@@ -4295,3 +4295,70 @@ body {
   opacity: 0.7;
   font-size: 0.85rem;
 }
+
+@media (max-width: 600px) {
+  .container {
+    padding: 12px;
+  }
+
+  .hero-logo {
+    max-width: 180px;
+  }
+
+  .glass-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 10px;
+  }
+
+  .nav-left {
+    display: none;
+  }
+
+  .nav-right {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .top-nav-btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px 10px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .detail-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-hero img,
+  .large-cover,
+  .poster-card img {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .charts-grid,
+  .artist-albums-grid,
+  .recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sticky-player {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+  }
+
+  body {
+    padding-bottom: 110px;
+  }
+}
