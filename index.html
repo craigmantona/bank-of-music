@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <meta name="theme-color" content="#070b15" />
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-title" content="Bank of Music" />
+ 
+ <title>Bank of Music</title>
+ 
+ <link rel="stylesheet" href="style.css" />
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="config.js"></script>
+</head>
+ 
+<body>
+ <div class="container">
+ 
+   <header class="hero" id="mainHeader">
+     <img src="logo.jpeg?v=1" class="hero-logo" alt="Bank of Music logo">
+ 
+     <p class="subtitle">Discover, rate and save music</p>
+ 
+     <div id="sessionStatus" class="session-bar">
+       Checking login...
+     </div>
+   </header>
+ 
+   <nav class="top-nav glass-nav">
+     <div class="nav-left" role="button" tabindex="0" aria-label="Go to home search"
+     onclick="window.showOnlySection && window.showOnlySection('searchSection')">
+       <img src="logo.jpeg?v=1" class="nav-logo" alt="BoM logo">
+       <span class="nav-title">BoM</span>
+     </div>
+ 
+     <div class="nav-right">
+       <button class="top-nav-btn active-nav" data-target="searchSection">🔎 Search</button>
+       <button class="top-nav-btn" data-target="librarySection">🎵 Ratings</button>
+       <button class="top-nav-btn" data-target="detailSection">⭐ Selected</button>
+	   <button class="top-nav-btn" type="button" data-target="chartsSection" onclick="window.goCharts(); return false;">🏆 Charts</button>
+       <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
+     </div>
+   </nav>
+ 
+   <section class="card" id="authCard">
+     <h2>Login / Sign up</h2>
+ 
+     <input id="email" type="email" placeholder="Email">
+     <input id="password" type="password" placeholder="Password">
+	 <input id="birthYear" type="number" min="1900" max="2026" placeholder="Year of birth, e.g. 1985">
+ 
+     <div class="button-row">
+       <button id="signupBtn">Sign up</button>
+       <button id="loginBtn">Login</button>
+       <button id="logoutBtn" class="secondary-btn">Logout</button>
+     </div>
+ 
+     <p id="authMessage"></p>
+   </section>
+ 
+   <section class="card" id="searchSection">
+     <h2>Search</h2>
+ 
+     <div class="search-bar-row">
+       <input id="globalSearchInput" placeholder="Search artists, albums and songs">
+       <button id="globalSearchBtn">Search</button>
+     </div>
+ 
+     <p id="globalSearchMessage"></p>
+     <div id="globalSearchResults"></div>
+   </section>
+   
+   <section class="card hidden" id="chartsSection">
+  <h2>Top 10 Charts</h2>
+  <p class="small">Global and age-range music charts.</p>
+
+  <div class="charts-grid">
+
+  <div>
+    <h3>Global Top Albums</h3>
+    <div id="globalAlbumCharts"></div>
+  </div>
+
+  <div>
+    <h3>Your Age Range Top Albums</h3>
+    <div id="ageAlbumCharts"></div>
+  </div>
+
+</div>
+</section>
+
+ 
+   <section class="card" id="recommendationsSection">
+     <h2>Recommended Albums</h2>
+     <p class="small">Albums you may want to rate next.</p>
+     <div id="recommendationsList"></div>
+   </section>
+ 
+   <section class="card hidden" id="librarySection">
+     <h2>Your Ratings</h2>
+ 
+     <button id="refreshLibraryBtn">Refresh</button>
+ 
+     <h3>Albums</h3>
+     <div id="albumsList"></div>
+ 
+     <h3>Songs</h3>
+     <div id="songsList"></div>
+   </section>
+ 
+   <section class="card hidden" id="detailSection">
+     <h2>Selected item</h2>
+     <div id="selectedItemDetail"></div>
+   </section>
+ 
+   <section class="card hidden" id="adminSection">
+     <h2>Admin Dashboard</h2>
+     <p class="small">Manage albums, tracks and artwork. Only admin users can see this page.</p>
+ 
+     <div class="admin-toolbar">
+       <input id="adminSearchInput" placeholder="Search local albums or songs to edit">
+       <button id="adminRefreshBtn">Refresh admin data</button>
+     </div>
+ 
+     <p id="adminMessage" class="small"></p>
+     <div id="adminDashboard"></div>
+   </section>
+ 
+ </div>
+ 
+ <div id="stickyPlayer" class="sticky-player hidden" aria-live="polite">
+   <button id="stickyPlayerOpenBtn" class="sticky-player-main" type="button">
+     <div id="stickyPlayerCover" class="sticky-player-cover">♪</div>
+     <div class="sticky-player-text">
+       <div id="stickyPlayerTitle" class="sticky-player-title">Nothing selected</div>
+       <div id="stickyPlayerArtist" class="sticky-player-artist">Select an album or song</div>
+     </div>
+   </button>
+   <button id="stickyPlayerShareBtn" class="sticky-player-action" type="button">Send</button>
+ </div>
+ 
+ <div id="profileModal" class="profile-modal hidden" aria-hidden="true"></div>
+ 
+ <script src="app.js"></script>
+ <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
+</body>
+</html>
+ 
