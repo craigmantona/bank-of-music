@@ -41,6 +41,12 @@
 	   <button class="top-nav-btn" type="button" data-target="chartsSection" onclick="window.goCharts(); return false;">🏆 Charts</button>
        <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
      </div>
+	 <select class="mobile-more-nav" onchange="showOnlySection(this.value); this.value='';">
+  <option value="">More</option>
+  <option value="librarySection">Ratings</option>
+  <option value="detailSection">Selected</option>
+  <option value="adminSection">Admin</option>
+</select>
    </nav>
  
    <section class="card" id="authCard">
