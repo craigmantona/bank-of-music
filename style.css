@@ -4362,3 +4362,55 @@ body {
     padding-bottom: 110px;
   }
 }
+
+.mobile-more-nav {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .nav-right {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .nav-right .top-nav-btn {
+    flex: 1;
+    font-size: 13px;
+    padding: 11px 8px;
+  }
+
+  .nav-right .top-nav-btn[data-target="librarySection"],
+  .nav-right .top-nav-btn[data-target="detailSection"],
+  .nav-right .top-nav-btn[data-target="adminSection"] {
+    display: none;
+  }
+
+  .mobile-more-nav {
+    display: block;
+    flex: 1;
+    padding: 11px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.16);
+    font-weight: 700;
+  }
+}
+
+.artist-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 700;
+  color: #67e8f9;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.artist-link-btn:hover {
+  color: white;
+}
