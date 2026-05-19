@@ -182,9 +182,15 @@ function normaliseText(value) {
 
 
 function normaliseCompare(value) {
-
-  return normaliseText(value).toLowerCase();
-
+  return String(value || "")
+    .replace(/\\[uU]([0-9a-fA-F]{4})/g, (_, code) =>
+      String.fromCharCode(parseInt(code, 16))
+    )
+    .toLowerCase()
+    .replace(/[’‘`´]/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/[^a-z0-9]+/g, "")
+    .trim();
 }
 
 
@@ -1419,10 +1425,25 @@ function getAlbumCoverMarkup(url, altText) {
 
 
 
-function getLargeCoverMarkup(url, altText) {
+function getLargeCoverMarkup(url, alt = "") {
+  const initial = (alt || "?").trim().charAt(0).toUpperCase();
 
-  return buildSafeImageMarkup(url, altText, "media-cover-large", "media-cover-placeholder-large", "No cover");
+  if (!url) {
+    return `<div class="artist-initial-large">${escapeHtml(initial)}</div>`;
+  }
 
+  return `
+    <div class="artist-image-wrap">
+      <img
+        src="${url}"
+        alt="${escapeHtml(alt)}"
+        class="large-cover-image"
+        loading="eager"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="artist-initial-large" style="display:none;">${escapeHtml(initial)}</div>
+    </div>
+  `;
 }
 
 
@@ -1689,7 +1710,8 @@ function renderStarSelector(targetId, currentValue = null) {
 
   return `
     <div class="star-rating-block">
-      <div class="star-rating" data-target-input="${targetId}">
+  <div class="album-rating-box">
+    <div class="star-rating" data-target-input="${targetId}">
         ${Array.from({ length: 10 }, (_, i) => {
           const score = i + 1;
           const activeClass = score <= safeValue ? "active-star" : "";
@@ -1708,8 +1730,9 @@ function renderStarSelector(targetId, currentValue = null) {
         <span class="star-score-text" id="${targetId}-text">
           ${safeValue > 0 ? `${safeValue}/10` : "Not rated"}
         </span>
-      </div>
-
+    </div>
+  </div>
+</div>
       <input type="hidden" id="${targetId}" value="${safeValue > 0 ? safeValue : ""}">
     </div>
   `;
@@ -2123,13 +2146,32 @@ async function loadLibrary() {
 
 
 
-  const { data: songs } = await supabaseClient
+  let allLoadedSongs = [];
+let from = 0;
+const size = 1000;
 
+while (true) {
+  const { data, error } = await supabaseClient
     .from("songs")
-
     .select("*")
+    .order("id", { ascending: true })
+    .range(from, from + size - 1);
 
-    .order("title", { ascending: true });
+  if (error) {
+    console.error("Songs load error", error);
+    break;
+  }
+
+  allLoadedSongs = allLoadedSongs.concat(data || []);
+
+  if (!data || data.length < size) break;
+
+  from += size;
+}
+
+const songs = allLoadedSongs;
+allSongs = songs;
+
 
 
 
@@ -4078,30 +4120,151 @@ async function fetchArtistDetail(externalId) {
 
 async function fetchArtistImagePremium(artistName) {
 
-  if (!LASTFM_API_KEY || !artistName) return "";
+  if (!artistName) return "";
 
-  try {
+  // 1. Try Last.fm first
 
-    const url = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${encodeURIComponent(LASTFM_API_KEY)}&format=json`;
+  if (LASTFM_API_KEY) {
 
-    const response = await fetch(url);
+    try {
 
-    if (!response.ok) return "";
+      const url = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${encodeURIComponent(LASTFM_API_KEY)}&format=json`;
 
-    const data = await response.json();
+      const response = await fetch(url);
 
-    const images = data?.artist?.image || [];
+      if (response.ok) {
 
-    const best = [...images].reverse().find((img) => img["#text"]);
+        const data = await response.json();
 
-    return best?.["#text"] || "";
+        const images = data?.artist?.image || [];
 
-  } catch {
+        const best = [...images]
+          .reverse()
+          .find((img) => img["#text"]);
 
-    return "";
+        if (best?.["#text"]) {
+          return best["#text"]
+  .replace("lastfm.freetls.fastly.net", "lastfm-img2.akamaized.net");
+        }
+
+      }
+
+    } catch (err) {
+
+      console.error("Last.fm artist image failed", err);
+
+    }
 
   }
 
+  // 2. Deezer fallback (VERY important)
+
+  try {
+
+    const deezerResponse = await fetch(
+      `https://api.deezer.com/search/artist?q=${encodeURIComponent(artistName)}`
+    );
+
+    const deezerData = await deezerResponse.json();
+
+    if (deezerData?.data?.length > 0) {
+
+      const deezerImage =
+  deezerData.data[0].picture_xl ||
+  deezerData.data[0].picture_big ||
+  deezerData.data[0].picture_medium ||
+  "";
+
+if (deezerImage) {
+  return `https://images.weserv.nl/?url=${encodeURIComponent(deezerImage.replace(/^https?:\/\//, ""))}`;
+}
+
+    }
+
+  } catch (err) {
+
+    console.error("Deezer artist image failed", err);
+
+  }
+  
+  // 3. Wikipedia fallback
+try {
+  const wikiResponse = await fetch(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(artistName)}`
+  );
+
+  if (wikiResponse.ok) {
+    const wikiData = await wikiResponse.json();
+
+    if (wikiData?.thumbnail?.source) {
+      const wikiThumb = wikiData.thumbnail.source.replace(/\/\d+px-/, "/600px-");
+
+      return `https://images.weserv.nl/?url=${encodeURIComponent(
+        wikiThumb.replace(/^https?:\/\//, "")
+      )}`;
+    }
+
+    if (wikiData?.originalimage?.source) {
+      return `https://images.weserv.nl/?url=${encodeURIComponent(
+        wikiData.originalimage.source.replace(/^https?:\/\//, "")
+      )}`;
+    }
+  }
+} catch (err) {
+  console.error("Wikipedia artist image failed", err);
+}
+
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(artistName)}&backgroundType=gradientLinear`;
+
+}
+
+async function cacheArtistImageToSupabase(artistName, remoteUrl) {
+  if (!artistName || !remoteUrl || !currentUser) return remoteUrl;
+
+  try {
+    const safeName = artistName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    const filePath = `${safeName}.jpg`;
+
+    const imageResponse = await fetch(remoteUrl);
+
+if (!imageResponse.ok) {
+  console.warn("Artist image could not be fetched, using fallback:", remoteUrl);
+  return remoteUrl;
+}
+
+
+    const imageBlob = await imageResponse.blob();
+	
+	console.log("Uploading artist image to Supabase:", filePath, imageBlob.type, imageBlob.size);
+
+
+    const { error: uploadError } = await supabaseClient.storage
+      .from("artist-images")
+      .upload(filePath, imageBlob, {
+        cacheControl: "3600",
+        upsert: true,
+        contentType: imageBlob.type || "image/jpeg"
+      });
+
+    if (uploadError) {
+      console.error("Artist image upload failed", uploadError);
+      return remoteUrl;
+    }
+
+    const { data } = supabaseClient.storage
+      .from("artist-images")
+      .getPublicUrl(filePath);
+
+    return data?.publicUrl || remoteUrl;
+
+  } catch (err) {
+    console.error("Artist image cache failed", err?.message || err, err);
+    return remoteUrl;
+  }
 }
 
 
@@ -4165,55 +4328,18 @@ async function ensureTrackSongs(albumDetail, savedAlbumId) {
 
 
 function buildArtistBannerMarkup(artistName, bannerUrl) {
-
-  if (bannerUrl) {
-
-    return `
-
-      <div class="artist-banner" style="position:relative;height:240px;border-radius:22px;overflow:hidden;margin-bottom:24px;background:#111827;">
-
-        <img src="${escapeHtml(bannerUrl)}" alt="${escapeHtml(artistName)} banner" style="width:100%;height:100%;object-fit:cover;display:block;">
-
-        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,15,0.12) 0%,rgba(5,7,15,0.72) 100%);"></div>
-
-        <div style="position:absolute;left:24px;bottom:22px;right:24px;">
-
-          <div style="font-size:0.95rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#cfd3ea;">Artist</div>
-
-          <div style="font-size:2.2rem;font-weight:900;color:white;line-height:1.05;margin-top:6px;">${escapeHtml(artistName)}</div>
-
-        </div>
-
-      </div>
-
-    `;
-
-  }
+  const initial = artistName ? artistName.charAt(0).toUpperCase() : "?";
 
   return `
+    <div class="artist-banner artist-banner-fallback">
+      <div class="artist-banner-initial">${escapeHtml(initial)}</div>
 
-    <div class="artist-banner" style="position:relative;height:240px;border-radius:22px;overflow:hidden;margin-bottom:24px;background:
-
-      radial-gradient(circle at top left, rgba(138,44,255,0.35), transparent 30%),
-
-      radial-gradient(circle at top right, rgba(255,45,141,0.24), transparent 26%),
-
-      radial-gradient(circle at bottom right, rgba(0,212,255,0.22), transparent 28%),
-
-      linear-gradient(135deg, #111827, #0b1020 55%, #171033);">
-
-      <div style="position:absolute;left:24px;bottom:22px;right:24px;">
-
-        <div style="font-size:0.95rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#cfd3ea;">Artist</div>
-
-        <div style="font-size:2.2rem;font-weight:900;color:white;line-height:1.05;margin-top:6px;">${escapeHtml(artistName)}</div>
-
+      <div class="artist-banner-text">
+        <div class="artist-banner-label">ARTIST</div>
+        <div class="artist-banner-name">${escapeHtml(artistName)}</div>
       </div>
-
     </div>
-
   `;
-
 }
 
 
@@ -4363,9 +4489,12 @@ async function renderArtistDetail(artistItem) {
   const artistDetail = artistItem.externalId ? await fetchArtistDetail(artistItem.externalId) : null;
 
   const premiumArtistImage = await fetchArtistImagePremium(artistName);
+  
+  console.log("Premium artist image result:", artistName, premiumArtistImage);
 
+  const cachedArtistImage = "";
 
-  const bannerUrl = premiumArtistImage ||
+const bannerUrl = cachedArtistImage ||
 
     remoteAlbums.find((album) => album.coverUrl)?.coverUrl ||
 
@@ -4405,7 +4534,18 @@ async function renderArtistDetail(artistItem) {
 
         <div>
 
-          ${bannerUrl ? getLargeCoverMarkup(bannerUrl, `${artistName} artwork`) : `<div class="media-cover-placeholder-large">Artist</div>`}
+          ${bannerUrl
+  ? `
+    <img
+      src="${bannerUrl}"
+      alt="${artistName} banner"
+      class="artist-banner-image"
+      loading="lazy"
+      onerror="this.style.display='none';"
+    >
+  `
+  : `<div class="media-cover-placeholder-large">${artistName}</div>`
+}
 
         </div>
 
@@ -4552,7 +4692,7 @@ function buildTrackListHtml(detail, savedAlbumId) {
   isManual = false
 }) {
   if (savedSong?.id) seenSongIds.add(Number(savedSong.id));
-  if (externalId) seenExternalIds.add(String(externalId));
+  if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
 
   const avgData = savedSong ? getSongAverage(savedSong.id) : null;
   const yourRating = savedSong ? getYourSongRating(savedSong.id) : null;
@@ -4577,11 +4717,11 @@ function buildTrackListHtml(detail, savedAlbumId) {
         </div>
 
         <div class="track-col-stars">
-          ${savedSong ? renderStarSelector(`track-rating-${savedSong.id}`, yourRating) : ""}
+          ${savedSong?.id ? renderStarSelector(`track-rating-${savedSong.id}`, yourRating) : ""}
         </div>
 
         <div class="track-col-actions">
-          ${savedSong
+          ${savedSong?.id
   ? `<button class="delete-track-rating-btn danger-btn" data-song-id="${savedSong.id}">Delete rating</button>`
   : `<button class="save-track-btn" data-action="save-track" data-track-title="${escapeHtml(title)}" data-track-external-id="${escapeHtml(externalId)}" data-album-id="${savedAlbumId}">Save track</button>`
 }
@@ -4596,25 +4736,49 @@ function buildTrackListHtml(detail, savedAlbumId) {
 
   for (const medium of detail.media || []) {
     for (const track of medium.tracks || []) {
-      const trackTitle = track.title || track.recording?.title || "Untitled track";
+      const trackTitle = String(track.title || track.recording?.title || "Untitled track")
+  .replace(/\\[uU]([0-9a-fA-F]{4})/g, (_, code) =>
+    String.fromCharCode(parseInt(code, 16))
+  );
       const externalId = track.recording?.id || "";
 
-      const savedSong = allSongs.find((song) =>
-  Number(song.album_id) === Number(savedAlbumId) &&
-  (
-    normaliseCompare(song.title) === normaliseCompare(trackTitle) ||
-    Number(song.track_position) === Number(trackNumber)
-  )
+      const albumSongPool = (allSongs || []).filter(song =>
+  Number(song.is_deleted || 0) === 0 &&
+  Number(song.album_id) === Number(savedAlbumId)
 );
 
+const savedSong =
+  albumSongPool.find(song =>
+    externalId &&
+    String(song.external_id || "") === String(externalId)
+  ) ||
+  albumSongPool.find(song =>
+    normaliseCompare(song.title || "") === normaliseCompare(trackTitle || "")
+  ) ||
+  null;
+
+console.log("SAVED SONG FOUND?", {
+  externalId,
+  savedSong,
+  trackTitle
+});
+  
+  console.log("SAVED SONG FOUND?", {
+  trackTitle,
+  externalId,
+  savedSong
+});
+
+
+
       trackRows.push(buildTrackRow({
-        number: getTrackSortPosition(savedSong, trackNumber),
-        sortPosition: getTrackSortPosition(savedSong, trackNumber),
-        title: trackTitle,
-        externalId,
-        savedSong,
-        isManual: savedSong?.external_source === "manual"
-      }));
+  number: getTrackSortPosition(savedSong, trackNumber),
+  sortPosition: getTrackSortPosition(savedSong, trackNumber),
+  title: savedSong?.title || trackTitle,
+  externalId: savedSong?.external_id || externalId,
+  savedSong: savedSong,
+  isManual: savedSong?.external_source === "manual"
+}));
 
       trackNumber += 1;
     }
@@ -4714,6 +4878,112 @@ async function renderSelectedItem() {
     return;
 
   }
+  
+  if (selectedItem.type === "song") {
+  const songId = selectedItem.savedSongId || selectedItem.songId || selectedItem.id;
+  const song = allSongs.find((s) => Number(s.id) === Number(songId)) || selectedItem;
+  
+  const linkedAlbum = song.album_id
+  ? allAlbums.find((a) => Number(a.id) === Number(song.album_id))
+  : null;
+
+const linkedAlbumCover = linkedAlbum ? getAlbumArtworkUrl(linkedAlbum) : "";
+
+  const avgData = getSongAverage(song.id || songId);
+  const yourRating = getYourSongRating(song.id || songId);
+
+  selectedItemDetail.innerHTML = `
+    <div class="detail-panel">
+      ${buildSelectedBackButton()}
+
+      <div class="detail-info-panel">
+        <div class="media-title">${escapeHtml(song.title || selectedItem.title || "Unknown song")}</div>
+
+<button class="song-artist-link" data-artist-name="${escapeHtml(song.artist || selectedItem.artist || "")}">
+  ${escapeHtml(song.artist || selectedItem.artist || "Unknown artist")}
+</button>
+
+        <div class="detail-meta-grid">
+          <div class="detail-meta-label">Album</div>
+<div class="detail-meta-value">
+  ${
+    song.album_id
+      ? `<button
+  type="button"
+  class="song-album-link"
+  data-open-song-album-id="${song.album_id}"
+>
+  ${escapeHtml(getAlbumNameById(song.album_id))}
+</button>`
+      : escapeHtml(selectedItem.releaseTitle || "Unknown")
+  }
+</div>
+
+          <div class="detail-meta-label">Average rating</div>
+          <div class="detail-meta-value">${
+            avgData?.count
+              ? `⭐ ${avgData.avg.toFixed(1)} / 10 (${avgData.count} rating${avgData.count === 1 ? "" : "s"})`
+              : "No ratings yet"
+          }</div>
+
+          <div class="detail-meta-label">Your rating</div>
+          <div class="detail-meta-value">${yourRating !== null ? `${yourRating}/10` : "Not rated"}</div>
+        </div>
+
+        <div class="detail-rating-row">
+          ${renderStarSelector(`song-rating-${song.id || songId}`, yourRating)}
+        </div>
+		
+		${
+  linkedAlbum
+    ? `
+      <button class="song-album-feature-card open-album-btn" data-album-id="${linkedAlbum.id}">
+        ${getAlbumCoverMarkup(linkedAlbumCover, `${linkedAlbum.title} cover`)}
+        <div>
+          <strong>${escapeHtml(linkedAlbum.title)}</strong>
+          <span>${escapeHtml(linkedAlbum.artist)}</span>
+          <small>Open album</small>
+        </div>
+      </button>
+    `
+    : ""
+}
+		
+
+  <h3>Other songs by ${escapeHtml(song.artist || selectedItem.artist || "this artist")}</h3>
+
+  <div class="song-mini-list">
+  ${allSongs
+    .filter((s) =>
+      normaliseCompare(s.artist) === normaliseCompare(song.artist || selectedItem.artist) &&
+      Number(s.id) !== Number(song.id || songId)
+    )
+    .slice(0, 8)
+    .map((s) => `
+  <button class="song-mini-card" data-library-type="song" data-song-id="${s.id}">
+    <strong>${escapeHtml(s.title)}</strong>
+    <span class="song-mini-album" data-album-id="${s.album_id}">
+      ${escapeHtml(getAlbumNameById(s.album_id) || "Unknown album")}
+    </span>
+  </button>
+`)
+    .join("")}
+</div>
+</div>
+
+        <div class="detail-actions">
+          ${
+            yourRating !== null
+              ? `<button class="delete-song-rating-btn danger-btn" data-song-id="${song.id || songId}">Delete rating</button>`
+              : ""
+          }
+        </div>
+      </div>
+    </div>
+  `;
+
+  return;
+}
 
 
 
@@ -5046,9 +5316,11 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
 
           <div class="detail-info-panel">
 
-            <div class="media-title">${escapeHtml(selectedItem.title)}</div>
+            <div class="media-title">${escapeHtml(song.title || selectedItem.title || "Unknown song")}</div>
 
-            <div class="media-subtitle">${escapeHtml(selectedItem.artist)}</div>
+<button class="song-artist-link" data-artist-name="${escapeHtml(song.artist || selectedItem.artist || "")}">
+  ${escapeHtml(song.artist || selectedItem.artist || "Unknown artist")}
+</button>
 
             ${renderFollowControls(selectedItem.artist)}
 
@@ -5056,7 +5328,15 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
 
               <div class="detail-meta-label">Album</div>
 
-              <div class="detail-meta-value">${selectedItem.releaseTitle ? escapeHtml(selectedItem.releaseTitle) : (linkedAlbum ? escapeHtml(linkedAlbum.title) : "Unknown")}</div>
+<div class="detail-meta-value">
+  ${
+    song.album_id
+      ? `<button class="open-album-btn song-album-link" data-album-id="${song.album_id}">
+          ${escapeHtml(getAlbumNameById(song.album_id))}
+        </button>`
+      : "Unknown"
+  }
+</div>
 
               <div class="detail-meta-label">Average rating</div>
 
@@ -5509,53 +5789,74 @@ async function importSelectedSong() {
 
 
 async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
+  if (!selectedItem || selectedItem.type !== "album") return null;
 
-  if (!selectedItem || selectedItem.type !== "album") return;
+  const finalAlbumId = Number(
+    albumId ||
+    selectedItem.savedAlbumId ||
+    selectedItem.albumId
+  );
 
-  const savedAlbum = getSavedAlbumByExternalId(selectedItem.externalId);
-
-  if (!savedAlbum && !albumId) return;
-
-
-
-  const payload = {
-
-    title: normaliseText(trackTitle),
-
-    artist: normaliseText(selectedItem.artist),
-
-    album_id: savedAlbum ? savedAlbum.id : Number(albumId),
-
-    external_source: trackExternalId ? "musicbrainz" : null,
-
-    external_id: trackExternalId || null
-
-  };
-
-
-
-  if (trackExternalId) {
-
-    await supabaseClient.from("songs").upsert([payload], { onConflict: "external_source,external_id" });
-
-  } else {
-
-    await supabaseClient.from("songs").insert([payload]);
-
+  if (!finalAlbumId) {
+    console.error("NO ALBUM ID FOUND FOR TRACK SAVE", { trackTitle, trackExternalId, selectedItem });
+    return null;
   }
 
+  const cleanTitle = normaliseText(trackTitle);
+  const cleanArtist = normaliseText(selectedItem.artist);
 
+  // First check if this track already exists on THIS album by title
+  const existing = allSongs.find((song) =>
+    Number(song.album_id) === Number(finalAlbumId) &&
+    normaliseCompare(song.title) === normaliseCompare(cleanTitle)
+  );
+
+  let result;
+
+  if (existing) {
+    result = await supabaseClient
+      .from("songs")
+      .update({
+        title: cleanTitle,
+        artist: cleanArtist,
+        album_id: finalAlbumId,
+        external_source: trackExternalId ? "musicbrainz" : existing.external_source || "manual",
+        external_id: trackExternalId || existing.external_id || null
+      })
+      .eq("id", existing.id)
+      .select()
+      .single();
+  } else {
+    result = await supabaseClient
+      .from("songs")
+      .insert([{
+        title: cleanTitle,
+        artist: cleanArtist,
+        album_id: finalAlbumId,
+        external_source: trackExternalId ? "musicbrainz" : "manual",
+        external_id: trackExternalId || null
+      }])
+      .select()
+      .single();
+  }
+
+  if (result.error) {
+    console.error("SAVE TRACK ERROR", result.error);
+    setMessage(globalSearchMessage, result.error.message);
+    return null;
+  }
+  
+  if (result.data) {
+  allSongs = (allSongs || []).filter(song => Number(song.id) !== Number(result.data.id));
+  allSongs.push(result.data);
+}
 
   await loadLibrary();
-
   renderLibrary();
-
   renderRecommendations();
 
-  await renderSelectedItem();
-
   setMessage(globalSearchMessage, "Track saved.");
-
+  return result.data;
 }
 
 
@@ -6359,6 +6660,21 @@ selectedItemDetail?.addEventListener("click", async (event) => {
     event.stopPropagation();
   }
 
+  const backButton = event.target.closest("[data-back-to-previous]");
+
+  if (backButton) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      showOnlySection(previousSectionId || "searchSection");
+    }
+
+    return;
+  }
+
   const deleteTrackButton = event.target.closest(".admin-delete-track-btn");
 
   if (deleteTrackButton) {
@@ -6594,15 +6910,64 @@ function bindCardClicks(container) {
   if (!container) return;
 
   container.addEventListener("click", async (event) => {
-    if (
-      event.target.closest(".star-option") ||
-      event.target.closest(".delete-track-rating-btn") ||
-      event.target.closest(".save-track-btn") ||
-      event.target.closest(".admin-edit-track-btn") ||
-      event.target.closest(".admin-delete-track-btn")
-    ) {
-      return;
-    }
+    const saveTrackBtn = event.target.closest(".save-track-btn");
+
+if (saveTrackBtn) {
+	console.log("SAVE TRACK CLICKED", saveTrackBtn.dataset);
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+
+  const title = saveTrackBtn.dataset.trackTitle || "";
+  const externalId = saveTrackBtn.dataset.trackExternalId || "";
+
+  const albumId = Number(
+    saveTrackBtn.dataset.albumId ||
+    selectedItem.savedAlbumId ||
+    selectedItem.albumId
+  );
+
+  const savedTrack = await saveTrackFromAlbum(title, externalId, albumId);
+  
+  await loadLibrary();
+
+const track = Array.isArray(savedTrack) ? savedTrack[0] : savedTrack;
+
+if (track) {
+  allSongs = [
+    ...allSongs.filter(song => Number(song.id) !== Number(track.id)),
+    track
+  ];
+}
+
+console.log("AFTER SAVE allSongs contains:", allSongs.filter(song =>
+  Number(song.album_id) === Number(albumId)
+));
+
+await renderSelectedItem();
+
+return false;
+
+await loadLibrary();
+
+if (savedTrack) {
+  const track = Array.isArray(savedTrack) ? savedTrack[0] : savedTrack;
+  allSongs.push(track);
+}
+
+await renderSelectedItem();
+
+return false;
+}
+
+if (
+  event.target.closest(".star-option") ||
+  event.target.closest(".delete-track-rating-btn") ||
+  event.target.closest(".admin-edit-track-btn") ||
+  event.target.closest(".admin-delete-track-btn")
+) {
+  return;
+}
 
     const libraryAlbumCard = event.target.closest('[data-library-type="album"][data-album-id]');
 
@@ -6684,6 +7049,60 @@ function bindCardClicks(container) {
       await renderSelectedItem();
       return;
     }
+	
+	const openAlbumBtn = event.target.closest(".open-album-btn");
+
+if (openAlbumBtn) {
+  event.preventDefault();
+
+  const albumId = Number(openAlbumBtn.dataset.albumId);
+  const album = allAlbums.find((a) => Number(a.id) === albumId);
+
+  if (!album) return;
+
+  selectedItem = {
+    type: "album",
+    title: album.title,
+    artist: album.artist,
+    externalId: album.external_id || "",
+    releaseDate: album.release_date || "",
+    coverUrl: getAlbumArtworkUrl(album),
+    savedAlbumId: album.id,
+    albumId: album.id
+  };
+
+  showOnlySection("detailSection");
+  await renderSelectedItem();
+  return;
+}
+
+
+const songAlbumLink = event.target.closest("[data-open-song-album-id]");
+
+if (songAlbumLink) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const albumId = Number(songAlbumLink.dataset.openSongAlbumId);
+  const album = allAlbums.find((a) => Number(a.id) === albumId);
+
+  if (!album) return;
+
+  selectedItem = {
+    type: "album",
+    title: album.title,
+    artist: album.artist,
+    externalId: album.external_id || "",
+    releaseDate: album.release_date || "",
+    coverUrl: getAlbumArtworkUrl(album),
+    savedAlbumId: album.id,
+    albumId: album.id
+  };
+
+  showOnlySection("detailSection");
+  await renderSelectedItem();
+  return;
+}
 
     const songCard = event.target.closest("[data-library-type='song']");
 
@@ -6710,6 +7129,26 @@ function bindCardClicks(container) {
       await renderSelectedItem();
       return;
     }
+	
+	const songArtistLink = event.target.closest(".song-artist-link");
+
+if (songArtistLink) {
+  event.preventDefault();
+
+  const artistName = songArtistLink.dataset.artistName;
+
+  selectedItem = {
+    type: "artist",
+    name: artistName,
+    artist: artistName
+  };
+
+  showOnlySection("detailSection");
+
+  await renderArtistDetail(selectedItem);
+
+  return;
+}
   });
 }
 
