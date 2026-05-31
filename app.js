@@ -97,7 +97,9 @@ injectProfileStyles();
 
 const LASTFM_API_KEY = window.LASTFM_API_KEY || null;
 
+const releaseGroupCoverCache = {};
 
+const albumTrackCache = {};
 
 let currentUser = null;
 
@@ -183,11 +185,11 @@ function normaliseText(value) {
 
 function normaliseCompare(value) {
   return String(value || "")
-    .replace(/\\[uU]([0-9a-fA-F]{4})/g, (_, code) =>
-      String.fromCharCode(parseInt(code, 16))
-    )
     .toLowerCase()
-    .replace(/[’‘`´]/g, "'")
+    .replace(/^the\s+/i, "")
+    .replace(/\u2019/gi, "")
+    .replace(/\U2019/g, "")
+    .replace(/[’'`]/g, "")
     .replace(/&amp;/g, "&")
     .replace(/[^a-z0-9]+/g, "")
     .trim();
@@ -283,14 +285,7 @@ function showOnlySection(targetId) {
 
     if (!section) return;
 
-    if (targetId === "searchSection") {
-      section.classList.toggle(
-        "hidden",
-        !(id === "searchSection" || id === "recommendationsSection")
-      );
-    } else {
-      section.classList.toggle("hidden", id !== targetId);
-    }
+    section.classList.toggle("hidden", id !== targetId);
 
   });
 
@@ -2133,6 +2128,33 @@ async function logOut() {
 }
 
 
+async function fetchAllRows(tableName, orderColumn = "id") {
+  let allRows = [];
+  let from = 0;
+  const size = 1000;
+
+  while (true) {
+    const { data, error } = await supabaseClient
+      .from(tableName)
+      .select("*")
+      .order(orderColumn, { ascending: true })
+      .range(from, from + size - 1);
+
+    if (error) {
+      console.error(`${tableName} load error`, error);
+      break;
+    }
+
+    allRows = allRows.concat(data || []);
+
+    if (!data || data.length < size) break;
+
+    from += size;
+  }
+
+  return allRows;
+}
+
 
 async function loadLibrary() {
 
@@ -2143,33 +2165,8 @@ async function loadLibrary() {
     .select("*")
 
     .order("title", { ascending: true });
-
-
-
-  let allLoadedSongs = [];
-let from = 0;
-const size = 1000;
-
-while (true) {
-  const { data, error } = await supabaseClient
-    .from("songs")
-    .select("*")
-    .order("id", { ascending: true })
-    .range(from, from + size - 1);
-
-  if (error) {
-    console.error("Songs load error", error);
-    break;
-  }
-
-  allLoadedSongs = allLoadedSongs.concat(data || []);
-
-  if (!data || data.length < size) break;
-
-  from += size;
-}
-
-const songs = allLoadedSongs;
+	
+	const songs = await fetchAllRows("songs", "id");
 allSongs = songs;
 
 
@@ -3543,6 +3540,7 @@ async function runGlobalSearch(forceOpenBest = false) {
             <div class="result-meta">${escapeHtml(item.artist)}</div>
 
             ${item.releaseTitle ? `<div class="result-meta">${escapeHtml(item.releaseTitle)}</div>` : ""}
+${item.versionCount > 1 ? `<div class="result-meta">+ ${item.versionCount - 1} other version${item.versionCount - 1 === 1 ? "" : "s"}</div>` : ""}
 
           </div>
 
@@ -3784,25 +3782,123 @@ async function runGlobalSearch(forceOpenBest = false) {
 
 
 
-    const songs = sortBySearchScore(
+    const queryWords = cleanSearchText(query).split(" ").filter(Boolean);
 
-      (songData.recordings || []).map((rec) => ({
+const artistsInResults = (songData.recordings || [])
+  .map((rec) => rec["artist-credit"]?.map(a => a.name).join(", ") || "")
+  .filter(Boolean);
 
-        type: "song",
+const likelyArtist =
+  artistsInResults.find((artist) =>
+    queryWords.some((word) => normaliseCompare(artist).includes(normaliseCompare(word)))
+  ) || "";
 
-        title: rec.title || "Untitled",
+function isBadSongReleaseTitle(title) {
+  const clean = normaliseCompare(title);
 
-        artist: rec["artist-credit"]?.map(a => a.name).join(", ") || "Unknown",
+  return (
+    clean.includes("unplugged") ||
+    clean.includes("undrugged") ||
+    clean.includes("acoustic") ||
+    clean.includes("session") ||
+    clean.includes("sessions") ||
+    clean.includes("live") ||
+    clean.includes("tribute") ||
+    clean.includes("karaoke") ||
+    clean.includes("greatesthits") ||
+    clean.includes("bestof") ||
+    clean.includes("collection") ||
+    clean.includes("anthology") ||
+    clean.includes("essential") ||
+    clean.includes("soundtrack") ||
+    clean.includes("hits")
+  );
+}
 
-        externalId: rec.id || "",
+function releaseScore(release, artistName) {
+  const title = release.title || "";
+  const cleanTitle = normaliseCompare(title);
+  let score = 0;
 
-        releaseTitle: rec.releases?.[0]?.title || ""
+  if (!isBadSongReleaseTitle(title)) score += 100;
+  if (release.date) score += 20;
+  if (release.status === "Official") score += 15;
+  if (release.country === "GB") score += 10;
+  if (cleanTitle.includes("whatsthestorymorningglory")) score += 500;
+  if (normaliseCompare(artistName).includes("oasis") && cleanTitle.includes("morningglory")) score += 500;
 
-      })),
+  return score;
+}
 
-      query
+const rawSongs = (songData.recordings || []).map((rec) => {
+  const artist = rec["artist-credit"]?.map(a => a.name).join(", ") || "Unknown";
+  const releases = rec.releases || [];
 
-    ).slice(0, 20);
+  const bestRelease = releases
+    .slice()
+    .sort((a, b) => releaseScore(b, artist) - releaseScore(a, artist))[0] || {};
+
+  return {
+    type: "song",
+    title: rec.title || "Untitled",
+    artist,
+    externalId: rec.id || "",
+    releaseTitle: bestRelease.title || "",
+    releaseDate: bestRelease.date || "",
+    releaseId: bestRelease.id || "",
+    versionCount: releases.length
+  };
+});
+
+const groupedSongs = {};
+
+rawSongs.forEach((song) => {
+  const key = `${normaliseCompare(song.artist)}-${normaliseCompare(song.title)}`;
+
+  if (!groupedSongs[key]) {
+    groupedSongs[key] = song;
+    return;
+  }
+
+  const currentScore = releaseScore(
+    { title: groupedSongs[key].releaseTitle, date: groupedSongs[key].releaseDate },
+    groupedSongs[key].artist
+  );
+
+  const nextScore = releaseScore(
+    { title: song.releaseTitle, date: song.releaseDate },
+    song.artist
+  );
+
+  groupedSongs[key].versionCount =
+    Number(groupedSongs[key].versionCount || 1) + Number(song.versionCount || 1);
+
+  if (nextScore > currentScore) {
+    groupedSongs[key] = {
+      ...song,
+      versionCount: groupedSongs[key].versionCount
+    };
+  }
+});
+
+const songs = sortBySearchScore(
+  Object.values(groupedSongs),
+  query
+)
+.sort((a, b) => {
+  const aArtistMatch = likelyArtist && normaliseCompare(a.artist) === normaliseCompare(likelyArtist);
+  const bArtistMatch = likelyArtist && normaliseCompare(b.artist) === normaliseCompare(likelyArtist);
+
+  if (aArtistMatch !== bArtistMatch) return aArtistMatch ? -1 : 1;
+
+  const aBad = isBadSongReleaseTitle(a.releaseTitle);
+  const bBad = isBadSongReleaseTitle(b.releaseTitle);
+
+  if (aBad !== bBad) return aBad ? 1 : -1;
+
+  return releaseScore(b, b.artist) - releaseScore(a, a.artist);
+})
+.slice(0, 20);
 
 
 
@@ -3915,27 +4011,50 @@ function isStudioReleaseGroup(releaseGroup) {
   const title = normaliseCompare(releaseGroup.title || "");
 
   const blockedTitleBits = [
-
-    "single", " ep", "remix", "karaoke", "instrumental", "acoustic",
-
-    "live", "demo", "edit", "radio edit", "session", "sessions",
-
-    "best of", "greatest hits", "collection", "compilation", "anthology",
-
-    "now that's what", "now thats what", "soundtrack", "tribute", "interview", "story", "childhood", "real story", "radio broadcast", "broadcast",
-"interview", "tribute", "unauthorised", "unauthorized", "Mixtape/Street", "remix", "Remix + Mixtape/Street", "bootleg", "vs Oasis"
-
-  ];
+  "single",
+  "ep",
+  "remix",
+  "karaoke",
+  "instrumental",
+  "acoustic",
+  "live",
+  "demo",
+  "radioedit",
+  "session",
+  "sessions",
+  "bestof",
+  "greatesthits",
+  "collection",
+  "compilation",
+  "anthology",
+  "soundtrack",
+  "tribute",
+  "interview",
+  "broadcast",
+  "bootleg",
+  "unauthorised",
+  "spokenword",
+  "unauthorized",
+  "mixtape",
+  "homedownshowdown"
+];
 
   if (primaryType !== "Album") return false;
 
-  if (secondaryTypes.includes("Compilation")) return false;
+  const secondaryText = secondaryTypes
+  .map((type) => normaliseCompare(type))
+  .join(" ");
 
-  if (secondaryTypes.includes("Live")) return false;
-
-  if (secondaryTypes.includes("Soundtrack")) return false;
-
-  if (secondaryTypes.includes("Interview")) return false;
+if (
+  secondaryText.includes("compilation") ||
+  secondaryText.includes("live") ||
+  secondaryText.includes("soundtrack") ||
+  secondaryText.includes("interview") ||
+  secondaryText.includes("mixtape") ||
+  secondaryText.includes("remix") ||
+  secondaryText.includes("spokenword") ||
+  secondaryText.includes("djmix")
+) return false;
 
   if (blockedTitleBits.some((bit) => title.includes(bit) || title.endsWith(bit.trim()))) return false;
 
@@ -4721,11 +4840,17 @@ function buildTrackListHtml(detail, savedAlbumId) {
         </div>
 
         <div class="track-col-actions">
-          ${savedSong?.id
-  ? `<button class="delete-track-rating-btn danger-btn" data-song-id="${savedSong.id}">Delete rating</button>`
-  : `<button class="save-track-btn" data-action="save-track" data-track-title="${escapeHtml(title)}" data-track-external-id="${escapeHtml(externalId)}" data-album-id="${savedAlbumId}">Save track</button>`
-}
-        </div>
+  ${savedSong?.id
+    ? ""
+    : `<button class="save-track-btn"
+         data-action="save-track"
+         data-track-title="${escapeHtml(title)}"
+         data-track-external-id="${escapeHtml(externalId)}"
+         data-album-id="${savedAlbumId}">
+         💾
+       </button>`
+  }
+</div>
       </div>
     `
   };
@@ -4821,7 +4946,6 @@ console.log("SAVED SONG FOUND?", {
         <div>Average</div>
         <div>Your rating</div>
         <div>Rate</div>
-        <div>Actions</div>
       </div>
       ${trackRows.map((row) => row.html).join("")}
     </div>
@@ -5040,17 +5164,45 @@ if (!selectedItem.externalId) {
 
       const albumLookupId = selectedItem.externalId || selectedItem.releaseGroupId || "";
 
-const detail = albumLookupId
-  ? await fetchAlbumDetail(albumLookupId)
-  : { media: [] };
+	  selectedItemDetail.innerHTML = `
+<div class="glass-card">
+    <h3>${escapeHtml(selectedItem.title)}</h3>
+    <p>Loading tracks...</p>
+</div>
+`;
+
+let detail = { media: [] };
+
+if (albumLookupId) {
+
+  if (albumTrackCache[albumLookupId]) {
+
+    detail = albumTrackCache[albumLookupId];
+
+  } else {
+
+    detail = await fetchAlbumDetail(albumLookupId);
+
+    if (detail) {
+      albumTrackCache[albumLookupId] = detail;
+    }
+
+  }
+
+}
 
       const releaseGroupId = detail?.["release-group"]?.id || "";
 
-      const releaseGroupCover = typeof fetchReleaseGroupCover === "function"
+      let releaseGroupCover = "";
 
-        ? await fetchReleaseGroupCover(releaseGroupId)
-
-        : "";
+if (releaseGroupId) {
+  if (releaseGroupCoverCache[releaseGroupId]) {
+    releaseGroupCover = releaseGroupCoverCache[releaseGroupId];
+  } else if (typeof fetchReleaseGroupCover === "function") {
+    releaseGroupCover = await fetchReleaseGroupCover(releaseGroupId);
+    releaseGroupCoverCache[releaseGroupId] = releaseGroupCover || "";
+  }
+}
 
 
 
@@ -5206,11 +5358,12 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
 
 		  ${(() => {
   const moreAlbums = allAlbums
-    .filter((album) =>
-      normaliseCompare(album.artist) === normaliseCompare(selectedItem.artist) &&
-      normaliseCompare(album.title) !== normaliseCompare(selectedItem.title)
-    )
-    .slice(0, 4);
+  .filter((album) =>
+    album.library_type === "album" &&
+    normaliseCompare(album.artist) === normaliseCompare(selectedItem.artist) &&
+    normaliseCompare(album.title) !== normaliseCompare(selectedItem.title)
+  )
+  .slice(0, 4);
 
   if (!moreAlbums.length) {
     return `
@@ -5807,9 +5960,13 @@ async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
 
   // First check if this track already exists on THIS album by title
   const existing = allSongs.find((song) =>
-    Number(song.album_id) === Number(finalAlbumId) &&
-    normaliseCompare(song.title) === normaliseCompare(cleanTitle)
-  );
+  Number(song.album_id) === Number(finalAlbumId) &&
+  normaliseCompare(song.title) === normaliseCompare(cleanTitle)
+) || allSongs.find((song) =>
+  trackExternalId &&
+  String(song.external_source || "") === "musicbrainz" &&
+  String(song.external_id || "") === String(trackExternalId)
+);
 
   let result;
 
@@ -8324,7 +8481,7 @@ document.addEventListener("click", async (event) => {
 
 window.addEventListener("scroll", handleScrollState, { passive: true });
 
-showOnlySection("searchSection");
+showOnlySection("recommendationsSection");
 
 refreshSessionUI().then(async () => {
   await handleIncomingShareLink();
