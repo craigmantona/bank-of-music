@@ -4779,3 +4779,26 @@ button.song-album-link {
 .star-score-text {
   display: none !important;
 }
+
+.search-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0 20px;
+  flex-wrap: wrap;
+}
+
+.search-tab {
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.search-tab.active-search-tab {
+  background: linear-gradient(135deg, #ff2d8d, #00d4ff);
+  border-color: rgba(255,255,255,0.35);
+}
+
