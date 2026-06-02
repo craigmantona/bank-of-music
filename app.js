@@ -3965,14 +3965,19 @@ const songs = sortBySearchScore(
 
 
     globalSearchResults.innerHTML = `
+  <div class="search-tabs">
+    <button class="search-tab active-search-tab" data-search-filter="all">All</button>
+    <button class="search-tab" data-search-filter="artists">Artists</button>
+    <button class="search-tab" data-search-filter="albums">Albums</button>
+    <button class="search-tab" data-search-filter="songs">Tracks</button>
+  </div>
 
-      ${renderExpandableSection("Artists", "artists", artists, 5)}
+  ${renderExpandableSection("Artists", "artists", artists, 5)}
 
-      ${renderExpandableSection("Albums", "albums", albums, 5)}
+  ${renderExpandableSection("Albums", "albums", albums, 5)}
 
-      ${renderExpandableSection("Songs", "songs", songs, 8)}
-
-    `;
+  ${renderExpandableSection("Songs", "songs", songs, 8)}
+`;
 
 
 
@@ -6582,9 +6587,7 @@ if (loginBtn) loginBtn.addEventListener("click", logIn);
 if (logoutBtn) logoutBtn.addEventListener("click", logOut);
 
 if (globalSearchBtn) {
-
-  globalSearchBtn.addEventListener("click", () => runGlobalSearch(true));
-
+  globalSearchBtn.addEventListener("click", () => runGlobalSearch(false));
 }
 
 if (globalSearchInput) {
@@ -6601,8 +6604,6 @@ if (globalSearchInput) {
 
   });
 
-
-
   globalSearchInput.addEventListener("keydown", (event) => {
 
     if (event.key === "Enter") {
@@ -6611,7 +6612,7 @@ if (globalSearchInput) {
 
       clearTimeout(searchDebounceTimer);
 
-      runGlobalSearch(true);
+      runGlobalSearch(false);
 
     }
 
@@ -6847,6 +6848,36 @@ selectedItemDetail?.addEventListener("click", async (event) => {
 if (globalSearchResults) {
 
   globalSearchResults.addEventListener("click", async (event) => {
+	  
+	  const tabButton = event.target.closest(".search-tab");
+
+if (tabButton) {
+  const filter = tabButton.dataset.searchFilter;
+
+  globalSearchResults.querySelectorAll(".search-tab").forEach((button) => {
+    button.classList.toggle("active-search-tab", button === tabButton);
+  });
+
+  globalSearchResults.querySelectorAll("[data-result-group]").forEach((item) => {
+    item.classList.toggle(
+      "hidden",
+      filter !== "all" && item.dataset.resultGroup !== filter
+    );
+  });
+
+  globalSearchResults.querySelectorAll(".section-divider[data-group]").forEach((heading) => {
+    heading.classList.toggle(
+      "hidden",
+      filter !== "all" && heading.dataset.group !== filter
+    );
+  });
+
+  globalSearchResults.querySelectorAll(".show-more-row").forEach((row) => {
+    row.classList.toggle("hidden", filter !== "all");
+  });
+
+  return;
+}
 
     const moreButton = event.target.closest(".show-more-results-btn");
 
