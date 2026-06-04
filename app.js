@@ -4685,7 +4685,11 @@ const bannerUrl = cachedArtistImage ||
 
 
 
-          <div class="detail-meta-grid">
+          <button class="artist-info-toggle" onclick="toggleArtistInfo()">
+  More info
+</button>
+
+<div id="artistInfoPanel" class="detail-meta-grid artist-info-panel collapsed">
 
             <div class="detail-meta-label">Country</div>
 
@@ -8529,6 +8533,24 @@ window.goHome = function () {
 window.goSearch = function () {
   selectedItem = null;
   showOnlySection("searchSection");
+};
+
+window.toggleArtistInfo = function () {
+
+  const panel = document.getElementById("artistInfoPanel");
+
+  const button = document.querySelector(".artist-info-toggle");
+
+  if (!panel || !button) return;
+
+  panel.classList.toggle("collapsed");
+
+  button.textContent = panel.classList.contains("collapsed")
+
+    ? "More info"
+
+    : "Less info";
+
 };
 
 window.goCharts = async function () {
