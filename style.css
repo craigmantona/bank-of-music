@@ -4802,3 +4802,34 @@ button.song-album-link {
   border-color: rgba(255,255,255,0.35);
 }
 
+.artist-info-toggle {
+  display: none;
+}
+
+@media (max-width: 700px) {
+
+  .artist-info-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 12px 0 18px;
+    padding: 12px 20px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,0.10);
+
+    border: 1px solid rgba(255,255,255,0.20);
+
+    color: white;
+
+    font-weight: 800;
+  }
+
+  .artist-info-panel.collapsed {
+    display: none;
+  }
+
+}
+
