@@ -4988,6 +4988,162 @@ document.querySelectorAll(
 });
 }
 
+const MAX_REVIEW_LENGTH = 500;
+
+async function loadAlbumReviews(albumId) {
+  const { data, error } = await supabaseClient
+    .from("album_reviews")
+    .select("*")
+    .eq("album_id", Number(albumId))
+    .order("updated_at", { ascending: false });
+
+  if (error) {
+    console.error("Load album reviews error", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+async function saveAlbumReview(albumId) {
+  if (!currentUser) {
+    alert("Please log in to write a review.");
+    return;
+  }
+
+  const textarea = document.getElementById("albumReviewText");
+  const message = document.getElementById("albumReviewMessage");
+
+  if (!textarea) return;
+
+  const reviewText = textarea.value.trim();
+
+  if (!reviewText) {
+  if (message) message.textContent = "Please write a review first.";
+  return;
+}
+
+  if (reviewText.length > MAX_REVIEW_LENGTH) {
+  if (message) message.textContent = "Review is too long. Maximum 500 characters.";
+  return;
+}
+
+  const { error } = await supabaseClient
+    .from("album_reviews")
+    .upsert({
+      user_id: currentUser.id,
+      album_id: Number(albumId),
+      review_text: reviewText,
+      updated_at: new Date().toISOString()
+    }, {
+      onConflict: "user_id,album_id"
+    });
+
+  if (error) {
+    console.error("Save album review error", error);
+    message.textContent = error.message;
+    return;
+  }
+
+  message.textContent = "Review posted.";
+
+await renderSelectedItem();
+
+setTimeout(() => {
+  const reviewsSection = document.querySelector(".album-reviews-section");
+  const newMessage = document.getElementById("albumReviewMessage");
+
+  if (reviewsSection) {
+    reviewsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  if (newMessage) {
+    newMessage.textContent = "Review posted.";
+  }
+}, 100);
+}
+
+window.saveAlbumReview = saveAlbumReview;
+
+function renderAlbumReviewsSection(albumId, reviews = []) {
+  const myReview = currentUser
+    ? reviews.find((review) => review.user_id === currentUser.id)
+    : null;
+
+  const otherReviews = reviews.filter((review) =>
+    !currentUser || review.user_id !== currentUser.id
+  );
+
+  const reviewCount = reviews.length;
+
+  return `
+    <section class="album-reviews-section">
+      <div class="reviews-header">
+        <h3>Reviews</h3>
+        <span class="review-count">${reviewCount} review${reviewCount === 1 ? "" : "s"}</span>
+      </div>
+
+      ${
+        myReview
+          ? `
+            <div class="posted-review-card">
+              <div class="posted-review-top">
+                <strong>Your review</strong>
+                <button type="button" onclick="toggleReviewEditor()">Edit review</button>
+              </div>
+
+              <p>${escapeHtml(myReview.review_text)}</p>
+
+              <div class="review-date">
+                Posted ${new Date(myReview.updated_at || myReview.created_at).toLocaleDateString()}
+              </div>
+            </div>
+
+            <div id="reviewEditor" class="review-write-box hidden">
+          `
+          : `
+            <div id="reviewEditor" class="review-write-box">
+          `
+      }
+
+        <label for="albumReviewText">${myReview ? "Edit your review" : "Write your review"}</label>
+
+        <textarea
+          id="albumReviewText"
+          maxlength="${MAX_REVIEW_LENGTH}"
+          placeholder="What did you think of this album?"
+          oninput="document.getElementById('albumReviewCount').textContent = this.value.length + ' / ${MAX_REVIEW_LENGTH}'"
+        >${myReview ? escapeHtml(myReview.review_text) : ""}</textarea>
+
+        <div class="review-footer">
+          <span id="albumReviewCount">${myReview ? myReview.review_text.length : 0} / ${MAX_REVIEW_LENGTH}</span>
+          <button type="button" onclick="saveAlbumReview(${Number(albumId)})">
+            ${myReview ? "Update review" : "Post review"}
+          </button>
+        </div>
+
+        <p id="albumReviewMessage" class="small"></p>
+      </div>
+
+      <div class="community-reviews">
+        <h4>Community reviews</h4>
+
+        ${
+          otherReviews.length
+            ? otherReviews.map((review) => `
+                <div class="review-card">
+                  <p>${escapeHtml(review.review_text)}</p>
+                  <div class="review-date">
+                    ${new Date(review.updated_at || review.created_at).toLocaleDateString()}
+                  </div>
+                </div>
+              `).join("")
+            : `<p class="small">No other reviews yet.</p>`
+        }
+      </div>
+    </section>
+  `;
+}
 
 async function renderSelectedItem() {
 
@@ -5277,6 +5433,12 @@ if (releaseGroupId) {
   selectedItem.id ||
   selectedItem.album_id ||
   null;
+  
+  const albumReviews = albumId
+  ? await loadAlbumReviews(albumId)
+  : [];
+
+const albumReviewCount = albumReviews.length;
 
       const refreshedAvg = albumId ? getAlbumAverage(albumId) : null;
 
@@ -5322,6 +5484,14 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
             <div class="detail-info-panel">
 
               <div class="media-title">${escapeHtml(detail?.title || selectedItem.title)}</div>
+			  
+			  <div class="album-activity-line">
+
+  ${refreshedAvg ? `⭐ ${refreshedAvg.avg.toFixed(1)} / 10` : "No ratings yet"}
+
+  ${albumReviewCount ? ` · 📝 ${albumReviewCount} review${albumReviewCount === 1 ? "" : "s"}` : " · No reviews yet"}
+
+</div>
 
               <div class="media-subtitle">
   ${renderClickableArtistName(displayArtist)}
@@ -5364,6 +5534,13 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
           </div>
 
           ${trackListHtml}
+
+${albumId
+  ? renderAlbumReviewsSection(
+      albumId,
+      albumReviews
+    )
+  : ""}
 
 		  ${(() => {
   const moreAlbums = allAlbums
@@ -8070,6 +8247,12 @@ document.getElementById("stickyPlayerShareBtn")?.addEventListener("click", async
   event.stopPropagation();
   if (selectedItem && (selectedItem.type === "album" || selectedItem.type === "song")) await shareSelectedItem();
 });
+
+window.toggleReviewEditor = function () {
+  const editor = document.getElementById("reviewEditor");
+  if (!editor) return;
+  editor.classList.toggle("hidden");
+};
 
 window.addEventListener("popstate", async () => { await handleIncomingShareLink(); });
 
