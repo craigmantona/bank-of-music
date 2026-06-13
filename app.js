@@ -35,6 +35,8 @@ const passwordInput = document.getElementById("password");
 
 const birthYearInput = document.getElementById("birthYear");
 
+const handleInput = document.getElementById("handleInput");
+
 const signupBtn = document.getElementById("signupBtn");
 
 const loginBtn = document.getElementById("loginBtn");
@@ -629,29 +631,16 @@ function injectProfileStyles() {
 
 
 function cleanHandle(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^@+/, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, "")
+    .slice(0, 20);
+}
 
- const cleaned = String(value || "")
-
-   .toLowerCase()
-
-   .replace(/@.*/, "")
-
-   .replace(/[^a-z0-9_]/g, "_")
-
-   .replace(/_+/g, "_")
-
-   .replace(/^_+|_+$/g, "")
-
-   .slice(0, 24);
-
-
-
- if (!cleaned) return "bom_user";
-
- if (cleaned.length < 3) return `${cleaned}_bom`;
-
- return cleaned;
-
+function isValidHandle(handle) {
+  return /^[a-z0-9_]{3,20}$/.test(handle);
 }
 
 async function updateCurrentUserHandle() {
@@ -1666,6 +1655,20 @@ function getSongAverage(songId) {
 
 }
 
+function getLinkedSongAverage(songIds) {
+  const ids = songIds.map(Number);
+
+  const ratings = allSongRatings
+    .filter((row) => ids.includes(Number(row.song_id)))
+    .map((row) => Number(row.rating));
+
+  if (!ratings.length) return null;
+
+  return {
+    avg: ratings.reduce((sum, value) => sum + value, 0) / ratings.length,
+    count: ratings.length
+  };
+}
 
 
 function getYourAlbumRating(albumId) {
@@ -1698,7 +1701,20 @@ function getYourSongRating(songId) {
 
 }
 
+function getYourSongRatingByTitleArtist(title, artist) {
 
+  const key = normaliseCompare(`${artist}-${title}`);
+
+  const matchingSong = allSongs.find(
+    (song) =>
+      normaliseCompare(`${song.artist}-${song.title}`) === key
+  );
+
+  if (!matchingSong) return null;
+
+  return getYourSongRating(matchingSong.id);
+
+}
 
 function renderStarSelector(targetId, currentValue = null) {
   const safeValue = currentValue !== null ? Number(currentValue) : 0;
@@ -1869,7 +1885,36 @@ function updateTrackRowUi(songId) {
 
   const avgData = getSongAverage(songId);
 
-  const yourRating = getYourSongRating(songId);
+  const selectedSong = allSongs.find(
+  (song) => Number(song.id) === Number(songId)
+);
+
+const selectedKey = selectedSong
+  ? normaliseCompare(`${selectedSong.artist}-${selectedSong.title}`)
+  : "";
+
+const linkedSongIds = selectedSong
+  ? allSongs
+      .filter((song) => {
+        const sameExternalId =
+          selectedSong.external_id &&
+          song.external_id &&
+          song.external_id === selectedSong.external_id;
+
+        const sameTitleArtist =
+          normaliseCompare(`${song.artist}-${song.title}`) === selectedKey;
+
+        return sameExternalId || sameTitleArtist;
+      })
+      .map((song) => Number(song.id))
+  : [Number(songId)];
+
+const yourRatingRow = songRatings.find((rating) =>
+  linkedSongIds.includes(Number(rating.song_id)) &&
+  rating.user_id === currentUser?.id
+);
+
+const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
 
 
@@ -1967,6 +2012,7 @@ async function signUp() {
   const email = emailInput?.value.trim() || "";
   const password = passwordInput?.value.trim() || "";
   const birthYear = Number(birthYearInput?.value || 0);
+  const handle = cleanHandle(handleInput?.value || "");
   const currentYear = new Date().getFullYear();
 
   if (!email || !password) {
@@ -1979,20 +2025,38 @@ async function signUp() {
     return;
   }
 
-  try {
-    const { data, error } = await supabaseClient.auth.signUp({
-
-  email,
-
-  password,
-
-  options: {
-
-    emailRedirectTo: window.location.origin + window.location.pathname
-
+  if (!isValidHandle(handle)) {
+    setMessage(
+      authMessage,
+      "Handle must be 3-20 characters and only use letters, numbers and underscores."
+    );
+    return;
   }
 
-});
+  const { data: existingHandle, error: handleCheckError } = await supabaseClient
+    .from("profiles")
+    .select("id")
+    .eq("handle", handle)
+    .maybeSingle();
+
+  if (handleCheckError) {
+    setMessage(authMessage, handleCheckError.message);
+    return;
+  }
+
+  if (existingHandle) {
+    setMessage(authMessage, "That handle is already taken.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + window.location.pathname
+      }
+    });
 
     if (error) {
       setMessage(authMessage, error.message);
@@ -2004,18 +2068,15 @@ async function signUp() {
         .from("profiles")
         .upsert({
           id: data.user.id,
-          handle: cleanHandle(email),
+          handle,
           birth_year: birthYear
         });
     }
 
     setMessage(
-
-  authMessage,
-
-  "Account created. Please check your email and click the confirmation link before logging in."
-
-);
+      authMessage,
+      "Account created. Please check your email and click the confirmation link before logging in."
+    );
   } catch (err) {
     setMessage(authMessage, "Error: " + err.message);
   }
@@ -3054,7 +3115,9 @@ function renderLibrary() {
       ? ratedSongs.map((song) => {
           const avgData = getSongAverage(song.id);
 
-          const yourRating = getYourSongRating(song.id);
+const yourRating =
+  getYourSongRating(song.id) ??
+  getYourSongRatingByTitleArtist(song.title, song.artist);
 
           const albumName = song.album_id ? getAlbumNameById(song.album_id) : "";
 
@@ -3655,28 +3718,37 @@ ${item.versionCount > 1 ? `<div class="result-meta">+ ${item.versionCount - 1} o
 
 
     const artists = sortBySearchScore(
+  (artistData.artists || []).map((artist) => ({
+    type: "artist",
+    name: artist.name || "Unknown",
+    title: artist.name || "Unknown",
+    artist: artist.name || "Unknown",
+    externalId: artist.id || "",
+    country: artist.country || "",
+    disambiguation: artist.disambiguation || "",
+    score: artist.score || 0,
+    releaseCount: artist["release-count"] || 0
+  })),
+  query
+)
+.sort((a, b) => {
+  const cleanQuery = normaliseCompare(query);
+  const aName = normaliseCompare(a.name);
+  const bName = normaliseCompare(b.name);
 
-      (artistData.artists || []).map((artist) => ({
+  const aBad = /tribute|karaoke|string quartet|cover|experience/i.test(a.name + " " + a.disambiguation);
+  const bBad = /tribute|karaoke|string quartet|cover|experience/i.test(b.name + " " + b.disambiguation);
 
-        type: "artist",
+  if (aBad !== bBad) return aBad ? 1 : -1;
 
-        name: artist.name || "Unknown artist",
+  const aExact = aName === cleanQuery;
+  const bExact = bName === cleanQuery;
 
-        title: artist.name || "Unknown artist",
+  if (aExact !== bExact) return aExact ? -1 : 1;
 
-        artist: artist.name || "Unknown artist",
-
-        externalId: artist.id || "",
-
-        country: artist.country || "",
-
-        disambiguation: artist.disambiguation || ""
-
-      })),
-
-      query
-
-    ).slice(0, 15);
+  return Number(b.releaseCount || 0) - Number(a.releaseCount || 0);
+})
+.slice(0, 20);
 
 
 
@@ -3815,17 +3887,41 @@ function isBadSongReleaseTitle(title) {
   );
 }
 
-function releaseScore(release, artistName) {
+function bigArtistBoost(artistName) {
+  const clean = normaliseCompare(artistName);
+
+  const boosts = {
+    oasis: 1000,
+    thebeatles: 1000,
+    beatles: 1000,
+    therollingstones: 950,
+    rollingstones: 950,
+    davidbowie: 900,
+    queen: 900,
+    radiohead: 850,
+    blur: 850,
+    pinkfloyd: 850
+  };
+
+  return boosts[clean] || 0;
+}
+
+function releaseScore(release, artistName, songTitle = "") {
   const title = release.title || "";
   const cleanTitle = normaliseCompare(title);
-  let score = 0;
+  let score = bigArtistBoost(artistName);
 
   if (!isBadSongReleaseTitle(title)) score += 100;
   if (release.date) score += 20;
   if (release.status === "Official") score += 15;
   if (release.country === "GB") score += 10;
-  if (cleanTitle.includes("whatsthestorymorningglory")) score += 500;
-  if (normaliseCompare(artistName).includes("oasis") && cleanTitle.includes("morningglory")) score += 500;
+  if (
+  normaliseCompare(artistName) === "oasis" &&
+  normaliseCompare(songTitle) === "wonderwall" &&
+  cleanTitle.includes("whatsthestorymorningglory")
+) {
+  score += 5000;
+}
 
   return score;
 }
@@ -3836,7 +3932,9 @@ const rawSongs = (songData.recordings || []).map((rec) => {
 
   const bestRelease = releases
     .slice()
-    .sort((a, b) => releaseScore(b, artist) - releaseScore(a, artist))[0] || {};
+    .sort((a, b) =>
+  releaseScore(b, artist, rec.title) - releaseScore(a, artist, rec.title)
+)[0] || {};
 
   return {
     type: "song",
@@ -5178,8 +5276,21 @@ async function renderSelectedItem() {
 
 const linkedAlbumCover = linkedAlbum ? getAlbumArtworkUrl(linkedAlbum) : "";
 
-  const avgData = getSongAverage(song.id || songId);
-  const yourRating = getYourSongRating(song.id || songId);
+  const linkedSongIds = allSongs
+  .filter((s) =>
+    normaliseCompare(`${s.artist}-${s.title}`) ===
+    normaliseCompare(`${song.artist || selectedItem.artist}-${song.title || selectedItem.title}`)
+  )
+  .map((s) => Number(s.id));
+
+const avgData = getLinkedSongAverage(linkedSongIds);
+
+const yourRatingRow = allSongRatings.find((rating) =>
+  rating.user_id === currentUser?.id &&
+  linkedSongIds.includes(Number(rating.song_id))
+);
+
+const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
   selectedItemDetail.innerHTML = `
     <div class="detail-panel">
@@ -6286,7 +6397,29 @@ async function saveTrackRating(songId) {
 
   const rating = parseFloat(input.value);
 
-  if (isNaN(rating) || rating < 0 || rating > 10) {
+const selectedSong = allSongs.find(
+  (song) => Number(song.id) === Number(songId)
+);
+
+const selectedKey = selectedSong
+  ? normaliseCompare(`${selectedSong.artist}-${selectedSong.title}`)
+  : "";
+
+const matchingSongs = selectedSong
+  ? allSongs.filter((song) => {
+      const sameExternalId =
+        selectedSong.external_id &&
+        song.external_id &&
+        song.external_id === selectedSong.external_id;
+
+      const sameTitleArtist =
+        normaliseCompare(`${song.artist}-${song.title}`) === selectedKey;
+
+      return sameExternalId || sameTitleArtist;
+    })
+  : [];
+
+if (isNaN(rating) || rating < 0 || rating > 10) {
 
     setMessage(globalSearchMessage, "Track rating must be between 0 and 10.");
 
@@ -6295,12 +6428,18 @@ async function saveTrackRating(songId) {
   }
 
 
+const ratingRows = matchingSongs.map((song) => ({
+  user_id: currentUser.id,
+  song_id: Number(song.id),
+  rating
+}));
 
-  const { error } = await supabaseClient
 
-    .from("song_ratings")
-
-    .upsert([{ user_id: currentUser.id, song_id: Number(songId), rating }], { onConflict: "user_id,song_id" });
+const { error } = await supabaseClient
+  .from("song_ratings")
+  .upsert(ratingRows, {
+    onConflict: "user_id,song_id"
+  });
 
 
 
@@ -6314,9 +6453,10 @@ async function saveTrackRating(songId) {
 
 
 
-  upsertLocalSongRating(songId, rating);
-
-  updateTrackRowUi(songId);
+  matchingSongs.forEach((song) => {
+  upsertLocalSongRating(song.id, rating);
+  updateTrackRowUi(song.id);
+});
 
   renderLibrary();
 
