@@ -6620,6 +6620,24 @@ function renderAdminDashboard() {
     .slice(0, 120);
 
   adminDashboard.innerHTML = `
+  
+  <div class="admin-panel">
+  <h3>Members</h3>
+
+  <div class="admin-summary-grid">
+    <div class="admin-stat-card">
+      <div class="admin-stat-number" id="adminTotalUsers">0</div>
+      <div>Total users</div>
+    </div>
+  </div>
+
+  <div class="admin-stat-card" style="margin-top: 16px; max-width: 520px;">
+    <h4>Latest members</h4>
+    <div id="latestMembers">
+      <p class="small">Loading members...</p>
+    </div>
+  </div>
+</div>
 
     <div class="admin-summary-grid">
 
@@ -6719,9 +6737,67 @@ function renderAdminDashboard() {
 
   `;
 
+loadAdminStats();
 }
 
+async function loadAdminStats() {
+  const totalUsers = document.getElementById("adminTotalUsers");
+  const totalRatings = document.getElementById("adminTotalRatings");
+  const totalAlbums = document.getElementById("adminTotalAlbums");
+  const totalSongs = document.getElementById("adminTotalSongs");
+  const latestMembers = document.getElementById("latestMembers");
 
+  if (!latestMembers) return;
+
+  latestMembers.innerHTML = `<p class="small">Loading members...</p>`;
+
+  const { data: members, error: membersError } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (membersError) {
+    latestMembers.innerHTML = `<p class="small">Could not load members: ${escapeHtml(membersError.message)}</p>`;
+  } else {
+    latestMembers.innerHTML = (members || []).length
+      ? members.map((member) => `
+          <div class="member-row">
+            <strong>#${member.member_number || "-"}</strong>
+            &nbsp;
+            <strong>@${escapeHtml(member.handle || "unknown")}</strong>
+            &nbsp;
+            <span>${member.birth_year || ""}</span>
+          </div>
+        `).join("")
+      : `<p class="small">No members yet.</p>`;
+  }
+
+  const { count: userCount } = await supabaseClient
+    .from("profiles")
+    .select("*", { count: "exact", head: true });
+
+  const { count: albumRatingCount } = await supabaseClient
+    .from("ratings")
+    .select("*", { count: "exact", head: true });
+
+  const { count: songRatingCount } = await supabaseClient
+    .from("song_ratings")
+    .select("*", { count: "exact", head: true });
+
+  const { count: albumCount } = await supabaseClient
+    .from("albums")
+    .select("*", { count: "exact", head: true });
+
+  const { count: songCount } = await supabaseClient
+    .from("songs")
+    .select("*", { count: "exact", head: true });
+
+  if (totalUsers) totalUsers.textContent = userCount || 0;
+  if (totalRatings) totalRatings.textContent = (albumRatingCount || 0) + (songRatingCount || 0);
+  if (totalAlbums) totalAlbums.textContent = albumCount || 0;
+  if (totalSongs) totalSongs.textContent = songCount || 0;
+}
 
 async function refreshAdminDashboard() {
 
