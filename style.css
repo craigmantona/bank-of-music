@@ -4962,3 +4962,65 @@ button.song-album-link {
   font-weight: 800;
 }
 
+/* Mobile fix for track rating rows */
+@media (max-width: 600px) {
+  .track-table,
+  .track-table thead,
+  .track-table tbody,
+  .track-table tr,
+  .track-table th,
+  .track-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .track-table thead {
+    display: none;
+  }
+
+  .track-table tr {
+    margin-bottom: 18px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .track-table td {
+    padding: 8px 0;
+  }
+
+  .track-table td:nth-child(1)::before {
+    content: "Track ";
+    font-weight: 700;
+  }
+
+  .track-table td:nth-child(3)::before {
+    content: "Average: ";
+    font-weight: 700;
+  }
+
+  .track-table td:nth-child(4)::before {
+    content: "Your rating: ";
+    font-weight: 700;
+  }
+
+  .track-table td:nth-child(5)::before {
+    content: "Rate: ";
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .track-table .star-rating {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+  }
+
+  .track-table .star-option {
+    font-size: 1rem !important;
+  }
+}
+
