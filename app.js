@@ -2026,10 +2026,7 @@ async function signUp() {
   }
 
   if (!isValidHandle(handle)) {
-    setMessage(
-      authMessage,
-      "Handle must be 3-20 characters and only use letters, numbers and underscores."
-    );
+    setMessage(authMessage, "Handle must be 3-20 characters and only use letters, numbers and underscores.");
     return;
   }
 
@@ -2054,7 +2051,11 @@ async function signUp() {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin + window.location.pathname
+        emailRedirectTo: window.location.origin + window.location.pathname,
+        data: {
+          handle,
+          birth_year: birthYear
+        }
       }
     });
 
@@ -2064,13 +2065,21 @@ async function signUp() {
     }
 
     if (data?.user?.id) {
-      await supabaseClient
+      const { error: profileError } = await supabaseClient
         .from("profiles")
         .upsert({
           id: data.user.id,
           handle,
           birth_year: birthYear
+        }, {
+          onConflict: "id"
         });
+
+      if (profileError) {
+        console.error("Profile save failed", profileError);
+        setMessage(authMessage, "Account created, but profile details were not saved: " + profileError.message);
+        return;
+      }
     }
 
     setMessage(
@@ -4700,19 +4709,36 @@ async function renderArtistDetail(artistItem) {
 
   const artistName = artistItem.name || artistItem.artist || "Unknown artist";
 
-  const savedAlbums = getSavedAlbumsByArtist(artistName);
+const savedAlbums = getSavedAlbumsByArtist(artistName);
+const savedSongs = getSavedSongsByArtist(artistName);
 
-  const savedSongs = getSavedSongsByArtist(artistName);
+const artistMusicBrainzId =
+  artistItem.externalId || artistItem.artistId || await resolveArtistIdByName(artistName);
 
-  const artistMusicBrainzId = artistItem.externalId || artistItem.artistId || await resolveArtistIdByName(artistName);
+const remoteAlbums = await fetchArtistAlbumsFromApi(artistName, artistMusicBrainzId);
 
-  const remoteAlbums = await fetchArtistAlbumsFromApi(artistName, artistMusicBrainzId);
+const displayAlbums = savedAlbums
+  .map((album) => {
+    const matchingRemote = remoteAlbums.find((remote) =>
+      normaliseCompare(remote.title) === normaliseCompare(album.title)
+    );
+
+    return {
+      ...album,
+      coverUrl: getAlbumArtworkUrl(album) || matchingRemote?.coverUrl || "",
+      releaseDate: album.release_date || album.releaseDate || matchingRemote?.releaseDate || ""
+    };
+  })
+  .sort((a, b) =>
+    String(a.releaseDate || "9999-99-99").localeCompare(
+      String(b.releaseDate || "9999-99-99")
+    )
+  );
+  
 
   const artistDetail = artistItem.externalId ? await fetchArtistDetail(artistItem.externalId) : null;
 
   const premiumArtistImage = await fetchArtistImagePremium(artistName);
-  
-  console.log("Premium artist image result:", artistName, premiumArtistImage);
 
   const cachedArtistImage = "";
 
@@ -4821,7 +4847,7 @@ const bannerUrl = cachedArtistImage ||
 
             <div class="detail-meta-label">Saved albums</div>
 
-            <div class="detail-meta-value">${savedAlbums.length}</div>
+            <div class="detail-meta-value">${displayAlbums.length}</div>
 
 
 
@@ -4857,13 +4883,15 @@ const bannerUrl = cachedArtistImage ||
 
       <div class="section-divider">Studio albums - chronological discography</div>
 
-      ${remoteAlbums.length
+      ${displayAlbums.length
 
-        ? `<div class="artist-albums-grid">
+  ? `<div class="artist-albums-grid">
 
-            ${remoteAlbums.map((album, index) => `
+      ${displayAlbums.map((album) => `
 
-              <div class="poster-card artist-album-card" data-artist-album-index="${index}">
+              <div class="poster-card artist-album-card"
+     data-library-type="album"
+     data-album-id="${album.id}">
 
                 ${getPosterCoverMarkup(album.coverUrl, `${album.title} cover`)}
 
@@ -5880,6 +5908,8 @@ async function autoSaveSelectedSong() {
       artist: normaliseText(selectedItem.artist),
 
       album_id: selectedItem.albumId ? Number(selectedItem.albumId) : null,
+	  
+	  track_position: selectedItem.trackPosition || selectedItem.track_position || null,
 
       external_source: selectedItem.externalId ? "musicbrainz" : null,
 
@@ -8551,15 +8581,29 @@ async function adminAddAlbumFromForm() {
     artist,
     external_source: "manual",
     external_id: `manual-album-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    cover_art_url: coverUrl || selectedItem.coverUrl || selectedItem.cover_url || null,
+    cover_art_url: coverUrl || selectedItem?.coverUrl || selectedItem?.cover_url || null,
     release_date: releaseDate
   };
-  const { data, error } = await supabaseClient.from("albums").insert([payload]).select();
-  if (error) { setMessage(adminMessage, error.message); return; }
+  
+  alert(JSON.stringify(payload, null, 2));
+  
+  alert("Attempting to add album:\n\n" + title + "\n" + artist);
+  
+  const { data, error } = await supabaseClient
+  .from("albums")
+  .insert([payload])
+  .select()
+  .single();
+  if (error) {
+  alert("Album insert failed:\n\n" + error.message);
+  setMessage(adminMessage, error.message);
+  console.error(error);
+  return;
+}
   setMessage(adminMessage, `Album added: ${title}.`);
   ["adminNewAlbumTitle", "adminNewAlbumArtist", "adminNewAlbumDate", "adminNewAlbumCover"].forEach((id) => { const el = document.getElementById(id); if (el) el.value = ""; });
   await refreshAdminDashboard();
-  const createdAlbum = Array.isArray(data) ? data[0] : null;
+  const createdAlbum = data || null;
   if (createdAlbum) {
     selectedItem = { type: "album", title: createdAlbum.title, artist: createdAlbum.artist, externalId: createdAlbum.external_id || "", releaseDate: createdAlbum.release_date || "", coverUrl: getAlbumArtworkUrl(createdAlbum), savedAlbumId: createdAlbum.id };
     showOnlySection("detailSection");
@@ -8567,84 +8611,174 @@ async function adminAddAlbumFromForm() {
   }
 }
 
-async function importMusicBrainzRelease() {
+function extractMusicBrainzReleaseId(value) {
+  const text = String(value || "").trim();
 
-  const releaseId =
-    document.getElementById("mbReleaseId")?.value?.trim();
+  const match = text.match(
+    /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
+  );
+
+  return match ? match[0] : "";
+}
+
+async function importMusicBrainzRelease() {
+  if (!isAdmin) return;
+
+  const rawValue = document.getElementById("mbReleaseId")?.value?.trim() || "";
+  const releaseId = extractMusicBrainzReleaseId(rawValue);
 
   if (!releaseId) {
-    alert("Enter a MusicBrainz release ID");
+    alert("Paste a MusicBrainz release URL or release ID.");
     return;
   }
 
   try {
-
     const response = await fetch(
-      `https://musicbrainz.org/ws/2/release/${releaseId}?inc=recordings&fmt=json`
+      `https://musicbrainz.org/ws/2/release/${releaseId}?inc=recordings+artist-credits&fmt=json`
     );
 
-    const data = await response.json();
-
-    if (!data.media?.length) {
-      alert("No tracks found");
+    if (!response.ok) {
+      alert("MusicBrainz could not load that release. Please check the URL is a release page.");
       return;
     }
 
-    const releaseTitle = data.title;
-    const releaseArtist =
-      data["artist-credit"]?.[0]?.name || "Unknown";
+    const data = await response.json();
 
-    const selectedAlbumId = Number(document.getElementById("adminTrackAlbumSelect")?.value);
+    const releaseTitle = normaliseText(data.title || "");
+    const releaseArtist = normaliseText(data["artist-credit"]?.[0]?.name || "Unknown artist");
+    const releaseDate = normaliseReleaseDate(data.date || "");
+    const coverUrl = `https://coverartarchive.org/release/${releaseId}/front`;
 
-const matchingAlbum = allAlbums.find(album => Number(album.id) === selectedAlbumId);
+    if (!releaseTitle || !releaseArtist) {
+      alert("Could not read album title or artist from MusicBrainz.");
+      return;
+    }
 
-alert(
-  `Importing into:\n\n${matchingAlbum?.artist} - ${matchingAlbum?.title}\nAlbum ID: ${matchingAlbum?.id}`
-);
+    const albumPayload = {
+      title: releaseTitle,
+      artist: releaseArtist,
+      release_date: releaseDate || null,
+      cover_art_url: coverUrl,
+      external_source: "musicbrainz",
+      external_id: releaseId,
+      is_deleted: false
+    };
 
-if (!matchingAlbum) {
-  alert("Please select the album from the dropdown above first");
+    let { data: albumData, error: albumError } = await supabaseClient
+  .from("albums")
+  .upsert([albumPayload], {
+    onConflict: "external_source,external_id"
+  })
+  .select()
+  .single();
+
+if (albumError && albumError.code === "23505") {
+  const existing = await supabaseClient
+    .from("albums")
+    .select("*")
+    .eq("title", releaseTitle)
+    .eq("artist", releaseArtist)
+    .single();
+
+  if (existing.error) {
+    alert("Album import failed:\n\n" + existing.error.message);
+    console.error(existing.error);
+    return;
+  }
+
+  const updated = await supabaseClient
+    .from("albums")
+    .update({
+      release_date: releaseDate || existing.data.release_date || null,
+      cover_art_url: coverUrl || existing.data.cover_art_url || null,
+      external_source: "musicbrainz",
+      external_id: releaseId,
+      is_deleted: false
+    })
+    .eq("id", existing.data.id)
+    .select()
+    .single();
+
+  if (updated.error) {
+    alert("Album update failed:\n\n" + updated.error.message);
+    console.error(updated.error);
+    return;
+  }
+
+  albumData = updated.data;
+  albumError = null;
+}
+
+if (albumError) {
+  alert("Album import failed:\n\n" + albumError.message);
+  console.error(albumError);
   return;
 }
 
-    let trackNumber = 1;
-
-    for (const medium of data.media) {
-
-      for (const track of medium.tracks || []) {
-
-        const title =
-          track.title || track.recording?.title;
-
-        if (!title) continue;
-
-        await supabaseClient
-          .from("songs")
-          .insert({
-            album_id: matchingAlbum.id,
-            title,
-            artist: releaseArtist,
-            track_number: trackNumber
-          });
-
-        trackNumber++;
-
-      }
-
+    if (albumError) {
+      alert("Album import failed:\n\n" + albumError.message);
+      console.error(albumError);
+      return;
     }
 
-    alert("Tracks imported");
+    let trackNumber = 1;
+
+    for (const medium of data.media || []) {
+      for (const track of medium.tracks || []) {
+        const title = normaliseText(track.title || track.recording?.title || "");
+        if (!title) continue;
+
+        const recordingId = track.recording?.id || null;
+
+        const songPayload = {
+          album_id: albumData.id,
+          title,
+          artist: releaseArtist,
+          track_position: trackNumber,
+          external_source: "musicbrainz",
+          external_id: recordingId,
+          is_deleted: false
+        };
+
+        if (recordingId) {
+          await supabaseClient
+            .from("songs")
+            .upsert([songPayload], {
+              onConflict: "external_source,external_id"
+            });
+        } else {
+          await supabaseClient
+            .from("songs")
+            .insert([songPayload]);
+        }
+
+        trackNumber++;
+      }
+    }
+
+    document.getElementById("mbReleaseId").value = "";
 
     await loadLibrary();
+    await refreshAdminDashboard();
 
+    selectedItem = {
+      type: "album",
+      title: albumData.title,
+      artist: albumData.artist,
+      externalId: albumData.external_id,
+      releaseDate: albumData.release_date || "",
+      coverUrl: getAlbumArtworkUrl(albumData),
+      savedAlbumId: albumData.id
+    };
+
+    showOnlySection("detailSection");
+    await renderSelectedItem();
+
+    alert(`Imported ${releaseTitle} with ${trackNumber - 1} tracks.`);
   } catch (error) {
-
     console.error(error);
-
-    alert("Import failed");
-
+    alert("Import failed:\n\n" + error.message);
   }
-
 }
 
 async function adminAddTrackFromForm() {
@@ -8831,7 +8965,7 @@ renderAdminDashboard = function() {
   <input
     id="mbReleaseId"
     type="text"
-    placeholder="MusicBrainz release ID"
+    placeholder="Paste MusicBrainz release URL or ID"
   />
 
   <button id="importMbReleaseBtn">
@@ -8904,13 +9038,21 @@ function goSearch() {
 }
 
 document.addEventListener("click", async (event) => {
-  if (event.target.id !== "importMbReleaseBtn") return;
 
-  event.preventDefault();
+  if (event.target.closest(".admin-add-album-btn")) {
+    event.preventDefault();
+    alert("Album button clicked");
+    await adminAddAlbumFromForm();
+    return;
+  }
 
-  alert("Import button clicked");
+  if (event.target.id === "importMbReleaseBtn") {
+    event.preventDefault();
+    alert("Import button clicked");
+    await importMusicBrainzRelease();
+    return;
+  }
 
-  await importMusicBrainzRelease();
 });
 
 window.addEventListener("scroll", handleScrollState, { passive: true });
