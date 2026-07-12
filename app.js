@@ -43,6 +43,8 @@ const loginBtn = document.getElementById("loginBtn");
 
 const logoutBtn = document.getElementById("logoutBtn");
 
+const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+
 const authMessage = document.getElementById("authMessage");
 
 const globalSearchInput = document.getElementById("globalSearchInput");
@@ -843,177 +845,81 @@ async function getChartPosition(itemType, itemId) {
 }
 
 async function ensureUserProfile() {
-
- if (!currentUser) {
-
-   currentProfile = null;
-
-   return null;
-
- }
-
-
-
- const fallbackHandle = getFallbackHandle();
-
-
-
- try {
-
-   const { data: existing, error: selectError } = await supabaseClient
-
-     .from("profiles")
-
-     .select("id, handle, member_number, created_at, is_admin")
-
-     .eq("id", currentUser.id)
-
-     .maybeSingle();
-
-
-
-   if (selectError && selectError.code !== "PGRST116") {
-
-     currentProfile = {
-
-       id: currentUser.id,
-
-       handle: fallbackHandle,
-
-       member_number: null,
-
-       created_at: null,
-
-       is_admin: false
-
-     };
-
-     return currentProfile;
-
-   }
-
-
-
-   if (existing) {
-
-     currentProfile = existing;
-
-     return currentProfile;
-
-   }
-
-
-
-   const preferredHandle = fallbackHandle;
-
-
-
-   let insertedProfile = null;
-
-
-
-   const firstAttempt = await supabaseClient
-
-     .from("profiles")
-
-     .insert({
-
-       id: currentUser.id,
-
-       handle: preferredHandle
-
-     })
-
-     .select("id, handle, member_number, created_at, is_admin")
-
-     .single();
-
-
-
-   if (firstAttempt.error) {
-
-     const suffix = String(currentUser.id || "")
-
-       .replace(/-/g, "")
-
-       .slice(0, 5);
-
-
-
-     const backupHandle = cleanHandle(`${preferredHandle}_${suffix}`);
-
-
-
-     const secondAttempt = await supabaseClient
-
-       .from("profiles")
-
-       .insert({
-
-         id: currentUser.id,
-
-         handle: backupHandle
-
-       })
-
-       .select("id, handle, member_number, created_at, is_admin")
-
-       .single();
-
-
-
-     if (!secondAttempt.error) {
-
-       insertedProfile = secondAttempt.data;
-
-     }
-
-   } else {
-
-     insertedProfile = firstAttempt.data;
-
-   }
-
-
-
-   currentProfile = insertedProfile || {
-
-     id: currentUser.id,
-
-     handle: preferredHandle,
-
-     member_number: null,
-
-     created_at: null
-
-   };
-
-
-
-   return currentProfile;
-
- } catch {
-
-   currentProfile = {
-
-     id: currentUser.id,
-
-     handle: fallbackHandle,
-
-     member_number: null,
-
-     created_at: null
-
-   };
-
-
-
-   return currentProfile;
-
- }
-
+  if (!currentUser) {
+    currentProfile = null;
+    return null;
+  }
+
+  const meta = currentUser.user_metadata || {};
+  const fallbackHandle = getFallbackHandle();
+
+  const metadataHandle = cleanHandle(meta.handle || "");
+  const preferredHandle = metadataHandle || fallbackHandle;
+  const metadataBirthYear = Number(meta.birth_year || 0) || null;
+
+  try {
+    const { data: existing, error: selectError } = await supabaseClient
+      .from("profiles")
+      .select("id, handle, member_number, created_at, is_admin, birth_year")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+    if (selectError && selectError.code !== "PGRST116") {
+      console.error("Profile lookup failed", selectError);
+      return null;
+    }
+
+    if (existing) {
+      currentProfile = existing;
+      return currentProfile;
+    }
+
+    let insertedProfile = null;
+
+    const firstAttempt = await supabaseClient
+      .from("profiles")
+      .insert({
+        id: currentUser.id,
+        handle: preferredHandle,
+        birth_year: metadataBirthYear
+      })
+      .select("id, handle, member_number, created_at, is_admin, birth_year")
+      .single();
+
+    if (firstAttempt.error) {
+      const suffix = String(currentUser.id || "")
+        .replace(/-/g, "")
+        .slice(0, 5);
+
+      const backupHandle = cleanHandle(`${preferredHandle}_${suffix}`);
+
+      const secondAttempt = await supabaseClient
+        .from("profiles")
+        .insert({
+          id: currentUser.id,
+          handle: backupHandle,
+          birth_year: metadataBirthYear
+        })
+        .select("id, handle, member_number, created_at, is_admin, birth_year")
+        .single();
+
+      if (!secondAttempt.error) {
+        insertedProfile = secondAttempt.data;
+      } else {
+        console.error("Profile insert failed", secondAttempt.error);
+      }
+    } else {
+      insertedProfile = firstAttempt.data;
+    }
+
+    currentProfile = insertedProfile;
+    return currentProfile;
+  } catch (err) {
+    console.error("ensureUserProfile failed", err);
+    currentProfile = null;
+    return null;
+  }
 }
-
 
 
 function getUserDisplayName() {
@@ -1144,6 +1050,7 @@ function renderProfileModalContent() {
 
          <p>Member ${escapeHtml(memberNumber)}</p>
 <button type="button" id="editHandleBtn" class="secondary-btn">Edit handle</button>
+<button type="button" id="logoutProfileBtn" class="secondary-btn">Logout</button>
 
        </div>
 
@@ -1271,38 +1178,54 @@ function hideUserProfile() {
 
 }
 
+function showUserAccountMenu() {
+  if (!currentUser) return;
 
+  const handle = currentProfile?.handle ? `@${currentProfile.handle}` : "No handle set";
+  const email = currentUser.email || "Email not available";
+
+  const choice = prompt(
+    `Account menu:\n\n${handle}\n${email}\n\n1. My Profile\n2. Settings\n3. Logout\n\nType 1, 2 or 3`
+  );
+
+  if (choice === "1") {
+    showUserProfile();
+    return;
+  }
+
+  if (choice === "2") {
+    alert("Settings coming soon");
+    return;
+  }
+
+  if (choice === "3") {
+    logOut();
+  }
+}
 
 function updateSessionUI() {
+  if (!sessionStatus || !authCard) return;
 
- if (!sessionStatus || !authCard) return;
+  if (currentUser) {
+    const displayName = getUserDisplayName();
 
+    sessionStatus.innerHTML = `
+      <button type="button" class="session-profile-btn" title="Open account menu">
+        ${escapeHtml(displayName)} ▼
+      </button>
+    `;
 
+    sessionStatus.classList.add("session-clickable");
+    authCard.classList.add("hidden");
+  } else {
+    currentProfile = null;
 
- if (currentUser) {
+    sessionStatus.textContent = "Not logged in";
+    sessionStatus.classList.remove("session-clickable");
+    authCard.classList.remove("hidden");
+  }
 
-   const displayName = getUserDisplayName();
-
-   sessionStatus.innerHTML = `Logged in as <button type="button" class="session-profile-btn" title="Open profile">${escapeHtml(displayName)}</button>`;
-
-   sessionStatus.classList.add("session-clickable");
-
-   authCard.classList.add("hidden");
-
- } else {
-
-   currentProfile = null;
-
-   sessionStatus.textContent = "Not logged in";
-
-   sessionStatus.classList.remove("session-clickable");
-
-   authCard.classList.remove("hidden");
-
- }
-
- updateAdminAccessUI();
-
+  updateAdminAccessUI();
 }
 
 function updateAdminAccessUI() {
@@ -2064,28 +1987,12 @@ async function signUp() {
       return;
     }
 
-    if (data?.user?.id) {
-      const { error: profileError } = await supabaseClient
-        .from("profiles")
-        .upsert({
-          id: data.user.id,
-          handle,
-          birth_year: birthYear
-        }, {
-          onConflict: "id"
-        });
+    
 
-      if (profileError) {
-        console.error("Profile save failed", profileError);
-        setMessage(authMessage, "Account created, but profile details were not saved: " + profileError.message);
-        return;
-      }
-    }
-
-    setMessage(
-      authMessage,
-      "Account created. Please check your email and click the confirmation link before logging in."
-    );
+setMessage(
+    authMessage,
+    "Account created. Please check your email and click the confirmation link before logging in."
+);
   } catch (err) {
     setMessage(authMessage, "Error: " + err.message);
   }
@@ -2197,6 +2104,25 @@ async function logOut() {
 
 }
 
+async function resetPassword() {
+  const email = emailInput?.value.trim() || "";
+
+  if (!email) {
+    setMessage(authMessage, "Enter your email address first, then tap Forgot password.");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  });
+
+  if (error) {
+    setMessage(authMessage, error.message);
+    return;
+  }
+
+  setMessage(authMessage, "Password reset email sent. Please check your inbox.");
+}
 
 async function fetchAllRows(tableName, orderColumn = "id") {
   let allRows = [];
@@ -7013,6 +6939,8 @@ if (loginBtn) loginBtn.addEventListener("click", logIn);
 
 if (logoutBtn) logoutBtn.addEventListener("click", logOut);
 
+if (forgotPasswordBtn) forgotPasswordBtn.addEventListener("click", resetPassword);
+
 if (globalSearchBtn) {
   globalSearchBtn.addEventListener("click", () => runGlobalSearch(false));
 }
@@ -7773,17 +7701,12 @@ bindCardClicks(songsList);
 bindCardClicks(selectedItemDetail);
 
 if (sessionStatus) {
-
   sessionStatus.addEventListener("click", async (event) => {
-
     const profileButton = event.target.closest(".session-profile-btn");
-
     if (!profileButton) return;
 
-    await showUserProfile();
-
+    showUserAccountMenu();
   });
-
 }
 
 
@@ -7876,6 +7799,22 @@ document.addEventListener("click", async (event) => {
   event.preventDefault();
   await updateCurrentUserHandle();
   return;
+}
+
+if (event.target.closest("#logoutProfileBtn")) {
+    event.preventDefault();
+
+    await supabaseClient.auth.signOut();
+
+    currentUser = null;
+    currentProfile = null;
+
+    updateSessionUI();
+	showOnlySection("searchSection");
+
+    profileModal.classList.add("hidden");
+
+    return;
 }
 
   if (event.target.closest("#stickyPlayerOpenBtn")) {
@@ -8543,6 +8482,13 @@ function renderProfileModalContent() {
           <h2>${escapeHtml(displayHandle)}</h2>
           <p>Member ${escapeHtml(memberNumber)}</p>
 <button type="button" id="editHandleBtn" class="secondary-btn">Edit handle</button>
+
+<button type="button"
+        id="logoutProfileBtn"
+        class="secondary-btn"
+        style="margin-left:10px;">
+    Logout
+</button>
 		  
         </div>
         <button type="button" class="profile-close-btn" data-profile-close="true">×</button>
