@@ -870,9 +870,29 @@ async function ensureUserProfile() {
     }
 
     if (existing) {
+  if (!existing.birth_year && metadataBirthYear) {
+    const { data: updatedProfile, error: updateError } = await supabaseClient
+      .from("profiles")
+      .update({
+        birth_year: metadataBirthYear
+      })
+      .eq("id", currentUser.id)
+      .select("id, handle, member_number, created_at, is_admin, birth_year")
+      .single();
+
+    if (updateError) {
+      console.error("Birth year update failed", updateError);
       currentProfile = existing;
       return currentProfile;
     }
+
+    currentProfile = updatedProfile;
+    return currentProfile;
+  }
+
+  currentProfile = existing;
+  return currentProfile;
+}
 
     let insertedProfile = null;
 
@@ -1178,29 +1198,10 @@ function hideUserProfile() {
 
 }
 
-function showUserAccountMenu() {
+async function showUserAccountMenu() {
   if (!currentUser) return;
 
-  const handle = currentProfile?.handle ? `@${currentProfile.handle}` : "No handle set";
-  const email = currentUser.email || "Email not available";
-
-  const choice = prompt(
-    `Account menu:\n\n${handle}\n${email}\n\n1. My Profile\n2. Settings\n3. Logout\n\nType 1, 2 or 3`
-  );
-
-  if (choice === "1") {
-    showUserProfile();
-    return;
-  }
-
-  if (choice === "2") {
-    alert("Settings coming soon");
-    return;
-  }
-
-  if (choice === "3") {
-    logOut();
-  }
+  await showUserProfile();
 }
 
 function updateSessionUI() {
