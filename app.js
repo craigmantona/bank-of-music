@@ -125,6 +125,11 @@ let currentProfile = null;
 
 let isAdmin = false;
 
+/*
+  Prevents the tap that opens a profile from also opening
+  one of the albums inside the newly displayed profile.
+*/
+let profileOpenedAt = 0;
 
 
 function setMessage(element, text) {
@@ -169,7 +174,6 @@ function renderClickableProfileHandle(profile, userId, fallbackText = "BoM membe
   type="button"
   class="review-member-handle clickable-profile-handle"
   data-open-profile-id="${escapeHtml(userId)}"
-  onclick="event.preventDefault(); event.stopPropagation();"
       title="View ${escapeHtml(handle)}'s profile"
     >
       ${escapeHtml(handle)}
@@ -7906,61 +7910,64 @@ if (sessionStatus) {
 
 
 if (profileModal) {
-
   profileModal.addEventListener("click", async (event) => {
+    const closeButton = event.target.closest("[data-profile-close='true']");
 
-    if (event.target.closest("[data-profile-close='true']")) {
+    if (closeButton) {
+      event.preventDefault();
+      event.stopPropagation();
 
       hideUserProfile();
-
       return;
-
     }
-
-
 
     const albumRow = event.target.closest("[data-profile-album-id]");
 
-    if (albumRow) {
+    if (!albumRow) return;
 
-      const albumId = Number(albumRow.dataset.profileAlbumId);
+    event.preventDefault();
+    event.stopPropagation();
 
-      const album = allAlbums.find((row) => Number(row.id) === albumId);
+    /*
+      Ignore any ghost click created by the original tap that
+      opened the profile.
 
-      if (!album) return;
+      A genuine second tap on an album will work normally.
+    */
+    const millisecondsSinceProfileOpened =
+      Date.now() - profileOpenedAt;
 
-
-
-      selectedItem = {
-
-        type: "album",
-
-        title: album.title,
-
-        artist: album.artist,
-
-        externalId: album.external_id || "",
-
-        releaseDate: album.release_date || "",
-
-        coverUrl: album.cover_art_url || "",
-
-        savedAlbumId: album.id
-
-      };
-
-
-
-      hideUserProfile();
-
-      showOnlySection("detailSection");
-
-      await renderSelectedItem();
-
+    if (millisecondsSinceProfileOpened < 900) {
+      console.log("Ignored profile ghost click");
+      return;
     }
 
-  });
+    const albumId = Number(albumRow.dataset.profileAlbumId);
 
+    if (!albumId) return;
+
+    const album = allAlbums.find(
+      (row) => Number(row.id) === albumId
+    );
+
+    if (!album) return;
+
+    selectedItem = {
+      type: "album",
+      title: album.title,
+      artist: album.artist,
+      externalId: album.external_id || "",
+      releaseDate: album.release_date || "",
+      coverUrl: getAlbumArtworkUrl(album),
+      savedAlbumId: album.id,
+      albumId: album.id
+    };
+
+    hideUserProfile();
+    showOnlySection("detailSection");
+
+    await renderSelectedItem();
+  });
 }
 
 
@@ -8340,9 +8347,25 @@ async function renderPublicProfile(profile) {
     </div>
   `;
 
-  profileModal.classList.remove("hidden");
-  profileModal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("profile-open");
+  /*
+  Record exactly when the profile appeared.
+
+  Mobile Safari can reuse the opening tap on newly rendered
+  content, so album links are temporarily locked.
+*/
+profileOpenedAt = Date.now();
+
+profileModal.classList.remove("hidden");
+profileModal.setAttribute("aria-hidden", "false");
+document.body.classList.add("profile-open");
+
+profileModal.scrollTop = 0;
+
+const profilePanel = profileModal.querySelector(".profile-card-panel");
+
+if (profilePanel) {
+  profilePanel.scrollTop = 0;
+}
 }
 
 async function renderProfileSocialExtras() {
