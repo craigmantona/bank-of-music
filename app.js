@@ -151,6 +151,31 @@ function escapeHtml(value) {
 
 }
 
+function renderClickableProfileHandle(profile, userId, fallbackText = "BoM member") {
+  const handle = profile?.handle
+    ? `@${String(profile.handle).replace(/^@+/, "")}`
+    : fallbackText;
+
+  if (!userId) {
+    return `
+      <span class="review-member-handle">
+        ${escapeHtml(handle)}
+      </span>
+    `;
+  }
+
+  return `
+    <button
+      type="button"
+      class="review-member-handle clickable-profile-handle"
+      data-open-profile-id="${escapeHtml(userId)}"
+      title="View ${escapeHtml(handle)}'s profile"
+    >
+      ${escapeHtml(handle)}
+    </button>
+  `;
+}
+
 function renderClickableArtistName(artistName) {
   if (!artistName) return "";
 
@@ -1198,11 +1223,82 @@ function hideUserProfile() {
 
 }
 
-async function showUserAccountMenu() {
+function showUserAccountMenu() {
   if (!currentUser) return;
 
-  await showUserProfile();
+  const existingMenu = document.getElementById("accountDropdown");
+
+  if (existingMenu) {
+    existingMenu.remove();
+    return;
+  }
+
+  const handle = currentProfile?.handle
+    ? `@${currentProfile.handle}`
+    : "My account";
+
+  const email = currentUser.email || "";
+
+  const menu = document.createElement("div");
+  menu.id = "accountDropdown";
+  menu.className = "account-dropdown";
+
+  menu.innerHTML = `
+    <div class="account-dropdown-header">
+      <strong>${escapeHtml(handle)}</strong>
+      <span>${escapeHtml(email)}</span>
+    </div>
+
+    <button type="button" id="accountProfileBtn">
+      👤 My profile
+    </button>
+
+    <button type="button" id="accountLogoutBtn" class="account-logout-btn">
+      ↪ Logout
+    </button>
+  `;
+
+  document.body.appendChild(menu);
+
+  const handleButton = sessionStatus?.querySelector(".session-profile-btn");
+
+  if (handleButton) {
+    const rect = handleButton.getBoundingClientRect();
+
+    menu.style.top = `${rect.bottom + window.scrollY + 10}px`;
+    menu.style.left = `${Math.max(
+      12,
+      rect.right + window.scrollX - menu.offsetWidth
+    )}px`;
+  }
+
+  document
+    .getElementById("accountProfileBtn")
+    ?.addEventListener("click", async () => {
+      menu.remove();
+      await showUserProfile();
+    });
+
+  document
+    .getElementById("accountLogoutBtn")
+    ?.addEventListener("click", async () => {
+      menu.remove();
+      await logOut();
+    });
 }
+
+document.addEventListener("click", (event) => {
+  const menu = document.getElementById("accountDropdown");
+
+  if (!menu) return;
+
+  const clickedMenu = event.target.closest("#accountDropdown");
+  const clickedHandle = event.target.closest(".session-profile-btn");
+
+  if (!clickedMenu && !clickedHandle) {
+    menu.remove();
+  }
+});
 
 function updateSessionUI() {
   if (!sessionStatus || !authCard) return;
@@ -5044,7 +5140,7 @@ document.querySelectorAll(
 const MAX_REVIEW_LENGTH = 500;
 
 async function loadAlbumReviews(albumId) {
-  const { data, error } = await supabaseClient
+  const { data: reviews, error } = await supabaseClient
     .from("album_reviews")
     .select("*")
     .eq("album_id", Number(albumId))
@@ -5055,7 +5151,42 @@ async function loadAlbumReviews(albumId) {
     return [];
   }
 
-  return data || [];
+  if (!reviews?.length) {
+    return [];
+  }
+
+  const userIds = [
+    ...new Set(
+      reviews
+        .map((review) => review.user_id)
+        .filter(Boolean)
+    )
+  ];
+
+  let profilesById = {};
+
+  if (userIds.length) {
+    const { data: profiles, error: profilesError } = await supabaseClient
+      .from("profiles")
+      .select("id, handle, member_number")
+      .in("id", userIds);
+
+    if (profilesError) {
+      console.error("Review profile lookup error", profilesError);
+    } else {
+      profilesById = Object.fromEntries(
+        (profiles || []).map((profile) => [
+          profile.id,
+          profile
+        ])
+      );
+    }
+  }
+
+  return reviews.map((review) => ({
+    ...review,
+    profile: profilesById[review.user_id] || null
+  }));
 }
 
 async function saveAlbumReview(albumId) {
@@ -5133,7 +5264,10 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
     <section class="album-reviews-section">
       <div class="reviews-header">
         <h3>Reviews</h3>
-        <span class="review-count">${reviewCount} review${reviewCount === 1 ? "" : "s"}</span>
+
+        <span class="review-count">
+          ${reviewCount} review${reviewCount === 1 ? "" : "s"}
+        </span>
       </div>
 
       ${
@@ -5141,14 +5275,29 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
           ? `
             <div class="posted-review-card">
               <div class="posted-review-top">
-                <strong>Your review</strong>
-                <button type="button" onclick="toggleReviewEditor()">Edit review</button>
+                <div>
+                  <strong>Your review</strong>
+
+                  <div class="review-author-line">
+                    ${renderClickableProfileHandle(
+                      currentProfile,
+                      currentUser?.id,
+                      "You"
+                    )}
+                  </div>
+                </div>
+
+                <button type="button" onclick="toggleReviewEditor()">
+                  Edit review
+                </button>
               </div>
 
               <p>${escapeHtml(myReview.review_text)}</p>
 
               <div class="review-date">
-                Posted ${new Date(myReview.updated_at || myReview.created_at).toLocaleDateString()}
+                Posted ${new Date(
+                  myReview.updated_at || myReview.created_at
+                ).toLocaleDateString()}
               </div>
             </div>
 
@@ -5159,7 +5308,9 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
           `
       }
 
-        <label for="albumReviewText">${myReview ? "Edit your review" : "Write your review"}</label>
+        <label for="albumReviewText">
+          ${myReview ? "Edit your review" : "Write your review"}
+        </label>
 
         <textarea
           id="albumReviewText"
@@ -5169,8 +5320,14 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
         >${myReview ? escapeHtml(myReview.review_text) : ""}</textarea>
 
         <div class="review-footer">
-          <span id="albumReviewCount">${myReview ? myReview.review_text.length : 0} / ${MAX_REVIEW_LENGTH}</span>
-          <button type="button" onclick="saveAlbumReview(${Number(albumId)})">
+          <span id="albumReviewCount">
+            ${myReview ? myReview.review_text.length : 0} / ${MAX_REVIEW_LENGTH}
+          </span>
+
+          <button
+            type="button"
+            onclick="saveAlbumReview(${Number(albumId)})"
+          >
             ${myReview ? "Update review" : "Post review"}
           </button>
         </div>
@@ -5183,14 +5340,49 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
 
         ${
           otherReviews.length
-            ? otherReviews.map((review) => `
-                <div class="review-card">
-                  <p>${escapeHtml(review.review_text)}</p>
-                  <div class="review-date">
-                    ${new Date(review.updated_at || review.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-              `).join("")
+            ? otherReviews.map((review) => {
+                const profile = review.profile || null;
+
+                return `
+                  <article class="review-card">
+                    <div class="review-card-header">
+                      <div class="review-member-avatar">
+                        ${escapeHtml(
+                          String(profile?.handle || "B")
+                            .replace(/^@+/, "")
+                            .slice(0, 1)
+                            .toUpperCase()
+                        )}
+                      </div>
+
+                      <div class="review-member-info">
+                        ${renderClickableProfileHandle(
+                          profile,
+                          review.user_id
+                        )}
+
+                        ${
+                          profile?.member_number
+                            ? `
+                              <div class="review-member-number">
+                                Member #${escapeHtml(profile.member_number)}
+                              </div>
+                            `
+                            : ""
+                        }
+                      </div>
+                    </div>
+
+                    <p>${escapeHtml(review.review_text)}</p>
+
+                    <div class="review-date">
+                      Posted ${new Date(
+                        review.updated_at || review.created_at
+                      ).toLocaleDateString()}
+                    </div>
+                  </article>
+                `;
+              }).join("")
             : `<p class="small">No other reviews yet.</p>`
         }
       </div>
@@ -7784,6 +7976,21 @@ document.addEventListener("keydown", (event) => {
 
 
 document.addEventListener("click", async (event) => {
+	
+	  const profileHandle = event.target.closest("[data-open-profile-id]");
+
+  if (profileHandle) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const profileId = profileHandle.dataset.openProfileId;
+
+    if (profileId) {
+      await openPublicProfileById(profileId);
+    }
+
+    return;
+  }
 
   const carouselArrow = event.target.closest(".carousel-arrow");
   if (carouselArrow) {
