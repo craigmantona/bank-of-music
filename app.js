@@ -156,7 +156,11 @@ function escapeHtml(value) {
 
 }
 
-function renderClickableProfileHandle(profile, userId, fallbackText = "BoM member") {
+function renderClickableProfileHandle(
+  profile,
+  userId,
+  fallbackText = "BoM member"
+) {
   const handle = profile?.handle
     ? `@${String(profile.handle).replace(/^@+/, "")}`
     : fallbackText;
@@ -171,9 +175,15 @@ function renderClickableProfileHandle(profile, userId, fallbackText = "BoM membe
 
   return `
     <button
-  type="button"
-  class="review-member-handle clickable-profile-handle"
-  data-open-profile-id="${escapeHtml(userId)}"
+      type="button"
+      class="review-member-handle clickable-profile-handle"
+      data-profile-user-id="${escapeHtml(userId)}"
+      onclick="
+        event.preventDefault();
+        event.stopPropagation();
+        window.openPublicProfileById('${escapeHtml(userId)}');
+        return false;
+      "
       title="View ${escapeHtml(handle)}'s profile"
     >
       ${escapeHtml(handle)}
@@ -7982,35 +7992,6 @@ document.addEventListener("keydown", (event) => {
 
 });
 
-/* ============================================================
-   v46 PROFILE CLICK SAFETY
-   Captures profile-handle clicks before album/card listeners.
-   ============================================================ */
-
-document.addEventListener(
-  "click",
-  async (event) => {
-    const profileHandle = event.target.closest("[data-open-profile-id]");
-
-    if (!profileHandle) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
-    const profileId = String(
-      profileHandle.dataset.openProfileId || ""
-    ).trim();
-
-    if (!profileId) {
-      setMessage(globalSearchMessage, "Profile could not be opened.");
-      return;
-    }
-
-    await openPublicProfileById(profileId);
-  },
-  true
-);
 
 document.addEventListener("click", async (event) => {
 	
@@ -8267,6 +8248,8 @@ async function openPublicProfileById(profileId) {
 
   await renderPublicProfile(data);
 }
+
+window.openPublicProfileById = openPublicProfileById;
 
 async function openPublicProfileByHandle(handle) {
   const profile = await findProfileByHandle(handle);
