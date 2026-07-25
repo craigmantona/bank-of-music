@@ -317,13 +317,14 @@ function showOnlySection(targetId) {
   }
 
   [
-    "searchSection",
-    "recommendationsSection",
-    "librarySection",
-    "detailSection",
-    "chartsSection",
-    "adminSection"
-  ].forEach((id) => {
+  "searchSection",
+  "recommendationsSection",
+  "librarySection",
+  "detailSection",
+  "chartsSection",
+  "settingsSection",
+  "adminSection"
+].forEach((id) => {
 
     const section = document.getElementById(id);
 
@@ -8039,6 +8040,655 @@ if (event.target.closest("#logoutProfileBtn")) {
 
 });
 
+/* ============================================================
+   SPOTIFY CONNECTION — PKCE
+   Connects BoM to Spotify without exposing a client secret.
+   ============================================================ */
+
+const SPOTIFY_CLIENT_ID = window.SPOTIFY_CLIENT_ID || "";
+
+const SPOTIFY_REDIRECT_URI =
+  window.SPOTIFY_REDIRECT_URI ||
+  "https://bank-of-music.pages.dev/";
+
+const SPOTIFY_SCOPES = [
+  "user-read-private",
+  "playlist-modify-private"
+];
+
+const SPOTIFY_STORAGE_KEYS = {
+  accessToken: "bom_spotify_access_token",
+  refreshToken: "bom_spotify_refresh_token",
+  expiresAt: "bom_spotify_expires_at",
+  verifier: "bom_spotify_code_verifier",
+  state: "bom_spotify_auth_state"
+};
+
+function getSpotifyElement(id) {
+  return document.getElementById(id);
+}
+
+function setSpotifyMessage(message) {
+  const element = getSpotifyElement("spotifyMessage");
+
+  if (element) {
+    element.textContent = message || "";
+  }
+}
+
+function generateSpotifyRandomString(length = 64) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  const randomValues = new Uint8Array(length);
+
+  window.crypto.getRandomValues(randomValues);
+
+  return Array.from(randomValues)
+    .map((value) => characters[value % characters.length])
+    .join("");
+}
+
+function spotifyBase64UrlEncode(arrayBuffer) {
+  const bytes = new Uint8Array(arrayBuffer);
+
+  let binary = "";
+
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+
+  return window
+    .btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+async function createSpotifyCodeChallenge(verifier) {
+  const encodedVerifier = new TextEncoder().encode(verifier);
+
+  const digest = await window.crypto.subtle.digest(
+    "SHA-256",
+    encodedVerifier
+  );
+
+  return spotifyBase64UrlEncode(digest);
+}
+
+function saveSpotifyTokens(tokenData) {
+  if (tokenData.access_token) {
+    localStorage.setItem(
+      SPOTIFY_STORAGE_KEYS.accessToken,
+      tokenData.access_token
+    );
+  }
+
+  if (tokenData.refresh_token) {
+    localStorage.setItem(
+      SPOTIFY_STORAGE_KEYS.refreshToken,
+      tokenData.refresh_token
+    );
+  }
+
+  const expiresInSeconds = Number(tokenData.expires_in || 3600);
+
+  const expiresAt =
+    Date.now() + expiresInSeconds * 1000 - 60000;
+
+  localStorage.setItem(
+    SPOTIFY_STORAGE_KEYS.expiresAt,
+    String(expiresAt)
+  );
+}
+
+function clearSpotifyTokens() {
+  Object.values(SPOTIFY_STORAGE_KEYS).forEach((key) => {
+    localStorage.removeItem(key);
+  });
+}
+
+function getStoredSpotifyAccessToken() {
+  return localStorage.getItem(
+    SPOTIFY_STORAGE_KEYS.accessToken
+  );
+}
+
+function getStoredSpotifyRefreshToken() {
+  return localStorage.getItem(
+    SPOTIFY_STORAGE_KEYS.refreshToken
+  );
+}
+
+function spotifyTokenHasExpired() {
+  const expiresAt = Number(
+    localStorage.getItem(SPOTIFY_STORAGE_KEYS.expiresAt) || 0
+  );
+
+  return !expiresAt || Date.now() >= expiresAt;
+}
+
+async function connectSpotify() {
+  if (!currentUser) {
+    setSpotifyMessage(
+      "Please log into Bank of Music before connecting Spotify."
+    );
+
+    return;
+  }
+
+  if (!SPOTIFY_CLIENT_ID) {
+    setSpotifyMessage(
+      "Spotify Client ID is missing from config.js."
+    );
+
+    return;
+  }
+
+  try {
+    setSpotifyMessage("Opening Spotify…");
+
+    const verifier = generateSpotifyRandomString(96);
+
+    const challenge =
+      await createSpotifyCodeChallenge(verifier);
+
+    const state = generateSpotifyRandomString(32);
+
+    localStorage.setItem(
+      SPOTIFY_STORAGE_KEYS.verifier,
+      verifier
+    );
+
+    localStorage.setItem(
+      SPOTIFY_STORAGE_KEYS.state,
+      state
+    );
+
+    const authorizationUrl =
+      new URL("https://accounts.spotify.com/authorize");
+
+    authorizationUrl.search = new URLSearchParams({
+      client_id: SPOTIFY_CLIENT_ID,
+      response_type: "code",
+      redirect_uri: SPOTIFY_REDIRECT_URI,
+      scope: SPOTIFY_SCOPES.join(" "),
+      code_challenge_method: "S256",
+      code_challenge: challenge,
+      state,
+      show_dialog: "true"
+    }).toString();
+
+    window.location.href = authorizationUrl.toString();
+  } catch (error) {
+    console.error("Spotify connection failed", error);
+
+    setSpotifyMessage(
+      "Could not start the Spotify connection."
+    );
+  }
+}
+
+async function exchangeSpotifyCodeForTokens(code) {
+  const verifier = localStorage.getItem(
+    SPOTIFY_STORAGE_KEYS.verifier
+  );
+
+  if (!verifier) {
+    throw new Error(
+      "Spotify security verifier was not found."
+    );
+  }
+
+  const body = new URLSearchParams({
+    client_id: SPOTIFY_CLIENT_ID,
+    grant_type: "authorization_code",
+    code,
+    redirect_uri: SPOTIFY_REDIRECT_URI,
+    code_verifier: verifier
+  });
+
+  const response = await fetch(
+    "https://accounts.spotify.com/api/token",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+      },
+      body
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error_description ||
+      data?.error ||
+      "Spotify token request failed."
+    );
+  }
+
+  saveSpotifyTokens(data);
+
+  localStorage.removeItem(
+    SPOTIFY_STORAGE_KEYS.verifier
+  );
+
+  localStorage.removeItem(
+    SPOTIFY_STORAGE_KEYS.state
+  );
+
+  return data.access_token;
+}
+
+async function refreshSpotifyAccessToken() {
+  const refreshToken = getStoredSpotifyRefreshToken();
+
+  if (!refreshToken) {
+    return null;
+  }
+
+  const response = await fetch(
+    "https://accounts.spotify.com/api/token",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        client_id: SPOTIFY_CLIENT_ID,
+        grant_type: "refresh_token",
+        refresh_token: refreshToken
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Spotify refresh failed", data);
+
+    clearSpotifyTokens();
+
+    return null;
+  }
+
+  saveSpotifyTokens(data);
+
+  return data.access_token;
+}
+
+async function getValidSpotifyAccessToken() {
+  let accessToken = getStoredSpotifyAccessToken();
+
+  if (!accessToken) {
+    return null;
+  }
+
+  if (spotifyTokenHasExpired()) {
+    accessToken = await refreshSpotifyAccessToken();
+  }
+
+  return accessToken;
+}
+
+async function spotifyApiRequest(path, options = {}) {
+  const accessToken =
+    await getValidSpotifyAccessToken();
+
+  if (!accessToken) {
+    throw new Error("Spotify is not connected.");
+  }
+
+  const response = await fetch(
+    `https://api.spotify.com/v1${path}`,
+    {
+      ...options,
+
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      }
+    }
+  );
+
+  if (response.status === 401) {
+    const refreshedToken =
+      await refreshSpotifyAccessToken();
+
+    if (!refreshedToken) {
+      throw new Error(
+        "Spotify connection expired. Please reconnect."
+      );
+    }
+
+    return spotifyApiRequest(path, options);
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error?.message ||
+      "Spotify request failed."
+    );
+  }
+
+  return data;
+}
+
+async function getSpotifyCurrentUser() {
+  return spotifyApiRequest("/me");
+}
+
+function renderSpotifyDisconnected(message = "") {
+  const status =
+    getSpotifyElement("spotifyConnectionStatus");
+
+  const account =
+    getSpotifyElement("spotifyConnectedAccount");
+
+  const connectButton =
+    getSpotifyElement("connectSpotifyBtn");
+
+  const disconnectButton =
+    getSpotifyElement("disconnectSpotifyBtn");
+
+  if (status) {
+    status.classList.remove("spotify-connected");
+
+    status.innerHTML = `
+      <div class="spotify-status-dot"></div>
+
+      <div>
+        <strong>Spotify not connected</strong>
+
+        <div class="small">
+          Connect Spotify to create playlists from your BoM ratings.
+        </div>
+      </div>
+    `;
+  }
+
+  if (account) {
+    account.innerHTML = "";
+    account.classList.add("hidden");
+  }
+
+  connectButton?.classList.remove("hidden");
+  disconnectButton?.classList.add("hidden");
+
+  setSpotifyMessage(message);
+}
+
+function renderSpotifyConnected(spotifyUser) {
+  const status =
+    getSpotifyElement("spotifyConnectionStatus");
+
+  const account =
+    getSpotifyElement("spotifyConnectedAccount");
+
+  const connectButton =
+    getSpotifyElement("connectSpotifyBtn");
+
+  const disconnectButton =
+    getSpotifyElement("disconnectSpotifyBtn");
+
+  const displayName =
+    spotifyUser?.display_name ||
+    spotifyUser?.id ||
+    "Spotify user";
+
+  const imageUrl =
+    spotifyUser?.images?.[0]?.url || "";
+
+  if (status) {
+    status.classList.add("spotify-connected");
+
+    status.innerHTML = `
+      <div class="spotify-status-dot"></div>
+
+      <div>
+        <strong>Spotify connected</strong>
+
+        <div class="small">
+          Ready to create BoM playlists.
+        </div>
+      </div>
+    `;
+  }
+
+  if (account) {
+    account.classList.remove("hidden");
+
+    account.innerHTML = `
+      <div class="spotify-account-card">
+        ${
+          imageUrl
+            ? `
+              <img
+                src="${escapeHtml(imageUrl)}"
+                alt=""
+                class="spotify-account-image"
+              >
+            `
+            : `
+              <div class="spotify-account-placeholder">
+                ♪
+              </div>
+            `
+        }
+
+        <div>
+          <div class="small">Connected as</div>
+
+          <strong>${escapeHtml(displayName)}</strong>
+
+          ${
+            spotifyUser?.product
+              ? `
+                <div class="small">
+                  ${escapeHtml(spotifyUser.product)} account
+                </div>
+              `
+              : ""
+          }
+        </div>
+      </div>
+    `;
+  }
+
+  connectButton?.classList.add("hidden");
+  disconnectButton?.classList.remove("hidden");
+
+  setSpotifyMessage("");
+}
+
+async function refreshSpotifyConnectionUI() {
+  const status =
+    getSpotifyElement("spotifyConnectionStatus");
+
+  if (!status) return;
+
+  const accessToken =
+    await getValidSpotifyAccessToken();
+
+  if (!accessToken) {
+    renderSpotifyDisconnected();
+
+    return;
+  }
+
+  status.innerHTML = `
+    <div class="spotify-status-dot"></div>
+
+    <div>
+      <strong>Checking Spotify connection…</strong>
+    </div>
+  `;
+
+  try {
+    const spotifyUser =
+      await getSpotifyCurrentUser();
+
+    renderSpotifyConnected(spotifyUser);
+  } catch (error) {
+    console.error(
+      "Spotify account lookup failed",
+      error
+    );
+
+    clearSpotifyTokens();
+
+    renderSpotifyDisconnected(
+      "Spotify needs to be connected again."
+    );
+  }
+}
+
+function disconnectSpotify() {
+  clearSpotifyTokens();
+
+  renderSpotifyDisconnected(
+    "Spotify disconnected."
+  );
+}
+
+function cleanSpotifyCallbackUrl() {
+  const url = new URL(window.location.href);
+
+  [
+    "code",
+    "state",
+    "error",
+    "error_description"
+  ].forEach((parameter) => {
+    url.searchParams.delete(parameter);
+  });
+
+  window.history.replaceState(
+    {},
+    document.title,
+    url.toString()
+  );
+}
+
+async function handleSpotifyAuthorizationCallback() {
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const code = params.get("code");
+  const returnedState = params.get("state");
+  const spotifyError = params.get("error");
+
+  if (spotifyError) {
+    cleanSpotifyCallbackUrl();
+
+    setSpotifyMessage(
+      spotifyError === "access_denied"
+        ? "Spotify connection was cancelled."
+        : "Spotify could not be connected."
+    );
+
+    return false;
+  }
+
+  if (!code) {
+    return false;
+  }
+
+  showOnlySection("settingsSection");
+
+  const expectedState = localStorage.getItem(
+    SPOTIFY_STORAGE_KEYS.state
+  );
+
+  if (
+    !returnedState ||
+    !expectedState ||
+    returnedState !== expectedState
+  ) {
+    cleanSpotifyCallbackUrl();
+
+    clearSpotifyTokens();
+
+    setSpotifyMessage(
+      "Spotify security check failed. Please try connecting again."
+    );
+
+    return true;
+  }
+
+  try {
+    setSpotifyMessage(
+      "Completing Spotify connection…"
+    );
+
+    await exchangeSpotifyCodeForTokens(code);
+
+    cleanSpotifyCallbackUrl();
+
+    await refreshSpotifyConnectionUI();
+
+    setSpotifyMessage(
+      "Spotify connected successfully."
+    );
+  } catch (error) {
+    console.error(
+      "Spotify callback failed",
+      error
+    );
+
+    cleanSpotifyCallbackUrl();
+
+    clearSpotifyTokens();
+
+    renderSpotifyDisconnected(
+      error?.message ||
+      "Spotify could not be connected."
+    );
+  }
+
+  return true;
+}
+
+getSpotifyElement("connectSpotifyBtn")
+  ?.addEventListener("click", connectSpotify);
+
+getSpotifyElement("disconnectSpotifyBtn")
+  ?.addEventListener("click", disconnectSpotify);
+
+topNavButtons.forEach((button) => {
+  if (button.dataset.target !== "settingsSection") {
+    return;
+  }
+
+  button.addEventListener("click", () => {
+    refreshSpotifyConnectionUI();
+  });
+});
+
+handleSpotifyAuthorizationCallback()
+  .then((handledCallback) => {
+    if (!handledCallback) {
+      refreshSpotifyConnectionUI();
+    }
+  })
+  .catch((error) => {
+    console.error(
+      "Spotify startup failed",
+      error
+    );
+  });
+
 supabaseClient.auth.onAuthStateChange((event, session) => {
 
   currentUser = session ? session.user : null;
@@ -8155,7 +8805,7 @@ async function findProfileByHandle(handle) {
 
   const { data, error } = await supabaseClient
     .from("profiles")
-    .select("id, handle, member_number, avatar_url, bio, created_at, is_admin")
+    .select("id, handle, member_number, created_at, is_admin")
     .eq("handle", clean)
     .maybeSingle();
 
@@ -8237,12 +8887,18 @@ async function unfollowProfile(profileId) {
 async function openPublicProfileById(profileId) {
   const { data, error } = await supabaseClient
     .from("profiles")
-    .select("id, handle, member_number, avatar_url, bio, created_at, is_admin")
+    .select("id, handle, member_number, created_at, is_admin")
     .eq("id", profileId)
     .maybeSingle();
 
-  if (error || !data) {
-    setMessage(globalSearchMessage, error?.message || "Profile not found.");
+  if (error) {
+    console.error("Public profile lookup failed:", error);
+    alert("Could not open profile: " + error.message);
+    return;
+  }
+
+  if (!data) {
+    alert("Profile not found.");
     return;
   }
 
@@ -8250,6 +8906,7 @@ async function openPublicProfileById(profileId) {
 }
 
 window.openPublicProfileById = openPublicProfileById;
+
 
 async function openPublicProfileByHandle(handle) {
   const profile = await findProfileByHandle(handle);
@@ -8546,7 +9203,7 @@ function clearRealShareLinkState() {
 
 function applySectionTransition(targetId) {
   document.body.classList.add("bom-is-transitioning");
-  ["searchSection", "recommendationsSection", "librarySection", "detailSection", "chartsSection", "adminSection"].forEach((id) => {
+  ["searchSection", "recommendationsSection", "settingsSection", "librarySection", "detailSection", "chartsSection", "adminSection"].forEach((id) => {
     const section = document.getElementById(id);
     if (!section) return;
     section.classList.add("bom-page");
