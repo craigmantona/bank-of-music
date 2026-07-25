@@ -39,13 +39,17 @@
        <button class="top-nav-btn" data-target="librarySection">🎵 Ratings</button>
        <button class="top-nav-btn" data-target="detailSection">⭐ Selected</button>
 	   <button class="top-nav-btn" type="button" data-target="chartsSection" onclick="window.goCharts(); return false;">🏆 Charts</button>
-       <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
+       <button class="top-nav-btn" data-target="settingsSection">
+  ⚙️ Settings
+</button>
+	   <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
      </div>
 	 <select class="mobile-more-nav" onchange="showOnlySection(this.value); this.value='';">
   <option value="">More</option>
   <option value="librarySection">Ratings</option>
   <option value="detailSection">Selected</option>
-  <option value="adminSection">Admin</option>
+<option value="settingsSection">Settings</option>
+<option value="adminSection">Admin</option>
 </select>
    </nav>
  
@@ -135,6 +139,74 @@
      <h2>Selected item</h2>
      <div id="selectedItemDetail"></div>
    </section>
+   
+   <section class="card hidden" id="settingsSection">
+  <div class="settings-page-header">
+    <div>
+      <div class="settings-kicker">Account integrations</div>
+      <h2>Settings</h2>
+
+      <p class="small">
+        Connect Bank of Music to your music services.
+      </p>
+    </div>
+  </div>
+
+  <div class="settings-panel spotify-settings-panel">
+    <div class="settings-service-header">
+      <div class="spotify-service-icon" aria-hidden="true">
+        ♪
+      </div>
+
+      <div>
+        <h3>Spotify</h3>
+
+        <p class="small">
+          Export your highest-rated BoM tracks into a Spotify playlist.
+        </p>
+      </div>
+    </div>
+
+    <div id="spotifyConnectionStatus" class="spotify-status-card">
+      <div class="spotify-status-dot"></div>
+
+      <div>
+        <strong>Checking Spotify connection…</strong>
+      </div>
+    </div>
+
+    <div id="spotifyConnectedAccount" class="hidden"></div>
+
+    <div class="settings-actions">
+      <button id="connectSpotifyBtn" type="button">
+        Connect Spotify
+      </button>
+
+      <button
+        id="disconnectSpotifyBtn"
+        type="button"
+        class="secondary-btn hidden"
+      >
+        Disconnect Spotify
+      </button>
+    </div>
+
+    <p id="spotifyMessage" class="small"></p>
+  </div>
+
+  <div class="settings-panel">
+    <div class="settings-service-header">
+      <div class="apple-service-icon" aria-hidden="true">
+        ♪
+      </div>
+
+      <div>
+        <h3>Apple Music</h3>
+        <p class="small">Coming later.</p>
+      </div>
+    </div>
+  </div>
+</section>
  
    <section class="card hidden" id="adminSection">
      <h2>Admin Dashboard</h2>
@@ -164,7 +236,7 @@
  
  <div id="profileModal" class="profile-modal hidden" aria-hidden="true"></div>
  
- <script src="app.js?v=48"></script>
+ <script src="app.js?v=49"></script>
  <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
 </body>
 </html>
