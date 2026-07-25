@@ -5166,3 +5166,188 @@ button.song-album-link {
   line-height: 1.55;
 }
 
+/* ============================================================
+   v49 SETTINGS + SPOTIFY CONNECTION
+   ============================================================ */
+
+.settings-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.settings-kicker {
+  margin-bottom: 7px;
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.settings-panel {
+  margin-top: 18px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(138, 44, 255, 0.12),
+      transparent 34%
+    ),
+    rgba(255, 255, 255, 0.035);
+}
+
+.spotify-settings-panel {
+  border-color: rgba(29, 185, 84, 0.34);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(29, 185, 84, 0.14),
+      transparent 35%
+    ),
+    rgba(255, 255, 255, 0.035);
+}
+
+.settings-service-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.settings-service-header h3 {
+  margin: 0 0 5px;
+}
+
+.settings-service-header p {
+  margin: 0;
+}
+
+.spotify-service-icon,
+.apple-service-icon {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 950;
+}
+
+.spotify-service-icon {
+  color: #07120b;
+  background: #1db954;
+  box-shadow: 0 10px 30px rgba(29, 185, 84, 0.25);
+}
+
+.apple-service-icon {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 45, 141, 0.95),
+      rgba(138, 44, 255, 0.92)
+    );
+}
+
+.spotify-status-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.spotify-status-dot {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  border-radius: 50%;
+  background: #94a3b8;
+  box-shadow: 0 0 16px rgba(148, 163, 184, 0.35);
+}
+
+.spotify-status-card.spotify-connected {
+  border-color: rgba(29, 185, 84, 0.42);
+  background: rgba(29, 185, 84, 0.08);
+}
+
+.spotify-status-card.spotify-connected
+.spotify-status-dot {
+  background: #1ed760;
+  box-shadow: 0 0 18px rgba(30, 215, 96, 0.65);
+}
+
+.spotify-account-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 15px;
+  border: 1px solid rgba(29, 185, 84, 0.25);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.spotify-account-image,
+.spotify-account-placeholder {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  border-radius: 50%;
+}
+
+.spotify-account-image {
+  display: block;
+  object-fit: cover;
+}
+
+.spotify-account-placeholder {
+  display: grid;
+  place-items: center;
+  color: #07120b;
+  background: #1db954;
+  font-size: 1.5rem;
+  font-weight: 950;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+#connectSpotifyBtn {
+  color: #06140a;
+  background: #1ed760;
+  box-shadow: 0 12px 30px rgba(30, 215, 96, 0.24);
+}
+
+#spotifyMessage {
+  min-height: 20px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .settings-panel {
+    padding: 18px;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-actions button {
+    width: 100%;
+  }
+}
+
