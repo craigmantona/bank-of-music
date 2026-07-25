@@ -8263,12 +8263,19 @@ async function exchangeSpotifyCodeForTokens(code) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      data?.error_description ||
-      data?.error ||
-      "Spotify token request failed."
-    );
-  }
+  console.error("Spotify token response:", data);
+
+  throw new Error(
+    [
+      data?.error,
+      data?.error_description,
+      `HTTP ${response.status}`
+    ]
+      .filter(Boolean)
+      .join(" — ") ||
+    "Spotify token request failed."
+  );
+}
 
   saveSpotifyTokens(data);
 
@@ -8641,21 +8648,23 @@ async function handleSpotifyAuthorizationCallback() {
     setSpotifyMessage(
       "Spotify connected successfully."
     );
-  } catch (error) {
-    console.error(
-      "Spotify callback failed",
-      error
-    );
+	} catch (error) {
+  console.error("Spotify callback failed", error);
 
-    cleanSpotifyCallbackUrl();
+  const errorMessage =
+    error?.message ||
+    "Spotify could not be connected.";
 
-    clearSpotifyTokens();
+  cleanSpotifyCallbackUrl();
 
-    renderSpotifyDisconnected(
-      error?.message ||
-      "Spotify could not be connected."
-    );
-  }
+  clearSpotifyTokens();
+
+  renderSpotifyDisconnected(
+    "Connection failed: " + errorMessage
+  );
+
+  alert("Spotify connection failed: " + errorMessage);
+}
 
   return true;
 }
