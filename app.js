@@ -8050,6 +8050,9 @@ const SPOTIFY_CLIENT_ID = window.SPOTIFY_CLIENT_ID || "";
 const SPOTIFY_REDIRECT_URI =
   window.SPOTIFY_REDIRECT_URI ||
   "https://bank-of-music.pages.dev/";
+  
+const SPOTIFY_TOKEN_FUNCTION_URL =
+  `${window.SUPABASE_URL}/functions/v1/spotify-token`;
 
 const SPOTIFY_SCOPES = [
   "user-read-private",
@@ -8173,7 +8176,6 @@ async function connectSpotify() {
     setSpotifyMessage(
       "Please log into Bank of Music before connecting Spotify."
     );
-
     return;
   }
 
@@ -8181,24 +8183,14 @@ async function connectSpotify() {
     setSpotifyMessage(
       "Spotify Client ID is missing from config.js."
     );
-
     return;
   }
 
   try {
     setSpotifyMessage("Opening Spotify…");
 
-    const verifier = generateSpotifyRandomString(96);
-
-    const challenge =
-      await createSpotifyCodeChallenge(verifier);
-
-    const state = generateSpotifyRandomString(32);
-
-    localStorage.setItem(
-      SPOTIFY_STORAGE_KEYS.verifier,
-      verifier
-    );
+    const state =
+      generateSpotifyRandomString(32);
 
     localStorage.setItem(
       SPOTIFY_STORAGE_KEYS.state,
@@ -8206,22 +8198,28 @@ async function connectSpotify() {
     );
 
     const authorizationUrl =
-      new URL("https://accounts.spotify.com/authorize");
+      new URL(
+        "https://accounts.spotify.com/authorize"
+      );
 
-    authorizationUrl.search = new URLSearchParams({
-      client_id: SPOTIFY_CLIENT_ID,
-      response_type: "code",
-      redirect_uri: SPOTIFY_REDIRECT_URI,
-      scope: SPOTIFY_SCOPES.join(" "),
-      code_challenge_method: "S256",
-      code_challenge: challenge,
-      state,
-      show_dialog: "true"
-    }).toString();
+    authorizationUrl.search =
+      new URLSearchParams({
+        client_id: SPOTIFY_CLIENT_ID,
+        response_type: "code",
+        redirect_uri:
+          SPOTIFY_REDIRECT_URI,
+        scope: SPOTIFY_SCOPES.join(" "),
+        state,
+        show_dialog: "true"
+      }).toString();
 
-    window.location.href = authorizationUrl.toString();
+    window.location.href =
+      authorizationUrl.toString();
   } catch (error) {
-    console.error("Spotify connection failed", error);
+    console.error(
+      "Spotify connection failed",
+      error
+    );
 
     setSpotifyMessage(
       "Could not start the Spotify connection."
@@ -8230,52 +8228,48 @@ async function connectSpotify() {
 }
 
 async function exchangeSpotifyCodeForTokens(code) {
-  const verifier = localStorage.getItem(
-    SPOTIFY_STORAGE_KEYS.verifier
-  );
-
-  if (!verifier) {
-    throw new Error(
-      "Spotify security verifier was not found."
-    );
-  }
-
-  const body = new URLSearchParams({
-    client_id: SPOTIFY_CLIENT_ID,
-    grant_type: "authorization_code",
-    code,
-    redirect_uri: SPOTIFY_REDIRECT_URI,
-    code_verifier: verifier
-  });
-
   const response = await fetch(
-    "https://accounts.spotify.com/api/token",
+    SPOTIFY_TOKEN_FUNCTION_URL,
     {
       method: "POST",
       headers: {
-        "Content-Type":
-          "application/x-www-form-urlencoded"
+        "Content-Type": "application/json",
+        apikey: window.SUPABASE_ANON_KEY
       },
-      body
+      body: JSON.stringify({
+        action: "exchange",
+        code
+      })
     }
   );
 
-  const data = await response.json();
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(
+      `Spotify server returned HTTP ${response.status}.`
+    );
+  }
 
   if (!response.ok) {
-  console.error("Spotify token response:", data);
+    console.error(
+      "Spotify Edge Function response:",
+      data
+    );
 
-  throw new Error(
-    [
-      data?.error,
-      data?.error_description,
-      `HTTP ${response.status}`
-    ]
-      .filter(Boolean)
-      .join(" — ") ||
-    "Spotify token request failed."
-  );
-}
+    throw new Error(
+      data?.error ||
+      `Spotify token exchange failed with HTTP ${response.status}.`
+    );
+  }
+
+  if (!data.access_token) {
+    throw new Error(
+      "Spotify did not return an access token."
+    );
+  }
 
   saveSpotifyTokens(data);
 
@@ -8380,14 +8374,26 @@ async function spotifyApiRequest(path, options = {}) {
     return null;
   }
 
-  const data = await response.json();
+  let data = null;
 
-  if (!response.ok) {
-    throw new Error(
-      data?.error?.message ||
-      "Spotify request failed."
-    );
-  }
+try {
+  data = await response.json();
+} catch {
+  data = null;
+}
+
+if (!response.ok) {
+  console.error(
+    "Spotify API error:",
+    response.status,
+    data
+  );
+
+  throw new Error(
+    data?.error?.message ||
+    `Spotify API request failed with HTTP ${response.status}.`
+  );
+}
 
   return data;
 }
