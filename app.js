@@ -8052,7 +8052,7 @@ const SPOTIFY_REDIRECT_URI =
   "https://bank-of-music.pages.dev/";
   
 const SPOTIFY_TOKEN_FUNCTION_URL =
-  `${window.SUPABASE_URL}/functions/v1/spotify-token`;
+  `${window.SUPABASE_URL}/functions/v1/rapid-processor`;
 
 const SPOTIFY_SCOPES = [
   "user-read-private",
