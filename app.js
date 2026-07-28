@@ -8595,46 +8595,91 @@ function cleanSpotifyCallbackUrl() {
 }
 
 async function handleSpotifyAuthorizationCallback() {
-  const params =
+  const liveParams =
     new URLSearchParams(window.location.search);
 
-  const code = params.get("code");
-  const returnedState = params.get("state");
-  const spotifyError = params.get("error");
+  let preservedCallback = null;
 
-  if (spotifyError) {
-    cleanSpotifyCallbackUrl();
+  const preservedValue = sessionStorage.getItem(
+    "bom_spotify_pending_callback"
+  );
 
-    setSpotifyMessage(
-      spotifyError === "access_denied"
-        ? "Spotify connection was cancelled."
-        : "Spotify could not be connected."
-    );
-
-    return false;
+  if (preservedValue) {
+    try {
+      preservedCallback =
+        JSON.parse(preservedValue);
+    } catch {
+      preservedCallback = null;
+    }
   }
 
-  if (!code) {
+  const code =
+    preservedCallback?.code ||
+    liveParams.get("code") ||
+    "";
+
+  const returnedState =
+    preservedCallback?.state ||
+    liveParams.get("state") ||
+    "";
+
+  const spotifyError =
+    preservedCallback?.error ||
+    liveParams.get("error") ||
+    "";
+
+  const spotifyErrorDescription =
+    preservedCallback?.errorDescription ||
+    liveParams.get("error_description") ||
+    "";
+
+  const expectedState =
+    preservedCallback?.expectedState ||
+    localStorage.getItem(
+      SPOTIFY_STORAGE_KEYS.state
+    ) ||
+    "";
+
+  if (!code && !spotifyError) {
     return false;
   }
 
   showOnlySection("settingsSection");
 
-  const expectedState = localStorage.getItem(
-    SPOTIFY_STORAGE_KEYS.state
-  );
+  if (spotifyError) {
+    sessionStorage.removeItem(
+      "bom_spotify_pending_callback"
+    );
+
+    cleanSpotifyCallbackUrl();
+
+    renderSpotifyDisconnected(
+      spotifyError === "access_denied"
+        ? "Spotify connection was cancelled."
+        : (
+            spotifyErrorDescription ||
+            "Spotify could not be connected."
+          )
+    );
+
+    return true;
+  }
 
   if (
     !returnedState ||
     !expectedState ||
     returnedState !== expectedState
   ) {
+    sessionStorage.removeItem(
+      "bom_spotify_pending_callback"
+    );
+
     cleanSpotifyCallbackUrl();
 
     clearSpotifyTokens();
 
-    setSpotifyMessage(
-      "Spotify security check failed. Please try connecting again."
+    renderSpotifyDisconnected(
+      "Spotify security check failed. Please connect again."
     );
 
     return true;
@@ -8645,7 +8690,15 @@ async function handleSpotifyAuthorizationCallback() {
       "Completing Spotify connection…"
     );
 
+    /*
+      The Supabase invocation should appear when this
+      function calls exchangeSpotifyCodeForTokens().
+    */
     await exchangeSpotifyCodeForTokens(code);
+
+    sessionStorage.removeItem(
+      "bom_spotify_pending_callback"
+    );
 
     cleanSpotifyCallbackUrl();
 
@@ -8654,25 +8707,37 @@ async function handleSpotifyAuthorizationCallback() {
     setSpotifyMessage(
       "Spotify connected successfully."
     );
-	} catch (error) {
-  console.error("Spotify callback failed", error);
 
-  const errorMessage =
-    error?.message ||
-    "Spotify could not be connected.";
+    return true;
+  } catch (error) {
+    console.error(
+      "Spotify callback failed",
+      error
+    );
 
-  cleanSpotifyCallbackUrl();
+    const errorMessage =
+      error?.message ||
+      "Spotify could not be connected.";
 
-  clearSpotifyTokens();
+    sessionStorage.removeItem(
+      "bom_spotify_pending_callback"
+    );
 
-  renderSpotifyDisconnected(
-    "Connection failed: " + errorMessage
-  );
+    cleanSpotifyCallbackUrl();
 
-  alert("Spotify connection failed: " + errorMessage);
-}
+    clearSpotifyTokens();
 
-  return true;
+    renderSpotifyDisconnected(
+      "Connection failed: " + errorMessage
+    );
+
+    alert(
+      "Spotify connection failed: " +
+      errorMessage
+    );
+
+    return true;
+  }
 }
 
 getSpotifyElement("connectSpotifyBtn")
