@@ -236,7 +236,36 @@
  
  <div id="profileModal" class="profile-modal hidden" aria-hidden="true"></div>
  
- <script src="app.js?v=52"></script>
+ <script>
+  /*
+    Preserve Spotify's callback before any other BoM code
+    can alter or clean the address.
+  */
+  (function preserveSpotifyCallback() {
+    const params = new URLSearchParams(window.location.search);
+
+    if (!params.has("code") && !params.has("error")) {
+      return;
+    }
+
+    sessionStorage.setItem(
+      "bom_spotify_pending_callback",
+      JSON.stringify({
+        code: params.get("code") || "",
+        state: params.get("state") || "",
+        error: params.get("error") || "",
+        errorDescription:
+          params.get("error_description") || "",
+        expectedState:
+          localStorage.getItem(
+            "bom_spotify_auth_state"
+          ) || ""
+      })
+    );
+  })();
+</script>
+
+<script src="app.js?v=53"></script>
  <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
 </body>
 </html>
