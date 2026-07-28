@@ -9,7 +9,7 @@
  
  <title>Bank of Music</title>
  
- <link rel="stylesheet" href="style.css" />
+ <link rel="stylesheet" href="style.css?v=57" />
  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
  <script src="config.js"></script>
 </head>
@@ -178,20 +178,86 @@
     <div id="spotifyConnectedAccount" class="hidden"></div>
 
     <div class="settings-actions">
-      <button id="connectSpotifyBtn" type="button">
-        Connect Spotify
-      </button>
+  <button id="connectSpotifyBtn" type="button">
+    Connect Spotify
+  </button>
 
-      <button
-        id="disconnectSpotifyBtn"
-        type="button"
-        class="secondary-btn hidden"
-      >
-        Disconnect Spotify
-      </button>
+  <button
+    id="disconnectSpotifyBtn"
+    type="button"
+    class="secondary-btn hidden"
+  >
+    Disconnect Spotify
+  </button>
+</div>
+
+<div id="spotifyExportPanel" class="spotify-export-panel hidden">
+	<div class="spotify-export-heading">
+  <div>
+    <h3>Create a playlist</h3>
+
+    <p class="small">
+      Export tracks you've rated above your chosen minimum.
+    </p>
+  </div>
+</div>
+
+<label for="spotifyMinimumRating">
+  Minimum rating
+</label>
+
+<select id="spotifyMinimumRating">
+  <option value="7">7 or higher</option>
+  <option value="8" selected>8 or higher</option>
+  <option value="9">9 or higher</option>
+  <option value="10">Perfect 10s</option>
+</select>
+
+<label for="spotifyPlaylistName">
+  Playlist name
+</label>
+
+<input
+  id="spotifyPlaylistName"
+  type="text"
+  maxlength="100"
+  value="BoM • Rated 8+"
+  placeholder="Playlist name"
+>
+
+  <input
+    id="spotifyPlaylistName"
+    type="text"
+    maxlength="100"
+    value="BoM • Rated 8+"
+    placeholder="Playlist name"
+  >
+
+  <button id="createSpotifyPlaylistBtn" type="button">
+    Create Spotify Playlist
+  </button>
+
+  <div
+    id="spotifyExportProgress"
+    class="spotify-export-progress hidden"
+  >
+    <div class="spotify-progress-track">
+      <div
+  id="spotifyProgressBar"
+  class="spotify-progress-fill"
+></div>
     </div>
 
-    <p id="spotifyMessage" class="small"></p>
+    <p id="spotifyProgressText" class="small"></p>
+  </div>
+
+  <div
+    id="spotifyExportResult"
+    class="spotify-export-result hidden"
+  ></div>
+</div>
+
+<p id="spotifyMessage" class="small"></p>
   </div>
 
   <div class="settings-panel">
@@ -265,7 +331,7 @@
   })();
 </script>
 
-<script src="app.js?v=54"></script>
+<script src="app.js?v=57"></script>
  <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
 </body>
 </html>
