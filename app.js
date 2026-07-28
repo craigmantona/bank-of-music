@@ -8350,10 +8350,12 @@ async function spotifyApiRequest(path, options = {}) {
       ...options,
 
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-      }
+  Authorization: `Bearer ${accessToken}`,
+  ...(options.body
+    ? { "Content-Type": "application/json" }
+    : {}),
+  ...(options.headers || {})
+}
     }
   );
 
@@ -8402,6 +8404,562 @@ async function getSpotifyCurrentUser() {
   return spotifyApiRequest("/me");
 }
 
+/* ============================================================
+   SPOTIFY PLAYLIST EXPORT
+   Exports the current user's highly rated BoM tracks.
+   ============================================================ */
+
+function normaliseSpotifyMatchText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\([^)]*(remaster|remastered|live|edit|version)[^)]*\)/gi, "")
+    .replace(/\[[^\]]*(remaster|remastered|live|edit|version)[^\]]*\]/gi, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function getSpotifyExportElements() {
+  return {
+    button:
+      getSpotifyElement("createSpotifyPlaylistBtn"),
+
+    rating:
+      getSpotifyElement("spotifyMinimumRating"),
+
+    name:
+      getSpotifyElement("spotifyPlaylistName"),
+
+    progress:
+      getSpotifyElement("spotifyExportProgress"),
+
+    progressBar:
+      getSpotifyElement("spotifyProgressBar"),
+
+    progressText:
+      getSpotifyElement("spotifyProgressText"),
+
+    result:
+      getSpotifyElement("spotifyExportResult")
+  };
+}
+
+function updateSpotifyExportProgress(
+  completed,
+  total,
+  message
+) {
+  const elements = getSpotifyExportElements();
+
+  const percentage = total
+    ? Math.round((completed / total) * 100)
+    : 0;
+
+  if (elements.progress) {
+    elements.progress.classList.remove("hidden");
+  }
+
+  if (elements.progressBar) {
+    elements.progressBar.style.width =
+      `${Math.min(100, percentage)}%`;
+  }
+
+  if (elements.progressText) {
+    elements.progressText.textContent =
+      message || `${completed} of ${total}`;
+  }
+}
+
+function resetSpotifyExportDisplay() {
+  const elements = getSpotifyExportElements();
+
+  elements.result?.classList.add("hidden");
+
+  if (elements.result) {
+    elements.result.innerHTML = "";
+  }
+
+  if (elements.progressBar) {
+    elements.progressBar.style.width = "0%";
+  }
+
+  elements.progress?.classList.add("hidden");
+}
+
+function getCurrentUserRatedTracksForSpotify(
+  minimumRating
+) {
+  if (!currentUser) {
+    return [];
+  }
+
+  return allSongRatings
+    .filter((ratingRow) => {
+      return (
+        ratingRow.user_id === currentUser.id &&
+        Number(ratingRow.rating) >= minimumRating
+      );
+    })
+    .map((ratingRow) => {
+      const song = allSongs.find(
+        (item) =>
+          Number(item.id) ===
+          Number(ratingRow.song_id)
+      );
+
+      if (!song) {
+        return null;
+      }
+
+      const album = allAlbums.find(
+        (item) =>
+          Number(item.id) ===
+          Number(song.album_id)
+      );
+
+      return {
+        id: song.id,
+        title: song.title || "",
+        artist:
+          song.artist ||
+          album?.artist ||
+          "",
+        album:
+          album?.title || "",
+        rating: Number(ratingRow.rating)
+      };
+    })
+    .filter((item) => {
+      return item && item.title && item.artist;
+    })
+    .sort((a, b) => {
+      if (b.rating !== a.rating) {
+        return b.rating - a.rating;
+      }
+
+      return a.artist.localeCompare(b.artist);
+    });
+}
+
+async function searchSpotifyTrackForBoMTrack(
+  bomTrack
+) {
+  const searchQuery = [
+    `track:${bomTrack.title}`,
+    `artist:${bomTrack.artist}`
+  ].join(" ");
+
+  const searchData = await spotifyApiRequest(
+    `/search?${new URLSearchParams({
+      q: searchQuery,
+      type: "track",
+      limit: "5"
+    }).toString()}`
+  );
+
+  const candidates =
+    searchData?.tracks?.items || [];
+
+  if (!candidates.length) {
+    return null;
+  }
+
+  const wantedTitle =
+    normaliseSpotifyMatchText(bomTrack.title);
+
+  const wantedArtist =
+    normaliseSpotifyMatchText(bomTrack.artist);
+
+  const exactMatch = candidates.find((candidate) => {
+    const candidateTitle =
+      normaliseSpotifyMatchText(candidate.name);
+
+    const candidateArtists =
+      (candidate.artists || [])
+        .map((artist) =>
+          normaliseSpotifyMatchText(artist.name)
+        )
+        .join(" ");
+
+    return (
+      candidateTitle === wantedTitle &&
+      candidateArtists.includes(wantedArtist)
+    );
+  });
+
+  if (exactMatch) {
+    return exactMatch;
+  }
+
+  const closeMatch = candidates.find((candidate) => {
+    const candidateTitle =
+      normaliseSpotifyMatchText(candidate.name);
+
+    const candidateArtists =
+      (candidate.artists || [])
+        .map((artist) =>
+          normaliseSpotifyMatchText(artist.name)
+        )
+        .join(" ");
+
+    const titleMatches =
+      candidateTitle.includes(wantedTitle) ||
+      wantedTitle.includes(candidateTitle);
+
+    const artistMatches =
+      candidateArtists.includes(wantedArtist) ||
+      wantedArtist.includes(candidateArtists);
+
+    return titleMatches && artistMatches;
+  });
+
+  return closeMatch || null;
+}
+
+async function createSpotifyPlaylist(
+  playlistName,
+  minimumRating
+) {
+  const description =
+    `Tracks rated ${minimumRating}/10 or higher in Bank of Music.`;
+
+  return spotifyApiRequest("/me/playlists", {
+    method: "POST",
+
+    body: JSON.stringify({
+      name: playlistName,
+      description,
+      public: false
+    })
+  });
+}
+
+async function addSpotifyItemsToPlaylist(
+  playlistId,
+  uris
+) {
+  const batchSize = 100;
+
+  for (
+    let start = 0;
+    start < uris.length;
+    start += batchSize
+  ) {
+    const batch = uris.slice(
+      start,
+      start + batchSize
+    );
+
+    await spotifyApiRequest(
+      `/playlists/${encodeURIComponent(playlistId)}/items`,
+      {
+        method: "POST",
+
+        body: JSON.stringify({
+          uris: batch
+        })
+      }
+    );
+  }
+}
+
+function renderSpotifyExportResult({
+  playlist,
+  matched,
+  unmatched,
+  minimumRating
+}) {
+  const elements = getSpotifyExportElements();
+
+  if (!elements.result) {
+    return;
+  }
+
+  const playlistUrl =
+    playlist?.external_urls?.spotify || "";
+
+  elements.result.classList.remove("hidden");
+
+  elements.result.innerHTML = `
+    <div class="spotify-export-success">
+      <div class="spotify-export-success-icon">
+        ✓
+      </div>
+
+      <div>
+        <h3>Playlist created</h3>
+
+        <p>
+          <strong>${matched.length}</strong>
+          track${matched.length === 1 ? "" : "s"}
+          rated ${minimumRating}+ added to Spotify.
+        </p>
+
+        ${
+          unmatched.length
+            ? `
+              <p class="small">
+                ${unmatched.length}
+                track${unmatched.length === 1 ? "" : "s"}
+                could not be matched automatically.
+              </p>
+            `
+            : ""
+        }
+
+        ${
+          playlistUrl
+            ? `
+              <a
+                class="spotify-open-playlist-btn"
+                href="${escapeHtml(playlistUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open playlist in Spotify
+              </a>
+            `
+            : ""
+        }
+      </div>
+    </div>
+
+    ${
+      unmatched.length
+        ? `
+          <details class="spotify-unmatched-details">
+            <summary>
+              View unmatched tracks
+            </summary>
+
+            <div class="spotify-unmatched-list">
+              ${unmatched
+                .map(
+                  (track) => `
+                    <div class="spotify-unmatched-row">
+                      <strong>
+                        ${escapeHtml(track.title)}
+                      </strong>
+
+                      <span>
+                        ${escapeHtml(track.artist)}
+                      </span>
+                    </div>
+                  `
+                )
+                .join("")}
+            </div>
+          </details>
+        `
+        : ""
+    }
+  `;
+}
+
+async function exportRatedTracksToSpotify() {
+  const elements = getSpotifyExportElements();
+
+  if (!currentUser) {
+    setSpotifyMessage(
+      "Please log into Bank of Music first."
+    );
+    return;
+  }
+
+  const accessToken =
+    await getValidSpotifyAccessToken();
+
+  if (!accessToken) {
+    renderSpotifyDisconnected(
+      "Please connect Spotify before creating a playlist."
+    );
+    return;
+  }
+
+  const minimumRating = Number(
+    elements.rating?.value || 8
+  );
+
+  const playlistName =
+    String(
+      elements.name?.value ||
+      `BoM • Rated ${minimumRating}+`
+    ).trim() ||
+    `BoM • Rated ${minimumRating}+`;
+
+  const tracks =
+    getCurrentUserRatedTracksForSpotify(
+      minimumRating
+    );
+
+  if (!tracks.length) {
+    setSpotifyMessage(
+      `You do not currently have any tracks rated ${minimumRating} or above.`
+    );
+    return;
+  }
+
+  resetSpotifyExportDisplay();
+
+  if (elements.button) {
+    elements.button.disabled = true;
+    elements.button.textContent =
+      "Creating playlist…";
+  }
+
+  const matched = [];
+  const unmatched = [];
+
+  try {
+    setSpotifyMessage(
+      `Matching ${tracks.length} BoM track${tracks.length === 1 ? "" : "s"} with Spotify…`
+    );
+
+    for (
+      let index = 0;
+      index < tracks.length;
+      index += 1
+    ) {
+      const bomTrack = tracks[index];
+
+      updateSpotifyExportProgress(
+        index,
+        tracks.length,
+        `Finding ${bomTrack.title} — ${bomTrack.artist}`
+      );
+
+      try {
+        const spotifyTrack =
+          await searchSpotifyTrackForBoMTrack(
+            bomTrack
+          );
+
+        if (spotifyTrack?.uri) {
+          matched.push({
+            bomTrack,
+            spotifyTrack
+          });
+        } else {
+          unmatched.push(bomTrack);
+        }
+      } catch (error) {
+        console.error(
+          "Spotify track matching failed:",
+          bomTrack,
+          error
+        );
+
+        unmatched.push(bomTrack);
+      }
+
+      updateSpotifyExportProgress(
+        index + 1,
+        tracks.length,
+        `Matched ${matched.length} of ${tracks.length}`
+      );
+    }
+
+    if (!matched.length) {
+      throw new Error(
+        "Spotify could not match any of the selected BoM tracks."
+      );
+    }
+
+    setSpotifyMessage(
+      "Creating your Spotify playlist…"
+    );
+
+    const playlist =
+      await createSpotifyPlaylist(
+        playlistName,
+        minimumRating
+      );
+
+    if (!playlist?.id) {
+      throw new Error(
+        "Spotify did not return a playlist ID."
+      );
+    }
+
+    const uniqueUris = [
+      ...new Set(
+        matched.map(
+          (item) => item.spotifyTrack.uri
+        )
+      )
+    ];
+
+    await addSpotifyItemsToPlaylist(
+      playlist.id,
+      uniqueUris
+    );
+
+    updateSpotifyExportProgress(
+      tracks.length,
+      tracks.length,
+      "Playlist created successfully."
+    );
+
+    renderSpotifyExportResult({
+      playlist,
+      matched,
+      unmatched,
+      minimumRating
+    });
+
+    setSpotifyMessage(
+      `Created "${playlistName}" with ${uniqueUris.length} track${uniqueUris.length === 1 ? "" : "s"}.`
+    );
+  } catch (error) {
+    console.error(
+      "Spotify playlist export failed",
+      error
+    );
+
+    const errorMessage =
+      error?.message ||
+      "The Spotify playlist could not be created.";
+
+    setSpotifyMessage(errorMessage);
+
+    alert(
+      "Spotify playlist export failed: " +
+      errorMessage
+    );
+  } finally {
+    if (elements.button) {
+      elements.button.disabled = false;
+      elements.button.textContent =
+        "Create Spotify Playlist";
+    }
+  }
+}
+
+getSpotifyElement("spotifyMinimumRating")
+  ?.addEventListener("change", (event) => {
+    const minimumRating =
+      Number(event.target.value || 8);
+
+    const nameInput =
+      getSpotifyElement("spotifyPlaylistName");
+
+    if (nameInput) {
+      nameInput.value =
+        minimumRating === 10
+          ? "BoM • Perfect 10s"
+          : `BoM • Rated ${minimumRating}+`;
+    }
+
+    resetSpotifyExportDisplay();
+  });
+
+getSpotifyElement("createSpotifyPlaylistBtn")
+  ?.addEventListener(
+    "click",
+    exportRatedTracksToSpotify
+  );
+
 function renderSpotifyDisconnected(message = "") {
   const status =
     getSpotifyElement("spotifyConnectionStatus");
@@ -8414,6 +8972,9 @@ function renderSpotifyDisconnected(message = "") {
 
   const disconnectButton =
     getSpotifyElement("disconnectSpotifyBtn");
+	
+	const exportPanel =
+  getSpotifyElement("spotifyExportPanel");
 
   if (status) {
     status.classList.remove("spotify-connected");
@@ -8438,6 +8999,7 @@ function renderSpotifyDisconnected(message = "") {
 
   connectButton?.classList.remove("hidden");
   disconnectButton?.classList.add("hidden");
+  exportPanel?.classList.add("hidden");
 
   setSpotifyMessage(message);
 }
@@ -8454,6 +9016,9 @@ function renderSpotifyConnected(spotifyUser) {
 
   const disconnectButton =
     getSpotifyElement("disconnectSpotifyBtn");
+	
+	const exportPanel =
+  getSpotifyElement("spotifyExportPanel");
 
   const displayName =
     spotifyUser?.display_name ||
@@ -8521,6 +9086,7 @@ function renderSpotifyConnected(spotifyUser) {
 
   connectButton?.classList.add("hidden");
   disconnectButton?.classList.remove("hidden");
+  exportPanel?.classList.remove("hidden");
 
   setSpotifyMessage("");
 }
