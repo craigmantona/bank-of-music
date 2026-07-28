@@ -8553,18 +8553,30 @@ async function refreshSpotifyConnectionUI() {
       await getSpotifyCurrentUser();
 
     renderSpotifyConnected(spotifyUser);
-  } catch (error) {
-    console.error(
-      "Spotify account lookup failed",
-      error
-    );
+	} catch (error) {
+  console.error(
+    "Spotify account lookup failed",
+    error
+  );
 
-    clearSpotifyTokens();
+  const errorMessage =
+    error?.message ||
+    "Spotify account lookup failed.";
 
-    renderSpotifyDisconnected(
-      "Spotify needs to be connected again."
-    );
-  }
+  /*
+    Do not delete the tokens while diagnosing this.
+    The token exchange has already succeeded.
+  */
+  renderSpotifyDisconnected(
+    "Spotify account check failed: " +
+    errorMessage
+  );
+
+  alert(
+    "Spotify account check failed: " +
+    errorMessage
+  );
+}
 }
 
 function disconnectSpotify() {
