@@ -9,7 +9,7 @@
  
  <title>Bank of Music</title>
  
- <link rel="stylesheet" href="style.css?v=57" />
+ <link rel="stylesheet" href="style.css?v=58" />
  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
  <script src="config.js"></script>
 </head>
@@ -162,7 +162,7 @@
         <h3>Spotify</h3>
 
         <p class="small">
-          Export your highest-rated BoM tracks into a Spotify playlist.
+          Create and synchronise personal and community BoM playlists.
         </p>
       </div>
     </div>
@@ -192,50 +192,93 @@
 </div>
 
 <div id="spotifyExportPanel" class="spotify-export-panel hidden">
-	<div class="spotify-export-heading">
-  <div>
-    <h3>Create a playlist</h3>
+  <div class="spotify-export-heading">
+    <div>
+      <h3>Your BoM Spotify playlists</h3>
 
-    <p class="small">
-      Export tracks you've rated above your chosen minimum.
-    </p>
+      <p class="small">
+        Create or synchronise permanent Spotify playlists
+        using your Bank of Music track ratings.
+      </p>
+    </div>
   </div>
-</div>
 
-<label for="spotifyMinimumRating">
-  Minimum rating
-</label>
+  <div class="spotify-playlist-buttons">
 
-<select id="spotifyMinimumRating">
-  <option value="7">7 or higher</option>
-  <option value="8" selected>8 or higher</option>
-  <option value="9">9 or higher</option>
-  <option value="10">Perfect 10s</option>
-</select>
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="7"
+      data-playlist-name="BoM • Rated 7+"
+    >
+      <span class="spotify-sync-rating">7+</span>
 
-<label for="spotifyPlaylistName">
-  Playlist name
-</label>
+      <span class="spotify-sync-button-text">
+        <strong>BoM Rated 7+</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
 
-<input
-  id="spotifyPlaylistName"
-  type="text"
-  maxlength="100"
-  value="BoM • Rated 8+"
-  placeholder="Playlist name"
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="8"
+      data-playlist-name="BoM • Rated 8+"
+    >
+      <span class="spotify-sync-rating">8+</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Rated 8+</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="9"
+      data-playlist-name="BoM • Rated 9+"
+    >
+      <span class="spotify-sync-rating">9+</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Rated 9+</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="10"
+      data-playlist-name="BoM • Perfect 10s"
+    >
+      <span class="spotify-sync-rating">10</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Perfect 10s</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+	
+	<button
+  type="button"
+  id="spotifyTop100Btn"
+  class="spotify-sync-playlist-btn spotify-top-100-btn"
+  data-playlist-type="global-top-100"
+  data-playlist-name="BoM • Global Top 100"
 >
+  <span class="spotify-sync-rating">🏆</span>
 
-  <input
-    id="spotifyPlaylistName"
-    type="text"
-    maxlength="100"
-    value="BoM • Rated 8+"
-    placeholder="Playlist name"
-  >
+  <span class="spotify-sync-button-text">
+    <strong>BoM Global Top 100</strong>
+    <small>
+      Highest-rated songs with at least 3 ratings
+    </small>
+  </span>
+</button>
 
-  <button id="createSpotifyPlaylistBtn" type="button">
-    Create Spotify Playlist
-  </button>
+  </div>
 
   <div
     id="spotifyExportProgress"
@@ -243,12 +286,15 @@
   >
     <div class="spotify-progress-track">
       <div
-  id="spotifyProgressBar"
-  class="spotify-progress-fill"
-></div>
+        id="spotifyProgressBar"
+        class="spotify-progress-fill"
+      ></div>
     </div>
 
-    <p id="spotifyProgressText" class="small"></p>
+    <p
+      id="spotifyProgressText"
+      class="spotify-progress-text"
+    ></p>
   </div>
 
   <div
@@ -331,7 +377,7 @@
   })();
 </script>
 
-<script src="app.js?v=57"></script>
+<script src="app.js?v=58"></script>
  <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
 </body>
 </html>
