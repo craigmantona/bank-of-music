@@ -5625,3 +5625,52 @@ button.song-album-link {
   color: #111;
 }
 
+/* ============================================================
+   SPOTIFY SYNC RESULT CONTRAST FIX - v2.1
+   ============================================================ */
+
+.spotify-export-success {
+  background:
+    radial-gradient(circle at top left, rgba(29, 185, 84, 0.24), transparent 38%),
+    linear-gradient(180deg, rgba(13, 48, 31, 0.98), rgba(8, 28, 22, 0.98)) !important;
+  border: 1px solid rgba(29, 185, 84, 0.7) !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34) !important;
+}
+
+.spotify-export-success h3,
+.spotify-export-success p,
+.spotify-export-success strong {
+  color: #ffffff !important;
+}
+
+.spotify-export-success .small {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.spotify-unmatched-details {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.spotify-unmatched-details summary {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #ffffff !important;
+}
+
+.spotify-unmatched-list {
+  background: rgba(7, 11, 21, 0.96) !important;
+}
+
+.spotify-unmatched-row {
+  border-top-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+.spotify-unmatched-row strong {
+  color: #ffffff !important;
+}
+
+.spotify-unmatched-row span {
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
