@@ -8056,7 +8056,9 @@ const SPOTIFY_TOKEN_FUNCTION_URL =
 
 const SPOTIFY_SCOPES = [
   "user-read-private",
-  "playlist-modify-private"
+  "playlist-read-private",
+  "playlist-modify-private",
+  "playlist-modify-public"
 ];
 
 const SPOTIFY_STORAGE_KEYS = {
