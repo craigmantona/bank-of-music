@@ -40,7 +40,7 @@
        <button class="top-nav-btn" data-target="detailSection">⭐ Selected</button>
 	   <button class="top-nav-btn" type="button" data-target="chartsSection" onclick="window.goCharts(); return false;">🏆 Charts</button>
        <button class="top-nav-btn" data-target="settingsSection">
-  ⚙️ Settings
+  🎵 Spotify Sync
 </button>
 	   <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
      </div>
@@ -48,7 +48,7 @@
   <option value="">More</option>
   <option value="librarySection">Ratings</option>
   <option value="detailSection">Selected</option>
-<option value="settingsSection">Settings</option>
+<option value="settingsSection">Spotify Sync</option>
 <option value="adminSection">Admin</option>
 </select>
    </nav>
@@ -142,15 +142,19 @@
    
    <section class="card hidden" id="settingsSection">
   <div class="settings-page-header">
-    <div>
-      <div class="settings-kicker">Account integrations</div>
-      <h2>Settings</h2>
-
-      <p class="small">
-        Connect Bank of Music to your music services.
-      </p>
+  <div>
+    <div class="settings-kicker">
+      Spotify integration
     </div>
+
+    <h2>Spotify Playlist Sync</h2>
+
+    <p class="small">
+      Create and keep your Spotify playlists synchronised
+      with your Bank of Music ratings.
+    </p>
   </div>
+</div>
 
   <div class="settings-panel spotify-settings-panel">
     <div class="settings-service-header">
@@ -194,12 +198,12 @@
 <div id="spotifyExportPanel" class="spotify-export-panel hidden">
   <div class="spotify-export-heading">
     <div>
-      <h3>Your BoM Spotify playlists</h3>
+      <h3>Sync your BoM playlists</h3>
 
       <p class="small">
-        Create or synchronise permanent Spotify playlists
-        using your Bank of Music track ratings.
-      </p>
+  Tap a playlist below to create it or keep it
+  synchronised with your latest ratings.
+</p>
     </div>
   </div>
 
@@ -377,7 +381,7 @@
   })();
 </script>
 
-<script src="app.js?v=61"></script>
+<script src="app.js?v=62"></script>
  <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
 </body>
 </html>
