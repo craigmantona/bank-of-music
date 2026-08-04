@@ -131,6 +131,12 @@ let isAdmin = false;
 */
 let profileOpenedAt = 0;
 
+/*
+  Prevents an iPhone/iPad synthetic second tap from opening an
+  album card immediately after a track-rating star changes the DOM.
+*/
+let lastTrackRatingInteractionAt = 0;
+
 
 function setMessage(element, text) {
 
@@ -4744,222 +4750,431 @@ async function renderArtistDetail(artistItem) {
 
   if (!artistItem) return;
 
+  const artistName =
+    artistItem.name ||
+    artistItem.artist ||
+    "Unknown artist";
 
+  const savedAlbums =
+    getSavedAlbumsByArtist(artistName);
 
-  const artistName = artistItem.name || artistItem.artist || "Unknown artist";
+  const savedSongs =
+    getSavedSongsByArtist(artistName);
 
-const savedAlbums = getSavedAlbumsByArtist(artistName);
-const savedSongs = getSavedSongsByArtist(artistName);
+  const artistMusicBrainzId =
+    artistItem.externalId ||
+    artistItem.artistId ||
+    await resolveArtistIdByName(artistName);
 
-const artistMusicBrainzId =
-  artistItem.externalId || artistItem.artistId || await resolveArtistIdByName(artistName);
-
-const remoteAlbums = await fetchArtistAlbumsFromApi(artistName, artistMusicBrainzId);
-
-const displayAlbums = savedAlbums
-  .map((album) => {
-    const matchingRemote = remoteAlbums.find((remote) =>
-      normaliseCompare(remote.title) === normaliseCompare(album.title)
+  const remoteAlbums =
+    await fetchArtistAlbumsFromApi(
+      artistName,
+      artistMusicBrainzId
     );
 
-    return {
-      ...album,
-      coverUrl: getAlbumArtworkUrl(album) || matchingRemote?.coverUrl || "",
-      releaseDate: album.release_date || album.releaseDate || matchingRemote?.releaseDate || ""
-    };
-  })
-  .sort((a, b) =>
-    String(a.releaseDate || "9999-99-99").localeCompare(
-      String(b.releaseDate || "9999-99-99")
-    )
+  /*
+    Build the displayed discography from MusicBrainz first,
+    then attach any matching locally saved BoM album.
+
+    Previously this page only mapped savedAlbums, so an artist
+    with one album saved in BoM displayed only that one album,
+    even when MusicBrainz returned their full discography.
+  */
+  const savedAlbumsByTitle = new Map(
+    savedAlbums.map((album) => [
+      normaliseCompare(album.title || ""),
+      album
+    ])
   );
-  
 
-  const artistDetail = artistItem.externalId ? await fetchArtistDetail(artistItem.externalId) : null;
+  const seenAlbumKeys = new Set();
 
-  const premiumArtistImage = await fetchArtistImagePremium(artistName);
+  const displayAlbums = remoteAlbums
+    .map((remoteAlbum) => {
+      const albumKey =
+        normaliseCompare(remoteAlbum.title || "");
+
+      const savedAlbum =
+        savedAlbumsByTitle.get(albumKey) || null;
+
+      seenAlbumKeys.add(albumKey);
+
+      return {
+        ...remoteAlbum,
+
+        artist:
+          remoteAlbum.artist ||
+          savedAlbum?.artist ||
+          artistName,
+
+        coverUrl:
+          getAlbumArtworkUrl(savedAlbum) ||
+          remoteAlbum.coverUrl ||
+          "",
+
+        releaseDate:
+          savedAlbum?.release_date ||
+          savedAlbum?.releaseDate ||
+          remoteAlbum.releaseDate ||
+          "",
+
+        savedAlbumId:
+          savedAlbum?.id || "",
+
+        localAlbumId:
+          savedAlbum?.id || ""
+      };
+    });
+
+  /*
+    Keep any locally saved albums that MusicBrainz did not return,
+    for example a manual import or an unusual release.
+  */
+  savedAlbums.forEach((savedAlbum) => {
+    const albumKey =
+      normaliseCompare(savedAlbum.title || "");
+
+    if (!albumKey || seenAlbumKeys.has(albumKey)) {
+      return;
+    }
+
+    displayAlbums.push({
+      type: "album",
+      title: savedAlbum.title || "Untitled",
+      artist: savedAlbum.artist || artistName,
+      externalId: savedAlbum.external_id || "",
+      releaseGroupId:
+        savedAlbum.release_group_id ||
+        savedAlbum.releaseGroupId ||
+        "",
+      artistId:
+        artistMusicBrainzId ||
+        savedAlbum.artist_id ||
+        "",
+      releaseDate:
+        savedAlbum.release_date ||
+        savedAlbum.releaseDate ||
+        "",
+      coverUrl: getAlbumArtworkUrl(savedAlbum),
+      savedAlbumId: savedAlbum.id,
+      localAlbumId: savedAlbum.id
+    });
+  });
+
+  displayAlbums.sort((a, b) => {
+    const dateComparison =
+      String(a.releaseDate || "9999-99-99")
+        .localeCompare(
+          String(b.releaseDate || "9999-99-99")
+        );
+
+    if (dateComparison !== 0) {
+      return dateComparison;
+    }
+
+    return String(a.title || "")
+      .localeCompare(String(b.title || ""));
+  });
+
+  const artistDetail =
+    artistItem.externalId
+      ? await fetchArtistDetail(
+          artistItem.externalId
+        )
+      : null;
+
+  const premiumArtistImage =
+    await fetchArtistImagePremium(artistName);
 
   const cachedArtistImage = "";
 
-const bannerUrl = cachedArtistImage ||
-
-    remoteAlbums.find((album) => album.coverUrl)?.coverUrl ||
-
-    savedAlbums.find((album) => album.cover_art_url)?.cover_art_url ||
-
+  const bannerUrl =
+    cachedArtistImage ||
+    premiumArtistImage ||
+    displayAlbums.find(
+      (album) => album.coverUrl
+    )?.coverUrl ||
     "";
 
+  const artistType =
+    artistDetail?.type || "Artist";
 
+  const artistCountry =
+    artistDetail?.country ||
+    artistItem.country ||
+    "Unknown";
 
-  const artistType = artistDetail?.type || "Artist";
+  const artistArea =
+    artistDetail?.area?.name ||
+    artistDetail?.begin_area?.name ||
+    "";
 
-  const artistCountry = artistDetail?.country || artistItem.country || "Unknown";
+  const disambiguation =
+    artistDetail?.disambiguation ||
+    artistItem.disambiguation ||
+    "";
 
-  const artistArea = artistDetail?.area?.name || artistDetail?.begin_area?.name || "";
+  const sortName =
+    artistDetail?.["sort-name"] ||
+    artistItem.sortName ||
+    "";
 
-  const disambiguation = artistDetail?.disambiguation || artistItem.disambiguation || "";
+  const lifeStart =
+    artistDetail?.["life-span"]?.begin || "";
 
-  const sortName = artistDetail?.["sort-name"] || artistItem.sortName || "";
+  const lifeEnd =
+    artistDetail?.["life-span"]?.end || "";
 
-  const lifeStart = artistDetail?.["life-span"]?.begin || "";
-
-  const lifeEnd = artistDetail?.["life-span"]?.end || "";
-
-  const tags = (artistDetail?.tags || []).slice(0, 6).map((tag) => tag.name).filter(Boolean);
-
-
+  const tags =
+    (artistDetail?.tags || [])
+      .slice(0, 6)
+      .map((tag) => tag.name)
+      .filter(Boolean);
 
   selectedItemDetail.innerHTML = `
-
-    ${buildArtistBannerMarkup(artistName, bannerUrl)}
-
-
+    ${buildArtistBannerMarkup(
+      artistName,
+      bannerUrl
+    )}
 
     <div class="detail-panel">
-
       <div class="detail-hero">
-
         <div>
-
-          ${bannerUrl
-  ? `
-    <img
-      src="${bannerUrl}"
-      alt="${artistName} banner"
-      class="artist-banner-image"
-      loading="lazy"
-      onerror="this.style.display='none';"
-    >
-  `
-  : `<div class="media-cover-placeholder-large">${artistName}</div>`
-}
-
+          ${
+            bannerUrl
+              ? `
+                <img
+                  src="${escapeHtml(bannerUrl)}"
+                  alt="${escapeHtml(artistName)} banner"
+                  class="artist-banner-image"
+                  loading="lazy"
+                  onerror="this.style.display='none';"
+                >
+              `
+              : `
+                <div class="media-cover-placeholder-large">
+                  ${escapeHtml(artistName)}
+                </div>
+              `
+          }
         </div>
 
-
-
         <div class="detail-info-panel">
+          <div class="media-title">
+            ${escapeHtml(artistName)}
+          </div>
 
-          <div class="media-title">${escapeHtml(artistName)}</div>
-
-          <div class="media-subtitle">${escapeHtml(artistType)}</div>
+          <div class="media-subtitle">
+            ${escapeHtml(artistType)}
+          </div>
 
           ${renderFollowControls(artistName)}
 
+          <button
+            class="artist-info-toggle"
+            onclick="toggleArtistInfo()"
+          >
+            More info
+          </button>
 
+          <div
+            id="artistInfoPanel"
+            class="detail-meta-grid artist-info-panel collapsed"
+          >
+            <div class="detail-meta-label">
+              Country
+            </div>
 
-          <button class="artist-info-toggle" onclick="toggleArtistInfo()">
-  More info
-</button>
+            <div class="detail-meta-value">
+              ${escapeHtml(artistCountry)}
+            </div>
 
-<div id="artistInfoPanel" class="detail-meta-grid artist-info-panel collapsed">
+            <div class="detail-meta-label">
+              Area
+            </div>
 
-            <div class="detail-meta-label">Country</div>
+            <div class="detail-meta-value">
+              ${
+                artistArea
+                  ? escapeHtml(artistArea)
+                  : "Unknown"
+              }
+            </div>
 
-            <div class="detail-meta-value">${escapeHtml(artistCountry)}</div>
+            <div class="detail-meta-label">
+              Also known as
+            </div>
 
+            <div class="detail-meta-value">
+              ${
+                sortName
+                  ? escapeHtml(sortName)
+                  : "—"
+              }
+            </div>
 
+            <div class="detail-meta-label">
+              Active since
+            </div>
 
-            <div class="detail-meta-label">Area</div>
+            <div class="detail-meta-value">
+              ${
+                lifeStart
+                  ? escapeHtml(lifeStart)
+                  : "Unknown"
+              }
+            </div>
 
-            <div class="detail-meta-value">${artistArea ? escapeHtml(artistArea) : "Unknown"}</div>
+            <div class="detail-meta-label">
+              Ended
+            </div>
 
+            <div class="detail-meta-value">
+              ${
+                lifeEnd
+                  ? escapeHtml(lifeEnd)
+                  : "Still active / Unknown"
+              }
+            </div>
 
+            <div class="detail-meta-label">
+              Studio albums shown
+            </div>
 
-            <div class="detail-meta-label">Also known as</div>
+            <div class="detail-meta-value">
+              ${displayAlbums.length}
+            </div>
 
-            <div class="detail-meta-value">${sortName ? escapeHtml(sortName) : "—"}</div>
+            <div class="detail-meta-label">
+              Saved tracks
+            </div>
 
-
-
-            <div class="detail-meta-label">Active since</div>
-
-            <div class="detail-meta-value">${lifeStart ? escapeHtml(lifeStart) : "Unknown"}</div>
-
-
-
-            <div class="detail-meta-label">Ended</div>
-
-            <div class="detail-meta-value">${lifeEnd ? escapeHtml(lifeEnd) : "Still active / Unknown"}</div>
-
-
-
-            <div class="detail-meta-label">Saved albums</div>
-
-            <div class="detail-meta-value">${displayAlbums.length}</div>
-
-
-
-            <div class="detail-meta-label">Saved tracks</div>
-
-            <div class="detail-meta-value">${savedSongs.length}</div>
-
+            <div class="detail-meta-value">
+              ${savedSongs.length}
+            </div>
           </div>
 
+          ${
+            disambiguation
+              ? `
+                <div class="artist-bio-box">
+                  ${escapeHtml(disambiguation)}
+                </div>
+              `
+              : ""
+          }
 
-
-          ${disambiguation ? `<div class="artist-bio-box">${escapeHtml(disambiguation)}</div>` : ""}
-
-          ${tags.length ? `<div class="artist-tags">${tags.map((tag) => `<span class="artist-tag">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
-
+          ${
+            tags.length
+              ? `
+                <div class="artist-tags">
+                  ${tags
+                    .map(
+                      (tag) => `
+                        <span class="artist-tag">
+                          ${escapeHtml(tag)}
+                        </span>
+                      `
+                    )
+                    .join("")}
+                </div>
+              `
+              : ""
+          }
         </div>
-
       </div>
 
-
-
-      <div class="section-divider">Top tracks</div>
+      <div class="section-divider">
+        Top tracks
+      </div>
 
       ${buildArtistTopTracksHtml(artistName)}
 
+      <div class="section-divider">
+        Most rated albums by
+        ${escapeHtml(artistName)}
+      </div>
 
+      ${buildArtistTopRatedAlbumsHtml(
+        artistName
+      )}
 
-      <div class="section-divider">Most rated albums by ${escapeHtml(artistName)}</div>
+      <div class="section-divider">
+        Studio albums - chronological discography
+      </div>
 
-      ${buildArtistTopRatedAlbumsHtml(artistName)}
+      ${
+        displayAlbums.length
+          ? `
+            <div class="artist-albums-grid">
+              ${displayAlbums
+                .map((album, index) => {
+                  const cardAttributes =
+                    album.savedAlbumId
+                      ? `
+                        data-library-type="album"
+                        data-album-id="${escapeHtml(
+                          album.savedAlbumId
+                        )}"
+                      `
+                      : `
+                        data-artist-album-index="${index}"
+                      `;
 
+                  return `
+                    <div
+                      class="poster-card artist-album-card"
+                      ${cardAttributes}
+                    >
+                      ${getPosterCoverMarkup(
+                        album.coverUrl,
+                        `${album.title} cover`
+                      )}
 
+                      <div class="poster-body">
+                        <div class="poster-title">
+                          ${escapeHtml(album.title)}
+                        </div>
 
-      <div class="section-divider">Studio albums - chronological discography</div>
+                        <div class="poster-subtitle">
+                          ${escapeHtml(
+                            album.artist || artistName
+                          )}
+                        </div>
 
-      ${displayAlbums.length
-
-  ? `<div class="artist-albums-grid">
-
-      ${displayAlbums.map((album) => `
-
-              <div class="poster-card artist-album-card"
-     data-library-type="album"
-     data-album-id="${album.id}">
-
-                ${getPosterCoverMarkup(album.coverUrl, `${album.title} cover`)}
-
-                <div class="poster-body">
-
-                  <div class="poster-title">${escapeHtml(album.title)}</div>
-
-                  <div class="poster-subtitle">${escapeHtml(album.artist)}</div>
-
-                  ${album.releaseDate ? `<div class="poster-meta">${escapeHtml(album.releaseDate)}</div>` : ""}
-
-                </div>
-
-              </div>
-
-            `).join("")}
-
-          </div>`
-
-        : `<p class="small">No album data found.</p>`}
-
+                        ${
+                          album.releaseDate
+                            ? `
+                              <div class="poster-meta">
+                                ${escapeHtml(
+                                  album.releaseDate
+                                )}
+                              </div>
+                            `
+                            : ""
+                        }
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("")}
+            </div>
+          `
+          : `
+            <p class="small">
+              No studio album data found.
+            </p>
+          `
+      }
     </div>
-
   `;
 
-
-
-  selectedItemDetail.dataset.artistAlbums = JSON.stringify(remoteAlbums);
-
+  /*
+    The click handler uses this array for albums that have not
+    yet been saved locally, so it must match the displayed order.
+  */
+  selectedItemDetail.dataset.artistAlbums =
+    JSON.stringify(displayAlbums);
 }
 
 
@@ -6422,13 +6637,16 @@ async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
 
   // First check if this track already exists on THIS album by title
   const existing = allSongs.find((song) =>
-  Number(song.album_id) === Number(finalAlbumId) &&
-  normaliseCompare(song.title) === normaliseCompare(cleanTitle)
-) || allSongs.find((song) =>
-  trackExternalId &&
-  String(song.external_source || "") === "musicbrainz" &&
-  String(song.external_id || "") === String(trackExternalId)
-);
+    Number(song.album_id) === Number(finalAlbumId) &&
+    (
+      normaliseCompare(song.title) === normaliseCompare(cleanTitle) ||
+      (
+        trackExternalId &&
+        String(song.external_source || "") === "musicbrainz" &&
+        String(song.external_id || "") === String(trackExternalId)
+      )
+    )
+  );
 
   let result;
 
@@ -6679,6 +6897,8 @@ async function deleteTrackRating(songId) {
 /* PASTE NEW FUNCTION HERE */
 
 window.handleStarOptionClick = async function (event, button) {
+
+  lastTrackRatingInteractionAt = Date.now();
 
   event.preventDefault();
 
@@ -7723,6 +7943,16 @@ if (
 
     const libraryAlbumCard = event.target.closest('[data-library-type="album"][data-album-id]');
 
+    if (
+      libraryAlbumCard &&
+      Date.now() - lastTrackRatingInteractionAt < 1200
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("Ignored album ghost click after track rating");
+      return;
+    }
+
     if (libraryAlbumCard) {
       event.preventDefault();
       event.stopPropagation();
@@ -7749,6 +7979,16 @@ if (
     }
 
     const artistAlbumCard = event.target.closest("[data-artist-album-index]");
+
+    if (
+      artistAlbumCard &&
+      Date.now() - lastTrackRatingInteractionAt < 1200
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("Ignored artist-album ghost click after track rating");
+      return;
+    }
 
     if (artistAlbumCard && selectedItemDetail.dataset.artistAlbums) {
       event.preventDefault();
