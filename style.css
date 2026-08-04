@@ -5674,3 +5674,97 @@ button.song-album-link {
   color: rgba(255, 255, 255, 0.68) !important;
 }
 
+/* ============================================================
+   PLAY WITH YOUR MUSIC PROVIDER
+   ============================================================ */
+
+.music-provider-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid rgba(29, 185, 84, 0.48);
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(29, 185, 84, 0.18),
+      transparent 42%
+    ),
+    rgba(255, 255, 255, 0.035);
+}
+
+.music-provider-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.music-provider-kicker {
+  color: #22f5a7;
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.music-provider-copy strong {
+  color: #ffffff;
+  font-size: 1.04rem;
+}
+
+.music-provider-copy span {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.music-provider-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-width: 190px;
+  border: 1px solid rgba(29, 185, 84, 0.74);
+  border-radius: 999px;
+  background: #1db954;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(29, 185, 84, 0.24);
+}
+
+.music-provider-play-btn:hover {
+  background: #20c65a;
+  transform: translateY(-2px);
+}
+
+.music-provider-play-btn:disabled {
+  opacity: 0.68;
+  cursor: wait;
+  transform: none;
+}
+
+.music-provider-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  font-weight: 950;
+}
+
+@media (max-width: 700px) {
+  .music-provider-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .music-provider-play-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
