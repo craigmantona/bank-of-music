@@ -212,11 +212,29 @@ function renderClickableArtistName(artistName) {
 
 window.openArtistPage = async function (artistName) {
 
+  const cleanArtistName = normaliseText(artistName);
+
+  if (!cleanArtistName) {
+    return;
+  }
+
+  /*
+    Artist links from saved songs usually contain only the artist
+    name, whereas a search result already contains MusicBrainz's
+    artist ID. Resolve and retain that ID before rendering so both
+    routes show the same complete studio discography.
+  */
+  const artistId =
+    getSelectedArtistIdFallback(cleanArtistName) ||
+    await resolveArtistIdByName(cleanArtistName);
+
   selectedItem = {
     type: "artist",
-    title: artistName,
-    name: artistName,
-    artist: artistName
+    title: cleanArtistName,
+    name: cleanArtistName,
+    artist: cleanArtistName,
+    externalId: artistId,
+    artistId
   };
 
   showOnlySection("detailSection");
@@ -4243,11 +4261,33 @@ async function resolveArtistIdByName(artistName) {
 
   if (!cleanName) return "";
 
+  /*
+    Prefer an artist ID already attached to one of BoM's saved
+    albums. This is the same canonical ID used when the artist was
+    originally found through search.
+  */
+  const localArtistId =
+    getSelectedArtistIdFallback(cleanName);
+
+  if (localArtistId) {
+    return localArtistId;
+  }
+
   try {
 
-    const url = `https://musicbrainz.org/ws/2/artist/?query=artist:${encodeURIComponent(cleanName)}&fmt=json&limit=8`;
+    /*
+      Quote the MusicBrainz artist search so names containing "&",
+      punctuation or common words are resolved as one exact phrase.
+    */
+    const query = `artist:"${cleanName.replace(/"/g, "")}"`;
 
-    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    const url =
+      `https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}` +
+      `&fmt=json&limit=25`;
+
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" }
+    });
 
     if (!response.ok) return "";
 
@@ -4255,11 +4295,55 @@ async function resolveArtistIdByName(artistName) {
 
     const artists = data.artists || [];
 
-    const exact = artists.find((artist) => normaliseCompare(artist.name) === normaliseCompare(cleanName));
+    const exactMatches = artists.filter(
+      (artist) =>
+        normaliseCompare(artist.name) ===
+        normaliseCompare(cleanName)
+    );
 
-    return (exact || artists[0])?.id || "";
+    const candidates =
+      exactMatches.length
+        ? exactMatches
+        : artists;
 
-  } catch {
+    candidates.sort((a, b) => {
+      const aBad =
+        /tribute|cover|karaoke|impersonator/i.test(
+          `${a.disambiguation || ""} ${a.type || ""}`
+        );
+
+      const bBad =
+        /tribute|cover|karaoke|impersonator/i.test(
+          `${b.disambiguation || ""} ${b.type || ""}`
+        );
+
+      if (aBad !== bBad) {
+        return aBad ? 1 : -1;
+      }
+
+      const scoreDifference =
+        Number(b.score || 0) -
+        Number(a.score || 0);
+
+      if (scoreDifference !== 0) {
+        return scoreDifference;
+      }
+
+      return (
+        Number(b["release-count"] || 0) -
+        Number(a["release-count"] || 0)
+      );
+    });
+
+    return candidates[0]?.id || "";
+
+  } catch (error) {
+
+    console.error(
+      "MusicBrainz artist ID resolution failed:",
+      cleanName,
+      error
+    );
 
     return "";
 
@@ -4764,6 +4848,7 @@ async function renderArtistDetail(artistItem) {
   const artistMusicBrainzId =
     artistItem.externalId ||
     artistItem.artistId ||
+    getSelectedArtistIdFallback(artistName) ||
     await resolveArtistIdByName(artistName);
 
   const remoteAlbums =
@@ -5621,6 +5706,386 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
   `;
 }
 
+
+/* ============================================================
+   PLAY WITH YOUR MUSIC PROVIDER
+   Opens the selected BoM song or album in Spotify.
+   ============================================================ */
+
+const SPOTIFY_ALBUM_MATCH_CACHE_PREFIX =
+  "bom_spotify_album_match_";
+
+function getSpotifyAlbumMatchCacheKey(album) {
+  return (
+    SPOTIFY_ALBUM_MATCH_CACHE_PREFIX +
+    [
+      normaliseSpotifyMatchText(album?.artist),
+      normaliseSpotifyMatchText(album?.title)
+    ].join("|")
+  );
+}
+
+function getCachedSpotifyAlbumMatch(album) {
+  try {
+    const cached = JSON.parse(
+      localStorage.getItem(
+        getSpotifyAlbumMatchCacheKey(album)
+      ) || "null"
+    );
+
+    return cached?.externalUrl ? cached : null;
+  } catch {
+    return null;
+  }
+}
+
+function cacheSpotifyAlbumMatch(bomAlbum, spotifyAlbum) {
+  const externalUrl =
+    spotifyAlbum?.external_urls?.spotify || "";
+
+  if (!externalUrl) return;
+
+  localStorage.setItem(
+    getSpotifyAlbumMatchCacheKey(bomAlbum),
+    JSON.stringify({
+      id: spotifyAlbum.id || "",
+      uri: spotifyAlbum.uri || "",
+      name: spotifyAlbum.name || "",
+      externalUrl,
+      matchedAt: new Date().toISOString()
+    })
+  );
+}
+
+async function searchSpotifyAlbumForBoMAlbum(bomAlbum) {
+  const cachedMatch =
+    getCachedSpotifyAlbumMatch(bomAlbum);
+
+  if (cachedMatch) {
+    return cachedMatch;
+  }
+
+  const searchQuery = [
+    `album:${bomAlbum.title}`,
+    `artist:${bomAlbum.artist}`
+  ].join(" ");
+
+  const searchData = await spotifyApiRequest(
+    `/search?${new URLSearchParams({
+      q: searchQuery,
+      type: "album",
+      limit: "10"
+    }).toString()}`
+  );
+
+  const candidates =
+    searchData?.albums?.items || [];
+
+  if (!candidates.length) {
+    return null;
+  }
+
+  const wantedTitle =
+    normaliseSpotifyMatchText(bomAlbum.title);
+
+  const wantedArtist =
+    normaliseSpotifyMatchText(bomAlbum.artist);
+
+  const scoredCandidates = candidates
+    .map((candidate) => {
+      const candidateTitle =
+        normaliseSpotifyMatchText(candidate.name);
+
+      const candidateArtists =
+        (candidate.artists || [])
+          .map((artist) =>
+            normaliseSpotifyMatchText(artist.name)
+          )
+          .join(" ");
+
+      let score = 0;
+
+      if (candidateTitle === wantedTitle) {
+        score += 100;
+      } else if (
+        candidateTitle.includes(wantedTitle) ||
+        wantedTitle.includes(candidateTitle)
+      ) {
+        score += 45;
+      }
+
+      if (candidateArtists.includes(wantedArtist)) {
+        score += 90;
+      } else if (
+        wantedArtist.includes(candidateArtists)
+      ) {
+        score += 50;
+      }
+
+      return { candidate, score };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  const bestMatch = scoredCandidates[0];
+
+  if (!bestMatch || bestMatch.score < 140) {
+    return null;
+  }
+
+  cacheSpotifyAlbumMatch(
+    bomAlbum,
+    bestMatch.candidate
+  );
+
+  return bestMatch.candidate;
+}
+
+function buildMusicProviderPanel({
+  type,
+  title,
+  artist,
+  album = ""
+}) {
+  if (!title || !artist) {
+    return "";
+  }
+
+  return `
+    <div class="music-provider-panel">
+      <div class="music-provider-copy">
+        <div class="music-provider-kicker">
+          Listen now
+        </div>
+
+        <strong>
+          Play with your music provider
+        </strong>
+
+        <span>
+          Open this ${type === "album" ? "album" : "track"}
+          in Spotify.
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="music-provider-play-btn"
+        data-provider-type="${escapeHtml(type)}"
+        data-provider-title="${escapeHtml(title)}"
+        data-provider-artist="${escapeHtml(artist)}"
+        data-provider-album="${escapeHtml(album)}"
+      >
+        <span class="music-provider-icon" aria-hidden="true">
+          ♪
+        </span>
+
+        <span>Play in Spotify</span>
+      </button>
+    </div>
+  `;
+}
+
+function getSpotifySearchFallbackUrl({
+  title,
+  artist
+}) {
+  return (
+    "https://open.spotify.com/search/" +
+    encodeURIComponent(
+      `${title} ${artist}`.trim()
+    )
+  );
+}
+
+
+function getMusicProviderItemKey({
+  type,
+  title,
+  artist,
+  album = ""
+}) {
+  return [
+    normaliseSpotifyMatchText(type),
+    normaliseSpotifyMatchText(artist),
+    normaliseSpotifyMatchText(title),
+    normaliseSpotifyMatchText(album)
+  ].join("|");
+}
+
+async function recordMusicProviderClick({
+  provider,
+  type,
+  title,
+  artist,
+  album = ""
+}) {
+  try {
+    const itemKey =
+      getMusicProviderItemKey({
+        type,
+        title,
+        artist,
+        album
+      });
+
+    if (
+      !provider ||
+      !itemKey ||
+      !title ||
+      !artist
+    ) {
+      return null;
+    }
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        "record_music_provider_click",
+        {
+          p_provider: provider,
+          p_item_type: type,
+          p_item_key: itemKey,
+          p_title: title,
+          p_artist: artist,
+          p_album: album || null
+        }
+      );
+
+    if (error) {
+      console.warn(
+        "Music provider click tracking failed:",
+        error
+      );
+
+      return null;
+    }
+
+    return Number(data || 0) || null;
+  } catch (error) {
+    console.warn(
+      "Music provider click tracking failed:",
+      error
+    );
+
+    return null;
+  }
+}
+
+async function openWithMusicProvider({
+  type,
+  title,
+  artist,
+  album = "",
+  button = null
+}) {
+  const fallbackUrl =
+    getSpotifySearchFallbackUrl({
+      title,
+      artist
+    });
+
+  const providerWindow =
+    window.open("about:blank", "_blank");
+
+  if (providerWindow) {
+    providerWindow.document.title =
+      "Opening Spotify…";
+
+    providerWindow.document.body.innerHTML = `
+      <p style="
+        font-family: Arial, sans-serif;
+        padding: 24px;
+      ">
+        Opening Spotify…
+      </p>
+    `;
+  }
+
+  const originalText =
+    button?.innerHTML || "";
+
+  if (button) {
+    button.disabled = true;
+    button.innerHTML =
+      "<span>Finding in Spotify…</span>";
+  }
+
+  try {
+    /*
+      Record an anonymous aggregate before opening Spotify.
+      No user ID, email, IP address or device identifier is
+      written by BoM's database function.
+    */
+    await recordMusicProviderClick({
+      provider: "spotify",
+      type,
+      title,
+      artist,
+      album
+    });
+
+    const accessToken =
+      await getValidSpotifyAccessToken();
+
+    let spotifyUrl = "";
+
+    if (accessToken && type === "song") {
+      const spotifyTrack =
+        await searchSpotifyTrackForBoMTrack({
+          title,
+          artist,
+          album
+        });
+
+      spotifyUrl =
+        spotifyTrack?.external_urls?.spotify ||
+        spotifyTrack?.externalUrl ||
+        "";
+    }
+
+    if (accessToken && type === "album") {
+      const spotifyAlbum =
+        await searchSpotifyAlbumForBoMAlbum({
+          title,
+          artist
+        });
+
+      spotifyUrl =
+        spotifyAlbum?.external_urls?.spotify ||
+        spotifyAlbum?.externalUrl ||
+        "";
+    }
+
+    const destination =
+      spotifyUrl || fallbackUrl;
+
+    if (providerWindow) {
+      providerWindow.location.href =
+        destination;
+    } else {
+      window.location.href =
+        destination;
+    }
+  } catch (error) {
+    console.error(
+      "Open with music provider failed:",
+      error
+    );
+
+    if (providerWindow) {
+      providerWindow.location.href =
+        fallbackUrl;
+    } else {
+      window.location.href =
+        fallbackUrl;
+    }
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = originalText;
+    }
+  }
+}
+
 async function renderSelectedItem() {
 
   if (!selectedItem) {
@@ -5711,6 +6176,22 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
         <div class="detail-rating-row">
           ${renderStarSelector(`song-rating-${song.id || songId}`, yourRating)}
         </div>
+
+        ${buildMusicProviderPanel({
+          type: "song",
+          title:
+            song.title ||
+            selectedItem.title ||
+            "",
+          artist:
+            song.artist ||
+            selectedItem.artist ||
+            "",
+          album:
+            linkedAlbum?.title ||
+            selectedItem.releaseTitle ||
+            ""
+        })}
 		
 		${
   linkedAlbum
@@ -6015,6 +6496,18 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
                 ${buildSelectedSharePanel(selectedItem)}
 
               </div>
+
+              ${buildMusicProviderPanel({
+                type: "album",
+                title:
+                  detail?.title ||
+                  selectedItem.title ||
+                  "",
+                artist:
+                  displayArtist ||
+                  selectedItem.artist ||
+                  ""
+              })}
 
               ${typeof renderSelectedAdminControls === "function" ? renderSelectedAdminControls({ albumId }) : ""}
 
@@ -7941,6 +8434,34 @@ if (
   return;
 }
 
+    const musicProviderButton =
+      event.target.closest(
+        ".music-provider-play-btn"
+      );
+
+    if (musicProviderButton) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      await openWithMusicProvider({
+        type:
+          musicProviderButton.dataset
+            .providerType || "song",
+        title:
+          musicProviderButton.dataset
+            .providerTitle || "",
+        artist:
+          musicProviderButton.dataset
+            .providerArtist || "",
+        album:
+          musicProviderButton.dataset
+            .providerAlbum || "",
+        button: musicProviderButton
+      });
+
+      return;
+    }
+
     const libraryAlbumCard = event.target.closest('[data-library-type="album"][data-album-id]');
 
     if (
@@ -8126,18 +8647,12 @@ if (songAlbumLink) {
 
 if (songArtistLink) {
   event.preventDefault();
+  event.stopPropagation();
 
-  const artistName = songArtistLink.dataset.artistName;
+  const artistName =
+    songArtistLink.dataset.artistName || "";
 
-  selectedItem = {
-    type: "artist",
-    name: artistName,
-    artist: artistName
-  };
-
-  showOnlySection("detailSection");
-
-  await renderArtistDetail(selectedItem);
+  await window.openArtistPage(artistName);
 
   return;
 }
