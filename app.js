@@ -137,6 +137,12 @@ let profileOpenedAt = 0;
 */
 let lastTrackRatingInteractionAt = 0;
 
+/*
+  Prevent album-card navigation when a Spotify control is tapped
+  inside an album detail card on touch devices.
+*/
+let lastMusicProviderInteractionAt = 0;
+
 
 function setMessage(element, text) {
 
@@ -5846,41 +5852,45 @@ function buildMusicProviderPanel({
   artist,
   album = ""
 }) {
-  if (!title || !artist) {
-    return "";
-  }
+  if (!title || !artist) return "";
+
+  const playerId =
+    "spotify-embed-" +
+    Math.random().toString(36).slice(2);
 
   return `
-    <div class="music-provider-panel">
-      <div class="music-provider-copy">
-        <div class="music-provider-kicker">
-          Listen now
+    <div class="music-provider-panel" data-music-provider-panel="true">
+      <div class="music-provider-header">
+        <div class="music-provider-copy">
+          <div class="music-provider-kicker">Listen now</div>
+          <strong>Play with your music provider</strong>
+          <span>
+            Play this ${type === "album" ? "album" : "track"}
+            inside Bank of Music.
+          </span>
         </div>
 
-        <strong>
-          Play with your music provider
-        </strong>
-
-        <span>
-          Open this ${type === "album" ? "album" : "track"}
-          in Spotify.
-        </span>
+        <div class="music-provider-actions">
+          <button
+            type="button"
+            class="music-provider-play-btn"
+            data-provider-type="${escapeHtml(type)}"
+            data-provider-title="${escapeHtml(title)}"
+            data-provider-artist="${escapeHtml(artist)}"
+            data-provider-album="${escapeHtml(album)}"
+            data-player-target="${escapeHtml(playerId)}"
+          >
+            <span class="music-provider-icon" aria-hidden="true">♪</span>
+            <span>Play here</span>
+          </button>
+        </div>
       </div>
 
-      <button
-        type="button"
-        class="music-provider-play-btn"
-        data-provider-type="${escapeHtml(type)}"
-        data-provider-title="${escapeHtml(title)}"
-        data-provider-artist="${escapeHtml(artist)}"
-        data-provider-album="${escapeHtml(album)}"
-      >
-        <span class="music-provider-icon" aria-hidden="true">
-          ♪
-        </span>
-
-        <span>Play in Spotify</span>
-      </button>
+      <div
+        id="${escapeHtml(playerId)}"
+        class="spotify-embed-container hidden"
+        aria-live="polite"
+      ></div>
     </div>
   `;
 }
@@ -5970,12 +5980,104 @@ async function recordMusicProviderClick({
   }
 }
 
+function getSpotifyEntityId(spotifyItem) {
+  if (spotifyItem?.id) return spotifyItem.id;
+
+  const uri = spotifyItem?.uri || "";
+  if (uri.includes(":")) {
+    return uri.split(":").pop() || "";
+  }
+
+  const url =
+    spotifyItem?.external_urls?.spotify ||
+    spotifyItem?.externalUrl ||
+    "";
+
+  const match = url.match(
+    /open\.spotify\.com\/(?:intl-[^/]+\/)?(?:track|album)\/([A-Za-z0-9]+)/
+  );
+
+  return match?.[1] || "";
+}
+
+function buildSpotifyEmbedUrl({
+  type,
+  spotifyItem
+}) {
+  const entityId =
+    getSpotifyEntityId(spotifyItem);
+
+  if (!entityId) return "";
+
+  const entityType =
+    type === "album" ? "album" : "track";
+
+  return (
+    `https://open.spotify.com/embed/${entityType}/` +
+    encodeURIComponent(entityId) +
+    "?utm_source=generator&theme=0"
+  );
+}
+
+function renderSpotifyEmbed({
+  target,
+  type,
+  title,
+  artist,
+  embedUrl,
+  externalUrl
+}) {
+  if (!target || !embedUrl) return false;
+
+  const height =
+    type === "album" ? 352 : 152;
+
+  target.classList.remove("hidden");
+
+  target.innerHTML = `
+    <iframe
+      class="spotify-embed-frame"
+      title="Spotify player for ${escapeHtml(title)} by ${escapeHtml(artist)}"
+      src="${escapeHtml(embedUrl)}"
+      width="100%"
+      height="${height}"
+      frameborder="0"
+      allowfullscreen
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    ></iframe>
+
+    <div class="spotify-embed-footer">
+      <span class="small">
+        Playback remains inside Bank of Music.
+      </span>
+
+      <a
+        class="spotify-open-externally-btn"
+        href="${escapeHtml(externalUrl)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open in Spotify
+      </a>
+    </div>
+  `;
+
+  target.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+
+  return true;
+}
+
 async function openWithMusicProvider({
   type,
   title,
   artist,
   album = "",
-  button = null
+  button = null,
+  playerTarget = ""
 }) {
   const fallbackUrl =
     getSpotifySearchFallbackUrl({
@@ -5983,22 +6085,12 @@ async function openWithMusicProvider({
       artist
     });
 
-  const providerWindow =
-    window.open("about:blank", "_blank");
-
-  if (providerWindow) {
-    providerWindow.document.title =
-      "Opening Spotify…";
-
-    providerWindow.document.body.innerHTML = `
-      <p style="
-        font-family: Arial, sans-serif;
-        padding: 24px;
-      ">
-        Opening Spotify…
-      </p>
-    `;
-  }
+  const target =
+    playerTarget
+      ? document.getElementById(playerTarget)
+      : button
+          ?.closest("[data-music-provider-panel='true']")
+          ?.querySelector(".spotify-embed-container");
 
   const originalText =
     button?.innerHTML || "";
@@ -6006,15 +6098,19 @@ async function openWithMusicProvider({
   if (button) {
     button.disabled = true;
     button.innerHTML =
-      "<span>Finding in Spotify…</span>";
+      "<span>Loading player…</span>";
+  }
+
+  if (target) {
+    target.classList.remove("hidden");
+    target.innerHTML = `
+      <div class="spotify-embed-loading">
+        Finding ${escapeHtml(title)} in Spotify…
+      </div>
+    `;
   }
 
   try {
-    /*
-      Record an anonymous aggregate before opening Spotify.
-      No user ID, email, IP address or device identifier is
-      written by BoM's database function.
-    */
     await recordMusicProviderClick({
       provider: "spotify",
       type,
@@ -6026,62 +6122,97 @@ async function openWithMusicProvider({
     const accessToken =
       await getValidSpotifyAccessToken();
 
-    let spotifyUrl = "";
+    let spotifyItem = null;
 
     if (accessToken && type === "song") {
-      const spotifyTrack =
+      spotifyItem =
         await searchSpotifyTrackForBoMTrack({
           title,
           artist,
           album
         });
-
-      spotifyUrl =
-        spotifyTrack?.external_urls?.spotify ||
-        spotifyTrack?.externalUrl ||
-        "";
     }
 
     if (accessToken && type === "album") {
-      const spotifyAlbum =
+      spotifyItem =
         await searchSpotifyAlbumForBoMAlbum({
           title,
           artist
         });
-
-      spotifyUrl =
-        spotifyAlbum?.external_urls?.spotify ||
-        spotifyAlbum?.externalUrl ||
-        "";
     }
 
-    const destination =
-      spotifyUrl || fallbackUrl;
+    if (!spotifyItem) {
+      throw new Error(
+        "No exact Spotify match found."
+      );
+    }
 
-    if (providerWindow) {
-      providerWindow.location.href =
-        destination;
-    } else {
-      window.location.href =
-        destination;
+    const externalUrl =
+      spotifyItem?.external_urls?.spotify ||
+      spotifyItem?.externalUrl ||
+      fallbackUrl;
+
+    const rendered =
+      renderSpotifyEmbed({
+        target,
+        type,
+        title,
+        artist,
+        embedUrl: buildSpotifyEmbedUrl({
+          type,
+          spotifyItem
+        }),
+        externalUrl
+      });
+
+    if (!rendered) {
+      throw new Error(
+        "Spotify did not return a playable embed."
+      );
+    }
+
+    if (button) {
+      button.innerHTML = `
+        <span class="music-provider-icon" aria-hidden="true">✓</span>
+        <span>Player loaded</span>
+      `;
     }
   } catch (error) {
     console.error(
-      "Open with music provider failed:",
+      "Embedded Spotify player failed:",
       error
     );
 
-    if (providerWindow) {
-      providerWindow.location.href =
-        fallbackUrl;
-    } else {
-      window.location.href =
-        fallbackUrl;
+    if (target) {
+      target.classList.remove("hidden");
+      target.innerHTML = `
+        <div class="spotify-embed-error">
+          <strong>
+            This item could not be embedded automatically.
+          </strong>
+
+          <span>
+            You can still find it directly in Spotify.
+          </span>
+
+          <a
+            class="spotify-open-externally-btn"
+            href="${escapeHtml(fallbackUrl)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Search in Spotify
+          </a>
+        </div>
+      `;
+    }
+
+    if (button) {
+      button.innerHTML = originalText;
     }
   } finally {
     if (button) {
       button.disabled = false;
-      button.innerHTML = originalText;
     }
   }
 }
@@ -8330,6 +8461,27 @@ document.addEventListener("click", async function (event) {
   return false;
 }, true);
 
+/*
+  Capture provider-control taps before the main selected-item
+  navigation listener sees them. This is especially important in
+  iOS Safari/Textastic preview where a synthetic second click can
+  land on the album card after the player area expands.
+*/
+document.addEventListener(
+  "pointerdown",
+  (event) => {
+    if (
+      event.target.closest(
+        "[data-music-provider-panel='true']"
+      )
+    ) {
+      lastMusicProviderInteractionAt = Date.now();
+      event.stopPropagation();
+    }
+  },
+  true
+);
+
 document.addEventListener("click", async (event) => {
   const chartCard = event.target.closest(".chart-card");
   if (!chartCard) return;
@@ -8440,8 +8592,11 @@ if (
       );
 
     if (musicProviderButton) {
+      lastMusicProviderInteractionAt = Date.now();
+
       event.preventDefault();
       event.stopPropagation();
+      event.stopImmediatePropagation();
 
       await openWithMusicProvider({
         type:
@@ -8456,8 +8611,43 @@ if (
         album:
           musicProviderButton.dataset
             .providerAlbum || "",
-        button: musicProviderButton
+        button: musicProviderButton,
+        playerTarget:
+          musicProviderButton.dataset
+            .playerTarget || ""
       });
+
+      return;
+    }
+
+    const spotifyExternalLink =
+      event.target.closest(
+        ".spotify-open-externally-btn"
+      );
+
+    if (spotifyExternalLink) {
+      lastMusicProviderInteractionAt = Date.now();
+
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      return;
+    }
+
+    const providerPanel =
+      event.target.closest(
+        "[data-music-provider-panel='true']"
+      );
+
+    if (providerPanel) {
+      lastMusicProviderInteractionAt = Date.now();
+
+      /*
+        Controls inside this panel must never be interpreted as
+        clicks on the surrounding BoM album card.
+      */
+      event.stopPropagation();
+      event.stopImmediatePropagation();
 
       return;
     }
@@ -8466,7 +8656,10 @@ if (
 
     if (
       libraryAlbumCard &&
-      Date.now() - lastTrackRatingInteractionAt < 1200
+      (
+        Date.now() - lastTrackRatingInteractionAt < 1200 ||
+        Date.now() - lastMusicProviderInteractionAt < 1500
+      )
     ) {
       event.preventDefault();
       event.stopPropagation();
@@ -8503,7 +8696,10 @@ if (
 
     if (
       artistAlbumCard &&
-      Date.now() - lastTrackRatingInteractionAt < 1200
+      (
+        Date.now() - lastTrackRatingInteractionAt < 1200 ||
+        Date.now() - lastMusicProviderInteractionAt < 1500
+      )
     ) {
       event.preventDefault();
       event.stopPropagation();
