@@ -5768,3 +5768,103 @@ button.song-album-link {
   }
 }
 
+/* ============================================================
+   EMBEDDED SPOTIFY PLAYER
+   ============================================================ */
+
+.music-provider-panel {
+  display: block;
+}
+
+.music-provider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.music-provider-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.spotify-embed-container {
+  width: 100%;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.spotify-embed-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  background: #121212;
+}
+
+.spotify-embed-loading,
+.spotify-embed-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 92px;
+  padding: 18px;
+  border: 1px solid rgba(29, 185, 84, 0.35);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.22);
+  color: #ffffff;
+}
+
+.spotify-embed-error {
+  border-color: rgba(255, 193, 7, 0.45);
+}
+
+.spotify-embed-error span {
+  color: var(--muted);
+}
+
+.spotify-embed-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 4px 0;
+}
+
+.spotify-open-externally-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: 1px solid rgba(29, 185, 84, 0.62);
+  border-radius: 999px;
+  background: rgba(29, 185, 84, 0.13);
+  color: #ffffff;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.spotify-open-externally-btn:hover {
+  background: rgba(29, 185, 84, 0.24);
+}
+
+@media (max-width: 700px) {
+  .music-provider-header,
+  .spotify-embed-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .music-provider-actions {
+    width: 100%;
+  }
+
+  .spotify-open-externally-btn {
+    width: 100%;
+  }
+}
+
