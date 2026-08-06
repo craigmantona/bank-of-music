@@ -4635,19 +4635,112 @@ if (!imageResponse.ok) {
 
 
 
-async function fetchAlbumDetail(externalId) {
+const ALBUM_DETAIL_STORAGE_PREFIX =
+  "bom_album_detail_v1_";
 
-  const url = `https://musicbrainz.org/ws/2/release/${encodeURIComponent(externalId)}?inc=recordings+artist-credits+release-groups&fmt=json`;
+const ALBUM_DETAIL_CACHE_MAX_AGE_MS =
+  1000 * 60 * 60 * 24 * 30;
 
-  const response = await fetch(url, { headers: { Accept: "application/json" } });
+function getStoredAlbumDetail(externalId) {
+  if (!externalId) return null;
 
-  if (!response.ok) throw new Error(`Album detail request failed: ${response.status}`);
+  try {
+    const stored = JSON.parse(
+      localStorage.getItem(
+        ALBUM_DETAIL_STORAGE_PREFIX +
+        externalId
+      ) || "null"
+    );
 
-  return await response.json();
+    if (!stored?.detail || !stored?.savedAt) {
+      return null;
+    }
 
+    const age =
+      Date.now() -
+      Number(stored.savedAt);
+
+    if (
+      !Number.isFinite(age) ||
+      age > ALBUM_DETAIL_CACHE_MAX_AGE_MS
+    ) {
+      localStorage.removeItem(
+        ALBUM_DETAIL_STORAGE_PREFIX +
+        externalId
+      );
+
+      return null;
+    }
+
+    return stored.detail;
+  } catch {
+    return null;
+  }
 }
 
+function storeAlbumDetail(
+  externalId,
+  detail
+) {
+  if (!externalId || !detail) return;
 
+  try {
+    localStorage.setItem(
+      ALBUM_DETAIL_STORAGE_PREFIX +
+      externalId,
+      JSON.stringify({
+        savedAt: Date.now(),
+        detail
+      })
+    );
+  } catch (error) {
+    console.warn(
+      "Album track cache could not be stored:",
+      error
+    );
+  }
+}
+
+async function fetchAlbumDetail(externalId) {
+  const storedDetail =
+    getStoredAlbumDetail(externalId);
+
+  if (storedDetail) {
+    albumTrackCache[externalId] =
+      storedDetail;
+
+    return storedDetail;
+  }
+
+  const url =
+    `https://musicbrainz.org/ws/2/release/${encodeURIComponent(externalId)}` +
+    `?inc=recordings+artist-credits+release-groups&fmt=json`;
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Album detail request failed: ${response.status}`
+    );
+  }
+
+  const detail =
+    await response.json();
+
+  albumTrackCache[externalId] =
+    detail;
+
+  storeAlbumDetail(
+    externalId,
+    detail
+  );
+
+  return detail;
+}
 
 async function fetchReleaseGroupCover(releaseGroupId) {
 
@@ -5771,70 +5864,133 @@ async function searchSpotifyAlbumForBoMAlbum(bomAlbum) {
     return cachedMatch;
   }
 
-  const searchQuery = [
-    `album:${bomAlbum.title}`,
-    `artist:${bomAlbum.artist}`
-  ].join(" ");
-
-  const searchData = await spotifyApiRequest(
-    `/search?${new URLSearchParams({
-      q: searchQuery,
-      type: "album",
-      limit: "10"
-    }).toString()}`
-  );
-
-  const candidates =
-    searchData?.albums?.items || [];
-
-  if (!candidates.length) {
-    return null;
-  }
-
   const wantedTitle =
     normaliseSpotifyMatchText(bomAlbum.title);
 
   const wantedArtist =
     normaliseSpotifyMatchText(bomAlbum.artist);
 
-  const scoredCandidates = candidates
-    .map((candidate) => {
-      const candidateTitle =
-        normaliseSpotifyMatchText(candidate.name);
+  const queries = [
+    `album:${bomAlbum.title} artist:${bomAlbum.artist}`,
+    `"${bomAlbum.title}" "${bomAlbum.artist}"`,
+    `${bomAlbum.title} ${bomAlbum.artist}`
+  ];
 
-      const candidateArtists =
-        (candidate.artists || [])
-          .map((artist) =>
-            normaliseSpotifyMatchText(artist.name)
-          )
-          .join(" ");
+  let candidates = [];
 
-      let score = 0;
+  for (const query of queries) {
+    const searchData = await spotifyApiRequest(
+      `/search?${new URLSearchParams({
+        q: query,
+        type: "album",
+        limit: "20"
+      }).toString()}`
+    );
 
-      if (candidateTitle === wantedTitle) {
-        score += 100;
-      } else if (
-        candidateTitle.includes(wantedTitle) ||
-        wantedTitle.includes(candidateTitle)
-      ) {
-        score += 45;
-      }
+    candidates.push(
+      ...(searchData?.albums?.items || [])
+    );
 
-      if (candidateArtists.includes(wantedArtist)) {
-        score += 90;
-      } else if (
-        wantedArtist.includes(candidateArtists)
-      ) {
-        score += 50;
-      }
+    if (candidates.length >= 20) {
+      break;
+    }
+  }
 
-      return { candidate, score };
-    })
-    .sort((a, b) => b.score - a.score);
+  const uniqueCandidates = Array.from(
+    new Map(
+      candidates
+        .filter(Boolean)
+        .map((candidate) => [
+          candidate.id,
+          candidate
+        ])
+    ).values()
+  );
 
-  const bestMatch = scoredCandidates[0];
+  if (!uniqueCandidates.length) {
+    return null;
+  }
 
-  if (!bestMatch || bestMatch.score < 140) {
+  const scoredCandidates =
+    uniqueCandidates
+      .map((candidate) => {
+        const candidateTitle =
+          normaliseSpotifyMatchText(
+            candidate.name
+          );
+
+        const candidateArtists =
+          (candidate.artists || [])
+            .map((artist) =>
+              normaliseSpotifyMatchText(
+                artist.name
+              )
+            )
+            .join(" ");
+
+        let score = 0;
+
+        if (candidateTitle === wantedTitle) {
+          score += 120;
+        } else if (
+          candidateTitle.includes(wantedTitle) ||
+          wantedTitle.includes(candidateTitle)
+        ) {
+          score += 80;
+        } else {
+          const wantedWords =
+            new Set(
+              wantedTitle
+                .split(" ")
+                .filter((word) => word.length > 2)
+            );
+
+          const candidateWords =
+            new Set(
+              candidateTitle
+                .split(" ")
+                .filter((word) => word.length > 2)
+            );
+
+          const sharedWords =
+            [...wantedWords].filter((word) =>
+              candidateWords.has(word)
+            ).length;
+
+          score += sharedWords * 12;
+        }
+
+        if (candidateArtists === wantedArtist) {
+          score += 120;
+        } else if (
+          candidateArtists.includes(wantedArtist) ||
+          wantedArtist.includes(candidateArtists)
+        ) {
+          score += 90;
+        }
+
+        return {
+          candidate,
+          score
+        };
+      })
+      .sort((a, b) => b.score - a.score);
+
+  const bestMatch =
+    scoredCandidates[0];
+
+  /*
+    Artist agreement is weighted heavily, so this accepts legitimate
+    Spotify titles that include subtitles, territories or expanded
+    release names, such as The Rolling Stones' first UK/US albums.
+  */
+  if (!bestMatch || bestMatch.score < 150) {
+    console.warn(
+      "No confident Spotify album match:",
+      bomAlbum,
+      scoredCandidates.slice(0, 3)
+    );
+
     return null;
   }
 
@@ -6119,12 +6275,27 @@ async function openWithMusicProvider({
       album
     });
 
+    /*
+      First use a match already cached by BoM's Spotify playlist
+      sync. This works even when Textastic's Local preview does not
+      share the live site's Spotify login/session.
+    */
+    let spotifyItem =
+      type === "song"
+        ? getCachedSpotifyMatch({
+            title,
+            artist,
+            album
+          })
+        : getCachedSpotifyAlbumMatch({
+            title,
+            artist
+          });
+
     const accessToken =
       await getValidSpotifyAccessToken();
 
-    let spotifyItem = null;
-
-    if (accessToken && type === "song") {
+    if (!spotifyItem && accessToken && type === "song") {
       spotifyItem =
         await searchSpotifyTrackForBoMTrack({
           title,
@@ -6133,7 +6304,7 @@ async function openWithMusicProvider({
         });
     }
 
-    if (accessToken && type === "album") {
+    if (!spotifyItem && accessToken && type === "album") {
       spotifyItem =
         await searchSpotifyAlbumForBoMAlbum({
           title,
@@ -6141,9 +6312,15 @@ async function openWithMusicProvider({
         });
     }
 
+    if (!spotifyItem && !accessToken) {
+      throw new Error(
+        "SPOTIFY_NOT_CONNECTED_IN_THIS_BROWSER"
+      );
+    }
+
     if (!spotifyItem) {
       throw new Error(
-        "No exact Spotify match found."
+        "NO_EXACT_SPOTIFY_MATCH"
       );
     }
 
@@ -6167,7 +6344,7 @@ async function openWithMusicProvider({
 
     if (!rendered) {
       throw new Error(
-        "Spotify did not return a playable embed."
+        "NO_PLAYABLE_SPOTIFY_EMBED"
       );
     }
 
@@ -6183,28 +6360,66 @@ async function openWithMusicProvider({
       error
     );
 
+    const reason =
+      String(error?.message || error);
+
+    const isNotConnected =
+      reason.includes(
+        "SPOTIFY_NOT_CONNECTED_IN_THIS_BROWSER"
+      );
+
     if (target) {
       target.classList.remove("hidden");
-      target.innerHTML = `
-        <div class="spotify-embed-error">
-          <strong>
-            This item could not be embedded automatically.
-          </strong>
 
-          <span>
-            You can still find it directly in Spotify.
-          </span>
+      target.innerHTML = isNotConnected
+        ? `
+          <div class="spotify-embed-error">
+            <strong>
+              Spotify is not connected in this browser.
+            </strong>
 
-          <a
-            class="spotify-open-externally-btn"
-            href="${escapeHtml(fallbackUrl)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Search in Spotify
-          </a>
-        </div>
-      `;
+            <span>
+              Textastic Local preview has separate browser storage
+              from your live BoM site. Open the Remote version, or
+              connect Spotify from Spotify Sync in this preview.
+            </span>
+
+            <button
+              type="button"
+              class="spotify-connect-from-player-btn"
+              onclick="
+                event.preventDefault();
+                event.stopPropagation();
+                showOnlySection('settingsSection');
+              "
+            >
+              Go to Spotify Sync
+            </button>
+          </div>
+        `
+        : `
+          <div class="spotify-embed-error">
+            <strong>
+              BoM could not find an exact Spotify match.
+            </strong>
+
+            <span>
+              You can still search for it directly in Spotify.
+            </span>
+
+            <a
+              class="spotify-open-externally-btn"
+              href="${escapeHtml(fallbackUrl)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="
+                event.stopPropagation();
+              "
+            >
+              Search in Spotify
+            </a>
+          </div>
+        `;
     }
 
     if (button) {
@@ -6447,10 +6662,20 @@ if (albumLookupId) {
 
   } else {
 
-    detail = await fetchAlbumDetail(albumLookupId);
+    const storedDetail =
+      getStoredAlbumDetail(
+        albumLookupId
+      );
 
-    if (detail) {
-      albumTrackCache[albumLookupId] = detail;
+    if (storedDetail) {
+      detail = storedDetail;
+      albumTrackCache[albumLookupId] =
+        storedDetail;
+    } else {
+      detail =
+        await fetchAlbumDetail(
+          albumLookupId
+        );
     }
 
   }
