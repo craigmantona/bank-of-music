@@ -5365,6 +5365,19 @@ async function renderArtistDetail(artistItem) {
 
 function buildTrackListHtml(detail, savedAlbumId) {
 
+  const trackAlbumTitle =
+    detail?.title ||
+    selectedItem?.title ||
+    "";
+
+  const trackArtistName =
+    detail?.["artist-credit"]
+      ?.map((credit) => credit.name)
+      .filter(Boolean)
+      .join(", ") ||
+    selectedItem?.artist ||
+    "";
+
   const trackRows = [];
   const seenSongIds = new Set();
   const seenExternalIds = new Set();
@@ -5413,17 +5426,31 @@ function buildTrackListHtml(detail, savedAlbumId) {
         </div>
 
         <div class="track-col-actions">
-  ${savedSong?.id
-    ? ""
-    : `<button class="save-track-btn"
-         data-action="save-track"
-         data-track-title="${escapeHtml(title)}"
-         data-track-external-id="${escapeHtml(externalId)}"
-         data-album-id="${savedAlbumId}">
-         💾
-       </button>`
-  }
-</div>
+          <button
+            type="button"
+            class="track-preview-btn music-provider-play-btn"
+            data-provider-type="song"
+            data-provider-title="${escapeHtml(title)}"
+            data-provider-artist="${escapeHtml(trackArtistName)}"
+            data-provider-album="${escapeHtml(trackAlbumTitle)}"
+            data-player-target=""
+            title="Play a Spotify preview"
+            aria-label="Play ${escapeHtml(title)}"
+          >
+            ▶
+          </button>
+
+          ${savedSong?.id
+            ? ""
+            : `<button class="save-track-btn"
+                 data-action="save-track"
+                 data-track-title="${escapeHtml(title)}"
+                 data-track-external-id="${escapeHtml(externalId)}"
+                 data-album-id="${savedAlbumId}">
+                 💾
+               </button>`
+          }
+        </div>
       </div>
     `
   };
@@ -5519,6 +5546,7 @@ console.log("SAVED SONG FOUND?", {
         <div>Average</div>
         <div>Your rating</div>
         <div>Rate</div>
+        <div>Play</div>
       </div>
       ${trackRows.map((row) => row.html).join("")}
     </div>
@@ -6241,12 +6269,45 @@ async function openWithMusicProvider({
       artist
     });
 
-  const target =
+  let target =
     playerTarget
       ? document.getElementById(playerTarget)
       : button
           ?.closest("[data-music-provider-panel='true']")
           ?.querySelector(".spotify-embed-container");
+
+  if (
+    !target &&
+    button?.classList.contains(
+      "track-preview-btn"
+    )
+  ) {
+    const trackRow =
+      button.closest(".track-row-table");
+
+    let inlinePlayer =
+      trackRow?.nextElementSibling;
+
+    if (
+      !inlinePlayer ||
+      !inlinePlayer.classList.contains(
+        "track-inline-player"
+      )
+    ) {
+      inlinePlayer =
+        document.createElement("div");
+
+      inlinePlayer.className =
+        "track-inline-player spotify-embed-container";
+
+      trackRow?.insertAdjacentElement(
+        "afterend",
+        inlinePlayer
+      );
+    }
+
+    target = inlinePlayer;
+  }
 
   const originalText =
     button?.innerHTML || "";
@@ -6349,10 +6410,15 @@ async function openWithMusicProvider({
     }
 
     if (button) {
-      button.innerHTML = `
-        <span class="music-provider-icon" aria-hidden="true">✓</span>
-        <span>Player loaded</span>
-      `;
+      button.innerHTML =
+        button.classList.contains(
+          "track-preview-btn"
+        )
+          ? "✓"
+          : `
+              <span class="music-provider-icon" aria-hidden="true">✓</span>
+              <span>Player loaded</span>
+            `;
     }
   } catch (error) {
     console.error(
@@ -6597,6 +6663,243 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
     renderLoadingSkeleton(selectedItemDetail, "detail");
 
     try {
+
+      const immediatelySavedAlbum =
+        (selectedItem.savedAlbumId
+          ? allAlbums.find(
+              (album) =>
+                Number(album.id) ===
+                Number(selectedItem.savedAlbumId)
+            )
+          : null) ||
+        (selectedItem.id
+          ? allAlbums.find(
+              (album) =>
+                Number(album.id) ===
+                Number(selectedItem.id)
+            )
+          : null) ||
+        getSavedAlbumByExternalId(
+          selectedItem.externalId
+        ) ||
+        allAlbums.find(
+          (album) =>
+            normaliseCompare(album.title) ===
+              normaliseCompare(selectedItem.title) &&
+            normaliseCompare(album.artist) ===
+              normaliseCompare(selectedItem.artist)
+        ) ||
+        null;
+
+      const immediatelySavedTracks =
+        immediatelySavedAlbum
+          ? allSongs
+              .filter(
+                (song) =>
+                  Number(song.album_id) ===
+                    Number(immediatelySavedAlbum.id) &&
+                  Number(song.is_deleted || 0) === 0
+              )
+              .sort(
+                (a, b) =>
+                  Number(a.track_position || 9999) -
+                  Number(b.track_position || 9999)
+              )
+          : [];
+
+      /*
+        Rated/saved albums already have their tracks in BoM.
+        Build a local MusicBrainz-shaped detail object and render
+        from that instead of waiting for another network request.
+      */
+      if (immediatelySavedAlbum && immediatelySavedTracks.length) {
+        const localDetail = {
+          id:
+            immediatelySavedAlbum.external_id ||
+            selectedItem.externalId ||
+            "",
+          title:
+            immediatelySavedAlbum.title ||
+            selectedItem.title ||
+            "",
+          date:
+            immediatelySavedAlbum.release_date ||
+            immediatelySavedAlbum.releaseDate ||
+            selectedItem.releaseDate ||
+            "",
+          "artist-credit": [
+            {
+              name:
+                immediatelySavedAlbum.artist ||
+                selectedItem.artist ||
+                ""
+            }
+          ],
+          media: [
+            {
+              tracks:
+                immediatelySavedTracks.map(
+                  (song, index) => ({
+                    position:
+                      Number(song.track_position) ||
+                      index + 1,
+                    title:
+                      song.title ||
+                      `Track ${index + 1}`,
+                    recording: {
+                      id:
+                        song.external_id ||
+                        "",
+                      title:
+                        song.title ||
+                        `Track ${index + 1}`
+                    }
+                  })
+                )
+            }
+          ]
+        };
+
+        const albumId =
+          immediatelySavedAlbum.id;
+
+        const albumReviews =
+          await loadAlbumReviews(albumId);
+
+        const avg =
+          getAlbumAverage(albumId);
+
+        const yourRating =
+          getYourAlbumRating(albumId);
+
+        const coverUrl =
+          getAlbumArtworkUrl(
+            immediatelySavedAlbum
+          ) ||
+          selectedItem.coverUrl ||
+          "";
+
+        const displayArtist =
+          immediatelySavedAlbum.artist ||
+          selectedItem.artist ||
+          "";
+
+        selectedItemDetail.innerHTML = `
+          <div class="detail-panel">
+            ${buildSelectedBackButton()}
+
+            <div class="detail-hero">
+              <div>
+                ${getLargeCoverMarkup(
+                  coverUrl,
+                  `${immediatelySavedAlbum.title} cover`
+                )}
+              </div>
+
+              <div class="detail-info-panel">
+                <div class="media-title">
+                  ${escapeHtml(
+                    immediatelySavedAlbum.title
+                  )}
+                </div>
+
+                <div class="album-activity-line">
+                  ${
+                    avg
+                      ? `⭐ ${avg.avg.toFixed(1)} / 10`
+                      : "No ratings yet"
+                  }
+                  ${
+                    albumReviews.length
+                      ? ` · 📝 ${albumReviews.length} review${albumReviews.length === 1 ? "" : "s"}`
+                      : " · No reviews yet"
+                  }
+                </div>
+
+                <div class="media-subtitle">
+                  ${renderClickableArtistName(
+                    displayArtist
+                  )}
+                </div>
+
+                ${renderFollowControls(
+                  displayArtist
+                )}
+
+                <div class="detail-meta-grid">
+                  <div class="detail-meta-label">
+                    Release date
+                  </div>
+
+                  <div class="detail-meta-value">
+                    ${escapeHtml(
+                      immediatelySavedAlbum.release_date ||
+                      immediatelySavedAlbum.releaseDate ||
+                      "Unknown"
+                    )}
+                  </div>
+
+                  <div class="detail-meta-label">
+                    Average rating
+                  </div>
+
+                  <div class="detail-meta-value">
+                    ${
+                      avg
+                        ? `⭐ ${avg.avg.toFixed(1)} / 10 (${avg.count} rating${avg.count === 1 ? "" : "s"})`
+                        : "No ratings yet"
+                    }
+                  </div>
+
+                  <div class="detail-meta-label">
+                    Your rating
+                  </div>
+
+                  <div class="detail-meta-value">
+                    ${
+                      yourRating !== null
+                        ? `${yourRating}/10`
+                        : "Not rated"
+                    }
+                  </div>
+                </div>
+
+                <div class="detail-actions">
+                  ${renderStarSelector(
+                    `album-rating-${albumId}`,
+                    yourRating
+                  )}
+
+                  ${buildSelectedSharePanel(
+                    selectedItem
+                  )}
+                </div>
+
+                ${
+                  typeof renderSelectedAdminControls ===
+                  "function"
+                    ? renderSelectedAdminControls({
+                        albumId
+                      })
+                    : ""
+                }
+              </div>
+            </div>
+
+            ${buildTrackListHtml(
+              localDetail,
+              albumId
+            )}
+
+            ${renderAlbumReviewsSection(
+              albumId,
+              albumReviews
+            )}
+          </div>
+        `;
+
+        return;
+      }
 
       if (!selectedItem.externalId && selectedItem.releaseGroupId) {
 
@@ -6852,18 +7155,6 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
                 ${buildSelectedSharePanel(selectedItem)}
 
               </div>
-
-              ${buildMusicProviderPanel({
-                type: "album",
-                title:
-                  detail?.title ||
-                  selectedItem.title ||
-                  "",
-                artist:
-                  displayArtist ||
-                  selectedItem.artist ||
-                  ""
-              })}
 
               ${typeof renderSelectedAdminControls === "function" ? renderSelectedAdminControls({ albumId }) : ""}
 
