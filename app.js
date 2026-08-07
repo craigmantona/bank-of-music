@@ -5428,16 +5428,17 @@ function buildTrackListHtml(detail, savedAlbumId) {
         <div class="track-col-actions">
           <button
             type="button"
-            class="track-preview-btn music-provider-play-btn"
+            class="track-preview-btn"
+            data-track-preview="true"
             data-provider-type="song"
             data-provider-title="${escapeHtml(title)}"
             data-provider-artist="${escapeHtml(trackArtistName)}"
             data-provider-album="${escapeHtml(trackAlbumTitle)}"
-            data-player-target=""
-            title="Play a Spotify preview"
-            aria-label="Play ${escapeHtml(title)}"
+            title="Preview ${escapeHtml(title)}"
+            aria-label="Preview ${escapeHtml(title)}"
           >
-            ▶
+            <span class="track-preview-icon" aria-hidden="true">▶</span>
+            <span class="track-preview-label">Preview</span>
           </button>
 
           ${savedSong?.id
@@ -5539,6 +5540,13 @@ console.log("SAVED SONG FOUND?", {
 
   return `
     <div class="section-divider">Tracks</div>
+
+    <div
+      id="albumTrackPreviewDock"
+      class="album-track-preview-dock hidden"
+      aria-live="polite"
+    ></div>
+
     <div class="track-table">
       <div class="track-header">
         <div>#</div>
@@ -6261,7 +6269,8 @@ async function openWithMusicProvider({
   artist,
   album = "",
   button = null,
-  playerTarget = ""
+  playerTarget = "",
+  targetElement = null
 }) {
   const fallbackUrl =
     getSpotifySearchFallbackUrl({
@@ -6270,44 +6279,20 @@ async function openWithMusicProvider({
     });
 
   let target =
-    playerTarget
-      ? document.getElementById(playerTarget)
-      : button
-          ?.closest("[data-music-provider-panel='true']")
-          ?.querySelector(".spotify-embed-container");
-
-  if (
-    !target &&
-    button?.classList.contains(
-      "track-preview-btn"
-    )
-  ) {
-    const trackRow =
-      button.closest(".track-row-table");
-
-    let inlinePlayer =
-      trackRow?.nextElementSibling;
-
-    if (
-      !inlinePlayer ||
-      !inlinePlayer.classList.contains(
-        "track-inline-player"
-      )
-    ) {
-      inlinePlayer =
-        document.createElement("div");
-
-      inlinePlayer.className =
-        "track-inline-player spotify-embed-container";
-
-      trackRow?.insertAdjacentElement(
-        "afterend",
-        inlinePlayer
-      );
-    }
-
-    target = inlinePlayer;
-  }
+    targetElement ||
+    (
+      playerTarget
+        ? document.getElementById(
+            playerTarget
+          )
+        : button
+            ?.closest(
+              "[data-music-provider-panel='true']"
+            )
+            ?.querySelector(
+              ".spotify-embed-container"
+            )
+    );
 
   const originalText =
     button?.innerHTML || "";
@@ -6390,18 +6375,81 @@ async function openWithMusicProvider({
       spotifyItem?.externalUrl ||
       fallbackUrl;
 
-    const rendered =
-      renderSpotifyEmbed({
-        target,
+    let rendered = false;
+
+    const embedUrl =
+      buildSpotifyEmbedUrl({
         type,
-        title,
-        artist,
-        embedUrl: buildSpotifyEmbedUrl({
-          type,
-          spotifyItem
-        }),
-        externalUrl
+        spotifyItem
       });
+
+    if (
+      target?.id ===
+      "albumTrackPreviewDock"
+    ) {
+      if (embedUrl) {
+        target.classList.remove(
+          "hidden"
+        );
+
+        target.innerHTML = `
+          <div class="album-track-preview-card">
+            <div class="album-track-preview-heading">
+              <div>
+                <div class="album-track-preview-kicker">
+                  Now previewing
+                </div>
+
+                <strong>
+                  ${escapeHtml(title)}
+                </strong>
+
+                <span>
+                  ${escapeHtml(artist)}
+                </span>
+              </div>
+
+              <a
+                class="album-track-preview-open"
+                href="${escapeHtml(externalUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                onclick="event.stopPropagation();"
+              >
+                Open in Spotify
+              </a>
+            </div>
+
+            <iframe
+              class="spotify-embed-frame album-track-preview-frame"
+              title="Spotify preview for ${escapeHtml(title)} by ${escapeHtml(artist)}"
+              src="${escapeHtml(embedUrl)}"
+              width="100%"
+              height="152"
+              frameborder="0"
+              allowfullscreen
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            ></iframe>
+
+            <div class="album-track-preview-note">
+              Tap the play control in the Spotify player to hear the preview.
+            </div>
+          </div>
+        `;
+
+        rendered = true;
+      }
+    } else {
+      rendered =
+        renderSpotifyEmbed({
+          target,
+          type,
+          title,
+          artist,
+          embedUrl,
+          externalUrl
+        });
+    }
 
     if (!rendered) {
       throw new Error(
@@ -6410,15 +6458,10 @@ async function openWithMusicProvider({
     }
 
     if (button) {
-      button.innerHTML =
-        button.classList.contains(
-          "track-preview-btn"
-        )
-          ? "✓"
-          : `
-              <span class="music-provider-icon" aria-hidden="true">✓</span>
-              <span>Player loaded</span>
-            `;
+      button.innerHTML = `
+        <span class="music-provider-icon" aria-hidden="true">✓</span>
+        <span>Player loaded</span>
+      `;
     }
   } catch (error) {
     console.error(
@@ -6436,6 +6479,10 @@ async function openWithMusicProvider({
 
     if (target) {
       target.classList.remove("hidden");
+
+      const inTrackDock =
+        target.id ===
+        "albumTrackPreviewDock";
 
       target.innerHTML = isNotConnected
         ? `
@@ -6464,7 +6511,7 @@ async function openWithMusicProvider({
           </div>
         `
         : `
-          <div class="spotify-embed-error">
+          <div class="spotify-embed-error ${inTrackDock ? "album-track-preview-error" : ""}">
             <strong>
               BoM could not find an exact Spotify match.
             </strong>
@@ -9101,6 +9148,93 @@ if (
 ) {
   return;
 }
+
+    const trackPreviewButton =
+      event.target.closest(
+        "[data-track-preview='true']"
+      );
+
+    if (trackPreviewButton) {
+      lastMusicProviderInteractionAt = Date.now();
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      const dock =
+        document.getElementById(
+          "albumTrackPreviewDock"
+        );
+
+      if (!dock) {
+        return;
+      }
+
+      document
+        .querySelectorAll(
+          "[data-track-preview='true'].is-active"
+        )
+        .forEach((button) => {
+          if (button !== trackPreviewButton) {
+            button.classList.remove("is-active");
+            button.removeAttribute("aria-pressed");
+          }
+        });
+
+      trackPreviewButton.classList.add(
+        "is-active"
+      );
+
+      trackPreviewButton.setAttribute(
+        "aria-pressed",
+        "true"
+      );
+
+      dock.classList.remove("hidden");
+
+      dock.innerHTML = `
+        <div class="album-track-preview-loading">
+          <div>
+            <div class="album-track-preview-kicker">
+              Spotify preview
+            </div>
+
+            <strong>
+              ${escapeHtml(
+                trackPreviewButton.dataset
+                  .providerTitle || ""
+              )}
+            </strong>
+
+            <span>
+              Finding this track…
+            </span>
+          </div>
+        </div>
+      `;
+
+      await openWithMusicProvider({
+        type: "song",
+        title:
+          trackPreviewButton.dataset
+            .providerTitle || "",
+        artist:
+          trackPreviewButton.dataset
+            .providerArtist || "",
+        album:
+          trackPreviewButton.dataset
+            .providerAlbum || "",
+        button: null,
+        targetElement: dock
+      });
+
+      dock.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+
+      return;
+    }
 
     const musicProviderButton =
       event.target.closest(
