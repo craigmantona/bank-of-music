@@ -9036,9 +9036,17 @@ document.addEventListener(
     if (
       event.target.closest(
         "[data-music-provider-panel='true']"
+      ) ||
+      event.target.closest(
+        "[data-track-preview='true']"
+      ) ||
+      event.target.closest(
+        "#albumTrackPreviewDock"
       )
     ) {
-      lastMusicProviderInteractionAt = Date.now();
+      lastMusicProviderInteractionAt =
+        Date.now();
+
       event.stopPropagation();
     }
   },
@@ -9085,6 +9093,146 @@ document.addEventListener("click", async (event) => {
   showOnlySection("detailSection");
   await renderSelectedItem();
 });
+
+
+async function handleAlbumTrackPreviewButton(
+  trackPreviewButton
+) {
+  if (!trackPreviewButton) return;
+
+  lastMusicProviderInteractionAt =
+    Date.now();
+
+  const albumSnapshot =
+    selectedItem
+      ? { ...selectedItem }
+      : null;
+
+  const dock =
+    document.getElementById(
+      "albumTrackPreviewDock"
+    );
+
+  if (!dock) return;
+
+  document
+    .querySelectorAll(
+      "[data-track-preview='true'].is-active"
+    )
+    .forEach((button) => {
+      if (button !== trackPreviewButton) {
+        button.classList.remove(
+          "is-active"
+        );
+        button.removeAttribute(
+          "aria-pressed"
+        );
+      }
+    });
+
+  trackPreviewButton.classList.add(
+    "is-active"
+  );
+
+  trackPreviewButton.setAttribute(
+    "aria-pressed",
+    "true"
+  );
+
+  dock.classList.remove("hidden");
+
+  dock.innerHTML = `
+    <div class="album-track-preview-loading">
+      <div>
+        <div class="album-track-preview-kicker">
+          Spotify preview
+        </div>
+
+        <strong>
+          ${escapeHtml(
+            trackPreviewButton.dataset
+              .providerTitle || ""
+          )}
+        </strong>
+
+        <span>
+          Finding this track…
+        </span>
+      </div>
+    </div>
+  `;
+
+  await openWithMusicProvider({
+    type: "song",
+    title:
+      trackPreviewButton.dataset
+        .providerTitle || "",
+    artist:
+      trackPreviewButton.dataset
+        .providerArtist || "",
+    album:
+      trackPreviewButton.dataset
+        .providerAlbum || "",
+    button: null,
+    targetElement: dock
+  });
+
+  /*
+    Previewing must never change the selected BoM album.
+    Restore the exact album snapshot if any unrelated listener
+    attempted to navigate while Spotify was loading.
+  */
+  if (
+    albumSnapshot &&
+    (
+      selectedItem?.type !==
+        albumSnapshot.type ||
+      selectedItem?.title !==
+        albumSnapshot.title ||
+      selectedItem?.artist !==
+        albumSnapshot.artist
+    )
+  ) {
+    selectedItem = albumSnapshot;
+  }
+
+  lastMusicProviderInteractionAt =
+    Date.now();
+
+  dock.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+
+/*
+  Handle track previews in the capture phase so the tap never
+  reaches album cards, song cards, swipe handlers or other
+  navigation listeners on iOS.
+*/
+document.addEventListener(
+  "click",
+  (event) => {
+    const previewButton =
+      event.target.closest(
+        "[data-track-preview='true']"
+      );
+
+    if (!previewButton) return;
+
+    lastMusicProviderInteractionAt =
+      Date.now();
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    void handleAlbumTrackPreviewButton(
+      previewButton
+    );
+  },
+  true
+);
 
 function bindCardClicks(container) {
   if (!container) return;
@@ -9154,85 +9302,14 @@ if (
         "[data-track-preview='true']"
       );
 
+    /*
+      Track previews are handled by the capture-phase listener
+      above. Keep this guard as a second line of defence.
+    */
     if (trackPreviewButton) {
-      lastMusicProviderInteractionAt = Date.now();
-
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-
-      const dock =
-        document.getElementById(
-          "albumTrackPreviewDock"
-        );
-
-      if (!dock) {
-        return;
-      }
-
-      document
-        .querySelectorAll(
-          "[data-track-preview='true'].is-active"
-        )
-        .forEach((button) => {
-          if (button !== trackPreviewButton) {
-            button.classList.remove("is-active");
-            button.removeAttribute("aria-pressed");
-          }
-        });
-
-      trackPreviewButton.classList.add(
-        "is-active"
-      );
-
-      trackPreviewButton.setAttribute(
-        "aria-pressed",
-        "true"
-      );
-
-      dock.classList.remove("hidden");
-
-      dock.innerHTML = `
-        <div class="album-track-preview-loading">
-          <div>
-            <div class="album-track-preview-kicker">
-              Spotify preview
-            </div>
-
-            <strong>
-              ${escapeHtml(
-                trackPreviewButton.dataset
-                  .providerTitle || ""
-              )}
-            </strong>
-
-            <span>
-              Finding this track…
-            </span>
-          </div>
-        </div>
-      `;
-
-      await openWithMusicProvider({
-        type: "song",
-        title:
-          trackPreviewButton.dataset
-            .providerTitle || "",
-        artist:
-          trackPreviewButton.dataset
-            .providerArtist || "",
-        album:
-          trackPreviewButton.dataset
-            .providerAlbum || "",
-        button: null,
-        targetElement: dock
-      });
-
-      dock.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest"
-      });
-
       return;
     }
 
@@ -9412,6 +9489,16 @@ if (
 	const openAlbumBtn = event.target.closest(".open-album-btn");
 
 if (openAlbumBtn) {
+  if (
+    Date.now() -
+      lastMusicProviderInteractionAt <
+    2200
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
   event.preventDefault();
 
   const albumId = Number(openAlbumBtn.dataset.albumId);
@@ -9439,6 +9526,16 @@ if (openAlbumBtn) {
 const songAlbumLink = event.target.closest("[data-open-song-album-id]");
 
 if (songAlbumLink) {
+  if (
+    Date.now() -
+      lastMusicProviderInteractionAt <
+    2200
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
   event.preventDefault();
   event.stopPropagation();
 
@@ -9466,6 +9563,16 @@ if (songAlbumLink) {
     const songCard = event.target.closest("[data-library-type='song']");
 
     if (songCard) {
+      if (
+        Date.now() -
+          lastMusicProviderInteractionAt <
+        2200
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
       event.preventDefault();
       event.stopPropagation();
 
@@ -11586,6 +11693,14 @@ function bindSelectedAlbumSwipe() {
   selectedItemDetail.addEventListener("pointerup", async (event) => {
     if (!started) return;
     started = false;
+
+    if (
+      Date.now() -
+        lastMusicProviderInteractionAt <
+      2200
+    ) {
+      return;
+    }
     const dx = event.clientX - startX;
     const dy = event.clientY - startY;
     if (Math.abs(dx) < 90 || Math.abs(dx) < Math.abs(dy) * 1.35) return;
