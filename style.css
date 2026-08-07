@@ -6804,3 +6804,106 @@ video {
   }
 }
 
+/* ============================================================
+   REUSABLE SPOTIFY TRACK PLAYER — v80
+   ============================================================ */
+
+.album-track-preview-dock {
+  width: 100%;
+  margin: 0 0 16px;
+}
+
+.album-track-preview-card {
+  overflow: hidden;
+  border: 1px solid rgba(34, 245, 167, 0.30);
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(34, 245, 167, 0.08),
+      rgba(62, 197, 255, 0.04)
+    ),
+    rgba(7, 10, 26, 0.94);
+}
+
+.album-track-preview-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px 10px;
+}
+
+.album-track-preview-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.album-track-preview-title {
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.album-track-preview-artist {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.album-track-preview-frame {
+  display: block;
+  width: calc(100% - 20px) !important;
+  margin: 0 10px;
+  border: 0;
+  border-radius: 12px;
+}
+
+.album-track-preview-note {
+  padding: 9px 16px 13px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.spotify-local-preview-notice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 193, 7, 0.34);
+  border-radius: 16px;
+  background: rgba(255, 193, 7, 0.06);
+}
+
+.spotify-local-preview-notice strong {
+  color: #ffffff;
+}
+
+.spotify-local-preview-notice span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.42;
+}
+
+.spotify-connect-from-player-btn {
+  align-self: flex-start;
+  min-width: 0;
+  padding: 9px 13px;
+  border-radius: 999px;
+}
+
+@media (max-width: 700px) {
+  .album-track-preview-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .album-track-preview-open {
+    width: 100%;
+    text-align: center;
+  }
+}
+
