@@ -5868,3 +5868,46 @@ button.song-album-link {
   }
 }
 
+/* ============================================================
+   INSTANT ALBUMS + TRACK PREVIEWS
+   ============================================================ */
+
+.track-col-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.track-preview-btn {
+  min-width: 42px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0.92rem;
+}
+
+.track-inline-player {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 0 12px;
+}
+
+.track-inline-player .spotify-embed-frame {
+  height: 152px;
+}
+
+@media (max-width: 700px) {
+  .track-preview-btn {
+    min-width: 38px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .track-inline-player {
+    padding: 0;
+  }
+}
+
