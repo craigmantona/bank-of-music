@@ -5605,6 +5605,8 @@ console.log("SAVED SONG FOUND?", {
     return `<p class="small">No track list available.</p>`;
   }
 
+  scheduleSpotifyTrackCacheWarmup();
+
   return `
     <div class="section-divider">Tracks</div>
 
@@ -6454,58 +6456,14 @@ async function openWithMusicProvider({
       target?.id ===
       "albumTrackPreviewDock"
     ) {
-      if (embedUrl) {
-        target.classList.remove(
-          "hidden"
-        );
-
-        target.innerHTML = `
-          <div class="album-track-preview-card">
-            <div class="album-track-preview-heading">
-              <div>
-                <div class="album-track-preview-kicker">
-                  Now previewing
-                </div>
-
-                <strong>
-                  ${escapeHtml(title)}
-                </strong>
-
-                <span>
-                  ${escapeHtml(artist)}
-                </span>
-              </div>
-
-              <a
-                class="album-track-preview-open"
-                href="${escapeHtml(externalUrl)}"
-                target="_blank"
-                rel="noopener noreferrer"
-                onclick="event.stopPropagation();"
-              >
-                Open in Spotify
-              </a>
-            </div>
-
-            <iframe
-              class="spotify-embed-frame album-track-preview-frame"
-              title="Spotify preview for ${escapeHtml(title)} by ${escapeHtml(artist)}"
-              src="${escapeHtml(embedUrl)}"
-              width="100%"
-              height="152"
-              frameborder="0"
-              allowfullscreen
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            ></iframe>
-
-            <div class="album-track-preview-note">
-              Tap the play control in the Spotify player to hear the preview.
-            </div>
-          </div>
-        `;
-
-        rendered = true;
-      }
+      rendered =
+        getOrCreateReusableAlbumPreviewFrame({
+          dock: target,
+          title,
+          artist,
+          embedUrl,
+          externalUrl
+        });
     } else {
       rendered =
         renderSpotifyEmbed({
@@ -6553,15 +6511,15 @@ async function openWithMusicProvider({
 
       target.innerHTML = isNotConnected
         ? `
-          <div class="spotify-embed-error">
+          <div class="spotify-local-preview-notice">
             <strong>
-              Spotify is not connected in this browser.
+              Preview available on live BoM
             </strong>
 
             <span>
-              Textastic Local preview has separate browser storage
-              from your live BoM site. Open the Remote version, or
-              connect Spotify from Spotify Sync in this preview.
+              Textastic Local preview uses separate Spotify login storage.
+              Use Remote/live BoM for seamless previews, or connect Spotify
+              in this Local preview once.
             </span>
 
             <button
@@ -6573,7 +6531,7 @@ async function openWithMusicProvider({
                 showOnlySection('settingsSection');
               "
             >
-              Go to Spotify Sync
+              Connect Spotify here
             </button>
           </div>
         `
@@ -9263,6 +9221,241 @@ document.addEventListener("click", async (event) => {
   await renderSelectedItem();
 });
 
+
+let spotifyAlbumWarmupKey = "";
+let spotifyAlbumWarmupPromise = null;
+
+function getCurrentAlbumPreviewButtons() {
+  return [
+    ...document.querySelectorAll(
+      "[data-track-preview='true']"
+    )
+  ];
+}
+
+async function warmSpotifyTrackCacheForCurrentAlbum() {
+  const buttons =
+    getCurrentAlbumPreviewButtons();
+
+  if (!buttons.length) return;
+
+  const albumTitle =
+    buttons[0]?.dataset.providerAlbum || "";
+
+  const artist =
+    buttons[0]?.dataset.providerArtist || "";
+
+  const warmupKey =
+    `${normaliseSpotifyMatchText(artist)}|` +
+    `${normaliseSpotifyMatchText(albumTitle)}`;
+
+  if (
+    warmupKey &&
+    spotifyAlbumWarmupKey === warmupKey &&
+    spotifyAlbumWarmupPromise
+  ) {
+    return spotifyAlbumWarmupPromise;
+  }
+
+  spotifyAlbumWarmupKey = warmupKey;
+
+  spotifyAlbumWarmupPromise =
+    (async () => {
+      const accessToken =
+        await getValidSpotifyAccessToken();
+
+      if (!accessToken) return;
+
+      const pending = buttons
+        .map((button) => ({
+          title:
+            button.dataset.providerTitle || "",
+          artist:
+            button.dataset.providerArtist || "",
+          album:
+            button.dataset.providerAlbum || ""
+        }))
+        .filter(
+          (track) =>
+            track.title &&
+            track.artist &&
+            !getCachedSpotifyMatch(track)
+        );
+
+      /*
+        Match a few tracks at a time so album opening stays fast
+        and Spotify is not hit with a burst of requests.
+      */
+      const concurrency = 3;
+      let nextIndex = 0;
+
+      async function worker() {
+        while (nextIndex < pending.length) {
+          const index = nextIndex++;
+          const track = pending[index];
+
+          try {
+            await searchSpotifyTrackForBoMTrack(
+              track
+            );
+          } catch (error) {
+            console.warn(
+              "Spotify preview warmup skipped:",
+              track.title,
+              error
+            );
+          }
+        }
+      }
+
+      await Promise.all(
+        Array.from(
+          {
+            length: Math.min(
+              concurrency,
+              pending.length
+            )
+          },
+          () => worker()
+        )
+      );
+    })();
+
+  return spotifyAlbumWarmupPromise;
+}
+
+function scheduleSpotifyTrackCacheWarmup() {
+  const tryWarmup = (attempt = 0) => {
+    window.setTimeout(
+      () => {
+        const buttons =
+          getCurrentAlbumPreviewButtons();
+
+        if (!buttons.length && attempt < 4) {
+          tryWarmup(attempt + 1);
+          return;
+        }
+
+        void warmSpotifyTrackCacheForCurrentAlbum();
+      },
+      attempt === 0 ? 250 : 350
+    );
+  };
+
+  tryWarmup();
+}
+
+function getOrCreateReusableAlbumPreviewFrame({
+  dock,
+  title,
+  artist,
+  embedUrl,
+  externalUrl
+}) {
+  if (!dock || !embedUrl) {
+    return false;
+  }
+
+  dock.classList.remove("hidden");
+
+  let card = dock.querySelector(
+    ".album-track-preview-card"
+  );
+
+  let frame = dock.querySelector(
+    ".album-track-preview-frame"
+  );
+
+  if (!card || !frame) {
+    dock.innerHTML = `
+      <div class="album-track-preview-card">
+        <div class="album-track-preview-heading">
+          <div>
+            <div class="album-track-preview-kicker">
+              Now previewing
+            </div>
+
+            <strong
+              class="album-track-preview-title"
+            ></strong>
+
+            <span
+              class="album-track-preview-artist"
+            ></span>
+          </div>
+
+          <a
+            class="album-track-preview-open"
+            target="_blank"
+            rel="noopener noreferrer"
+            onclick="event.stopPropagation();"
+          >
+            Open in Spotify
+          </a>
+        </div>
+
+        <iframe
+          class="spotify-embed-frame album-track-preview-frame"
+          width="100%"
+          height="152"
+          frameborder="0"
+          allowfullscreen
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        ></iframe>
+
+        <div class="album-track-preview-note">
+          Tap ▶ in the Spotify player to hear the track.
+          Then choose another song below to switch the same player.
+        </div>
+      </div>
+    `;
+
+    card = dock.querySelector(
+      ".album-track-preview-card"
+    );
+
+    frame = dock.querySelector(
+      ".album-track-preview-frame"
+    );
+  }
+
+  const titleNode = dock.querySelector(
+    ".album-track-preview-title"
+  );
+
+  const artistNode = dock.querySelector(
+    ".album-track-preview-artist"
+  );
+
+  const openLink = dock.querySelector(
+    ".album-track-preview-open"
+  );
+
+  if (titleNode) {
+    titleNode.textContent = title;
+  }
+
+  if (artistNode) {
+    artistNode.textContent = artist;
+  }
+
+  if (openLink) {
+    openLink.href = externalUrl;
+  }
+
+  /*
+    Keep one iframe in the DOM and switch its Spotify entity.
+    This avoids stacking multiple players or error panels.
+  */
+  if (frame.src !== embedUrl) {
+    frame.title =
+      `Spotify preview for ${title} by ${artist}`;
+
+    frame.src = embedUrl;
+  }
+
+  return true;
+}
 
 async function handleAlbumTrackPreviewButton(
   trackPreviewButton
