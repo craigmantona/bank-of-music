@@ -767,9 +767,53 @@ function getFallbackHandle() {
 }
 
 
+function fixChartSectionHeadings() {
+  document
+    .querySelectorAll("h1, h2, h3, h4, .section-title")
+    .forEach((heading) => {
+      const text =
+        normaliseText(
+          heading.textContent || ""
+        )
+          .replace(/\s+/g, " ")
+          .trim()
+          .toLowerCase();
+
+      if (
+        text ===
+        "your age range top albums"
+      ) {
+        heading.textContent =
+          "Global Top Songs";
+      }
+    });
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    fixChartSectionHeadings();
+
+    const chartHeadingObserver =
+      new MutationObserver(() => {
+        fixChartSectionHeadings();
+      });
+
+    chartHeadingObserver.observe(
+      document.body,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+  }
+);
+
 async function loadCharts() {
   globalAlbumCharts.innerHTML = "<p class='small'>Loading albums...</p>";
   ageAlbumCharts.innerHTML = "<p class='small'>Loading songs...</p>";
+
+  fixChartSectionHeadings();
 
   const { data: albums, error: albumError } = await supabaseClient
     .from("album_rating_charts")
@@ -804,6 +848,8 @@ async function loadCharts() {
     <h3>🎵 Top 10 Songs</h3>
     ${renderChartRows(songs || [])}
   `;
+
+  fixChartSectionHeadings();
 }
 
 function renderAlbumCharts(albums) {
@@ -1769,16 +1815,26 @@ function getYourSongRating(songId) {
 
 function getYourSongRatingByTitleArtist(title, artist) {
 
+  if (!currentUser) return null;
+
   const key = normaliseCompare(`${artist}-${title}`);
 
-  const matchingSong = allSongs.find(
-    (song) =>
-      normaliseCompare(`${song.artist}-${song.title}`) === key
+  const matchingSongIds = allSongs
+    .filter(
+      (song) =>
+        normaliseCompare(`${song.artist}-${song.title}`) === key
+    )
+    .map((song) => Number(song.id));
+
+  if (!matchingSongIds.length) return null;
+
+  const row = allSongRatings.find(
+    (rating) =>
+      rating.user_id === currentUser.id &&
+      matchingSongIds.includes(Number(rating.song_id))
   );
 
-  if (!matchingSong) return null;
-
-  return getYourSongRating(matchingSong.id);
+  return row ? Number(row.rating) : null;
 
 }
 
@@ -1975,7 +2031,7 @@ const linkedSongIds = selectedSong
       .map((song) => Number(song.id))
   : [Number(songId)];
 
-const yourRatingRow = songRatings.find((rating) =>
+const yourRatingRow = allSongRatings.find((rating) =>
   linkedSongIds.includes(Number(rating.song_id)) &&
   rating.user_id === currentUser?.id
 );
@@ -5400,7 +5456,19 @@ function buildTrackListHtml(detail, savedAlbumId) {
   if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
 
   const avgData = savedSong ? getSongAverage(savedSong.id) : null;
-  const yourRating = savedSong ? getYourSongRating(savedSong.id) : null;
+
+  const yourRating = savedSong
+    ? (
+        getYourSongRating(savedSong.id) ??
+        getYourSongRatingByTitleArtist(
+          title,
+          savedSong.artist || trackArtistName
+        )
+      )
+    : getYourSongRatingByTitleArtist(
+        title,
+        trackArtistName
+      );
 
   return {
     sortPosition,
@@ -5438,7 +5506,7 @@ function buildTrackListHtml(detail, savedAlbumId) {
             aria-label="Preview ${escapeHtml(title)}"
           >
             <span class="track-preview-icon" aria-hidden="true">▶</span>
-            <span class="track-preview-label">Preview</span>
+            <span class="track-preview-label">Play preview</span>
           </button>
 
           ${savedSong?.id
@@ -7307,7 +7375,18 @@ ${albumId
 
     const avgData = savedSong ? getSongAverage(savedSong.id) : null;
 
-    const yourRating = savedSong ? getYourSongRating(savedSong.id) : null;
+    const yourRating = savedSong
+      ? (
+          getYourSongRating(savedSong.id) ??
+          getYourSongRatingByTitleArtist(
+            savedSong.title || selectedItem.title,
+            savedSong.artist || selectedItem.artist
+          )
+        )
+      : getYourSongRatingByTitleArtist(
+          selectedItem.title,
+          selectedItem.artist
+        );
 
     const linkedAlbum = savedSong?.album_id
 
@@ -7954,87 +8033,173 @@ async function saveAlbumRating(albumId) {
 async function saveTrackRating(songId) {
 
   if (!currentUser) {
-
-    setMessage(globalSearchMessage, "You must be logged in first.");
-
+    setMessage(
+      globalSearchMessage,
+      "You must be logged in first."
+    );
     return;
-
   }
 
-  const input = document.getElementById(`track-rating-${songId}`);
+  const input =
+    document.getElementById(
+      `track-rating-${songId}`
+    ) ||
+    document.getElementById(
+      `song-rating-${songId}`
+    );
 
   if (!input) return;
 
   const rating = parseFloat(input.value);
 
-const selectedSong = allSongs.find(
-  (song) => Number(song.id) === Number(songId)
-);
+  if (
+    isNaN(rating) ||
+    rating < 0 ||
+    rating > 10
+  ) {
+    setMessage(
+      globalSearchMessage,
+      "Track rating must be between 0 and 10."
+    );
+    return;
+  }
 
-const selectedKey = selectedSong
-  ? normaliseCompare(`${selectedSong.artist}-${selectedSong.title}`)
-  : "";
+  let selectedSong = allSongs.find(
+    (song) =>
+      Number(song.id) === Number(songId)
+  );
 
-const matchingSongs = selectedSong
-  ? allSongs.filter((song) => {
+  if (!selectedSong && selectedItem?.type === "song") {
+    selectedSong = allSongs.find(
+      (song) =>
+        normaliseCompare(song.title) ===
+          normaliseCompare(selectedItem.title) &&
+        normaliseCompare(song.artist) ===
+          normaliseCompare(selectedItem.artist)
+    );
+  }
+
+  if (!selectedSong) {
+    setMessage(
+      globalSearchMessage,
+      "BoM could not identify this track to save the rating."
+    );
+    return;
+  }
+
+  const selectedKey = normaliseCompare(
+    `${selectedSong.artist}-${selectedSong.title}`
+  );
+
+  let matchingSongs = allSongs.filter(
+    (song) => {
       const sameExternalId =
         selectedSong.external_id &&
         song.external_id &&
-        song.external_id === selectedSong.external_id;
+        song.external_id ===
+          selectedSong.external_id;
 
       const sameTitleArtist =
-        normaliseCompare(`${song.artist}-${song.title}`) === selectedKey;
+        normaliseCompare(
+          `${song.artist}-${song.title}`
+        ) === selectedKey;
 
       return sameExternalId || sameTitleArtist;
-    })
-  : [];
+    }
+  );
 
-if (isNaN(rating) || rating < 0 || rating > 10) {
-
-    setMessage(globalSearchMessage, "Track rating must be between 0 and 10.");
-
-    return;
-
+  if (!matchingSongs.length) {
+    matchingSongs = [selectedSong];
   }
 
+  const ratingRows = matchingSongs.map(
+    (song) => ({
+      user_id: currentUser.id,
+      song_id: Number(song.id),
+      rating
+    })
+  );
 
-const ratingRows = matchingSongs.map((song) => ({
-  user_id: currentUser.id,
-  song_id: Number(song.id),
-  rating
-}));
-
-
-const { error } = await supabaseClient
-  .from("song_ratings")
-  .upsert(ratingRows, {
-    onConflict: "user_id,song_id"
-  });
-
-
+  const { error } = await supabaseClient
+    .from("song_ratings")
+    .upsert(ratingRows, {
+      onConflict: "user_id,song_id"
+    });
 
   if (error) {
-
-    setMessage(globalSearchMessage, error.message);
-
+    setMessage(
+      globalSearchMessage,
+      error.message
+    );
     return;
-
   }
 
-
-
   matchingSongs.forEach((song) => {
-  upsertLocalSongRating(song.id, rating);
-  updateTrackRowUi(song.id);
-});
+    upsertLocalSongRating(
+      song.id,
+      rating
+    );
+
+    updateTrackRowUi(song.id);
+  });
+
+  /*
+    Re-read this user's saved rows in the background so every
+    route (album, song detail and charts) uses the same source.
+  */
+  void supabaseClient
+    .from("song_ratings")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .then(({ data, error }) => {
+      if (!error && Array.isArray(data)) {
+        const otherUsersRows =
+          allSongRatings.filter(
+            (row) =>
+              row.user_id !== currentUser.id
+          );
+
+        allSongRatings = [
+          ...otherUsersRows,
+          ...data
+        ];
+      }
+    });
+
+  /*
+    Keep both possible selector IDs in sync. This prevents one
+    song-detail route showing the old value after a successful save.
+  */
+  updateStarSelector(
+    `track-rating-${selectedSong.id}`,
+    rating
+  );
+
+  updateStarSelector(
+    `song-rating-${selectedSong.id}`,
+    rating
+  );
+
+  const currentDetailRating =
+    selectedItemDetail?.querySelector(
+      ".detail-meta-grid .detail-meta-value:last-child"
+    );
+
+  if (
+    selectedItem?.type === "song" &&
+    currentDetailRating
+  ) {
+    currentDetailRating.textContent =
+      `${rating}/10`;
+  }
 
   renderLibrary();
 
-  setMessage(globalSearchMessage, "Track rating saved.");
-
+  setMessage(
+    globalSearchMessage,
+    "Track rating saved."
+  );
 }
-
-
 
 async function deleteTrackRating(songId) {
 
@@ -8099,9 +8264,14 @@ window.handleStarOptionClick = async function (event, button) {
 
   updateStarSelector(targetId, rating);
 
-  if (targetId.startsWith("track-rating-")) {
+  if (
+    targetId.startsWith("track-rating-") ||
+    targetId.startsWith("song-rating-")
+  ) {
 
-    const songId = targetId.replace("track-rating-", "");
+    const songId = targetId
+      .replace("track-rating-", "")
+      .replace("song-rating-", "");
 
     await saveTrackRating(songId);
 
