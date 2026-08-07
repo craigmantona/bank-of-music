@@ -4466,6 +4466,137 @@ async function fetchCanonicalReleaseForReleaseGroup(releaseGroupId) {
 
 
 
+async function resolveArtistIdFreshFromMusicBrainz(
+  artistName,
+  excludedIds = []
+) {
+  const cleanName = normaliseText(artistName);
+  if (!cleanName) return "";
+
+  try {
+    const query =
+      `artist:"${cleanName.replace(/"/g, "")}"`;
+
+    const url =
+      `https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}` +
+      `&fmt=json&limit=25`;
+
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" }
+    });
+
+    if (!response.ok) return "";
+
+    const data = await response.json();
+    const excluded = new Set(
+      (excludedIds || [])
+        .filter(Boolean)
+        .map(String)
+    );
+
+    const exactMatches =
+      (data.artists || [])
+        .filter(
+          (artist) =>
+            normaliseCompare(artist.name) ===
+            normaliseCompare(cleanName)
+        )
+        .filter(
+          (artist) =>
+            !excluded.has(String(artist.id || ""))
+        )
+        .filter(
+          (artist) =>
+            !/tribute|cover|karaoke|impersonator|string quartet/i.test(
+              `${artist.disambiguation || ""} ${artist.type || ""}`
+            )
+        )
+        .sort((a, b) => {
+          const releaseDifference =
+            Number(b["release-count"] || 0) -
+            Number(a["release-count"] || 0);
+
+          if (releaseDifference !== 0) {
+            return releaseDifference;
+          }
+
+          return (
+            Number(b.score || 0) -
+            Number(a.score || 0)
+          );
+        });
+
+    return exactMatches[0]?.id || "";
+  } catch (error) {
+    console.warn(
+      "Fresh artist lookup failed:",
+      cleanName,
+      error
+    );
+
+    return "";
+  }
+}
+
+async function fetchMostCompleteArtistDiscography({
+  artistName,
+  preferredArtistId = "",
+  savedAlbumCount = 0,
+  expectedReleaseCount = 0
+}) {
+  let bestArtistId = preferredArtistId || "";
+  let bestAlbums = [];
+
+  if (preferredArtistId) {
+    bestAlbums =
+      await fetchStudioAlbumsForArtist(
+        preferredArtistId,
+        artistName
+      );
+  }
+
+  /*
+    A common failure mode in BoM was an old/wrong MusicBrainz ID
+    attached to a saved album. The artist page then showed only the
+    few albums already stored locally. If the remote discography is
+    empty or suspiciously small, perform a fresh exact-name lookup
+    that ignores the local ID and compare the results.
+  */
+  const looksIncomplete =
+    !bestAlbums.length ||
+    bestAlbums.length <= savedAlbumCount ||
+    (
+      Number(expectedReleaseCount || 0) >= 8 &&
+      bestAlbums.length < 5
+    );
+
+  if (looksIncomplete) {
+    const freshArtistId =
+      await resolveArtistIdFreshFromMusicBrainz(
+        artistName,
+        [preferredArtistId]
+      );
+
+    if (freshArtistId) {
+      const freshAlbums =
+        await fetchStudioAlbumsForArtist(
+          freshArtistId,
+          artistName
+        );
+
+      if (freshAlbums.length > bestAlbums.length) {
+        bestAlbums = freshAlbums;
+        bestArtistId = freshArtistId;
+      }
+    }
+  }
+
+  return {
+    artistId: bestArtistId,
+    albums: bestAlbums
+  };
+}
+
 async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
   const resolvedArtistId = artistId || await resolveArtistIdByName(artistName);
@@ -4999,17 +5130,33 @@ async function renderArtistDetail(artistItem) {
   const savedSongs =
     getSavedSongsByArtist(artistName);
 
-  const artistMusicBrainzId =
+  const preferredArtistMusicBrainzId =
     artistItem.externalId ||
     artistItem.artistId ||
     getSelectedArtistIdFallback(artistName) ||
     await resolveArtistIdByName(artistName);
 
-  const remoteAlbums =
-    await fetchArtistAlbumsFromApi(
+  const completeDiscography =
+    await fetchMostCompleteArtistDiscography({
       artistName,
-      artistMusicBrainzId
-    );
+      preferredArtistId:
+        preferredArtistMusicBrainzId,
+      savedAlbumCount:
+        savedAlbums.length,
+      expectedReleaseCount:
+        Number(
+          artistItem.releaseCount ||
+          artistItem["release-count"] ||
+          0
+        )
+    });
+
+  const artistMusicBrainzId =
+    completeDiscography.artistId ||
+    preferredArtistMusicBrainzId;
+
+  const remoteAlbums =
+    completeDiscography.albums || [];
 
   /*
     Build the displayed discography from MusicBrainz first,
@@ -5116,9 +5263,9 @@ async function renderArtistDetail(artistItem) {
   });
 
   const artistDetail =
-    artistItem.externalId
+    artistMusicBrainzId
       ? await fetchArtistDetail(
-          artistItem.externalId
+          artistMusicBrainzId
         )
       : null;
 
