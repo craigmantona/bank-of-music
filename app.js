@@ -1866,8 +1866,7 @@ function renderStarSelector(targetId, currentValue = null) {
     </div>
   </div>
 </div>
-      <input type="hidden" id="${targetId}" value="${safeValue > 0 ? safeValue : ""}">
-    </div>
+<input type="hidden" id="${targetId}" value="${safeValue > 0 ? safeValue : ""}">
   `;
 }
 
