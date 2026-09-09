@@ -10447,13 +10447,25 @@ async function connectSpotify() {
 }
 
 async function exchangeSpotifyCodeForTokens(code) {
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabaseClient.auth.getSession();
+
+  if (sessionError || !session?.access_token) {
+    throw new Error(
+      "Your Bank of Music session has expired. Please log in again."
+    );
+  }
+
   const response = await fetch(
     SPOTIFY_TOKEN_FUNCTION_URL,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        apikey: window.SUPABASE_ANON_KEY
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${session.access_token}`
       },
       body: JSON.stringify({
         action: "exchange",
