@@ -339,6 +339,94 @@
   }
 }
 
+/* Stage 2B: namespaced Artist presentation. */
+.bom-shell-v1 .bom-v1-artist { width: min(100%, 1320px); margin: 0 auto; padding: 28px clamp(24px, 4.5vw, 72px) 100px; color: var(--bom-v1-text); }
+.bom-shell-v1 .bom-v1-artist-back { margin-bottom: 26px; }
+.bom-shell-v1 .bom-v1-artist-hero { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(460px, 1.2fr); gap: clamp(44px, 7vw, 100px); align-items: center; min-height: 460px; padding-bottom: clamp(54px, 7vw, 90px); }
+.bom-shell-v1 .bom-v1-artist-identity h1 { max-width: 15ch; margin: 0; color: var(--bom-v1-text); font-size: clamp(54px, 7vw, 104px); font-weight: 600; letter-spacing: -.06em; line-height: .94; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-artist-identity > p { margin: 22px 0 0; color: var(--bom-v1-muted); font-size: 15px; line-height: 1.7; }
+.bom-shell-v1 .bom-v1-artist-identity .bom-v1-artist-description { max-width: 56ch; margin-top: 10px; font-size: 13px; }
+.bom-shell-v1 .bom-v1-artist-follow-wrap { margin-top: 28px; }
+.bom-shell-v1 .bom-v1-artist-follow { min-height: 44px !important; padding: 9px 14px !important; color: var(--bom-v1-text) !important; background: transparent !important; background-image: none !important; border: 1px solid var(--bom-v1-line) !important; border-radius: var(--bom-v1-radius) !important; box-shadow: none !important; transform: none !important; cursor: pointer; }
+.bom-shell-v1 .bom-v1-artist-follow.is-following { color: var(--bom-v1-accent); }
+.bom-shell-v1 .bom-v1-artist-photo-wrap { min-width: 0; }
+.bom-shell-v1 .bom-v1-artist-photo { display: block; width: 100%; aspect-ratio: 1.55 / 1; object-fit: cover; border-radius: 3px; background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-artist-photo-missing { display: grid; place-items: center; align-content: center; color: var(--bom-v1-muted); }
+.bom-shell-v1 .bom-v1-artist-photo-missing span { color: var(--bom-v1-accent); font-size: clamp(58px, 9vw, 112px); font-weight: 600; }
+.bom-shell-v1 .bom-v1-artist-photo-missing small { margin-top: 10px; }
+.bom-shell-v1 .bom-v1-artist [hidden] { display: none !important; }
+.bom-shell-v1 .bom-v1-artist-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--bom-v1-line); }
+.bom-shell-v1 .bom-v1-artist-summary div { min-width: 0; }
+.bom-shell-v1 .bom-v1-artist-summary span,
+.bom-shell-v1 .bom-v1-artist-summary small { display: block; color: var(--bom-v1-muted); font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-artist-summary strong { display: block; margin: 7px 0 4px; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-artist-summary small { color: var(--bom-v1-accent); font-variant-numeric: tabular-nums; }
+.bom-shell-v1 .bom-v1-artist-section { padding: clamp(52px, 7vw, 92px) 0; border-top: 1px solid var(--bom-v1-line); }
+.bom-shell-v1 .bom-v1-artist-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 30px; }
+.bom-shell-v1 .bom-v1-artist-section-heading h2 { margin: 0; color: var(--bom-v1-text); font-size: clamp(32px, 4vw, 52px); font-weight: 600; letter-spacing: -.045em; }
+.bom-shell-v1 .bom-v1-artist-section-heading p { margin: 8px 0 0; color: var(--bom-v1-muted); font-size: 13px; }
+.bom-shell-v1 .bom-v1-artist-section-heading > span { color: var(--bom-v1-muted); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-artist-section-heading label { display: grid; gap: 6px; min-width: 210px; color: var(--bom-v1-muted); font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-artist-section-heading select { min-height: 44px; padding: 9px 34px 9px 11px; color: var(--bom-v1-text); background: var(--bom-v1-surface); border: 0; border-radius: 3px; font: inherit; font-size: 12px; letter-spacing: 0; text-transform: none; }
+.bom-shell-v1 .bom-v1-artist-discography { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 42px 22px; }
+.bom-shell-v1 .bom-v1-artist-album-card { min-width: 0; cursor: pointer; }
+.bom-shell-v1 .bom-v1-artist-album-art { aspect-ratio: 1; margin-bottom: 14px; overflow: hidden; background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-artist-album-art img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity 160ms ease, transform 180ms ease; }
+.bom-shell-v1 .bom-v1-artist-album-card:hover .bom-v1-artist-album-art img { opacity: .9; transform: scale(1.012); }
+.bom-shell-v1 .bom-v1-artist-album-card h3 { margin: 0; color: var(--bom-v1-text); font-size: 15px; font-weight: 600; line-height: 1.42; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-artist-album-card > p { margin: 5px 0 0; color: var(--bom-v1-muted); font-size: 12px; }
+.bom-shell-v1 .bom-v1-artist-album-ratings { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 10px; margin-top: 9px; color: var(--bom-v1-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.bom-shell-v1 .bom-v1-artist-album-ratings small { color: var(--bom-v1-muted); font-size: 9px; font-weight: 400; }
+.bom-shell-v1 .bom-v1-artist-album-personal { color: var(--bom-v1-accent); }
+.bom-shell-v1 .bom-v1-artist-artwork-missing { display: grid; width: 100%; height: 100%; place-items: center; color: var(--bom-v1-accent); background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-artist-artwork-missing > span { font-size: 26px; font-weight: 600; letter-spacing: -.05em; }
+.bom-shell-v1 .bom-v1-artist-track-row { display: grid; grid-template-columns: 44px 58px minmax(0, 1fr) 82px; gap: 18px; align-items: center; min-height: 78px; padding: 10px 0; border-bottom: 1px solid var(--bom-v1-line); }
+.bom-shell-v1 .bom-v1-artist-track-rank { color: var(--bom-v1-muted); font-size: 26px; font-variant-numeric: tabular-nums; }
+.bom-shell-v1 .bom-v1-artist-track-art { width: 58px; height: 58px; padding: 0; overflow: hidden; background: var(--bom-v1-surface); border: 0; border-radius: 2px; cursor: pointer; }
+.bom-shell-v1 .bom-v1-artist-track-art img { width: 100%; height: 100%; object-fit: cover; }
+.bom-shell-v1 .bom-v1-artist-track-copy { min-width: 0; }
+.bom-shell-v1 .bom-v1-artist-track-copy strong { display: block; color: var(--bom-v1-text); font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-artist-track-copy span { display: block; margin-top: 5px; color: var(--bom-v1-muted); font-size: 12px; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-artist-track-score { text-align: right; color: var(--bom-v1-text); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bom-shell-v1 .bom-v1-artist-track-score small { color: var(--bom-v1-muted); font-size: 10px; font-weight: 400; }
+.bom-shell-v1 .bom-v1-artist-more { min-height: 44px; margin-top: 24px; padding: 8px 0; color: var(--bom-v1-accent); background: transparent; border: 0; cursor: pointer; }
+
+@media (max-width: 1100px) {
+  .bom-shell-v1 .bom-v1-artist-hero { grid-template-columns: minmax(280px, .8fr) minmax(380px, 1.2fr); gap: 44px; }
+  .bom-shell-v1 .bom-v1-artist-discography { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .bom-shell-v1 .bom-v1-artist { padding-inline: clamp(20px, 5vw, 44px); }
+  .bom-shell-v1 .bom-v1-artist-hero { grid-template-columns: 1fr; min-height: 0; }
+  .bom-shell-v1 .bom-v1-artist-photo-wrap { grid-row: 1; }
+  .bom-shell-v1 .bom-v1-artist-identity { grid-row: 2; }
+  .bom-shell-v1 .bom-v1-artist-photo { aspect-ratio: 1.8 / 1; }
+  .bom-shell-v1 .bom-v1-artist-discography { grid-template-columns: repeat(3, minmax(0, 1fr)); gap-inline: 18px; }
+}
+
+@media (max-width: 600px) {
+  .bom-shell-v1 .bom-v1-artist { padding: 20px 18px 72px; }
+  .bom-shell-v1 .bom-v1-artist-back { margin-bottom: 18px; }
+  .bom-shell-v1 .bom-v1-artist-hero { gap: 28px; padding-bottom: 52px; }
+  .bom-shell-v1 .bom-v1-artist-photo { aspect-ratio: 1.35 / 1; }
+  .bom-shell-v1 .bom-v1-artist-identity h1 { font-size: clamp(46px, 15vw, 64px); }
+  .bom-shell-v1 .bom-v1-artist-summary { grid-template-columns: 1fr; gap: 16px; }
+  .bom-shell-v1 .bom-v1-artist-section { padding: 50px 0; }
+  .bom-shell-v1 .bom-v1-artist-section-heading { align-items: start; flex-direction: column; gap: 20px; }
+  .bom-shell-v1 .bom-v1-artist-section-heading label { width: 100%; min-width: 0; }
+  .bom-shell-v1 .bom-v1-artist-discography { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 14px; }
+  .bom-shell-v1 .bom-v1-artist-album-card h3 { font-size: 13px; }
+  .bom-shell-v1 .bom-v1-artist-album-ratings { display: grid; justify-content: start; font-size: 11px; }
+  .bom-shell-v1 .bom-v1-artist-track-row { grid-template-columns: 26px 44px minmax(0, 1fr) 54px; gap: 10px; min-height: 68px; }
+  .bom-shell-v1 .bom-v1-artist-track-rank { font-size: 19px; }
+  .bom-shell-v1 .bom-v1-artist-track-art { width: 44px; height: 44px; }
+  .bom-shell-v1 .bom-v1-artist-track-copy strong { font-size: 12px; }
+  .bom-shell-v1 .bom-v1-artist-track-copy span { font-size: 10px; }
+  .bom-shell-v1 .bom-v1-artist-track-score { font-size: 14px; }
+  .bom-shell-v1 .bom-v1-artist-track-score small { display: none; }
+}
+
 /* Stage 2A: production-backed Album presentation. */
 .bom-shell-v1 #detailSection:has(.bom-v1-album) {
   margin: 0;
@@ -348,8 +436,18 @@
   border-radius: 0;
   box-shadow: none;
 }
-.bom-shell-v1 #detailSection:has(.bom-v1-album) > h2 { display: none; }
-.bom-shell-v1:has(.bom-v1-album) #stickyPlayer { display: none !important; }
+.bom-shell-v1 #detailSection:has(.bom-v1-artist) {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.bom-shell-v1 #detailSection:has(.bom-v1-album) > h2,
+.bom-shell-v1 #detailSection:has(.bom-v1-artist) > h2 { display: none; }
+.bom-shell-v1:has(.bom-v1-album) #stickyPlayer,
+.bom-shell-v1:has(.bom-v1-artist) #stickyPlayer { display: none !important; }
 .bom-shell-v1 .bom-v1-album {
   width: min(100%, 1328px);
   margin: 0 auto;
@@ -507,5 +605,8 @@
 @media (prefers-reduced-motion: reduce) {
   .bom-shell-v1 .bom-v1-album *,
   .bom-shell-v1 .bom-v1-album *::before,
-  .bom-shell-v1 .bom-v1-album *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .bom-shell-v1 .bom-v1-album *::after,
+  .bom-shell-v1 .bom-v1-artist *,
+  .bom-shell-v1 .bom-v1-artist *::before,
+  .bom-shell-v1 .bom-v1-artist *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }

@@ -2538,6 +2538,18 @@ async function unfollowArtistByName(artistName) {
 
 }
 
+window.BOMArtistBridge = Object.freeze({
+  async setFollowing(shouldFollow) {
+    if (selectedItem?.type !== "artist") return false;
+    const artistName = selectedItem.name || selectedItem.artist || selectedItem.title || "";
+    const changed = shouldFollow
+      ? await followArtistByName(artistName)
+      : await unfollowArtistByName(artistName);
+    if (changed && selectedItem?.type === "artist") await renderSelectedItem();
+    return changed;
+  }
+});
+
 
 
 async function followArtistFromInput() {
@@ -3132,6 +3144,15 @@ async function handleIncomingShareLink() {
       releaseTitle: params.get("release") || "",
       coverUrl: params.get("cover") || "",
       savedSongId: params.get("songId") || ""
+    };
+  } else if (shareType === "artist") {
+    selectedItem = {
+      type: "artist",
+      title: artist,
+      name: artist,
+      artist,
+      externalId,
+      artistId: externalId
     };
   } else {
     return;
@@ -5167,6 +5188,90 @@ function buildArtistTopRatedAlbumsHtml(artistName) {
 
 }
 
+function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, albums, savedSongs }) {
+  const normalizedAlbums = albums.map((album, sourceIndex) => {
+    const albumId = album.savedAlbumId || album.localAlbumId || "";
+    const average = albumId ? getAlbumAverage(albumId) : null;
+    return {
+      sourceIndex,
+      albumId,
+      title: album.title || "Untitled album",
+      artworkUrl: album.coverUrl || "",
+      releaseDate: album.releaseDate || "",
+      releaseDatePrecision: album.release_date_precision || (albumId ? "stored" : "external"),
+      community: average ? { average: Number(average.avg), count: Number(average.count || 0) } : null,
+      personal: albumId ? getYourAlbumRating(albumId) : null
+    };
+  });
+
+  const rankedAlbums = normalizedAlbums
+    .filter((album) => album.community)
+    .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || String(a.releaseDate || "9999").localeCompare(String(b.releaseDate || "9999")) || a.title.localeCompare(b.title));
+
+  const rankedTracks = savedSongs
+    .map((song) => {
+      const average = getSongAverage(song.id);
+      const album = song.album_id ? allAlbums.find((item) => Number(item.id) === Number(song.album_id)) : null;
+      return average ? {
+        songId: song.id,
+        title: song.title || "Untitled track",
+        albumId: album?.id || "",
+        albumTitle: album?.title || getAlbumNameById(song.album_id) || "",
+        albumYear: String(album?.release_date || "").slice(0, 4),
+        artworkUrl: album ? getAlbumArtworkUrl(album) : "",
+        community: { average: Number(average.avg), count: Number(average.count || 0) },
+        personal: getYourSongRating(song.id)
+      } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || a.albumYear.localeCompare(b.albumYear) || a.albumTitle.localeCompare(b.albumTitle) || a.title.localeCompare(b.title));
+
+  let priorDisplayedScore = null;
+  let priorRank = 0;
+  rankedTracks.forEach((track, index) => {
+    const displayedScore = track.community.average.toFixed(1);
+    if (displayedScore !== priorDisplayedScore) priorRank = index + 1;
+    track.rank = priorRank;
+    priorDisplayedScore = displayedScore;
+  });
+
+  const metadata = [];
+  const area = artistDetail?.area?.name || artistDetail?.begin_area?.name || "";
+  const country = artistDetail?.country || artistItem.country || "";
+  const start = artistDetail?.["life-span"]?.begin || "";
+  const end = artistDetail?.["life-span"]?.end || "";
+  if (area) metadata.push(area);
+  else if (country) metadata.push(country);
+  if (start) metadata.push(`${end ? "Active" : "Formed"} ${start.slice(0, 4)}${end ? `–${end.slice(0, 4)}` : ""}`);
+  if (artistDetail?.type && artistDetail.type !== "Other") metadata.push(artistDetail.type);
+
+  return {
+    name: artistName,
+    imageUrl,
+    metadata,
+    description: artistDetail?.disambiguation || artistItem.disambiguation || "",
+    albums: normalizedAlbums,
+    topTracks: rankedTracks,
+    highestAlbum: rankedAlbums[0] || null,
+    highestTrack: rankedTracks[0] || null,
+    backControlHtml: buildSelectedBackButton(),
+    followControlHtml: isArtistFollowed(artistName)
+      ? '<button type="button" class="bom-v1-artist-follow is-following" data-bom-artist-follow="false" aria-pressed="true">Following ✓</button>'
+      : '<button type="button" class="bom-v1-artist-follow" data-bom-artist-follow="true" aria-pressed="false">+ Follow artist</button>'
+  };
+}
+
+async function renderStageOneArtist(model, sourceAlbums) {
+  if (!window.BOMArtistUI) await new Promise((resolve) => window.setTimeout(resolve, 0));
+  if (!window.BOMArtistUI) throw new Error("Artist presentation did not load");
+  selectedItemDetail.innerHTML = window.BOMArtistUI.render(model);
+  selectedItemDetail.dataset.artistAlbums = JSON.stringify(sourceAlbums);
+  window.BOMArtistUI.renderDiscography();
+  window.BOMArtistUI.renderTracks();
+  performance.mark?.("bom-artist-useful-content");
+  updateStickyPlayer(selectedItem);
+}
+
 async function renderArtistDetail(artistItem) {
 
   if (!artistItem) return;
@@ -5175,6 +5280,11 @@ async function renderArtistDetail(artistItem) {
     artistItem.name ||
     artistItem.artist ||
     "Unknown artist";
+
+  if (isStageOnePresentation()) {
+    if (!window.BOMArtistUI) await new Promise((resolve) => window.setTimeout(resolve, 0));
+    if (window.BOMArtistUI) selectedItemDetail.innerHTML = window.BOMArtistUI.renderLoading(artistName, buildSelectedBackButton());
+  }
 
   const savedAlbums =
     getSavedAlbumsByArtist(artistName);
@@ -5314,15 +5424,10 @@ async function renderArtistDetail(artistItem) {
       .localeCompare(String(b.title || ""));
   });
 
-  const artistDetail =
-    artistMusicBrainzId
-      ? await fetchArtistDetail(
-          artistMusicBrainzId
-        )
-      : null;
-
-  const premiumArtistImage =
-    await fetchArtistImagePremium(artistName);
+  const [artistDetail, premiumArtistImage] = await Promise.all([
+    artistMusicBrainzId ? fetchArtistDetail(artistMusicBrainzId) : Promise.resolve(null),
+    fetchArtistImagePremium(artistName)
+  ]);
 
   const cachedArtistImage = "";
 
@@ -5368,6 +5473,20 @@ async function renderArtistDetail(artistItem) {
       .slice(0, 6)
       .map((tag) => tag.name)
       .filter(Boolean);
+
+  if (isStageOnePresentation()) {
+    await renderStageOneArtist(buildStageOneArtistModel({
+      artistName,
+      artistDetail,
+      artistItem,
+      imageUrl: /(api\.dicebear\.com|2a96cbd8b46e442fc41c2b86b821562f)/i.test(premiumArtistImage || "")
+        ? (displayAlbums.find((album) => album.coverUrl)?.coverUrl || "")
+        : bannerUrl,
+      albums: displayAlbums,
+      savedSongs
+    }), displayAlbums);
+    return;
+  }
 
   selectedItemDetail.innerHTML = `
     ${buildArtistBannerMarkup(
@@ -12332,7 +12451,7 @@ window.scrollTo({ top: 0, behavior: "smooth" });
    ============================================================ */
 
 function getItemDeepLinkUrl(item = selectedItem) {
-  if (!item || (item.type !== "album" && item.type !== "song")) return window.location.pathname;
+  if (!item || !["album", "song", "artist"].includes(item.type)) return window.location.pathname;
   const url = new URL(window.location.href);
   url.searchParams.set("share", item.type);
   if (item.externalId) url.searchParams.set("id", item.externalId);
@@ -12346,7 +12465,7 @@ function getItemDeepLinkUrl(item = selectedItem) {
 }
 
 function updateRealShareLinkState(item = selectedItem) {
-  if (!item || (item.type !== "album" && item.type !== "song")) return;
+  if (!item || !["album", "song", "artist"].includes(item.type)) return;
   const nextUrl = getItemDeepLinkUrl(item);
   if (nextUrl && nextUrl !== window.location.href) {
     window.history.replaceState({ bomShare: true, itemType: item.type }, "", nextUrl);
@@ -12473,7 +12592,7 @@ showOnlySection = function(targetId) {
 const originalUpdateStickyPlayerV32 = updateStickyPlayer;
 updateStickyPlayer = function(item = selectedItem) {
   originalUpdateStickyPlayerV32(item);
-  if (item && (item.type === "album" || item.type === "song")) updateRealShareLinkState(item);
+  if (item && ["album", "song", "artist"].includes(item.type)) updateRealShareLinkState(item);
   const shareBtn = document.getElementById("stickyPlayerShareBtn");
   if (shareBtn) shareBtn.classList.toggle("hidden", !(item && (item.type === "album" || item.type === "song")));
 };
