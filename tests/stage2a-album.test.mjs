@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
 
 const [html, app, album, styles] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
@@ -12,7 +13,7 @@ const [html, app, album, styles] = await Promise.all([
 test("Stage 2A remains opt-in and loads after the approved foundation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /foundationScript\.addEventListener\("load"/);
-  assert.match(html, /bom-album\.js\?v=1/);
+  assert.match(html, /bom-album\.js\?v=2/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)/);
 });
 
@@ -58,4 +59,23 @@ test("approved table and responsive mobile composition are present", () => {
 
 test("catalogue and qualification infrastructure is absent from Stage 2A assets", () => {
   assert.doesNotMatch(album + styles, /artist-catalog|qualification-v2|shadow snapshots|artist_import_queue/i);
+});
+
+test("track ratings use a compact disclosure while retaining the existing handler", () => {
+  assert.match(app, /<details class="bom-v1-track-rating-control">/);
+  assert.match(app, /handleStarOptionClick\(event, this\)/);
+  assert.match(app, /data-clear-track-rating/);
+  assert.match(app, /await deleteTrackRating/);
+  assert.doesNotMatch(album, /★/);
+  assert.match(styles, /\.bom-v1-track-rating-popover/);
+});
+
+test("release dates display only the precision supported by their source", () => {
+  const context = { window: { BOMUI: {} }, document: { addEventListener() {} }, Intl, Date, Number, String };
+  vm.runInNewContext(album, context);
+  const format = context.window.BOMAlbumUI.formatReleaseDate;
+  assert.equal(format("1973-01-01", "stored"), "1973");
+  assert.equal(format("1973", "external"), "1973");
+  assert.equal(format("1973-05", "external"), "May 1973");
+  assert.equal(format("1969-10-01", "external"), "1 October 1969");
 });

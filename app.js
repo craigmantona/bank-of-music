@@ -2089,8 +2089,14 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
 
   if (yourRatingEl) {
-
-    yourRatingEl.textContent = yourRating !== null ? `${yourRating}/10` : "—";
+    const compactValue = yourRatingEl.querySelector(".bom-v1-track-personal-value");
+    const compactSlot = yourRatingEl.querySelector(".bom-v1-track-rating-slot");
+    if (compactValue && compactSlot) {
+      compactValue.innerHTML = yourRating !== null ? `<strong>${yourRating}</strong><span> / 10</span>` : "—";
+      compactSlot.innerHTML = buildCompactTrackRatingControl(songId, yourRating);
+    } else {
+      yourRatingEl.textContent = yourRating !== null ? `${yourRating}/10` : "—";
+    }
 
     yourRatingEl.classList.toggle("has-rating", yourRating !== null);
 
@@ -5604,6 +5610,22 @@ function isStageOnePresentation() {
   return new URLSearchParams(window.location.search).get("ui") === "stage1";
 }
 
+function buildCompactTrackRatingControl(songId, currentValue) {
+  if (!songId) return "";
+  const hasRating = currentValue !== null && Number.isFinite(Number(currentValue));
+  const targetId = `track-rating-${songId}`;
+  return `<details class="bom-v1-track-rating-control">
+    <summary class="bom-v1-track-rating-trigger">${hasRating ? "Change" : "Rate +"}</summary>
+    <div class="bom-v1-track-rating-popover" role="group" aria-label="Rate this track from 1 to 10">
+      ${Array.from({ length: 10 }, (_, index) => {
+        const rating = index + 1;
+        return `<button type="button" class="star-option bom-v1-track-rating-choice${rating === Number(currentValue) ? " is-selected" : ""}" data-target-input="${targetId}" data-rating="${rating}" aria-label="Rate ${rating} out of 10" onclick="handleStarOptionClick(event, this); return false;">${rating}</button>`;
+      }).join("")}
+      ${hasRating ? `<button type="button" class="bom-v1-track-rating-clear delete-track-rating-btn" data-clear-track-rating="${songId}">Clear</button>` : ""}
+    </div>
+  </details><input type="hidden" id="${targetId}" value="${hasRating ? Number(currentValue) : ""}">`;
+}
+
 function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
   const albumTitle = detail?.title || selectedItem?.title || "";
   const artist = detail?.["artist-credit"]?.map((credit) => credit.name).filter(Boolean).join(", ") || selectedItem?.artist || "";
@@ -5629,7 +5651,7 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
       index: Math.max(0, number - 1), number, title, artist, album: albumTitle,
       durationMs: Number(track?.length || track?.recording?.length || 0) || null,
       songId: savedSong?.id || null, externalId, community, personal, isManual,
-      ratingControlHtml: savedSong?.id ? renderStarSelector(`track-rating-${savedSong.id}`, personal) : "",
+      ratingControlHtml: savedSong?.id ? buildCompactTrackRatingControl(savedSong.id, personal) : "",
       saveControlHtml: savedSong?.id ? "" : `<button class="save-track-btn" data-action="save-track" data-track-title="${escapeHtml(title)}" data-track-external-id="${escapeHtml(externalId)}" data-album-id="${savedAlbumId || ""}" aria-label="Save ${escapeHtml(title)}">Save</button>`
     });
     fallbackNumber += 1;
@@ -5657,7 +5679,7 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
   return rows;
 }
 
-function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, community, personal, releaseDate }) {
+function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, community, personal, releaseDate, releaseDateSource = "external" }) {
   const tracks = buildStageOneAlbumTrackModels(detail, albumId);
   const knownDurations = tracks.map((track) => track.durationMs).filter((value) => Number.isFinite(value) && value > 0);
   return {
@@ -5666,6 +5688,7 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
     artist,
     artworkUrl,
     releaseDate: releaseDate || "",
+    releaseDatePrecision: album?.release_date_precision || album?.releaseDatePrecision || releaseDateSource,
     trackCount: tracks.length,
     durationMs: knownDurations.length === tracks.length && tracks.length ? knownDurations.reduce((sum, value) => sum + value, 0) : null,
     community: community ? { average: Number(community.avg), count: Number(community.count || 0) } : null,
@@ -5713,6 +5736,14 @@ window.addEventListener("click", (event) => {
     const albumId = document.querySelector("[data-bom-album-id]")?.dataset.bomAlbumId;
     void hydrateStageOneAlbumReviews(albumId);
   }
+});
+
+window.addEventListener("click", async (event) => {
+  const clearButton = event.target.closest("[data-clear-track-rating]");
+  if (!clearButton) return;
+  event.preventDefault();
+  event.stopPropagation();
+  await deleteTrackRating(clearButton.dataset.clearTrackRating);
 });
 
 function buildTrackListHtml(detail, savedAlbumId) {
@@ -7164,7 +7195,8 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
             artist: displayArtist,
             community: avg,
             personal: yourRating,
-            releaseDate: immediatelySavedAlbum.release_date || immediatelySavedAlbum.releaseDate || ""
+            releaseDate: immediatelySavedAlbum.original_release_date || immediatelySavedAlbum.release_date || immediatelySavedAlbum.releaseDate || "",
+            releaseDateSource: "stored"
           }));
           return;
         }
@@ -7485,7 +7517,8 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
           artist: displayArtist,
           community: refreshedAvg,
           personal: refreshedYourRating,
-          releaseDate
+          releaseDate,
+          releaseDateSource: detail?.date ? "external" : "stored"
         }));
         return;
       }
