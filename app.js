@@ -5600,6 +5600,121 @@ async function renderArtistDetail(artistItem) {
 
 
 
+function isStageOnePresentation() {
+  return new URLSearchParams(window.location.search).get("ui") === "stage1";
+}
+
+function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
+  const albumTitle = detail?.title || selectedItem?.title || "";
+  const artist = detail?.["artist-credit"]?.map((credit) => credit.name).filter(Boolean).join(", ") || selectedItem?.artist || "";
+  const albumSongs = (allSongs || []).filter((song) => Number(song.is_deleted || 0) === 0 && Number(song.album_id) === Number(savedAlbumId));
+  const rows = [];
+  const seenSongIds = new Set();
+  const seenExternalIds = new Set();
+  let fallbackNumber = 1;
+
+  const addTrack = ({ track = null, savedSong = null, isManual = false }) => {
+    const rawTitle = savedSong?.title || track?.title || track?.recording?.title || "Untitled track";
+    const title = String(rawTitle).replace(/\\[uU]([0-9a-fA-F]{4})/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
+    const number = Number(savedSong?.track_position || track?.position || fallbackNumber) || fallbackNumber;
+    const externalId = savedSong?.external_id || track?.recording?.id || "";
+    const averageData = savedSong ? getSongAverage(savedSong.id) : null;
+    const community = averageData ? { average: Number(averageData.avg), count: Number(averageData.count || 0) } : null;
+    const personal = savedSong
+      ? (getYourSongRating(savedSong.id) ?? getYourSongRatingByTitleArtist(title, savedSong.artist || artist))
+      : getYourSongRatingByTitleArtist(title, artist);
+    if (savedSong?.id) seenSongIds.add(Number(savedSong.id));
+    if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
+    rows.push({
+      index: Math.max(0, number - 1), number, title, artist, album: albumTitle,
+      durationMs: Number(track?.length || track?.recording?.length || 0) || null,
+      songId: savedSong?.id || null, externalId, community, personal, isManual,
+      ratingControlHtml: savedSong?.id ? renderStarSelector(`track-rating-${savedSong.id}`, personal) : "",
+      saveControlHtml: savedSong?.id ? "" : `<button class="save-track-btn" data-action="save-track" data-track-title="${escapeHtml(title)}" data-track-external-id="${escapeHtml(externalId)}" data-album-id="${savedAlbumId || ""}" aria-label="Save ${escapeHtml(title)}">Save</button>`
+    });
+    fallbackNumber += 1;
+  };
+
+  for (const medium of detail?.media || []) {
+    for (const track of medium.tracks || []) {
+      const trackTitle = track.title || track.recording?.title || "Untitled track";
+      const externalId = track.recording?.id || "";
+      const savedSong = albumSongs.find((song) => externalId && String(song.external_id || "") === String(externalId)) ||
+        albumSongs.find((song) => normaliseCompare(song.title || "") === normaliseCompare(trackTitle)) || null;
+      addTrack({ track, savedSong, isManual: savedSong?.external_source === "manual" });
+    }
+  }
+
+  albumSongs
+    .filter((song) => !seenSongIds.has(Number(song.id)))
+    .filter((song) => !song.external_id || !seenExternalIds.has(String(song.external_id)))
+    .forEach((song) => addTrack({ savedSong: song, isManual: song.external_source === "manual" || !song.external_source }));
+
+  rows.sort((a, b) => a.number - b.number || a.title.localeCompare(b.title));
+  const rated = rows.filter((row) => row.community).sort((a, b) => b.community.average - a.community.average);
+  const topThreshold = rated.length ? rated[Math.min(2, rated.length - 1)].community.average : null;
+  rows.forEach((row) => { row.isTopTrack = topThreshold !== null && row.community?.average >= topThreshold; });
+  return rows;
+}
+
+function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, community, personal, releaseDate }) {
+  const tracks = buildStageOneAlbumTrackModels(detail, albumId);
+  const knownDurations = tracks.map((track) => track.durationMs).filter((value) => Number.isFinite(value) && value > 0);
+  return {
+    albumId,
+    title: detail?.title || album?.title || selectedItem?.title || "Unknown album",
+    artist,
+    artworkUrl,
+    releaseDate: releaseDate || "",
+    trackCount: tracks.length,
+    durationMs: knownDurations.length === tracks.length && tracks.length ? knownDurations.reduce((sum, value) => sum + value, 0) : null,
+    community: community ? { average: Number(community.avg), count: Number(community.count || 0) } : null,
+    personal,
+    tracks,
+    backControlHtml: buildSelectedBackButton(),
+    artistControlHtml: renderClickableArtistName(artist),
+    albumRatingControlHtml: albumId ? renderStarSelector(`album-rating-${albumId}`, personal) : '<button id="importSelectedAlbumBtn">Save album</button>',
+    providerControlHtml: buildMusicProviderPanel({ type: "album", title: detail?.title || album?.title || selectedItem?.title || "", artist }).replace(">Play here<", ">Listen elsewhere<"),
+    shareControlHtml: buildSelectedSharePanel(selectedItem).replace(">Send<", ">Share album<"),
+    adminControlHtml: typeof renderSelectedAdminControls === "function" ? renderSelectedAdminControls({ albumId }) : ""
+  };
+}
+
+async function renderStageOneAlbum(model) {
+  if (!window.BOMAlbumUI) {
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+  }
+  if (!window.BOMAlbumUI) throw new Error("Album presentation did not load");
+  selectedItemDetail.innerHTML = window.BOMAlbumUI.render(model);
+  selectedItemDetail.dataset.bomAlbumSource = model.albumId ? "production" : "external";
+  performance.mark?.("bom-album-useful-content");
+  updateStickyPlayer(selectedItem);
+  scheduleSpotifyTrackCacheWarmup();
+  void hydrateStageOneAlbumReviews(model.albumId);
+}
+
+async function hydrateStageOneAlbumReviews(albumId) {
+  if (!albumId || !window.BOMAlbumUI) {
+    window.BOMAlbumUI?.renderReviews(window.BOMUI.SectionState({ title: "No reviews yet", message: "Reviews are available after this album is saved." }));
+    return;
+  }
+  try {
+    const reviews = await loadAlbumReviews(albumId, { throwOnError: true });
+    if (document.querySelector("[data-bom-album-id]")?.dataset.bomAlbumId !== String(albumId)) return;
+    window.BOMAlbumUI.renderReviews(renderAlbumReviewsSection(albumId, reviews));
+  } catch (error) {
+    console.warn("Album reviews unavailable", error?.message || error);
+    window.BOMAlbumUI.renderReviews(`<header class="bom-v1-album-section-header"><h2>Reviews</h2></header>${window.BOMUI.SectionState({ title: "Reviews unavailable", message: "The album is still available.", actionLabel: "Retry", action: "retry-album-reviews" })}`);
+  }
+}
+
+window.addEventListener("click", (event) => {
+  if (event.target.closest('[data-bom-action="retry-album-reviews"]')) {
+    const albumId = document.querySelector("[data-bom-album-id]")?.dataset.bomAlbumId;
+    void hydrateStageOneAlbumReviews(albumId);
+  }
+});
+
 function buildTrackListHtml(detail, savedAlbumId) {
 
   const trackAlbumTitle =
@@ -5841,7 +5956,7 @@ document.querySelectorAll(
 
 const MAX_REVIEW_LENGTH = 500;
 
-async function loadAlbumReviews(albumId) {
+async function loadAlbumReviews(albumId, { throwOnError = false } = {}) {
   const { data: reviews, error } = await supabaseClient
     .from("album_reviews")
     .select("*")
@@ -5850,6 +5965,7 @@ async function loadAlbumReviews(albumId) {
 
   if (error) {
     console.error("Load album reviews error", error);
+    if (throwOnError) throw error;
     return [];
   }
 
@@ -7017,8 +7133,9 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
         const albumId =
           immediatelySavedAlbum.id;
 
-        const albumReviews =
-          await loadAlbumReviews(albumId);
+        const albumReviews = isStageOnePresentation()
+          ? []
+          : await loadAlbumReviews(albumId);
 
         const avg =
           getAlbumAverage(albumId);
@@ -7037,6 +7154,20 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
           immediatelySavedAlbum.artist ||
           selectedItem.artist ||
           "";
+
+        if (isStageOnePresentation()) {
+          await renderStageOneAlbum(buildStageOneAlbumModel({
+            album: immediatelySavedAlbum,
+            detail: localDetail,
+            albumId,
+            artworkUrl: coverUrl,
+            artist: displayArtist,
+            community: avg,
+            personal: yourRating,
+            releaseDate: immediatelySavedAlbum.release_date || immediatelySavedAlbum.releaseDate || ""
+          }));
+          return;
+        }
 
         selectedItemDetail.innerHTML = `
           <div class="detail-panel">
@@ -7317,9 +7448,9 @@ if (releaseGroupId) {
   selectedItem.album_id ||
   null;
   
-  const albumReviews = albumId
-  ? await loadAlbumReviews(albumId)
-  : [];
+  const albumReviews = isStageOnePresentation()
+  ? []
+  : (albumId ? await loadAlbumReviews(albumId) : []);
 
 const albumReviewCount = albumReviews.length;
 
@@ -7327,7 +7458,7 @@ const albumReviewCount = albumReviews.length;
 
       const refreshedYourRating = albumId ? getYourAlbumRating(albumId) : null;
 
-const trackListHtml = buildTrackListHtml(detail, albumId);
+const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail, albumId);
 
       const displayArtist = detail?.["artist-credit"]?.map((credit) => credit.name).join(", ") || selectedItem.artist;
       const displayArtistId = detail?.["artist-credit"]?.[0]?.artist?.id || selectedItem.artistId || "";
@@ -7344,6 +7475,20 @@ const trackListHtml = buildTrackListHtml(detail, albumId);
         "";
 
       const releaseDate = detail?.date || selectedItem.releaseDate || "";
+
+      if (isStageOnePresentation()) {
+        await renderStageOneAlbum(buildStageOneAlbumModel({
+          album: refreshedSavedAlbum || selectedItem,
+          detail,
+          albumId,
+          artworkUrl: coverUrl,
+          artist: displayArtist,
+          community: refreshedAvg,
+          personal: refreshedYourRating,
+          releaseDate
+        }));
+        return;
+      }
 	  
 	  const chartPosition = await getChartPosition(
   selectedItem.type,
@@ -7472,7 +7617,9 @@ ${albumId
 
       console.warn("Album detail unavailable", err?.message || err);
 
-      selectedItemDetail.innerHTML = `
+      selectedItemDetail.innerHTML = isStageOnePresentation() && window.BOMUI
+        ? `<div class="bom-v1-album bom-v1-album-error">${window.BOMUI.SectionState({ title: "Album details unavailable", message: "We could not load this album right now.", actionLabel: "Retry", action: "retry-album" })}</div>`
+        : `
   <div class="empty-state">
     <h3>Album details unavailable</h3>
     <p class="small">We found the album, but could not load a full track list from MusicBrainz yet.</p>
@@ -12303,6 +12450,10 @@ window.toggleReviewEditor = function () {
 };
 
 window.addEventListener("popstate", async () => { await handleIncomingShareLink(); });
+
+window.addEventListener("click", (event) => {
+  if (event.target.closest('[data-bom-action="retry-album"]')) void renderSelectedItem();
+});
 
 
 
