@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stage 2A track-rating DOM regression</title>
+  <link rel="stylesheet" href="../style.css?v=80">
+  <link rel="stylesheet" href="../bom-foundation.css?v=9">
+</head>
+<body class="bom-shell-v1">
+  <main class="bom-v1-album" style="max-width:1000px">
+    <section class="bom-v1-album-section bom-v1-tracks-section">
+      <header class="bom-v1-album-section-header"><h2>Tracks</h2></header>
+      <div class="bom-v1-track-table" id="testRows"></div>
+      <output id="result" aria-live="polite">Running…</output>
+    </section>
+  </main>
+  <script>
+    const row = (id, title, rating) => `<div class="track-row-table bom-v1-track-row" data-song-id="${id}">
+      <div class="track-col-number">${id}</div><div class="track-col-title"><strong>${title}</strong></div>
+      <div class="bom-v1-track-time" data-label="Time">—</div><div class="track-col-average" data-label="Community"><strong>8.0</strong><span> / 10</span></div>
+      <div class="track-col-your-rating" data-label="You"><span class="bom-v1-track-rating-slot">${control(id, rating)}</span></div>
+      <div class="track-col-actions"><button class="track-preview-btn" type="button">▶</button></div></div>`;
+    function control(id, rating) {
+      const rated = rating !== null;
+      return `<details class="bom-v1-track-rating-control"><summary class="bom-v1-track-rating-trigger">${rated ? rating + " / 10" : "Rate +"}</summary>
+        <div class="bom-v1-track-rating-popover">${Array.from({length:10},(_,i)=>`<button type="button" class="bom-v1-track-rating-choice${i+1===rating?" is-selected":""}" data-rating="${i+1}">${i+1}</button>`).join("")}${rated?'<button type="button" class="bom-v1-track-rating-clear">Clear</button>':""}</div></details>`;
+    }
+    testRows.innerHTML = row(1, "A rated track with a deliberately long title", 8) + row(2, "An unrated track", null);
+    testRows.addEventListener("click", (event) => {
+      const choice = event.target.closest(".bom-v1-track-rating-choice");
+      const clear = event.target.closest(".bom-v1-track-rating-clear");
+      if (!choice && !clear) return;
+      const slot = event.target.closest(".bom-v1-track-rating-slot");
+      const id = event.target.closest(".bom-v1-track-row").dataset.songId;
+      slot.innerHTML = control(id, choice ? Number(choice.dataset.rating) : null);
+    });
+    const visibleChoices = () => [...document.querySelectorAll(".bom-v1-track-rating-choice")].filter((button) => button.getClientRects().length);
+    (async () => {
+      const rated = document.querySelector('[data-song-id="1"]');
+      const unrated = document.querySelector('[data-song-id="2"]');
+      const assert = (value, message) => { if (!value) throw new Error(message); };
+      assert(visibleChoices().length === 0, "closed selector leaked choices");
+      rated.querySelector("summary").click();
+      assert(visibleChoices().length === 10, "rated selector did not open");
+      rated.querySelector('[data-rating="9"]').click();
+      assert(rated.querySelector("summary").textContent.trim() === "9 / 10", "changed value did not update");
+      rated.querySelector("summary").click();
+      assert(rated.querySelector(".is-selected").textContent === "9", "changed value was not selected on reopen");
+      rated.querySelector(".bom-v1-track-rating-clear").click();
+      assert(rated.querySelector("summary").textContent.trim() === "Rate +", "clear did not reset control");
+      unrated.querySelector("summary").click();
+      assert(visibleChoices().length === 10, "unrated selector did not open");
+      result.value = "PASS: Change, numeric selection, reopen, Clear and Rate +";
+      document.documentElement.dataset.testResult = "pass";
+    })().catch((error) => { result.value = `FAIL: ${error.message}`; document.documentElement.dataset.testResult = "fail"; });
+  </script>
+</body>
+</html>

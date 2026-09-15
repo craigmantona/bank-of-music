@@ -3,17 +3,18 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
-const [html, app, album, styles] = await Promise.all([
+const [html, app, album, styles, browserRegression] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-album.js", import.meta.url), "utf8"),
-  readFile(new URL("../bom-foundation.css", import.meta.url), "utf8")
+  readFile(new URL("../bom-foundation.css", import.meta.url), "utf8"),
+  readFile(new URL("./stage2a-album-browser.test.html", import.meta.url), "utf8")
 ]);
 
 test("Stage 2A remains opt-in and loads after the approved foundation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /foundationScript\.addEventListener\("load"/);
-  assert.match(html, /bom-album\.js\?v=2/);
+  assert.match(html, /bom-album\.js\?v=3/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)/);
 });
 
@@ -68,6 +69,13 @@ test("track ratings use a compact disclosure while retaining the existing handle
   assert.match(app, /await deleteTrackRating/);
   assert.doesNotMatch(album, /★/);
   assert.match(styles, /\.bom-v1-track-rating-popover/);
+});
+
+test("browser regression harness exercises the visible rating lifecycle", () => {
+  for (const expectation of ["closed selector leaked choices", "rated selector did not open", "changed value did not update", "changed value was not selected on reopen", "clear did not reset control", "unrated selector did not open"]) {
+    assert.match(browserRegression, new RegExp(expectation));
+  }
+  assert.match(browserRegression, /dataset\.testResult/);
 });
 
 test("release dates display only the precision supported by their source", () => {

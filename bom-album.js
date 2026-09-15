@@ -39,12 +39,12 @@
 
   function trackRow(track) {
     const topClass = track.isTopTrack ? " bom-v1-top-track" : "";
-    return `<div class="track-row-table bom-v1-track-row${topClass}" data-track-index="${track.index}" data-song-id="${escapeHtml(track.songId || "")}">
+    return `<div id="bomTrack-${escapeHtml(track.songId || track.index)}" class="track-row-table bom-v1-track-row${topClass}" data-track-index="${track.index}" data-song-id="${escapeHtml(track.songId || "")}">
       <div class="track-col-number">${escapeHtml(track.number)}</div>
       <div class="track-col-title"><strong>${escapeHtml(track.title)}</strong>${track.isManual ? '<small>Manual track</small>' : ""}</div>
       <div class="bom-v1-track-time" data-label="Time">${duration(track.durationMs)}</div>
       <div class="track-col-average" data-label="Community" ${track.community ? `title="${track.community.count} community rating${track.community.count === 1 ? "" : "s"}" aria-label="${track.community.average.toFixed(1)} out of 10 from ${track.community.count} community rating${track.community.count === 1 ? "" : "s"}"` : 'aria-label="No community ratings"'}>${track.community ? `<strong>${track.community.average.toFixed(1)}</strong><span> / 10</span>` : "—"}</div>
-      <div class="track-col-your-rating${track.personal !== null ? " has-rating" : ""}" data-label="You"><span class="bom-v1-track-personal-value">${track.personal !== null ? `<strong>${track.personal}</strong><span> / 10</span>` : "—"}</span><span class="bom-v1-track-rating-slot">${track.ratingControlHtml || ""}</span></div>
+      <div class="track-col-your-rating${track.personal !== null ? " has-rating" : ""}" data-label="You"><span class="bom-v1-track-rating-slot">${track.ratingControlHtml || `<span class="bom-v1-track-personal-value">${track.personal !== null ? `<strong>${track.personal}</strong><span> / 10</span>` : "—"}</span>`}</span></div>
       <div class="track-col-actions">
         <button type="button" class="track-preview-btn" data-track-preview="true" data-provider-type="song" data-provider-title="${escapeHtml(track.title)}" data-provider-artist="${escapeHtml(track.artist)}" data-provider-album="${escapeHtml(track.album)}" aria-label="Preview ${escapeHtml(track.title)}"><span aria-hidden="true">▶</span></button>
         ${track.saveControlHtml || ""}
@@ -56,11 +56,11 @@
     if (!model.tracks.length) return `<section class="bom-v1-album-section"><h2>Tracks</h2>${window.BOMUI.SectionState({ title: "Track list unavailable", message: "No track information is available for this release." })}</section>`;
     return `<section class="bom-v1-album-section bom-v1-tracks-section">
       <header class="bom-v1-album-section-header"><h2>Tracks</h2><span>${model.trackCount} track${model.trackCount === 1 ? "" : "s"}</span></header>
-      <div id="albumTrackPreviewDock" class="album-track-preview-dock hidden" aria-live="polite"></div>
       <div class="bom-v1-track-table">
         <div class="bom-v1-track-header" aria-hidden="true"><span>#</span><span>Track</span><span>Time</span><span>Community</span><span>You</span><span></span></div>
         ${model.tracks.map(trackRow).join("")}
       </div>
+      <div id="albumTrackPreviewDock" class="album-track-preview-dock hidden" aria-live="polite"></div>
     </section>`;
   }
 

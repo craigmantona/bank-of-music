@@ -2082,17 +2082,28 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
   if (averageEl) {
 
-    averageEl.textContent = avgData ? `⭐ ${avgData.avg.toFixed(1)} / 10` : "No ratings";
+    if (isStageOnePresentation()) {
+      if (avgData) {
+        const count = Number(avgData.count || 0);
+        averageEl.innerHTML = `<strong>${avgData.avg.toFixed(1)}</strong><span> / 10</span>`;
+        averageEl.title = `${count} community rating${count === 1 ? "" : "s"}`;
+        averageEl.setAttribute("aria-label", `${avgData.avg.toFixed(1)} out of 10 from ${count} community rating${count === 1 ? "" : "s"}`);
+      } else {
+        averageEl.textContent = "—";
+        averageEl.removeAttribute("title");
+        averageEl.setAttribute("aria-label", "No community ratings");
+      }
+    } else {
+      averageEl.textContent = avgData ? `⭐ ${avgData.avg.toFixed(1)} / 10` : "No ratings";
+    }
 
   }
 
 
 
   if (yourRatingEl) {
-    const compactValue = yourRatingEl.querySelector(".bom-v1-track-personal-value");
     const compactSlot = yourRatingEl.querySelector(".bom-v1-track-rating-slot");
-    if (compactValue && compactSlot) {
-      compactValue.innerHTML = yourRating !== null ? `<strong>${yourRating}</strong><span> / 10</span>` : "—";
+    if (compactSlot) {
       compactSlot.innerHTML = buildCompactTrackRatingControl(songId, yourRating);
     } else {
       yourRatingEl.textContent = yourRating !== null ? `${yourRating}/10` : "—";
@@ -5615,11 +5626,11 @@ function buildCompactTrackRatingControl(songId, currentValue) {
   const hasRating = currentValue !== null && Number.isFinite(Number(currentValue));
   const targetId = `track-rating-${songId}`;
   return `<details class="bom-v1-track-rating-control">
-    <summary class="bom-v1-track-rating-trigger">${hasRating ? "Change" : "Rate +"}</summary>
+    <summary class="bom-v1-track-rating-trigger" aria-label="${hasRating ? `Change rating, currently ${Number(currentValue)} out of 10` : "Rate this track"}">${hasRating ? `${Number(currentValue)} / 10` : "Rate +"}</summary>
     <div class="bom-v1-track-rating-popover" role="group" aria-label="Rate this track from 1 to 10">
       ${Array.from({ length: 10 }, (_, index) => {
         const rating = index + 1;
-        return `<button type="button" class="star-option bom-v1-track-rating-choice${rating === Number(currentValue) ? " is-selected" : ""}" data-target-input="${targetId}" data-rating="${rating}" aria-label="Rate ${rating} out of 10" onclick="handleStarOptionClick(event, this); return false;">${rating}</button>`;
+        return `<button type="button" class="bom-v1-track-rating-choice${rating === Number(currentValue) ? " is-selected" : ""}" data-target-input="${targetId}" data-rating="${rating}" aria-label="Rate ${rating} out of 10" onclick="handleStarOptionClick(event, this); return false;">${rating}</button>`;
       }).join("")}
       ${hasRating ? `<button type="button" class="bom-v1-track-rating-clear delete-track-rating-btn" data-clear-track-rating="${songId}">Clear</button>` : ""}
     </div>
