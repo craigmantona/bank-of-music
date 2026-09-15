@@ -386,6 +386,41 @@ function showOnlySection(targetId) {
   }, 100);
 }
 
+/*
+  Stage 1 presentation bridge.
+  It exposes existing application actions without duplicating their data,
+  authentication, Spotify, rating, review or catalogue behaviour.
+*/
+window.BOMPresentationBridge = Object.freeze({
+  showSection: (sectionId) => showOnlySection(sectionId),
+  showDiscover: () => {
+    selectedItem = null;
+    showOnlySection("recommendationsSection");
+  },
+  showSearch: () => showOnlySection("searchSection"),
+  showCharts: () => window.goCharts(),
+  showRatings: () => showOnlySection("librarySection"),
+  showSpotify: () => {
+    showOnlySection("settingsSection");
+    return refreshSpotifyConnectionUI();
+  },
+  showProfile: () => showUserProfile(),
+  logout: () => logOut(),
+  runSearch: (term) => {
+    if (globalSearchInput) globalSearchInput.value = String(term || "");
+    showOnlySection("searchSection");
+    return runGlobalSearch();
+  },
+  getState: () => ({
+    authenticated: Boolean(currentUser),
+    displayName: getUserDisplayName(),
+    isAdmin: Boolean(isAdmin),
+    currentSectionId
+  })
+});
+
+window.dispatchEvent(new CustomEvent("bom:presentation-ready"));
+
 }
 
 

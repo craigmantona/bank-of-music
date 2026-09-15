@@ -10,11 +10,32 @@
  <title>Bank of Music</title>
  
  <link rel="stylesheet" href="style.css?v=80" />
+ <script>
+  /* Stage 1 assets are development-only and add no requests to the legacy UI. */
+  if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
+    ["regular", "semibold", "extrabold"].forEach(function (weight) {
+      var preload = document.createElement("link");
+      preload.rel = "preload";
+      preload.as = "font";
+      preload.type = "font/ttf";
+      preload.crossOrigin = "anonymous";
+      preload.href = "assets/fonts/manrope-" + weight + ".ttf";
+      document.head.appendChild(preload);
+    });
+
+    var foundationStyles = document.createElement("link");
+    foundationStyles.rel = "stylesheet";
+    foundationStyles.href = "bom-foundation.css?v=2";
+    document.head.appendChild(foundationStyles);
+
+  }
+ </script>
  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
  <script src="config.js"></script>
 </head>
  
 <body>
+ <div id="bomStageOneShell" class="bom-v1-shell" hidden></div>
  <div class="container">
  
    <header class="hero" id="mainHeader">
@@ -381,7 +402,14 @@
   })();
 </script>
 
-<script src="app.js?v=81"></script>
+<script src="app.js?v=83"></script>
+<script>
+  if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
+    var foundationScript = document.createElement("script");
+    foundationScript.src = "bom-foundation.js?v=1";
+    document.body.appendChild(foundationScript);
+  }
+</script>
  <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
 </body>
 </html>
