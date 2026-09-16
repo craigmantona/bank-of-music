@@ -4768,8 +4768,14 @@ async function fetchArtistImagePremium(artistName) {
           .find((img) => img["#text"]);
 
         if (best?.["#text"]) {
-          return best["#text"]
-  .replace("lastfm.freetls.fastly.net", "lastfm-img2.akamaized.net");
+          const lastFmImage = best["#text"]
+            .replace("lastfm.freetls.fastly.net", "lastfm-img2.akamaized.net");
+
+          // Last.fm returns this shared image when it has no artist photograph.
+          // Continue through BOM's existing image sources instead of presenting it.
+          if (!/2a96cbd8b46e442fc41c2b86b821562f/i.test(lastFmImage)) {
+            return lastFmImage;
+          }
         }
 
       }
@@ -4801,7 +4807,7 @@ async function fetchArtistImagePremium(artistName) {
   "";
 
 if (deezerImage) {
-  return `https://images.weserv.nl/?url=${encodeURIComponent(deezerImage.replace(/^https?:\/\//, ""))}`;
+  return deezerImage;
 }
 
     }
@@ -4822,17 +4828,11 @@ try {
     const wikiData = await wikiResponse.json();
 
     if (wikiData?.thumbnail?.source) {
-      const wikiThumb = wikiData.thumbnail.source.replace(/\/\d+px-/, "/600px-");
-
-      return `https://images.weserv.nl/?url=${encodeURIComponent(
-        wikiThumb.replace(/^https?:\/\//, "")
-      )}`;
+      return wikiData.thumbnail.source;
     }
 
     if (wikiData?.originalimage?.source) {
-      return `https://images.weserv.nl/?url=${encodeURIComponent(
-        wikiData.originalimage.source.replace(/^https?:\/\//, "")
-      )}`;
+      return wikiData.originalimage.source;
     }
   }
 } catch (err) {
@@ -5479,9 +5479,11 @@ async function renderArtistDetail(artistItem) {
       artistName,
       artistDetail,
       artistItem,
+      // Stage 2B never promotes album artwork or generated avatars into the
+      // artist-photo position. The presentation supplies its own quiet fallback.
       imageUrl: /(api\.dicebear\.com|2a96cbd8b46e442fc41c2b86b821562f)/i.test(premiumArtistImage || "")
-        ? (displayAlbums.find((album) => album.coverUrl)?.coverUrl || "")
-        : bannerUrl,
+        ? ""
+        : premiumArtistImage,
       albums: displayAlbums,
       savedSongs
     }), displayAlbums);

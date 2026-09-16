@@ -85,30 +85,23 @@
     return `<div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable"><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
   }
 
-  function summary(model) {
-    const items = [];
-    if (model.highestAlbum) items.push(`<div><span>Highest-rated album</span><strong>${escapeHtml(model.highestAlbum.title)}</strong><small>${model.highestAlbum.community.average.toFixed(1)} / 10</small></div>`);
-    if (model.highestTrack) items.push(`<div><span>Highest-rated track</span><strong>${escapeHtml(model.highestTrack.title)}</strong><small>${model.highestTrack.community.average.toFixed(1)} / 10</small></div>`);
-    return items.length ? `<div class="bom-v1-artist-summary">${items.join("")}</div>` : "";
-  }
-
   function render(model) {
     currentModel = model;
     discographySort = "release";
     trackLimit = 10;
     const metadata = model.metadata.filter(Boolean).join(" · ");
     return `<article class="bom-v1-artist" data-bom-artist="${escapeHtml(model.name)}">
-      <div class="bom-v1-artist-back">${model.backControlHtml || ""}</div>
+      <nav class="bom-v1-artist-breadcrumb" aria-label="Breadcrumb">${model.backControlHtml || ""}<span aria-hidden="true">/</span><span>Artist</span></nav>
       <section class="bom-v1-artist-hero">
-        <div class="bom-v1-artist-identity"><h1>${escapeHtml(model.name)}</h1>${metadata ? `<p>${escapeHtml(metadata)}</p>` : ""}${model.description ? `<p class="bom-v1-artist-description">${escapeHtml(model.description)}</p>` : ""}<div class="bom-v1-artist-follow-wrap">${model.followControlHtml || ""}</div>${summary(model)}</div>
+        <div class="bom-v1-artist-identity"><span class="bom-v1-artist-eyebrow">The artist</span><h1>${escapeHtml(model.name)}</h1>${metadata ? `<p>${escapeHtml(metadata)}</p>` : ""}<div class="bom-v1-artist-follow-wrap">${model.followControlHtml || ""}</div></div>
         <div class="bom-v1-artist-photo-wrap">${heroImage(model)}</div>
       </section>
       <section class="bom-v1-artist-section" aria-labelledby="bomV1DiscographyHeading">
-        <header class="bom-v1-artist-section-heading"><div><h2 id="bomV1DiscographyHeading">Discography</h2><p>Albums, release dates and ratings.</p></div><label>Sort<select id="bomV1ArtistSort"><option value="release">Release date</option><option value="community">Highest community rated</option><option value="personal">Highest personally rated</option></select></label></header>
+        <header class="bom-v1-artist-section-heading"><div><h2 id="bomV1DiscographyHeading">The records</h2><p>A selection from the discography.</p></div><label>Sort<select id="bomV1ArtistSort"><option value="release">Release date</option><option value="community">Highest community rated</option><option value="personal">Highest personally rated</option></select></label></header>
         <div id="bomV1ArtistDiscography" class="bom-v1-artist-discography"></div>
       </section>
       <section class="bom-v1-artist-section" aria-labelledby="bomV1TopTracksHeading">
-        <header class="bom-v1-artist-section-heading"><div><h2 id="bomV1TopTracksHeading">Highest-rated tracks</h2><p>Ranked by community track rating.</p></div><span>Community</span></header>
+        <header class="bom-v1-artist-section-heading"><div><h2 id="bomV1TopTracksHeading">Highest-rated tracks</h2><p>Ranked by community rating.</p></div><span>Community</span></header>
         <div id="bomV1ArtistTracks" class="bom-v1-artist-tracks"></div>
         <button type="button" id="bomV1ArtistTrackLimit" class="bom-v1-artist-more">View Top 50 →</button>
       </section>
@@ -117,9 +110,9 @@
 
   function renderLoading(name, backControlHtml = "") {
     return `<article class="bom-v1-artist bom-v1-artist-loading" aria-busy="true">
-      <div class="bom-v1-artist-back">${backControlHtml}</div>
-      <section class="bom-v1-artist-hero"><div class="bom-v1-artist-identity"><h1>${escapeHtml(name)}</h1>${window.BOMUI.Skeleton({ label: "Loading artist details", lines: 3 })}</div><div class="bom-v1-artist-photo-wrap">${window.BOMUI.Skeleton({ label: "Loading artist image", lines: 1 })}</div></section>
-      <section class="bom-v1-artist-section"><header class="bom-v1-artist-section-heading"><h2>Discography</h2></header>${window.BOMUI.Skeleton({ label: "Loading discography", lines: 4 })}</section>
+      <nav class="bom-v1-artist-breadcrumb" aria-label="Breadcrumb">${backControlHtml}<span aria-hidden="true">/</span><span>Artist</span></nav>
+      <section class="bom-v1-artist-hero"><div class="bom-v1-artist-identity"><span class="bom-v1-artist-eyebrow">The artist</span><h1>${escapeHtml(name)}</h1>${window.BOMUI.Skeleton({ label: "Loading artist details", lines: 2 })}</div><div class="bom-v1-artist-photo-wrap">${window.BOMUI.Skeleton({ label: "Loading artist image", lines: 1 })}</div></section>
+      <section class="bom-v1-artist-section"><header class="bom-v1-artist-section-heading"><div><h2>The records</h2><p>A selection from the discography.</p></div></header>${window.BOMUI.Skeleton({ label: "Loading discography", lines: 4 })}</section>
     </article>`;
   }
 

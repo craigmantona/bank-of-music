@@ -12,7 +12,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=1/);
+  assert.match(html, /bom-artist\.js\?v=2/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -31,9 +31,13 @@ test("Artist adapter reuses catalogue, ratings, artwork and follow functions", (
   assert.match(app, /buildStageOneArtistModel/);
   assert.match(app, /window\.BOMArtistBridge/);
   assert.match(app, /2a96cbd8b46e442fc41c2b86b821562f/);
+  assert.match(app, /imageUrl:[\s\S]*\? ""[\s\S]*: premiumArtistImage/);
+  assert.doesNotMatch(app.match(/if \(isStageOnePresentation\(\)\)[\s\S]*?return;/)?.[0] || "", /displayAlbums\.find\(\(album\) => album\.coverUrl\)/);
 });
 
 test("Discography supports release, community and personal ordering", () => {
+  assert.match(artist, />The records</);
+  assert.match(artist, /A selection from the discography\./);
   assert.match(artist, /value="release">Release date/);
   assert.match(artist, /value="community">Highest community rated/);
   assert.match(artist, /value="personal">Highest personally rated/);
@@ -52,11 +56,12 @@ test("Top tracks use community track ratings with competition ranks and Top 10 o
 
 test("responsive Artist layouts and missing artwork states are present", () => {
   assert.match(styles, /\.bom-v1-artist-discography/);
-  assert.match(styles, /repeat\(5, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /repeat\(4, minmax\(0, 1fr\)\)/);
   assert.match(styles, /@media \(max-width: 900px\)/);
   assert.match(styles, /@media \(max-width: 600px\)/);
   assert.match(styles, /repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(artist, /Artist image unavailable/);
+  assert.match(artist, /bom-v1-artist-eyebrow">The artist/);
   assert.match(artist, /Artwork unavailable/);
 });
 

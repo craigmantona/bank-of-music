@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=10";
+    foundationStyles.href = "bom-foundation.css?v=11";
     document.head.appendChild(foundationStyles);
 
   }
@@ -402,7 +402,7 @@
   })();
 </script>
 
-<script src="app.js?v=85"></script>
+<script src="app.js?v=86"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
     var foundationScript = document.createElement("script");
@@ -412,7 +412,7 @@
       albumScript.src = "bom-album.js?v=3";
       albumScript.addEventListener("load", function () {
         var artistScript = document.createElement("script");
-        artistScript.src = "bom-artist.js?v=1";
+        artistScript.src = "bom-artist.js?v=2";
         document.body.appendChild(artistScript);
       });
       document.body.appendChild(albumScript);
