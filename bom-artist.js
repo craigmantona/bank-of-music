@@ -110,10 +110,10 @@
 
   function heroImage(model) {
     if (isApprovedArtistImageUrl(model.imageUrl)) {
-      const source = artistImageSource(model.imageUrl);
-      return `<img class="bom-v1-artist-photo" src="${escapeHtml(model.imageUrl)}" alt="${escapeHtml(model.name)}" data-bom-artist-image-source="${escapeHtml(source)}" fetchpriority="high" decoding="async" onload="this.classList.toggle('is-wide', this.naturalWidth / Math.max(this.naturalHeight, 1) >= 2.1)" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" hidden><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
+      const source = model.imageMeta?.provider || artistImageSource(model.imageUrl);
+      return `<img class="bom-v1-artist-photo" src="${escapeHtml(model.imageUrl)}" alt="${escapeHtml(model.name)}" data-bom-artist-image-source="${escapeHtml(source)}" data-bom-artist-identity-source="${escapeHtml(model.imageMeta?.identitySource || "")}" data-bom-artist-identity-url="${escapeHtml(model.imageMeta?.identityUrl || "")}" data-bom-artist-image-width="${escapeHtml(model.imageMeta?.width || "")}" data-bom-artist-image-height="${escapeHtml(model.imageMeta?.height || "")}" fetchpriority="high" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" hidden><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
     }
-    return `<div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable"><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
+    return `<div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" data-bom-artist-image-source="${escapeHtml(model.imageMeta?.provider || "BOM placeholder")}" data-bom-artist-identity-source="${escapeHtml(model.imageMeta?.identitySource || "No validated artist photograph")}"><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
   }
 
   function render(model) {

@@ -4820,113 +4820,301 @@ async function fetchArtistAlbumsFromApi(artistName, artistId = "") {
 async function fetchArtistDetail(externalId) {
   if (!externalId) return null;
 
-  const url = `https://musicbrainz.org/ws/2/artist/${encodeURIComponent(externalId)}?inc=tags+genres+aliases&fmt=json`;
+  const url = `https://musicbrainz.org/ws/2/artist/${encodeURIComponent(externalId)}?inc=tags+genres+aliases+url-rels&fmt=json`;
 
-  const response = await fetch(url, { headers: { Accept: "application/json" } });
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    if (response.ok) return await response.json();
+    if (attempt < 2 && (response.status === 503 || response.status === 429)) {
+      await new Promise((resolve) => window.setTimeout(resolve, 1200));
+      continue;
+    }
+    return null;
+  }
+  return null;
 
-  if (!response.ok) return null;
+}
 
-  return await response.json();
+async function resolveArtistIdentityForImage(artistName, preferredArtistId = "", preferredDetail = null) {
+  if (preferredArtistId && preferredDetail?.id === preferredArtistId) return { artistId: preferredArtistId, detail: preferredDetail };
+  if (preferredArtistId) {
+    const detail = preferredDetail || await fetchArtistDetail(preferredArtistId);
+    if (detail) return { artistId: preferredArtistId, detail };
+  }
 
+  const endpoint = new URL("https://musicbrainz.org/ws/2/artist");
+  endpoint.search = new URLSearchParams({ query: `artist:\"${artistName.replace(/\"/g, "")}\"`, fmt: "json", limit: "10" }).toString();
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await fetch(endpoint.toString(), { headers: { Accept: "application/json" } });
+    if (response.ok) {
+      const matches = ((await response.json())?.artists || [])
+        .filter((artist) => normaliseCompare(artist.name) === normaliseCompare(artistName))
+        .filter((artist) => artist.type && artist.id)
+        .sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+      const match = matches[0];
+      if (!match) return { artistId: "", detail: null };
+      await new Promise((resolve) => window.setTimeout(resolve, 1100));
+      return { artistId: match.id, detail: await fetchArtistDetail(match.id) };
+    }
+    if (attempt < 2 && (response.status === 503 || response.status === 429)) {
+      await new Promise((resolve) => window.setTimeout(resolve, 1200));
+      continue;
+    }
+    break;
+  }
+  return { artistId: "", detail: null };
 }
 
 
 
-async function fetchArtistImagePremium(artistName) {
+const ARTIST_IMAGE_CACHE_PREFIX = "bom_artist_image_v10:";
+const ARTIST_IMAGE_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 14;
+const artistImageMemoryCache = new Map();
 
-  if (!artistName) return "";
+function isMusicalArtistContext(value) {
+  return /\b(singer|songwriter|musician|rapper|composer|record producer|musical artist|music group|rock band|pop band|band|duo|trio|quartet|vocalist|instrumentalist)\b/i.test(String(value || ""));
+}
 
-  // 1. Try Last.fm first
+function isSuitableArtistImageFilename(value) {
+  return !/(album|single|ep[._ -]?cover|record[._ -]?cover|sleeve|logo|wordmark|composite|collage|montage|poster|advert|ticket|prop|mini.?disc|ostinato|chord|sheet.?music|scenery|landscape|desert|satellite|building|meter|tree|microphones?|instruments?|statue|sculpture|mural|museum|memorabilia|waxwork|graffiti|costume|magazine|book|publication|newspaper)/i.test(String(value || ""));
+}
+
+function isSuitableArtistImageMetadata(value) {
+  return !/(montage|composite|collage|album cover|record sleeve|logo|wordmark|museum exhibits|statues|sculptures|waxworks|memorabilia|magazines|books|publications|newspapers)/i.test(String(value || ""));
+}
+
+function getArtistImageCacheKey(artistName, artistId = "") {
+  return `${ARTIST_IMAGE_CACHE_PREFIX}${artistId || normaliseCompare(artistName)}`;
+}
+
+function readArtistImageCache(artistName, artistId = "") {
+  const key = getArtistImageCacheKey(artistName, artistId);
+  if (artistImageMemoryCache.has(key)) return artistImageMemoryCache.get(key);
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(key) || "null");
+    if (cached && Date.now() - Number(cached.cachedAt || 0) < ARTIST_IMAGE_CACHE_MAX_AGE_MS) {
+      artistImageMemoryCache.set(key, cached.value);
+      return cached.value;
+    }
+  } catch (_error) {}
+  return null;
+}
+
+function writeArtistImageCache(artistName, artistId, value) {
+  const key = getArtistImageCacheKey(artistName, artistId);
+  artistImageMemoryCache.set(key, value);
+  try {
+    sessionStorage.setItem(key, JSON.stringify({ cachedAt: Date.now(), value }));
+  } catch (_error) {}
+  return value;
+}
+
+function getMusicBrainzRelation(artistDetail, type) {
+  return (artistDetail?.relations || []).find((relation) => relation.type === type && !relation.ended && relation.url?.resource) || null;
+}
+
+function getCommonsFilename(value) {
+  const clean = decodeURIComponent(String(value || "").split("?")[0]);
+  const match = clean.match(/(?:File:|\/wiki\/File:)(.+)$/i);
+  return match ? match[1].replace(/_/g, " ") : "";
+}
+
+async function fetchArtistImageJson(url, options = {}, attempts = 3) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const response = await fetch(url, options);
+    if (response.ok) return await response.json();
+    if (attempt < attempts - 1 && (response.status === 429 || response.status === 503)) {
+      await new Promise((resolve) => window.setTimeout(resolve, 1000 * (attempt + 1)));
+      continue;
+    }
+    return null;
+  }
+  return null;
+}
+
+async function fetchCommonsArtistImage(filename, identity) {
+  if (!filename || !isSuitableArtistImageFilename(filename)) return null;
+  const endpoint = new URL("https://commons.wikimedia.org/w/api.php");
+  endpoint.search = new URLSearchParams({ action: "query", format: "json", origin: "*", prop: "imageinfo", iiprop: "url|size|mime|extmetadata", iiurlwidth: "1200", titles: `File:${filename}` }).toString();
+  const data = await fetchArtistImageJson(endpoint.toString());
+  if (!data) return null;
+  const pages = Object.values(data?.query?.pages || {});
+  const info = pages[0]?.imageinfo?.[0];
+  const metadataText = `${info?.extmetadata?.ImageDescription?.value || ""} ${info?.extmetadata?.Categories?.value || ""}`;
+  if (!isSuitableArtistImageMetadata(metadataText)) return null;
+  const originalWidth = Number(info?.width || 0);
+  const originalHeight = Number(info?.height || 0);
+  const useThumbnail = originalWidth > 1200 && info?.thumburl;
+  const imageUrl = (useThumbnail ? info.thumburl : info?.url) || "";
+  if (!imageUrl || !/^https:\/\/(?:upload|thumb)\.wikimedia\.org\//i.test(imageUrl)) return null;
+  const width = useThumbnail ? Number(info.thumbwidth || 1200) : originalWidth;
+  const height = useThumbnail ? Number(info.thumbheight || 0) : originalHeight;
+  return {
+    url: imageUrl,
+    provider: "Wikimedia Commons",
+    identitySource: identity.source,
+    identityUrl: identity.url,
+    imageIdentity: filename,
+    width,
+    height,
+    originalWidth,
+    originalHeight
+  };
+}
+
+async function fetchCommonsCategoryArtistImage(category, artistName, identity) {
+  if (!category || !artistName) return null;
+  const endpoint = new URL("https://commons.wikimedia.org/w/api.php");
+  endpoint.search = new URLSearchParams({ action: "query", format: "json", origin: "*", generator: "categorymembers", gcmtitle: `Category:${category}`, gcmtype: "file", gcmlimit: "50", prop: "imageinfo", iiprop: "url|size|mime|extmetadata", iiurlwidth: "1200" }).toString();
+  const data = await fetchArtistImageJson(endpoint.toString());
+  if (!data) return null;
+  const artistKey = normaliseCompare(artistName);
+  const candidates = Object.values(data?.query?.pages || {})
+    .map((page) => ({ filename: String(page.title || "").replace(/^File:/i, ""), info: page.imageinfo?.[0] }))
+    .filter((item) => item.info?.mime === "image/jpeg" && item.info.width >= 800 && item.info.height >= 300)
+    .filter((item) => isSuitableArtistImageFilename(item.filename))
+    .filter((item) => isSuitableArtistImageMetadata(`${item.info.extmetadata?.ImageDescription?.value || ""} ${item.info.extmetadata?.Categories?.value || ""}`))
+    .map((item) => {
+      const fileKey = normaliseCompare(item.filename.replace(/\.[a-z0-9]+$/i, ""));
+      const categories = String(item.info.extmetadata?.Categories?.value || "");
+      let score = categories.toLowerCase().split("|").some((value) => normaliseCompare(value) === artistKey) ? 60 : 0;
+      if (fileKey === artistKey) score += 200;
+      else if (fileKey.includes(artistKey)) score += 100;
+      const description = String(item.info.extmetadata?.ImageDescription?.value || "");
+      const depictsPeople = /\b(live|concert|perform|band|group|members?|portrait|singer|musician|vocalist|guitarist|drummer|bassist)\b/i.test(`${item.filename} ${description}`);
+      if (depictsPeople) score += 20;
+      score += Math.min(20, Math.round(item.info.width / 500));
+      return { ...item, score, depictsPeople, namesArtist: fileKey.includes(artistKey) };
+    })
+    .filter((item) => item.score >= 60)
+    .sort((a, b) => b.score - a.score || b.info.width - a.info.width);
+  if (!candidates[0]) return null;
+  return await fetchCommonsArtistImage(candidates[0].filename, identity);
+}
+
+async function fetchWikidataArtistImage(relation) {
+  const entityId = relation?.url?.resource?.match(/\/(Q\d+)(?:$|[?#])/i)?.[1]?.toUpperCase();
+  if (!entityId) return null;
+  const data = await fetchArtistImageJson(`https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`);
+  if (!data) return null;
+  const entity = data?.entities?.[entityId];
+  const description = entity?.descriptions?.en?.value || "";
+  if (!isMusicalArtistContext(description)) return null;
+  const filename = entity?.claims?.P18?.[0]?.mainsnak?.datavalue?.value || "";
+  const identity = { source: "MusicBrainz-linked Wikidata", url: relation.url.resource };
+  const primaryImage = filename ? await fetchCommonsArtistImage(filename, identity) : null;
+  if (primaryImage) return primaryImage;
+  const category = entity?.claims?.P373?.[0]?.mainsnak?.datavalue?.value || "";
+  return await fetchCommonsCategoryArtistImage(category, entity?.labels?.en?.value || "", identity);
+}
+
+async function fetchWikidataArtistImageByMusicBrainzId(artistName, artistId) {
+  if (!artistName || !artistId) return null;
+  const search = new URL("https://www.wikidata.org/w/api.php");
+  search.search = new URLSearchParams({ action: "wbsearchentities", format: "json", origin: "*", language: "en", type: "item", limit: "10", search: artistName }).toString();
+  const searchData = await fetchArtistImageJson(search.toString());
+  if (!searchData) return null;
+  const entityIds = (searchData?.search || []).map((item) => item.id).filter(Boolean);
+  if (!entityIds.length) return null;
+
+  const entitiesUrl = new URL("https://www.wikidata.org/w/api.php");
+  entitiesUrl.search = new URLSearchParams({ action: "wbgetentities", format: "json", origin: "*", languages: "en", props: "claims|descriptions|sitelinks", ids: entityIds.join("|") }).toString();
+  const entitiesData = await fetchArtistImageJson(entitiesUrl.toString());
+  if (!entitiesData) return null;
+  const entities = Object.values(entitiesData?.entities || {});
+  const entity = entities.find((item) =>
+    (item?.claims?.P434 || []).some((claim) => String(claim?.mainsnak?.datavalue?.value || "") === String(artistId))
+  );
+  const description = entity?.descriptions?.en?.value || "";
+  if (!entity?.id || !isMusicalArtistContext(description)) return null;
+  const identity = { source: "Wikidata MusicBrainz ID match", url: `https://www.wikidata.org/wiki/${entity.id}` };
+  const filename = entity?.claims?.P18?.[0]?.mainsnak?.datavalue?.value || "";
+  const primaryImage = filename ? await fetchCommonsArtistImage(filename, identity) : null;
+  if (primaryImage) return primaryImage;
+  const category = entity?.claims?.P373?.[0]?.mainsnak?.datavalue?.value || "";
+  return await fetchCommonsCategoryArtistImage(category, artistName, identity);
+}
+
+async function fetchValidatedWikipediaSearchImage(artistName) {
+  const endpoint = new URL("https://en.wikipedia.org/w/api.php");
+  endpoint.search = new URLSearchParams({ action: "query", format: "json", origin: "*", generator: "search", gsrsearch: `intitle:\"${artistName}\" (band OR musician OR singer)`, gsrlimit: "5", prop: "pageimages|description", piprop: "name", redirects: "1" }).toString();
+  const data = await fetchArtistImageJson(endpoint.toString());
+  if (!data) return null;
+  const candidates = Object.values(data?.query?.pages || {})
+    .filter((page) => isMusicalArtistContext(page.description))
+    .filter((page) => normaliseCompare(page.title).includes(normaliseCompare(artistName)))
+    .sort((a, b) => Number(a.index || 99) - Number(b.index || 99));
+  const page = candidates[0];
+  if (!page?.pageimage) return null;
+  return await fetchCommonsArtistImage(page.pageimage, { source: "Validated Wikipedia search", url: `https://en.wikipedia.org/?curid=${page.pageid}` });
+}
+
+async function fetchArtistImagePremium(artistName, artistId = "", artistDetail = null) {
+  if (!artistName) return { url: "", provider: "BOM placeholder", identitySource: "No artist identity" };
+  const cached = readArtistImageCache(artistName, artistId);
+  if (cached) return cached;
+
+  const directImageRelation = getMusicBrainzRelation(artistDetail, "image");
+  const directFilename = getCommonsFilename(directImageRelation?.url?.resource);
+  let lowResolutionDirectImage = null;
+  if (directFilename) {
+    try {
+      const directImage = await fetchCommonsArtistImage(directFilename, { source: "MusicBrainz image relation", url: directImageRelation.url.resource });
+      if (directImage?.width >= 800) return writeArtistImageCache(artistName, artistId, directImage);
+      lowResolutionDirectImage = directImage;
+    } catch (error) { console.warn("MusicBrainz artist image failed", error); }
+  }
+
+  const wikidataRelation = getMusicBrainzRelation(artistDetail, "wikidata");
+  if (wikidataRelation) {
+    try {
+      const wikidataImage = await fetchWikidataArtistImage(wikidataRelation);
+      if (wikidataImage) return writeArtistImageCache(artistName, artistId, wikidataImage);
+    } catch (error) { console.warn("Wikidata artist image failed", error); }
+  }
+
+  if (artistId) {
+    try {
+      const wikidataIdImage = await fetchWikidataArtistImageByMusicBrainzId(artistName, artistId);
+      if (wikidataIdImage) return writeArtistImageCache(artistName, artistId, wikidataIdImage);
+    } catch (error) { console.warn("Wikidata MusicBrainz ID image failed", error); }
+  }
 
   if (LASTFM_API_KEY) {
-
     try {
-
-      const url = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${encodeURIComponent(LASTFM_API_KEY)}&format=json`;
-
-      const response = await fetch(url);
-
+      const response = await fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${encodeURIComponent(LASTFM_API_KEY)}&format=json`);
       if (response.ok) {
-
         const data = await response.json();
-
-        const images = data?.artist?.image || [];
-
-        const best = [...images]
-          .reverse()
-          .find((img) => img["#text"]);
-
-        if (best?.["#text"]) {
-          const lastFmImage = best["#text"]
-            .replace("lastfm.freetls.fastly.net", "lastfm-img2.akamaized.net");
-
-          // Last.fm returns this shared image when it has no artist photograph.
-          // Continue through BOM's existing image sources instead of presenting it.
-          if (!/2a96cbd8b46e442fc41c2b86b821562f/i.test(lastFmImage)) {
-            return lastFmImage;
-          }
+        const best = [...(data?.artist?.image || [])].reverse().find((image) => image["#text"]);
+        const url = String(best?.["#text"] || "").replace("lastfm.freetls.fastly.net", "lastfm-img2.akamaized.net");
+        if (url && !/2a96cbd8b46e442fc41c2b86b821562f/i.test(url)) {
+          return writeArtistImageCache(artistName, artistId, { url, provider: "Last.fm", identitySource: "Last.fm exact artist lookup", identityUrl: data?.artist?.url || "" });
         }
-
       }
-
-    } catch (err) {
-
-      console.error("Last.fm artist image failed", err);
-
-    }
-
+    } catch (error) { console.warn("Last.fm artist image failed", error); }
   }
-
-  // 2. Deezer fallback (VERY important)
 
   try {
+    const response = await fetch(`https://api.deezer.com/search/artist?q=${encodeURIComponent(artistName)}`);
+    const data = await response.json();
+    const match = (data?.data || []).find((artist) => normaliseCompare(artist.name) === normaliseCompare(artistName));
+    const url = match?.picture_xl || match?.picture_big || match?.picture_medium || "";
+    if (url) return writeArtistImageCache(artistName, artistId, { url, provider: "Deezer", identitySource: "Deezer exact artist match", identityUrl: match.link || "" });
+  } catch (error) { console.warn("Deezer artist image failed", error); }
 
-    const deezerResponse = await fetch(
-      `https://api.deezer.com/search/artist?q=${encodeURIComponent(artistName)}`
-    );
+  try {
+    const wikipediaImage = await fetchValidatedWikipediaSearchImage(artistName);
+    if (wikipediaImage) return writeArtistImageCache(artistName, artistId, wikipediaImage);
+  } catch (error) { console.warn("Wikipedia artist search failed", error); }
 
-    const deezerData = await deezerResponse.json();
-
-    if (deezerData?.data?.length > 0) {
-
-      const deezerImage =
-  deezerData.data[0].picture_xl ||
-  deezerData.data[0].picture_big ||
-  deezerData.data[0].picture_medium ||
-  "";
-
-if (deezerImage) {
-  return deezerImage;
-}
-
-    }
-
-  } catch (err) {
-
-    console.error("Deezer artist image failed", err);
-
-  }
-  
-  // 3. Wikipedia fallback
-try {
-  const wikiResponse = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(artistName)}`
-  );
-
-  if (wikiResponse.ok) {
-    const wikiData = await wikiResponse.json();
-
-    const artistContext = `${wikiData?.description || ""} ${wikiData?.extract || ""}`;
-    const isArtistSubject = /\b(singer|songwriter|musician|rapper|composer|record producer|musical artist|music group|rock band|pop band|band|duo|trio|quartet)\b/i.test(artistContext);
-    if (isArtistSubject && wikiData?.thumbnail?.source) return wikiData.thumbnail.source;
-    if (isArtistSubject && wikiData?.originalimage?.source) return wikiData.originalimage.source;
-  }
-} catch (err) {
-  console.error("Wikipedia artist image failed", err);
-}
-
-  return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(artistName)}&backgroundType=gradientLinear`;
-
+  if (lowResolutionDirectImage) return writeArtistImageCache(artistName, artistId, lowResolutionDirectImage);
+  return {
+    url: "",
+    provider: "BOM placeholder",
+    identitySource: artistDetail?.id
+      ? `MusicBrainz identity ${artistDetail.id}; no validated photograph`
+      : `MusicBrainz identity unavailable${artistId ? ` for ${artistId}` : ""}`
+  };
 }
 
 async function cacheArtistImageToSupabase(artistName, remoteUrl) {
@@ -5274,7 +5462,7 @@ function buildArtistTopRatedAlbumsHtml(artistName) {
 
 }
 
-function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, albums, savedSongs }) {
+function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, imageMeta = null, albums, savedSongs }) {
   const normalizedAlbums = albums.map((album, sourceIndex) => {
     const albumId = album.savedAlbumId || album.localAlbumId || "";
     const average = albumId ? getAlbumAverage(albumId) : null;
@@ -5334,6 +5522,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
   return {
     name: artistName,
     imageUrl,
+    imageMeta,
     metadata,
     description: artistDetail?.disambiguation || artistItem.disambiguation || "",
     albums: normalizedAlbums,
@@ -5384,6 +5573,11 @@ async function renderArtistDetail(artistItem) {
     getSelectedArtistIdFallback(artistName) ||
     await resolveArtistIdByName(artistName);
 
+  // Resolve the image identity before the discography makes further
+  // MusicBrainz requests. This keeps URL relationships off the rate-limit tail.
+  if (preferredArtistMusicBrainzId) await new Promise((resolve) => window.setTimeout(resolve, 1100));
+  let imageIdentity = await resolveArtistIdentityForImage(artistName, preferredArtistMusicBrainzId);
+
   const completeDiscography =
     await fetchMostCompleteArtistDiscography({
       artistName,
@@ -5402,6 +5596,14 @@ async function renderArtistDetail(artistItem) {
   const artistMusicBrainzId =
     completeDiscography.artistId ||
     preferredArtistMusicBrainzId;
+
+  // The discography lookup can recover an identity after an earlier transient
+  // MusicBrainz search failure. Reuse that verified ID before accepting the
+  // placeholder so direct Artist links remain resilient without guessing.
+  if (!imageIdentity.detail && artistMusicBrainzId) {
+    await new Promise((resolve) => window.setTimeout(resolve, 1100));
+    imageIdentity = await resolveArtistIdentityForImage(artistName, artistMusicBrainzId);
+  }
 
   const remoteAlbums =
     completeDiscography.albums || [];
@@ -5510,10 +5712,9 @@ async function renderArtistDetail(artistItem) {
       .localeCompare(String(b.title || ""));
   });
 
-  const [artistDetail, premiumArtistImage] = await Promise.all([
-    artistMusicBrainzId ? fetchArtistDetail(artistMusicBrainzId) : Promise.resolve(null),
-    fetchArtistImagePremium(artistName)
-  ]);
+  const artistDetail = imageIdentity.detail;
+  const artistImageResult = await fetchArtistImagePremium(artistName, imageIdentity.artistId || artistMusicBrainzId, artistDetail);
+  const premiumArtistImage = artistImageResult?.url || "";
 
   const cachedArtistImage = "";
 
@@ -5570,6 +5771,7 @@ async function renderArtistDetail(artistItem) {
       imageUrl: /(api\.dicebear\.com|2a96cbd8b46e442fc41c2b86b821562f)/i.test(premiumArtistImage || "")
         ? ""
         : premiumArtistImage,
+      imageMeta: artistImageResult,
       albums: displayAlbums,
       savedSongs
     }), displayAlbums);

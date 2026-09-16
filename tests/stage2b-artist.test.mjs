@@ -13,7 +13,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=4/);
+  assert.match(html, /bom-artist\.js\?v=6/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -80,10 +80,62 @@ test("Artist hero rejects album, release, composite and unapproved image URLs", 
   assert.equal(accepts("https://e-cdns-images.dzcdn.net/images/artist/example/1000x1000.jpg"), true);
 });
 
-test("Wikipedia fallback requires a recognisable music-artist subject", () => {
-  assert.match(app, /const isArtistSubject = \/\\b\(singer\|songwriter\|musician/);
-  assert.match(app, /if \(isArtistSubject && wikiData\?\.thumbnail\?\.source\)/);
-  assert.doesNotMatch(app, /if \(wikiData\?\.thumbnail\?\.source\) \{\s*return wikiData\.thumbnail\.source/);
+test("MusicBrainz identity links are preferred over validated free-text search", () => {
+  assert.match(app, /inc=tags\+genres\+aliases\+url-rels/);
+  assert.match(app, /getMusicBrainzRelation\(artistDetail, "image"\)/);
+  assert.match(app, /getMusicBrainzRelation\(artistDetail, "wikidata"\)/);
+  const resolver = app.match(/async function fetchArtistImagePremium[\s\S]*?\n\}/)?.[0] || "";
+  assert.ok(resolver.indexOf('getMusicBrainzRelation(artistDetail, "image")') < resolver.indexOf("fetchValidatedWikipediaSearchImage(artistName)"));
+  assert.match(app, /gsrsearch: `intitle:\\"\$\{artistName\}\\" \(band OR musician OR singer\)`/);
+});
+
+test("non-musical entities are rejected and the placeholder remains final", () => {
+  assert.match(app, /function isMusicalArtistContext/);
+  assert.match(app, /if \(!isMusicalArtistContext\(description\)\) return null/);
+  assert.match(app, /filter\(\(page\) => isMusicalArtistContext\(page\.description\)\)/);
+  assert.match(app, /provider: "BOM placeholder"/);
+  assert.match(app, /no validated photograph/);
+  assert.doesNotMatch(app, /api\/rest_v1\/page\/summary\/\$\{encodeURIComponent\(artistName\)\}/);
+});
+
+test("ambiguous names require exact musical identity rather than the first text result", () => {
+  assert.match(app, /normaliseCompare\(artist\.name\) === normaliseCompare\(artistName\)/);
+  assert.match(app, /artist\.type && artist\.id/);
+  assert.match(app, /claims\?\.P434/);
+  assert.match(app, /datavalue\?\.value \|\| ""\) === String\(artistId\)/);
+  assert.match(app, /normaliseCompare\(page\.title\)\.includes\(normaliseCompare\(artistName\)\)/);
+  assert.doesNotMatch(app, /deezerData\.data\[0\]/);
+});
+
+test("release art, composites, objects and unknown hosts remain ineligible", () => {
+  assert.match(app, /function isSuitableArtistImageFilename/);
+  for (const term of ["album", "single", "logo", "composite", "collage", "montage", "desert", "satellite", "microphones", "magazine"]) {
+    assert.match(app, new RegExp(term, "i"));
+  }
+  assert.match(artist, /coverartarchive/);
+  assert.match(artist, /const approvedArtistImageHosts/);
+});
+
+test("a recovered discography identity is retried before the safe fallback", () => {
+  assert.match(app, /if \(!imageIdentity\.detail && artistMusicBrainzId\)/);
+  assert.match(app, /resolveArtistIdentityForImage\(artistName, artistMusicBrainzId\)/);
+});
+
+test("Wikimedia hero sizing preserves a validated file identity", () => {
+  assert.match(app, /iiurlwidth: "1200"/);
+  assert.match(app, /titles: `File:\$\{filename\}`/);
+  assert.match(app, /imageIdentity: filename/);
+  assert.match(app, /originalWidth/);
+  assert.match(app, /if \(primaryImage\) return primaryImage/);
+  assert.match(app, /\(\?:upload\|thumb\)\\\.wikimedia\\\.org/);
+  assert.doesNotMatch(styles, /\.bom-v1-artist-photo\.is-wide \{ object-fit: cover/);
+});
+
+test("artist image resolution uses a session cache without schema changes", () => {
+  assert.match(app, /ARTIST_IMAGE_CACHE_PREFIX/);
+  assert.match(app, /artistImageMemoryCache/);
+  assert.match(app, /sessionStorage\.getItem/);
+  assert.match(app, /sessionStorage\.setItem/);
 });
 
 test("artist deep links preserve Stage 1 rollback and Album navigation", () => {
