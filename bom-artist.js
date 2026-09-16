@@ -9,6 +9,34 @@
   let discographySort = "release";
   let trackLimit = 10;
 
+  const approvedArtistImageHosts = new Set([
+    "lastfm-img2.akamaized.net",
+    "lastfm.freetls.fastly.net",
+    "e-cdns-images.dzcdn.net",
+    "cdn-images.dzcdn.net",
+    "upload.wikimedia.org",
+    "thumb.wikimedia.org"
+  ]);
+
+  function isApprovedArtistImageUrl(value) {
+    if (!value) return false;
+    try {
+      const imageUrl = new URL(value, window.location?.href || "http://localhost/");
+      if (imageUrl.protocol !== "https:" || !approvedArtistImageHosts.has(imageUrl.hostname.toLowerCase())) return false;
+      return !/(coverartarchive|release-group|\/releases?\/|\/albums?\/|composite)/i.test(`${imageUrl.hostname}${imageUrl.pathname}`);
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function artistImageSource(value) {
+    const hostname = new URL(value).hostname.toLowerCase();
+    if (hostname.includes("lastfm")) return "Last.fm";
+    if (hostname.includes("dzcdn")) return "Deezer";
+    if (hostname.includes("wikimedia")) return "Wikipedia";
+    return "Artist image";
+  }
+
   function releaseLabel(value, precision) {
     if (window.BOMAlbumUI?.formatReleaseDate) return window.BOMAlbumUI.formatReleaseDate(value, precision);
     return String(value || "").slice(0, 4);
@@ -81,7 +109,10 @@
   }
 
   function heroImage(model) {
-    if (model.imageUrl) return `<img class="bom-v1-artist-photo" src="${escapeHtml(model.imageUrl)}" alt="${escapeHtml(model.name)}" fetchpriority="high" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" hidden><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
+    if (isApprovedArtistImageUrl(model.imageUrl)) {
+      const source = artistImageSource(model.imageUrl);
+      return `<img class="bom-v1-artist-photo" src="${escapeHtml(model.imageUrl)}" alt="${escapeHtml(model.name)}" data-bom-artist-image-source="${escapeHtml(source)}" fetchpriority="high" decoding="async" onload="this.classList.toggle('is-wide', this.naturalWidth / Math.max(this.naturalHeight, 1) >= 2.1)" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" hidden><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
+    }
     return `<div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable"><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
   }
 
@@ -148,5 +179,5 @@
     card.click();
   });
 
-  window.BOMArtistUI = Object.freeze({ render, renderLoading, renderDiscography, renderTracks });
+  window.BOMArtistUI = Object.freeze({ render, renderLoading, renderDiscography, renderTracks, isApprovedArtistImageUrl });
 })();

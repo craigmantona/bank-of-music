@@ -350,8 +350,9 @@
 .bom-shell-v1 .bom-v1-artist-follow-wrap { margin-top: 24px; }
 .bom-shell-v1 .bom-v1-artist-follow { min-height: 40px !important; padding: 8px 13px !important; color: var(--bom-v1-text) !important; background: var(--bom-v1-surface) !important; background-image: none !important; border: 0 !important; border-radius: 3px !important; box-shadow: none !important; transform: none !important; cursor: pointer; }
 .bom-shell-v1 .bom-v1-artist-follow.is-following { color: var(--bom-v1-accent); }
-.bom-shell-v1 .bom-v1-artist-photo-wrap { min-width: 0; }
-.bom-shell-v1 .bom-v1-artist-photo { display: block; width: 100%; aspect-ratio: 2.75 / 1; object-fit: cover; object-position: center; filter: grayscale(1); border-radius: 2px; background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-artist-photo-wrap { min-width: 0; aspect-ratio: 2.75 / 1; overflow: hidden; background: var(--bom-v1-surface); border-radius: 2px; }
+.bom-shell-v1 .bom-v1-artist-photo { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; filter: grayscale(1); background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-artist-photo.is-wide { object-fit: cover; }
 .bom-shell-v1 .bom-v1-artist-photo-missing { display: grid; place-items: center; align-content: center; color: var(--bom-v1-muted); }
 .bom-shell-v1 .bom-v1-artist-photo-missing span { color: var(--bom-v1-accent); font-size: clamp(58px, 9vw, 112px); font-weight: 600; }
 .bom-shell-v1 .bom-v1-artist-photo-missing small { margin-top: 10px; }
@@ -397,7 +398,7 @@
   .bom-shell-v1 .bom-v1-artist-hero { grid-template-columns: 1fr; min-height: 0; }
   .bom-shell-v1 .bom-v1-artist-photo-wrap { grid-row: 1; }
   .bom-shell-v1 .bom-v1-artist-identity { grid-row: 2; }
-  .bom-shell-v1 .bom-v1-artist-photo { aspect-ratio: 2.75 / 1; }
+  .bom-shell-v1 .bom-v1-artist-photo-wrap { aspect-ratio: 2.75 / 1; }
   .bom-shell-v1 .bom-v1-artist-discography { grid-template-columns: repeat(3, minmax(0, 1fr)); gap-inline: 18px; }
 }
 
@@ -405,7 +406,7 @@
   .bom-shell-v1 .bom-v1-artist { padding: 20px 18px 72px; }
   .bom-shell-v1 .bom-v1-artist-breadcrumb { padding: 22px 0; }
   .bom-shell-v1 .bom-v1-artist-hero { gap: 24px; padding: 0 0 28px; }
-  .bom-shell-v1 .bom-v1-artist-photo { aspect-ratio: 2.1 / 1; }
+  .bom-shell-v1 .bom-v1-artist-photo-wrap { aspect-ratio: 2.1 / 1; }
   .bom-shell-v1 .bom-v1-artist-eyebrow { display: none; }
   .bom-shell-v1 .bom-v1-artist-identity h1 { font-size: clamp(44px, 13vw, 52px); }
   .bom-shell-v1 .bom-v1-artist-section { padding: 40px 0 8px; }

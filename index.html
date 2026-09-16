@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=11";
+    foundationStyles.href = "bom-foundation.css?v=12";
     document.head.appendChild(foundationStyles);
 
   }
@@ -412,7 +412,7 @@
       albumScript.src = "bom-album.js?v=3";
       albumScript.addEventListener("load", function () {
         var artistScript = document.createElement("script");
-        artistScript.src = "bom-artist.js?v=2";
+        artistScript.src = "bom-artist.js?v=3";
         document.body.appendChild(artistScript);
       });
       document.body.appendChild(albumScript);

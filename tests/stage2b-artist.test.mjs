@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
 
 const [html, app, artist, styles] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
@@ -12,7 +13,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=2/);
+  assert.match(html, /bom-artist\.js\?v=3/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -63,6 +64,19 @@ test("responsive Artist layouts and missing artwork states are present", () => {
   assert.match(artist, /Artist image unavailable/);
   assert.match(artist, /bom-v1-artist-eyebrow">The artist/);
   assert.match(artist, /Artwork unavailable/);
+});
+
+test("Artist hero rejects album, release, composite and unapproved image URLs", () => {
+  const window = { location: { href: "http://localhost/" }, BOMUI: {} };
+  const document = { addEventListener() {} };
+  vm.runInNewContext(artist, { window, document, URL });
+  const accepts = window.BOMArtistUI.isApprovedArtistImageUrl;
+
+  assert.equal(accepts("https://coverartarchive.org/release-group/example/front-500"), false);
+  assert.equal(accepts("https://thumb.wikimedia.org/wikipedia/commons/example/Radiohead_composite.jpg"), false);
+  assert.equal(accepts("https://example.com/artist.jpg"), false);
+  assert.equal(accepts("https://thumb.wikimedia.org/wikipedia/commons/example/artist-performing.jpg"), true);
+  assert.equal(accepts("https://e-cdns-images.dzcdn.net/images/artist/example/1000x1000.jpg"), true);
 });
 
 test("artist deep links preserve Stage 1 rollback and Album navigation", () => {
