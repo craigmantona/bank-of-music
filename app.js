@@ -119,6 +119,7 @@ let followedArtists = [];
 
 let selectedItem = null;
 let currentSectionId = "searchSection";
+let stageOneInitialDataReady = false;
 let previousSectionId = "searchSection";
 
 let currentProfile = null;
@@ -415,6 +416,12 @@ window.BOMPresentationBridge = Object.freeze({
   openArtist: (artistName) => window.openArtistPage(artistName),
   refreshDiscover: () => renderRecommendations(),
   refreshCharts: () => loadCharts(),
+  openRequestedRoute: () => {
+    const params = new URLSearchParams(window.location.search);
+    if (stageOneInitialDataReady && params.get("ui") === "stage1" && params.get("view") === "charts" && window.BOMChartsUI) {
+      return window.goCharts();
+    }
+  },
   getState: () => ({
     authenticated: Boolean(currentUser),
     displayName: getUserDisplayName(),
@@ -13734,8 +13741,10 @@ window.addEventListener("scroll", handleScrollState, { passive: true });
 showOnlySection("recommendationsSection");
 
 refreshSessionUI().then(async () => {
+  stageOneInitialDataReady = true;
   await handleIncomingShareLink();
   await handleIncomingProfileLink();
+  await window.BOMPresentationBridge?.openRequestedRoute();
 });
 
 handleScrollState();

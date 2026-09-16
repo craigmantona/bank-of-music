@@ -402,7 +402,7 @@
   })();
 </script>
 
-  <script src="app.js?v=114"></script>
+  <script src="app.js?v=115"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
     var foundationScript = document.createElement("script");
@@ -418,7 +418,7 @@
           discoverScript.src = "bom-discover.js?v=2";
           discoverScript.addEventListener("load", function () {
             var chartsScript = document.createElement("script");
-            chartsScript.src = "bom-charts.js?v=1";
+            chartsScript.src = "bom-charts.js?v=3";
             chartsScript.addEventListener("load", function () {
               window.BOMPresentationBridge && window.BOMPresentationBridge.refreshDiscover();
             });

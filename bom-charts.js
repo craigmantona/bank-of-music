@@ -91,4 +91,8 @@
   });
 
   window.BOMChartsUI = Object.freeze({ render, renderLoading, renderError });
+
+  if (new URLSearchParams(window.location.search).get("view") === "charts") {
+    void window.BOMPresentationBridge?.openRequestedRoute();
+  }
 })();

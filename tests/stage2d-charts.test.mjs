@@ -16,6 +16,7 @@ function loadChartsUI() {
     addEventListener(type, handler) { listeners[type] = handler; }
   };
   const window = {
+    location: { search: "" },
     BOMUI: {
       SegmentedControl({ options, selected }) {
         return `<div>${options.map((option) => `<button data-value="${option.value}" aria-pressed="${option.value === selected}">${option.text}</button>`).join("")}</div>`;
@@ -23,15 +24,21 @@ function loadChartsUI() {
       SectionState({ title, message, actionLabel = "" }) { return `<div>${title}|${message}|${actionLabel}</div>`; }
     }
   };
-  vm.runInNewContext(charts, { window, document, Number, String });
+  vm.runInNewContext(charts, { window, document, Number, String, URLSearchParams });
   return window.BOMChartsUI;
 }
 
 test("Stage 2D loads only inside the Stage 1 opt-in chain", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
-  assert.match(html, /bom-charts\.js\?v=1/);
-  assert.match(html, /app\.js\?v=114/);
+  assert.match(html, /bom-charts\.js\?v=3/);
+  assert.match(html, /app\.js\?v=115/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMChartsUI/);
+});
+
+test("the direct Charts preview route opens Stage 2D after its asset loads", () => {
+  assert.match(charts, /new URLSearchParams\(window\.location\.search\)\.get\("view"\) === "charts"/);
+  assert.match(charts, /BOMPresentationBridge\?\.openRequestedRoute\(\)/);
+  assert.match(app, /stageOneInitialDataReady && params\.get\("ui"\) === "stage1" && params\.get\("view"\) === "charts"/);
 });
 
 test("Charts retain the existing production views, ordering and limits", () => {
