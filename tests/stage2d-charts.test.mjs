@@ -31,14 +31,15 @@ function loadChartsUI() {
 test("Stage 2D loads only inside the Stage 1 opt-in chain", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-charts\.js\?v=3/);
-  assert.match(html, /app\.js\?v=115/);
+  assert.match(html, /app\.js\?v=116/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMChartsUI/);
 });
 
 test("the direct Charts preview route opens Stage 2D after its asset loads", () => {
   assert.match(charts, /new URLSearchParams\(window\.location\.search\)\.get\("view"\) === "charts"/);
   assert.match(charts, /BOMPresentationBridge\?\.openRequestedRoute\(\)/);
-  assert.match(app, /stageOneInitialDataReady && params\.get\("ui"\) === "stage1" && params\.get\("view"\) === "charts"/);
+  assert.match(app, /!stageOneInitialDataReady \|\| params\.get\("ui"\) !== "stage1"/);
+  assert.match(app, /params\.get\("view"\) === "charts" && window\.BOMChartsUI/);
 });
 
 test("Charts retain the existing production views, ordering and limits", () => {

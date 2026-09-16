@@ -401,7 +401,10 @@ window.BOMPresentationBridge = Object.freeze({
   },
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
-  showRatings: () => showOnlySection("librarySection"),
+  showRatings: () => {
+    showOnlySection("librarySection");
+    renderLibrary();
+  },
   showSpotify: () => {
     showOnlySection("settingsSection");
     return refreshSpotifyConnectionUI();
@@ -416,10 +419,24 @@ window.BOMPresentationBridge = Object.freeze({
   openArtist: (artistName) => window.openArtistPage(artistName),
   refreshDiscover: () => renderRecommendations(),
   refreshCharts: () => loadCharts(),
+  refreshRatings: async () => {
+    const root = document.getElementById("librarySection");
+    if (isStageOnePresentation() && window.BOMRatingsUI && root) root.innerHTML = window.BOMRatingsUI.renderLoading();
+    try {
+      await loadLibrary();
+      renderLibrary();
+    } catch (error) {
+      if (isStageOnePresentation() && window.BOMRatingsUI && root) root.innerHTML = window.BOMRatingsUI.renderError();
+    }
+  },
+  openAlbumById: (albumId) => openStageOneRatingsAlbum(albumId),
   openRequestedRoute: () => {
     const params = new URLSearchParams(window.location.search);
-    if (stageOneInitialDataReady && params.get("ui") === "stage1" && params.get("view") === "charts" && window.BOMChartsUI) {
-      return window.goCharts();
+    if (!stageOneInitialDataReady || params.get("ui") !== "stage1") return;
+    if (params.get("view") === "charts" && window.BOMChartsUI) return window.goCharts();
+    if (params.get("view") === "ratings" && window.BOMRatingsUI) {
+      showOnlySection("librarySection");
+      return renderLibrary();
     }
   },
   getState: () => ({
@@ -3408,6 +3425,12 @@ function renderRecommendations() {
 
 function renderLibrary() {
 
+  if (isStageOnePresentation() && window.BOMRatingsUI) {
+    const root = document.getElementById("librarySection");
+    if (root) root.innerHTML = window.BOMRatingsUI.render(buildStageOneRatingsModel());
+    return;
+  }
+
   const ratedAlbumIds = currentUser
 
     ? allAlbumRatings.filter((row) => row.user_id === currentUser.id).map((row) => Number(row.album_id))
@@ -3505,6 +3528,51 @@ const yourRating =
 
   }
 
+}
+
+function buildStageOneRatingsModel() {
+  const ownAlbumRatings = currentUser ? allAlbumRatings.filter((row) => row.user_id === currentUser.id) : [];
+  const ownTrackRatings = currentUser ? allSongRatings.filter((row) => row.user_id === currentUser.id) : [];
+  const albums = ownAlbumRatings.map((ratingRow) => {
+    const album = allAlbums.find((item) => Number(item.id) === Number(ratingRow.album_id));
+    if (!album) return null;
+    const community = getAlbumAverage(album.id);
+    return {
+      id: album.id,
+      title: album.title || "Untitled album",
+      artist: album.artist || "Unknown artist",
+      year: String(album.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      artworkUrl: getAlbumArtworkUrl(album),
+      personal: Number(ratingRow.rating),
+      community: community ? { average: community.avg, count: community.count } : null
+    };
+  }).filter(Boolean);
+  const tracks = ownTrackRatings.map((ratingRow) => {
+    const track = allSongs.find((item) => Number(item.id) === Number(ratingRow.song_id));
+    if (!track) return null;
+    const album = allAlbums.find((item) => Number(item.id) === Number(track.album_id));
+    const community = getSongAverage(track.id);
+    return {
+      id: track.id,
+      title: track.title || "Untitled track",
+      artist: track.artist || album?.artist || "Unknown artist",
+      albumId: album?.id || null,
+      albumTitle: album?.title || "",
+      year: String(album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      artworkUrl: album ? getAlbumArtworkUrl(album) : "",
+      personal: Number(ratingRow.rating),
+      community: community ? { average: community.avg, count: community.count } : null
+    };
+  }).filter(Boolean);
+  return { authenticated: Boolean(currentUser), albums, tracks };
+}
+
+async function openStageOneRatingsAlbum(albumId) {
+  const album = allAlbums.find((row) => Number(row.id) === Number(albumId));
+  if (!album) return;
+  selectedItem = { type: "album", title: album.title, artist: album.artist, externalId: album.external_id || "", releaseDate: album.release_date || "", coverUrl: getAlbumArtworkUrl(album), savedAlbumId: album.id, albumId: album.id };
+  showOnlySection("detailSection");
+  await renderSelectedItem();
 }
 
 
