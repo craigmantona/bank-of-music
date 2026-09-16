@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=16";
+    foundationStyles.href = "bom-foundation.css?v=17";
     document.head.appendChild(foundationStyles);
 
   }
@@ -402,7 +402,7 @@
   })();
 </script>
 
-  <script src="app.js?v=113"></script>
+  <script src="app.js?v=114"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
     var foundationScript = document.createElement("script");
@@ -417,7 +417,12 @@
           var discoverScript = document.createElement("script");
           discoverScript.src = "bom-discover.js?v=2";
           discoverScript.addEventListener("load", function () {
-            window.BOMPresentationBridge && window.BOMPresentationBridge.refreshDiscover();
+            var chartsScript = document.createElement("script");
+            chartsScript.src = "bom-charts.js?v=1";
+            chartsScript.addEventListener("load", function () {
+              window.BOMPresentationBridge && window.BOMPresentationBridge.refreshDiscover();
+            });
+            document.body.appendChild(chartsScript);
           });
           document.body.appendChild(discoverScript);
         });

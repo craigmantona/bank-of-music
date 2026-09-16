@@ -414,6 +414,7 @@ window.BOMPresentationBridge = Object.freeze({
   },
   openArtist: (artistName) => window.openArtistPage(artistName),
   refreshDiscover: () => renderRecommendations(),
+  refreshCharts: () => loadCharts(),
   getState: () => ({
     authenticated: Boolean(currentUser),
     displayName: getUserDisplayName(),
@@ -848,8 +849,13 @@ document.addEventListener(
 );
 
 async function loadCharts() {
+  const chartRoot = document.getElementById("chartsSection");
+  if (isStageOnePresentation() && window.BOMChartsUI) {
+    chartRoot.innerHTML = window.BOMChartsUI.renderLoading();
+  } else {
   globalAlbumCharts.innerHTML = "<p class='small'>Loading albums...</p>";
   ageAlbumCharts.innerHTML = "<p class='small'>Loading songs...</p>";
+  }
 
   fixChartSectionHeadings();
 
@@ -861,6 +867,10 @@ async function loadCharts() {
     .limit(20);
 
   if (albumError) {
+    if (isStageOnePresentation() && window.BOMChartsUI) {
+      chartRoot.innerHTML = window.BOMChartsUI.renderError();
+      return;
+    }
     globalAlbumCharts.innerHTML = `<p class="small">${escapeHtml(albumError.message)}</p>`;
     return;
   }
@@ -873,7 +883,16 @@ async function loadCharts() {
     .limit(20);
 
   if (songError) {
+    if (isStageOnePresentation() && window.BOMChartsUI) {
+      chartRoot.innerHTML = window.BOMChartsUI.renderError();
+      return;
+    }
     ageAlbumCharts.innerHTML = `<p class="small">${escapeHtml(songError.message)}</p>`;
+    return;
+  }
+
+  if (isStageOnePresentation() && window.BOMChartsUI) {
+    chartRoot.innerHTML = window.BOMChartsUI.render(buildStageOneChartsModel(albums || [], songs || []));
     return;
   }
 
@@ -888,6 +907,37 @@ async function loadCharts() {
   `;
 
   fixChartSectionHeadings();
+}
+
+function buildStageOneChartsModel(albumRows, songRows) {
+  const albums = dedupeChartRows(albumRows).map((row) => {
+    const album = allAlbums.find((item) => Number(item.id) === Number(row.item_id));
+    return {
+      id: row.item_id,
+      title: row.title || "Untitled album",
+      artist: row.artist || album?.artist || "Unknown artist",
+      year: String(album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      artworkUrl: row.cover_art_url || row.cover_url || row.image_url || (album ? getAlbumArtworkUrl(album) : ""),
+      averageRating: row.average_rating,
+      ratingCount: row.rating_count
+    };
+  });
+  const tracks = (songRows || []).map((row) => {
+    const song = allSongs.find((item) => Number(item.id) === Number(row.item_id));
+    const albumId = row.album_id || song?.album_id;
+    const album = allAlbums.find((item) => Number(item.id) === Number(albumId));
+    return {
+      id: row.item_id,
+      title: row.title || "Untitled track",
+      artist: row.artist || song?.artist || album?.artist || "Unknown artist",
+      albumTitle: album?.title || "",
+      year: String(album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      artworkUrl: album ? getAlbumArtworkUrl(album) : "",
+      averageRating: row.average_rating,
+      ratingCount: row.rating_count
+    };
+  });
+  return { albums, tracks };
 }
 
 function renderAlbumCharts(albums) {
