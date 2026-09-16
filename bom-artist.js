@@ -23,7 +23,7 @@
     try {
       const imageUrl = new URL(value, window.location?.href || "http://localhost/");
       if (imageUrl.protocol !== "https:" || !approvedArtistImageHosts.has(imageUrl.hostname.toLowerCase())) return false;
-      return !/(coverartarchive|release-group|\/releases?\/|\/albums?\/|composite)/i.test(`${imageUrl.hostname}${imageUrl.pathname}`);
+      return !/(coverartarchive|release-group|\/releases?\/|\/albums?\/|composite|\bISS[-_]|desert|satellite|scenery|landscape)/i.test(`${imageUrl.hostname}${imageUrl.pathname}`);
     } catch (_error) {
       return false;
     }

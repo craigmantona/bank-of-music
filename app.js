@@ -1976,6 +1976,19 @@ function upsertLocalAlbumRating(albumId, rating) {
 
 }
 
+function removeLocalAlbumRating(albumId) {
+  if (!currentUser) return;
+  allAlbumRatings = allAlbumRatings.filter(
+    (row) => !(row.user_id === currentUser.id && Number(row.album_id) === Number(albumId))
+  );
+}
+
+function updateStageOneAlbumRatingUi(albumId) {
+  if (!isStageOnePresentation()) return;
+  const target = selectedItemDetail?.querySelector(".bom-v1-album-personal");
+  if (target) target.innerHTML = buildCompactAlbumRatingControl(albumId, getYourAlbumRating(albumId));
+}
+
 
 
 function upsertLocalSongRating(songId, rating) {
@@ -4903,13 +4916,10 @@ try {
   if (wikiResponse.ok) {
     const wikiData = await wikiResponse.json();
 
-    if (wikiData?.thumbnail?.source) {
-      return wikiData.thumbnail.source;
-    }
-
-    if (wikiData?.originalimage?.source) {
-      return wikiData.originalimage.source;
-    }
+    const artistContext = `${wikiData?.description || ""} ${wikiData?.extract || ""}`;
+    const isArtistSubject = /\b(singer|songwriter|musician|rapper|composer|record producer|musical artist|music group|rock band|pop band|band|duo|trio|quartet)\b/i.test(artistContext);
+    if (isArtistSubject && wikiData?.thumbnail?.source) return wikiData.thumbnail.source;
+    if (isArtistSubject && wikiData?.originalimage?.source) return wikiData.originalimage.source;
   }
 } catch (err) {
   console.error("Wikipedia artist image failed", err);
@@ -5834,6 +5844,22 @@ function buildCompactTrackRatingControl(songId, currentValue) {
   </details><input type="hidden" id="${targetId}" value="${hasRating ? Number(currentValue) : ""}">`;
 }
 
+function buildCompactAlbumRatingControl(albumId, currentValue) {
+  if (!albumId) return "";
+  const hasRating = currentValue !== null && Number.isFinite(Number(currentValue));
+  const targetId = `album-rating-${albumId}`;
+  return `<details class="bom-v1-album-rating-control" data-bom-album-rating="${albumId}">
+    <summary class="bom-v1-album-rating-trigger" aria-label="${hasRating ? `Change album rating, currently ${Number(currentValue)} out of 10` : "Rate this album"}">${hasRating ? `<strong>${Number(currentValue)}</strong><span> / 10</span><small>Change</small>` : "Rate +"}</summary>
+    <div class="bom-v1-album-rating-popover" role="group" aria-label="Rate this album from 1 to 10">
+      ${Array.from({ length: 10 }, (_, index) => {
+        const rating = index + 1;
+        return `<button type="button" class="bom-v1-album-rating-choice${rating === Number(currentValue) ? " is-selected" : ""}" data-target-input="${targetId}" data-rating="${rating}" aria-label="Rate ${rating} out of 10" onclick="handleStarOptionClick(event, this); return false;">${rating}</button>`;
+      }).join("")}
+      ${hasRating ? `<button type="button" class="bom-v1-album-rating-clear" data-clear-album-rating="${albumId}">Clear</button>` : ""}
+    </div>
+  </details><input type="hidden" id="${targetId}" value="${hasRating ? Number(currentValue) : ""}">`;
+}
+
 function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
   const albumTitle = detail?.title || selectedItem?.title || "";
   const artist = detail?.["artist-credit"]?.map((credit) => credit.name).filter(Boolean).join(", ") || selectedItem?.artist || "";
@@ -5904,7 +5930,7 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
     tracks,
     backControlHtml: buildSelectedBackButton(),
     artistControlHtml: renderClickableArtistName(artist),
-    albumRatingControlHtml: albumId ? renderStarSelector(`album-rating-${albumId}`, personal) : '<button id="importSelectedAlbumBtn">Save album</button>',
+    albumRatingControlHtml: albumId ? buildCompactAlbumRatingControl(albumId, personal) : '<button id="importSelectedAlbumBtn">Save album</button>',
     providerControlHtml: buildMusicProviderPanel({ type: "album", title: detail?.title || album?.title || selectedItem?.title || "", artist }).replace(">Play here<", ">Listen elsewhere<"),
     shareControlHtml: buildSelectedSharePanel(selectedItem).replace(">Send<", ">Share album<"),
     adminControlHtml: typeof renderSelectedAdminControls === "function" ? renderSelectedAdminControls({ albumId }) : ""
@@ -5952,6 +5978,14 @@ window.addEventListener("click", async (event) => {
   event.preventDefault();
   event.stopPropagation();
   await deleteTrackRating(clearButton.dataset.clearTrackRating);
+});
+
+window.addEventListener("click", async (event) => {
+  const clearButton = event.target.closest("[data-clear-album-rating]");
+  if (!clearButton) return;
+  event.preventDefault();
+  event.stopPropagation();
+  await deleteAlbumRating(clearButton.dataset.clearAlbumRating);
 });
 
 function buildTrackListHtml(detail, savedAlbumId) {
@@ -8547,12 +8581,38 @@ async function saveAlbumRating(albumId) {
 
   upsertLocalAlbumRating(albumId, rating);
 
+  updateStageOneAlbumRatingUi(albumId);
+
   renderLibrary();
 
   renderRecommendations();
 
   setMessage(globalSearchMessage, "Album rating saved.");
 
+}
+
+async function deleteAlbumRating(albumId) {
+  if (!currentUser) {
+    setMessage(globalSearchMessage, "You must be logged in first.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("ratings")
+    .delete()
+    .eq("user_id", currentUser.id)
+    .eq("album_id", Number(albumId));
+
+  if (error) {
+    setMessage(globalSearchMessage, error.message);
+    return;
+  }
+
+  removeLocalAlbumRating(albumId);
+  updateStageOneAlbumRatingUi(albumId);
+  renderLibrary();
+  renderRecommendations();
+  setMessage(globalSearchMessage, "Album rating deleted.");
 }
 
 

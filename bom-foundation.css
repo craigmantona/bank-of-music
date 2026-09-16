@@ -594,6 +594,20 @@
 .bom-shell-v1 .bom-v1-album .star-option:hover,
 .bom-shell-v1 .bom-v1-album .star-option.active-star { color: var(--bom-v1-accent); }
 .bom-shell-v1 .bom-v1-album .star-score-text { min-width: 70px; margin-left: 8px; color: var(--bom-v1-muted); font-size: 13px; }
+.bom-shell-v1 .bom-v1-album-rating-control { position: relative; width: fit-content; }
+.bom-shell-v1 .bom-v1-album-rating-trigger { display: flex; align-items: baseline; gap: 3px; min-height: 40px; padding: 5px 0; color: var(--bom-v1-text); background: transparent; border: 0; list-style: none; cursor: pointer; }
+.bom-shell-v1 .bom-v1-album-rating-trigger::-webkit-details-marker { display: none; }
+.bom-shell-v1 .bom-v1-album-rating-trigger strong { font-size: 28px; font-weight: 600; line-height: 1; }
+.bom-shell-v1 .bom-v1-album-rating-trigger > span { color: var(--bom-v1-muted); font-size: 13px; }
+.bom-shell-v1 .bom-v1-album-rating-trigger small { margin-left: 9px; color: var(--bom-v1-accent); font-size: 11px; font-weight: 500; }
+.bom-shell-v1 .bom-v1-album-rating-trigger:hover small,
+.bom-shell-v1 .bom-v1-album-rating-control[open] .bom-v1-album-rating-trigger small { text-decoration: underline; text-underline-offset: 4px; }
+.bom-shell-v1 .bom-v1-album-rating-popover { position: absolute; z-index: 50; top: calc(100% + 6px); left: 0; width: 232px; padding: 10px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: var(--bom-v1-surface-raised); border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius); box-shadow: 0 18px 40px rgba(0, 0, 0, .42); }
+.bom-shell-v1 .bom-v1-album-rating-control:not([open]) .bom-v1-album-rating-popover { display: none; }
+.bom-shell-v1 .bom-v1-album .bom-v1-album-rating-choice { min-width: 36px !important; min-height: 36px !important; padding: 0 !important; color: var(--bom-v1-text) !important; background: transparent !important; border: 1px solid var(--bom-v1-line) !important; border-radius: 3px !important; font-size: 12px !important; font-weight: 600 !important; box-shadow: none !important; transform: none !important; }
+.bom-shell-v1 .bom-v1-album .bom-v1-album-rating-choice:hover,
+.bom-shell-v1 .bom-v1-album .bom-v1-album-rating-choice.is-selected { color: var(--bom-v1-bg) !important; background: var(--bom-v1-accent) !important; border-color: var(--bom-v1-accent) !important; }
+.bom-shell-v1 .bom-v1-album-rating-clear { grid-column: 1 / -1; min-height: 36px !important; margin: 0 !important; padding: 8px 0 0 !important; color: var(--bom-v1-muted) !important; background: transparent !important; border: 0 !important; border-top: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow: none !important; cursor: pointer; }
 
 .bom-shell-v1 .bom-v1-album-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
 .bom-shell-v1 .bom-v1-album-actions .music-provider-panel { margin: 0; padding: 0; background: transparent; border: 0; }
@@ -616,7 +630,8 @@
 .bom-shell-v1 .bom-v1-track-row { display: grid !important; grid-template-columns: 44px minmax(220px, 1fr) 80px 112px minmax(110px, 140px) 44px !important; grid-template-areas: none !important; gap: 16px !important; align-items: center !important; width: 100% !important; margin: 0 !important; background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow: none !important; overflow: visible !important; }
 .bom-shell-v1 .bom-v1-track-header { min-height: 44px; color: var(--bom-v1-muted); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; border-bottom: 1px solid var(--bom-v1-line); }
 .bom-shell-v1 .bom-v1-track-row { position: relative; min-height: 70px; padding: 10px 0; color: var(--bom-v1-muted); border-bottom: 1px solid var(--bom-v1-line); font-variant-numeric: tabular-nums; }
-.bom-shell-v1 .bom-v1-track-row.bom-v1-top-track { box-shadow: inset 2px 0 0 rgba(196, 211, 172, .58) !important; }
+.bom-shell-v1 .bom-v1-track-row.bom-v1-top-track { box-shadow: none !important; }
+.bom-shell-v1 .bom-v1-track-row.bom-v1-top-track .track-col-average strong { text-decoration: underline; text-decoration-color: rgba(196, 211, 172, .45); text-underline-offset: 5px; text-decoration-thickness: 1px; }
 .bom-shell-v1 .bom-v1-track-row .track-col-number,
 .bom-shell-v1 .bom-v1-track-row .track-col-title,
 .bom-shell-v1 .bom-v1-track-row .bom-v1-track-time,
@@ -665,6 +680,9 @@
   .bom-shell-v1 .bom-v1-album-artwork-wrap { width: min(100%, 520px); }
   .bom-shell-v1 .bom-v1-album h1 { font-size: clamp(40px, 13vw, 64px); }
   .bom-shell-v1 .bom-v1-album-ratings { grid-template-columns: 1fr; gap: 24px; }
+  .bom-shell-v1 .bom-v1-album-rating-trigger { min-height: 44px; }
+  .bom-shell-v1 .bom-v1-album-rating-popover { width: 244px; }
+  .bom-shell-v1 .bom-v1-album .bom-v1-album-rating-choice { min-width: 40px; min-height: 40px; }
   .bom-shell-v1 .bom-v1-track-header { display: none; }
   .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 28px minmax(0, 1fr) auto !important; grid-template-rows: auto auto auto !important; grid-template-areas: "number title actions" "number time time" "number community yours" !important; gap: 8px 12px !important; padding: 16px 0 18px 8px !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-number { grid-area: number !important; align-self: start !important; padding-top: 2px !important; }

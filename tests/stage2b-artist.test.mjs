@@ -13,7 +13,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=3/);
+  assert.match(html, /bom-artist\.js\?v=4/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -74,9 +74,16 @@ test("Artist hero rejects album, release, composite and unapproved image URLs", 
 
   assert.equal(accepts("https://coverartarchive.org/release-group/example/front-500"), false);
   assert.equal(accepts("https://thumb.wikimedia.org/wikipedia/commons/example/Radiohead_composite.jpg"), false);
+  assert.equal(accepts("https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/ISS-64_Jubba_with_Nefud_Desert.jpg"), false);
   assert.equal(accepts("https://example.com/artist.jpg"), false);
   assert.equal(accepts("https://thumb.wikimedia.org/wikipedia/commons/example/artist-performing.jpg"), true);
   assert.equal(accepts("https://e-cdns-images.dzcdn.net/images/artist/example/1000x1000.jpg"), true);
+});
+
+test("Wikipedia fallback requires a recognisable music-artist subject", () => {
+  assert.match(app, /const isArtistSubject = \/\\b\(singer\|songwriter\|musician/);
+  assert.match(app, /if \(isArtistSubject && wikiData\?\.thumbnail\?\.source\)/);
+  assert.doesNotMatch(app, /if \(wikiData\?\.thumbnail\?\.source\) \{\s*return wikiData\.thumbnail\.source/);
 });
 
 test("artist deep links preserve Stage 1 rollback and Album navigation", () => {

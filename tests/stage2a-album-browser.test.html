@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Stage 2A track-rating DOM regression</title>
   <link rel="stylesheet" href="../style.css?v=80">
-  <link rel="stylesheet" href="../bom-foundation.css?v=9">
+  <link rel="stylesheet" href="../bom-foundation.css?v=14">
 </head>
 <body class="bom-shell-v1">
   <main class="bom-v1-album" style="max-width:1000px">
+    <section class="bom-v1-album-ratings"><div><span>Your album rating</span><div class="bom-v1-album-personal" id="albumRatingTest"></div></div></section>
     <section class="bom-v1-album-section bom-v1-tracks-section">
       <header class="bom-v1-album-section-header"><h2>Tracks</h2></header>
       <div class="bom-v1-track-table" id="testRows"></div>
@@ -26,6 +27,12 @@
       return `<details class="bom-v1-track-rating-control"><summary class="bom-v1-track-rating-trigger">${rated ? rating + " / 10" : "Rate +"}</summary>
         <div class="bom-v1-track-rating-popover">${Array.from({length:10},(_,i)=>`<button type="button" class="bom-v1-track-rating-choice${i+1===rating?" is-selected":""}" data-rating="${i+1}">${i+1}</button>`).join("")}${rated?'<button type="button" class="bom-v1-track-rating-clear">Clear</button>':""}</div></details>`;
     }
+    function albumControl(rating) {
+      const rated = rating !== null;
+      return `<details class="bom-v1-album-rating-control"><summary class="bom-v1-album-rating-trigger">${rated ? `<strong>${rating}</strong><span> / 10</span><small>Change</small>` : "Rate +"}</summary>
+        <div class="bom-v1-album-rating-popover">${Array.from({length:10},(_,i)=>`<button type="button" class="bom-v1-album-rating-choice${i+1===rating?" is-selected":""}" data-rating="${i+1}">${i+1}</button>`).join("")}${rated?'<button type="button" class="bom-v1-album-rating-clear">Clear</button>':""}</div></details>`;
+    }
+    albumRatingTest.innerHTML = albumControl(6);
     testRows.innerHTML = row(1, "A rated track with a deliberately long title", 8) + row(2, "An unrated track", null);
     testRows.addEventListener("click", (event) => {
       const choice = event.target.closest(".bom-v1-track-rating-choice");
@@ -35,12 +42,27 @@
       const id = event.target.closest(".bom-v1-track-row").dataset.songId;
       slot.innerHTML = control(id, choice ? Number(choice.dataset.rating) : null);
     });
+    albumRatingTest.addEventListener("click", (event) => {
+      const choice = event.target.closest(".bom-v1-album-rating-choice");
+      const clear = event.target.closest(".bom-v1-album-rating-clear");
+      if (!choice && !clear) return;
+      albumRatingTest.innerHTML = albumControl(choice ? Number(choice.dataset.rating) : null);
+    });
     const visibleChoices = () => [...document.querySelectorAll(".bom-v1-track-rating-choice")].filter((button) => button.getClientRects().length);
     (async () => {
       const rated = document.querySelector('[data-song-id="1"]');
       const unrated = document.querySelector('[data-song-id="2"]');
       const assert = (value, message) => { if (!value) throw new Error(message); };
       assert(visibleChoices().length === 0, "closed selector leaked choices");
+      const albumValue = () => albumRatingTest.querySelector("summary").textContent.replace(/\s+/g, " ").trim();
+      assert(document.querySelectorAll(".bom-v1-album-personal .star-option").length === 0, "legacy album stars remained visible");
+      albumRatingTest.querySelector("summary").click();
+      assert([...albumRatingTest.querySelectorAll(".bom-v1-album-rating-choice")].filter((button) => button.getClientRects().length).length === 10, "rated album Change selector did not open");
+      albumRatingTest.querySelector('[data-rating="7"]').click();
+      assert(albumValue().includes("7 / 10"), "album rating change did not update");
+      albumRatingTest.querySelector("summary").click();
+      albumRatingTest.querySelector(".bom-v1-album-rating-clear").click();
+      assert(albumValue() === "Rate +", "album Clear did not reset to Rate +");
       rated.querySelector("summary").click();
       assert(visibleChoices().length === 10, "rated selector did not open");
       rated.querySelector('[data-rating="9"]').click();
@@ -51,7 +73,7 @@
       assert(rated.querySelector("summary").textContent.trim() === "Rate +", "clear did not reset control");
       unrated.querySelector("summary").click();
       assert(visibleChoices().length === 10, "unrated selector did not open");
-      result.value = "PASS: Change, numeric selection, reopen, Clear and Rate +";
+      result.value = "PASS: Album and Track Change, numeric selection, reopen, Clear and Rate +";
       document.documentElement.dataset.testResult = "pass";
     })().catch((error) => { result.value = `FAIL: ${error.message}`; document.documentElement.dataset.testResult = "fail"; });
   </script>

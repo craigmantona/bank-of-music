@@ -29,8 +29,8 @@ test("normalized Album and Track models retain first-class ratings", () => {
   }
   assert.match(app, /getSongAverage\(savedSong\.id\)/);
   assert.match(app, /getYourSongRating\(savedSong\.id\)/);
-  assert.match(app, /renderStarSelector\(`track-rating-/);
-  assert.match(app, /renderStarSelector\(`album-rating-/);
+  assert.match(app, /buildCompactTrackRatingControl\(savedSong\.id, personal\)/);
+  assert.match(app, /buildCompactAlbumRatingControl\(albumId, personal\)/);
 });
 
 test("existing mutation and provider handlers remain authoritative", () => {
@@ -69,6 +69,23 @@ test("track ratings use a compact disclosure while retaining the existing handle
   assert.match(app, /await deleteTrackRating/);
   assert.doesNotMatch(album, /★/);
   assert.match(styles, /\.bom-v1-track-rating-popover/);
+});
+
+test("album ratings use the compact numeric interaction and no permanent stars", () => {
+  assert.match(app, /<details class="bom-v1-album-rating-control"/);
+  assert.match(app, /Rate this album from 1 to 10/);
+  assert.match(app, /data-clear-album-rating/);
+  assert.match(app, /await saveAlbumRating\(albumId\)/);
+  assert.match(app, /await deleteAlbumRating\(clearButton\.dataset\.clearAlbumRating\)/);
+  assert.doesNotMatch(app.match(/function buildCompactAlbumRatingControl[\s\S]*?\n\}/)?.[0] || "", /★/);
+  assert.match(styles, /\.bom-v1-album-rating-popover/);
+  assert.match(styles, /\.bom-v1-album-rating-trigger/);
+});
+
+test("top track emphasis never draws a left-hand rule", () => {
+  assert.match(styles, /\.bom-v1-track-row\.bom-v1-top-track \{ box-shadow: none !important; \}/);
+  assert.doesNotMatch(styles, /\.bom-v1-track-row\.bom-v1-top-track \{[^}]*inset\s+2px\s+0\s+0/);
+  assert.match(styles, /\.bom-v1-track-row\.bom-v1-top-track \.track-col-average strong/);
 });
 
 test("browser regression harness exercises the visible rating lifecycle", () => {
