@@ -4867,7 +4867,7 @@ async function resolveArtistIdentityForImage(artistName, preferredArtistId = "",
 
 
 
-const ARTIST_IMAGE_CACHE_PREFIX = "bom_artist_image_v10:";
+const ARTIST_IMAGE_CACHE_PREFIX = "bom_artist_image_v17:";
 const ARTIST_IMAGE_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 14;
 const artistImageMemoryCache = new Map();
 
@@ -4881,6 +4881,96 @@ function isSuitableArtistImageFilename(value) {
 
 function isSuitableArtistImageMetadata(value) {
   return !/(montage|composite|collage|album cover|record sleeve|logo|wordmark|museum exhibits|statues|sculptures|waxworks|memorabilia|magazines|books|publications|newspapers)/i.test(String(value || ""));
+}
+
+function isArtistGroupContext(value) {
+  return /\b(group|band|duo|trio|quartet|ensemble|orchestra)\b/i.test(String(value || ""));
+}
+
+function buildCommonsArtistImage(filename, info, identity) {
+  if (!filename || !info || !isSuitableArtistImageFilename(filename)) return null;
+  const description = String(info?.extmetadata?.ImageDescription?.value || "").replace(/<[^>]*>/g, " ");
+  const categories = String(info?.extmetadata?.Categories?.value || "");
+  if (!isSuitableArtistImageMetadata(`${description} ${categories}`)) return null;
+  const originalWidth = Number(info?.width || 0);
+  const originalHeight = Number(info?.height || 0);
+  const useThumbnail = originalWidth > 1200 && info?.thumburl;
+  const imageUrl = (useThumbnail ? info.thumburl : info?.url) || "";
+  if (!imageUrl || !/^https:\/\/(?:upload|thumb)\.wikimedia\.org\//i.test(imageUrl)) return null;
+  const width = useThumbnail ? Number(info.thumbwidth || 1200) : originalWidth;
+  const height = useThumbnail ? Number(info.thumbheight || 0) : originalHeight;
+  return {
+    url: imageUrl,
+    provider: "Wikimedia Commons",
+    identitySource: identity.source,
+    identityUrl: identity.url,
+    imageIdentity: filename,
+    width,
+    height,
+    originalWidth,
+    originalHeight,
+    description,
+    categories
+  };
+}
+
+function scoreArtistHeroCandidate(image, artistName, isGroup, primary = false) {
+  if (!image?.url || !image.width || !image.height) return -Infinity;
+  const ratio = image.width / image.height;
+  const text = `${image.imageIdentity || ""} ${image.description || ""} ${image.categories || ""}`;
+  const artistKey = normaliseCompare(artistName);
+  const filenameKey = normaliseCompare(String(image.imageIdentity || "").replace(/\.[a-z0-9]+$/i, ""));
+  let score = primary ? 12 : 0;
+  score += Math.min(28, Math.round(image.originalWidth / 180));
+  if (ratio >= 1.45 && ratio <= 2.5) score += 38;
+  else if (ratio >= 1.2 && ratio < 1.45) score += 18;
+  else if (ratio > 3.2) score -= 35;
+  if (filenameKey.includes(artistKey)) score += 28;
+
+  const groupCue = /\b(group photo|group portrait|group shot|band photo|band portrait|band members|members of|the band|full band|musical group|left to right|performing together)\b|\bL-R\b/i.test(text);
+  const peopleCue = /\b(portrait|performing|performance|musicians?|singers?|band|group|members?)\b/i.test(text);
+  const soloCue = /\b(solo|lead singer|frontman|frontwoman|vocalist|guitarist|drummer|bassist)\b/i.test(text);
+  const distantCue = /\b(crowd|audience|stadium|festival grounds?|wide shot|panorama|aerial|from a distance|distant|stage view)\b/i.test(text);
+  if (isGroup) {
+    if (groupCue) score += 70;
+    else if (peopleCue) score += 20;
+    if (soloCue && !groupCue) score -= 42;
+    if (ratio < 1.05) score -= 40;
+  } else {
+    if (/\b(portrait|headshot|close-up)\b/i.test(text)) score += 55;
+    else if (peopleCue) score += 25;
+  }
+  if (distantCue) score -= 65;
+  return score;
+}
+
+function isStrongPrimaryArtistHero(image, isGroup) {
+  if (!image?.width || !image?.height || image.width < 800) return false;
+  const ratio = image.width / image.height;
+  const text = `${image.imageIdentity || ""} ${image.description || ""} ${image.categories || ""}`;
+  if (ratio < 1.3 || ratio > 2.6) return false;
+  if (/\b(crowd|audience|stadium|festival grounds?|wide shot|panorama|aerial|from a distance|distant|stage view)\b/i.test(text)) return false;
+  if (!isGroup) return /\b(portrait|performing|performance|singer|musician)\b/i.test(text);
+  return /\b(group|band|members?|left to right|bow|lineup|performing together)\b|\bL-R\b/i.test(text);
+}
+
+function selectBestArtistHero(candidates, artistName, isGroup) {
+  const ranked = candidates
+    .filter(Boolean)
+    .map((candidate) => ({
+      ...candidate,
+      selectionScore: scoreArtistHeroCandidate(candidate, artistName, isGroup, Boolean(candidate.isPrimary))
+    }))
+    .filter((candidate) => Number.isFinite(candidate.selectionScore))
+    .sort((a, b) => b.selectionScore - a.selectionScore || b.originalWidth - a.originalWidth);
+  const selected = ranked[0] || null;
+  if (!selected) return null;
+  const ratio = selected.width / Math.max(selected.height, 1);
+  selected.heroFit = ratio >= 1.25 && ratio <= 2.6 && !/\b(close-up|headshot)\b/i.test(`${selected.imageIdentity} ${selected.description}`)
+    ? "cover"
+    : "contain";
+  selected.heroPosition = selected.heroFit === "cover" ? "center 32%" : "center";
+  return selected;
 }
 
 function getArtistImageCacheKey(artistName, artistId = "") {
@@ -4940,34 +5030,15 @@ async function fetchCommonsArtistImage(filename, identity) {
   if (!data) return null;
   const pages = Object.values(data?.query?.pages || {});
   const info = pages[0]?.imageinfo?.[0];
-  const metadataText = `${info?.extmetadata?.ImageDescription?.value || ""} ${info?.extmetadata?.Categories?.value || ""}`;
-  if (!isSuitableArtistImageMetadata(metadataText)) return null;
-  const originalWidth = Number(info?.width || 0);
-  const originalHeight = Number(info?.height || 0);
-  const useThumbnail = originalWidth > 1200 && info?.thumburl;
-  const imageUrl = (useThumbnail ? info.thumburl : info?.url) || "";
-  if (!imageUrl || !/^https:\/\/(?:upload|thumb)\.wikimedia\.org\//i.test(imageUrl)) return null;
-  const width = useThumbnail ? Number(info.thumbwidth || 1200) : originalWidth;
-  const height = useThumbnail ? Number(info.thumbheight || 0) : originalHeight;
-  return {
-    url: imageUrl,
-    provider: "Wikimedia Commons",
-    identitySource: identity.source,
-    identityUrl: identity.url,
-    imageIdentity: filename,
-    width,
-    height,
-    originalWidth,
-    originalHeight
-  };
+  return buildCommonsArtistImage(filename, info, identity);
 }
 
-async function fetchCommonsCategoryArtistImage(category, artistName, identity) {
-  if (!category || !artistName) return null;
+async function fetchCommonsCategoryArtistImages(category, artistName, identity, isGroup) {
+  if (!category || !artistName) return [];
   const endpoint = new URL("https://commons.wikimedia.org/w/api.php");
   endpoint.search = new URLSearchParams({ action: "query", format: "json", origin: "*", generator: "categorymembers", gcmtitle: `Category:${category}`, gcmtype: "file", gcmlimit: "50", prop: "imageinfo", iiprop: "url|size|mime|extmetadata", iiurlwidth: "1200" }).toString();
   const data = await fetchArtistImageJson(endpoint.toString());
-  if (!data) return null;
+  if (!data) return [];
   const artistKey = normaliseCompare(artistName);
   const candidates = Object.values(data?.query?.pages || {})
     .map((page) => ({ filename: String(page.title || "").replace(/^File:/i, ""), info: page.imageinfo?.[0] }))
@@ -4984,12 +5055,74 @@ async function fetchCommonsCategoryArtistImage(category, artistName, identity) {
       const depictsPeople = /\b(live|concert|perform|band|group|members?|portrait|singer|musician|vocalist|guitarist|drummer|bassist)\b/i.test(`${item.filename} ${description}`);
       if (depictsPeople) score += 20;
       score += Math.min(20, Math.round(item.info.width / 500));
-      return { ...item, score, depictsPeople, namesArtist: fileKey.includes(artistKey) };
+      const image = buildCommonsArtistImage(item.filename, item.info, identity);
+      return { ...item, image, score, depictsPeople, namesArtist: fileKey.includes(artistKey) };
     })
-    .filter((item) => item.score >= 60)
-    .sort((a, b) => b.score - a.score || b.info.width - a.info.width);
-  if (!candidates[0]) return null;
-  return await fetchCommonsArtistImage(candidates[0].filename, identity);
+    .filter((item) => item.image && item.score >= 60)
+    .map((item) => ({
+      ...item.image,
+      shortlistScore: item.score,
+      heroScore: scoreArtistHeroCandidate(item.image, artistName, isGroup)
+    }))
+    .sort((a, b) => b.heroScore - a.heroScore || b.shortlistScore - a.shortlistScore || b.originalWidth - a.originalWidth)
+    .slice(0, 8);
+  return candidates;
+}
+
+async function fetchCommonsSearchArtistImages(artistName, identity, isGroup) {
+  if (!artistName) return [];
+  const queries = isGroup
+    ? [`\"${artistName}\" \"left to right\"`]
+    : [`\"${artistName}\" portrait`];
+  const responses = await Promise.all(queries.map(async (query) => {
+    const endpoint = new URL("https://commons.wikimedia.org/w/api.php");
+    endpoint.search = new URLSearchParams({
+      action: "query",
+      format: "json",
+      origin: "*",
+      generator: "search",
+      gsrnamespace: "6",
+      gsrlimit: "20",
+      gsrsearch: query,
+      prop: "imageinfo",
+      iiprop: "url|size|mime|extmetadata",
+      iiurlwidth: "1200"
+    }).toString();
+    return await fetchArtistImageJson(endpoint.toString());
+  }));
+  const artistKey = normaliseCompare(artistName);
+  const pages = responses.flatMap((data) => Object.values(data?.query?.pages || {}));
+  return pages
+    .map((page) => ({ filename: String(page.title || "").replace(/^File:/i, ""), info: page.imageinfo?.[0] }))
+    .filter((item) => item.info?.mime === "image/jpeg" && item.info.width >= 800 && item.info.height >= 300)
+    .map((item) => {
+      const image = buildCommonsArtistImage(item.filename, item.info, identity);
+      if (!image) return null;
+      const filenameKey = normaliseCompare(item.filename.replace(/\.[a-z0-9]+$/i, ""));
+      const descriptionKey = normaliseCompare(image.description);
+      const categoryKeys = String(image.categories || "").split("|").map(normaliseCompare);
+      const identityConfirmed = categoryKeys.some((key) => key === artistKey || key.includes(artistKey))
+        && (filenameKey.includes(artistKey) || descriptionKey.includes(artistKey));
+      if (!identityConfirmed) return null;
+      return { ...image, heroScore: scoreArtistHeroCandidate(image, artistName, isGroup) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.heroScore - a.heroScore || b.originalWidth - a.originalWidth)
+    .slice(0, 8);
+}
+
+async function fetchVerifiedCommonsArtistCandidates(category, artistName, identity, isGroup) {
+  const [categoryImages, searchImages] = await Promise.all([
+    fetchCommonsCategoryArtistImages(category, artistName, identity, isGroup),
+    fetchCommonsSearchArtistImages(artistName, identity, isGroup)
+  ]);
+  const unique = new Map();
+  [...categoryImages, ...searchImages].forEach((image) => {
+    if (image?.imageIdentity && !unique.has(image.imageIdentity)) unique.set(image.imageIdentity, image);
+  });
+  return [...unique.values()]
+    .sort((a, b) => scoreArtistHeroCandidate(b, artistName, isGroup) - scoreArtistHeroCandidate(a, artistName, isGroup))
+    .slice(0, 8);
 }
 
 async function fetchWikidataArtistImage(relation) {
@@ -5000,12 +5133,15 @@ async function fetchWikidataArtistImage(relation) {
   const entity = data?.entities?.[entityId];
   const description = entity?.descriptions?.en?.value || "";
   if (!isMusicalArtistContext(description)) return null;
+  const isGroup = isArtistGroupContext(description);
   const filename = entity?.claims?.P18?.[0]?.mainsnak?.datavalue?.value || "";
   const identity = { source: "MusicBrainz-linked Wikidata", url: relation.url.resource };
   const primaryImage = filename ? await fetchCommonsArtistImage(filename, identity) : null;
-  if (primaryImage) return primaryImage;
+  if (primaryImage) primaryImage.isPrimary = true;
+  if (isStrongPrimaryArtistHero(primaryImage, isGroup)) return selectBestArtistHero([primaryImage], entity?.labels?.en?.value || "", isGroup);
   const category = entity?.claims?.P373?.[0]?.mainsnak?.datavalue?.value || "";
-  return await fetchCommonsCategoryArtistImage(category, entity?.labels?.en?.value || "", identity);
+  const categoryImages = await fetchVerifiedCommonsArtistCandidates(category, entity?.labels?.en?.value || "", identity, isGroup);
+  return selectBestArtistHero([primaryImage, ...categoryImages], entity?.labels?.en?.value || "", isGroup);
 }
 
 async function fetchWikidataArtistImageByMusicBrainzId(artistName, artistId) {
@@ -5027,17 +5163,20 @@ async function fetchWikidataArtistImageByMusicBrainzId(artistName, artistId) {
   );
   const description = entity?.descriptions?.en?.value || "";
   if (!entity?.id || !isMusicalArtistContext(description)) return null;
+  const isGroup = isArtistGroupContext(description);
   const identity = { source: "Wikidata MusicBrainz ID match", url: `https://www.wikidata.org/wiki/${entity.id}` };
   const filename = entity?.claims?.P18?.[0]?.mainsnak?.datavalue?.value || "";
   const primaryImage = filename ? await fetchCommonsArtistImage(filename, identity) : null;
-  if (primaryImage) return primaryImage;
+  if (primaryImage) primaryImage.isPrimary = true;
+  if (isStrongPrimaryArtistHero(primaryImage, isGroup)) return selectBestArtistHero([primaryImage], artistName, isGroup);
   const category = entity?.claims?.P373?.[0]?.mainsnak?.datavalue?.value || "";
-  return await fetchCommonsCategoryArtistImage(category, artistName, identity);
+  const categoryImages = await fetchVerifiedCommonsArtistCandidates(category, artistName, identity, isGroup);
+  return selectBestArtistHero([primaryImage, ...categoryImages], artistName, isGroup);
 }
 
 async function fetchValidatedWikipediaSearchImage(artistName) {
   const endpoint = new URL("https://en.wikipedia.org/w/api.php");
-  endpoint.search = new URLSearchParams({ action: "query", format: "json", origin: "*", generator: "search", gsrsearch: `intitle:\"${artistName}\" (band OR musician OR singer)`, gsrlimit: "5", prop: "pageimages|description", piprop: "name", redirects: "1" }).toString();
+  endpoint.search = new URLSearchParams({ action: "query", format: "json", origin: "*", generator: "search", gsrsearch: `intitle:\"${artistName}\" (band OR musician OR singer)`, gsrlimit: "5", prop: "pageimages|description|pageprops", piprop: "name", redirects: "1" }).toString();
   const data = await fetchArtistImageJson(endpoint.toString());
   if (!data) return null;
   const candidates = Object.values(data?.query?.pages || {})
@@ -5045,6 +5184,11 @@ async function fetchValidatedWikipediaSearchImage(artistName) {
     .filter((page) => normaliseCompare(page.title).includes(normaliseCompare(artistName)))
     .sort((a, b) => Number(a.index || 99) - Number(b.index || 99));
   const page = candidates[0];
+  const wikidataId = String(page?.pageprops?.wikibase_item || "");
+  if (wikidataId) {
+    const linkedImage = await fetchWikidataArtistImage({ url: { resource: `https://www.wikidata.org/wiki/${wikidataId}` } });
+    if (linkedImage) return linkedImage;
+  }
   if (!page?.pageimage) return null;
   return await fetchCommonsArtistImage(page.pageimage, { source: "Validated Wikipedia search", url: `https://en.wikipedia.org/?curid=${page.pageid}` });
 }
@@ -5060,23 +5204,29 @@ async function fetchArtistImagePremium(artistName, artistId = "", artistDetail =
   if (directFilename) {
     try {
       const directImage = await fetchCommonsArtistImage(directFilename, { source: "MusicBrainz image relation", url: directImageRelation.url.resource });
-      if (directImage?.width >= 800) return writeArtistImageCache(artistName, artistId, directImage);
-      lowResolutionDirectImage = directImage;
+      if (directImage) {
+        directImage.isPrimary = true;
+        lowResolutionDirectImage = directImage;
+      }
     } catch (error) { console.warn("MusicBrainz artist image failed", error); }
   }
+
+  const isGroup = isArtistGroupContext(`${artistDetail?.type || ""} ${artistDetail?.disambiguation || ""}`);
 
   const wikidataRelation = getMusicBrainzRelation(artistDetail, "wikidata");
   if (wikidataRelation) {
     try {
       const wikidataImage = await fetchWikidataArtistImage(wikidataRelation);
-      if (wikidataImage) return writeArtistImageCache(artistName, artistId, wikidataImage);
+      const selected = selectBestArtistHero([lowResolutionDirectImage, wikidataImage], artistName, isGroup);
+      if (selected) return writeArtistImageCache(artistName, artistId, selected);
     } catch (error) { console.warn("Wikidata artist image failed", error); }
   }
 
   if (artistId) {
     try {
       const wikidataIdImage = await fetchWikidataArtistImageByMusicBrainzId(artistName, artistId);
-      if (wikidataIdImage) return writeArtistImageCache(artistName, artistId, wikidataIdImage);
+      const selected = selectBestArtistHero([lowResolutionDirectImage, wikidataIdImage], artistName, isGroup);
+      if (selected) return writeArtistImageCache(artistName, artistId, selected);
     } catch (error) { console.warn("Wikidata MusicBrainz ID image failed", error); }
   }
 

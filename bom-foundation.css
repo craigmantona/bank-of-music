@@ -443,6 +443,7 @@
 .bom-shell-v1 .bom-v1-artist-follow.is-following { color: var(--bom-v1-accent); }
 .bom-shell-v1 .bom-v1-artist-photo-wrap { min-width: 0; aspect-ratio: 2.75 / 1; overflow: hidden; background: var(--bom-v1-surface); border-radius: 2px; }
 .bom-shell-v1 .bom-v1-artist-photo { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; filter: grayscale(1); background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-artist-photo.is-cover { object-fit: cover; object-position: center 32%; }
 .bom-shell-v1 .bom-v1-artist-photo-missing { display: grid; place-items: center; align-content: center; color: var(--bom-v1-muted); }
 .bom-shell-v1 .bom-v1-artist-photo-missing span { color: var(--bom-v1-accent); font-size: clamp(58px, 9vw, 112px); font-weight: 600; }
 .bom-shell-v1 .bom-v1-artist-photo-missing small { margin-top: 10px; }

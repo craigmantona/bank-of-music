@@ -13,7 +13,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=6/);
+  assert.match(html, /bom-artist\.js\?v=7/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -126,9 +126,24 @@ test("Wikimedia hero sizing preserves a validated file identity", () => {
   assert.match(app, /titles: `File:\$\{filename\}`/);
   assert.match(app, /imageIdentity: filename/);
   assert.match(app, /originalWidth/);
-  assert.match(app, /if \(primaryImage\) return primaryImage/);
+  assert.match(app, /selectBestArtistHero\(\[primaryImage, \.\.\.categoryImages\]/);
   assert.match(app, /\(\?:upload\|thumb\)\\\.wikimedia\\\.org/);
   assert.doesNotMatch(styles, /\.bom-v1-artist-photo\.is-wide \{ object-fit: cover/);
+});
+
+test("Artist hero selection compares a bounded suitability-ranked shortlist", () => {
+  assert.match(app, /function scoreArtistHeroCandidate/);
+  assert.match(app, /function selectBestArtistHero/);
+  assert.match(app, /function isStrongPrimaryArtistHero/);
+  assert.match(app, /\.slice\(0, 8\)/);
+  assert.match(app, /gsrlimit: "20"/);
+  assert.match(app, /`\\"\$\{artistName\}\\" \\"left to right\\"`/);
+  assert.match(app, /group photo\|group portrait\|group shot\|band photo/);
+  assert.match(app, /crowd\|audience\|stadium\|festival grounds/);
+  assert.match(app, /selectionScore/);
+  assert.match(app, /pageprops\?\.wikibase_item/);
+  assert.match(artist, /data-bom-artist-image-fit/);
+  assert.match(styles, /\.bom-v1-artist-photo\.is-cover \{ object-fit: cover; object-position: center 32%; \}/);
 });
 
 test("artist image resolution uses a session cache without schema changes", () => {
