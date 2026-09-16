@@ -339,6 +339,97 @@
   }
 }
 
+/* Stage 2C: namespaced production-backed Discover presentation. */
+.bom-shell-v1 #recommendationsSection:has(.bom-v1-discover) {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.bom-shell-v1 #recommendationsSection:has(.bom-v1-discover) > h2,
+.bom-shell-v1 #recommendationsSection:has(.bom-v1-discover) > .small { display: none; }
+.bom-shell-v1 .bom-v1-discover { width: min(100%, 1328px); margin: 0 auto; padding: 0 0 96px; color: var(--bom-v1-text); font-family: "BOM Manrope", system-ui, sans-serif; }
+.bom-shell-v1 .bom-v1-discover button { font: inherit; }
+.bom-shell-v1 .bom-v1-discover button:focus-visible,
+.bom-shell-v1 .bom-v1-discover [tabindex]:focus-visible { outline: 3px solid var(--bom-v1-focus); outline-offset: 3px; }
+.bom-shell-v1 .bom-v1-discover-intro { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 44px 0 38px; border-bottom: 1px solid var(--bom-v1-line); }
+.bom-shell-v1 .bom-v1-discover-eyebrow { margin: 0 0 14px; color: var(--bom-v1-accent); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-discover-intro h1 { margin: 0; color: var(--bom-v1-text); font-size: clamp(40px, 4.2vw, 58px); font-weight: 600; letter-spacing: -.055em; line-height: 1.04; }
+.bom-shell-v1 .bom-v1-discover-intro div > p:last-child { margin: 12px 0 0; color: var(--bom-v1-muted); font-size: 14px; }
+.bom-shell-v1 .bom-v1-discover-intro > span { color: var(--bom-v1-muted); font-size: 10px; line-height: 1.8; letter-spacing: .05em; text-align: right; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-discover-group,
+.bom-shell-v1 .bom-v1-discover-section { padding: 40px 0 8px; }
+.bom-shell-v1 .bom-v1-discover-group + .bom-v1-discover-group,
+.bom-shell-v1 .bom-v1-discover-section { margin-top: 34px; border-top: 1px solid var(--bom-v1-line); }
+.bom-shell-v1 .bom-v1-discover-group-heading { margin-bottom: 22px; }
+.bom-shell-v1 .bom-v1-discover-group-heading p { margin: 0; color: var(--bom-v1-muted); font-size: 13px; }
+.bom-shell-v1 .bom-v1-discover-group-heading strong { color: var(--bom-v1-text); font-weight: 600; }
+.bom-shell-v1 .bom-v1-discover-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.bom-shell-v1 .bom-v1-discover-section-heading h2 { margin: 0; color: var(--bom-v1-text); font-size: clamp(28px, 3vw, 42px); font-weight: 600; letter-spacing: -.045em; }
+.bom-shell-v1 .bom-v1-discover-section-heading p { margin: 8px 0 0; color: var(--bom-v1-muted); font-size: 13px; }
+.bom-shell-v1 .bom-v1-discover-row-shell { position: relative; }
+.bom-shell-v1 .bom-v1-discover-row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(190px, 1fr); grid-template-rows: auto; gap: 22px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: inline proximity; }
+.bom-shell-v1 .bom-v1-discover-row::-webkit-scrollbar { display: none; }
+.bom-shell-v1 .bom-v1-discover-row > * { scroll-snap-align: start; }
+.bom-shell-v1 .bom-v1-discover-arrow { position: absolute; z-index: 2; top: 34%; width: 42px; height: 42px; padding: 0; color: var(--bom-v1-text); background: rgba(20,21,19,.9); border: 1px solid var(--bom-v1-line); border-radius: 50%; cursor: pointer; }
+.bom-shell-v1 .bom-v1-discover-arrow.is-previous { left: -16px; }
+.bom-shell-v1 .bom-v1-discover-arrow.is-next { right: -16px; }
+.bom-shell-v1 .bom-v1-discover-arrow[hidden] { display: none; }
+.bom-shell-v1 .bom-v1-music-card { min-width: 0; cursor: pointer; }
+.bom-shell-v1 .bom-v1-music-card-art { aspect-ratio: 1; margin-bottom: 14px; overflow: hidden; background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-music-card-artwork { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity 160ms ease, transform 180ms ease; }
+.bom-shell-v1 .bom-v1-music-card:hover .bom-v1-music-card-artwork:not(.bom-v1-music-card-missing) { opacity: .9; transform: translateY(-3px); }
+.bom-shell-v1 .bom-v1-music-card-missing { display: grid; place-items: center; align-content: center; gap: 8px; color: var(--bom-v1-muted); background: var(--bom-v1-surface); }
+.bom-shell-v1 .bom-v1-music-card-missing > span { color: var(--bom-v1-accent); font-size: 26px; font-weight: 600; letter-spacing: -.05em; }
+.bom-shell-v1 .bom-v1-music-card-missing small { font-size: 10px; }
+.bom-shell-v1 .bom-v1-music-card h3 { margin: 0; color: var(--bom-v1-text); font-size: 14px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-music-card-artist { display: block; min-height: 32px; margin: 1px 0 0; padding: 4px 0; color: var(--bom-v1-muted); background: transparent; border: 0; font-size: 12px; line-height: 1.45; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-music-card-artist:hover { color: var(--bom-v1-text); }
+.bom-shell-v1 .bom-v1-music-card-foot { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; color: var(--bom-v1-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.bom-shell-v1 .bom-v1-music-card-foot small { font-size: 9px; }
+.bom-shell-v1 .bom-v1-discover-skeleton-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; }
+.bom-shell-v1 .bom-v1-discover-skeleton-row > div { display: grid; gap: 10px; }
+.bom-shell-v1 .bom-v1-discover-skeleton-row .bom-v1-skeleton:first-child { aspect-ratio: 1; }
+.bom-shell-v1 .bom-v1-discover-skeleton-row .bom-v1-skeleton:nth-child(2) { width: 80%; }
+.bom-shell-v1 .bom-v1-discover-skeleton-row .bom-v1-skeleton:nth-child(3) { width: 54%; }
+.bom-shell-v1 .bom-v1-discover .bom-v1-section-state { margin-top: 40px; }
+.bom-shell-v1 .bom-v1-discover .bom-v1-section-state h3 { margin: 0; color: var(--bom-v1-text); font-size: 24px; }
+.bom-shell-v1 .bom-v1-discover .bom-v1-section-state p { max-width: 580px; margin: 10px 0 0; line-height: 1.7; }
+.bom-shell-v1 .bom-v1-discover .bom-v1-section-state button { min-height: 44px; margin-top: 18px; padding: 0; color: var(--bom-v1-accent); background: transparent; border: 0; cursor: pointer; }
+
+@media (min-width: 1200px) {
+  .bom-shell-v1 .bom-v1-discover-row { grid-auto-columns: calc((100% - 88px) / 5); }
+}
+
+@media (max-width: 900px) {
+  .bom-shell-v1 .bom-v1-discover-row { grid-auto-columns: minmax(190px, 31vw); }
+  .bom-shell-v1 .bom-v1-discover-arrow { display: none; }
+  .bom-shell-v1 .bom-v1-discover-skeleton-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bom-shell-v1 .bom-v1-discover-skeleton-row > div:nth-child(n+4) { display: none; }
+}
+
+@media (max-width: 600px) {
+  .bom-shell-v1 .bom-v1-discover { padding-bottom: 72px; }
+  .bom-shell-v1 .bom-v1-discover-intro { padding: 28px 0 26px; }
+  .bom-shell-v1 .bom-v1-discover-intro h1 { font-size: 34px; }
+  .bom-shell-v1 .bom-v1-discover-intro div > p:last-child { font-size: 12px; }
+  .bom-shell-v1 .bom-v1-discover-intro > span { display: none; }
+  .bom-shell-v1 .bom-v1-discover-group,
+  .bom-shell-v1 .bom-v1-discover-section { padding-top: 32px; }
+  .bom-shell-v1 .bom-v1-discover-group + .bom-v1-discover-group,
+  .bom-shell-v1 .bom-v1-discover-section { margin-top: 26px; }
+  .bom-shell-v1 .bom-v1-discover-row { grid-auto-columns: minmax(156px, 44vw); gap: 16px; margin-right: -20px; padding-right: 20px; }
+  .bom-shell-v1 .bom-v1-discover-section-heading h2 { font-size: 27px; }
+  .bom-shell-v1 .bom-v1-discover-group-heading p { font-size: 12px; line-height: 1.6; }
+  .bom-shell-v1 .bom-v1-music-card h3 { font-size: 13px; }
+  .bom-shell-v1 .bom-v1-music-card-artist { font-size: 11px; }
+  .bom-shell-v1 .bom-v1-discover-skeleton-row { display: flex; overflow: hidden; }
+  .bom-shell-v1 .bom-v1-discover-skeleton-row > div { flex: 0 0 44vw; }
+}
+
 /* Stage 2B: namespaced Artist presentation. */
 .bom-shell-v1 .bom-v1-artist { width: min(100%, 1440px); margin: 0 auto; padding: 0 clamp(24px, 4vw, 56px) 100px; color: var(--bom-v1-text); }
 .bom-shell-v1 .bom-v1-artist-breadcrumb { display: flex; align-items: center; gap: 10px; padding: 28px 0; color: var(--bom-v1-muted); font-size: 11px; }

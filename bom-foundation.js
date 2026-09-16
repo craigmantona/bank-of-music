@@ -41,6 +41,19 @@
     },
     SegmentedControl({ label, options = [], selected = "" } = {}) {
       return `<div class="bom-v1-segmented-control" role="group" aria-label="${escapeHtml(label)}">${options.map(({ value, text }) => `<button type="button" data-value="${escapeHtml(value)}" aria-pressed="${value === selected}">${escapeHtml(text)}</button>`).join("")}</div>`;
+    },
+    AlbumCard({ id, title, artist = "", artworkUrl = "", year = "", community = null } = {}) {
+      const score = Number(community?.average);
+      const hasScore = community && Number.isFinite(score);
+      const artwork = artworkUrl
+        ? `<img class="bom-v1-music-card-artwork" src="${escapeHtml(artworkUrl)}" alt="${escapeHtml(title)} cover" loading="lazy" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bom-v1-music-card-artwork bom-v1-music-card-missing" role="img" aria-label="Artwork unavailable" hidden><span aria-hidden="true">bom</span><small>Artwork unavailable</small></span>`
+        : '<span class="bom-v1-music-card-artwork bom-v1-music-card-missing" role="img" aria-label="Artwork unavailable"><span aria-hidden="true">bom</span><small>Artwork unavailable</small></span>';
+      return `<article class="bom-v1-music-card" data-library-type="album" data-album-id="${escapeHtml(id)}" tabindex="0" role="link" aria-label="Open ${escapeHtml(title)}">
+        <div class="bom-v1-music-card-art">${artwork}</div>
+        <h3>${escapeHtml(title)}</h3>
+        ${artist ? `<button type="button" class="bom-v1-music-card-artist" data-bom-discover-artist="${escapeHtml(artist)}">${escapeHtml(artist)}</button>` : ""}
+        <div class="bom-v1-music-card-foot"><span>${escapeHtml(year)}</span><span>${hasScore ? `${score.toFixed(1)} <small>/ 10</small>` : "Not rated"}</span></div>
+      </article>`;
     }
   });
 

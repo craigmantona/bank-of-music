@@ -12,7 +12,7 @@ const [html, app, shell, styles] = await Promise.all([
 test("the Stage 1 shell is opt-in and legacy assets remain primary", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /style\.css\?v=80/);
-  assert.match(html, /app\.js\?v=86/);
+  assert.match(html, /app\.js\?v=87/);
   assert.match(shell, /params\.get\("ui"\) !== "stage1"/);
 });
 

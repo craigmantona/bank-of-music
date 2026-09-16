@@ -396,6 +396,7 @@ window.BOMPresentationBridge = Object.freeze({
   showDiscover: () => {
     selectedItem = null;
     showOnlySection("recommendationsSection");
+    renderRecommendations();
   },
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
@@ -411,6 +412,8 @@ window.BOMPresentationBridge = Object.freeze({
     showOnlySection("searchSection");
     return runGlobalSearch();
   },
+  openArtist: (artistName) => window.openArtistPage(artistName),
+  refreshDiscover: () => renderRecommendations(),
   getState: () => ({
     authenticated: Boolean(currentUser),
     displayName: getUserDisplayName(),
@@ -2153,6 +2156,8 @@ async function refreshSessionUI() {
 
     updateSessionUI();
 
+    renderStageOneDiscoverLoading();
+
     await loadLibrary();
 
     renderLibrary();
@@ -2172,6 +2177,8 @@ async function refreshSessionUI() {
     updateSessionUI();
 
     setMessage(authMessage, "Session error: " + err.message);
+
+    renderStageOneDiscoverError();
 
   }
 
@@ -3233,9 +3240,78 @@ function buildSmartRecommendationHtml() {
 
 }
 
+function getStageOneDiscoverYear(album) {
+  const value = album?.original_release_date || album?.release_date || "";
+  const precision = album?.original_release_date_precision || album?.release_date_precision || "stored";
+  const label = window.BOMAlbumUI?.formatReleaseDate
+    ? window.BOMAlbumUI.formatReleaseDate(value, precision)
+    : String(value || "");
+  return label.match(/\b\d{4}\b/)?.[0] || "";
+}
+
+function buildStageOneDiscoverAlbum(album) {
+  const average = getAlbumAverage(album.id);
+  return {
+    id: album.id,
+    title: album.title || "Untitled album",
+    artist: album.artist || "",
+    artworkUrl: getAlbumArtworkUrl(album),
+    year: getStageOneDiscoverYear(album),
+    community: average ? { average: Number(average.avg), count: Number(average.count || 0) } : null
+  };
+}
+
+function buildStageOneDiscoverModel() {
+  const userRatings = currentUser
+    ? allAlbumRatings.filter((row) => row.user_id === currentUser.id)
+    : [];
+  const ratedAlbumIds = new Set(userRatings.map((row) => Number(row.album_id)));
+  const highRatedAlbums = userRatings
+    .filter((row) => Number(row.rating) >= 8)
+    .map((row) => {
+      const album = allAlbums.find((item) => Number(item.id) === Number(row.album_id));
+      return album ? { album, rating: Number(row.rating) } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 3);
+
+  const groups = highRatedAlbums.map((ratedItem, index) => ({
+    key: `${ratedItem.album.id}-${index}`,
+    reason: { title: ratedItem.album.title, rating: ratedItem.rating },
+    albums: allAlbums
+      .filter((album) => normaliseCompare(album.artist) === normaliseCompare(ratedItem.album.artist) && !ratedAlbumIds.has(Number(album.id)) && Number(album.id) !== Number(ratedItem.album.id) && isLikelyStudioAlbum(album))
+      .slice(0, 4)
+      .map(buildStageOneDiscoverAlbum)
+  })).filter((group) => group.albums.length);
+
+  const general = allAlbums
+    .filter((album) => !ratedAlbumIds.has(Number(album.id)) && isLikelyStudioAlbum(album))
+    .sort((a, b) => getAlbumTrackCount(Number(b.id)) - getAlbumTrackCount(Number(a.id)))
+    .slice(0, 8)
+    .map(buildStageOneDiscoverAlbum);
+
+  return { authenticated: Boolean(currentUser), groups, general };
+}
+
+function renderStageOneDiscoverLoading() {
+  if (!isStageOnePresentation() || !window.BOMDiscoverUI || !recommendationsList) return;
+  recommendationsList.innerHTML = window.BOMDiscoverUI.renderLoading();
+}
+
+function renderStageOneDiscoverError() {
+  if (!isStageOnePresentation() || !window.BOMDiscoverUI || !recommendationsList) return;
+  recommendationsList.innerHTML = window.BOMDiscoverUI.renderError();
+}
+
 function renderRecommendations() {
 
   if (!recommendationsList) return;
+  if (isStageOnePresentation() && window.BOMDiscoverUI) {
+    recommendationsList.innerHTML = window.BOMDiscoverUI.render(buildStageOneDiscoverModel());
+    window.requestAnimationFrame(() => window.BOMDiscoverUI.updateRowControls(recommendationsList));
+    return;
+  }
   if (!currentUser) {
     recommendationsList.innerHTML = `<p class="poster-empty">Log in to get recommendations.</p>`;
     return;
@@ -11976,6 +12052,8 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 
     updateSessionUI();
 
+    renderStageOneDiscoverLoading();
+
     loadLibrary().then(async () => {
 
       renderLibrary();
@@ -12614,7 +12692,16 @@ window.toggleReviewEditor = function () {
   editor.classList.toggle("hidden");
 };
 
-window.addEventListener("popstate", async () => { await handleIncomingShareLink(); });
+window.addEventListener("popstate", async (event) => {
+  if (isStageOnePresentation() && event.state?.bomDiscover) {
+    selectedItem = null;
+    showOnlySection("recommendationsSection");
+    renderRecommendations();
+    window.requestAnimationFrame(() => window.scrollTo({ top: Number(event.state.scrollY || 0), behavior: "auto" }));
+    return;
+  }
+  await handleIncomingShareLink();
+});
 
 window.addEventListener("click", (event) => {
   if (event.target.closest('[data-bom-action="retry-album"]')) void renderSelectedItem();
