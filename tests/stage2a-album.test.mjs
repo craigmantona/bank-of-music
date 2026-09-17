@@ -12,7 +12,7 @@ const [html, app, album, styles, browserRegression] = await Promise.all([
 ]);
 
 test("Stage 2A remains opt-in and loads after the approved foundation", () => {
-  assert.match(html, /get\("ui"\) === "stage1"/);
+  assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /foundationScript\.addEventListener\("load"/);
   assert.match(html, /bom-album\.js\?v=3/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)/);

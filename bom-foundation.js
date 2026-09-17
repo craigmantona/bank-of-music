@@ -2,7 +2,7 @@
   "use strict";
 
   const params = new URLSearchParams(window.location.search);
-  if (params.get("ui") !== "stage1") return;
+  if (params.get("ui") === "legacy") return;
 
   const root = document.getElementById("bomStageOneShell");
   if (!root) return;

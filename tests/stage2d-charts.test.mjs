@@ -28,17 +28,17 @@ function loadChartsUI() {
   return window.BOMChartsUI;
 }
 
-test("Stage 2D loads only inside the Stage 1 opt-in chain", () => {
-  assert.match(html, /get\("ui"\) === "stage1"/);
+test("Stage 2D loads in the approved default chain", () => {
+  assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-charts\.js\?v=3/);
-  assert.match(html, /app\.js\?v=118/);
+  assert.match(html, /app\.js\?v=119/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMChartsUI/);
 });
 
 test("the direct Charts preview route opens Stage 2D after its asset loads", () => {
   assert.match(charts, /new URLSearchParams\(window\.location\.search\)\.get\("view"\) === "charts"/);
   assert.match(charts, /BOMPresentationBridge\?\.openRequestedRoute\(\)/);
-  assert.match(app, /!stageOneInitialDataReady \|\| params\.get\("ui"\) !== "stage1"/);
+  assert.match(app, /!stageOneInitialDataReady \|\| params\.get\("ui"\) === "legacy"/);
   assert.match(app, /params\.get\("view"\) === "charts" && window\.BOMChartsUI/);
 });
 

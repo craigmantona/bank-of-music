@@ -19,7 +19,7 @@ function loadSearchUI() {
 }
 
 test("Stage 3 search presentation loads only in the Stage 1 chain", () => {
-  assert.match(html, /get\("ui"\) === "stage1"/);
+  assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-search\.js\?v=2/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMSearchUI/);
 });

@@ -9,11 +9,11 @@ const [html, app, shell, styles] = await Promise.all([
   readFile(new URL("../bom-foundation.css", import.meta.url), "utf8")
 ]);
 
-test("the Stage 1 shell is opt-in and legacy assets remain primary", () => {
-  assert.match(html, /get\("ui"\) === "stage1"/);
+test("the approved shell is default and legacy remains an explicit rollback", () => {
+  assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /style\.css\?v=80/);
-  assert.match(html, /app\.js\?v=118/);
-  assert.match(shell, /params\.get\("ui"\) !== "stage1"/);
+  assert.match(html, /app\.js\?v=119/);
+  assert.match(shell, /params\.get\("ui"\) === "legacy"/);
 });
 
 test("the approved navigation and account destinations are present", () => {

@@ -432,7 +432,7 @@ window.BOMPresentationBridge = Object.freeze({
   openAlbumById: (albumId) => openStageOneRatingsAlbum(albumId),
   openRequestedRoute: () => {
     const params = new URLSearchParams(window.location.search);
-    if (!stageOneInitialDataReady || params.get("ui") !== "stage1") return;
+    if (!stageOneInitialDataReady || params.get("ui") === "legacy") return;
     if (params.get("view") === "search" && window.BOMSearchUI) {
       const query = params.get("q") || "";
       const shellInput = document.getElementById("bomV1Search");
@@ -6357,7 +6357,7 @@ async function renderArtistDetail(artistItem) {
 
 
 function isStageOnePresentation() {
-  return new URLSearchParams(window.location.search).get("ui") === "stage1";
+  return new URLSearchParams(window.location.search).get("ui") !== "legacy";
 }
 
 function buildCompactTrackRatingControl(songId, currentValue) {

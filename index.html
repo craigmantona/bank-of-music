@@ -12,7 +12,7 @@
  <link rel="stylesheet" href="style.css?v=80" />
  <script>
   /* Stage 1 assets are development-only and add no requests to the legacy UI. */
-  if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
+  if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
     ["regular", "semibold", "extrabold"].forEach(function (weight) {
       var preload = document.createElement("link");
       preload.rel = "preload";
@@ -402,11 +402,11 @@
   })();
 </script>
 
-  <script src="app.js?v=118"></script>
+  <script src="app.js?v=119"></script>
 <script>
-  if (new URLSearchParams(window.location.search).get("ui") === "stage1") {
+  if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
     var foundationScript = document.createElement("script");
-    foundationScript.src = "bom-foundation.js?v=3";
+    foundationScript.src = "bom-foundation.js?v=4";
     foundationScript.addEventListener("load", function () {
       var albumScript = document.createElement("script");
       albumScript.src = "bom-album.js?v=3";
