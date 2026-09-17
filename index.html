@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=22";
+    foundationStyles.href = "bom-foundation.css?v=23";
     document.head.appendChild(foundationStyles);
 
   }
@@ -402,7 +402,8 @@
   })();
 </script>
 
-  <script src="app.js?v=119"></script>
+  <script src="bom-artist-hero.js?v=1"></script>
+  <script src="app.js?v=120"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
     var foundationScript = document.createElement("script");
@@ -412,7 +413,7 @@
       albumScript.src = "bom-album.js?v=3";
       albumScript.addEventListener("load", function () {
         var artistScript = document.createElement("script");
-        artistScript.src = "bom-artist.js?v=7";
+        artistScript.src = "bom-artist.js?v=8";
         artistScript.addEventListener("load", function () {
           var discoverScript = document.createElement("script");
           discoverScript.src = "bom-discover.js?v=2";

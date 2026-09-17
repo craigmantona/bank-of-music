@@ -8,6 +8,8 @@
   let currentModel = null;
   let discographySort = "release";
   let trackLimit = 10;
+  let selectedHeroFile = null;
+  let selectedHeroPreviewUrl = "";
 
   const approvedArtistImageHosts = new Set([
     "lastfm-img2.akamaized.net",
@@ -24,6 +26,17 @@
       const imageUrl = new URL(value, window.location?.href || "http://localhost/");
       if (imageUrl.protocol !== "https:" || !approvedArtistImageHosts.has(imageUrl.hostname.toLowerCase())) return false;
       return !/(coverartarchive|release-group|\/releases?\/|\/albums?\/|composite|\bISS[-_]|desert|satellite|scenery|landscape)/i.test(`${imageUrl.hostname}${imageUrl.pathname}`);
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function isApprovedManualHeroUrl(value) {
+    if (!value || !window.SUPABASE_URL) return false;
+    try {
+      const imageUrl = new URL(value);
+      const projectUrl = new URL(window.SUPABASE_URL);
+      return imageUrl.protocol === "https:" && imageUrl.hostname === projectUrl.hostname && imageUrl.pathname.includes("/storage/v1/object/public/artist-hero-images/");
     } catch (_error) {
       return false;
     }
@@ -109,7 +122,7 @@
   }
 
   function heroImage(model) {
-    if (isApprovedArtistImageUrl(model.imageUrl)) {
+    if (isApprovedArtistImageUrl(model.imageUrl) || (model.imageMeta?.isManual && isApprovedManualHeroUrl(model.imageUrl))) {
       const source = model.imageMeta?.provider || artistImageSource(model.imageUrl);
       const fitClass = model.imageMeta?.heroFit === "cover" ? " is-cover" : "";
       return `<img class="bom-v1-artist-photo${fitClass}" src="${escapeHtml(model.imageUrl)}" alt="${escapeHtml(model.name)}" data-bom-artist-image-source="${escapeHtml(source)}" data-bom-artist-identity-source="${escapeHtml(model.imageMeta?.identitySource || "")}" data-bom-artist-identity-url="${escapeHtml(model.imageMeta?.identityUrl || "")}" data-bom-artist-image-width="${escapeHtml(model.imageMeta?.width || "")}" data-bom-artist-image-height="${escapeHtml(model.imageMeta?.height || "")}" data-bom-artist-image-identity="${escapeHtml(model.imageMeta?.imageIdentity || "")}" data-bom-artist-image-fit="${escapeHtml(model.imageMeta?.heroFit || "contain")}" fetchpriority="high" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" hidden><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
@@ -117,15 +130,31 @@
     return `<div class="bom-v1-artist-photo bom-v1-artist-photo-missing" role="img" aria-label="Artist image unavailable" data-bom-artist-image-source="${escapeHtml(model.imageMeta?.provider || "BOM placeholder")}" data-bom-artist-identity-source="${escapeHtml(model.imageMeta?.identitySource || "No validated artist photograph")}"><span>${escapeHtml(model.name.slice(0, 1).toUpperCase())}</span><small>Artist image unavailable</small></div>`;
   }
 
+  function heroAdminControls(model) {
+    if (!model.heroAdmin?.enabled) return "";
+    const action = model.heroAdmin.hasManual ? "Change hero" : "Add hero";
+    return `<div class="bom-v1-artist-hero-admin" data-bom-artist-hero-admin>
+      <div class="bom-v1-artist-hero-admin-actions"><button type="button" data-bom-artist-hero-pick>${action}</button>${model.heroAdmin.hasManual ? '<button type="button" data-bom-artist-hero-remove>Remove hero</button>' : ""}</div>
+      <input type="file" data-bom-artist-hero-input accept="image/jpeg,image/png,image/webp" hidden>
+      <div class="bom-v1-artist-hero-editor" data-bom-artist-hero-editor hidden>
+        <img data-bom-artist-hero-preview alt="New artist hero preview">
+        <div><p data-bom-artist-hero-file></p><span data-bom-artist-hero-message role="status"></span><div><button type="button" data-bom-artist-hero-save>Save hero</button><button type="button" data-bom-artist-hero-cancel>Cancel</button></div></div>
+      </div>
+    </div>`;
+  }
+
   function render(model) {
     currentModel = model;
+    if (selectedHeroPreviewUrl) URL.revokeObjectURL(selectedHeroPreviewUrl);
+    selectedHeroFile = null;
+    selectedHeroPreviewUrl = "";
     discographySort = "release";
     trackLimit = 10;
     const metadata = model.metadata.filter(Boolean).join(" · ");
     return `<article class="bom-v1-artist" data-bom-artist="${escapeHtml(model.name)}">
       <nav class="bom-v1-artist-breadcrumb" aria-label="Breadcrumb">${model.backControlHtml || ""}<span aria-hidden="true">/</span><span>Artist</span></nav>
       <section class="bom-v1-artist-hero">
-        <div class="bom-v1-artist-identity"><span class="bom-v1-artist-eyebrow">The artist</span><h1>${escapeHtml(model.name)}</h1>${metadata ? `<p>${escapeHtml(metadata)}</p>` : ""}<div class="bom-v1-artist-follow-wrap">${model.followControlHtml || ""}</div></div>
+        <div class="bom-v1-artist-identity"><span class="bom-v1-artist-eyebrow">The artist</span><h1>${escapeHtml(model.name)}</h1>${metadata ? `<p>${escapeHtml(metadata)}</p>` : ""}<div class="bom-v1-artist-follow-wrap">${model.followControlHtml || ""}</div>${heroAdminControls(model)}</div>
         <div class="bom-v1-artist-photo-wrap">${heroImage(model)}</div>
       </section>
       <section class="bom-v1-artist-section" aria-labelledby="bomV1DiscographyHeading">
@@ -149,12 +178,62 @@
   }
 
   document.addEventListener("change", (event) => {
-    if (event.target.id !== "bomV1ArtistSort") return;
-    discographySort = event.target.value;
-    renderDiscography();
+    if (event.target.id === "bomV1ArtistSort") {
+      discographySort = event.target.value;
+      renderDiscography();
+      return;
+    }
+    if (!event.target.matches("[data-bom-artist-hero-input]")) return;
+    const file = event.target.files?.[0] || null;
+    const editor = event.target.closest("[data-bom-artist-hero-admin]")?.querySelector("[data-bom-artist-hero-editor]");
+    const message = editor?.querySelector("[data-bom-artist-hero-message]");
+    if (!file || !editor) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      if (message) message.textContent = "Choose a JPEG, PNG or WebP image no larger than 5 MB.";
+      editor.hidden = false;
+      return;
+    }
+    if (selectedHeroPreviewUrl) URL.revokeObjectURL(selectedHeroPreviewUrl);
+    selectedHeroFile = file;
+    selectedHeroPreviewUrl = URL.createObjectURL(file);
+    editor.querySelector("[data-bom-artist-hero-preview]").src = selectedHeroPreviewUrl;
+    editor.querySelector("[data-bom-artist-hero-file]").textContent = `${file.name} · ${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+    if (message) message.textContent = "Preview ready. The current hero is unchanged until you save.";
+    editor.hidden = false;
   });
 
   document.addEventListener("click", async (event) => {
+    const adminRoot = event.target.closest("[data-bom-artist-hero-admin]");
+    if (adminRoot && event.target.closest("[data-bom-artist-hero-pick]")) {
+      adminRoot.querySelector("[data-bom-artist-hero-input]")?.click();
+      return;
+    }
+    if (adminRoot && event.target.closest("[data-bom-artist-hero-cancel]")) {
+      if (selectedHeroPreviewUrl) URL.revokeObjectURL(selectedHeroPreviewUrl);
+      selectedHeroFile = null;
+      selectedHeroPreviewUrl = "";
+      adminRoot.querySelector("[data-bom-artist-hero-editor]").hidden = true;
+      adminRoot.querySelector("[data-bom-artist-hero-input]").value = "";
+      return;
+    }
+    if (adminRoot && event.target.closest("[data-bom-artist-hero-save]")) {
+      const saveButton = event.target.closest("[data-bom-artist-hero-save]");
+      const message = adminRoot.querySelector("[data-bom-artist-hero-message]");
+      if (!selectedHeroFile || !window.BOMArtistBridge) return;
+      saveButton.disabled = true;
+      message.textContent = "Saving artist hero…";
+      const result = await window.BOMArtistBridge.saveHero(selectedHeroFile);
+      if (!result?.ok) { saveButton.disabled = false; message.textContent = result?.message || "The artist hero could not be saved."; }
+      return;
+    }
+    if (adminRoot && event.target.closest("[data-bom-artist-hero-remove]")) {
+      if (!window.confirm("Remove this manual artist hero and restore automatic imagery?")) return;
+      const removeButton = event.target.closest("[data-bom-artist-hero-remove]");
+      removeButton.disabled = true;
+      const result = await window.BOMArtistBridge?.removeHero();
+      if (!result?.ok) removeButton.disabled = false;
+      return;
+    }
     if (event.target.closest("#bomV1ArtistTrackLimit")) {
       trackLimit = trackLimit === 10 ? 50 : 10;
       renderTracks();

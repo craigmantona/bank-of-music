@@ -13,7 +13,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=7/);
+  assert.match(html, /bom-artist\.js\?v=8/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -117,7 +117,7 @@ test("release art, composites, objects and unknown hosts remain ineligible", () 
 });
 
 test("a recovered discography identity is retried before the safe fallback", () => {
-  assert.match(app, /if \(!imageIdentity\.detail && artistMusicBrainzId\)/);
+  assert.match(app, /if \(!manualArtistHero && !imageIdentity\.detail && artistMusicBrainzId\)/);
   assert.match(app, /resolveArtistIdentityForImage\(artistName, artistMusicBrainzId\)/);
 });
 

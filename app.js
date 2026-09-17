@@ -2638,6 +2638,72 @@ async function unfollowArtistByName(artistName) {
 
 }
 
+async function saveManualArtistHero(file) {
+  if (!currentUser || !isAdmin || selectedItem?.type !== "artist") return { ok: false, message: "Admin access is required." };
+  const validationMessage = validateArtistHeroFile(file);
+  if (validationMessage) return { ok: false, message: validationMessage };
+  const artistName = selectedItem.name || selectedItem.artist || selectedItem.title || "";
+  const artistKey = getArtistHeroKey(artistName);
+  if (!artistKey) return { ok: false, message: "The artist could not be identified." };
+  let dimensions;
+  try {
+    dimensions = await readArtistHeroDimensions(file);
+  } catch (error) {
+    return { ok: false, message: error?.message || "The selected image could not be read." };
+  }
+  if (dimensions.width < 800 || dimensions.height < 300) {
+    return { ok: false, message: "Choose an image at least 800 × 300 pixels." };
+  }
+  const existing = await loadManualArtistHero(artistName);
+  const extension = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" }[file.type];
+  const safeArtist = normaliseCompare(artistName).slice(0, 80) || "artist";
+  const uniqueId = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const storagePath = `${safeArtist}/${Date.now()}-${uniqueId}.${extension}`;
+  const { error: uploadError } = await supabaseClient.storage
+    .from(ARTIST_HERO_BUCKET)
+    .upload(storagePath, file, { cacheControl: "31536000", contentType: file.type, upsert: false });
+  if (uploadError) return { ok: false, message: uploadError.message || "The image could not be uploaded." };
+  const payload = {
+    artist_key: artistKey,
+    artist_name: artistName,
+    musicbrainz_artist_id: selectedItem.externalId || selectedItem.artistId || null,
+    storage_path: storagePath,
+    mime_type: file.type,
+    width: dimensions.width,
+    height: dimensions.height,
+    uploaded_by: currentUser.id,
+    updated_at: new Date().toISOString()
+  };
+  const { error: saveError } = await supabaseClient
+    .from("artist_hero_overrides")
+    .upsert(payload, { onConflict: "artist_key" });
+  if (saveError) {
+    await supabaseClient.storage.from(ARTIST_HERO_BUCKET).remove([storagePath]);
+    return { ok: false, message: saveError.message || "The artist hero could not be saved." };
+  }
+  if (existing?.storage_path && existing.storage_path !== storagePath) {
+    const { error: cleanupError } = await supabaseClient.storage.from(ARTIST_HERO_BUCKET).remove([existing.storage_path]);
+    if (cleanupError) console.warn("Previous artist hero could not be removed", cleanupError);
+  }
+  clearAutomaticArtistImageCache(artistName, payload.musicbrainz_artist_id || "");
+  await renderSelectedItem();
+  return { ok: true, message: "Artist hero saved." };
+}
+
+async function removeManualArtistHero() {
+  if (!currentUser || !isAdmin || selectedItem?.type !== "artist") return { ok: false, message: "Admin access is required." };
+  const artistName = selectedItem.name || selectedItem.artist || selectedItem.title || "";
+  const existing = await loadManualArtistHero(artistName);
+  if (!existing) return { ok: true, message: "Automatic artist image restored." };
+  const { error } = await supabaseClient.from("artist_hero_overrides").delete().eq("artist_key", existing.artist_key);
+  if (error) return { ok: false, message: error.message || "The artist hero could not be removed." };
+  const { error: storageError } = await supabaseClient.storage.from(ARTIST_HERO_BUCKET).remove([existing.storage_path]);
+  if (storageError) console.warn("Removed artist hero object could not be cleaned up", storageError);
+  clearAutomaticArtistImageCache(artistName, existing.musicbrainz_artist_id || selectedItem.externalId || "");
+  await renderSelectedItem();
+  return { ok: true, message: "Automatic artist image restored." };
+}
+
 window.BOMArtistBridge = Object.freeze({
   async setFollowing(shouldFollow) {
     if (selectedItem?.type !== "artist") return false;
@@ -2647,7 +2713,9 @@ window.BOMArtistBridge = Object.freeze({
       : await unfollowArtistByName(artistName);
     if (changed && selectedItem?.type === "artist") await renderSelectedItem();
     return changed;
-  }
+  },
+  saveHero: (file) => saveManualArtistHero(file),
+  removeHero: () => removeManualArtistHero()
 });
 
 
@@ -5050,6 +5118,87 @@ async function resolveArtistIdentityForImage(artistName, preferredArtistId = "",
 const ARTIST_IMAGE_CACHE_PREFIX = "bom_artist_image_v17:";
 const ARTIST_IMAGE_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 14;
 const artistImageMemoryCache = new Map();
+const ARTIST_HERO_BUCKET = "artist-hero-images";
+
+function getArtistHeroKey(artistName) {
+  return String(artistName || "")
+    .normalize("NFKC")
+    .trim()
+    .toLocaleLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function getArtistHeroPublicUrl(storagePath, updatedAt = "") {
+  if (!storagePath) return "";
+  const { data } = supabaseClient.storage.from(ARTIST_HERO_BUCKET).getPublicUrl(storagePath);
+  const url = data?.publicUrl || "";
+  if (!url || !updatedAt) return url;
+  const version = Date.parse(updatedAt);
+  return Number.isFinite(version) ? `${url}?v=${version}` : url;
+}
+
+async function loadManualArtistHero(artistName) {
+  const artistKey = getArtistHeroKey(artistName);
+  if (!artistKey) return null;
+  const { data, error } = await supabaseClient
+    .from("artist_hero_overrides")
+    .select("artist_key, artist_name, musicbrainz_artist_id, storage_path, mime_type, width, height, updated_at")
+    .eq("artist_key", artistKey)
+    .maybeSingle();
+  if (error) {
+    // Keep the staged UI usable while the accompanying migration is pending.
+    // Unexpected read failures still surface for diagnosis.
+    if (!["PGRST205", "42P01"].includes(error.code)) {
+      console.warn("Artist hero override could not load", error);
+    }
+    return null;
+  }
+  if (!data?.storage_path) return null;
+  const width = Number(data.width || 0);
+  const height = Number(data.height || 0);
+  const { heroFit, heroPosition } = window.BOMArtistHeroPolicy.fitForDimensions(width, height);
+  return {
+    ...data,
+    url: getArtistHeroPublicUrl(data.storage_path, data.updated_at),
+    provider: "BOM artist hero",
+    identitySource: "Admin-selected artist photograph",
+    imageIdentity: data.storage_path,
+    width,
+    height,
+    originalWidth: width,
+    originalHeight: height,
+    heroFit,
+    heroPosition,
+    isManual: true
+  };
+}
+
+function clearAutomaticArtistImageCache(artistName, artistId = "") {
+  [getArtistImageCacheKey(artistName, artistId), getArtistImageCacheKey(artistName, "")].forEach((key) => {
+    artistImageMemoryCache.delete(key);
+    try { sessionStorage.removeItem(key); } catch (_error) {}
+  });
+}
+
+async function readArtistHeroDimensions(file) {
+  if (typeof createImageBitmap === "function") {
+    const bitmap = await createImageBitmap(file);
+    const dimensions = { width: bitmap.width, height: bitmap.height };
+    bitmap.close();
+    return dimensions;
+  }
+  return await new Promise((resolve, reject) => {
+    const image = new Image();
+    const url = URL.createObjectURL(file);
+    image.onload = () => { URL.revokeObjectURL(url); resolve({ width: image.naturalWidth, height: image.naturalHeight }); };
+    image.onerror = () => { URL.revokeObjectURL(url); reject(new Error("The selected image could not be read.")); };
+    image.src = url;
+  });
+}
+
+function validateArtistHeroFile(file) {
+  return window.BOMArtistHeroPolicy.validateFile(file);
+}
 
 function isMusicalArtistContext(value) {
   return /\b(singer|songwriter|musician|rapper|composer|record producer|musical artist|music group|rock band|pop band|band|duo|trio|quartet|vocalist|instrumentalist)\b/i.test(String(value || ""));
@@ -5859,6 +6008,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
     topTracks: rankedTracks,
     highestAlbum: rankedAlbums[0] || null,
     highestTrack: rankedTracks[0] || null,
+    heroAdmin: { enabled: Boolean(isAdmin), hasManual: Boolean(imageMeta?.isManual) },
     backControlHtml: buildSelectedBackButton(),
     followControlHtml: isArtistFollowed(artistName)
       ? '<button type="button" class="bom-v1-artist-follow is-following" data-bom-artist-follow="false" aria-pressed="true">Following ✓</button>'
@@ -5903,10 +6053,14 @@ async function renderArtistDetail(artistItem) {
     getSelectedArtistIdFallback(artistName) ||
     await resolveArtistIdByName(artistName);
 
+  const manualArtistHero = await loadManualArtistHero(artistName);
+
   // Resolve the image identity before the discography makes further
   // MusicBrainz requests. This keeps URL relationships off the rate-limit tail.
-  if (preferredArtistMusicBrainzId) await new Promise((resolve) => window.setTimeout(resolve, 1100));
-  let imageIdentity = await resolveArtistIdentityForImage(artistName, preferredArtistMusicBrainzId);
+  if (preferredArtistMusicBrainzId && !manualArtistHero) await new Promise((resolve) => window.setTimeout(resolve, 1100));
+  let imageIdentity = manualArtistHero
+    ? { artistId: preferredArtistMusicBrainzId, detail: preferredArtistMusicBrainzId ? await fetchArtistDetail(preferredArtistMusicBrainzId) : null }
+    : await resolveArtistIdentityForImage(artistName, preferredArtistMusicBrainzId);
 
   const completeDiscography =
     await fetchMostCompleteArtistDiscography({
@@ -5930,7 +6084,7 @@ async function renderArtistDetail(artistItem) {
   // The discography lookup can recover an identity after an earlier transient
   // MusicBrainz search failure. Reuse that verified ID before accepting the
   // placeholder so direct Artist links remain resilient without guessing.
-  if (!imageIdentity.detail && artistMusicBrainzId) {
+  if (!manualArtistHero && !imageIdentity.detail && artistMusicBrainzId) {
     await new Promise((resolve) => window.setTimeout(resolve, 1100));
     imageIdentity = await resolveArtistIdentityForImage(artistName, artistMusicBrainzId);
   }
@@ -6043,7 +6197,10 @@ async function renderArtistDetail(artistItem) {
   });
 
   const artistDetail = imageIdentity.detail;
-  const artistImageResult = await fetchArtistImagePremium(artistName, imageIdentity.artistId || artistMusicBrainzId, artistDetail);
+  const artistImageResult = await window.BOMArtistHeroPolicy.select(
+    manualArtistHero,
+    () => fetchArtistImagePremium(artistName, imageIdentity.artistId || artistMusicBrainzId, artistDetail)
+  );
   const premiumArtistImage = artistImageResult?.url || "";
 
   const cachedArtistImage = "";

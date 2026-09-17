@@ -31,7 +31,7 @@ function loadChartsUI() {
 test("Stage 2D loads in the approved default chain", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-charts\.js\?v=3/);
-  assert.match(html, /app\.js\?v=119/);
+  assert.match(html, /app\.js\?v=120/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMChartsUI/);
 });
 

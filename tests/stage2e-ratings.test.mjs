@@ -26,7 +26,7 @@ function loadRatingsUI() {
 test("Stage 2E loads only within the Stage 1 asset chain", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-ratings\.js\?v=2/);
-  assert.match(html, /app\.js\?v=119/);
+  assert.match(html, /app\.js\?v=120/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMRatingsUI/);
 });
 
