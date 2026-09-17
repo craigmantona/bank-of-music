@@ -433,6 +433,12 @@ window.BOMPresentationBridge = Object.freeze({
   openRequestedRoute: () => {
     const params = new URLSearchParams(window.location.search);
     if (!stageOneInitialDataReady || params.get("ui") !== "stage1") return;
+    if (params.get("view") === "search" && window.BOMSearchUI) {
+      const query = params.get("q") || "";
+      const shellInput = document.getElementById("bomV1Search");
+      if (shellInput) shellInput.value = query;
+      if (query) return window.BOMPresentationBridge.runSearch(query);
+    }
     if (params.get("view") === "charts" && window.BOMChartsUI) return window.goCharts();
     if (params.get("view") === "ratings" && window.BOMRatingsUI) {
       showOnlySection("librarySection");
@@ -1365,7 +1371,7 @@ function renderProfileModalContent() {
 
                </div>
 
-               <div class="profile-album-rating">⭐ ${item.rating}/10</div>
+               <div class="profile-album-rating">${isStageOnePresentation() ? "" : "⭐ "}${item.rating}/10</div>
 
              </div>
 
@@ -3931,8 +3937,11 @@ async function runGlobalSearch(forceOpenBest = false) {
 
 
   setMessage(globalSearchMessage, "Searching...");
-
-  renderLoadingSkeleton(globalSearchResults, "list");
+  if (isStageOnePresentation() && window.BOMSearchUI) {
+    globalSearchResults.innerHTML = window.BOMSearchUI.renderLoading(query);
+  } else {
+    renderLoadingSkeleton(globalSearchResults, "list");
+  }
 
 
 
@@ -4473,11 +4482,18 @@ const songs = sortBySearchScore(
     if (!artists.length && !albums.length && !songs.length) {
 
       setMessage(globalSearchMessage, "No results found.");
-
-      globalSearchResults.innerHTML = "";
+      globalSearchResults.innerHTML = isStageOnePresentation() && window.BOMSearchUI
+        ? window.BOMSearchUI.renderEmpty(query)
+        : "";
 
       return;
 
+    }
+
+    if (isStageOnePresentation() && window.BOMSearchUI) {
+      globalSearchResults.innerHTML = window.BOMSearchUI.render(buildStageOneSearchModel(query, groupedResults));
+      setMessage(globalSearchMessage, "");
+      return;
     }
 
 
@@ -4516,9 +4532,48 @@ const songs = sortBySearchScore(
     console.error("Search failed", err);
 
     setMessage(globalSearchMessage, "Search failed.");
+    if (isStageOnePresentation() && window.BOMSearchUI) {
+      globalSearchResults.innerHTML = window.BOMSearchUI.renderError(query);
+    }
 
   }
 
+}
+
+function buildStageOneSearchModel(query, groupedResults) {
+  const findAlbum = (item) => allAlbums.find((album) =>
+    normaliseCompare(album.title) === normaliseCompare(item.title) &&
+    normaliseCompare(album.artist) === normaliseCompare(item.artist)
+  );
+  const artists = groupedResults.artists.map((item, index) => ({ ...item, index, artworkUrl: "" }));
+  const albums = groupedResults.albums.map((item, index) => {
+    const saved = findAlbum(item);
+    const community = saved ? getAlbumAverage(saved.id) : null;
+    return {
+      ...item,
+      index,
+      artworkUrl: saved ? getAlbumArtworkUrl(saved) : item.coverUrl,
+      year: String(saved?.original_release_date || saved?.release_date || item.releaseDate || "").match(/\b\d{4}\b/)?.[0] || "",
+      community: community ? { average: community.avg, count: community.count } : null
+    };
+  });
+  const songs = groupedResults.songs.map((item, index) => {
+    const saved = allSongs.find((song) =>
+      normaliseCompare(song.title) === normaliseCompare(item.title) &&
+      normaliseCompare(song.artist) === normaliseCompare(item.artist)
+    );
+    const album = saved?.album_id ? allAlbums.find((row) => Number(row.id) === Number(saved.album_id)) : findAlbum({ title: item.releaseTitle, artist: item.artist });
+    const community = saved ? getSongAverage(saved.id) : null;
+    return {
+      ...item,
+      index,
+      albumTitle: album?.title || item.releaseTitle || "",
+      artworkUrl: album ? getAlbumArtworkUrl(album) : "",
+      year: String(album?.original_release_date || album?.release_date || item.releaseDate || "").match(/\b\d{4}\b/)?.[0] || "",
+      community: community ? { average: community.avg, count: community.count } : null
+    };
+  });
+  return { query, artists, albums, songs };
 }
 
 
@@ -12874,7 +12929,7 @@ async function renderPublicProfile(profile) {
               <div class="profile-album-title">${escapeHtml(item.album.title)}</div>
               <div class="profile-album-artist">${escapeHtml(item.album.artist || "")}</div>
             </div>
-            <div class="profile-album-rating">⭐ ${item.rating}/10</div>
+            <div class="profile-album-rating">${isStageOnePresentation() ? "" : "⭐ "}${item.rating}/10</div>
           </div>
         `).join("") : `<p class="small">No public ratings yet.</p>`}
       </div>
@@ -13309,7 +13364,7 @@ function renderProfileModalContent() {
             <div class="profile-album-rank">${index + 1}</div>
             <div class="profile-album-cover-wrap">${getAlbumCoverMarkup(getAlbumArtworkUrl(item.album), `${item.album.title} cover`)}</div>
             <div class="profile-album-main"><div class="profile-album-title">${escapeHtml(item.album.title)}</div><div class="profile-album-artist">${escapeHtml(item.album.artist || "")}</div></div>
-            <div class="profile-album-rating">⭐ ${item.rating}/10</div>
+            <div class="profile-album-rating">${isStageOnePresentation() ? "" : "⭐ "}${item.rating}/10</div>
           </div>
         `).join("") : `<p class="small">No rated albums yet.</p>`}
       </div>

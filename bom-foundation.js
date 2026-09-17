@@ -96,6 +96,19 @@
     });
   }
 
+  function routeUrl(route, query = "") {
+    const url = new URL(window.location.href);
+    ["share", "id", "albumId", "songId", "title", "artist", "date", "cover", "release", "view", "q"].forEach((key) => url.searchParams.delete(key));
+    if (route === "charts" || route === "ratings" || route === "search") url.searchParams.set("view", route);
+    if (route === "search" && query) url.searchParams.set("q", query);
+    return url.toString();
+  }
+
+  function rememberRoute(route, query = "") {
+    const nextUrl = routeUrl(route, query);
+    if (nextUrl !== window.location.href) window.history.pushState({ bomStageOneRoute: route, query }, "", nextUrl);
+  }
+
   function closeMenu({ restoreFocus = false } = {}) {
     menu.hidden = true;
     accountButton.setAttribute("aria-expanded", "false");
@@ -128,6 +141,7 @@
     if (action === "discover") app.showDiscover();
     if (action === "charts") await app.showCharts();
     if (action === "ratings") app.showRatings();
+    rememberRoute(action);
   }));
 
   searchForm.addEventListener("submit", async (event) => {
@@ -136,6 +150,7 @@
     if (!term || !bridge()) return;
     setRoute("");
     await bridge().runSearch(term);
+    rememberRoute("search", term);
   });
 
   accountButton.addEventListener("click", () => {
@@ -172,6 +187,16 @@
   const sessionStatus = document.getElementById("sessionStatus");
   if (sessionStatus) new MutationObserver(activate).observe(sessionStatus, { childList: true, subtree: true, characterData: true });
   window.addEventListener("bom:presentation-ready", activate);
-  window.addEventListener("popstate", activate);
+  window.addEventListener("popstate", async (event) => {
+    const params = new URLSearchParams(window.location.search);
+    const route = event.state?.bomStageOneRoute || params.get("view") || "";
+    const app = bridge();
+    if (!app) return activate();
+    if (route === "charts") await app.showCharts();
+    else if (route === "ratings") app.showRatings();
+    else if (route === "search") await app.runSearch(event.state?.query || params.get("q") || "");
+    else if (!params.get("share")) app.showDiscover();
+    activate();
+  });
   activate();
 })();

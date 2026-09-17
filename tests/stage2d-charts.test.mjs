@@ -31,7 +31,7 @@ function loadChartsUI() {
 test("Stage 2D loads only inside the Stage 1 opt-in chain", () => {
   assert.match(html, /get\("ui"\) === "stage1"/);
   assert.match(html, /bom-charts\.js\?v=3/);
-  assert.match(html, /app\.js\?v=116/);
+  assert.match(html, /app\.js\?v=118/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMChartsUI/);
 });
 
