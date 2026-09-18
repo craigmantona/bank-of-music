@@ -1,10 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { getAdminKey, requireServiceOrAdmin } from "../_shared/authorization.ts";
-
-const MUSICBRAINZ_BASE = "https://musicbrainz.org/ws/2";
-const REQUEST_DELAY_MS = 1100;
-
-const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
+import { CatalogueWorker, CatalogueDeferral, catalogueFetch, musicBrainzIdentity } from "../_shared/catalogue-worker.ts";
 
 function normalise(value: unknown) {
   return String(value ?? "")
@@ -19,35 +15,10 @@ function normalise(value: unknown) {
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL") || "",
   getAdminKey(),
-  { auth: { persistSession:false, autoRefreshToken:false } }
+  { global: { fetch: catalogueFetch }, auth: { persistSession:false, autoRefreshToken:false } }
 );
 
-const contactEmail =
-  Deno.env.get("MUSICBRAINZ_CONTACT_EMAIL") ||
-  "bom-catalogue-inspector@example.invalid";
-
-let lastRequestAt = 0;
-
-async function mb(path:string) {
-  const elapsed = Date.now() - lastRequestAt;
-  if (elapsed < REQUEST_DELAY_MS) await sleep(REQUEST_DELAY_MS - elapsed);
-  lastRequestAt = Date.now();
-
-  const r = await fetch(`${MUSICBRAINZ_BASE}${path}`, {
-    headers: {
-      Accept:"application/json",
-      "User-Agent":`BankOfMusic/1.0 (${contactEmail})`
-    }
-  });
-
-  if (!r.ok) {
-    throw new Error(`MusicBrainz ${r.status}: ${(await r.text()).slice(0,300)}`);
-  }
-
-  return r.json();
-}
-
-async function resolveArtist(name:string) {
+async function resolveArtist(name:string, mb: (path: string) => Promise<any>) {
   const q = `artist:"${name.replaceAll('"',"")}"`;
   const data = await mb(`/artist/?query=${encodeURIComponent(q)}&fmt=json&limit=25`);
 
@@ -59,7 +30,7 @@ async function resolveArtist(name:string) {
   return exact[0] || data.artists?.[0] || null;
 }
 
-async function fetchGroups(artistId:string) {
+async function fetchGroups(artistId:string, mb: (path: string) => Promise<any>) {
   const all:any[] = [];
   let offset = 0;
 
@@ -86,7 +57,11 @@ Deno.serve(async (request) => {
   const authorization = await requireServiceOrAdmin(request);
   if (!authorization.ok) return authorization.response;
 
+  const worker = new CatalogueWorker(supabase, 120000, musicBrainzIdentity(Deno.env.get("MUSICBRAINZ_CONTACT_EMAIL")));
+  const mb = (path: string) => worker.musicBrainzGet(path);
   try {
+    const lease = await worker.acquire("inspector");
+    if (lease.busy) return Response.json({ ok: true, deferred: "worker_busy" });
     let artistName = "The Beatles";
 
     try {
@@ -96,15 +71,10 @@ Deno.serve(async (request) => {
       }
     } catch {}
 
-    const artist = await resolveArtist(artistName);
+    const artist = await resolveArtist(artistName, mb);
     if (!artist?.id) throw new Error(`No artist found for ${artistName}`);
 
-    const groups = await fetchGroups(artist.id);
-
-    await supabase
-      .from("artist_release_group_debug")
-      .delete()
-      .eq("artist_name", artistName);
+    const groups = await fetchGroups(artist.id, mb);
 
     const rows = groups.map((g:any) => ({
       artist_name: artistName,
@@ -117,13 +87,8 @@ Deno.serve(async (request) => {
       inspected_at: new Date().toISOString()
     }));
 
-    if (rows.length) {
-      const { error } = await supabase
-        .from("artist_release_group_debug")
-        .upsert(rows, { onConflict:"artist_name,release_group_id" });
-
-      if (error) throw error;
-    }
+    await worker.rpc("inspection", { artist: artistName, artist_id: artist.id, groups });
+    await worker.finish();
 
     return Response.json({
       ok:true,
@@ -133,6 +98,9 @@ Deno.serve(async (request) => {
       with_secondary_types:rows.filter((r:any)=>r.secondary_types.length).length
     });
   } catch (error) {
+    try { await worker.finish(error); }
+    catch (checkpointError) { return Response.json({ ok: false, error: String((checkpointError as Error).message) }, { status: 500 }); }
+    if (error instanceof CatalogueDeferral) return Response.json({ ok: true, deferred: error.reason });
     return Response.json(
       { ok:false, error:String((error as any)?.message || error) },
       { status:500 }

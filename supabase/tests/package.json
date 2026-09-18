@@ -1,0 +1,11 @@
+{
+  "name": "bom-catalogue-tests",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 *.test.mjs ../functions/artist-catalog-importer/*.test.mjs",
+    "typecheck": "tsc --noEmit --allowImportingTsExtensions --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom --skipLibCheck runtime.d.ts ../functions/_shared/catalogue-worker.ts ../functions/_shared/catalogue-selection.ts ../functions/_shared/authorization.ts ../functions/artist-catalog-importer/index.ts ../functions/artist-catalog-inspector/index.ts ../functions/daily-artist-import/index.ts"
+  },
+  "devDependencies": { "@electric-sql/pglite": "0.3.16", "typescript": "7.0.2" }
+}

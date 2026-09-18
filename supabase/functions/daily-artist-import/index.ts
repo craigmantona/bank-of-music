@@ -27,6 +27,23 @@ function jsonResponse(body: Record<string, unknown>, status = 200) {
   return Response.json(body, { status, headers: corsHeaders });
 }
 
+async function functionErrorDetails(error: any) {
+  const response = error?.context;
+  if (!(response instanceof Response)) return null;
+
+  try {
+    return {
+      status: response.status,
+      body: await response.clone().json()
+    };
+  } catch {
+    return {
+      status: response.status,
+      body: (await response.clone().text()).slice(0, 1500)
+    };
+  }
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: corsHeaders });
@@ -85,14 +102,23 @@ Deno.serve(async (request) => {
       await supabase.functions.invoke(
         "artist-catalog-importer",
         {
-          body: {}
+          body: {},
+          // Make the service principal explicit for server-to-server calls.
+          // This avoids depending on FunctionsClient header defaults.
+          headers: {
+            Authorization: `Bearer ${adminKey}`
+          }
         }
       );
 
     if (error) {
+      const downstream =
+        await functionErrorDetails(error);
+
       console.error(
         "DAILY IMPORT: importer failed",
-        error
+        error,
+        downstream
       );
 
       return jsonResponse(
@@ -100,7 +126,8 @@ Deno.serve(async (request) => {
           ok: false,
           error:
             error.message ||
-            String(error)
+            String(error),
+          downstream
         },
         500
       );
