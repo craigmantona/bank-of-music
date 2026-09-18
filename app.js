@@ -8741,6 +8741,8 @@ function getSavedAlbumByTitleArtist(title, artist) {
 
 async function autoSaveSelectedSong() {
 
+  if (!currentUser) return null;
+
   if (!selectedItem || selectedItem.type !== "song") return null;
 
 
@@ -8884,6 +8886,7 @@ async function autoSaveSelectedSong() {
 
 
 async function autoSaveSelectedAlbum() {
+  if (!currentUser) return null;
   if (!selectedItem || selectedItem.type !== "album") return null;
 
   let savedAlbum =
