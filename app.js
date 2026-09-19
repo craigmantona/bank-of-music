@@ -8035,34 +8035,35 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
   if (selectedItem.type === "album") {
 
+    const albumSelection = selectedItem;
     renderLoadingSkeleton(selectedItemDetail, "detail");
 
     try {
 
       const immediatelySavedAlbum =
-        (selectedItem.savedAlbumId
+        (albumSelection.savedAlbumId
           ? allAlbums.find(
               (album) =>
                 Number(album.id) ===
-                Number(selectedItem.savedAlbumId)
+                Number(albumSelection.savedAlbumId)
             )
           : null) ||
-        (selectedItem.id
+        (albumSelection.id
           ? allAlbums.find(
               (album) =>
                 Number(album.id) ===
-                Number(selectedItem.id)
+                Number(albumSelection.id)
             )
           : null) ||
         getSavedAlbumByExternalId(
-          selectedItem.externalId
+          albumSelection.externalId
         ) ||
         allAlbums.find(
           (album) =>
             normaliseCompare(album.title) ===
-              normaliseCompare(selectedItem.title) &&
+              normaliseCompare(albumSelection.title) &&
             normaliseCompare(album.artist) ===
-              normaliseCompare(selectedItem.artist)
+              normaliseCompare(albumSelection.artist)
         ) ||
         null;
 
@@ -8091,22 +8092,22 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
         const localDetail = {
           id:
             immediatelySavedAlbum.external_id ||
-            selectedItem.externalId ||
+            albumSelection.externalId ||
             "",
           title:
             immediatelySavedAlbum.title ||
-            selectedItem.title ||
+            albumSelection.title ||
             "",
           date:
             immediatelySavedAlbum.release_date ||
             immediatelySavedAlbum.releaseDate ||
-            selectedItem.releaseDate ||
+            albumSelection.releaseDate ||
             "",
           "artist-credit": [
             {
               name:
                 immediatelySavedAlbum.artist ||
-                selectedItem.artist ||
+                albumSelection.artist ||
                 ""
             }
           ],
@@ -8152,12 +8153,12 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
           getAlbumArtworkUrl(
             immediatelySavedAlbum
           ) ||
-          selectedItem.coverUrl ||
+          albumSelection.coverUrl ||
           "";
 
         const displayArtist =
           immediatelySavedAlbum.artist ||
-          selectedItem.artist ||
+          albumSelection.artist ||
           "";
 
         if (isStageOnePresentation()) {
@@ -8262,7 +8263,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
                   )}
 
                   ${buildSelectedSharePanel(
-                    selectedItem
+                    albumSelection
                   )}
                 </div>
 
@@ -8292,56 +8293,57 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
         return;
       }
 
-      if (!selectedItem.externalId && selectedItem.releaseGroupId) {
+      if (!albumSelection.externalId && albumSelection.releaseGroupId) {
 
-        selectedItem.externalId = await fetchCanonicalReleaseForReleaseGroup(selectedItem.releaseGroupId);
+        albumSelection.externalId = await fetchCanonicalReleaseForReleaseGroup(albumSelection.releaseGroupId);
 
       }
 
-      if (!selectedItem.externalId && selectedItem?.title && selectedItem?.artist) {
-		  const cleanTitle = normaliseCompare(selectedItem.title);
-const cleanArtist = normaliseCompare(selectedItem.artist);
+      if (!albumSelection.externalId && albumSelection?.title && albumSelection?.artist) {
+		  const cleanTitle = normaliseCompare(albumSelection.title);
+const cleanArtist = normaliseCompare(albumSelection.artist);
 
 if (
   (cleanTitle === "abbey road" && (cleanArtist === "beatles" || cleanArtist === "the beatles")) ||
   (cleanArtist === "abbey road" && (cleanTitle === "beatles" || cleanTitle === "the beatles"))
 ) {
-  selectedItem.title = "Abbey Road";
-  selectedItem.artist = "The Beatles";
-  selectedItem.externalId = "46264b17-694c-468a-8233-6b79bbb1b8b5";
+  albumSelection.title = "Abbey Road";
+  albumSelection.artist = "The Beatles";
+  albumSelection.externalId = "46264b17-694c-468a-8233-6b79bbb1b8b5";
 }
   const searchUrl =
-    `https://musicbrainz.org/ws/2/release/?query=release:${encodeURIComponent(selectedItem.title)}%20AND%20artist:${encodeURIComponent(selectedItem.artist === "Beatles" ? "The Beatles" : selectedItem.artist)}&fmt=json&limit=5`;
+    `https://musicbrainz.org/ws/2/release/?query=release:${encodeURIComponent(albumSelection.title)}%20AND%20artist:${encodeURIComponent(albumSelection.artist === "Beatles" ? "The Beatles" : albumSelection.artist)}&fmt=json&limit=5`;
 
   const res = await fetch(searchUrl);
   const data = await res.json();
 
   const bestMatch = (data.releases || []).find((r) =>
-    normaliseCompare(r.title) === normaliseCompare(selectedItem.title)
+    normaliseCompare(r.title) === normaliseCompare(albumSelection.title)
   ) || data.releases?.[0];
 
   if (bestMatch?.id) {
-    selectedItem.externalId = bestMatch.id;
+    albumSelection.externalId = bestMatch.id;
   }
 }
 
-if (!selectedItem.externalId) {
+if (selectedItem !== albumSelection) return;
+if (!albumSelection.externalId) {
   console.warn("No MusicBrainz release found — showing fallback view");
 
   selectedItemDetail.innerHTML = `
-    <h3>${escapeHtml(selectedItem.title)}</h3>
-    <p class="small">${escapeHtml(selectedItem.artist)}</p>
+    <h3>${escapeHtml(albumSelection.title)}</h3>
+    <p class="small">${escapeHtml(albumSelection.artist)}</p>
     <p class="small">Track list unavailable, but you can still rate this album.</p>
   `;
 
   return;
 }
 
-      const albumLookupId = selectedItem.externalId || selectedItem.releaseGroupId || "";
+      const albumLookupId = albumSelection.externalId || albumSelection.releaseGroupId || "";
 
 	  selectedItemDetail.innerHTML = `
 <div class="glass-card">
-    <h3>${escapeHtml(selectedItem.title)}</h3>
+    <h3>${escapeHtml(albumSelection.title)}</h3>
     <p>Loading tracks...</p>
 </div>
 `;
@@ -8376,6 +8378,7 @@ if (albumLookupId) {
 
 }
 
+      if (selectedItem !== albumSelection) return;
       const releaseGroupId = detail?.["release-group"]?.id || "";
 
       let releaseGroupCover = "";
@@ -8391,13 +8394,14 @@ if (releaseGroupId) {
 
 
 
+      if (selectedItem !== albumSelection) return;
       let savedAlbum =
 
-        getSavedAlbumByExternalId(selectedItem.externalId) ||
+        getSavedAlbumByExternalId(albumSelection.externalId) ||
 
-        (selectedItem.savedAlbumId
+        (albumSelection.savedAlbumId
 
-          ? allAlbums.find((row) => Number(row.id) === Number(selectedItem.savedAlbumId))
+          ? allAlbums.find((row) => Number(row.id) === Number(albumSelection.savedAlbumId))
 
           : null);
 
@@ -8409,7 +8413,7 @@ if (releaseGroupId) {
 
           savedAlbum = await autoSaveSelectedAlbum();
 
-          await loadLibrary();
+          if (selectedItem !== albumSelection) return;
 
         } catch (error) {
 
@@ -8439,19 +8443,20 @@ if (releaseGroupId) {
 
 
 
+      if (selectedItem !== albumSelection) return;
       const refreshedSavedAlbum =
 
-        getSavedAlbumByExternalId(selectedItem.externalId) ||
+        getSavedAlbumByExternalId(albumSelection.externalId) ||
 
-        (savedAlbum ? allAlbums.find((row) => Number(row.id) === Number(savedAlbum.id)) : null);
+        (savedAlbum ? allAlbums.find((row) => Number(row.id) === Number(savedAlbum.id)) || savedAlbum : null);
 
 
 
       const albumId =
   refreshedSavedAlbum?.id ||
-  selectedItem.savedAlbumId ||
-  selectedItem.id ||
-  selectedItem.album_id ||
+  albumSelection.savedAlbumId ||
+  albumSelection.id ||
+  albumSelection.album_id ||
   null;
   
   const albumReviews = isStageOnePresentation()
@@ -8466,25 +8471,25 @@ const albumReviewCount = albumReviews.length;
 
 const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail, albumId);
 
-      const displayArtist = detail?.["artist-credit"]?.map((credit) => credit.name).join(", ") || selectedItem.artist;
-      const displayArtistId = detail?.["artist-credit"]?.[0]?.artist?.id || selectedItem.artistId || "";
-      if (displayArtistId) selectedItem.artistId = displayArtistId;
+      const displayArtist = detail?.["artist-credit"]?.map((credit) => credit.name).join(", ") || albumSelection.artist;
+      const displayArtistId = detail?.["artist-credit"]?.[0]?.artist?.id || albumSelection.artistId || "";
+      if (displayArtistId) albumSelection.artistId = displayArtistId;
 
       const coverUrl =
 
         getAlbumArtworkUrl(refreshedSavedAlbum) ||
 
-        selectedItem.coverUrl ||
+        albumSelection.coverUrl ||
 
         releaseGroupCover ||
 
         "";
 
-      const releaseDate = detail?.date || selectedItem.releaseDate || "";
+      const releaseDate = detail?.date || albumSelection.releaseDate || "";
 
       if (isStageOnePresentation()) {
         await renderStageOneAlbum(buildStageOneAlbumModel({
-          album: refreshedSavedAlbum || selectedItem,
+          album: refreshedSavedAlbum || albumSelection,
           detail,
           albumId,
           artworkUrl: coverUrl,
@@ -8498,8 +8503,8 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
       }
 	  
 	  const chartPosition = await getChartPosition(
-  selectedItem.type,
-  selectedItem.id || selectedItem.externalId
+  albumSelection.type,
+  albumSelection.id || albumSelection.externalId
 );
 
 
@@ -8514,11 +8519,11 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
 
           <div class="detail-hero">
 
-            <div>${getLargeCoverMarkup(coverUrl, `${selectedItem.title} cover`)}</div>
+            <div>${getLargeCoverMarkup(coverUrl, `${albumSelection.title} cover`)}</div>
 
             <div class="detail-info-panel">
 
-              <div class="media-title">${escapeHtml(detail?.title || selectedItem.title)}</div>
+              <div class="media-title">${escapeHtml(detail?.title || albumSelection.title)}</div>
 			  
 			  <div class="album-activity-line">
 
@@ -8558,7 +8563,7 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
 
                   : `<button id="importSelectedAlbumBtn">Save album</button>`}
 
-                ${buildSelectedSharePanel(selectedItem)}
+                ${buildSelectedSharePanel(albumSelection)}
 
               </div>
 
@@ -8581,8 +8586,8 @@ ${albumId
   const moreAlbums = allAlbums
   .filter((album) =>
     album.library_type === "album" &&
-    normaliseCompare(album.artist) === normaliseCompare(selectedItem.artist) &&
-    normaliseCompare(album.title) !== normaliseCompare(selectedItem.title)
+    normaliseCompare(album.artist) === normaliseCompare(albumSelection.artist) &&
+    normaliseCompare(album.title) !== normaliseCompare(albumSelection.title)
   )
   .slice(0, 4);
 
@@ -8615,12 +8620,13 @@ ${albumId
 
 
       `;
-      updateStickyPlayer(selectedItem);
+      updateStickyPlayer(albumSelection);
       requestAnimationFrame(() => activateCarousels(selectedItemDetail));
 
 	  
 
     } catch (err) {
+      if (selectedItem !== albumSelection) return;
 
       console.warn("Album detail unavailable", err?.message || err);
 
@@ -8928,129 +8934,140 @@ async function autoSaveSelectedSong() {
 
 
 
+// Coalesce repeated selections without introducing another catalogue write path.
+const albumAutoSaveInFlight = new Map();
+
 async function autoSaveSelectedAlbum() {
   if (!currentUser) return null;
   if (!selectedItem || selectedItem.type !== "album") return null;
+  const item = selectedItem;
+  const userId = currentUser.id;
+  const key = `${userId}:${item.releaseGroupId || item.externalId || normaliseCompare(`${item.artist}-${item.title}`)}`;
 
-  let savedAlbum =
-    getSavedAlbumByExternalId(selectedItem.externalId) ||
-    allAlbums.find((album) =>
-      normaliseCompare(album.title) === normaliseCompare(selectedItem.title) &&
-      normaliseCompare(album.artist) === normaliseCompare(selectedItem.artist)
-    );
+  const bindSavedAlbum = (album) => {
+    if (!album || selectedItem !== item) return album;
+    item.savedAlbumId = album.id;
+    item.albumId = album.id;
+    item.title = album.title;
+    item.artist = album.artist;
+    item.externalId = album.musicbrainz_release_id || album.external_id || item.externalId;
+    item.releaseGroupId = album.musicbrainz_release_group_id || item.releaseGroupId;
+    item.coverUrl = getAlbumArtworkUrl(album) || item.coverUrl || "";
+    item.releaseDate = album.release_date || item.releaseDate || "";
+    return album;
+  };
 
-  let detail = null;
+  if (albumAutoSaveInFlight.has(key)) return bindSavedAlbum(await albumAutoSaveInFlight.get(key));
 
-  try {
-    detail = selectedItem.externalId
-      ? await fetchAlbumDetail(selectedItem.externalId)
-      : null;
-  } catch (error) {
-    console.error("MusicBrainz album detail failed", error);
-  }
+  const save = (async () => {
+    const matches = (album, title, artist, releaseGroupId) =>
+      (item.savedAlbumId && Number(album.id) === Number(item.savedAlbumId)) ||
+      (item.externalId && (album.musicbrainz_release_id === item.externalId ||
+        (album.external_source === "musicbrainz" && album.external_id === item.externalId))) ||
+      (releaseGroupId && album.musicbrainz_release_group_id === releaseGroupId) ||
+      (normaliseCompare(album.title) === normaliseCompare(title) && normaliseCompare(album.artist) === normaliseCompare(artist));
 
-  const albumTitle = normaliseText(detail?.title || selectedItem.title);
-  const artistCredits = detail && detail["artist-credit"]
-  ? detail["artist-credit"].map((credit) => credit.name).join(", ")
-  : selectedItem.artist;
+    const local = allAlbums.find((album) => matches(album, item.title, item.artist, item.releaseGroupId));
+    if (local) return local.is_deleted ? null : local;
 
-const albumArtist = normaliseText(artistCredits);
+    // Resolution must be complete before the first catalogue mutation. Never
+    // fall back to a synthetic/manual album when MusicBrainz is unavailable.
+    if (!item.externalId) return null;
+    const detail = await fetchAlbumDetail(item.externalId);
+    const title = normaliseText(detail?.title);
+    const artist = normaliseText(detail?.["artist-credit"]?.map((credit) => credit.name || credit.artist?.name || "").join(", "));
+    const releaseGroupId = detail?.["release-group"]?.id;
+    const media = detail?.media;
+    const tracks = Array.isArray(media) ? media.flatMap((medium) => medium.tracks || []) : [];
+    if (detail?.id !== item.externalId || !title || !artist || !releaseGroupId ||
+        (item.releaseGroupId && item.releaseGroupId !== releaseGroupId) ||
+        !detail["artist-credit"].every((credit) => normaliseText(credit.name || credit.artist?.name)) ||
+        !tracks.length || !media.every((medium) => Array.isArray(medium.tracks) &&
+          medium.tracks.length > 0 && (medium["track-count"] == null || Number(medium["track-count"]) === medium.tracks.length)) ||
+        !tracks.every((track) => normaliseText(track.title || track.recording?.title))) return null;
 
-  const releaseGroupId = detail?.["release-group"]?.id || selectedItem.releaseGroupId || "";
-  const coverUrl =
-    selectedItem.coverUrl ||
-    selectedItem.cover_url ||
-    (selectedItem.externalId
-      ? `https://coverartarchive.org/release/${encodeURIComponent(selectedItem.externalId)}/front-250`
-      : "") ||
-    (releaseGroupId
-      ? `https://coverartarchive.org/release-group/${encodeURIComponent(releaseGroupId)}/front-250`
-      : "");
-
-  if (!savedAlbum) {
-    const payload = {
-      title: albumTitle,
-      artist: albumArtist,
-      external_source: selectedItem.externalId ? "musicbrainz" : "manual",
-      external_id: selectedItem.externalId || `manual-album-${Date.now()}`,
-      cover_art_url: coverUrl || null,
-      release_date: normaliseReleaseDate(detail?.date || selectedItem.releaseDate)
-    };
-
-    const { data, error } = await supabaseClient
-      .from("albums")
-      .upsert([payload], { onConflict: "external_source,external_id" })
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Album auto-save failed", error);
-      setMessage(globalSearchMessage, error.message);
-      return null;
-    }
-
-    savedAlbum = data;
-  }
-
-  selectedItem.savedAlbumId = savedAlbum.id;
-  selectedItem.title = savedAlbum.title;
-  selectedItem.artist = savedAlbum.artist;
-  selectedItem.coverUrl =
-  getAlbumArtworkUrl(savedAlbum) ||
-  coverUrl ||
-  selectedItem.coverUrl ||
-  selectedItem.cover_url ||
-  "";
-  selectedItem.releaseDate = savedAlbum.release_date || selectedItem.releaseDate || "";
-
-  if (detail?.media?.length) {
-    let trackPosition = 1;
-
-    for (const medium of detail.media || []) {
-      for (const track of medium.tracks || []) {
-        const trackTitle = normaliseText(track.title || track.recording?.title || "");
-        if (!trackTitle) continue;
-
-        const trackExternalId = track.recording?.id || "";
-
-        const exists = allSongs.some((song) =>
-          Number(song.album_id) === Number(savedAlbum.id) &&
-          normaliseCompare(song.title) === normaliseCompare(trackTitle)
-        );
-
-        if (true) {
-          const { error: songInsertError } = await supabaseClient
-  .from("songs")
-  .insert([{
-    title: trackTitle,
-    artist: albumArtist,
-    album_id: savedAlbum.id,
-    track_position: trackPosition,
-    external_source: trackExternalId ? "musicbrainz" : "manual",
-    external_id: trackExternalId || `manual-track-${savedAlbum.id}-${trackPosition}-${Date.now()}`
-  }]);
-
-if (
-  songInsertError &&
-  !songInsertError.message?.includes("duplicate key value")
-) {
-  console.error("Song insert failed", songInsertError);
-}
-        }
-
-        trackPosition++;
+    // The catalogue cache can be stale or truncated. Restore the historical
+    // database conflict recovery, including the existing release-group key.
+    const findSavedAlbum = async () => {
+      const queries = [
+        () => supabaseClient.from("albums").select("*").eq("external_source", "musicbrainz").eq("external_id", detail.id).maybeSingle(),
+        () => supabaseClient.from("albums").select("*").eq("musicbrainz_release_group_id", releaseGroupId).maybeSingle(),
+        () => supabaseClient.from("albums").select("*").eq("title", title).eq("artist", artist).maybeSingle()
+      ];
+      for (const query of queries) {
+        const { data, error } = await query();
+        if (error) throw error;
+        if (data) return data;
       }
+      return null;
+    };
+    let savedAlbum = await findSavedAlbum();
+    if (savedAlbum?.is_deleted) return null;
+    if (savedAlbum) {
+      await loadLibrary();
+      if (!allAlbums.some((album) => Number(album.id) === Number(savedAlbum.id))) allAlbums.push(savedAlbum);
+      return savedAlbum;
     }
+    if (currentUser?.id !== userId) return null;
+
+    const coverUrl = item.coverUrl || item.cover_url ||
+      `https://coverartarchive.org/release/${encodeURIComponent(detail.id)}/front-250`;
+    const payload = {
+      title, artist, external_source: "musicbrainz", external_id: detail.id,
+      musicbrainz_release_id: detail.id, musicbrainz_release_group_id: releaseGroupId,
+      cover_art_url: coverUrl,
+      release_date: normaliseReleaseDate(detail.date || item.releaseDate)
+    };
+    const { data, error } = await supabaseClient.from("albums")
+      .upsert([payload], { onConflict: "external_source,external_id", ignoreDuplicates: true })
+      .select().maybeSingle();
+    if (error && error.code !== "23505") throw error;
+    savedAlbum = data || await findSavedAlbum();
+    if (!savedAlbum || savedAlbum.is_deleted) return null;
+    // A concurrent client may already have imported the canonical album.
+    // Do not overwrite its metadata or append tracks from another edition.
+    if (!data) {
+      await loadLibrary();
+      if (!allAlbums.some((album) => Number(album.id) === Number(savedAlbum.id))) allAlbums.push(savedAlbum);
+      return savedAlbum;
+    }
+
+    const { data: savedTracks, error: trackReadError } = await supabaseClient.from("songs").select("*").eq("album_id", savedAlbum.id);
+    if (trackReadError) throw trackReadError;
+    const knownTracks = savedTracks || [];
+    for (const [index, track] of tracks.entries()) {
+      const trackTitle = normaliseText(track.title || track.recording?.title);
+      const trackExternalId = track.recording?.id || "";
+      const exists = knownTracks.some((song) => normaliseCompare(song.title) === normaliseCompare(trackTitle) ||
+        (trackExternalId && song.external_source === "musicbrainz" && song.external_id === trackExternalId));
+      if (exists) continue;
+      const { data: song, error: songInsertError } = await supabaseClient.from("songs").insert([{
+        title: trackTitle, artist, album_id: savedAlbum.id, track_position: index + 1,
+        external_source: trackExternalId ? "musicbrainz" : "manual",
+        external_id: trackExternalId || `manual-track-${savedAlbum.id}-${index + 1}`
+      }]).select().single();
+      // Preserve the existing recording/title unique constraints; never move
+      // an existing recording to another album to evade a duplicate conflict.
+      if (songInsertError && songInsertError.code !== "23505") throw songInsertError;
+      if (song) knownTracks.push(song);
+    }
+
+    await loadLibrary();
+    if (!allAlbums.some((album) => Number(album.id) === Number(savedAlbum.id))) allAlbums.push(savedAlbum);
+    for (const song of knownTracks) if (!allSongs.some((row) => Number(row.id) === Number(song.id))) allSongs.push(song);
+    predictiveCataloguePromise = null;
+    predictiveCatalogueLoadedAt = 0;
+    renderLibrary();
+    renderRecommendations();
+    return savedAlbum;
+  })();
+  albumAutoSaveInFlight.set(key, save);
+  try {
+    return bindSavedAlbum(await save);
+  } finally {
+    albumAutoSaveInFlight.delete(key);
   }
-
-  await loadLibrary();
-
-  renderLibrary();
-  renderRecommendations();
-
-  return savedAlbum;
 }
-
 
 
 async function importSelectedAlbum() {
@@ -10435,30 +10452,6 @@ if (tabButton) {
       renderLoadingSkeleton(selectedItemDetail, "detail");
 
     }
-
-
-
-    if (selectedItem?.type === "album") {
-
-  try {
-
-    const savedAlbum = await autoSaveSelectedAlbum();
-
-    if (savedAlbum?.id) {
-
-  selectedItem.savedAlbumId = savedAlbum.id;
-  selectedItem.albumId = savedAlbum.id;
-
-  await loadLibrary();
-}
-
-  } catch (error) {
-
-    console.error("Album auto-save on select failed", error);
-
-  }
-
-}
 
 
 
