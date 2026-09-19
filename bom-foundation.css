@@ -1009,3 +1009,32 @@
   .bom-shell-v1 .bom-v1-ratings *::before,
   .bom-shell-v1 .bom-v1-ratings *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Predictive search uses the approved shell's existing surface and typography. */
+.bom-shell-v1 .bom-v1-suggestions {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 100;
+  overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  background: var(--bom-v1-surface); color: var(--bom-v1-text);
+  border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius);
+  box-shadow: 0 12px 28px #0003; text-align: left;
+}
+.bom-shell-v1 .bom-v1-suggestions[hidden] { display: none; }
+.bom-shell-v1 .bom-v1-suggestion {
+  display: flex; align-items: center; gap: 10px; min-height: 62px; padding: 10px 12px;
+  cursor: pointer; border-bottom: 1px solid var(--bom-v1-line); touch-action: pan-y;
+}
+.bom-shell-v1 .bom-v1-suggestion:last-child { border-bottom: 0; }
+.bom-shell-v1 .bom-v1-suggestion[aria-selected="true"],
+.bom-shell-v1 .bom-v1-suggestion:hover { background: var(--bom-v1-bg); outline: 1px solid var(--bom-v1-accent); outline-offset: -1px; }
+.bom-shell-v1 .bom-v1-suggestion-art { width: 36px; height: 36px; flex: 0 0 36px; display: grid; place-items: center; color: var(--bom-v1-muted); }
+.bom-shell-v1 .bom-v1-suggestion-art img { width: 36px; height: 36px; object-fit: cover; border-radius: 3px; }
+.bom-shell-v1 .bom-v1-suggestion-copy { min-width: 0; flex: 1; }
+.bom-shell-v1 .bom-v1-suggestion-copy strong,
+.bom-shell-v1 .bom-v1-suggestion-copy > span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.bom-shell-v1 .bom-v1-suggestion-copy > span { color: var(--bom-v1-muted); margin-top: 4px; font-size: 11px; }
+.bom-shell-v1 .bom-v1-suggestion small { flex: 0 0 auto; color: var(--bom-v1-muted); font-size: 10px; }
+.bom-shell-v1 .bom-v1-suggestion-all { font-size: 12px; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-suggestion-message { padding: 16px; font-size: 12px; }
+@media (max-width: 700px) {
+  .bom-shell-v1 .bom-v1-search input { font-size: 16px; }
+}

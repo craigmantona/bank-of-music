@@ -416,6 +416,22 @@ window.BOMPresentationBridge = Object.freeze({
     showOnlySection("searchSection");
     return runGlobalSearch();
   },
+  getSearchCatalogue: () => getPredictiveCatalogue(),
+  openSearchSuggestion: async (item) => {
+    if (item.kind === "Artist") return window.openArtistPage(item.title);
+    const row = item.row;
+    if (item.album && !allAlbums.some((album) => album.id === item.album.id)) allAlbums.push(item.album);
+    if (item.kind === "Album" && !allAlbums.some((album) => album.id === row.id)) allAlbums.push(row);
+    if (item.kind === "Track" && !allSongs.some((song) => song.id === row.id)) allSongs.push(row);
+    selectedItem = {
+      type: item.kind === "Album" ? "album" : "song", title: row.title, artist: row.artist,
+      externalId: row.external_id || "", coverUrl: item.artworkUrl,
+      releaseDate: row.release_date || "", albumId: item.kind === "Album" ? row.id : row.album_id,
+      ...(item.kind === "Album" ? { savedAlbumId: row.id } : { savedSongId: row.id })
+    };
+    showOnlySection("detailSection");
+    await renderSelectedItem();
+  },
   openArtist: (artistName) => window.openArtistPage(artistName),
   refreshDiscover: () => renderRecommendations(),
   refreshCharts: () => loadCharts(),
@@ -3981,6 +3997,33 @@ function sortBySearchScore(items, query) {
 }
 
 
+
+// One shared, read-only catalogue snapshot; typing never fans out into requests.
+let predictiveCataloguePromise = null;
+let predictiveCatalogueLoadedAt = 0;
+function getPredictiveCatalogue() {
+  if (predictiveCatalogueLoadedAt && Date.now() - predictiveCatalogueLoadedAt > 300000) predictiveCataloguePromise = null;
+  if (!predictiveCataloguePromise) {
+    predictiveCatalogueLoadedAt = 0;
+    const read = async (table) => {
+      const rows = [];
+      for (let offset = 0; ; offset += 1000) {
+        const { data, error } = await supabaseClient.from(table).select("*")
+          .order("id", { ascending: true }).range(offset, offset + 999);
+        if (error) throw error;
+        rows.push(...(data || []));
+        if (!data || data.length < 1000) return rows;
+      }
+    };
+    predictiveCataloguePromise = Promise.all([read("albums"), read("songs")])
+      .then(([albums, songs]) => {
+        predictiveCatalogueLoadedAt = Date.now();
+        return window.BOMAutocomplete.buildCatalogue(albums, songs, getAlbumArtworkUrl, (name) => readArtistImageCache(name)?.url || "");
+      })
+      .catch((error) => { predictiveCataloguePromise = null; throw error; });
+  }
+  return predictiveCataloguePromise;
+}
 
 let searchDebounceTimer = null;
 

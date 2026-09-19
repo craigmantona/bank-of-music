@@ -144,6 +144,11 @@
     rememberRoute(action);
   }));
 
+  window.BOMAutocomplete?.attach(searchInput, searchForm, {
+    load: () => bridge().getSearchCatalogue(),
+    open: (item) => bridge().openSearchSuggestion(item)
+  });
+
   searchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const term = searchInput.value.trim();
