@@ -35,7 +35,7 @@ create index artist_catalogue_events_type_time_idx
   on public.artist_catalogue_events(event_type, occurred_at desc);
 
 alter table public.artist_catalogue_events enable row level security;
-revoke all on public.artist_catalogue_events from public, anon, authenticated;
+revoke all on public.artist_catalogue_events from public, anon, authenticated, service_role;
 grant select, insert on public.artist_catalogue_events to service_role;
 
 create or replace function public.catalogue_worker(
