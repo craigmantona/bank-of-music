@@ -568,6 +568,10 @@
 .bom-shell-v1 .bom-v1-discover .bom-v1-section-state p { max-width: 580px; margin: 10px 0 0; line-height: 1.7; }
 .bom-shell-v1 .bom-v1-discover .bom-v1-section-state button { min-height: 44px; margin-top: 18px; padding: 0; color: var(--bom-v1-accent); background: transparent; border: 0; cursor: pointer; }
 
+@media (min-width: 901px) {
+  .bom-shell-v1 .bom-v1-discover-group .bom-v1-discover-row { grid-auto-columns: calc((100% - 66px) / 4); }
+}
+
 @media (min-width: 1200px) {
   .bom-shell-v1 .bom-v1-discover-row { grid-auto-columns: calc((100% - 88px) / 5); }
 }

@@ -23,7 +23,7 @@ test("Discover adapter preserves production recommendation semantics", () => {
   assert.match(app, /function buildStageOneDiscoverModel/);
   assert.match(app, /Number\(row\.rating\) >= 8/);
   assert.match(app, /\.sort\(\(a, b\) => b\.rating - a\.rating\)/);
-  assert.match(app, /\.slice\(0, 3\)/);
+  assert.doesNotMatch(app.match(/function buildStageOneDiscoverModel[\s\S]*?return \{ authenticated/)?.[0] || "", /\.slice\(0, 3\)/);
   assert.match(app, /normaliseCompare\(album\.artist\) === normaliseCompare\(ratedItem\.album\.artist\)/);
   assert.match(app, /!ratedAlbumIds\.has\(Number\(album\.id\)\)/);
   assert.match(app, /isLikelyStudioAlbum\(album\)/);
@@ -32,10 +32,22 @@ test("Discover adapter preserves production recommendation semantics", () => {
   assert.match(app, /\.slice\(0, 8\)/);
 });
 
-test("rating-based recommendation groups do not repeat albums and backfill in order", () => {
+function buildRecommendationGroups(ratedAlbums, ratedIds, candidates, maxGroups = 3) {
   const start = app.indexOf("function buildStageOneRatedRecommendationGroups");
   const end = app.indexOf("function buildStageOneDiscoverModel", start);
   const source = app.slice(start, end);
+  const context = {
+    normaliseCompare: (value) => String(value).toLowerCase(),
+    isLikelyStudioAlbum: () => true,
+    buildStageOneDiscoverAlbum: (album) => ({ ...album })
+  };
+  return vm.runInNewContext(
+    `${source}; buildStageOneRatedRecommendationGroups(ratedAlbums, ratedIds, candidates, maxGroups);`,
+    { ...context, ratedAlbums, ratedIds, candidates, maxGroups, Set, Number }
+  );
+}
+
+test("rating-based recommendation groups contain up to four unique unrated albums", () => {
   const ratedAlbums = [
     { album: { id: 1, title: "First favourite", artist: "Same Artist" }, rating: 10 },
     { album: { id: 2, title: "Second favourite", artist: "Same Artist" }, rating: 9 }
@@ -45,18 +57,39 @@ test("rating-based recommendation groups do not repeat albums and backfill in or
     title: `Candidate ${index + 1}`,
     artist: "Same Artist"
   }));
-  const context = {
-    normaliseCompare: (value) => String(value).toLowerCase(),
-    isLikelyStudioAlbum: () => true,
-    buildStageOneDiscoverAlbum: (album) => ({ ...album })
-  };
-  const result = vm.runInNewContext(
-    `${source}; buildStageOneRatedRecommendationGroups(ratedAlbums, new Set([1, 2]), candidates);`,
-    { ...context, ratedAlbums, candidates, Set, Number }
-  );
+  const result = buildRecommendationGroups(ratedAlbums, new Set([1, 2]), candidates);
   assert.deepEqual(Array.from(result[0].albums, (album) => album.id), [3, 4, 5, 6]);
   assert.deepEqual(Array.from(result[1].albums, (album) => album.id), [7, 8, 9, 10]);
   assert.equal(new Set(result.flatMap((group) => group.albums.map((album) => album.id))).size, 8);
+});
+
+test("rated recommendations are excluded and the next eligible album backfills", () => {
+  const seeds = [{ album: { id: 1, title: "Seed", artist: "Artist" }, rating: 10 }];
+  const candidates = Array.from({ length: 6 }, (_, index) => ({ id: index + 2, title: `Album ${index + 2}`, artist: "Artist" }));
+  const result = buildRecommendationGroups(seeds, new Set([1, 3]), candidates);
+  assert.deepEqual(Array.from(result[0].albums, (album) => album.id), [2, 4, 5, 6]);
+});
+
+test("exhausted seeds fall through to later eligible highly-rated albums", () => {
+  const seeds = [
+    { album: { id: 1, title: "Exhausted", artist: "No More Albums" }, rating: 10 },
+    { album: { id: 2, title: "Also exhausted", artist: "Still Empty" }, rating: 9 },
+    { album: { id: 3, title: "Reseed", artist: "Productive Artist" }, rating: 8 }
+  ];
+  const candidates = Array.from({ length: 4 }, (_, index) => ({ id: index + 4, title: `Recommendation ${index + 1}`, artist: "Productive Artist" }));
+  const result = buildRecommendationGroups(seeds, new Set([1, 2, 3]), candidates);
+  assert.equal(result.length, 1);
+  assert.equal(result[0].reason.title, "Reseed");
+  assert.deepEqual(Array.from(result[0].albums, (album) => album.id), [4, 5, 6, 7]);
+});
+
+test("rating-based sections disappear only when no seed has a valid recommendation", () => {
+  const seeds = [
+    { album: { id: 1, title: "One", artist: "Artist A" }, rating: 10 },
+    { album: { id: 2, title: "Two", artist: "Artist B" }, rating: 8 }
+  ];
+  const candidates = [{ id: 3, title: "Already rated", artist: "Artist B" }];
+  assert.equal(buildRecommendationGroups(seeds, new Set([1, 2, 3]), candidates).length, 0);
 });
 
 test("Discover view model includes artwork, reliable year and community rating", () => {
@@ -119,6 +152,7 @@ test("Discover presentation is progressive, responsive and free of legacy stylin
   assert.match(styles, /@media \(max-width: 900px\)/);
   assert.match(styles, /@media \(max-width: 600px\)/);
   assert.match(styles, /grid-auto-columns: minmax\(156px, 44vw\)/);
+  assert.match(styles, /\.bom-v1-discover-group \.bom-v1-discover-row \{ grid-auto-columns: calc\(\(100% - 66px\) \/ 4\); \}/);
 });
 
 test("legacy Discover renderer remains available without the Stage 1 flag", () => {

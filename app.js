@@ -3438,19 +3438,23 @@ function buildStageOneDiscoverAlbum(album) {
   };
 }
 
-function buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds, albums = allAlbums) {
+function buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds, albums = allAlbums, maxGroups = 3) {
   const displayedAlbumIds = new Set();
-  return highRatedAlbums.map((ratedItem, index) => {
+  const groups = [];
+  for (const ratedItem of highRatedAlbums) {
     const recommendations = albums
       .filter((album) => normaliseCompare(album.artist) === normaliseCompare(ratedItem.album.artist) && !ratedAlbumIds.has(Number(album.id)) && Number(album.id) !== Number(ratedItem.album.id) && !displayedAlbumIds.has(Number(album.id)) && isLikelyStudioAlbum(album))
       .slice(0, 4);
+    if (!recommendations.length) continue;
     recommendations.forEach((album) => displayedAlbumIds.add(Number(album.id)));
-    return {
-      key: `${ratedItem.album.id}-${index}`,
+    groups.push({
+      key: `${ratedItem.album.id}-${groups.length}`,
       reason: { title: ratedItem.album.title, rating: ratedItem.rating },
       albums: recommendations.map(buildStageOneDiscoverAlbum)
-    };
-  }).filter((group) => group.albums.length);
+    });
+    if (groups.length >= maxGroups) break;
+  }
+  return groups;
 }
 
 function buildStageOneDiscoverModel() {
@@ -3465,8 +3469,7 @@ function buildStageOneDiscoverModel() {
       return album ? { album, rating: Number(row.rating) } : null;
     })
     .filter(Boolean)
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, 3);
+    .sort((a, b) => b.rating - a.rating);
 
   const groups = buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds);
 
