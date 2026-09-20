@@ -57,3 +57,14 @@ test("editor has a desktop table and a non-breaking mobile fallback", () => {
   assert.match(styles, /\.admin-track-listing-row \{ display: grid; grid-template-columns: 82px/);
   assert.match(styles, /@media \(max-width: 780px\)[\s\S]*\.admin-track-listing-row \{ grid-template-columns: 68px minmax\(0, 1fr\); \}/);
 });
+
+test("Admin add-track album selector does not eagerly render the catalogue", () => {
+  const selectorMarkup = app.match(/<select id="adminTrackAlbumSelect">([\s\S]*?)<\/select>/)?.[1] || "";
+  assert.match(selectorMarkup, /<option value="">Select album<\/option>/);
+  assert.doesNotMatch(selectorMarkup, /allAlbums\.map/);
+});
+
+test("Admin album search populates only a small matching result set", () => {
+  assert.match(app, /var matchingAlbums = query[\s\S]*?normaliseCompare\(album\.title\)\.includes\(query\)[\s\S]*?normaliseCompare\(album\.artist\)\.includes\(query\)[\s\S]*?\.slice\(0, 24\)[\s\S]*?: \[\]/);
+  assert.match(app, /select\.innerHTML = `[\s\S]*?\$\{matchingAlbums[\s\S]*?<option value="\$\{album\.id\}">/);
+});

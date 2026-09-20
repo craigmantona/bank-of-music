@@ -14054,7 +14054,6 @@ renderAdminDashboard = function() {
         <input id="adminAlbumSearchInput" placeholder="Search album or artist..." />
 		<select id="adminTrackAlbumSelect">
           <option value="">Select album</option>
-          ${allAlbums.map((album) => `<option value="${album.id}">${escapeHtml(album.artist || "Unknown artist")} — ${escapeHtml(album.title)}</option>`).join("")}
         </select>
         <input id="adminNewTrackTitle" placeholder="Track title" />
         <input id="adminNewTrackArtist" placeholder="Track artist (optional - uses album artist if blank)" />
@@ -14090,13 +14089,18 @@ adminDashboard?.addEventListener("input", function(event) {
   var select = document.getElementById("adminTrackAlbumSelect");
   if (!select) return;
 
+  var matchingAlbums = query
+    ? allAlbums
+        .filter(function(album) {
+          return normaliseCompare(album.title).includes(query) ||
+                 normaliseCompare(album.artist).includes(query);
+        })
+        .slice(0, 24)
+    : [];
+
   select.innerHTML = `
     <option value="">Select album</option>
-    ${allAlbums
-      .filter(function(album) {
-        return normaliseCompare(album.title).includes(query) ||
-               normaliseCompare(album.artist).includes(query);
-      })
+    ${matchingAlbums
       .map(function(album) {
         return `
           <option value="${album.id}">
