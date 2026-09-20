@@ -68,3 +68,19 @@ test("Admin album search populates only a small matching result set", () => {
   assert.match(app, /var matchingAlbums = query[\s\S]*?normaliseCompare\(album\.title\)\.includes\(query\)[\s\S]*?normaliseCompare\(album\.artist\)\.includes\(query\)[\s\S]*?\.slice\(0, 24\)[\s\S]*?: \[\]/);
   assert.match(app, /select\.innerHTML = `[\s\S]*?\$\{matchingAlbums[\s\S]*?<option value="\$\{album\.id\}">/);
 });
+
+test("initial Admin catalogue render leaves album and song result areas lightweight", () => {
+  assert.match(app, /const matchingAlbums = query[\s\S]*?\.slice\(0, 24\)[\s\S]*?: \[\]/);
+  assert.match(app, /const matchingSongs = query[\s\S]*?\.slice\(0, 24\)[\s\S]*?: \[\]/);
+  assert.doesNotMatch(app, /if \(!query\) return true/);
+  assert.match(app, /Search to find an album\./);
+  assert.match(app, /Search to find a song or track\./);
+});
+
+test("Admin catalogue search keeps existing album and song matching with capped results", () => {
+  assert.match(app, /normaliseCompare\(`\$\{album\.title\} \$\{album\.artist\}`\)\.includes\(query\)[\s\S]*?\.slice\(0, 24\)/);
+  assert.match(app, /getAlbumNameById\(song\.album_id\)[\s\S]*?normaliseCompare\(`\$\{song\.title\} \$\{song\.artist\} \$\{albumName\}`\)\.includes\(query\)[\s\S]*?\.slice\(0, 24\)/);
+  assert.match(app, /admin-open-album-btn/);
+  assert.match(app, /admin-edit-track-listing-btn/);
+  assert.match(app, /admin-edit-song-btn/);
+});

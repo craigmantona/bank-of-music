@@ -9716,31 +9716,20 @@ function renderAdminDashboard() {
 
   const query = normaliseCompare(adminSearchInput?.value || "");
 
-  const matchingAlbums = allAlbums
+  const matchingAlbums = query
+    ? allAlbums
+        .filter((album) => normaliseCompare(`${album.title} ${album.artist}`).includes(query))
+        .slice(0, 24)
+    : [];
 
-    .filter((album) => {
-
-      if (!query) return true;
-
-      return normaliseCompare(`${album.title} ${album.artist}`).includes(query);
-
-    })
-
-    .slice(0, 80);
-
-  const matchingSongs = allSongs
-
-    .filter((song) => {
-
-      if (!query) return true;
-
-      const albumName = song.album_id ? getAlbumNameById(song.album_id) : "";
-
-      return normaliseCompare(`${song.title} ${song.artist} ${albumName}`).includes(query);
-
-    })
-
-    .slice(0, 120);
+  const matchingSongs = query
+    ? allSongs
+        .filter((song) => {
+          const albumName = song.album_id ? getAlbumNameById(song.album_id) : "";
+          return normaliseCompare(`${song.title} ${song.artist} ${albumName}`).includes(query);
+        })
+        .slice(0, 24)
+    : [];
 
   adminDashboard.innerHTML = `
   
@@ -9814,7 +9803,7 @@ function renderAdminDashboard() {
 
           </div>
 
-        `).join("") : `<p class="small">No albums found.</p>`}
+        `).join("") : `<p class="small">${query ? "No albums found." : "Search to find an album."}</p>`}
 
       </div>
 
@@ -9856,7 +9845,7 @@ function renderAdminDashboard() {
 
           </div>
 
-        `).join("") : `<p class="small">No songs found.</p>`}
+        `).join("") : `<p class="small">${query ? "No songs found." : "Search to find a song or track."}</p>`}
 
       </div>
 
