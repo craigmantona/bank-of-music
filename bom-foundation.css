@@ -807,9 +807,9 @@
 .bom-shell-v1 .bom-v1-track-detail-hero { grid-template-columns: minmax(260px, 440px) minmax(380px, 1fr); }
 .bom-shell-v1 .bom-v1-track-detail-album { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-top: 20px; color: var(--bom-v1-muted); font-size: 14px; }
 .bom-shell-v1 .bom-v1-track-detail-album button,
-.bom-shell-v1 .bom-v1-track-detail-album strong { min-height: 44px; padding: 0; color: var(--bom-v1-text); background: transparent; border: 0; font: inherit; font-weight: 500; cursor: pointer; }
+.bom-shell-v1 .bom-v1-track-detail-album strong { min-height: 44px; padding: 0; color: var(--bom-v1-text); background: transparent; border: 0; box-shadow: none; font: inherit; font-weight: 500; cursor: pointer; }
 .bom-shell-v1 .bom-v1-track-detail .bom-v1-track-rating-popover { right: auto; left: 0; }
-.bom-shell-v1 .bom-v1-track-album-card { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: 18px; width: min(100%, 520px); min-height: 116px; padding: 12px; color: var(--bom-v1-text); text-align: left; background: var(--bom-v1-surface); border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius); cursor: pointer; }
+.bom-shell-v1 .bom-v1-track-album-card { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: 18px; width: min(100%, 520px); min-height: 116px; padding: 12px; color: var(--bom-v1-text); text-align: left; background: var(--bom-v1-surface); border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius); box-shadow: none; cursor: pointer; }
 .bom-shell-v1 .bom-v1-track-album-card img,
 .bom-shell-v1 .bom-v1-track-album-card .album-cover-placeholder { display: block; width: 92px; height: 92px; object-fit: cover; }
 .bom-shell-v1 .bom-v1-track-album-card span { min-width: 0; }

@@ -37,3 +37,8 @@ test("track detail follows the Album surface system and has focused mobile rules
   assert.match(styles, /min-height: 44px/);
   assert.doesNotMatch(styles.match(/\/\* Selected track detail[\s\S]*?(?=\.bom-shell-v1 \.bom-v1-album-section)/)?.[0] || "", /purple|gradient|#[a-f0-9]{6}/i);
 });
+
+test("modern track album links and cards reset the legacy global button glow", () => {
+  assert.match(styles, /\.bom-v1-track-detail-album strong \{[^}]*box-shadow: none;/);
+  assert.match(styles, /\.bom-v1-track-album-card \{[^}]*box-shadow: none;/);
+});
