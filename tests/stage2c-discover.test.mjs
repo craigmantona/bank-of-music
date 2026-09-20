@@ -32,6 +32,33 @@ test("Discover adapter preserves production recommendation semantics", () => {
   assert.match(app, /\.slice\(0, 8\)/);
 });
 
+test("rating-based recommendation groups do not repeat albums and backfill in order", () => {
+  const start = app.indexOf("function buildStageOneRatedRecommendationGroups");
+  const end = app.indexOf("function buildStageOneDiscoverModel", start);
+  const source = app.slice(start, end);
+  const ratedAlbums = [
+    { album: { id: 1, title: "First favourite", artist: "Same Artist" }, rating: 10 },
+    { album: { id: 2, title: "Second favourite", artist: "Same Artist" }, rating: 9 }
+  ];
+  const candidates = Array.from({ length: 8 }, (_, index) => ({
+    id: index + 3,
+    title: `Candidate ${index + 1}`,
+    artist: "Same Artist"
+  }));
+  const context = {
+    normaliseCompare: (value) => String(value).toLowerCase(),
+    isLikelyStudioAlbum: () => true,
+    buildStageOneDiscoverAlbum: (album) => ({ ...album })
+  };
+  const result = vm.runInNewContext(
+    `${source}; buildStageOneRatedRecommendationGroups(ratedAlbums, new Set([1, 2]), candidates);`,
+    { ...context, ratedAlbums, candidates, Set, Number }
+  );
+  assert.deepEqual(Array.from(result[0].albums, (album) => album.id), [3, 4, 5, 6]);
+  assert.deepEqual(Array.from(result[1].albums, (album) => album.id), [7, 8, 9, 10]);
+  assert.equal(new Set(result.flatMap((group) => group.albums.map((album) => album.id))).size, 8);
+});
+
 test("Discover view model includes artwork, reliable year and community rating", () => {
   assert.match(app, /function buildStageOneDiscoverAlbum/);
   assert.match(app, /getAlbumArtworkUrl\(album\)/);

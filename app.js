@@ -3438,6 +3438,21 @@ function buildStageOneDiscoverAlbum(album) {
   };
 }
 
+function buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds, albums = allAlbums) {
+  const displayedAlbumIds = new Set();
+  return highRatedAlbums.map((ratedItem, index) => {
+    const recommendations = albums
+      .filter((album) => normaliseCompare(album.artist) === normaliseCompare(ratedItem.album.artist) && !ratedAlbumIds.has(Number(album.id)) && Number(album.id) !== Number(ratedItem.album.id) && !displayedAlbumIds.has(Number(album.id)) && isLikelyStudioAlbum(album))
+      .slice(0, 4);
+    recommendations.forEach((album) => displayedAlbumIds.add(Number(album.id)));
+    return {
+      key: `${ratedItem.album.id}-${index}`,
+      reason: { title: ratedItem.album.title, rating: ratedItem.rating },
+      albums: recommendations.map(buildStageOneDiscoverAlbum)
+    };
+  }).filter((group) => group.albums.length);
+}
+
 function buildStageOneDiscoverModel() {
   const userRatings = currentUser
     ? allAlbumRatings.filter((row) => row.user_id === currentUser.id)
@@ -3453,14 +3468,7 @@ function buildStageOneDiscoverModel() {
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 3);
 
-  const groups = highRatedAlbums.map((ratedItem, index) => ({
-    key: `${ratedItem.album.id}-${index}`,
-    reason: { title: ratedItem.album.title, rating: ratedItem.rating },
-    albums: allAlbums
-      .filter((album) => normaliseCompare(album.artist) === normaliseCompare(ratedItem.album.artist) && !ratedAlbumIds.has(Number(album.id)) && Number(album.id) !== Number(ratedItem.album.id) && isLikelyStudioAlbum(album))
-      .slice(0, 4)
-      .map(buildStageOneDiscoverAlbum)
-  })).filter((group) => group.albums.length);
+  const groups = buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds);
 
   const general = allAlbums
     .filter((album) => !ratedAlbumIds.has(Number(album.id)) && isLikelyStudioAlbum(album))
