@@ -36,8 +36,8 @@
     const hasMusic = groups.some((group) => group.albums.length) || general.length;
     return `<article class="bom-v1-discover" data-bom-discover>
       <header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>
-      ${hasMusic ? `${groups.map(recommendationGroup).join("")}
-        ${general.length ? `<section class="bom-v1-discover-section" aria-labelledby="bomDiscoverNext"><header class="bom-v1-discover-section-heading"><div><h2 id="bomDiscoverNext">Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general, "Albums to rate next")}</section>` : ""}` : emptyState(model)}
+      ${hasMusic ? `${general.length ? `<section class="bom-v1-discover-section" aria-labelledby="bomDiscoverNext"><header class="bom-v1-discover-section-heading"><div><h2 id="bomDiscoverNext">Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general, "Albums to rate next")}</section>` : ""}
+        ${groups.map(recommendationGroup).join("")}` : emptyState(model)}
     </article>`;
   }
 

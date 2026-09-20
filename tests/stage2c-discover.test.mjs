@@ -59,7 +59,8 @@ test("Discover renders recommendation reasons, long titles and low-data states",
   };
   vm.runInNewContext(discover, { window, document, URL, Math });
   const longTitle = "The Record That Took the Long Way Home (Expanded Anniversary Edition)";
-  const rendered = window.BOMDiscoverUI.render({ authenticated: true, groups: [{ key: "1", reason: { title: "The Masterplan", rating: 10 }, albums: [{ id: 2, title: longTitle, artist: "A Very Long Artist Name", artworkUrl: "", year: "1997", community: null }] }], general: [] });
+  const rendered = window.BOMDiscoverUI.render({ authenticated: true, groups: [{ key: "1", reason: { title: "The Masterplan", rating: 10 }, albums: [{ id: 2, title: longTitle, artist: "A Very Long Artist Name", artworkUrl: "", year: "1997", community: null }] }], general: [{ id: 3, title: "Next Album", artist: "Next Artist", artworkUrl: "", year: "2001", community: null }] });
+  assert.ok(rendered.indexOf("Your next listen") < rendered.indexOf("Because you rated"));
   assert.match(rendered, /Because you rated <strong>The Masterplan<\/strong> 10 \/ 10/);
   assert.match(rendered, new RegExp(longTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(rendered, /Not rated/);
