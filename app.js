@@ -125,6 +125,7 @@ let previousSectionId = "searchSection";
 let currentProfile = null;
 
 let isAdmin = false;
+let adminEditingTrackAlbumId = null;
 
 /*
   Prevents the tap that opens a profile from also opening
@@ -9637,6 +9638,62 @@ function getSongRatingCount(songId) {
 
 
 
+function renderAdminTrackListingRow(song, fallbackArtist = "", position = "") {
+  return `<div class="admin-track-listing-row" data-admin-track-row data-song-id="${song?.id || ""}">
+    <input class="admin-track-listing-position" data-admin-track-position type="number" min="1" value="${escapeHtml(song?.track_position || position || "")}" aria-label="Track position">
+    <input data-admin-track-title value="${escapeHtml(song?.title || "")}" placeholder="Track title" aria-label="Track title">
+    <input data-admin-track-artist value="${escapeHtml(song?.artist || fallbackArtist)}" placeholder="Track artist" aria-label="Track artist">
+    <button type="button" class="admin-track-listing-remove danger-btn">Remove</button>
+  </div>`;
+}
+
+function renderAdminTrackListingEditor() {
+  const album = allAlbums.find((item) => Number(item.id) === Number(adminEditingTrackAlbumId));
+  if (!album) return "";
+  const tracks = allSongs
+    .filter((song) => Number(song.album_id) === Number(album.id))
+    .sort((a, b) => Number(a.track_position || 9999) - Number(b.track_position || 9999) || Number(a.id) - Number(b.id));
+  return `<div class="admin-panel admin-track-listing-editor" data-admin-track-listing-editor data-album-id="${album.id}">
+    <div class="admin-track-listing-header">
+      <div><h3>Edit track listing</h3><p class="small">${escapeHtml(album.artist)} — ${escapeHtml(album.title)}</p></div>
+      <button type="button" class="admin-track-listing-cancel secondary-btn">Cancel</button>
+    </div>
+    <div class="admin-track-listing-labels" aria-hidden="true"><span>#</span><span>Title</span><span>Artist</span><span></span></div>
+    <div data-admin-track-rows>${tracks.map((song) => renderAdminTrackListingRow(song, album.artist)).join("")}</div>
+    <div class="admin-track-listing-actions">
+      <button type="button" class="admin-track-listing-add secondary-btn">Add track</button>
+      <button type="button" class="admin-track-listing-save">Save complete listing</button>
+    </div>
+    <p class="small">Removing a track detaches it from this album without deleting its ratings or external identity.</p>
+  </div>`;
+}
+
+async function saveAdminTrackListing(editor) {
+  if (!isAdmin || !editor) return;
+  const albumId = Number(editor.dataset.albumId || 0);
+  const tracks = [...editor.querySelectorAll("[data-admin-track-row]")].map((row) => ({
+    id: row.dataset.songId ? Number(row.dataset.songId) : null,
+    position: Number(row.querySelector("[data-admin-track-position]")?.value || 0),
+    title: normaliseText(row.querySelector("[data-admin-track-title]")?.value || ""),
+    artist: normaliseText(row.querySelector("[data-admin-track-artist]")?.value || "")
+  }));
+  if (tracks.some((track) => !track.position || !track.title || !track.artist)) {
+    setMessage(adminMessage, "Every track needs a positive position, title and artist.");
+    return;
+  }
+  const { error } = await supabaseClient.rpc("admin_update_album_track_listing", {
+    p_album_id: albumId,
+    p_tracks: tracks
+  });
+  if (error) {
+    setMessage(adminMessage, error.message);
+    return;
+  }
+  adminEditingTrackAlbumId = null;
+  setMessage(adminMessage, "Track listing updated.");
+  await refreshAdminDashboard();
+}
+
 function renderAdminDashboard() {
 
   if (!adminDashboard) return;
@@ -9717,6 +9774,8 @@ function renderAdminDashboard() {
 
     </div>
 
+    ${renderAdminTrackListingEditor()}
+
     <div class="admin-panel">
 
       <h3>Albums</h3>
@@ -9744,6 +9803,8 @@ function renderAdminDashboard() {
             <div class="admin-actions">
 
               <button class="admin-open-album-btn" data-album-id="${album.id}">Open</button>
+
+              <button class="admin-edit-track-listing-btn secondary-btn" data-album-id="${album.id}">Edit track listing</button>
 
               <button class="admin-edit-cover-btn" data-album-id="${album.id}">Edit cover</button>
 
@@ -10201,6 +10262,62 @@ if (adminSearchInput) {
 if (adminDashboard) {
 
   adminDashboard.addEventListener("click", async (event) => {
+
+    const editTrackListingButton = event.target.closest(".admin-edit-track-listing-btn");
+
+    if (editTrackListingButton) {
+
+      adminEditingTrackAlbumId = Number(editTrackListingButton.dataset.albumId);
+
+      renderAdminDashboard();
+
+      adminDashboard.querySelector("[data-admin-track-listing-editor]")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      return;
+
+    }
+
+    const trackListingEditor = event.target.closest("[data-admin-track-listing-editor]");
+
+    if (trackListingEditor && event.target.closest(".admin-track-listing-add")) {
+
+      const album = allAlbums.find((item) => Number(item.id) === Number(trackListingEditor.dataset.albumId));
+
+      const rows = trackListingEditor.querySelector("[data-admin-track-rows]");
+
+      const nextPosition = Math.max(0, ...[...rows.querySelectorAll("[data-admin-track-position]")].map((input) => Number(input.value || 0))) + 1;
+
+      rows.insertAdjacentHTML("beforeend", renderAdminTrackListingRow(null, album?.artist || "", nextPosition));
+
+      return;
+
+    }
+
+    if (trackListingEditor && event.target.closest(".admin-track-listing-remove")) {
+
+      event.target.closest("[data-admin-track-row]")?.remove();
+
+      return;
+
+    }
+
+    if (trackListingEditor && event.target.closest(".admin-track-listing-cancel")) {
+
+      adminEditingTrackAlbumId = null;
+
+      renderAdminDashboard();
+
+      return;
+
+    }
+
+    if (trackListingEditor && event.target.closest(".admin-track-listing-save")) {
+
+      await saveAdminTrackListing(trackListingEditor);
+
+      return;
+
+    }
 
     const openAlbumButton = event.target.closest(".admin-open-album-btn");
 

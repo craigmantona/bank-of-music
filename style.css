@@ -3946,6 +3946,27 @@ body { padding-bottom: 96px !important; }
 .admin-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: end; }
 .admin-form-grid input, .admin-form-grid select { width: 100%; min-height: 48px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.045); color: var(--text); padding: 12px 14px; }
 .admin-form-grid select option { background: #0b0f1a; color: white; }
+
+.admin-track-listing-editor { scroll-margin-top: 24px; }
+.admin-track-listing-header { display: flex; align-items: start; justify-content: space-between; gap: 20px; }
+.admin-track-listing-header h3 { margin: 0; }
+.admin-track-listing-header p { margin: 6px 0 0; }
+.admin-track-listing-labels,
+.admin-track-listing-row { display: grid; grid-template-columns: 82px minmax(220px, 1.3fr) minmax(200px, 1fr) 110px; gap: 12px; align-items: center; }
+.admin-track-listing-labels { padding: 18px 10px 8px; color: var(--muted); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
+.admin-track-listing-row { padding: 10px; border-top: 1px solid rgba(255,255,255,.09); }
+.admin-track-listing-row input { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; color: var(--text); background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; }
+.admin-track-listing-row button { min-height: 44px; padding: 9px 12px !important; }
+.admin-track-listing-actions { display: flex; justify-content: space-between; gap: 16px; margin-top: 18px; }
+
+@media (max-width: 780px) {
+  .admin-track-listing-labels { display: none; }
+  .admin-track-listing-row { grid-template-columns: 68px minmax(0, 1fr); }
+  .admin-track-listing-row [data-admin-track-artist] { grid-column: 2; }
+  .admin-track-listing-row button { grid-column: 2; justify-self: start; }
+  .admin-track-listing-header,
+  .admin-track-listing-actions { align-items: stretch; flex-direction: column; }
+}
 .admin-add-album-btn, .admin-add-track-btn { min-height: 48px; }
 .chart-grid {
   display: grid;
@@ -6906,4 +6927,3 @@ video {
     text-align: center;
   }
 }
-
