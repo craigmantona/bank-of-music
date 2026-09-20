@@ -4929,6 +4929,34 @@ button.song-album-link {
   font-size: 0.9rem;
 }
 
+.review-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.review-like-btn,
+.review-like-count {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--muted);
+  background: rgba(255,255,255,0.06);
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+
+.review-like-btn { cursor: pointer; }
+.review-like-btn:hover,
+.review-like-btn.is-liked {
+  color: white;
+  border-color: rgba(0,212,255,0.38);
+  background: rgba(0,212,255,0.12);
+}
+
 .review-rating {
   color: #ffd34d;
   font-weight: 950;

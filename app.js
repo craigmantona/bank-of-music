@@ -7014,6 +7014,16 @@ async function loadAlbumReviews(albumId, { throwOnError = false } = {}) {
     return [];
   }
 
+  const reviewIds = reviews.map((review) => review.id).filter(Boolean);
+  const { data: likes, error: likesError } = await supabaseClient
+    .from("album_review_likes")
+    .select("review_id,user_id")
+    .in("review_id", reviewIds);
+
+  if (likesError) {
+    console.error("Review likes lookup error", likesError);
+  }
+
   const userIds = [
     ...new Set(
       reviews
@@ -7044,8 +7054,58 @@ async function loadAlbumReviews(albumId, { throwOnError = false } = {}) {
 
   return reviews.map((review) => ({
     ...review,
-    profile: profilesById[review.user_id] || null
+    profile: profilesById[review.user_id] || null,
+    like_count: (likes || []).filter((like) => like.review_id === review.id).length,
+    liked_by_current_user: Boolean(
+      currentUser && (likes || []).some((like) =>
+        like.review_id === review.id && like.user_id === currentUser.id
+      )
+    )
   }));
+}
+
+async function toggleAlbumReviewLike(reviewId, reviewOwnerId, albumId, currentlyLiked) {
+  if (!currentUser) {
+    alert("Please log in to like a review.");
+    return;
+  }
+  if (currentUser.id === reviewOwnerId) return;
+
+  const request = currentlyLiked
+    ? supabaseClient
+        .from("album_review_likes")
+        .delete()
+        .eq("review_id", reviewId)
+        .eq("user_id", currentUser.id)
+    : supabaseClient
+        .from("album_review_likes")
+        .insert({ review_id: reviewId, user_id: currentUser.id });
+  const { error } = await request;
+
+  if (error) {
+    console.error("Toggle review like error", error);
+    return;
+  }
+
+  const reviews = await loadAlbumReviews(albumId);
+  const section = document.querySelector(".album-reviews-section");
+  if (section) section.outerHTML = renderAlbumReviewsSection(albumId, reviews);
+}
+
+window.toggleAlbumReviewLike = toggleAlbumReviewLike;
+
+function renderAlbumReviewLikeControl(albumId, review) {
+  const count = Number(review.like_count || 0);
+  const countLabel = `${count} like${count === 1 ? "" : "s"}`;
+  if (!currentUser || currentUser.id === review.user_id) {
+    return `<span class="review-like-count">${countLabel}</span>`;
+  }
+  return `<button
+    type="button"
+    class="review-like-btn${review.liked_by_current_user ? " is-liked" : ""}"
+    aria-pressed="${review.liked_by_current_user ? "true" : "false"}"
+    onclick="toggleAlbumReviewLike('${escapeHtml(review.id)}', '${escapeHtml(review.user_id)}', ${Number(albumId)}, ${review.liked_by_current_user ? "true" : "false"})"
+  >${review.liked_by_current_user ? "Unlike" : "Like"} · ${countLabel}</button>`;
 }
 
 async function saveAlbumReview(albumId) {
@@ -7158,6 +7218,10 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
                   myReview.updated_at || myReview.created_at
                 ).toLocaleDateString()}
               </div>
+
+              <div class="review-actions">
+                ${renderAlbumReviewLikeControl(albumId, myReview)}
+              </div>
             </div>
 
             <div id="reviewEditor" class="review-write-box hidden">
@@ -7238,6 +7302,10 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
                       Posted ${new Date(
                         review.updated_at || review.created_at
                       ).toLocaleDateString()}
+                    </div>
+
+                    <div class="review-actions">
+                      ${renderAlbumReviewLikeControl(albumId, review)}
                     </div>
                   </article>
                 `;
