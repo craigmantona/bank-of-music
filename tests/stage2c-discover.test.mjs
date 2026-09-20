@@ -29,7 +29,7 @@ test("Discover adapter preserves production recommendation semantics", () => {
   assert.match(app, /isLikelyStudioAlbum\(album\)/);
   assert.match(app, /\.slice\(0, 4\)/);
   assert.match(app, /getAlbumTrackCount\(Number\(b\.id\)\) - getAlbumTrackCount\(Number\(a\.id\)\)/);
-  assert.match(app, /\.slice\(0, 8\)/);
+  assert.match(app, /buildStageOneNextListenAlbums\(highRatedAlbums, ratedAlbumIds\)/);
 });
 
 function buildRecommendationGroups(ratedAlbums, ratedIds, candidates, maxGroups = 3) {
@@ -90,6 +90,53 @@ test("rating-based sections disappear only when no seed has a valid recommendati
   ];
   const candidates = [{ id: 3, title: "Already rated", artist: "Artist B" }];
   assert.equal(buildRecommendationGroups(seeds, new Set([1, 2, 3]), candidates).length, 0);
+});
+
+function buildNextListen(ratedAlbums, ratedIds, candidates, trackCounts = {}, limit = 8) {
+  const start = app.indexOf("function buildStageOneNextListenAlbums");
+  const end = app.indexOf("function buildStageOneDiscoverModel", start);
+  const source = app.slice(start, end);
+  const context = {
+    normaliseCompare: (value) => String(value || "").trim().toLowerCase(),
+    isLikelyStudioAlbum: () => true,
+    getAlbumTrackCount: (id) => trackCounts[id] || 0,
+    buildStageOneDiscoverAlbum: (album) => ({ ...album })
+  };
+  return vm.runInNewContext(
+    `${source}; buildStageOneNextListenAlbums(ratedAlbums, ratedIds, candidates, limit);`,
+    { ...context, ratedAlbums, ratedIds, candidates, trackCounts, limit, Map, Set, Number, Math }
+  );
+}
+
+test("Your next listen ranks albums from highly rated artists ahead of global popularity", () => {
+  const favourites = [{ album: { id: 1, artist: "Favourite Artist" }, rating: 9 }];
+  const candidates = [
+    { id: 2, title: "Popular unrelated album", artist: "Other Artist" },
+    { id: 3, title: "Related album", artist: "Favourite Artist" }
+  ];
+  const result = buildNextListen(favourites, new Set([1]), candidates, { 2: 20, 3: 8 });
+  assert.equal(result[0].id, 3);
+});
+
+test("Your next listen excludes every album the user has already rated", () => {
+  const candidates = [
+    { id: 1, title: "Rated album", artist: "Rated Artist" },
+    { id: 2, title: "Unrated album", artist: "Unrated Artist" }
+  ];
+  const result = buildNextListen([], new Set([1]), candidates);
+  assert.deepEqual(Array.from(result, (album) => album.id), [2]);
+});
+
+test("Your next listen returns up to eight albums with one normalized artist each", () => {
+  const candidates = [
+    { id: 1, title: "First", artist: "The Artist" },
+    { id: 2, title: "Duplicate", artist: " the artist " },
+    ...Array.from({ length: 9 }, (_, index) => ({ id: index + 3, title: `Album ${index + 3}`, artist: `Artist ${index + 1}` }))
+  ];
+  const result = buildNextListen([], new Set(), candidates, Object.fromEntries(candidates.map((album, index) => [album.id, 100 - index])));
+  assert.equal(result.length, 8);
+  assert.equal(new Set(result.map((album) => album.artist.trim().toLowerCase())).size, 8);
+  assert.equal(result.filter((album) => album.artist.trim().toLowerCase() === "the artist").length, 1);
 });
 
 test("Discover view model includes artwork, reliable year and community rating", () => {

@@ -3457,6 +3457,34 @@ function buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds, 
   return groups;
 }
 
+function buildStageOneNextListenAlbums(highRatedAlbums, ratedAlbumIds, albums = allAlbums, limit = 8) {
+  const affinityByArtist = new Map();
+  highRatedAlbums.forEach((ratedItem) => {
+    const artistKey = normaliseCompare(ratedItem.album.artist);
+    if (!artistKey) return;
+    affinityByArtist.set(artistKey, Math.max(affinityByArtist.get(artistKey) || 0, Number(ratedItem.rating) || 0));
+  });
+
+  const candidates = albums
+    .filter((album) => !ratedAlbumIds.has(Number(album.id)) && isLikelyStudioAlbum(album))
+    .sort((a, b) => {
+      const affinityDifference = (affinityByArtist.get(normaliseCompare(b.artist)) || 0) - (affinityByArtist.get(normaliseCompare(a.artist)) || 0);
+      if (affinityDifference) return affinityDifference;
+      return getAlbumTrackCount(Number(b.id)) - getAlbumTrackCount(Number(a.id));
+    });
+
+  const seenArtists = new Set();
+  const recommendations = [];
+  for (const album of candidates) {
+    const artistKey = normaliseCompare(album.artist);
+    if (!artistKey || seenArtists.has(artistKey)) continue;
+    seenArtists.add(artistKey);
+    recommendations.push(buildStageOneDiscoverAlbum(album));
+    if (recommendations.length >= limit) break;
+  }
+  return recommendations;
+}
+
 function buildStageOneDiscoverModel() {
   const userRatings = currentUser
     ? allAlbumRatings.filter((row) => row.user_id === currentUser.id)
@@ -3473,11 +3501,7 @@ function buildStageOneDiscoverModel() {
 
   const groups = buildStageOneRatedRecommendationGroups(highRatedAlbums, ratedAlbumIds);
 
-  const general = allAlbums
-    .filter((album) => !ratedAlbumIds.has(Number(album.id)) && isLikelyStudioAlbum(album))
-    .sort((a, b) => getAlbumTrackCount(Number(b.id)) - getAlbumTrackCount(Number(a.id)))
-    .slice(0, 8)
-    .map(buildStageOneDiscoverAlbum);
+  const general = buildStageOneNextListenAlbums(highRatedAlbums, ratedAlbumIds);
 
   return { authenticated: Boolean(currentUser), groups, general };
 }
