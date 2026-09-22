@@ -6997,6 +6997,9 @@ document.querySelectorAll(
 }
 
 const MAX_REVIEW_LENGTH = 500;
+const MAX_REVIEW_COMMENT_LENGTH = 500;
+const expandedReviewCommentIds = new Set();
+let editingAlbumReviewCommentId = null;
 
 async function loadAlbumReviews(albumId, { throwOnError = false } = {}) {
   const { data: reviews, error } = await supabaseClient
@@ -7025,10 +7028,20 @@ async function loadAlbumReviews(albumId, { throwOnError = false } = {}) {
     console.error("Review likes lookup error", likesError);
   }
 
+  const { data: comments, error: commentsError } = await supabaseClient
+    .from("album_review_comments")
+    .select("id,review_id,user_id,comment_text,created_at,updated_at")
+    .in("review_id", reviewIds)
+    .order("created_at", { ascending: true });
+
+  if (commentsError) {
+    console.error("Review comments lookup error", commentsError);
+  }
+
   const userIds = [
     ...new Set(
-      reviews
-        .map((review) => review.user_id)
+      [...reviews, ...(comments || [])]
+        .map((item) => item.user_id)
         .filter(Boolean)
     )
   ];
@@ -7056,6 +7069,12 @@ async function loadAlbumReviews(albumId, { throwOnError = false } = {}) {
   return reviews.map((review) => ({
     ...review,
     profile: profilesById[review.user_id] || null,
+    comments: (comments || [])
+      .filter((comment) => comment.review_id === review.id)
+      .map((comment) => ({
+        ...comment,
+        profile: profilesById[comment.user_id] || null
+      })),
     like_count: (likes || []).filter((like) => like.review_id === review.id).length,
     liked_by_current_user: Boolean(
       currentUser && (likes || []).some((like) =>
@@ -7095,6 +7114,81 @@ async function toggleAlbumReviewLike(reviewId, reviewOwnerId, albumId, currently
 
 window.toggleAlbumReviewLike = toggleAlbumReviewLike;
 
+async function refreshAlbumReviewSection(albumId) {
+  const reviews = await loadAlbumReviews(albumId);
+  const section = document.querySelector(".album-reviews-section");
+  if (section) section.outerHTML = renderAlbumReviewsSection(albumId, reviews);
+}
+
+function toggleAlbumReviewComments(reviewId) {
+  const comments = document.querySelector(`[data-review-comments="${reviewId}"]`);
+  const toggle = document.querySelector(`[data-review-comments-toggle="${reviewId}"]`);
+  if (!comments) return;
+  const willExpand = comments.classList.contains("hidden");
+  comments.classList.toggle("hidden", !willExpand);
+  if (willExpand) expandedReviewCommentIds.add(reviewId);
+  else expandedReviewCommentIds.delete(reviewId);
+  if (toggle) toggle.setAttribute("aria-expanded", willExpand ? "true" : "false");
+}
+
+async function saveAlbumReviewComment(reviewId, albumId, commentId = "") {
+  if (!currentUser) return;
+  const suffix = commentId || reviewId;
+  const input = document.getElementById(`reviewCommentInput-${suffix}`);
+  const message = document.getElementById(`reviewCommentMessage-${reviewId}`);
+  const commentText = input?.value.trim() || "";
+  if (!commentText || commentText.length > MAX_REVIEW_COMMENT_LENGTH) {
+    if (message) message.textContent = `Comments must be 1–${MAX_REVIEW_COMMENT_LENGTH} characters.`;
+    return;
+  }
+
+  const request = commentId
+    ? supabaseClient
+        .from("album_review_comments")
+        .update({ comment_text: commentText, updated_at: new Date().toISOString() })
+        .eq("id", commentId)
+        .eq("user_id", currentUser.id)
+    : supabaseClient.from("album_review_comments").insert({
+        review_id: reviewId,
+        user_id: currentUser.id,
+        comment_text: commentText
+      });
+  const { error } = await request;
+  if (error) {
+    if (message) message.textContent = error.message;
+    return;
+  }
+  expandedReviewCommentIds.add(reviewId);
+  editingAlbumReviewCommentId = null;
+  await refreshAlbumReviewSection(albumId);
+}
+
+async function deleteAlbumReviewComment(commentId, reviewId, albumId) {
+  if (!currentUser || (!isAdmin && !confirm("Delete this comment?"))) return;
+  const { error } = await supabaseClient
+    .from("album_review_comments")
+    .delete()
+    .eq("id", commentId);
+  if (error) {
+    console.error("Delete review comment error", error);
+    return;
+  }
+  expandedReviewCommentIds.add(reviewId);
+  await refreshAlbumReviewSection(albumId);
+}
+
+async function editAlbumReviewComment(commentId, reviewId, albumId) {
+  editingAlbumReviewCommentId = commentId;
+  expandedReviewCommentIds.add(reviewId);
+  await refreshAlbumReviewSection(albumId);
+  document.getElementById(`reviewCommentInput-${commentId}`)?.focus();
+}
+
+window.toggleAlbumReviewComments = toggleAlbumReviewComments;
+window.saveAlbumReviewComment = saveAlbumReviewComment;
+window.deleteAlbumReviewComment = deleteAlbumReviewComment;
+window.editAlbumReviewComment = editAlbumReviewComment;
+
 function renderAlbumReviewLikeControl(albumId, review) {
   const count = Number(review.like_count || 0);
   const countLabel = `${count} like${count === 1 ? "" : "s"}`;
@@ -7107,6 +7201,47 @@ function renderAlbumReviewLikeControl(albumId, review) {
     aria-pressed="${review.liked_by_current_user ? "true" : "false"}"
     onclick="toggleAlbumReviewLike('${escapeHtml(review.id)}', '${escapeHtml(review.user_id)}', ${Number(albumId)}, ${review.liked_by_current_user ? "true" : "false"})"
   >${review.liked_by_current_user ? "Unlike" : "Like"} · ${countLabel}</button>`;
+}
+
+function renderAlbumReviewComments(albumId, review) {
+  const comments = review.comments || [];
+  const expanded = expandedReviewCommentIds.has(review.id);
+  return `
+    <div class="review-comment-controls">
+      <button type="button" class="review-comment-toggle" data-review-comments-toggle="${escapeHtml(review.id)}"
+        aria-expanded="${expanded ? "true" : "false"}"
+        onclick="toggleAlbumReviewComments('${escapeHtml(review.id)}')">
+        ${comments.length} comment${comments.length === 1 ? "" : "s"}
+      </button>
+    </div>
+    <div class="review-comments${expanded ? "" : " hidden"}" data-review-comments="${escapeHtml(review.id)}">
+      ${comments.length ? comments.map((comment) => {
+        const ownsComment = currentUser?.id === comment.user_id;
+        const canDelete = ownsComment || isAdmin;
+        const isEditing = ownsComment && editingAlbumReviewCommentId === comment.id;
+        return `<div class="review-comment" data-comment-id="${escapeHtml(comment.id)}">
+          <div class="review-comment-meta">
+            <span>${renderClickableProfileHandle(comment.profile, comment.user_id, "Member")}</span>
+            <time>${new Date(comment.updated_at || comment.created_at).toLocaleDateString()}</time>
+          </div>
+          ${isEditing ? `
+            <textarea id="reviewCommentInput-${escapeHtml(comment.id)}" maxlength="${MAX_REVIEW_COMMENT_LENGTH}">${escapeHtml(comment.comment_text)}</textarea>
+            <div class="review-comment-actions">
+              <button type="button" onclick="saveAlbumReviewComment('${escapeHtml(review.id)}', ${Number(albumId)}, '${escapeHtml(comment.id)}')">Save</button>
+            </div>
+          ` : `<p>${escapeHtml(comment.comment_text)}</p>`}
+          ${!isEditing && (ownsComment || canDelete) ? `<div class="review-comment-actions">
+            ${ownsComment ? `<button type="button" onclick="editAlbumReviewComment('${escapeHtml(comment.id)}', '${escapeHtml(review.id)}', ${Number(albumId)})">Edit</button>` : ""}
+            ${canDelete ? `<button type="button" class="danger-link" onclick="deleteAlbumReviewComment('${escapeHtml(comment.id)}', '${escapeHtml(review.id)}', ${Number(albumId)})">Delete${isAdmin && !ownsComment ? " as Admin" : ""}</button>` : ""}
+          </div>` : ""}
+        </div>`;
+      }).join("") : `<p class="small">No comments yet.</p>`}
+      ${currentUser ? `<div class="review-comment-form">
+        <textarea id="reviewCommentInput-${escapeHtml(review.id)}" maxlength="${MAX_REVIEW_COMMENT_LENGTH}" placeholder="Add a comment"></textarea>
+        <button type="button" onclick="saveAlbumReviewComment('${escapeHtml(review.id)}', ${Number(albumId)})">Add comment</button>
+      </div>` : ""}
+      <p id="reviewCommentMessage-${escapeHtml(review.id)}" class="small review-comment-message"></p>
+    </div>`;
 }
 
 async function saveAlbumReview(albumId) {
@@ -7223,6 +7358,7 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
               <div class="review-actions">
                 ${renderAlbumReviewLikeControl(albumId, myReview)}
               </div>
+              ${renderAlbumReviewComments(albumId, myReview)}
             </div>
 
             <div id="reviewEditor" class="review-write-box hidden">
@@ -7308,6 +7444,7 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
                     <div class="review-actions">
                       ${renderAlbumReviewLikeControl(albumId, review)}
                     </div>
+                    ${renderAlbumReviewComments(albumId, review)}
                   </article>
                 `;
               }).join("")
