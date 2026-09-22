@@ -1071,3 +1071,32 @@
 @media (max-width: 700px) {
   .bom-shell-v1 .bom-v1-search input { font-size: 16px; }
 }
+
+/* Quick Rate: the existing album scale in a focused, dismissible card. */
+.bom-shell-v1 .bom-v1-quick-entry { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px; margin: 24px 0; border: 1px solid var(--bom-v1-line); border-radius: 12px; background: var(--bom-v1-surface-raised); }
+.bom-shell-v1 .bom-v1-quick-entry p { margin: 6px 0 0; }
+.bom-shell-v1 .bom-v1-quick-entry button { flex-shrink: 0; }
+.bom-shell-v1 .bom-v1-quick-rate { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); box-sizing: border-box; padding: 24px; border: 1px solid var(--bom-v1-line); border-radius: 18px; background: var(--bom-v1-surface-raised); color: var(--bom-v1-text); text-align: center; overflow-y: auto; }
+.bom-v1-quick-rate::backdrop { background: rgba(0, 0, 0, .8); backdrop-filter: blur(8px); }
+.bom-v1-quick-rate header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.bom-v1-quick-rate h1 { font-size: 22px; margin: 0; }
+.bom-v1-quick-rate h2 { font-size: clamp(22px, 4vw, 30px); margin: 18px 0 8px; }
+.bom-v1-quick-rate p { margin: 12px 0; }
+.bom-v1-quick-rate [data-quick-status] { min-height: 24px; }
+.bom-quick-art { position: relative; display: grid; place-items: center; width: min(100%, 340px); aspect-ratio: 1; margin: 0 auto; border-radius: 10px; overflow: hidden; background: var(--bom-v1-bg); box-shadow: 0 12px 35px #0005; }
+.bom-quick-art img { position: absolute; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+.bom-quick-art span { font-size: 52px; font-weight: 800; color: var(--bom-v1-accent); }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-trigger { display: none; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-control { display: block; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-popover { position: static; width: auto; grid-template-columns: repeat(10, minmax(0, 1fr)); padding: 0; margin: 14px 0; border: 0; box-shadow: none; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-choice { min-width: 0 !important; min-height: 44px !important; }
+.bom-v1-quick-rate button:disabled { opacity: .55; cursor: wait; }
+.bom-v1-quick-rate .bom-quick-art { animation: bom-quick-enter .18s ease-out; }
+@keyframes bom-quick-enter { from { opacity: .4; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 480px) {
+  .bom-shell-v1 .bom-v1-quick-rate { padding: 16px; }
+  .bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-popover { grid-template-columns: repeat(5, 1fr); }
+  .bom-shell-v1 .bom-v1-quick-entry { padding: 16px; gap: 12px; }
+  .bom-quick-art { width: min(100%, 280px); }
+}
+@media (prefers-reduced-motion: reduce) { .bom-v1-quick-rate .bom-quick-art { animation: none; } }

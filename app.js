@@ -400,6 +400,7 @@ window.BOMPresentationBridge = Object.freeze({
     showOnlySection("recommendationsSection");
     renderRecommendations();
   },
+  showQuickRate: () => openQuickRate(),
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
   showRatings: () => {
@@ -9331,7 +9332,122 @@ async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
 
 
 
-async function saveAlbumRating(albumId) {
+// Quick Rate keeps its queue and skips in memory only.
+function buildQuickRateQueue(albums, ratings, userId, random = Math.random) {
+  const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.album_id)));
+  const queue = albums.filter(album => !rated.has(Number(album.id)) && isLikelyStudioAlbum(album));
+  for (let i = queue.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [queue[i], queue[j]] = [queue[j], queue[i]];
+  }
+  return queue;
+}
+
+async function fetchQuickRateRows(table, columns, userId) {
+  const rows = [];
+  for (let offset = 0; ; offset += 1000) {
+    let query = supabaseClient.from(table).select(columns).order("id", { ascending: true });
+    if (userId) query = query.eq("user_id", userId);
+    const { data, error } = await query.range(offset, offset + 999);
+    if (error) throw error;
+    rows.push(...(data || []));
+    if (!data || data.length < 1000) return rows;
+  }
+}
+
+async function openQuickRate() {
+  if (!currentUser || document.getElementById("bomQuickRate")) return;
+  const userId = currentUser.id;
+  const dialog = document.createElement("dialog");
+  dialog.id = "bomQuickRate";
+  dialog.className = "bom-v1-quick-rate bom-v1-album";
+  dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
+  dialog.innerHTML = `<header><h1 id="bomQuickRateTitle">Quick Rate</h1><button type="button" data-quick-exit>Exit Quick Rate</button></header>
+    <p data-quick-count>0 rated this session</p><div data-quick-card></div><p data-quick-status role="status">Loading unrated albums…</p>`;
+  document.body.append(dialog);
+  const card = dialog.querySelector("[data-quick-card]");
+  const status = dialog.querySelector("[data-quick-status]");
+  let queue = [], index = 0, count = 0, busy = false;
+  dialog.addEventListener("close", () => dialog.remove());
+  dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
+  dialog.showModal();
+
+  function render(focus = false) {
+    if (!dialog.open) return;
+    if (currentUser?.id !== userId) { dialog.close(); return; }
+    while (queue[index] && allAlbumRatings.some(row => row.user_id === userId && Number(row.album_id) === Number(queue[index].id))) index++;
+    const album = queue[index];
+    if (!album) {
+      card.innerHTML = `<h2>You’re all caught up for this round.</h2><p>Skipped albums are available again next time.</p>`;
+      status.textContent = "No more unrated albums in this round.";
+      dialog.querySelector("[data-quick-exit]").focus();
+      return;
+    }
+    const artwork = getAlbumArtworkUrl(album);
+    const control = buildCompactAlbumRatingControl(album.id, null)
+      .replace('<details ', '<details open ')
+      .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
+    card.innerHTML = `<div class="bom-quick-art">${artwork ? `<img src="${escapeHtml(artwork)}" alt="${escapeHtml(album.title)} cover" onerror="this.hidden=true">` : ''}<span>bom</span></div>
+      <h2>${escapeHtml(album.title)}</h2><p>${escapeHtml(album.artist)} · ${escapeHtml(getStageOneDiscoverYear(album) || "Year unavailable")}</p>
+      <p>Your rating / 10</p>${control}<button type="button" data-quick-skip>Skip →</button>`;
+    card.querySelector("[data-quick-skip]").onclick = () => {
+      if (busy) return;
+      index++;
+      status.textContent = "Skipped. No rating saved.";
+      render(true);
+    };
+    if (focus) card.querySelector(".bom-v1-album-rating-choice").focus();
+  }
+
+  dialog.saveRating = async (button) => {
+    if (busy || currentUser?.id !== userId || !queue[index]) return;
+    busy = true;
+    card.querySelectorAll("button").forEach(item => item.disabled = true);
+    status.textContent = "Saving…";
+    try {
+      const album = queue[index];
+      if (!allAlbums.some(row => Number(row.id) === Number(album.id))) allAlbums.push(album);
+      const saved = await saveAlbumRating(album.id, Number(button.dataset.rating));
+      if (!dialog.open || currentUser?.id !== userId) return;
+      if (!saved) throw new Error("Rating not saved");
+      count++;
+      dialog.querySelector("[data-quick-count]").textContent = `${count} rated this session`;
+      status.textContent = `Saved ${button.dataset.rating} / 10`;
+      button.classList.add("is-selected");
+      await new Promise(resolve => setTimeout(resolve, 350));
+      index++;
+      render(true);
+    } catch (error) {
+      status.textContent = "Couldn’t save your rating. Please try again.";
+    } finally {
+      busy = false;
+      card.querySelectorAll("button").forEach(item => item.disabled = false);
+      if (dialog.open) card.querySelector(".bom-v1-album-rating-choice")?.focus();
+    }
+  };
+
+  try {
+    const [albums, ratings] = await Promise.all([
+      fetchQuickRateRows("albums", "*"),
+      fetchQuickRateRows("ratings", "id,user_id,album_id,rating", userId)
+    ]);
+    if (!dialog.open || currentUser?.id !== userId) return;
+    queue = buildQuickRateQueue(albums, ratings, userId);
+    status.textContent = "Choose a rating, or skip an album you don’t know.";
+    render();
+  } catch (error) {
+    status.textContent = "Couldn’t load albums. Exit Quick Rate and try again.";
+  }
+}
+
+window.handleQuickRateClick = function (event, button) {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  void document.getElementById("bomQuickRate")?.saveRating(button);
+  return false;
+};
+
+async function saveAlbumRating(albumId, ratingValue = null) {
 
   if (!currentUser) {
 
@@ -9345,11 +9461,11 @@ async function saveAlbumRating(albumId) {
 
   const input = document.getElementById(`album-rating-${albumId}`);
 
-  if (!input) return;
+  if (!input && ratingValue === null) return;
 
 
 
-  const rating = parseFloat(input.value);
+  const rating = ratingValue === null ? parseFloat(input.value) : ratingValue;
 
   if (isNaN(rating) || rating < 0 || rating > 10) {
 
@@ -9387,13 +9503,15 @@ async function saveAlbumRating(albumId) {
 
   upsertLocalAlbumRating(albumId, rating);
 
-  updateStageOneAlbumRatingUi(albumId);
+  if (ratingValue === null) updateStageOneAlbumRatingUi(albumId);
 
   renderLibrary();
 
   renderRecommendations();
 
   setMessage(globalSearchMessage, "Album rating saved.");
+
+  return true;
 
 }
 

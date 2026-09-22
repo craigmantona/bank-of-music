@@ -36,6 +36,7 @@
     const hasMusic = groups.some((group) => group.albums.length) || general.length;
     return `<article class="bom-v1-discover" data-bom-discover>
       <header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>
+      ${model.authenticated ? `<div class="bom-v1-quick-entry"><div><strong>Know it? Rate it.</strong><p>One album at a time. Build your collection.</p></div><button type="button" data-bom-action="quick-rate">Quick Rate →</button></div>` : ""}
       ${hasMusic ? `${general.length ? `<section class="bom-v1-discover-section" aria-labelledby="bomDiscoverNext"><header class="bom-v1-discover-section-heading"><div><h2 id="bomDiscoverNext">Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general, "Albums to rate next")}</section>` : ""}
         ${groups.map(recommendationGroup).join("")}` : emptyState(model)}
     </article>`;
@@ -77,6 +78,7 @@
       return;
     }
     const action = event.target.closest("[data-bom-action]")?.dataset.bomAction;
+    if (action === "quick-rate") window.BOMPresentationBridge?.showQuickRate();
     if (action === "discover-search") window.BOMPresentationBridge?.showSearch();
     if (action === "discover-retry") window.BOMPresentationBridge?.refreshDiscover();
   });
