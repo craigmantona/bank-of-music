@@ -16,6 +16,7 @@ const SHADOW_MODE = Deno.env.get("CATALOGUE_SELECTION_SHADOW_MODE") === "true";
 const EXCLUDED_SECONDARY_TYPES =
   new Set([
     "Compilation",
+    "Demo",
     "DJ-mix",
     "Live",
     "Mixtape/Street",
@@ -30,9 +31,18 @@ function normalise(value: unknown) {
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/&/g, " and ")
-    .replace(/[^a-zA-Z0-9]+/g, " ")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim()
     .toLowerCase();
+}
+
+function normaliseAlbumTitle(value: unknown) {
+  const source = String(value ?? "").normalize("NFKC").trim();
+  const ordinary = normalise(source).replace(/\s+/g, "");
+  if (ordinary) return ordinary;
+  return source
+    ? `symbols:${Array.from(source).map(character => character.codePointAt(0)!.toString(16)).join("-")}`
+    : "";
 }
 
 function normaliseAlbumKey(
@@ -41,8 +51,24 @@ function normaliseAlbumKey(
 ) {
   return [
     normalise(artist),
-    normalise(title)
+    normaliseAlbumTitle(title)
   ].join("|||");
+}
+
+function albumTitleFallbackMatches(album: any, payload: any) {
+  const wantedTitle = normaliseAlbumTitle(payload.title);
+  if (!wantedTitle || normalise(album.artist) !== normalise(payload.artist) ||
+      normaliseAlbumTitle(album.title) !== wantedTitle) return false;
+
+  const albumGroupId = album.musicbrainz_release_group_id || "";
+  const payloadGroupId = payload.musicbrainz_release_group_id || "";
+  if (albumGroupId && payloadGroupId && albumGroupId !== payloadGroupId) return false;
+
+  const albumReleaseId = album.musicbrainz_release_id ||
+    (album.external_source === "musicbrainz" ? album.external_id : "") || "";
+  const payloadReleaseId = payload.musicbrainz_release_id ||
+    (payload.external_source === "musicbrainz" ? payload.external_id : "") || "";
+  return !(albumReleaseId && payloadReleaseId && albumReleaseId !== payloadReleaseId);
 }
 
 function databaseReleaseDate(value: unknown) {
@@ -708,7 +734,7 @@ async function prepareAlbum(
     } = await supabase
       .from("albums")
       .select(
-        "id, title, artist, external_source, external_id, cover_art_url, release_date"
+        "id, title, artist, external_source, external_id, musicbrainz_release_id, musicbrainz_release_group_id, cover_art_url, release_date"
       )
       .eq(
         "external_source",
@@ -752,7 +778,7 @@ async function prepareAlbum(
     } = await supabase
       .from("albums")
       .select(
-        "id, title, artist, external_source, external_id, cover_art_url, release_date"
+        "id, title, artist, external_source, external_id, musicbrainz_release_id, musicbrainz_release_group_id, cover_art_url, release_date"
       )
       .ilike(
         "artist",
@@ -766,19 +792,9 @@ async function prepareAlbum(
       );
     }
 
-    const wantedKey =
-      normaliseAlbumKey(
-        payload.title,
-        payload.artist
-      );
-
     existingAlbum =
       (artistAlbums || []).find(
-        (album: any) =>
-          normaliseAlbumKey(
-            album.title,
-            album.artist
-          ) === wantedKey
+        (album: any) => albumTitleFallbackMatches(album, payload)
       ) || null;
   }
 
@@ -846,6 +862,7 @@ Deno.serve(async (request) => {
           const payload = {
             title: String(release.title || group.title || "").trim(),
             artist: queue.artist_name, external_source: "musicbrainz", external_id: release.id,
+            musicbrainz_release_id: release.id, musicbrainz_release_group_id: group.id,
             cover_art_url: `https://coverartarchive.org/release-group/${encodeURIComponent(group.id)}/front-250`,
             release_date: databaseReleaseDate(
               group["first-release-date"] || release.date

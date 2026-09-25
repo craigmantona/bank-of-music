@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import vm from 'node:vm';
 const app = await readFile(new URL('../app.js', import.meta.url), 'utf8');
+const identitySource = app.slice(app.indexOf('function normaliseAlbumTitleKey'), app.indexOf('function normaliseReleaseDate'));
 const saveSource = app.slice(app.indexOf('const albumAutoSaveInFlight = new Map();'), app.indexOf('async function importSelectedAlbum()'));
 const renderSource = app.slice(app.indexOf('async function renderSelectedItem()'), app.indexOf('function getSavedAlbumByTitleArtist'));
 const modelSource = app.slice(app.indexOf('function buildStageOneAlbumModel('), app.indexOf('async function renderStageOneAlbum('));
@@ -59,7 +60,7 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
     } }
   };
   vm.createContext(context);
-  vm.runInContext(saveSource + '\n' + modelSource + '\n' + renderSource, context);
+  vm.runInContext(identitySource + '\n' + saveSource + '\n' + modelSource + '\n' + renderSource, context);
   return { context, db, writes, fetches };
 }
 test('resolved external search selection uses the former auto-save path before showing catalogue rating controls', async () => {
@@ -79,12 +80,20 @@ test('existing catalogue selection never duplicates album or tracks', async () =
   const h = harness({ albums: [saved()], songs: [{ id: 20, album_id: 10, title: 'First Song' }] });
   await h.context.renderSelectedItem(); assert.equal(h.writes.length, 0); assert.equal(h.context.model.albumId, 10);
 });
-test('release-group and title/artist matches outside the local cache reuse the existing BOM record', async () => {
-  for (const record of [{...saved(),external_id:'another-edition'}, {...saved(),external_id:'another-edition',musicbrainz_release_group_id:null}]) {
-    const h = harness({ albums: [record], cached: false }); await h.context.renderSelectedItem();
-    assert.equal(h.db.albums.length, 1); assert.equal(h.writes.length, 0); assert.equal(h.context.model.albumId, 10);
-    assert.equal(h.context.selectedItem.externalId, 'another-edition');
-  }
+test('release-group matches outside the local cache reuse the existing BOM record', async () => {
+  const record = {...saved(),external_id:'another-edition'};
+  const h = harness({ albums: [record], cached: false }); await h.context.renderSelectedItem();
+  assert.equal(h.db.albums.length, 1); assert.equal(h.writes.length, 0); assert.equal(h.context.model.albumId, 10);
+  assert.equal(h.context.selectedItem.externalId, 'another-edition');
+});
+test('conflicting MusicBrainz identities cannot be overridden by an equivalent title', async () => {
+  const conflicting = {...saved(), external_id:'other-release', musicbrainz_release_id:'other-release', musicbrainz_release_group_id:'other-group'};
+  const h = harness({ albums: [conflicting] });
+  await h.context.autoSaveSelectedAlbum();
+  assert.equal(h.context.selectedItem.savedAlbumId, undefined);
+  assert.equal(h.db.albums.length, 1);
+  assert.equal(h.db.albums[0].id, 10);
+  assert.equal(h.db.songs.length, 0);
 });
 test('repeated and concurrent selections are idempotent', async () => {
   const h = harness();

@@ -164,3 +164,68 @@ test("artist deep links preserve Stage 1 rollback and Album navigation", () => {
 test("catalogue and qualification infrastructure is absent from Stage 2B assets", () => {
   assert.doesNotMatch(artist + styles, /artist-catalog|qualification-v2|shadow snapshot|artist_import_queue|catalogue worker/i);
 });
+
+function albumIdentityContext() {
+  const start = app.indexOf("function normaliseAlbumTitleKey");
+  const end = app.indexOf("function normaliseReleaseDate", start);
+  const context = { normaliseCompare: value => String(value || "").toLowerCase().replace(/^the\s+/, "").replace(/[’'`]/g, "").replace(/&amp;/g, "&").replace(/[^a-z0-9]+/g, "").trim() };
+  vm.runInNewContext(app.slice(start, end), context);
+  return context;
+}
+
+test("symbolic and Unicode album title keys remain safe and distinct", () => {
+  const { normaliseAlbumTitleKey } = albumIdentityContext();
+  const titles = ["+", "×", "÷", "=", "−", "★", "Ö", "惠特妮·休斯顿纪念特辑"];
+  const keys = titles.map(normaliseAlbumTitleKey);
+  assert.equal(keys.every(Boolean), true);
+  assert.equal(new Set(keys).size, keys.length);
+  assert.equal(normaliseAlbumTitleKey("Sgt. Pepper’s Lonely Hearts Club Band"), normaliseAlbumTitleKey("Sgt Peppers Lonely Hearts Club Band"));
+});
+
+test("only Ed Sheeran plus inherits the saved BOM identity and metadata", () => {
+  const { albumIdentityMatches } = albumIdentityContext();
+  const savedPlus = { id: 575, title: "+", artist: "Ed Sheeran", external_source: "musicbrainz",
+    external_id: "plus-release", musicbrainz_release_id: "plus-release",
+    musicbrainz_release_group_id: "plus-group", cover_art_url: "orange.jpg", release_date: "2012-06-12" };
+  const remote = [
+    ["+", "plus-group"], ["×", "multiply-group"], ["÷", "divide-group"],
+    ["=", "equals-group"], ["−", "minus-group"]
+  ].map(([title, releaseGroupId]) => ({ title, artist: "Ed Sheeran", releaseGroupId,
+    coverUrl: `${title}.jpg`, releaseDate: `remote-${title}` }));
+  const merged = remote.map(album => {
+    const saved = albumIdentityMatches(savedPlus, album) ? savedPlus : null;
+    return { title: album.title, savedAlbumId: saved?.id || "", coverUrl: saved?.cover_art_url || album.coverUrl,
+      releaseDate: saved?.release_date || album.releaseDate, ratingAlbumId: saved?.id || null };
+  });
+  assert.deepEqual(merged[0], { title: "+", savedAlbumId: 575, coverUrl: "orange.jpg", releaseDate: "2012-06-12", ratingAlbumId: 575 });
+  assert.equal(albumIdentityMatches(savedPlus, { title: "×", artist: "Ed Sheeran",
+    releaseGroupId: "multiply-group", savedAlbumId: 575 }), false);
+  for (const album of merged.slice(1)) {
+    assert.equal(album.savedAlbumId, "");
+    assert.notEqual(album.coverUrl, "orange.jpg");
+    assert.notEqual(album.releaseDate, "2012-06-12");
+    assert.equal(album.ratingAlbumId, null);
+  }
+});
+
+test("known vulnerable titles do not cross-match through an empty key", () => {
+  const { albumIdentityMatches } = albumIdentityContext();
+  const records = [
+    { id: 366, title: "★", artist: "David Bowie" },
+    { id: 244, title: "Ö", artist: "Fcukers" },
+    { id: 666, title: "惠特妮·休斯顿纪念特辑", artist: "Whitney Houston" }
+  ];
+  assert.equal(albumIdentityMatches(records[0], { title: "+", artist: "David Bowie" }), false);
+  assert.equal(albumIdentityMatches(records[1], { title: "×", artist: "Fcukers" }), false);
+  assert.equal(albumIdentityMatches(records[2], { title: "÷", artist: "Whitney Houston" }), false);
+  assert.equal(albumIdentityMatches(records[2], { title: "惠特妮·休斯顿纪念特辑", artist: "Whitney Houston" }), true);
+});
+
+test("frontend album qualification excludes MusicBrainz Demo secondary types", () => {
+  const start = app.indexOf("function isStudioReleaseGroup");
+  const end = app.indexOf("function sortReleaseGroupsByDate", start);
+  const context = { normaliseCompare: value => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "") };
+  vm.runInNewContext(app.slice(start, end), context);
+  assert.equal(context.isStudioReleaseGroup({ title: "Spinning Man", "primary-type": "Album", "secondary-types": ["Demo"] }), false);
+  assert.equal(context.isStudioReleaseGroup({ title: "Ordinary Album", "primary-type": "Album", "secondary-types": [] }), true);
+});

@@ -72,6 +72,27 @@ test("artist-era and normalized duplicate keys remain intact", () => {
   assert.equal(ctx.isReleaseGroupWithinArtistEra({ "first-release-date": "1972" }, { ended: true, end: "1970" }), true);
   assert.equal(ctx.normaliseAlbumKey("Álbum & Title!", "ARTIST"), ctx.normaliseAlbumKey("Album and Title", "Artist"));
 });
+test("symbol-only and Unicode album keys do not collapse together", () => {
+  const ctx = load(source);
+  const titles = ["+", "×", "÷", "=", "−", "★", "Ö", "惠特妮·休斯顿纪念特辑"];
+  const keys = titles.map(title => ctx.normaliseAlbumKey(title, "Artist"));
+  assert.equal(keys.every(key => !key.endsWith("|||")), true);
+  assert.equal(new Set(keys).size, keys.length);
+});
+test("title fallback rejects conflicting MusicBrainz identities", () => {
+  const ctx = load(source);
+  const album = { title: "+", artist: "Ed Sheeran", external_source: "musicbrainz",
+    external_id: "saved-release", musicbrainz_release_group_id: "saved-group" };
+  assert.equal(ctx.albumTitleFallbackMatches(album, { title: "+", artist: "Ed Sheeran",
+    external_source: "musicbrainz", external_id: "other-release", musicbrainz_release_group_id: "other-group" }), false);
+  assert.equal(ctx.albumTitleFallbackMatches(album, { title: "+", artist: "Ed Sheeran" }), true);
+  assert.equal(ctx.albumTitleFallbackMatches(album, { title: "×", artist: "Ed Sheeran" }), false);
+});
+test("importer excludes Demo release groups without broadening normal album filtering", () => {
+  const ctx = load(source);
+  assert.equal(ctx.isStudioReleaseGroup({ "primary-type": "Album", "secondary-types": ["Demo"] }), false);
+  assert.equal(ctx.isStudioReleaseGroup({ "primary-type": "Album", "secondary-types": [] }), true);
+});
 test("daily wrapper passes through legacy titles and new diagnostics", async () => {
   let handler;
   const payload = { ok: true, skipped: ["Regional album"], skipped_details: [{ title: "Regional album", reason: "regional_or_later_release" }] };

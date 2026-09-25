@@ -271,6 +271,43 @@ function normaliseCompare(value) {
     .trim();
 }
 
+function normaliseAlbumTitleKey(value) {
+  const source = String(value || "").normalize("NFKC").trim();
+  const ordinary = source
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[’'`]/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/[^\p{L}\p{N}]+/gu, "");
+  if (ordinary) return ordinary;
+  return source
+    ? `symbols:${Array.from(source).map((character) => character.codePointAt(0).toString(16)).join("-")}`
+    : "";
+}
+
+function albumIdentityMatches(album, candidate) {
+  if (!album || !candidate) return false;
+
+  const albumGroupId = album.musicbrainz_release_group_id || album.release_group_id || album.releaseGroupId || "";
+  const candidateGroupId = candidate.musicbrainz_release_group_id || candidate.release_group_id || candidate.releaseGroupId || "";
+  if (albumGroupId && candidateGroupId) return albumGroupId === candidateGroupId;
+
+  const albumReleaseId = album.musicbrainz_release_id ||
+    (album.external_source === "musicbrainz" ? album.external_id : "") || "";
+  const candidateReleaseId = candidate.musicbrainz_release_id ||
+    candidate.externalId ||
+    (candidate.external_source === "musicbrainz" ? candidate.external_id : "") || "";
+  if (albumReleaseId && candidateReleaseId) return albumReleaseId === candidateReleaseId;
+  if (candidate.savedAlbumId && Number(album.id) === Number(candidate.savedAlbumId)) return true;
+
+  const titleKey = normaliseAlbumTitleKey(candidate.title);
+  const artistKey = normaliseCompare(candidate.artist);
+  return Boolean(titleKey && artistKey &&
+    normaliseAlbumTitleKey(album.title) === titleKey &&
+    normaliseCompare(album.artist) === artistKey);
+}
+
 
 
 function normaliseReleaseDate(value) {
@@ -4771,9 +4808,10 @@ function isStudioReleaseGroup(releaseGroup) {
   .map((type) => normaliseCompare(type))
   .join(" ");
 
-if (
+  if (
   secondaryText.includes("compilation") ||
   secondaryText.includes("live") ||
+  secondaryText.includes("demo") ||
   secondaryText.includes("soundtrack") ||
   secondaryText.includes("interview") ||
   secondaryText.includes("mixtape") ||
@@ -6180,22 +6218,15 @@ async function renderArtistDetail(artistItem) {
     with one album saved in BoM displayed only that one album,
     even when MusicBrainz returned their full discography.
   */
-  const savedAlbumsByTitle = new Map(
-    savedAlbums.map((album) => [
-      normaliseCompare(album.title || ""),
-      album
-    ])
-  );
-
   const seenAlbumKeys = new Set();
 
   const displayAlbums = remoteAlbums
     .map((remoteAlbum) => {
       const albumKey =
-        normaliseCompare(remoteAlbum.title || "");
+        normaliseAlbumTitleKey(remoteAlbum.title || "");
 
       const savedAlbum =
-        savedAlbumsByTitle.get(albumKey) || null;
+        savedAlbums.find((album) => albumIdentityMatches(album, remoteAlbum)) || null;
 
       seenAlbumKeys.add(albumKey);
 
@@ -6232,7 +6263,7 @@ async function renderArtistDetail(artistItem) {
   */
   savedAlbums.forEach((savedAlbum) => {
     const albumKey =
-      normaliseCompare(savedAlbum.title || "");
+      normaliseAlbumTitleKey(savedAlbum.title || "");
 
     if (!albumKey || seenAlbumKeys.has(albumKey)) {
       return;
@@ -8973,10 +9004,7 @@ ${albumId
 }
 
 function getSavedAlbumByTitleArtist(title, artist) {
-  return allAlbums.find((album) =>
-    normaliseCompare(album.title) === normaliseCompare(title) &&
-    normaliseCompare(album.artist) === normaliseCompare(artist)
-  ) || null;
+  return allAlbums.find((album) => albumIdentityMatches(album, { title, artist })) || null;
 }
 
 
@@ -9153,11 +9181,7 @@ async function autoSaveSelectedAlbum() {
 
   const save = (async () => {
     const matches = (album, title, artist, releaseGroupId) =>
-      (item.savedAlbumId && Number(album.id) === Number(item.savedAlbumId)) ||
-      (item.externalId && (album.musicbrainz_release_id === item.externalId ||
-        (album.external_source === "musicbrainz" && album.external_id === item.externalId))) ||
-      (releaseGroupId && album.musicbrainz_release_group_id === releaseGroupId) ||
-      (normaliseCompare(album.title) === normaliseCompare(title) && normaliseCompare(album.artist) === normaliseCompare(artist));
+      albumIdentityMatches(album, { ...item, title, artist, releaseGroupId });
 
     const local = allAlbums.find((album) => matches(album, item.title, item.artist, item.releaseGroupId));
     if (local) return local.is_deleted ? null : local;
@@ -9182,14 +9206,16 @@ async function autoSaveSelectedAlbum() {
     // database conflict recovery, including the existing release-group key.
     const findSavedAlbum = async () => {
       const queries = [
-        () => supabaseClient.from("albums").select("*").eq("external_source", "musicbrainz").eq("external_id", detail.id).maybeSingle(),
-        () => supabaseClient.from("albums").select("*").eq("musicbrainz_release_group_id", releaseGroupId).maybeSingle(),
-        () => supabaseClient.from("albums").select("*").eq("title", title).eq("artist", artist).maybeSingle()
+        { exactIdentity: true, run: () => supabaseClient.from("albums").select("*").eq("external_source", "musicbrainz").eq("external_id", detail.id).maybeSingle() },
+        { exactIdentity: true, run: () => supabaseClient.from("albums").select("*").eq("musicbrainz_release_group_id", releaseGroupId).maybeSingle() },
+        { exactIdentity: false, run: () => supabaseClient.from("albums").select("*").eq("title", title).eq("artist", artist).maybeSingle() }
       ];
       for (const query of queries) {
-        const { data, error } = await query();
+        const { data, error } = await query.run();
         if (error) throw error;
-        if (data) return data;
+        if (data && (query.exactIdentity || albumIdentityMatches(data, {
+          title, artist, externalId: detail.id, releaseGroupId
+        }))) return data;
       }
       return null;
     };
