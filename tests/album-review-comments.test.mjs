@@ -5,7 +5,7 @@ import test from "node:test";
 const [app, styles, migration] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../style.css", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260922120000_album_review_comments.sql", import.meta.url), "utf8")
+  readFile(new URL("../supabase/migrations/20260922121436_album_review_comments.sql", import.meta.url), "utf8")
 ]);
 
 test("reviews load comments, commenter profiles and counts", () => {

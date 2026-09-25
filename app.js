@@ -2529,21 +2529,24 @@ async function resetPassword() {
   setMessage(authMessage, "Password reset email sent. Please check your inbox.");
 }
 
-async function fetchAllRows(tableName, orderColumn = "id") {
+async function fetchAllRows(tableName, orderColumn = "id", columns = "*") {
   let allRows = [];
   let from = 0;
   const size = 1000;
 
   while (true) {
-    const { data, error } = await supabaseClient
+    let query = supabaseClient
       .from(tableName)
-      .select("*")
-      .order(orderColumn, { ascending: true })
-      .range(from, from + size - 1);
+      .select(columns)
+      .order(orderColumn, { ascending: true });
+
+    if (orderColumn !== "id") query = query.order("id", { ascending: true });
+
+    const { data, error } = await query.range(from, from + size - 1);
 
     if (error) {
       console.error(`${tableName} load error`, error);
-      break;
+      throw error;
     }
 
     allRows = allRows.concat(data || []);
@@ -2559,13 +2562,7 @@ async function fetchAllRows(tableName, orderColumn = "id") {
 
 async function loadLibrary() {
 
-  const { data: albums } = await supabaseClient
-
-    .from("albums")
-
-    .select("*")
-
-    .order("title", { ascending: true });
+  const albums = await fetchAllRows("albums", "title");
 	
 	const songs = await fetchAllRows("songs", "id");
 allSongs = songs;
@@ -2573,29 +2570,27 @@ allSongs = songs;
 
 
 
-  const { data: albumRatings } = await supabaseClient
-
-    .from("ratings")
-
-    .select("user_id, album_id, rating");
-
-
-
-  const { data: songRatings } = await supabaseClient
-
-    .from("song_ratings")
-
-    .select("user_id, song_id, rating");
+  const albumRatings = await fetchAllRows(
+    "ratings",
+    "id",
+    "user_id, album_id, rating"
+  );
 
 
 
-  const { data: followed } = await supabaseClient
+  const songRatings = await fetchAllRows(
+    "song_ratings",
+    "id",
+    "user_id, song_id, rating"
+  );
 
-    .from("followed_artists")
 
-    .select("artist_name")
 
-    .order("artist_name", { ascending: true });
+  const followed = await fetchAllRows(
+    "followed_artists",
+    "artist_name",
+    "artist_name"
+  );
 
 
 

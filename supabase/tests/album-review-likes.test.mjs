@@ -4,7 +4,7 @@ import test from "node:test";
 import { PGlite } from "@electric-sql/pglite";
 
 const migration = await readFile(
-  new URL("../migrations/20260920183000_album_review_likes.sql", import.meta.url),
+  new URL("../migrations/20260920143131_album_review_likes.sql", import.meta.url),
   "utf8"
 );
 

@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { PGlite } from "@electric-sql/pglite";
 
 const migrationUrl = new URL(
-  "../migrations/20260920084107_secure_tracked_artist_album_trigger.sql",
+  "../migrations/20260920074353_secure_tracked_artist_album_trigger.sql",
   import.meta.url
 );
 

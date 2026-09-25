@@ -5,7 +5,7 @@ import test from "node:test";
 const [app, styles, migration] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../style.css", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260920131829_admin_album_track_listing_editor.sql", import.meta.url), "utf8")
+  readFile(new URL("../supabase/migrations/20260920133904_admin_album_track_listing_editor.sql", import.meta.url), "utf8")
 ]);
 
 test("Admin albums expose one complete track-listing editor", () => {
