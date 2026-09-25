@@ -38,7 +38,7 @@
       <header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>
       ${model.authenticated ? `<div class="bom-v1-quick-entry">
         <svg class="bom-v1-quick-vinyl" viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="29"/><circle cx="32" cy="32" r="23"/><circle cx="32" cy="32" r="18"/><circle cx="32" cy="32" r="8"/><circle cx="32" cy="32" r="2" fill="currentColor" stroke="none"/></svg>
-        <div class="bom-v1-quick-copy"><h2>Quick Rate</h2><p>One album at a time. Build your collection.</p></div>
+        <div class="bom-v1-quick-copy"><h2>Quick Rate</h2><p>One track at a time. Build your collection.</p></div>
         <span class="bom-v1-quick-cycle" aria-hidden="true">DISCOVER<br>RATE<br>REPEAT</span>
         <button type="button" data-bom-action="quick-rate">Start Quick Rate →</button>
       </div>` : ""}

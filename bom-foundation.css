@@ -1072,7 +1072,7 @@
   .bom-shell-v1 .bom-v1-search input { font-size: 16px; }
 }
 
-/* Quick Rate: the existing album scale in a focused, dismissible card. */
+/* Quick Rate: the existing rating scale in a focused, dismissible card. */
 .bom-shell-v1 .bom-v1-quick-entry { display: flex; align-items: center; gap: var(--bom-v1-space-5); padding: var(--bom-v1-space-5) var(--bom-v1-space-6); margin: var(--bom-v1-space-5) 0; border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius); background: var(--bom-v1-surface-raised); }
 .bom-shell-v1 .bom-v1-quick-vinyl { width: 64px; height: 64px; flex-shrink: 0; color: var(--bom-v1-muted); stroke: currentColor; stroke-width: 1; opacity: .6; }
 .bom-shell-v1 .bom-v1-quick-copy { flex: 1; min-width: 0; }
@@ -1097,16 +1097,17 @@
 .bom-quick-art { position: relative; display: grid; place-items: center; width: min(100%, 340px); aspect-ratio: 1; margin: 0 auto; border-radius: 10px; overflow: hidden; background: var(--bom-v1-bg); box-shadow: 0 12px 35px #0005; }
 .bom-quick-art img { position: absolute; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 .bom-quick-art span { font-size: 52px; font-weight: 800; color: var(--bom-v1-accent); }
-.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-trigger { display: none; }
-.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-control { display: block; }
-.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-popover { position: static; width: auto; grid-template-columns: repeat(10, minmax(0, 1fr)); padding: 0; margin: 14px 0; border: 0; box-shadow: none; }
-.bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-choice { min-width: 0 !important; min-height: 44px !important; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-track-rating-trigger { display: none; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-track-rating-control { display: block; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-track-rating-popover { position: static; width: auto; grid-template-columns: repeat(10, minmax(0, 1fr)); padding: 0; margin: 14px 0; border: 0; box-shadow: none; }
+.bom-shell-v1 .bom-v1-quick-rate .bom-v1-track-rating-choice { min-width: 0 !important; min-height: 44px !important; }
+.bom-v1-quick-rate .bom-quick-spotify { display: block; margin: 14px 0 4px; border: 0; border-radius: 12px; }
 .bom-v1-quick-rate button:disabled { opacity: .55; cursor: wait; }
 .bom-v1-quick-rate .bom-quick-art { animation: bom-quick-enter .18s ease-out; }
 @keyframes bom-quick-enter { from { opacity: .4; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 480px) {
   .bom-shell-v1 .bom-v1-quick-rate { padding: 16px; }
-  .bom-shell-v1 .bom-v1-quick-rate .bom-v1-album-rating-popover { grid-template-columns: repeat(5, 1fr); }
+  .bom-shell-v1 .bom-v1-quick-rate .bom-v1-track-rating-popover { grid-template-columns: repeat(5, 1fr); }
   .bom-quick-art { width: min(100%, 280px); }
 }
 @media (prefers-reduced-motion: reduce) { .bom-v1-quick-rate .bom-quick-art { animation: none; } }

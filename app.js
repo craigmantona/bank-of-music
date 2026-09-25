@@ -9496,14 +9496,154 @@ async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
 
 
 // Quick Rate keeps its queue and skips in memory only.
-function buildQuickRateQueue(albums, ratings, userId, random = Math.random) {
-  const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.album_id)));
-  const queue = albums.filter(album => !rated.has(Number(album.id)) && isLikelyStudioAlbum(album));
+function buildQuickRateQueue(songs, ratings, userId, random = Math.random) {
+  const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.song_id)));
+  const getTrackKey = song => song.canonical_song_id
+    ? `canonical:${song.canonical_song_id}`
+    : song.external_id
+      ? `external:${song.external_source || ""}:${song.external_id}`
+      : `track:${normaliseCompare(song.artist)}:${normaliseCompare(song.title)}`;
+  const ratedKeys = new Set(songs.filter(song => rated.has(Number(song.id))).map(getTrackKey));
+  const seen = new Set();
+  const queue = songs.filter(song => {
+    if (!song?.id || Number(song.is_deleted || 0) === 1) return false;
+    const key = getTrackKey(song);
+    if (rated.has(Number(song.id)) || ratedKeys.has(key) || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   for (let i = queue.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
     [queue[i], queue[j]] = [queue[j], queue[i]];
   }
+  for (let i = 1; i < queue.length; i++) {
+    if (normaliseCompare(queue[i].artist) !== normaliseCompare(queue[i - 1].artist)) continue;
+    const replacement = queue.findIndex((song, candidateIndex) =>
+      candidateIndex > i && normaliseCompare(song.artist) !== normaliseCompare(queue[i - 1].artist)
+    );
+    if (replacement > i) [queue[i], queue[replacement]] = [queue[replacement], queue[i]];
+  }
   return queue;
+}
+
+function getQuickRateSpotifyItem(song, album) {
+  if (song?.spotify_track_id) {
+    return {
+      id: song.spotify_track_id,
+      uri: `spotify:track:${song.spotify_track_id}`,
+      externalUrl: `https://open.spotify.com/track/${song.spotify_track_id}`
+    };
+  }
+  const uri = song?.spotify_uri || (song?.external_source === "spotify" ? `spotify:track:${song.external_id}` : "");
+  const id = song?.spotify_track_id || (uri ? uri.split(":").pop() : "");
+  if (id) return { id, uri };
+  return getCachedSpotifyMatch({ title: song?.title, artist: song?.artist, album: album?.title || "" });
+}
+
+async function resolveQuickRateSpotifyTrack(song) {
+  const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+  if (sessionError || !session?.access_token) {
+    throw new Error("Your Bank of Music session has expired. Please log in again.");
+  }
+
+  const response = await fetch(SPOTIFY_TOKEN_FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: window.SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${session.access_token}`
+    },
+    body: JSON.stringify({ action: "resolve_track", song_id: Number(song.id) })
+  });
+
+  let data = {};
+  try {
+    data = await response.json();
+  } catch {
+    data = {};
+  }
+
+  if (response.status === 429) {
+    const retryAfter = Number(response.headers.get("Retry-After") || data.retry_after || 1);
+    const error = new Error("Spotify is temporarily busy.");
+    error.retryAfter = Number.isFinite(retryAfter) ? retryAfter : 1;
+    throw error;
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || `Spotify resolver failed with HTTP ${response.status}.`);
+  }
+
+  if (data.status !== "matched" || !data.spotify_track_id) return null;
+
+  song.spotify_track_id = data.spotify_track_id;
+  song.spotify_matched_at = data.spotify_matched_at || new Date().toISOString();
+  const spotifyItem = {
+    id: data.spotify_track_id,
+    uri: `spotify:track:${data.spotify_track_id}`,
+    external_urls: { spotify: `https://open.spotify.com/track/${data.spotify_track_id}` }
+  };
+  cacheSpotifyMatch(song, spotifyItem);
+  return spotifyItem;
+}
+
+function renderQuickRateSpotifyFailure(target, song, retryAfter = 0) {
+  if (!target) return;
+  const fallbackUrl = getSpotifySearchFallbackUrl(song);
+  target.classList.remove("hidden");
+  target.innerHTML = `<div class="spotify-embed-error">
+    <strong>${retryAfter ? "Spotify is temporarily busy." : "BoM could not find an exact Spotify match."}</strong>
+    <span>${retryAfter ? `Try again in about ${retryAfter} second${retryAfter === 1 ? "" : "s"}.` : "You can still search for it directly in Spotify."}</span>
+    <a class="spotify-open-externally-btn" href="${escapeHtml(fallbackUrl)}" target="_blank" rel="noopener noreferrer">Search in Spotify</a>
+  </div>`;
+}
+
+async function listenToQuickRateTrack({ song, album, target, button }) {
+  if (!song || !target || !button) return false;
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Finding on Spotify…";
+  target.classList.remove("hidden");
+  target.innerHTML = `<div class="spotify-embed-loading">Finding ${escapeHtml(song.title)} in Spotify…</div>`;
+
+  try {
+    await recordMusicProviderClick({
+      provider: "spotify",
+      type: "song",
+      title: song.title,
+      artist: song.artist,
+      album: album?.title || ""
+    });
+
+    const spotifyItem = getQuickRateSpotifyItem(song, album) ||
+      await resolveQuickRateSpotifyTrack(song);
+    if (!spotifyItem) {
+      renderQuickRateSpotifyFailure(target, song);
+      return false;
+    }
+
+    const embedUrl = buildSpotifyEmbedUrl({ type: "song", spotifyItem });
+    const externalUrl = spotifyItem.external_urls?.spotify || spotifyItem.externalUrl ||
+      `https://open.spotify.com/track/${encodeURIComponent(getSpotifyEntityId(spotifyItem))}`;
+    const rendered = renderSpotifyEmbed({
+      target,
+      type: "song",
+      title: song.title,
+      artist: song.artist,
+      embedUrl,
+      externalUrl
+    });
+    if (!rendered) throw new Error("NO_PLAYABLE_SPOTIFY_EMBED");
+    button.textContent = "Player loaded";
+    return true;
+  } catch (error) {
+    console.error("Quick Rate Spotify player failed:", error);
+    renderQuickRateSpotifyFailure(target, song, Number(error?.retryAfter || 0));
+    return false;
+  } finally {
+    button.disabled = false;
+    if (button.textContent !== "Player loaded") button.textContent = originalText;
+  }
 }
 
 async function fetchQuickRateRows(table, columns, userId) {
@@ -9526,7 +9666,7 @@ async function openQuickRate() {
   dialog.className = "bom-v1-quick-rate bom-v1-album";
   dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
   dialog.innerHTML = `<header><h1 id="bomQuickRateTitle">Quick Rate</h1><button type="button" data-quick-exit>Exit Quick Rate</button></header>
-    <p data-quick-count>0 rated this session</p><div data-quick-card></div><p data-quick-status role="status">Loading unrated albums…</p>`;
+    <p data-quick-count>0 rated this session</p><div data-quick-card></div><p data-quick-status role="status">Loading unrated tracks…</p>`;
   document.body.append(dialog);
   const card = dialog.querySelector("[data-quick-card]");
   const status = dialog.querySelector("[data-quick-status]");
@@ -9538,28 +9678,42 @@ async function openQuickRate() {
   function render(focus = false) {
     if (!dialog.open) return;
     if (currentUser?.id !== userId) { dialog.close(); return; }
-    while (queue[index] && allAlbumRatings.some(row => row.user_id === userId && Number(row.album_id) === Number(queue[index].id))) index++;
-    const album = queue[index];
-    if (!album) {
-      card.innerHTML = `<h2>You’re all caught up for this round.</h2><p>Skipped albums are available again next time.</p>`;
-      status.textContent = "No more unrated albums in this round.";
+    while (queue[index] && allSongRatings.some(row => row.user_id === userId && Number(row.song_id) === Number(queue[index].id))) index++;
+    const song = queue[index];
+    if (!song) {
+      card.innerHTML = `<h2>You’re all caught up for this round.</h2><p>Skipped tracks are available again next time.</p>`;
+      status.textContent = "No more unrated tracks in this round.";
       dialog.querySelector("[data-quick-exit]").focus();
       return;
     }
+    const album = allAlbums.find(row => Number(row.id) === Number(song.album_id));
     const artwork = getAlbumArtworkUrl(album);
-    const control = buildCompactAlbumRatingControl(album.id, null)
+    const control = buildCompactTrackRatingControl(song.id, null)
       .replace('<details ', '<details open ')
       .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
-    card.innerHTML = `<div class="bom-quick-art">${artwork ? `<img src="${escapeHtml(artwork)}" alt="${escapeHtml(album.title)} cover" onerror="this.hidden=true">` : ''}<span>bom</span></div>
-      <h2>${escapeHtml(album.title)}</h2><p>${escapeHtml(album.artist)} · ${escapeHtml(getStageOneDiscoverYear(album) || "Year unavailable")}</p>
+    const albumMeta = album
+      ? `${escapeHtml(album.title)}${getStageOneDiscoverYear(album) ? ` · ${escapeHtml(getStageOneDiscoverYear(album))}` : ""}`
+      : "Album unavailable";
+    card.innerHTML = `<div class="bom-quick-art">${artwork ? `<img src="${escapeHtml(artwork)}" alt="${escapeHtml(album?.title || song.title)} cover" onerror="this.hidden=true">` : ''}<span>bom</span></div>
+      <h2>${escapeHtml(song.title)}</h2><p>${escapeHtml(song.artist)}</p><p>${albumMeta}</p>
+      <button type="button" data-quick-listen>Listen on Spotify</button>
+      <div class="spotify-embed-container hidden bom-quick-spotify" data-quick-spotify aria-live="polite"></div>
       <p>Your rating / 10</p>${control}<button type="button" data-quick-skip>Skip →</button>`;
+    card.querySelector("[data-quick-listen]").onclick = event => {
+      void listenToQuickRateTrack({
+        song,
+        album,
+        target: card.querySelector("[data-quick-spotify]"),
+        button: event.currentTarget
+      });
+    };
     card.querySelector("[data-quick-skip]").onclick = () => {
       if (busy) return;
       index++;
       status.textContent = "Skipped. No rating saved.";
       render(true);
     };
-    if (focus) card.querySelector(".bom-v1-album-rating-choice").focus();
+    if (focus) card.querySelector(".bom-v1-track-rating-choice").focus();
   }
 
   dialog.saveRating = async (button) => {
@@ -9568,9 +9722,9 @@ async function openQuickRate() {
     card.querySelectorAll("button").forEach(item => item.disabled = true);
     status.textContent = "Saving…";
     try {
-      const album = queue[index];
-      if (!allAlbums.some(row => Number(row.id) === Number(album.id))) allAlbums.push(album);
-      const saved = await saveAlbumRating(album.id, Number(button.dataset.rating));
+      const song = queue[index];
+      if (!allSongs.some(row => Number(row.id) === Number(song.id))) allSongs.push(song);
+      const saved = await saveTrackRating(song.id, Number(button.dataset.rating));
       if (!dialog.open || currentUser?.id !== userId) return;
       if (!saved) throw new Error("Rating not saved");
       count++;
@@ -9585,21 +9739,25 @@ async function openQuickRate() {
     } finally {
       busy = false;
       card.querySelectorAll("button").forEach(item => item.disabled = false);
-      if (dialog.open) card.querySelector(".bom-v1-album-rating-choice")?.focus();
+      if (dialog.open) card.querySelector(".bom-v1-track-rating-choice")?.focus();
     }
   };
 
   try {
-    const [albums, ratings] = await Promise.all([
+    const [songs, albums, ratings] = await Promise.all([
+      fetchQuickRateRows("songs", "*"),
       fetchQuickRateRows("albums", "*"),
-      fetchQuickRateRows("ratings", "id,user_id,album_id,rating", userId)
+      fetchQuickRateRows("song_ratings", "id,user_id,song_id,rating", userId)
     ]);
     if (!dialog.open || currentUser?.id !== userId) return;
-    queue = buildQuickRateQueue(albums, ratings, userId);
-    status.textContent = "Choose a rating, or skip an album you don’t know.";
+    albums.forEach(album => {
+      if (!allAlbums.some(row => Number(row.id) === Number(album.id))) allAlbums.push(album);
+    });
+    queue = buildQuickRateQueue(songs, ratings, userId);
+    status.textContent = "Choose a rating, or skip a track you don’t know.";
     render();
   } catch (error) {
-    status.textContent = "Couldn’t load albums. Exit Quick Rate and try again.";
+    status.textContent = "Couldn’t load tracks. Exit Quick Rate and try again.";
   }
 }
 
@@ -9704,7 +9862,7 @@ async function deleteAlbumRating(albumId) {
 
 
 
-async function saveTrackRating(songId) {
+async function saveTrackRating(songId, ratingValue = null) {
 
   if (!currentUser) {
     setMessage(
@@ -9722,9 +9880,9 @@ async function saveTrackRating(songId) {
       `song-rating-${songId}`
     );
 
-  if (!input) return;
+  if (!input && ratingValue === null) return;
 
-  const rating = parseFloat(input.value);
+  const rating = ratingValue === null ? parseFloat(input.value) : ratingValue;
 
   if (
     isNaN(rating) ||
@@ -9859,8 +10017,20 @@ async function saveTrackRating(songId) {
       ".detail-meta-grid .detail-meta-value:last-child"
     );
 
+  const selectedDetailSongId =
+    selectedItem?.savedSongId ||
+    selectedItem?.songId ||
+    selectedItem?.id;
+
+  const selectedDetailMatchesSong = selectedDetailSongId
+    ? Number(selectedDetailSongId) === Number(selectedSong.id)
+    : normaliseCompare(
+        `${selectedItem?.artist}-${selectedItem?.title}`
+      ) === selectedKey;
+
   if (
     selectedItem?.type === "song" &&
+    selectedDetailMatchesSong &&
     currentDetailRating
   ) {
     currentDetailRating.textContent =
@@ -9873,6 +10043,8 @@ async function saveTrackRating(songId) {
     globalSearchMessage,
     "Track rating saved."
   );
+
+  return true;
 }
 
 async function deleteTrackRating(songId) {
