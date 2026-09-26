@@ -137,7 +137,7 @@
   border-bottom-color: var(--bom-v1-accent) !important;
 }
 
-.bom-shell-v1 .bom-v1-nav .bom-v1-spotify-control {
+.bom-shell-v1 .bom-v1-spotify-control {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -206,7 +206,13 @@
   border: 0 !important;
 }
 
-.bom-shell-v1 .bom-v1-account { position: relative; justify-self: end; }
+.bom-shell-v1 .bom-v1-account {
+  position: relative;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .bom-shell-v1 .bom-v1-account-button {
   width: 44px;
@@ -346,14 +352,13 @@
     grid-column: 1 / -1;
     grid-row: 3;
     width: 100%;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 10px;
-    overflow-x: auto;
-    scrollbar-width: none;
   }
   .bom-shell-v1 .bom-v1-nav button { font-size: 12px; }
-  .bom-shell-v1 .bom-v1-nav::-webkit-scrollbar { display: none; }
-  .bom-shell-v1 .bom-v1-nav .bom-v1-spotify-control { margin-left: auto; padding-inline: 8px; font-size: 10px; }
+  .bom-shell-v1 .bom-v1-account { gap: 8px; }
+  .bom-shell-v1 .bom-v1-spotify-control { min-height: 44px; padding-inline: 9px; font-size: 10px; }
+  .bom-shell-v1 .bom-v1-spotify-control.is-connected { width: 44px; padding: 0; justify-content: center; }
   .bom-shell-v1 .bom-v1-spotify-wide { display: none; }
   .bom-shell-v1 .bom-v1-spotify-compact { display: inline; }
   .bom-shell-v1 .bom-v1-menu { right: 0; }

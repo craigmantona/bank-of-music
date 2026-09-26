@@ -37,12 +37,24 @@ test("the bridge delegates to existing functions", () => {
   assert.match(app, /return runGlobalSearch\(\)/);
 });
 
-test("Spotify connection state is shared with the primary navigation", () => {
+test("Spotify connection state is shared with the primary header", () => {
   assert.match(app, /publishSpotifyConnectionState\(true\)/);
   assert.match(app, /publishSpotifyConnectionState\(false\)/);
   assert.match(app, /bom:spotify-connection/);
   assert.match(shell, /bom:spotify-connection/);
   assert.match(styles, /\.bom-v1-spotify-control svg/);
+});
+
+test("Spotify connection lives with the account control and leaves mobile navigation clear", () => {
+  const navigationStart = shell.indexOf('<nav class="bom-v1-nav"');
+  const accountStart = shell.indexOf('<div class="bom-v1-account">');
+  const navigation = shell.slice(navigationStart, shell.indexOf("</nav>", navigationStart) + 6);
+  const account = shell.slice(accountStart, shell.indexOf("</header>", accountStart));
+  assert.doesNotMatch(navigation, /data-bom-spotify/);
+  assert.match(account, /data-bom-spotify[\s\S]*bom-v1-account-button/);
+  assert.match(styles, /\.bom-v1-account \{[\s\S]*display: flex/);
+  assert.match(styles, /\.bom-v1-spotify-control\.is-connected \{ width: 44px/);
+  assert.match(styles, /\.bom-v1-nav \{[\s\S]*justify-content: space-between/);
 });
 
 test("the new presentation is namespaced and contains no data access", () => {

@@ -64,10 +64,6 @@
         <button type="button" data-bom-route="discover" aria-current="page">Discover</button>
         <button type="button" data-bom-route="charts">Charts</button>
         <button type="button" data-bom-route="ratings">Your Ratings</button>
-        <button type="button" class="bom-v1-spotify-control" data-bom-spotify aria-label="Connect Spotify">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm4.81 15.14a.65.65 0 0 1-.9.22c-2.47-1.51-5.58-1.85-9.24-1.01a.66.66 0 0 1-.29-1.28c4.01-.91 7.45-.52 10.21 1.17.31.19.41.59.22.9Zm1.29-2.86a.82.82 0 0 1-1.13.27c-2.83-1.74-7.15-2.24-10.5-1.23a.82.82 0 1 1-.48-1.57c3.83-1.16 8.59-.6 11.84 1.4.39.23.51.74.27 1.13Zm.11-2.98C14.82 8.79 9.22 8.6 5.98 9.58a.98.98 0 1 1-.57-1.88c3.72-1.13 9.91-.9 13.81 1.41a.98.98 0 0 1-1.01 1.69Z"/></svg>
-          <span class="bom-v1-spotify-label">Connect Spotify</span>
-        </button>
       </nav>
       <form class="bom-v1-search" role="search">
         <label class="visually-hidden" for="bomV1Search">Search artists, albums and tracks</label>
@@ -75,6 +71,10 @@
         <button type="submit" aria-label="Search">⌕</button>
       </form>
       <div class="bom-v1-account">
+        <button type="button" class="bom-v1-spotify-control" data-bom-spotify aria-label="Connect Spotify">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm4.81 15.14a.65.65 0 0 1-.9.22c-2.47-1.51-5.58-1.85-9.24-1.01a.66.66 0 0 1-.29-1.28c4.01-.91 7.45-.52 10.21 1.17.31.19.41.59.22.9Zm1.29-2.86a.82.82 0 0 1-1.13.27c-2.83-1.74-7.15-2.24-10.5-1.23a.82.82 0 1 1-.48-1.57c3.83-1.16 8.59-.6 11.84 1.4.39.23.51.74.27 1.13Zm.11-2.98C14.82 8.79 9.22 8.6 5.98 9.58a.98.98 0 1 1-.57-1.88c3.72-1.13 9.91-.9 13.81 1.41a.98.98 0 0 1-1.01 1.69Z"/></svg>
+          <span class="bom-v1-spotify-label"><span class="bom-v1-spotify-wide">Connect Spotify</span><span class="bom-v1-spotify-compact">Connect</span></span>
+        </button>
         <button type="button" class="bom-v1-account-button" aria-expanded="false" aria-controls="bomV1ProfileMenu" aria-label="Open account menu">···</button>
         <div id="bomV1ProfileMenu" class="bom-v1-menu" hidden></div>
       </div>
@@ -105,8 +105,8 @@
     spotifyButton.classList.toggle("is-connected", connected);
     spotifyButton.setAttribute("aria-label", connected ? "Spotify connected" : "Connect Spotify");
     spotifyButton.querySelector(".bom-v1-spotify-label").innerHTML = connected
-      ? '<span class="bom-v1-spotify-wide">Spotify connected ✓</span><span class="bom-v1-spotify-compact">Connected ✓</span>'
-      : "Connect Spotify";
+      ? '<span class="bom-v1-spotify-wide">Spotify connected ✓</span>'
+      : '<span class="bom-v1-spotify-wide">Connect Spotify</span><span class="bom-v1-spotify-compact">Connect</span>';
   }
 
   function routeUrl(route, query = "") {
