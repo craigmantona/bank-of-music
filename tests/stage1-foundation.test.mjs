@@ -21,15 +21,28 @@ test("the approved navigation and account destinations are present", () => {
     assert.match(shell, new RegExp(label));
   }
   assert.match(shell, /Search artists, albums and tracks/);
+  assert.match(shell, /data-bom-spotify/);
+  assert.match(shell, /Connect Spotify/);
+  assert.match(shell, /Spotify connected ✓/);
+  assert.match(shell, /viewBox="0 0 24 24"/);
 });
 
 test("the bridge delegates to existing functions", () => {
   assert.match(app, /showDiscover: \(\) =>/);
   assert.match(app, /showCharts: \(\) => window\.goCharts\(\)/);
   assert.match(app, /showSpotify: \(\) =>/);
+  assert.match(app, /connectSpotify: \(\) =>/);
   assert.match(app, /showProfile: \(\) => showUserProfile\(\)/);
   assert.match(app, /logout: \(\) => logOut\(\)/);
   assert.match(app, /return runGlobalSearch\(\)/);
+});
+
+test("Spotify connection state is shared with the primary navigation", () => {
+  assert.match(app, /publishSpotifyConnectionState\(true\)/);
+  assert.match(app, /publishSpotifyConnectionState\(false\)/);
+  assert.match(app, /bom:spotify-connection/);
+  assert.match(shell, /bom:spotify-connection/);
+  assert.match(styles, /\.bom-v1-spotify-control svg/);
 });
 
 test("the new presentation is namespaced and contains no data access", () => {

@@ -137,6 +137,32 @@
   border-bottom-color: var(--bom-v1-accent) !important;
 }
 
+.bom-shell-v1 .bom-v1-nav .bom-v1-spotify-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 6px 10px;
+  color: var(--bom-v1-text);
+  background: var(--bom-v1-surface) !important;
+  border: 1px solid var(--bom-v1-line) !important;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+.bom-shell-v1 .bom-v1-spotify-control svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: #1ed760;
+}
+
+.bom-shell-v1 .bom-v1-spotify-control.is-connected {
+  color: var(--bom-v1-muted);
+}
+
+.bom-shell-v1 .bom-v1-spotify-compact { display: none; }
+
 .bom-shell-v1 .bom-v1-search {
   position: relative;
   display: grid;
@@ -320,10 +346,16 @@
     grid-column: 1 / -1;
     grid-row: 3;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
   .bom-shell-v1 .bom-v1-nav button { font-size: 12px; }
+  .bom-shell-v1 .bom-v1-nav::-webkit-scrollbar { display: none; }
+  .bom-shell-v1 .bom-v1-nav .bom-v1-spotify-control { margin-left: auto; padding-inline: 8px; font-size: 10px; }
+  .bom-shell-v1 .bom-v1-spotify-wide { display: none; }
+  .bom-shell-v1 .bom-v1-spotify-compact { display: inline; }
   .bom-shell-v1 .bom-v1-menu { right: 0; }
   .bom-shell-v1 > .container { padding-inline: 20px; }
 }

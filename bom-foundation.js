@@ -64,6 +64,10 @@
         <button type="button" data-bom-route="discover" aria-current="page">Discover</button>
         <button type="button" data-bom-route="charts">Charts</button>
         <button type="button" data-bom-route="ratings">Your Ratings</button>
+        <button type="button" class="bom-v1-spotify-control" data-bom-spotify aria-label="Connect Spotify">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm4.81 15.14a.65.65 0 0 1-.9.22c-2.47-1.51-5.58-1.85-9.24-1.01a.66.66 0 0 1-.29-1.28c4.01-.91 7.45-.52 10.21 1.17.31.19.41.59.22.9Zm1.29-2.86a.82.82 0 0 1-1.13.27c-2.83-1.74-7.15-2.24-10.5-1.23a.82.82 0 1 1-.48-1.57c3.83-1.16 8.59-.6 11.84 1.4.39.23.51.74.27 1.13Zm.11-2.98C14.82 8.79 9.22 8.6 5.98 9.58a.98.98 0 1 1-.57-1.88c3.72-1.13 9.91-.9 13.81 1.41a.98.98 0 0 1-1.01 1.69Z"/></svg>
+          <span class="bom-v1-spotify-label">Connect Spotify</span>
+        </button>
       </nav>
       <form class="bom-v1-search" role="search">
         <label class="visually-hidden" for="bomV1Search">Search artists, albums and tracks</label>
@@ -81,6 +85,7 @@
   const menu = root.querySelector(".bom-v1-menu");
   const searchForm = root.querySelector(".bom-v1-search");
   const searchInput = root.querySelector("#bomV1Search");
+  const spotifyButton = root.querySelector("[data-bom-spotify]");
 
   function bridge() { return window.BOMPresentationBridge || null; }
 
@@ -94,6 +99,14 @@
       if (button.dataset.bomRoute === route) button.setAttribute("aria-current", "page");
       else button.removeAttribute("aria-current");
     });
+  }
+
+  function renderSpotifyState(connected = false) {
+    spotifyButton.classList.toggle("is-connected", connected);
+    spotifyButton.setAttribute("aria-label", connected ? "Spotify connected" : "Connect Spotify");
+    spotifyButton.querySelector(".bom-v1-spotify-label").innerHTML = connected
+      ? '<span class="bom-v1-spotify-wide">Spotify connected ✓</span><span class="bom-v1-spotify-compact">Connected ✓</span>'
+      : "Connect Spotify";
   }
 
   function routeUrl(route, query = "") {
@@ -129,6 +142,7 @@
   function activate() {
     renderProfileMenu();
     const state = bridge()?.getState();
+    renderSpotifyState(Boolean(state?.spotifyConnected));
     const routeBySection = { recommendationsSection: "discover", chartsSection: "charts", librarySection: "ratings" };
     if (state?.currentSectionId) setRoute(routeBySection[state.currentSectionId] || "");
   }
@@ -143,6 +157,13 @@
     if (action === "ratings") app.showRatings();
     rememberRoute(action);
   }));
+
+  spotifyButton.addEventListener("click", async () => {
+    const app = bridge();
+    if (!app) return;
+    if (spotifyButton.classList.contains("is-connected")) await app.showSpotify();
+    else await app.connectSpotify();
+  });
 
   window.BOMAutocomplete?.attach(searchInput, searchForm, {
     load: () => bridge().getSearchCatalogue(),
@@ -192,6 +213,9 @@
   const sessionStatus = document.getElementById("sessionStatus");
   if (sessionStatus) new MutationObserver(activate).observe(sessionStatus, { childList: true, subtree: true, characterData: true });
   window.addEventListener("bom:presentation-ready", activate);
+  window.addEventListener("bom:spotify-connection", (event) => {
+    renderSpotifyState(Boolean(event.detail?.connected));
+  });
   window.addEventListener("popstate", async (event) => {
     const params = new URLSearchParams(window.location.search);
     const route = event.state?.bomStageOneRoute || params.get("view") || "";

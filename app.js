@@ -448,6 +448,10 @@ window.BOMPresentationBridge = Object.freeze({
     showOnlySection("settingsSection");
     return refreshSpotifyConnectionUI();
   },
+  connectSpotify: () => {
+    showOnlySection("settingsSection");
+    return connectSpotify();
+  },
   showProfile: () => showUserProfile(),
   logout: () => logOut(),
   runSearch: (term) => {
@@ -504,7 +508,8 @@ window.BOMPresentationBridge = Object.freeze({
     authenticated: Boolean(currentUser),
     displayName: getUserDisplayName(),
     isAdmin: Boolean(isAdmin),
-    currentSectionId
+    currentSectionId,
+    spotifyConnected: spotifyConnectionState
   })
 });
 
@@ -12104,6 +12109,16 @@ const SPOTIFY_STORAGE_KEYS = {
   state: "bom_spotify_auth_state"
 };
 
+let spotifyConnectionState = false;
+let spotifyRefreshPromise = null;
+
+function publishSpotifyConnectionState(connected) {
+  spotifyConnectionState = Boolean(connected);
+  window.dispatchEvent(new CustomEvent("bom:spotify-connection", {
+    detail: { connected: spotifyConnectionState }
+  }));
+}
+
 function getSpotifyElement(id) {
   return document.getElementById(id);
 }
@@ -12333,35 +12348,53 @@ async function exchangeSpotifyCodeForTokens(code) {
   return data.access_token;
 }
 
-async function refreshSpotifyAccessToken() {
+async function requestSpotifyAccessTokenRefresh() {
   const refreshToken = getStoredSpotifyRefreshToken();
 
   if (!refreshToken) {
     return null;
   }
 
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabaseClient.auth.getSession();
+
+  if (sessionError || !session?.access_token) {
+    return null;
+  }
+
   const response = await fetch(
-    "https://accounts.spotify.com/api/token",
+    SPOTIFY_TOKEN_FUNCTION_URL,
     {
       method: "POST",
       headers: {
-        "Content-Type":
-          "application/x-www-form-urlencoded"
+        "Content-Type": "application/json",
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${session.access_token}`
       },
-      body: new URLSearchParams({
-        client_id: SPOTIFY_CLIENT_ID,
-        grant_type: "refresh_token",
+      body: JSON.stringify({
+        action: "refresh",
         refresh_token: refreshToken
       })
     }
   );
 
-  const data = await response.json();
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch {
+    return null;
+  }
 
   if (!response.ok) {
     console.error("Spotify refresh failed", data);
 
-    clearSpotifyTokens();
+    if (response.status === 400 || response.status === 401) {
+      clearSpotifyTokens();
+      publishSpotifyConnectionState(false);
+    }
 
     return null;
   }
@@ -12369,6 +12402,17 @@ async function refreshSpotifyAccessToken() {
   saveSpotifyTokens(data);
 
   return data.access_token;
+}
+
+async function refreshSpotifyAccessToken() {
+  if (!spotifyRefreshPromise) {
+    spotifyRefreshPromise = requestSpotifyAccessTokenRefresh()
+      .finally(() => {
+        spotifyRefreshPromise = null;
+      });
+  }
+
+  return spotifyRefreshPromise;
 }
 
 async function getValidSpotifyAccessToken() {
@@ -13053,6 +13097,7 @@ document
 
 
 function renderSpotifyDisconnected(message = "") {
+  publishSpotifyConnectionState(false);
   const status =
     getSpotifyElement("spotifyConnectionStatus");
 
@@ -13097,6 +13142,7 @@ function renderSpotifyDisconnected(message = "") {
 }
 
 function renderSpotifyConnected(spotifyUser) {
+  publishSpotifyConnectionState(true);
   const status =
     getSpotifyElement("spotifyConnectionStatus");
 
