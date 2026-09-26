@@ -403,6 +403,9 @@ verify_jwt = true
 [functions.artist-import-rpc-test]
 verify_jwt = true
 
+[functions.send-test-email]
+verify_jwt = true
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
