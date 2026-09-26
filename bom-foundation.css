@@ -358,7 +358,8 @@
   .bom-shell-v1 .bom-v1-nav button { font-size: 12px; }
   .bom-shell-v1 .bom-v1-account { gap: 8px; }
   .bom-shell-v1 .bom-v1-spotify-control { min-height: 44px; padding-inline: 9px; font-size: 10px; }
-  .bom-shell-v1 .bom-v1-spotify-control.is-connected { width: 44px; padding: 0; justify-content: center; }
+  .bom-shell-v1 .bom-v1-spotify-control.is-connected { min-height: 42px; padding-inline: 8px; gap: 5px; justify-content: center; }
+  .bom-shell-v1 .bom-v1-spotify-control.is-connected .bom-v1-spotify-compact { font-size: 13px; font-weight: 600; }
   .bom-shell-v1 .bom-v1-spotify-wide { display: none; }
   .bom-shell-v1 .bom-v1-spotify-compact { display: inline; }
   .bom-shell-v1 .bom-v1-menu { right: 0; }

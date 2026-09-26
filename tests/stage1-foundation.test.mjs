@@ -53,7 +53,9 @@ test("Spotify connection lives with the account control and leaves mobile naviga
   assert.doesNotMatch(navigation, /data-bom-spotify/);
   assert.match(account, /data-bom-spotify[\s\S]*bom-v1-account-button/);
   assert.match(styles, /\.bom-v1-account \{[\s\S]*display: flex/);
-  assert.match(styles, /\.bom-v1-spotify-control\.is-connected \{ width: 44px/);
+  assert.match(shell, /bom-v1-spotify-compact[^>]*aria-hidden="true">✓/);
+  assert.doesNotMatch(shell, /bom-v1-spotify-compact[^>]*>Connected/);
+  assert.match(styles, /\.bom-v1-spotify-control\.is-connected \{ min-height: 42px; padding-inline: 8px/);
   assert.match(styles, /\.bom-v1-nav \{[\s\S]*justify-content: space-between/);
 });
 

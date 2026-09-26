@@ -105,7 +105,7 @@
     spotifyButton.classList.toggle("is-connected", connected);
     spotifyButton.setAttribute("aria-label", connected ? "Spotify connected" : "Connect Spotify");
     spotifyButton.querySelector(".bom-v1-spotify-label").innerHTML = connected
-      ? '<span class="bom-v1-spotify-wide">Spotify connected ✓</span>'
+      ? '<span class="bom-v1-spotify-wide">Spotify connected ✓</span><span class="bom-v1-spotify-compact" aria-hidden="true">✓</span>'
       : '<span class="bom-v1-spotify-wide">Connect Spotify</span><span class="bom-v1-spotify-compact">Connect</span>';
   }
 
