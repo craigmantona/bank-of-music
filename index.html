@@ -105,6 +105,21 @@
  
      <p id="authMessage"></p>
    </section>
+
+   <section class="card password-recovery-card hidden" id="passwordRecoveryCard" aria-labelledby="passwordRecoveryTitle">
+     <div class="password-recovery-kicker">Account recovery</div>
+     <h2 id="passwordRecoveryTitle">Set new password</h2>
+     <p class="small">Choose a new password for your Bank of Music account.</p>
+     <form id="passwordRecoveryForm" novalidate>
+       <label for="newPassword">New password</label>
+       <input id="newPassword" type="password" autocomplete="new-password" minlength="6" required>
+       <label for="confirmNewPassword">Confirm new password</label>
+       <input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="6" required>
+       <button id="setNewPasswordBtn" type="submit">Set new password</button>
+     </form>
+     <p id="passwordRecoveryMessage" role="status" aria-live="polite"></p>
+     <button id="passwordRecoveryContinueBtn" type="button" class="hidden">Continue to Bank of Music</button>
+   </section>
  
    <section class="card" id="searchSection">
      <h2>Search</h2>
@@ -404,7 +419,8 @@
 
   <script src="bom-autocomplete.js?v=1"></script>
   <script src="bom-artist-hero.js?v=1"></script>
-  <script src="app.js?v=120&autocomplete=1&search-autosave=1"></script>
+  <script src="bom-password-recovery.js?v=1"></script>
+  <script src="app.js?v=121&autocomplete=1&search-autosave=1"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
     var foundationScript = document.createElement("script");

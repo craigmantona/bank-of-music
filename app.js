@@ -107,6 +107,8 @@ const albumTrackCache = {};
 
 let currentUser = null;
 
+let passwordRecovery = null;
+
 let allAlbums = [];
 
 let allSongs = [];
@@ -1573,6 +1575,8 @@ document.addEventListener("click", (event) => {
 function updateSessionUI() {
   if (!sessionStatus || !authCard) return;
 
+  if (passwordRecovery?.isActive()) return;
+
   if (currentUser) {
     const displayName = getUserDisplayName();
 
@@ -2305,6 +2309,8 @@ async function refreshSessionUI() {
 
 
 
+    if (passwordRecovery?.reconcileSession(session)) return;
+
     await ensureUserProfile();
 
     updateSessionUI();
@@ -2434,6 +2440,8 @@ async function logIn() {
 
   try {
 
+    passwordRecovery?.clear({ notify: false });
+
     const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
 
@@ -2477,6 +2485,8 @@ async function logIn() {
 async function logOut() {
 
   try {
+
+    passwordRecovery?.clear({ notify: false });
 
     const { error } = await supabaseClient.auth.signOut();
 
@@ -2533,6 +2543,13 @@ async function resetPassword() {
 
   setMessage(authMessage, "Password reset email sent. Please check your inbox.");
 }
+
+passwordRecovery = window.BOMPasswordRecovery?.create({
+  auth: supabaseClient.auth,
+  document,
+  window,
+  onExit: () => refreshSessionUI()
+}) || null;
 
 async function fetchAllRows(tableName, orderColumn = "id", columns = "*") {
   let allRows = [];
@@ -13488,6 +13505,8 @@ handleSpotifyAuthorizationCallback()
 supabaseClient.auth.onAuthStateChange((event, session) => {
 
   currentUser = session ? session.user : null;
+
+  if (passwordRecovery?.handleAuthEvent(event, session)) return;
 
   ensureUserProfile().then(() => {
 

@@ -76,5 +76,5 @@ test("migration provides public reads with admin-only table and object mutation"
 });
 
 test("the policy module loads before the application", () => {
-  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=120"));
+  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=121"));
 });

@@ -578,6 +578,34 @@ button:hover { transform: translateY(-1px); }
  
  
 }
+
+.password-recovery-card {
+ max-width: 560px;
+ margin: 48px auto;
+}
+
+.password-recovery-card label {
+ display: block;
+ margin: 4px 0 8px;
+ font-weight: 800;
+}
+
+.password-recovery-kicker {
+ margin-bottom: 8px;
+ color: var(--cyan);
+ font-size: .82rem;
+ font-weight: 800;
+ letter-spacing: .12em;
+ text-transform: uppercase;
+}
+
+#passwordRecoveryMessage { color: var(--green); }
+#passwordRecoveryMessage.error { color: #ff9898; }
+
+body.bom-password-recovery-active #bomStageOneShell,
+body.bom-password-recovery-active .container > :not(#passwordRecoveryCard) {
+ display: none !important;
+}
  
  
 .section-divider {
