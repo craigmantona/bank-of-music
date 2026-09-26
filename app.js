@@ -109,6 +109,8 @@ let currentUser = null;
 
 let passwordRecovery = null;
 
+let authCaptcha = null;
+
 let allAlbums = [];
 
 let allSongs = [];
@@ -2386,10 +2388,12 @@ async function signUp() {
   }
 
   try {
+    const captchaToken = await authCaptcha?.getToken();
     const { data, error } = await supabaseClient.auth.signUp({
       email,
       password,
       options: {
+        ...(captchaToken ? { captchaToken } : {}),
         emailRedirectTo: window.location.origin + window.location.pathname,
         data: {
           handle,
@@ -2411,6 +2415,8 @@ setMessage(
 );
   } catch (err) {
     setMessage(authMessage, "Error: " + err.message);
+  } finally {
+    authCaptcha?.reset();
   }
 }
 
@@ -2442,7 +2448,12 @@ async function logIn() {
 
     passwordRecovery?.clear({ notify: false });
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const captchaToken = await authCaptcha?.getToken();
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password,
+      ...(captchaToken ? { options: { captchaToken } } : {})
+    });
 
 
 
@@ -2475,6 +2486,10 @@ async function logIn() {
   } catch (err) {
 
     setMessage(authMessage, "Error: " + err.message);
+
+  } finally {
+
+    authCaptcha?.reset();
 
   }
 
@@ -2532,17 +2547,31 @@ async function resetPassword() {
     return;
   }
 
-  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + window.location.pathname
-  });
+  try {
+    const captchaToken = await authCaptcha?.getToken();
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname,
+      ...(captchaToken ? { captchaToken } : {})
+    });
 
-  if (error) {
-    setMessage(authMessage, error.message);
-    return;
+    if (error) {
+      setMessage(authMessage, error.message);
+      return;
+    }
+
+    setMessage(authMessage, "Password reset email sent. Please check your inbox.");
+  } catch (err) {
+    setMessage(authMessage, "Error: " + err.message);
+  } finally {
+    authCaptcha?.reset();
   }
-
-  setMessage(authMessage, "Password reset email sent. Please check your inbox.");
 }
+
+authCaptcha = window.BOMTurnstile?.create({
+  siteKey: window.TURNSTILE_SITE_KEY,
+  document,
+  window
+}) || null;
 
 passwordRecovery = window.BOMPasswordRecovery?.create({
   auth: supabaseClient.auth,

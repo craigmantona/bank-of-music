@@ -579,6 +579,19 @@ button:hover { transform: translateY(-1px); }
  
 }
 
+.turnstile-container {
+ margin: 2px 0 16px;
+ max-width: 100%;
+}
+
+#turnstileWidget { max-width: 100%; }
+
+#turnstileMessage {
+ margin: 8px 0 0;
+ color: var(--muted);
+ font-size: .9rem;
+}
+
 .password-recovery-card {
  max-width: 560px;
  margin: 48px auto;
