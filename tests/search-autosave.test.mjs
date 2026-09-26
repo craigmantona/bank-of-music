@@ -16,7 +16,7 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
   const db = { albums: structuredClone(albums), songs: structuredClone(songs) }, writes = [], fetches = [];
   let nextId = 100;
   const context = {
-    currentUser: { id: 'user-1' }, selectedItem: selection(), allAlbums: cached ? structuredClone(albums) : [], allSongs: cached ? structuredClone(songs) : [],
+    currentUser: { id: 'user-1' }, isAdmin: false, selectedItem: selection(), allAlbums: cached ? structuredClone(albums) : [], allSongs: cached ? structuredClone(songs) : [],
     console: { warn() {}, error() {} }, albumTrackCache: {}, releaseGroupCoverCache: {}, selectedItemDetail: { innerHTML: '' }, window: {},
     predictiveCataloguePromise: Promise.resolve([]), predictiveCatalogueLoadedAt: 1,
     normaliseText: value => String(value || '').trim().replace(/\s+/g, ' '),
@@ -63,30 +63,19 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
   vm.runInContext(identitySource + '\n' + saveSource + '\n' + modelSource + '\n' + renderSource, context);
   return { context, db, writes, fetches };
 }
-test('resolved external search selection uses the former auto-save path before showing catalogue rating controls', async () => {
+test('resolved external search selection remains read-only before catalogue controls are shown', async () => {
   const h = harness(); await h.context.renderSelectedItem();
-  assert.equal(h.db.albums.length, 1); assert.equal(h.db.songs.length, 2);
-  const album = h.db.albums[0];
-  assert.equal(album.external_id, 'release-1'); assert.equal(album.musicbrainz_release_group_id, 'group-1');
-  assert.equal(album.musicbrainz_release_id, 'release-1'); assert.equal(album.cover_art_url, selection().coverUrl);
-  assert.equal(album.release_date, '2001-03-04');
-  assert.equal(h.context.selectedItem.savedAlbumId, album.id); assert.equal(h.context.selectedItem.albumId, album.id);
-  assert.equal(h.context.model.albumId, album.id); assert.doesNotMatch(h.context.model.albumRatingControlHtml, /Save album/);
-  assert.equal(h.context.model.community.average, 8);
-  assert.deepEqual(h.db.songs.map(s => [s.external_id, s.track_position, s.album_id]), [['recording-1',1,album.id],['recording-2',2,album.id]]);
-  assert.equal(h.context.predictiveCataloguePromise, null);
+  assert.equal(h.db.albums.length, 0); assert.equal(h.db.songs.length, 0);
+  assert.equal(h.writes.length, 0);
+  assert.equal(h.context.selectedItem.savedAlbumId, undefined);
+  assert.equal(h.context.model.albumId, null);
+  assert.match(h.context.model.albumRatingControlHtml, /Admin Catalogue|Not yet in the BOM catalogue/);
 });
 test('existing catalogue selection never duplicates album or tracks', async () => {
   const h = harness({ albums: [saved()], songs: [{ id: 20, album_id: 10, title: 'First Song' }] });
   await h.context.renderSelectedItem(); assert.equal(h.writes.length, 0); assert.equal(h.context.model.albumId, 10);
 });
-test('release-group matches outside the local cache reuse the existing BOM record', async () => {
-  const record = {...saved(),external_id:'another-edition'};
-  const h = harness({ albums: [record], cached: false }); await h.context.renderSelectedItem();
-  assert.equal(h.db.albums.length, 1); assert.equal(h.writes.length, 0); assert.equal(h.context.model.albumId, 10);
-  assert.equal(h.context.selectedItem.externalId, 'another-edition');
-});
-test('conflicting MusicBrainz identities cannot be overridden by an equivalent title', async () => {
+test('conflicting MusicBrainz identities are never written by album viewing', async () => {
   const conflicting = {...saved(), external_id:'other-release', musicbrainz_release_id:'other-release', musicbrainz_release_group_id:'other-group'};
   const h = harness({ albums: [conflicting] });
   await h.context.autoSaveSelectedAlbum();
@@ -95,19 +84,12 @@ test('conflicting MusicBrainz identities cannot be overridden by an equivalent t
   assert.equal(h.db.albums[0].id, 10);
   assert.equal(h.db.songs.length, 0);
 });
-test('repeated and concurrent selections are idempotent', async () => {
+test('repeated and concurrent remote selections remain read-only', async () => {
   const h = harness();
   await Promise.all([h.context.autoSaveSelectedAlbum(), h.context.autoSaveSelectedAlbum(), h.context.autoSaveSelectedAlbum()]);
   h.context.selectedItem = selection(); await h.context.autoSaveSelectedAlbum();
-  assert.equal(h.db.albums.length, 1); assert.equal(h.db.songs.length, 2);
-  assert.equal(h.writes.filter(w => w.table === 'albums').length, 1);
-  assert.equal(h.writes.filter(w => w.table === 'songs').length, 2);
-});
-test('a concurrent database insert resolves to the existing record without overwriting canonical metadata', async () => {
-  const h = harness({ beforeAlbumWrite(db) { db.albums.push({...saved(),external_id:'another-edition'}); } });
-  await h.context.renderSelectedItem(); assert.equal(h.db.albums.length, 1);
-  assert.equal(h.db.albums[0].cover_art_url, 'saved-cover.jpg'); assert.equal(h.context.model.albumId, 10);
-  assert.equal(h.writes.filter(w => w.table === 'songs').length, 0);
+  assert.equal(h.db.albums.length, 0); assert.equal(h.db.songs.length, 0);
+  assert.equal(h.writes.length, 0);
 });
 test('failed or incomplete external resolution performs no catalogue writes', async () => {
   const failed = harness({ failResolution: true }); await failed.context.renderSelectedItem(); assert.equal(failed.writes.length, 0);
@@ -117,12 +99,6 @@ test('failed or incomplete external resolution performs no catalogue writes', as
 });
 test('signed-out browsing retains the current no-write security boundary', async () => {
   const h = harness(); h.context.currentUser = null; assert.equal(await h.context.autoSaveSelectedAlbum(), null); assert.equal(h.writes.length, 0);
-});
-test('a completed save cannot attach its record to a newer selection', async () => {
-  const h = harness(); let resolve;
-  h.context.fetchAlbumDetail = () => new Promise(r => {resolve = r;});
-  const pending = h.context.autoSaveSelectedAlbum(); const newer = {type:'artist',title:'Another Artist'}; h.context.selectedItem = newer;
-  resolve(release()); await pending; assert.equal(h.context.selectedItem, newer); assert.equal(newer.savedAlbumId, undefined);
 });
 test('search selection no longer saves an unresolved result before rendering', () => {
   const handler = app.slice(app.indexOf('globalSearchResults.addEventListener("click"'), app.indexOf('let spotifyAlbumWarmupKey'));
@@ -139,11 +115,11 @@ test('changing selection during external resolution prevents saving or rendering
   resolve(release()); await pending;
   assert.equal(h.writes.length, 0); assert.equal(h.context.selectedItemDetail.innerHTML, 'New selection');
 });
-test('database read failure stops saving rather than treating an unknown catalogue state as absent', async () => {
+test('remote viewing never performs a database duplicate query or write', async () => {
   const h = harness();
-  h.context.supabaseClient.from = () => {
-    const q = { select: () => q, eq: () => q, maybeSingle: async () => ({ error: new Error('offline') }) }; return q;
-  };
-  await assert.rejects(h.context.autoSaveSelectedAlbum(), /offline/);
+  let calls = 0;
+  h.context.supabaseClient.from = () => { calls += 1; throw new Error('must not query'); };
+  assert.equal(await h.context.autoSaveSelectedAlbum(), null);
+  assert.equal(calls, 0);
   assert.equal(h.writes.length, 0);
 });

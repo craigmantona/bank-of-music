@@ -4008,6 +4008,73 @@ body { padding-bottom: 96px !important; }
   .admin-track-listing-header,
   .admin-track-listing-actions { align-items: stretch; flex-direction: column; }
 }
+
+/* Admin Catalogue V1 */
+.admin-catalogue { border-color: rgba(0, 255, 163, .3); background: linear-gradient(180deg, rgba(0,255,163,.055), rgba(10,14,34,.78)); }
+.admin-catalogue-header span,
+.admin-catalogue-confirmed span { color: var(--cyan); font-size: .76rem; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+.admin-catalogue-header h3 { margin: 4px 0 6px; }
+.admin-catalogue-header p { color: var(--muted); margin: 0; max-width: 760px; }
+.admin-catalogue-message { margin: 16px 0; padding: 12px 14px; border-radius: 14px; background: rgba(0,255,163,.08); border: 1px solid rgba(0,255,163,.18); }
+.admin-catalogue-artist-search > label,
+.admin-catalogue-row label,
+.admin-catalogue-correction label { display: grid; gap: 6px; color: var(--muted); font-size: .83rem; font-weight: 800; }
+.admin-catalogue-artist-search > div:first-of-type { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; margin-top: 7px; }
+.admin-catalogue-artist-search input,
+.admin-catalogue-row input,
+.admin-catalogue-correction select { width: 100%; min-width: 0; min-height: 46px; margin: 0; border-radius: 13px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.05); color: var(--text); padding: 10px 12px; }
+.admin-catalogue-candidates { display: grid; gap: 8px; margin-top: 12px; }
+.admin-catalogue-candidates button { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(220px, 1.3fr) auto; gap: 12px; align-items: center; text-align: left; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); }
+.admin-catalogue-candidates button span,
+.admin-catalogue-candidates button small { color: var(--muted); }
+.admin-catalogue-confirmed { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px; margin-top: 16px; border-radius: 16px; background: rgba(255,255,255,.05); }
+.admin-catalogue-confirmed div { display: grid; gap: 3px; }
+.admin-catalogue-confirmed strong { font-size: 1.18rem; }
+.admin-catalogue-confirmed small { color: var(--muted); }
+.admin-catalogue-existing { margin: 18px 0; }
+.admin-catalogue-existing h4 { margin: 0 0 8px; }
+.admin-catalogue-existing > div { display: flex; flex-wrap: wrap; gap: 7px; }
+.admin-catalogue-existing > div span { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.07); }
+.admin-catalogue-existing small { color: var(--muted); }
+.admin-catalogue-albums-heading { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+.admin-catalogue-albums-heading h4 { margin: 0; }
+.admin-catalogue-albums-heading p { margin: 5px 0 0; }
+.admin-catalogue-rows { display: grid; gap: 12px; margin-top: 14px; }
+.admin-catalogue-row { display: grid; grid-template-columns: 42px minmax(220px, 1.5fr) minmax(190px, .8fr) auto; gap: 12px; align-items: end; padding: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 18px; background: rgba(255,255,255,.035); }
+.admin-catalogue-row-number { width: 34px; height: 34px; align-self: center; display: grid; place-items: center; border-radius: 50%; background: rgba(0,255,163,.12); color: var(--cyan); font-weight: 950; }
+.admin-catalogue-remove { min-height: 46px; }
+.admin-catalogue-select { grid-column: 2 / -1; display: flex !important; grid-auto-flow: column; justify-content: start; align-items: center; }
+.admin-catalogue-select input { width: 20px; min-height: 20px; }
+.admin-catalogue-preview { grid-column: 2 / -1; padding: 13px; border-radius: 15px; border: 1px solid rgba(255,255,255,.1); background: rgba(4,7,16,.5); }
+.admin-catalogue-preview.is-ready,
+.admin-catalogue-preview.is-added { border-color: rgba(0,255,163,.35); }
+.admin-catalogue-preview.is-needs_correction { border-color: rgba(255,202,58,.4); }
+.admin-catalogue-preview.is-failed { border-color: rgba(255,86,112,.45); }
+.admin-catalogue-preview-heading { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center; }
+.admin-catalogue-preview-heading img,
+.admin-catalogue-no-art { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; display: grid; place-items: center; background: #0b1020; color: var(--muted); font-weight: 900; }
+.admin-catalogue-preview-heading div { display: grid; gap: 3px; }
+.admin-catalogue-preview-heading small { color: var(--muted); }
+.admin-catalogue-status { color: var(--cyan); font-size: .75rem; font-weight: 950; text-transform: uppercase; letter-spacing: .08em; }
+.admin-catalogue-warning { color: var(--yellow); margin: 9px 0 0; }
+.admin-catalogue-preview details { margin-top: 10px; }
+.admin-catalogue-preview ol { max-height: 240px; overflow: auto; columns: 2; padding-left: 24px; }
+.admin-catalogue-correction { display: grid; gap: 10px; margin-top: 12px; padding: 12px; border-radius: 13px; background: rgba(255,202,58,.08); }
+.admin-catalogue-correction small { color: var(--muted); }
+.admin-catalogue-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+
+@media (max-width: 780px) {
+  .admin-catalogue-candidates button { grid-template-columns: 1fr; gap: 3px; }
+  .admin-catalogue-confirmed,
+  .admin-catalogue-albums-heading,
+  .admin-catalogue-actions { align-items: stretch; flex-direction: column; }
+  .admin-catalogue-row { grid-template-columns: 38px minmax(0, 1fr); align-items: start; }
+  .admin-catalogue-row > label,
+  .admin-catalogue-row > button,
+  .admin-catalogue-preview,
+  .admin-catalogue-select { grid-column: 2; }
+  .admin-catalogue-preview ol { columns: 1; }
+}
 .admin-add-album-btn, .admin-add-track-btn { min-height: 48px; }
 .chart-grid {
   display: grid;

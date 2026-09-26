@@ -6776,7 +6776,9 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
     tracks,
     backControlHtml: buildSelectedBackButton(),
     artistControlHtml: renderClickableArtistName(artist),
-    albumRatingControlHtml: albumId ? buildCompactAlbumRatingControl(albumId, personal) : '<button id="importSelectedAlbumBtn">Save album</button>',
+    albumRatingControlHtml: albumId
+      ? buildCompactAlbumRatingControl(albumId, personal)
+      : (isAdmin ? '<button type="button" data-open-admin-catalogue>Add through Admin Catalogue</button>' : '<span class="small">Not yet in the BOM catalogue</span>'),
     providerControlHtml: buildMusicProviderPanel({ type: "album", title: detail?.title || album?.title || selectedItem?.title || "", artist }).replace(">Play here<", ">Listen elsewhere<"),
     shareControlHtml: buildSelectedSharePanel(selectedItem).replace(">Send<", ">Share album<"),
     adminControlHtml: typeof renderSelectedAdminControls === "function" ? renderSelectedAdminControls({ albumId }) : ""
@@ -8830,7 +8832,7 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
 
                   ? renderStarSelector(`album-rating-${albumId}`, refreshedYourRating)
 
-                  : `<button id="importSelectedAlbumBtn">Save album</button>`}
+                  : (isAdmin ? `<button type="button" data-open-admin-catalogue>Add through Admin Catalogue</button>` : `<span class="small">Not yet in the BOM catalogue</span>`)}
 
                 ${buildSelectedSharePanel(albumSelection)}
 
@@ -9080,6 +9082,10 @@ async function autoSaveSelectedSong() {
 
     );
 
+  // Opening remote metadata is read-only. New tracks enter BOM only through
+  // an administrator-approved album transaction.
+  return savedSong || null;
+
 
 
   if (!savedSong) {
@@ -9208,6 +9214,24 @@ async function autoSaveSelectedAlbum() {
   if (!selectedItem || selectedItem.type !== "album") return null;
   const item = selectedItem;
   const userId = currentUser.id;
+  const existingCatalogueAlbum = allAlbums.find((album) =>
+    albumIdentityMatches(album, item)
+  ) || null;
+
+  // Preserve normal browsing/rating of existing rows, but never let viewing
+  // remote metadata create a catalogue row (including for administrators).
+  if (existingCatalogueAlbum) {
+    item.savedAlbumId = existingCatalogueAlbum.id;
+    item.albumId = existingCatalogueAlbum.id;
+    item.title = existingCatalogueAlbum.title;
+    item.artist = existingCatalogueAlbum.artist;
+    item.externalId = existingCatalogueAlbum.musicbrainz_release_id || existingCatalogueAlbum.external_id || item.externalId;
+    item.releaseGroupId = existingCatalogueAlbum.musicbrainz_release_group_id || item.releaseGroupId;
+    item.coverUrl = getAlbumArtworkUrl(existingCatalogueAlbum) || item.coverUrl || "";
+    item.releaseDate = existingCatalogueAlbum.release_date || item.releaseDate || "";
+  }
+  return existingCatalogueAlbum;
+
   const key = `${userId}:${item.releaseGroupId || item.externalId || normaliseCompare(`${item.artist}-${item.title}`)}`;
 
   const bindSavedAlbum = (album) => {
@@ -9336,7 +9360,13 @@ async function autoSaveSelectedAlbum() {
 
 async function importSelectedAlbum() {
 
-  if (!selectedItem || selectedItem.type !== "album") return;
+  // Legacy direct import is intentionally retired. The Admin Catalogue
+  // performs previewed, revalidated and atomic album creation.
+  if (isAdmin) {
+    showOnlySection("adminSection");
+    window.BOMAdminCatalogue?.render();
+  }
+  return;
 
 
 
@@ -14273,6 +14303,9 @@ function renderProfileModalContent() {
 
 async function adminAddAlbumFromForm() {
   if (!isAdmin) return;
+  setMessage(adminMessage, "Use Catalogue / Add Artist & Albums so the album can be previewed first.");
+  window.BOMAdminCatalogue?.render();
+  return;
   const title = normaliseText(document.getElementById("adminNewAlbumTitle")?.value || "");
   const artist = normaliseText(document.getElementById("adminNewAlbumArtist")?.value || "");
   const releaseDate = normaliseReleaseDate(document.getElementById("adminNewAlbumDate")?.value || "");
@@ -14325,6 +14358,9 @@ function extractMusicBrainzReleaseId(value) {
 
 async function importMusicBrainzRelease() {
   if (!isAdmin) return;
+  setMessage(adminMessage, "Use Catalogue / Add Artist & Albums so the release can be previewed first.");
+  window.BOMAdminCatalogue?.render();
+  return;
 
   const rawValue = document.getElementById("mbReleaseId")?.value?.trim() || "";
   const releaseId = extractMusicBrainzReleaseId(rawValue);

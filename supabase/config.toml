@@ -400,6 +400,9 @@ verify_jwt = false
 [functions.artist-catalog-inspector]
 verify_jwt = true
 
+[functions.admin-catalogue]
+verify_jwt = true
+
 [functions.artist-import-rpc-test]
 verify_jwt = true
 
