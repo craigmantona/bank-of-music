@@ -4,14 +4,28 @@ import {
   requireAuthenticatedUser
 } from "../_shared/authorization.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://bank-of-music.pages.dev",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS"
-};
+const CANONICAL_SPOTIFY_REDIRECT_URI = "https://thebankofmusic.com/";
+const LEGACY_SPOTIFY_REDIRECT_URI = "https://bank-of-music.pages.dev/";
+const allowedBrowserOrigins = new Set([
+  "https://thebankofmusic.com",
+  "https://bank-of-music.pages.dev"
+]);
 
-function jsonResponse(
+function getCorsHeaders(request: Request) {
+  const origin = request.headers.get("Origin") || "";
+  return {
+    "Access-Control-Allow-Origin": allowedBrowserOrigins.has(origin)
+      ? origin
+      : "https://thebankofmusic.com",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin"
+  };
+}
+
+function createJsonResponse(
+  corsHeaders: Record<string, string>,
   body: Record<string, unknown>,
   status = 200,
   extraHeaders: Record<string, string> = {}
@@ -215,6 +229,13 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
 }
 
 Deno.serve(async (request) => {
+  const corsHeaders = getCorsHeaders(request);
+  const jsonResponse = (
+    body: Record<string, unknown>,
+    status = 200,
+    extraHeaders: Record<string, string> = {}
+  ) => createJsonResponse(corsHeaders, body, status, extraHeaders);
+
   if (request.method === "OPTIONS") {
     return new Response("ok", {
       headers: corsHeaders
@@ -222,10 +243,7 @@ Deno.serve(async (request) => {
   }
 
   if (request.method !== "POST") {
-    return jsonResponse(
-      { error: "Method not allowed." },
-      405
-    );
+    return jsonResponse({ error: "Method not allowed." }, 405);
   }
 
   const authorization = await requireAuthenticatedUser(request);
@@ -238,7 +256,7 @@ Deno.serve(async (request) => {
   }
 
   try {
-    const { action, code, refresh_token, song_id } =
+    const { action, code, refresh_token, song_id, redirect_uri } =
       await request.json();
 
     const clientId =
@@ -267,9 +285,21 @@ Deno.serve(async (request) => {
       return jsonResponse(result, result.status === "not_found" ? 404 : 200);
     }
 
-    const redirectUri = Deno.env.get("SPOTIFY_REDIRECT_URI");
-    if (!redirectUri) {
+    const configuredRedirectUri = Deno.env.get("SPOTIFY_REDIRECT_URI");
+    if (!configuredRedirectUri) {
       return jsonResponse({ error: "Spotify redirect URI is missing." }, 500);
+    }
+
+    const allowedRedirectUris = new Set([
+      CANONICAL_SPOTIFY_REDIRECT_URI,
+      LEGACY_SPOTIFY_REDIRECT_URI
+    ]);
+
+    // Older cached clients omit redirect_uri and must retain their original
+    // Pages value while the canonical frontend rolls out.
+    const redirectUri = redirect_uri || LEGACY_SPOTIFY_REDIRECT_URI;
+    if (typeof redirectUri !== "string" || !allowedRedirectUris.has(redirectUri)) {
+      return jsonResponse({ error: "Spotify redirect URI is invalid." }, 400);
     }
 
     let tokenBody;

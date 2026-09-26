@@ -12135,7 +12135,7 @@ const SPOTIFY_CLIENT_ID = window.SPOTIFY_CLIENT_ID || "";
 
 const SPOTIFY_REDIRECT_URI =
   window.SPOTIFY_REDIRECT_URI ||
-  "https://bank-of-music.pages.dev/";
+  "https://thebankofmusic.com/";
   
 const SPOTIFY_TOKEN_FUNCTION_URL =
   `${window.SUPABASE_URL}/functions/v1/rapid-processor`;
@@ -12348,7 +12348,8 @@ async function exchangeSpotifyCodeForTokens(code) {
       },
       body: JSON.stringify({
         action: "exchange",
-        code
+        code,
+        redirect_uri: SPOTIFY_REDIRECT_URI
       })
     }
   );

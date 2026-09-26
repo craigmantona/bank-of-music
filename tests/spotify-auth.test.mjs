@@ -76,6 +76,23 @@ test("expired Spotify access tokens refresh through the existing authenticated e
   assert.equal(localStorage.getItem("bom_spotify_refresh_token"), "persistent-refresh");
 });
 
+test("Spotify authorization-code exchange sends the exact configured redirect URI", async () => {
+  const { context, requests } = createContext({
+    response: () => new Response(JSON.stringify({ access_token: "fresh-access", expires_in: 3600 }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    })
+  });
+
+  assert.equal(await context.exchangeSpotifyCodeForTokens("authorization-code"), "fresh-access");
+  assert.equal(requests.length, 1);
+  assert.deepEqual(JSON.parse(requests[0][1].body), {
+    action: "exchange",
+    code: "authorization-code",
+    redirect_uri: "https://example.invalid/"
+  });
+});
+
 test("concurrent Spotify token checks share one refresh request", async () => {
   const { context, requests } = createContext({
     response: () => new Response(JSON.stringify({ access_token: "fresh-access", expires_in: 3600 }), {

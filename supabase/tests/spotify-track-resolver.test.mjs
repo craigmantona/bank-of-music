@@ -101,6 +101,83 @@ function resolver({ storedId = null, candidates = [], searchStatus = 200, retryA
   };
 }
 
+function spotifyTokenHandler() {
+  let handler;
+  const requests = [];
+
+  loadEdge(source.replace(/^export /gm, ""), {
+    btoa: value => Buffer.from(value).toString("base64"),
+    URLSearchParams,
+    Deno: {
+      env: { get: name => ({
+        SPOTIFY_CLIENT_ID: "client-id",
+        SPOTIFY_CLIENT_SECRET: "client-secret",
+        SPOTIFY_REDIRECT_URI: "https://thebankofmusic.com/"
+      })[name] || "" },
+      serve: fn => { handler = fn; }
+    },
+    requireAuthenticatedUser: async () => ({ ok: true, user: { id: "user-id" } }),
+    fetch: async (url, options) => {
+      requests.push({ url: String(url), options });
+      return Response.json({ access_token: "spotify-user-token", expires_in: 3600 });
+    }
+  });
+
+  return { handler, requests };
+}
+
+test("Spotify token function permits the canonical production origin", async () => {
+  const { handler } = spotifyTokenHandler();
+  const response = await handler(new Request("https://project.invalid/functions/v1/rapid-processor", {
+    method: "OPTIONS",
+    headers: { Origin: "https://thebankofmusic.com" }
+  }));
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "https://thebankofmusic.com");
+  assert.equal(response.headers.get("Vary"), "Origin");
+});
+
+test("Spotify token exchange uses the redirect URI supplied by the canonical frontend", async () => {
+  const { handler, requests } = spotifyTokenHandler();
+  const response = await handler(new Request("https://project.invalid/functions/v1/rapid-processor", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer user-token",
+      "Content-Type": "application/json",
+      Origin: "https://thebankofmusic.com"
+    },
+    body: JSON.stringify({
+      action: "exchange",
+      code: "authorization-code",
+      redirect_uri: "https://thebankofmusic.com/"
+    })
+  }));
+
+  assert.equal(response.status, 200, await response.text());
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "https://thebankofmusic.com");
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url, "https://accounts.spotify.com/api/token");
+  assert.equal(requests[0].options.body.get("redirect_uri"), "https://thebankofmusic.com/");
+});
+
+test("Spotify token exchange retains the legacy redirect for cached clients during rollout", async () => {
+  const { handler, requests } = spotifyTokenHandler();
+  const response = await handler(new Request("https://project.invalid/functions/v1/rapid-processor", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer user-token",
+      "Content-Type": "application/json",
+      Origin: "https://bank-of-music.pages.dev"
+    },
+    body: JSON.stringify({ action: "exchange", code: "authorization-code" })
+  }));
+
+  assert.equal(response.status, 200, await response.text());
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "https://bank-of-music.pages.dev");
+  assert.equal(requests[0].options.body.get("redirect_uri"), "https://bank-of-music.pages.dev/");
+});
+
 test("Spotify resolver returns a centrally stored track without an API call", async () => {
   const app = resolver({ storedId: "stored123" });
   const result = await app.run();
