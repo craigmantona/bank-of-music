@@ -14,7 +14,7 @@ const [app, catalogue, html, styles, edge, migration] = await Promise.all([
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=124") < html.indexOf("bom-admin-catalogue.js?v=2"));
+  assert.ok(html.indexOf("app.js?v=125") < html.indexOf("bom-admin-catalogue.js?v=2"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -69,6 +69,24 @@ test("application exposes only the dedicated Admin Catalogue integration surface
   assert.match(app, /installRenderExtension: \(extension\) => \{[\s\S]*renderBaseAdminDashboard\(\);[\s\S]*extension\(\);/);
   assert.match(app, /dispatchEvent\(new CustomEvent\("bom:admin-catalogue-host-ready"\)\)/);
   assert.doesNotMatch(app, /window\.(?:renderAdminDashboard|supabaseClient|allAlbums|currentUser|isAdmin)\s*=/);
+});
+
+test("catalogue commits refresh the Admin Dashboard from authoritative library data without losing results", () => {
+  const hostStart = app.indexOf("window.BOMAdminCatalogueHost = Object.freeze({");
+  const hostEnd = app.indexOf("document.dispatchEvent(new CustomEvent", hostStart);
+  const hostSource = app.slice(hostStart, hostEnd);
+  const refreshStart = hostSource.indexOf("refreshAfterCommit: async () => {");
+  const refreshEnd = hostSource.indexOf("openAdmin:", refreshStart);
+  const refreshSource = hostSource.slice(refreshStart, refreshEnd);
+  const commitStart = catalogue.indexOf("async function commitAlbums()");
+  const commitEnd = catalogue.indexOf("function bindEvents()", commitStart);
+  const commitSource = catalogue.slice(commitStart, commitEnd);
+
+  assert.ok(refreshSource.indexOf("await loadLibrary();") < refreshSource.indexOf("renderAdminDashboard();"));
+  assert.match(refreshSource, /renderLibrary\(\);[\s\S]*renderRecommendations\(\);[\s\S]*renderAdminDashboard\(\);/);
+  assert.doesNotMatch(refreshSource, /(?:allAlbums|allSongs|allAlbumRatings|allSongRatings)\.(?:push|splice)|\+\+/);
+  assert.ok(commitSource.indexOf("state.results = data.results || [];") < commitSource.indexOf("await host.refreshAfterCommit();"));
+  assert.match(commitSource, /finally \{[\s\S]*render\(\);[\s\S]*\}/);
 });
 
 test("workflow requires explicit artist choice, preview and selected commit", () => {

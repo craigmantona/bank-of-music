@@ -14691,6 +14691,7 @@ window.BOMAdminCatalogueHost = Object.freeze({
     await loadLibrary();
     renderLibrary();
     renderRecommendations();
+    renderAdminDashboard();
   },
   openAdmin: () => showOnlySection("adminSection"),
   installRenderExtension: (extension) => {
