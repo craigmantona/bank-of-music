@@ -70,6 +70,32 @@ test('Quick Rate reuses track rating upsert and reports success only after persi
   assert.equal(writes.length,2);
 });
 
+test('track rating writes only the selected album occurrence when recording provenance is shared', async () => {
+  const writes = [], local = [], refreshed = [];
+  const tableClient = {
+    upsert: async (rows, options) => { writes.push({rows,options}); return {error:null}; },
+    select(){ return this; },
+    eq(){ return Promise.resolve({data:[],error:null}); }
+  };
+  const context = vm.createContext({
+    currentUser:{id:'me'}, document:{getElementById:()=>null}, globalSearchMessage:{},
+    selectedItem:{type:'song',savedSongId:202}, selectedItemDetail:null,
+    allSongs:[
+      {id:101,album_id:1,title:'How Soon Is Now?',artist:'The Smiths',external_source:'musicbrainz',external_id:'shared'},
+      {id:202,album_id:2,title:'How Soon Is Now?',artist:'The Smiths',external_source:'musicbrainz',external_id:'shared'}
+    ],
+    allSongRatings:[], supabaseClient:{from:()=>tableClient}, setMessage(){},
+    upsertLocalSongRating:(...args)=>local.push(args), updateTrackRowUi:id=>refreshed.push(id),
+    updateStarSelector(){}, renderLibrary(){}
+  });
+  vm.runInContext(extract('async function saveTrackRating(', 'async function deleteTrackRating'),context);
+
+  assert.equal(await context.saveTrackRating(202, 8), true);
+  assert.deepEqual(Array.from(writes[0].rows, row => ({...row})), [{user_id:'me',song_id:202,rating:8}]);
+  assert.deepEqual(local, [[202,8]]);
+  assert.deepEqual(refreshed, [202]);
+});
+
 test('Quick Rate does not overwrite a different selected track detail rating', async () => {
   const writes = [], local = [];
   const detailRating = {textContent:'4/10'};

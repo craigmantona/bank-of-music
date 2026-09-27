@@ -14,7 +14,7 @@ const [app, catalogue, html, styles, edge, migration] = await Promise.all([
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=123") < html.indexOf("bom-admin-catalogue.js?v=2"));
+  assert.ok(html.indexOf("app.js?v=124") < html.indexOf("bom-admin-catalogue.js?v=2"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);

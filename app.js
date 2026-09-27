@@ -1861,16 +1861,37 @@ function getSavedAlbumByExternalId(externalId) {
 
 
 
-function getSavedSongByExternalId(externalId) {
+function getSavedSongByExternalId(externalId, { songId = null, albumId = null } = {}) {
 
   if (!externalId) return null;
 
-  return allSongs.find(
+  const matches = allSongs.filter(
 
     (song) => song.external_source === "musicbrainz" && song.external_id === externalId
 
-  ) || null;
+  );
 
+  if (songId) {
+    return matches.find((song) => Number(song.id) === Number(songId)) || null;
+  }
+
+  if (albumId) {
+    return matches.find((song) => Number(song.album_id) === Number(albumId)) || null;
+  }
+
+  return matches.length === 1 ? matches[0] : null;
+
+}
+
+function getSavedSongByTitleArtist(title, artist, { albumId = null } = {}) {
+  const matches = allSongs.filter((song) =>
+    normaliseCompare(song.title) === normaliseCompare(title) &&
+    normaliseCompare(song.artist) === normaliseCompare(artist)
+  );
+  if (albumId) {
+    return matches.find((song) => Number(song.album_id) === Number(albumId)) || null;
+  }
+  return matches.length === 1 ? matches[0] : null;
 }
 
 
@@ -1951,22 +1972,6 @@ function getSongAverage(songId) {
 
 }
 
-function getLinkedSongAverage(songIds) {
-  const ids = songIds.map(Number);
-
-  const ratings = allSongRatings
-    .filter((row) => ids.includes(Number(row.song_id)))
-    .map((row) => Number(row.rating));
-
-  if (!ratings.length) return null;
-
-  return {
-    avg: ratings.reduce((sum, value) => sum + value, 0) / ratings.length,
-    count: ratings.length
-  };
-}
-
-
 function getYourAlbumRating(albumId) {
 
   if (!currentUser) return null;
@@ -1991,31 +1996,6 @@ function getYourSongRating(songId) {
 
     (rating) => rating.user_id === currentUser.id && Number(rating.song_id) === Number(songId)
 
-  );
-
-  return row ? Number(row.rating) : null;
-
-}
-
-function getYourSongRatingByTitleArtist(title, artist) {
-
-  if (!currentUser) return null;
-
-  const key = normaliseCompare(`${artist}-${title}`);
-
-  const matchingSongIds = allSongs
-    .filter(
-      (song) =>
-        normaliseCompare(`${song.artist}-${song.title}`) === key
-    )
-    .map((song) => Number(song.id));
-
-  if (!matchingSongIds.length) return null;
-
-  const row = allSongRatings.find(
-    (rating) =>
-      rating.user_id === currentUser.id &&
-      matchingSongIds.includes(Number(rating.song_id))
   );
 
   return row ? Number(row.rating) : null;
@@ -2203,32 +2183,8 @@ function updateTrackRowUi(songId) {
 
   const avgData = getSongAverage(songId);
 
-  const selectedSong = allSongs.find(
-  (song) => Number(song.id) === Number(songId)
-);
-
-const selectedKey = selectedSong
-  ? normaliseCompare(`${selectedSong.artist}-${selectedSong.title}`)
-  : "";
-
-const linkedSongIds = selectedSong
-  ? allSongs
-      .filter((song) => {
-        const sameExternalId =
-          selectedSong.external_id &&
-          song.external_id &&
-          song.external_id === selectedSong.external_id;
-
-        const sameTitleArtist =
-          normaliseCompare(`${song.artist}-${song.title}`) === selectedKey;
-
-        return sameExternalId || sameTitleArtist;
-      })
-      .map((song) => Number(song.id))
-  : [Number(songId)];
-
 const yourRatingRow = allSongRatings.find((rating) =>
-  linkedSongIds.includes(Number(rating.song_id)) &&
+  Number(rating.song_id) === Number(songId) &&
   rating.user_id === currentUser?.id
 );
 
@@ -3298,7 +3254,10 @@ function getSelectedCoverUrl(item = selectedItem) {
   if (item.type === "song") {
     const saved = item.savedSongId
       ? allSongs.find((song) => Number(song.id) === Number(item.savedSongId))
-      : getSavedSongByExternalId(item.externalId);
+      : getSavedSongByExternalId(item.externalId, {
+          songId: item.songId || item.id,
+          albumId: item.albumId || item.album_id
+        });
     const album = saved?.album_id ? allAlbums.find((row) => Number(row.id) === Number(saved.album_id)) : null;
     return getAlbumArtworkUrl(album) || item.coverUrl || "";
   }
@@ -3700,9 +3659,7 @@ function renderLibrary() {
       ? ratedSongs.map((song) => {
           const avgData = getSongAverage(song.id);
 
-const yourRating =
-  getYourSongRating(song.id) ??
-  getYourSongRatingByTitleArtist(song.title, song.artist);
+const yourRating = getYourSongRating(song.id);
 
           const albumName = song.album_id ? getAlbumNameById(song.album_id) : "";
 
@@ -4789,10 +4746,9 @@ function buildStageOneSearchModel(query, groupedResults) {
     };
   });
   const songs = groupedResults.songs.map((item, index) => {
-    const saved = allSongs.find((song) =>
-      normaliseCompare(song.title) === normaliseCompare(item.title) &&
-      normaliseCompare(song.artist) === normaliseCompare(item.artist)
-    );
+    const savedAlbum = findAlbum({ title: item.releaseTitle, artist: item.artist });
+    const saved = getSavedSongByExternalId(item.externalId, { albumId: savedAlbum?.id }) ||
+      getSavedSongByTitleArtist(item.title, item.artist, { albumId: savedAlbum?.id });
     const album = saved?.album_id ? allAlbums.find((row) => Number(row.id) === Number(saved.album_id)) : findAlbum({ title: item.releaseTitle, artist: item.artist });
     const community = saved ? getSongAverage(saved.id) : null;
     return {
@@ -6722,9 +6678,7 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
     const externalId = savedSong?.external_id || track?.recording?.id || "";
     const averageData = savedSong ? getSongAverage(savedSong.id) : null;
     const community = averageData ? { average: Number(averageData.avg), count: Number(averageData.count || 0) } : null;
-    const personal = savedSong
-      ? (getYourSongRating(savedSong.id) ?? getYourSongRatingByTitleArtist(title, savedSong.artist || artist))
-      : getYourSongRatingByTitleArtist(title, artist);
+    const personal = savedSong ? getYourSongRating(savedSong.id) : null;
     if (savedSong?.id) seenSongIds.add(Number(savedSong.id));
     if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
     rows.push({
@@ -6874,18 +6828,7 @@ function buildTrackListHtml(detail, savedAlbumId) {
 
   const avgData = savedSong ? getSongAverage(savedSong.id) : null;
 
-  const yourRating = savedSong
-    ? (
-        getYourSongRating(savedSong.id) ??
-        getYourSongRatingByTitleArtist(
-          title,
-          savedSong.artist || trackArtistName
-        )
-      )
-    : getYourSongRatingByTitleArtist(
-        title,
-        trackArtistName
-      );
+  const yourRating = savedSong ? getYourSongRating(savedSong.id) : null;
 
   return {
     sortPosition,
@@ -8219,7 +8162,11 @@ async function renderSelectedItem() {
   
   if (selectedItem.type === "song") {
   const songId = selectedItem.savedSongId || selectedItem.songId || selectedItem.id;
-  const song = allSongs.find((s) => Number(s.id) === Number(songId)) || selectedItem;
+  const song = allSongs.find((s) => Number(s.id) === Number(songId)) ||
+    getSavedSongByExternalId(selectedItem.externalId, {
+      songId,
+      albumId: selectedItem.albumId || selectedItem.album_id
+    }) || selectedItem;
   
   const linkedAlbum = song.album_id
   ? allAlbums.find((a) => Number(a.id) === Number(song.album_id))
@@ -8227,18 +8174,11 @@ async function renderSelectedItem() {
 
 const linkedAlbumCover = linkedAlbum ? getAlbumArtworkUrl(linkedAlbum) : "";
 
-  const linkedSongIds = allSongs
-  .filter((s) =>
-    normaliseCompare(`${s.artist}-${s.title}`) ===
-    normaliseCompare(`${song.artist || selectedItem.artist}-${song.title || selectedItem.title}`)
-  )
-  .map((s) => Number(s.id));
-
-const avgData = getLinkedSongAverage(linkedSongIds);
+const avgData = song.id ? getSongAverage(song.id) : null;
 
 const yourRatingRow = allSongRatings.find((rating) =>
   rating.user_id === currentUser?.id &&
-  linkedSongIds.includes(Number(rating.song_id))
+  Number(rating.song_id) === Number(song.id)
 );
 
 const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
@@ -8929,15 +8869,14 @@ ${albumId
 
       savedSong = selectedItem.externalId
 
-        ? getSavedSongByExternalId(selectedItem.externalId)
+        ? getSavedSongByExternalId(selectedItem.externalId, {
+            songId: selectedItem.savedSongId || selectedItem.songId || selectedItem.id,
+            albumId: selectedItem.albumId || selectedItem.album_id
+          })
 
-        : allSongs.find((song) =>
-
-            normaliseCompare(song.title) === normaliseCompare(selectedItem.title) &&
-
-            normaliseCompare(song.artist) === normaliseCompare(selectedItem.artist)
-
-          );
+        : getSavedSongByTitleArtist(selectedItem.title, selectedItem.artist, {
+            albumId: selectedItem.albumId || selectedItem.album_id
+          });
 
     }
 
@@ -8945,18 +8884,7 @@ ${albumId
 
     const avgData = savedSong ? getSongAverage(savedSong.id) : null;
 
-    const yourRating = savedSong
-      ? (
-          getYourSongRating(savedSong.id) ??
-          getYourSongRatingByTitleArtist(
-            savedSong.title || selectedItem.title,
-            savedSong.artist || selectedItem.artist
-          )
-        )
-      : getYourSongRatingByTitleArtist(
-          selectedItem.title,
-          selectedItem.artist
-        );
+    const yourRating = savedSong ? getYourSongRating(savedSong.id) : null;
 
     const linkedAlbum = savedSong?.album_id
 
@@ -9066,21 +8994,20 @@ async function autoSaveSelectedSong() {
 
   let savedSong =
 
-    (selectedItem.externalId ? getSavedSongByExternalId(selectedItem.externalId) : null) ||
-
     (selectedItem.savedSongId
 
       ? allSongs.find((row) => Number(row.id) === Number(selectedItem.savedSongId))
 
       : null) ||
 
-    allSongs.find((song) =>
+    (selectedItem.externalId ? getSavedSongByExternalId(selectedItem.externalId, {
+      songId: selectedItem.songId || selectedItem.id,
+      albumId: selectedItem.albumId || selectedItem.album_id
+    }) : null) ||
 
-      normaliseCompare(song.title) === normaliseCompare(selectedItem.title) &&
-
-      normaliseCompare(song.artist) === normaliseCompare(selectedItem.artist)
-
-    );
+    getSavedSongByTitleArtist(selectedItem.title, selectedItem.artist, {
+      albumId: selectedItem.albumId || selectedItem.album_id
+    });
 
   // Opening remote metadata is read-only. New tracks enter BOM only through
   // an administrator-approved album transaction.
@@ -9118,7 +9045,7 @@ async function autoSaveSelectedSong() {
 
         .from("songs")
 
-        .upsert([payload], { onConflict: "external_source,external_id" })
+        .upsert([payload], { onConflict: "album_id,external_source,external_id" })
 
         .select();
 
@@ -9154,17 +9081,16 @@ async function autoSaveSelectedSong() {
 
     savedSong =
 
-      (selectedItem.externalId ? getSavedSongByExternalId(selectedItem.externalId) : null) ||
+      (selectedItem.externalId ? getSavedSongByExternalId(selectedItem.externalId, {
+        songId: selectedItem.savedSongId || selectedItem.songId || selectedItem.id,
+        albumId: selectedItem.albumId || selectedItem.album_id
+      }) : null) ||
 
       (Array.isArray(response.data) && response.data[0] ? response.data[0] : null) ||
 
-      allSongs.find((song) =>
-
-        normaliseCompare(song.title) === normaliseCompare(selectedItem.title) &&
-
-        normaliseCompare(song.artist) === normaliseCompare(selectedItem.artist)
-
-      );
+      getSavedSongByTitleArtist(selectedItem.title, selectedItem.artist, {
+        albumId: selectedItem.albumId || selectedItem.album_id
+      });
 
   }
 
@@ -9972,20 +9898,10 @@ async function saveTrackRating(songId, ratingValue = null) {
     return;
   }
 
-  let selectedSong = allSongs.find(
+  const selectedSong = allSongs.find(
     (song) =>
       Number(song.id) === Number(songId)
   );
-
-  if (!selectedSong && selectedItem?.type === "song") {
-    selectedSong = allSongs.find(
-      (song) =>
-        normaliseCompare(song.title) ===
-          normaliseCompare(selectedItem.title) &&
-        normaliseCompare(song.artist) ===
-          normaliseCompare(selectedItem.artist)
-    );
-  }
 
   if (!selectedSong) {
     setMessage(
@@ -9995,38 +9911,11 @@ async function saveTrackRating(songId, ratingValue = null) {
     return;
   }
 
-  const selectedKey = normaliseCompare(
-    `${selectedSong.artist}-${selectedSong.title}`
-  );
-
-  let matchingSongs = allSongs.filter(
-    (song) => {
-      const sameExternalId =
-        selectedSong.external_id &&
-        song.external_id &&
-        song.external_id ===
-          selectedSong.external_id;
-
-      const sameTitleArtist =
-        normaliseCompare(
-          `${song.artist}-${song.title}`
-        ) === selectedKey;
-
-      return sameExternalId || sameTitleArtist;
-    }
-  );
-
-  if (!matchingSongs.length) {
-    matchingSongs = [selectedSong];
-  }
-
-  const ratingRows = matchingSongs.map(
-    (song) => ({
-      user_id: currentUser.id,
-      song_id: Number(song.id),
-      rating
-    })
-  );
+  const ratingRows = [{
+    user_id: currentUser.id,
+    song_id: Number(selectedSong.id),
+    rating
+  }];
 
   const { error } = await supabaseClient
     .from("song_ratings")
@@ -10042,14 +9931,8 @@ async function saveTrackRating(songId, ratingValue = null) {
     return;
   }
 
-  matchingSongs.forEach((song) => {
-    upsertLocalSongRating(
-      song.id,
-      rating
-    );
-
-    updateTrackRowUi(song.id);
-  });
+  upsertLocalSongRating(selectedSong.id, rating);
+  updateTrackRowUi(selectedSong.id);
 
   /*
     Re-read this user's saved rows in the background so every
@@ -10100,9 +9983,7 @@ async function saveTrackRating(songId, ratingValue = null) {
 
   const selectedDetailMatchesSong = selectedDetailSongId
     ? Number(selectedDetailSongId) === Number(selectedSong.id)
-    : normaliseCompare(
-        `${selectedItem?.artist}-${selectedItem?.title}`
-      ) === selectedKey;
+    : false;
 
   if (
     selectedItem?.type === "song" &&
@@ -14482,7 +14363,7 @@ if (albumError) {
           await supabaseClient
             .from("songs")
             .upsert([songPayload], {
-              onConflict: "external_source,external_id"
+              onConflict: "album_id,external_source,external_id"
             });
         } else {
           await supabaseClient

@@ -13,7 +13,7 @@ test("the approved shell is default and legacy remains an explicit rollback", ()
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /style\.css\?v=81/);
   assert.match(html, /config\.js\?v=3/);
-  assert.match(html, /app\.js\?v=123/);
+  assert.match(html, /app\.js\?v=124/);
   assert.match(shell, /params\.get\("ui"\) === "legacy"/);
 });
 
