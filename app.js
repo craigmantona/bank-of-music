@@ -1992,14 +1992,33 @@ function getYourSongRating(songId) {
 
   if (!currentUser) return null;
 
+  const occurrenceIds = new Set(getSongRatingOccurrenceIds(songId));
   const row = allSongRatings.find(
 
-    (rating) => rating.user_id === currentUser.id && Number(rating.song_id) === Number(songId)
+    (rating) => rating.user_id === currentUser.id && occurrenceIds.has(Number(rating.song_id))
 
   );
 
   return row ? Number(row.rating) : null;
 
+}
+
+function getConfirmedMusicBrainzRecordingId(song) {
+  const recordingId = String(song?.external_id || "").trim().toLowerCase();
+  return song?.external_source === "musicbrainz" &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(recordingId)
+    ? recordingId
+    : "";
+}
+
+function getSongRatingOccurrenceIds(songId) {
+  const selectedSong = allSongs.find(song => Number(song.id) === Number(songId));
+  if (!selectedSong) return [];
+  const recordingId = getConfirmedMusicBrainzRecordingId(selectedSong);
+  if (!recordingId) return [Number(selectedSong.id)];
+  return allSongs
+    .filter(song => getConfirmedMusicBrainzRecordingId(song) === recordingId)
+    .map(song => Number(song.id));
 }
 
 function renderStarSelector(targetId, currentValue = null) {
@@ -9500,11 +9519,10 @@ async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
 // Quick Rate keeps its queue and skips in memory only.
 function buildQuickRateQueue(songs, ratings, userId, random = Math.random) {
   const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.song_id)));
-  const getTrackKey = song => song.canonical_song_id
-    ? `canonical:${song.canonical_song_id}`
-    : song.external_id
-      ? `external:${song.external_source || ""}:${song.external_id}`
-      : `track:${normaliseCompare(song.artist)}:${normaliseCompare(song.title)}`;
+  const getTrackKey = song => {
+    const recordingId = getConfirmedMusicBrainzRecordingId(song);
+    return recordingId ? `musicbrainz:${recordingId}` : `song:${Number(song.id)}`;
+  };
   const ratedKeys = new Set(songs.filter(song => rated.has(Number(song.id))).map(getTrackKey));
   const seen = new Set();
   const queue = songs.filter(song => {
@@ -9911,11 +9929,12 @@ async function saveTrackRating(songId, ratingValue = null) {
     return;
   }
 
-  const ratingRows = [{
+  const ratingSongIds = getSongRatingOccurrenceIds(selectedSong.id);
+  const ratingRows = ratingSongIds.map((ratingSongId) => ({
     user_id: currentUser.id,
-    song_id: Number(selectedSong.id),
+    song_id: ratingSongId,
     rating
-  }];
+  }));
 
   const { error } = await supabaseClient
     .from("song_ratings")
@@ -9931,8 +9950,10 @@ async function saveTrackRating(songId, ratingValue = null) {
     return;
   }
 
-  upsertLocalSongRating(selectedSong.id, rating);
-  updateTrackRowUi(selectedSong.id);
+  ratingSongIds.forEach((ratingSongId) => {
+    upsertLocalSongRating(ratingSongId, rating);
+    updateTrackRowUi(ratingSongId);
+  });
 
   /*
     Re-read this user's saved rows in the background so every
@@ -9961,15 +9982,10 @@ async function saveTrackRating(songId, ratingValue = null) {
     Keep both possible selector IDs in sync. This prevents one
     song-detail route showing the old value after a successful save.
   */
-  updateStarSelector(
-    `track-rating-${selectedSong.id}`,
-    rating
-  );
-
-  updateStarSelector(
-    `song-rating-${selectedSong.id}`,
-    rating
-  );
+  ratingSongIds.forEach((ratingSongId) => {
+    updateStarSelector(`track-rating-${ratingSongId}`, rating);
+    updateStarSelector(`song-rating-${ratingSongId}`, rating);
+  });
 
   const currentDetailRating =
     selectedItemDetail?.querySelector(
@@ -9982,7 +9998,7 @@ async function saveTrackRating(songId, ratingValue = null) {
     selectedItem?.id;
 
   const selectedDetailMatchesSong = selectedDetailSongId
-    ? Number(selectedDetailSongId) === Number(selectedSong.id)
+    ? ratingSongIds.includes(Number(selectedDetailSongId))
     : false;
 
   if (
@@ -10016,6 +10032,7 @@ async function deleteTrackRating(songId) {
 
 
 
+  const ratingSongIds = getSongRatingOccurrenceIds(songId);
   const { error } = await supabaseClient
 
     .from("song_ratings")
@@ -10024,7 +10041,7 @@ async function deleteTrackRating(songId) {
 
     .eq("user_id", currentUser.id)
 
-    .eq("song_id", Number(songId));
+    .in("song_id", ratingSongIds);
 
 
 
@@ -10038,9 +10055,10 @@ async function deleteTrackRating(songId) {
 
 
 
-  removeLocalSongRating(songId);
-
-  updateTrackRowUi(songId);
+  ratingSongIds.forEach((ratingSongId) => {
+    removeLocalSongRating(ratingSongId);
+    updateTrackRowUi(ratingSongId);
+  });
 
   renderLibrary();
 

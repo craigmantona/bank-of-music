@@ -52,13 +52,13 @@ test("album track modelling selects the occurrence belonging to that album", () 
   assert.equal(rows[0].ratingControlHtml, "rating-202");
 });
 
-test("occurrence-specific paths no longer use global recording conflicts or linked rating writes", async () => {
+test("catalogue occurrences remain separate while user ratings may follow confirmed recordings", async () => {
   const ratingFunction = extract("async function saveTrackRating(", "async function deleteTrackRating");
   const catalogueMigration = await readFile(
     new URL("../supabase/migrations/20260927120000_album_track_occurrence_identity.sql", import.meta.url),
     "utf8"
   );
-  assert.doesNotMatch(ratingFunction, /sameExternalId|sameTitleArtist|matchingSongs/);
+  assert.match(ratingFunction, /getSongRatingOccurrenceIds/);
   assert.doesNotMatch(catalogueMigration, /recording_already_belongs_to_another_catalogue_row/);
   assert.match(catalogueMigration, /songs_album_external_source_external_id_unique/);
   assert.match(catalogueMigration, /songs_album_track_position_unique/);
