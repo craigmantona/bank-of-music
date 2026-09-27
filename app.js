@@ -14799,6 +14799,29 @@ document.addEventListener("click", async (event) => {
 
 window.addEventListener("scroll", handleScrollState, { passive: true });
 
+window.BOMAdminCatalogueHost = Object.freeze({
+  getRoot: () => adminDashboard,
+  canRender: () => Boolean(currentUser && isAdmin),
+  getExistingAlbums: (artistName) => allAlbums.filter(
+    (album) => normaliseCompare(album.artist) === normaliseCompare(artistName)
+  ),
+  invoke: (body) => supabaseClient.functions.invoke("admin-catalogue", { body }),
+  refreshAfterCommit: async () => {
+    await loadLibrary();
+    renderLibrary();
+    renderRecommendations();
+  },
+  openAdmin: () => showOnlySection("adminSection"),
+  installRenderExtension: (extension) => {
+    const renderBaseAdminDashboard = renderAdminDashboard;
+    renderAdminDashboard = function renderAdminDashboardWithExtension() {
+      renderBaseAdminDashboard();
+      extension();
+    };
+  }
+});
+document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
+
 showOnlySection("recommendationsSection");
 
 refreshSessionUI().then(async () => {

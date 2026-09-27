@@ -1,6 +1,8 @@
 (function initialiseBOMAdminCatalogue(global) {
   "use strict";
 
+  let host = null;
+
   const state = {
     artistQuery: "",
     artistCandidates: [],
@@ -45,8 +47,7 @@
   }
 
   function existingAlbums() {
-    if (!state.artist) return [];
-    return allAlbums.filter(album => normalise(album.artist) === normalise(state.artist.name));
+    return state.artist ? host.getExistingAlbums(state.artist.name) : [];
   }
 
   function artistMarkup() {
@@ -134,7 +135,8 @@
   }
 
   function render() {
-    if (!adminDashboard || !currentUser || !isAdmin) return;
+    const adminDashboard = host?.getRoot();
+    if (!adminDashboard || !host.canRender()) return;
     adminDashboard.querySelectorAll(".admin-create-panel").forEach(panel => panel.remove());
     let panel = adminDashboard.querySelector("[data-admin-catalogue]");
     if (!panel) {
@@ -152,7 +154,7 @@
   }
 
   async function invoke(body) {
-    const { data, error } = await supabaseClient.functions.invoke("admin-catalogue", { body });
+    const { data, error } = await host.invoke(body);
     if (error) throw new Error(error.message || "Admin Catalogue request failed.");
     if (!data?.ok) throw new Error(data?.error || "Admin Catalogue request failed.");
     return data;
@@ -195,11 +197,9 @@
       const data = await invoke({ action: "commit", artist: state.artist, albums: selected });
       state.results = data.results || [];
       state.message = state.results.map(result => `${result.requested_title}: ${statusLabel(result.status)}`).join(" · ");
-      await loadLibrary();
-      renderLibrary();
-      renderRecommendations();
+      await host.refreshAfterCommit();
     } catch (error) { state.message = error.message; }
-    finally { state.busy = false; renderAdminDashboard(); }
+    finally { state.busy = false; render(); }
   }
 
   function resetArtist() {
@@ -208,7 +208,13 @@
     state.message = "Search and explicitly confirm the artist."; render();
   }
 
-  adminDashboard?.addEventListener("input", event => {
+  function attach(hostApi) {
+    if (host || !hostApi) return;
+    host = hostApi;
+    const adminDashboard = host.getRoot();
+    if (!adminDashboard) return;
+
+    adminDashboard.addEventListener("input", event => {
     const field = event.target.closest("[data-catalogue-field]");
     if (!field) return;
     const row = rowById(field.closest("[data-catalogue-row]")?.dataset.catalogueRow);
@@ -217,9 +223,9 @@
     row.selected = false;
     state.previews = state.previews.filter(item => item.client_id !== row.client_id);
     state.results = state.results.filter(item => item.client_id !== row.client_id);
-  });
+    });
 
-  adminDashboard?.addEventListener("change", event => {
+    adminDashboard.addEventListener("change", event => {
     const select = event.target.closest("[data-catalogue-select]");
     if (select) {
       const row = rowById(select.closest("[data-catalogue-row]")?.dataset.catalogueRow);
@@ -237,9 +243,9 @@
       const row = rowById(release.dataset.catalogueReleaseChoice);
       if (row) { row.release_id = release.value; row.selected = false; }
     }
-  });
+    });
 
-  adminDashboard?.addEventListener("click", async event => {
+    adminDashboard.addEventListener("click", async event => {
     if (event.target.closest("[data-catalogue-search-artist]")) { await searchArtist(); return; }
     const choice = event.target.closest("[data-catalogue-choose-artist]");
     if (choice) {
@@ -262,21 +268,21 @@
     }
     if (event.target.closest("[data-catalogue-preview]")) { await previewAlbums(); return; }
     if (event.target.closest("[data-catalogue-commit]")) { await commitAlbums(); }
-  });
+    });
+
+    host.installRenderExtension(render);
+    render();
+    global.BOMAdminCatalogue = Object.freeze({ render, state });
+  }
 
   document.addEventListener("click", event => {
     if (!event.target.closest("[data-open-admin-catalogue]")) return;
     event.preventDefault();
-    showOnlySection("adminSection");
-    renderAdminDashboard();
+    host?.openAdmin();
+    render();
     document.querySelector("[data-admin-catalogue]")?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
-  const previousRenderAdminDashboard = renderAdminDashboard;
-  renderAdminDashboard = function renderAdminDashboardWithCatalogue() {
-    previousRenderAdminDashboard();
-    render();
-  };
-
-  global.BOMAdminCatalogue = Object.freeze({ render, state });
+  document.addEventListener("bom:admin-catalogue-host-ready", () => attach(global.BOMAdminCatalogueHost));
+  attach(global.BOMAdminCatalogueHost);
 })(window);

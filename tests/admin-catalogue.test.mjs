@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { webcrypto } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
 
 const [app, catalogue, html, styles, edge, migration] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
@@ -12,10 +14,61 @@ const [app, catalogue, html, styles, edge, migration] = await Promise.all([
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=123") < html.indexOf("bom-admin-catalogue.js?v=1"));
-  assert.match(catalogue, /if \(!adminDashboard \|\| !currentUser \|\| !isAdmin\) return/);
+  assert.ok(html.indexOf("app.js?v=123") < html.indexOf("bom-admin-catalogue.js?v=2"));
+  assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
+});
+
+test("separate browser script initialises through the narrow host and preserves base Admin rendering", () => {
+  const listeners = new Map();
+  let cataloguePanel = null;
+  let baseAdminRenders = 0;
+  let installedAdminRender = null;
+  const root = {
+    addEventListener() {},
+    prepend(panel) { cataloguePanel = panel; },
+    querySelector(selector) {
+      if (selector === "[data-admin-catalogue]") return cataloguePanel;
+      return null;
+    },
+    querySelectorAll() { return []; }
+  };
+  const document = {
+    addEventListener(name, listener) { listeners.set(name, listener); },
+    createElement() { return { className: "", dataset: {}, innerHTML: "" }; },
+    querySelector() { return cataloguePanel; }
+  };
+  const host = Object.freeze({
+    getRoot: () => root,
+    canRender: () => true,
+    getExistingAlbums: () => [],
+    invoke: async () => ({ data: { ok: true }, error: null }),
+    refreshAfterCommit: async () => {},
+    openAdmin: () => {},
+    installRenderExtension(extension) {
+      const baseRender = () => { baseAdminRenders += 1; };
+      installedAdminRender = () => { baseRender(); extension(); };
+    }
+  });
+  const window = { BOMAdminCatalogueHost: host };
+  vm.runInNewContext(catalogue, { window, document, crypto: webcrypto, console });
+
+  assert.equal(typeof window.BOMAdminCatalogue?.render, "function");
+  assert.match(cataloguePanel.innerHTML, /Add Artist &amp; Albums/);
+  assert.equal(baseAdminRenders, 0);
+  installedAdminRender();
+  assert.equal(baseAdminRenders, 1);
+  assert.match(cataloguePanel.innerHTML, /Search MusicBrainz/);
+  assert.ok(listeners.has("bom:admin-catalogue-host-ready"));
+  assert.doesNotMatch(catalogue, /\brenderAdminDashboard\b|\bcurrentUser\b|\bisAdmin\b|\bsupabaseClient\b/);
+});
+
+test("application exposes only the dedicated Admin Catalogue integration surface", () => {
+  assert.match(app, /window\.BOMAdminCatalogueHost = Object\.freeze\(\{/);
+  assert.match(app, /installRenderExtension: \(extension\) => \{[\s\S]*renderBaseAdminDashboard\(\);[\s\S]*extension\(\);/);
+  assert.match(app, /dispatchEvent\(new CustomEvent\("bom:admin-catalogue-host-ready"\)\)/);
+  assert.doesNotMatch(app, /window\.(?:renderAdminDashboard|supabaseClient|allAlbums|currentUser|isAdmin)\s*=/);
 });
 
 test("workflow requires explicit artist choice, preview and selected commit", () => {
