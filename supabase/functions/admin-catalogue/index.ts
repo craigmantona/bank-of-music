@@ -21,7 +21,8 @@ const service = createClient(supabaseUrl, adminKey, {
 
 function corsHeaders(request: Request) {
   const origin = request.headers.get("origin") || "";
-  const allowed = origin === "https://bank-of-music.pages.dev" ||
+  const allowed = origin === "https://thebankofmusic.com" ||
+    origin === "https://bank-of-music.pages.dev" ||
     /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
   return {
     "Access-Control-Allow-Origin": allowed ? origin : "https://bank-of-music.pages.dev",
