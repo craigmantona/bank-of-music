@@ -4,17 +4,18 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
-const [app, catalogue, html, styles, edge, migration] = await Promise.all([
+const [app, catalogue, html, styles, edge, migration, deleteMigration] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-admin-catalogue.js", import.meta.url), "utf8"),
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../style.css", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260926120000_admin_catalogue_v1.sql", import.meta.url), "utf8")
+  readFile(new URL("../supabase/migrations/20260926120000_admin_catalogue_v1.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8")
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=125") < html.indexOf("bom-admin-catalogue.js?v=2"));
+  assert.ok(html.indexOf("app.js?v=125") < html.indexOf("bom-admin-catalogue.js?v=3"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -87,6 +88,77 @@ test("catalogue commits refresh the Admin Dashboard from authoritative library d
   assert.doesNotMatch(refreshSource, /(?:allAlbums|allSongs|allAlbumRatings|allSongRatings)\.(?:push|splice)|\+\+/);
   assert.ok(commitSource.indexOf("state.results = data.results || [];") < commitSource.indexOf("await host.refreshAfterCommit();"));
   assert.match(commitSource, /finally \{[\s\S]*render\(\);[\s\S]*\}/);
+});
+
+test("album deletion previews dependencies, confirms explicitly and refreshes authoritative admin counts", () => {
+  assert.match(catalogue, /data-catalogue-delete-album=/);
+  assert.match(catalogue, /action: "delete_album_preview"/);
+  assert.match(catalogue, /Tracks: \$\{preview\.track_count\}/);
+  assert.match(catalogue, /Album ratings: \$\{preview\.album_rating_count\}/);
+  assert.match(catalogue, /Album reviews: \$\{preview\.album_review_count\}/);
+  assert.match(catalogue, /Track ratings: \$\{preview\.track_rating_count\}/);
+  assert.match(catalogue, /global\.confirm/);
+  const deleteStart = catalogue.indexOf("async function deleteAlbum(albumId)");
+  const deleteEnd = catalogue.indexOf("function resetArtist()", deleteStart);
+  const source = catalogue.slice(deleteStart, deleteEnd);
+  assert.ok(source.indexOf('action: "delete_album"') < source.indexOf("await host.refreshAfterCommit();"));
+  assert.doesNotMatch(source, /\.from\(|\.delete\(|is_deleted\s*=/);
+  assert.match(app, /getExistingAlbums:[\s\S]*!album\.is_deleted/);
+});
+
+test("successful album deletion refreshes counts through the normal authoritative host", async () => {
+  let panel = null;
+  let clickHandler = null;
+  let refreshes = 0;
+  const calls = [];
+  const root = {
+    addEventListener(name, handler) { if (name === "click") clickHandler = handler; },
+    prepend(value) { panel = value; },
+    querySelector(selector) { return selector === "[data-admin-catalogue]" ? panel : null; },
+    querySelectorAll() { return []; }
+  };
+  const document = {
+    addEventListener() {},
+    createElement() { return { className: "", dataset: {}, innerHTML: "" }; },
+    querySelector() { return panel; }
+  };
+  const deletion = {
+    album_id: 27, artist: "The Example", title: "Delete Me", track_count: 2,
+    album_rating_count: 0, album_review_count: 0, track_rating_count: 0,
+    deletion_mode: "delete", status: "deleted"
+  };
+  const host = Object.freeze({
+    getRoot: () => root,
+    canRender: () => true,
+    getExistingAlbums: () => [{ id: 27, artist: "The Example", title: "Delete Me" }],
+    invoke: async body => { calls.push(body); return { data: { ok: true, deletion }, error: null }; },
+    refreshAfterCommit: async () => { refreshes += 1; },
+    openAdmin() {},
+    installRenderExtension() {}
+  });
+  const window = { BOMAdminCatalogueHost: host, confirm: () => true };
+  vm.runInNewContext(catalogue, { window, document, crypto: webcrypto, console });
+  window.BOMAdminCatalogue.state.artist = { name: "The Example" };
+  window.BOMAdminCatalogue.render();
+  const button = { dataset: { catalogueDeleteAlbum: "27" } };
+  await clickHandler({ target: { closest: selector => selector === "[data-catalogue-delete-album]" ? button : null } });
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [
+    { action: "delete_album_preview", album_id: 27 },
+    { action: "delete_album", album_id: 27 }
+  ]);
+  assert.equal(refreshes, 1);
+  assert.match(panel.innerHTML, /was permanently deleted/);
+});
+
+test("album deletion is routed through the authenticated transactional RPC", () => {
+  assert.match(edge, /body\?\.action === "delete_album_preview" \|\| body\?\.action === "delete_album"/);
+  assert.match(edge, /userClient\.rpc\("admin_catalogue_delete_album"/);
+  assert.match(edge, /p_execute: body\.action === "delete_album"/);
+  assert.match(deleteMigration, /security invoker/);
+  assert.match(deleteMigration, /where id = p_album_id[\s\S]*for update/);
+  assert.match(deleteMigration, /delete from public\.songs[\s\S]*where album_id = p_album_id/);
+  assert.match(deleteMigration, /update public\.songs[\s\S]*set is_deleted = true[\s\S]*where album_id = p_album_id/);
+  assert.match(deleteMigration, /revoke all on function public\.admin_catalogue_delete_album[\s\S]*from anon/);
 });
 
 test("workflow requires explicit artist choice, preview and selected commit", () => {

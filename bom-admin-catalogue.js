@@ -60,7 +60,7 @@
       </div>
       <div class="admin-catalogue-existing">
         <h4>Already in BOM (${albums.length})</h4>
-        ${albums.length ? `<div>${albums.map(album => `<span>${escape(album.title)}${album.release_date ? ` <small>${escape(String(album.release_date).slice(0, 4))}</small>` : ""}</span>`).join("")}</div>` : "<p class=\"small\">No albums for this artist are currently in BOM.</p>"}
+        ${albums.length ? `<div>${albums.map(album => `<span>${escape(album.title)}${album.release_date ? ` <small>${escape(String(album.release_date).slice(0, 4))}</small>` : ""}<button type="button" class="danger-btn" data-catalogue-delete-album="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Delete album</button></span>`).join("")}</div>` : "<p class=\"small\">No albums for this artist are currently in BOM.</p>"}
       </div>`;
     }
     return `<div class="admin-catalogue-artist-search">
@@ -202,6 +202,24 @@
     finally { state.busy = false; render(); }
   }
 
+  async function deleteAlbum(albumId) {
+    state.busy = true; state.message = "Checking album dependencies…"; render();
+    try {
+      const preview = (await invoke({ action: "delete_album_preview", album_id: albumId })).deletion;
+      const action = preview.deletion_mode === "delete"
+        ? "This will permanently delete this album and its album-specific tracks."
+        : "User data exists, so this album and its tracks will be hidden rather than permanently deleted.";
+      const confirmed = global.confirm(`${preview.artist} — ${preview.title}\n\nTracks: ${preview.track_count}\nAlbum ratings: ${preview.album_rating_count}\nAlbum reviews: ${preview.album_review_count}\nTrack ratings: ${preview.track_rating_count}\n\n${action}\n\nContinue?`);
+      if (!confirmed) { state.message = "Album deletion cancelled."; return; }
+      const result = (await invoke({ action: "delete_album", album_id: albumId })).deletion;
+      state.message = result.status === "deleted"
+        ? `${result.artist} — ${result.title} was permanently deleted.`
+        : `${result.artist} — ${result.title} was hidden because user data is attached.`;
+      await host.refreshAfterCommit();
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
   function resetArtist() {
     state.artist = null; state.artistCandidates = []; state.previews = []; state.results = [];
     state.rows.forEach(row => { row.selected = false; row.release_group_id = ""; row.release_id = ""; });
@@ -246,6 +264,8 @@
     });
 
     adminDashboard.addEventListener("click", async event => {
+    const deleteButton = event.target.closest("[data-catalogue-delete-album]");
+    if (deleteButton) { await deleteAlbum(Number(deleteButton.dataset.catalogueDeleteAlbum)); return; }
     if (event.target.closest("[data-catalogue-search-artist]")) { await searchArtist(); return; }
     const choice = event.target.closest("[data-catalogue-choose-artist]");
     if (choice) {

@@ -14702,7 +14702,7 @@ window.BOMAdminCatalogueHost = Object.freeze({
   getRoot: () => adminDashboard,
   canRender: () => Boolean(currentUser && isAdmin),
   getExistingAlbums: (artistName) => allAlbums.filter(
-    (album) => normaliseCompare(album.artist) === normaliseCompare(artistName)
+    (album) => !album.is_deleted && normaliseCompare(album.artist) === normaliseCompare(artistName)
   ),
   invoke: (body) => supabaseClient.functions.invoke("admin-catalogue", { body }),
   refreshAfterCommit: async () => {

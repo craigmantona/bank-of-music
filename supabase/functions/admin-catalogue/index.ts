@@ -170,6 +170,25 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json();
+    const authorizationHeader = request.headers.get("authorization") || "";
+    const userClient = createClient(supabaseUrl, publishableKey, {
+      global: { headers: { Authorization: authorizationHeader }, fetch: catalogueFetch },
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
+
+    if (body?.action === "delete_album_preview" || body?.action === "delete_album") {
+      const albumId = Number(body.album_id);
+      if (!Number.isSafeInteger(albumId) || albumId <= 0) {
+        return json(request, { ok: false, error: "Choose a valid BOM album." }, 400);
+      }
+      const { data, error } = await userClient.rpc("admin_catalogue_delete_album", {
+        p_album_id: albumId,
+        p_execute: body.action === "delete_album"
+      });
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, deletion: data });
+    }
+
     if (body?.action === "search_artist") {
       const name = String(body.artist_name || "").trim();
       if (!name) return json(request, { ok: false, error: "Enter an artist name." }, 400);
@@ -188,11 +207,6 @@ Deno.serve(async (request) => {
       return json(request, { ok: false, error: "Unknown Admin Catalogue action." }, 400);
     }
 
-    const authorizationHeader = request.headers.get("authorization") || "";
-    const userClient = createClient(supabaseUrl, publishableKey, {
-      global: { headers: { Authorization: authorizationHeader }, fetch: catalogueFetch },
-      auth: { persistSession: false, autoRefreshToken: false }
-    });
     const results = [];
     for (const preview of previews as any[]) {
       if (preview.status === "already_exists") {

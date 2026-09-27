@@ -11,7 +11,7 @@ const [html, app, shell, styles] = await Promise.all([
 
 test("the approved shell is default and legacy remains an explicit rollback", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
-  assert.match(html, /style\.css\?v=81/);
+  assert.match(html, /style\.css\?v=82/);
   assert.match(html, /config\.js\?v=3/);
   assert.match(html, /app\.js\?v=125/);
   assert.match(shell, /params\.get\("ui"\) === "legacy"/);

@@ -4034,7 +4034,8 @@ body { padding-bottom: 96px !important; }
 .admin-catalogue-existing { margin: 18px 0; }
 .admin-catalogue-existing h4 { margin: 0 0 8px; }
 .admin-catalogue-existing > div { display: flex; flex-wrap: wrap; gap: 7px; }
-.admin-catalogue-existing > div span { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.07); }
+.admin-catalogue-existing > div span { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.07); }
+.admin-catalogue-existing .danger-btn { padding: 4px 8px; font-size: .75rem; }
 .admin-catalogue-existing small { color: var(--muted); }
 .admin-catalogue-albums-heading { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
 .admin-catalogue-albums-heading h4 { margin: 0; }
