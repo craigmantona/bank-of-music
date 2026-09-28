@@ -13,8 +13,11 @@ const release = () => ({ id: 'release-1', title: 'Resolved Album', date: '2001-0
 const selection = () => ({ type: 'album', title: 'Resolved Album', artist: 'An Artist', externalId: 'release-1', releaseGroupId: 'group-1', coverUrl: 'https://example.test/cover.jpg' });
 const saved = () => ({ id: 10, title: 'Resolved Album', artist: 'An Artist', external_source: 'musicbrainz', external_id: 'release-1', musicbrainz_release_group_id: 'group-1', cover_art_url: 'saved-cover.jpg' });
 function harness({ albums = [], songs = [], cached = true, detail = release(), failResolution = false, beforeAlbumWrite,
-  autoAddResult = { status: 'needs_correction', reason: 'catalogue_confirmation_required' }, autoAddedAlbum = null, autoAddedSongs = [] } = {}) {
-  const db = { albums: structuredClone(albums), songs: structuredClone(songs) }, writes = [], fetches = [], invocations = [];
+  autoAddResult = { status: 'needs_correction', reason: 'catalogue_confirmation_required' }, autoAddedAlbum = null, autoAddedSongs = [],
+  deferRemoteCommit = false } = {}) {
+  const db = { albums: structuredClone(albums), songs: structuredClone(songs) }, writes = [], fetches = [], invocations = [], renderedModels = [], reviewAlbumIds = [];
+  let releaseRemoteCommit;
+  const remoteCommit = deferRemoteCommit ? new Promise(resolve => { releaseRemoteCommit = resolve; }) : null;
   let nextId = 100;
   const context = {
     currentUser: { id: 'user-1' }, isAdmin: false, selectedItem: selection(), allAlbums: cached ? structuredClone(albums) : [], allSongs: cached ? structuredClone(songs) : [],
@@ -36,7 +39,18 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
     buildSelectedBackButton: () => '', renderClickableArtistName: name => name,
     buildCompactAlbumRatingControl: id => `<button data-rate-album="${id}">Rate</button>`,
     buildMusicProviderPanel: () => '', buildSelectedSharePanel: () => '',
-    renderStageOneAlbum: async model => { context.model = model; },
+    renderStageOneAlbum: async (model, { isCurrent = () => true } = {}) => {
+      renderedModels.push(model);
+      if (!model.albumId && remoteCommit) {
+        context.model = model;
+        await remoteCommit;
+      }
+      if (!isCurrent()) return false;
+      context.model = model;
+      context.ratingAlbumId = model.albumId;
+      reviewAlbumIds.push(model.albumId);
+      return true;
+    },
     loadLibrary: async () => { context.allAlbums = structuredClone(db.albums); context.allSongs = structuredClone(db.songs); },
     renderLibrary() {}, renderRecommendations() {}, invalidatePredictiveCatalogue() {},
     supabaseClient: { functions: { async invoke(name, options) {
@@ -70,7 +84,7 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
   };
   vm.createContext(context);
   vm.runInContext(identitySource + '\n' + saveSource + '\n' + modelSource + '\n' + renderSource, context);
-  return { context, db, writes, fetches, invocations };
+  return { context, db, writes, fetches, invocations, renderedModels, reviewAlbumIds, releaseRemoteCommit };
 }
 test('resolved external search selection renders immediately while safe creation runs in the background', async () => {
   const h = harness(); await h.context.renderSelectedItem();
@@ -149,6 +163,51 @@ test('authenticated unambiguous remote album binds the complete server-created c
   assert.equal(h.context.selectedItem.catalogueAutoAddStatus, 'ready');
   assert.equal(h.context.allSongs.filter(song => song.album_id === 10).length, 2);
   assert.equal(h.writes.length, 0);
+});
+
+test('authoritative catalogue rebind cannot be overwritten by a stale 27-track remote render', async () => {
+  const remoteTracks = Array.from({ length: 27 }, (_, index) => ({
+    position: index + 1,
+    title: `Remote track ${index + 1}`,
+    recording: { id: `recording-${index + 1}` }
+  }));
+  const detail = { ...release(), media: [{ 'track-count': 27, tracks: remoteTracks }] };
+  const album = saved();
+  const songs = remoteTracks.slice(0, 13).map((track, index) => ({
+    id: 200 + index,
+    album_id: album.id,
+    title: track.title,
+    track_position: index + 1,
+    external_source: 'musicbrainz',
+    external_id: track.recording.id
+  }));
+  const h = harness({
+    detail,
+    autoAddResult: { status: 'added', album_id: album.id, track_count: 13 },
+    autoAddedAlbum: album,
+    autoAddedSongs: songs,
+    deferRemoteCommit: true
+  });
+
+  const pendingRemoteRender = h.context.renderSelectedItem();
+  for (let attempt = 0; attempt < 20 && h.context.model?.albumId !== album.id; attempt += 1) {
+    await new Promise(resolve => setImmediate(resolve));
+  }
+
+  assert.equal(h.renderedModels[0].albumId, null);
+  assert.equal(h.renderedModels[0].tracks.length, 27);
+  assert.equal(h.context.model.tracks.length, 13);
+  assert.equal(h.context.model.albumId, album.id);
+  assert.match(h.context.model.albumRatingControlHtml, /data-rate-album="10"/);
+  assert.equal(h.context.ratingAlbumId, album.id);
+  assert.deepEqual(h.reviewAlbumIds, [album.id]);
+
+  h.releaseRemoteCommit();
+  await pendingRemoteRender;
+
+  assert.equal(h.context.model.albumId, album.id);
+  assert.equal(h.context.model.tracks.length, 13);
+  assert.equal(h.invocations.length, 1);
 });
 
 test('ambiguous safe resolution leaves the remote album usable and unbound', async () => {

@@ -15,7 +15,7 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration] = await P
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=127") < html.indexOf("bom-admin-catalogue.js?v=3"));
+  assert.ok(html.indexOf("app.js?v=128") < html.indexOf("bom-admin-catalogue.js?v=3"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);

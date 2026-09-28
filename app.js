@@ -6874,10 +6874,12 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
   };
 }
 
-async function renderStageOneAlbum(model) {
+async function renderStageOneAlbum(model, { isCurrent = () => true } = {}) {
+  if (!isCurrent()) return false;
   if (!window.BOMAlbumUI) {
     await new Promise((resolve) => window.setTimeout(resolve, 0));
   }
+  if (!isCurrent()) return false;
   if (!window.BOMAlbumUI) throw new Error("Album presentation did not load");
   selectedItemDetail.innerHTML = window.BOMAlbumUI.render(model);
   selectedItemDetail.dataset.bomAlbumSource = model.albumId ? "production" : "external";
@@ -6885,6 +6887,7 @@ async function renderStageOneAlbum(model) {
   updateStickyPlayer(selectedItem);
   scheduleSpotifyTrackCacheWarmup();
   void hydrateStageOneAlbumReviews(model.albumId);
+  return true;
 }
 
 async function hydrateStageOneAlbumReviews(albumId) {
@@ -8274,6 +8277,9 @@ async function openWithMusicProvider({
 
 async function renderSelectedItem() {
 
+  const renderGeneration = (renderSelectedItem.generation || 0) + 1;
+  renderSelectedItem.generation = renderGeneration;
+
   if (!selectedItem) {
 
     updateStickyPlayer(null);
@@ -8382,6 +8388,8 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
   if (selectedItem.type === "album") {
 
     const albumSelection = selectedItem;
+    const isCurrentAlbumRender = () =>
+      selectedItem === albumSelection && renderSelectedItem.generation === renderGeneration;
     renderLoadingSkeleton(selectedItemDetail, "detail");
 
     try {
@@ -8518,7 +8526,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
             personal: yourRating,
             releaseDate: immediatelySavedAlbum.original_release_date || immediatelySavedAlbum.release_date || immediatelySavedAlbum.releaseDate || "",
             releaseDateSource: "stored"
-          }));
+          }), { isCurrent: isCurrentAlbumRender });
           return;
         }
 
@@ -8672,7 +8680,7 @@ if (
   }
 }
 
-if (selectedItem !== albumSelection) return;
+if (!isCurrentAlbumRender()) return;
 if (!albumSelection.externalId) {
   console.warn("No MusicBrainz release found — showing fallback view");
 
@@ -8724,7 +8732,7 @@ if (albumLookupId) {
 
 }
 
-      if (selectedItem !== albumSelection) return;
+      if (!isCurrentAlbumRender()) return;
       const releaseGroupId = detail?.["release-group"]?.id || "";
 
       let releaseGroupCover = "";
@@ -8740,7 +8748,7 @@ if (releaseGroupId) {
 
 
 
-      if (selectedItem !== albumSelection) return;
+      if (!isCurrentAlbumRender()) return;
       let savedAlbum =
 
         getSavedAlbumByExternalId(albumSelection.externalId) ||
@@ -8791,7 +8799,7 @@ if (releaseGroupId) {
 
 
 
-      if (selectedItem !== albumSelection) return;
+      if (!isCurrentAlbumRender()) return;
       const refreshedSavedAlbum =
 
         getSavedAlbumByExternalId(albumSelection.externalId) ||
@@ -8846,7 +8854,7 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
           personal: refreshedYourRating,
           releaseDate,
           releaseDateSource: detail?.date ? "external" : "stored"
-        }));
+        }), { isCurrent: isCurrentAlbumRender });
         return;
       }
 	  
