@@ -106,3 +106,14 @@ test("artist page still renders BOM content before any shared or MusicBrainz req
   assert.ok(source.indexOf("await renderStageOneArtist") < source.indexOf("const preferredArtistMusicBrainzId"));
   assert.match(source, /albums: localAlbums/);
 });
+
+test("active artist detail path reaches shared cache before direct MusicBrainz fallback", () => {
+  const renderSource = app.slice(app.indexOf("async function renderArtistDetail"), app.indexOf("async function renderAlbumDetail"));
+  const detailSource = app.slice(app.indexOf("async function fetchArtistDetail"), app.indexOf("async function resolveArtistIdentityForImage"));
+  const discographySource = app.slice(app.indexOf("async function fetchStudioAlbumsForArtist"), app.indexOf("async function fetchArtistAlbumsFromApi"));
+
+  assert.match(renderSource, /await fetchMostCompleteArtistDiscography/);
+  assert.match(renderSource, /resolveArtistIdentityForImage/);
+  assert.ok(detailSource.indexOf("fetchSharedArtistEnrichment(externalId)") < detailSource.indexOf("fetchMusicBrainz(url)"));
+  assert.ok(discographySource.indexOf("fetchSharedArtistEnrichment(resolvedArtistId)") < discographySource.indexOf("fetchMusicBrainz(url)"));
+});
