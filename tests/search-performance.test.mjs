@@ -41,6 +41,8 @@ test("artist discography is cached by MusicBrainz artist ID", async () => {
   let requests = 0;
   const context = {
     resolveArtistIdByName: async () => "artist-id",
+    fetchSharedArtistEnrichment: async () => null,
+    mapArtistReleaseGroups: (rows, artistId, artistName) => rows.map(row => ({ ...row, artistId, artist: artistName })),
     fetchMusicBrainz: async () => {
       requests += 1;
       return { ok: true, json: async () => ({ "release-groups": [{ id: "group", title: "Album", "primary-type": "Album" }] }) };
@@ -62,6 +64,7 @@ test("artist detail is cached by MusicBrainz artist ID", async () => {
   const end = app.indexOf("async function resolveArtistIdentityForImage", start);
   let requests = 0;
   const context = {
+    fetchSharedArtistEnrichment: async () => null,
     fetchMusicBrainz: async () => {
       requests += 1;
       return { ok: true, json: async () => ({ id: "artist-id" }) };

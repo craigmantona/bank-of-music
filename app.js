@@ -5138,7 +5138,7 @@ async function fetchMostCompleteArtistDiscography({
       bestAlbums.length < 5
     );
 
-  if (looksIncomplete) {
+  if (looksIncomplete && !sharedArtistEnrichmentResolvedIds.has(preferredArtistId)) {
     const freshArtistId =
       await resolveArtistIdFreshFromMusicBrainz(
         artistName,
@@ -5165,6 +5165,40 @@ async function fetchMostCompleteArtistDiscography({
   };
 }
 
+const sharedArtistEnrichmentCache = new Map();
+const sharedArtistEnrichmentResolvedIds = new Set();
+
+async function fetchSharedArtistEnrichment(artistId) {
+  if (!artistId) return null;
+  if (sharedArtistEnrichmentCache.has(artistId)) {
+    return sharedArtistEnrichmentCache.get(artistId);
+  }
+  const request = supabaseClient.functions.invoke("artist-enrichment", {
+    body: { artist_id: artistId }
+  }).then(({ data, error }) => {
+    if (error) return null;
+    sharedArtistEnrichmentResolvedIds.add(artistId);
+    return data?.enrichment || { artist_detail: null, release_groups: [] };
+  }).catch(() => null);
+  sharedArtistEnrichmentCache.set(artistId, request);
+  return request;
+}
+
+function mapArtistReleaseGroups(releaseGroups, artistId, artistName) {
+  return sortReleaseGroupsByDate(releaseGroups || [])
+    .filter(isStudioReleaseGroup)
+    .map((releaseGroup) => ({
+      type: "album",
+      title: releaseGroup.title || "Untitled",
+      artist: artistName || selectedItem?.artist || selectedItem?.name || "",
+      artistId,
+      externalId: "",
+      releaseGroupId: releaseGroup.id || "",
+      releaseDate: releaseGroup["first-release-date"] || "",
+      coverUrl: releaseGroup.id ? `https://coverartarchive.org/release-group/${releaseGroup.id}/front-250` : ""
+    }));
+}
+
 const artistDiscographyCache = new Map();
 
 async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
@@ -5179,6 +5213,11 @@ async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
   const request = (async () => {
 
+  const shared = await fetchSharedArtistEnrichment(resolvedArtistId);
+  if (shared) {
+    return mapArtistReleaseGroups(shared.release_groups, resolvedArtistId, artistName);
+  }
+
   try {
 
     const url = `https://musicbrainz.org/ws/2/release-group?artist=${encodeURIComponent(resolvedArtistId)}&type=album&fmt=json&limit=100`;
@@ -5189,29 +5228,7 @@ async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
     const data = await response.json();
 
-    return sortReleaseGroupsByDate(data["release-groups"] || [])
-
-      .filter(isStudioReleaseGroup)
-
-      .map((releaseGroup) => ({
-
-        type: "album",
-
-        title: releaseGroup.title || "Untitled",
-
-        artist: artistName || selectedItem?.artist || selectedItem?.name || "",
-
-        artistId: resolvedArtistId,
-
-        externalId: "",
-
-        releaseGroupId: releaseGroup.id || "",
-
-        releaseDate: releaseGroup["first-release-date"] || "",
-
-        coverUrl: releaseGroup.id ? `https://coverartarchive.org/release-group/${releaseGroup.id}/front-250` : ""
-
-      }));
+    return mapArtistReleaseGroups(data["release-groups"] || [], resolvedArtistId, artistName);
 
   } catch {
 
@@ -5245,6 +5262,9 @@ async function fetchArtistDetail(externalId) {
 
   const request = (async () => {
 
+  const shared = await fetchSharedArtistEnrichment(externalId);
+  if (shared) return shared.artist_detail || null;
+
   const url = `https://musicbrainz.org/ws/2/artist/${encodeURIComponent(externalId)}?inc=tags+genres+aliases+url-rels&fmt=json`;
 
   for (let attempt = 0; attempt < 3; attempt += 1) {
@@ -5275,6 +5295,9 @@ async function resolveArtistIdentityForImage(artistName, preferredArtistId = "",
   if (preferredArtistId) {
     const detail = preferredDetail || await fetchArtistDetail(preferredArtistId);
     if (detail) return { artistId: preferredArtistId, detail };
+    if (sharedArtistEnrichmentResolvedIds.has(preferredArtistId)) {
+      return { artistId: preferredArtistId, detail: null };
+    }
   }
 
   const endpoint = new URL("https://musicbrainz.org/ws/2/artist");
