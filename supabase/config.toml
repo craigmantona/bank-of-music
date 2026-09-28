@@ -406,6 +406,9 @@ verify_jwt = true
 [functions.artist-enrichment]
 verify_jwt = true
 
+[functions.remote-album-catalogue]
+verify_jwt = true
+
 [functions.artist-import-rpc-test]
 verify_jwt = true
 

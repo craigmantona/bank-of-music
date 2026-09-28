@@ -12,12 +12,13 @@ const release = () => ({ id: 'release-1', title: 'Resolved Album', date: '2001-0
 ] }] });
 const selection = () => ({ type: 'album', title: 'Resolved Album', artist: 'An Artist', externalId: 'release-1', releaseGroupId: 'group-1', coverUrl: 'https://example.test/cover.jpg' });
 const saved = () => ({ id: 10, title: 'Resolved Album', artist: 'An Artist', external_source: 'musicbrainz', external_id: 'release-1', musicbrainz_release_group_id: 'group-1', cover_art_url: 'saved-cover.jpg' });
-function harness({ albums = [], songs = [], cached = true, detail = release(), failResolution = false, beforeAlbumWrite } = {}) {
-  const db = { albums: structuredClone(albums), songs: structuredClone(songs) }, writes = [], fetches = [];
+function harness({ albums = [], songs = [], cached = true, detail = release(), failResolution = false, beforeAlbumWrite,
+  autoAddResult = { status: 'needs_correction', reason: 'catalogue_confirmation_required' }, autoAddedAlbum = null, autoAddedSongs = [] } = {}) {
+  const db = { albums: structuredClone(albums), songs: structuredClone(songs) }, writes = [], fetches = [], invocations = [];
   let nextId = 100;
   const context = {
     currentUser: { id: 'user-1' }, isAdmin: false, selectedItem: selection(), allAlbums: cached ? structuredClone(albums) : [], allSongs: cached ? structuredClone(songs) : [],
-    console: { warn() {}, error() {} }, albumTrackCache: {}, releaseGroupCoverCache: {}, selectedItemDetail: { innerHTML: '' }, window: {},
+    console: { warn() {}, error() {} }, albumTrackCache: {}, releaseGroupCoverCache: {}, selectedItemDetail: { innerHTML: '' }, window: { setTimeout },
     predictiveCataloguePromise: Promise.resolve([]), predictiveCatalogueLoadedAt: 1,
     normaliseText: value => String(value || '').trim().replace(/\s+/g, ' '),
     normaliseCompare: value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, ''),
@@ -31,13 +32,21 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
     isStageOnePresentation: () => true,
     getAlbumAverage: id => ({ avg: 8, count: 1, id }), getYourAlbumRating: () => null,
     buildStageOneAlbumTrackModels: (detail, albumId) => (detail.media || []).flatMap(m => (m.tracks || []).map(t => ({title:t.title,albumId}))),
+    renderRemoteAlbumCatalogueStatus: () => '<span>Preparing ratings…</span>',
     buildSelectedBackButton: () => '', renderClickableArtistName: name => name,
     buildCompactAlbumRatingControl: id => `<button data-rate-album="${id}">Rate</button>`,
     buildMusicProviderPanel: () => '', buildSelectedSharePanel: () => '',
     renderStageOneAlbum: async model => { context.model = model; },
     loadLibrary: async () => { context.allAlbums = structuredClone(db.albums); context.allSongs = structuredClone(db.songs); },
-    renderLibrary() {}, renderRecommendations() {},
-    supabaseClient: { from(table) {
+    renderLibrary() {}, renderRecommendations() {}, invalidatePredictiveCatalogue() {},
+    supabaseClient: { functions: { async invoke(name, options) {
+      invocations.push({ name, body: structuredClone(options?.body || {}) });
+      if (autoAddedAlbum && !db.albums.some(album => Number(album.id) === Number(autoAddedAlbum.id))) {
+        db.albums.push(structuredClone(autoAddedAlbum));
+        db.songs.push(...structuredClone(autoAddedSongs));
+      }
+      return { data: structuredClone(autoAddResult), error: null };
+    } }, from(table) {
       let operation = 'select', payload, filters = [], options;
       const query = {
         select() { return query; }, eq(field, value) { filters.push([field, value]); return query; },
@@ -61,15 +70,15 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
   };
   vm.createContext(context);
   vm.runInContext(identitySource + '\n' + saveSource + '\n' + modelSource + '\n' + renderSource, context);
-  return { context, db, writes, fetches };
+  return { context, db, writes, fetches, invocations };
 }
-test('resolved external search selection remains read-only before catalogue controls are shown', async () => {
+test('resolved external search selection renders immediately while safe creation runs in the background', async () => {
   const h = harness(); await h.context.renderSelectedItem();
   assert.equal(h.db.albums.length, 0); assert.equal(h.db.songs.length, 0);
   assert.equal(h.writes.length, 0);
   assert.equal(h.context.selectedItem.savedAlbumId, undefined);
   assert.equal(h.context.model.albumId, null);
-  assert.match(h.context.model.albumRatingControlHtml, /Admin Catalogue|Not yet in the BOM catalogue/);
+  assert.match(h.context.model.albumRatingControlHtml, /Preparing ratings/);
 });
 test('existing catalogue selection never duplicates album or tracks', async () => {
   const h = harness({ albums: [saved()], songs: [{ id: 20, album_id: 10, title: 'First Song' }] });
@@ -84,12 +93,13 @@ test('conflicting MusicBrainz identities are never written by album viewing', as
   assert.equal(h.db.albums[0].id, 10);
   assert.equal(h.db.songs.length, 0);
 });
-test('repeated and concurrent remote selections remain read-only', async () => {
+test('repeated and concurrent remote selections coalesce one safe server request', async () => {
   const h = harness();
   await Promise.all([h.context.autoSaveSelectedAlbum(), h.context.autoSaveSelectedAlbum(), h.context.autoSaveSelectedAlbum()]);
   h.context.selectedItem = selection(); await h.context.autoSaveSelectedAlbum();
   assert.equal(h.db.albums.length, 0); assert.equal(h.db.songs.length, 0);
   assert.equal(h.writes.length, 0);
+  assert.equal(h.invocations.length, 2);
 });
 test('failed or incomplete external resolution performs no catalogue writes', async () => {
   const failed = harness({ failResolution: true }); await failed.context.renderSelectedItem(); assert.equal(failed.writes.length, 0);
@@ -98,7 +108,7 @@ test('failed or incomplete external resolution performs no catalogue writes', as
   }
 });
 test('signed-out browsing retains the current no-write security boundary', async () => {
-  const h = harness(); h.context.currentUser = null; assert.equal(await h.context.autoSaveSelectedAlbum(), null); assert.equal(h.writes.length, 0);
+  const h = harness(); h.context.currentUser = null; assert.equal(await h.context.autoSaveSelectedAlbum(), null); assert.equal(h.writes.length, 0); assert.equal(h.invocations.length, 0);
 });
 test('search selection no longer saves an unresolved result before rendering', () => {
   const handler = app.slice(app.indexOf('globalSearchResults.addEventListener("click"'), app.indexOf('let spotifyAlbumWarmupKey'));
@@ -122,4 +132,30 @@ test('remote viewing never performs a database duplicate query or write', async 
   assert.equal(await h.context.autoSaveSelectedAlbum(), null);
   assert.equal(calls, 0);
   assert.equal(h.writes.length, 0);
+});
+
+test('authenticated unambiguous remote album binds the complete server-created catalogue row', async () => {
+  const album = saved();
+  const songs = [
+    { id: 20, album_id: 10, title: 'First Song', track_position: 1, external_source: 'musicbrainz', external_id: 'recording-1' },
+    { id: 21, album_id: 10, title: 'Second Song', track_position: 2, external_source: 'musicbrainz', external_id: 'recording-2' }
+  ];
+  const h = harness({ autoAddResult: { status: 'added', album_id: 10, track_count: 2 }, autoAddedAlbum: album, autoAddedSongs: songs });
+  const created = await h.context.autoSaveSelectedAlbum();
+  assert.equal(h.invocations.length, 1);
+  assert.deepEqual(h.invocations[0], { name: 'remote-album-catalogue', body: { release_id: 'release-1', release_group_id: 'group-1' } });
+  assert.equal(created.id, 10);
+  assert.equal(h.context.selectedItem.savedAlbumId, 10);
+  assert.equal(h.context.selectedItem.catalogueAutoAddStatus, 'ready');
+  assert.equal(h.context.allSongs.filter(song => song.album_id === 10).length, 2);
+  assert.equal(h.writes.length, 0);
+});
+
+test('ambiguous safe resolution leaves the remote album usable and unbound', async () => {
+  const h = harness({ autoAddResult: { status: 'needs_correction', reason: 'ambiguous_release_group' } });
+  assert.equal(await h.context.autoSaveSelectedAlbum(), null);
+  assert.equal(h.context.selectedItem.savedAlbumId, undefined);
+  assert.equal(h.context.selectedItem.catalogueAutoAddStatus, 'needs_correction');
+  assert.equal(h.db.albums.length, 0);
+  assert.equal(h.db.songs.length, 0);
 });

@@ -6784,6 +6784,17 @@ function buildCompactAlbumRatingControl(albumId, currentValue) {
   </details><input type="hidden" id="${targetId}" value="${hasRating ? Number(currentValue) : ""}">`;
 }
 
+function renderRemoteAlbumCatalogueStatus(item = selectedItem) {
+  if (!currentUser) return '<span class="small">Sign in to add and rate this album</span>';
+  if (item?.catalogueAutoAddStatus === "needs_correction") {
+    return '<span class="small">This album needs catalogue confirmation before ratings can be saved.</span>';
+  }
+  if (item?.catalogueAutoAddStatus === "failed") {
+    return '<span class="small">This album could not be added right now. You can still browse it.</span>';
+  }
+  return '<span class="small">Preparing ratings…</span>';
+}
+
 function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
   const albumTitle = detail?.title || selectedItem?.title || "";
   const artist = detail?.["artist-credit"]?.map((credit) => credit.name).filter(Boolean).join(", ") || selectedItem?.artist || "";
@@ -6854,7 +6865,9 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
     artistControlHtml: renderClickableArtistName(artist),
     albumRatingControlHtml: albumId
       ? buildCompactAlbumRatingControl(albumId, personal)
-      : (isAdmin ? '<button type="button" data-open-admin-catalogue>Add through Admin Catalogue</button>' : '<span class="small">Not yet in the BOM catalogue</span>'),
+      : (isAdmin && selectedItem?.catalogueAutoAddStatus === "needs_correction"
+          ? '<button type="button" data-open-admin-catalogue>Add through Admin Catalogue</button>'
+          : renderRemoteAlbumCatalogueStatus(selectedItem)),
     providerControlHtml: buildMusicProviderPanel({ type: "album", title: detail?.title || album?.title || selectedItem?.title || "", artist }).replace(">Play here<", ">Listen elsewhere<"),
     shareControlHtml: buildSelectedSharePanel(selectedItem).replace(">Send<", ">Share album<"),
     adminControlHtml: typeof renderSelectedAdminControls === "function" ? renderSelectedAdminControls({ albumId }) : ""
@@ -8740,20 +8753,22 @@ if (releaseGroupId) {
 
 
 
-      if (!savedAlbum && currentUser && typeof autoSaveSelectedAlbum === "function") {
-
-        try {
-
-          savedAlbum = await autoSaveSelectedAlbum();
-
+      if (!savedAlbum && currentUser && typeof autoSaveSelectedAlbum === "function" &&
+          !albumSelection.catalogueAutoAddStarted) {
+        albumSelection.catalogueAutoAddStarted = true;
+        albumSelection.catalogueAutoAddStatus = "pending";
+        void autoSaveSelectedAlbum().then((createdAlbum) => {
           if (selectedItem !== albumSelection) return;
-
-        } catch (error) {
-
-          console.warn("Album auto-save during render skipped", error?.message || error);
-
-        }
-
+          if (!createdAlbum && albumSelection.catalogueAutoAddStatus === "pending") {
+            albumSelection.catalogueAutoAddStatus = "failed";
+          }
+          window.setTimeout(() => { void renderSelectedItem(); }, 0);
+        }).catch((error) => {
+          console.warn("Album auto-add during render skipped", error?.message || error);
+          if (selectedItem !== albumSelection) return;
+          albumSelection.catalogueAutoAddStatus = "failed";
+          window.setTimeout(() => { void renderSelectedItem(); }, 0);
+        });
       }
 
 
@@ -8894,7 +8909,9 @@ const trackListHtml = isStageOnePresentation() ? "" : buildTrackListHtml(detail,
 
                   ? renderStarSelector(`album-rating-${albumId}`, refreshedYourRating)
 
-                  : (isAdmin ? `<button type="button" data-open-admin-catalogue>Add through Admin Catalogue</button>` : `<span class="small">Not yet in the BOM catalogue</span>`)}
+                  : (isAdmin && albumSelection.catalogueAutoAddStatus === "needs_correction"
+                      ? `<button type="button" data-open-admin-catalogue>Add through Admin Catalogue</button>`
+                      : renderRemoteAlbumCatalogueStatus(albumSelection))}
 
                 ${buildSelectedSharePanel(albumSelection)}
 
@@ -9266,8 +9283,6 @@ async function autoSaveSelectedAlbum() {
     albumIdentityMatches(album, item)
   ) || null;
 
-  // Preserve normal browsing/rating of existing rows, but never let viewing
-  // remote metadata create a catalogue row (including for administrators).
   if (existingCatalogueAlbum) {
     item.savedAlbumId = existingCatalogueAlbum.id;
     item.albumId = existingCatalogueAlbum.id;
@@ -9277,8 +9292,71 @@ async function autoSaveSelectedAlbum() {
     item.releaseGroupId = existingCatalogueAlbum.musicbrainz_release_group_id || item.releaseGroupId;
     item.coverUrl = getAlbumArtworkUrl(existingCatalogueAlbum) || item.coverUrl || "";
     item.releaseDate = existingCatalogueAlbum.release_date || item.releaseDate || "";
+    item.catalogueAutoAddStatus = "ready";
   }
-  return existingCatalogueAlbum;
+  if (existingCatalogueAlbum) return existingCatalogueAlbum;
+
+  {
+    if (!item.externalId) {
+      item.catalogueAutoAddStatus = "needs_correction";
+      return null;
+    }
+    const requestKey = `${userId}:${item.externalId}`;
+    const bindCreatedAlbum = (album) => {
+      if (!album || selectedItem !== item) return album;
+      item.savedAlbumId = album.id;
+      item.albumId = album.id;
+      item.title = album.title;
+      item.artist = album.artist;
+      item.externalId = album.musicbrainz_release_id || album.external_id || item.externalId;
+      item.releaseGroupId = album.musicbrainz_release_group_id || item.releaseGroupId;
+      item.coverUrl = getAlbumArtworkUrl(album) || item.coverUrl || "";
+      item.releaseDate = album.release_date || item.releaseDate || "";
+      item.catalogueAutoAddStatus = "ready";
+      return album;
+    };
+    if (albumAutoSaveInFlight.has(requestKey)) {
+      return bindCreatedAlbum(await albumAutoSaveInFlight.get(requestKey));
+    }
+
+    const creation = (async () => {
+      const { data, error } = await supabaseClient.functions.invoke("remote-album-catalogue", {
+        body: {
+          release_id: item.externalId,
+          release_group_id: item.releaseGroupId || ""
+        }
+      });
+      if (currentUser?.id !== userId) return null;
+      if (error) throw error;
+      if (data?.status === "needs_correction") {
+        item.catalogueAutoAddStatus = "needs_correction";
+        item.catalogueAutoAddReason = data.reason || "catalogue_confirmation_required";
+        return null;
+      }
+      if (data?.status !== "added" && data?.status !== "already_exists") {
+        item.catalogueAutoAddStatus = "failed";
+        return null;
+      }
+
+      await loadLibrary();
+      const album = allAlbums.find((candidate) => Number(candidate.id) === Number(data.album_id)) ||
+        allAlbums.find((candidate) => albumIdentityMatches(candidate, item)) || null;
+      if (!album || album.is_deleted) {
+        item.catalogueAutoAddStatus = "failed";
+        return null;
+      }
+      invalidatePredictiveCatalogue();
+      renderLibrary();
+      renderRecommendations();
+      return album;
+    })();
+    albumAutoSaveInFlight.set(requestKey, creation);
+    try {
+      return bindCreatedAlbum(await creation);
+    } finally {
+      albumAutoSaveInFlight.delete(requestKey);
+    }
+  }
 
   const key = `${userId}:${item.releaseGroupId || item.externalId || normaliseCompare(`${item.artist}-${item.title}`)}`;
 

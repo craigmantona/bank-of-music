@@ -15,7 +15,7 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration] = await P
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=126") < html.indexOf("bom-admin-catalogue.js?v=3"));
+  assert.ok(html.indexOf("app.js?v=127") < html.indexOf("bom-admin-catalogue.js?v=3"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -183,12 +183,14 @@ test("desktop and iPad/mobile layouts are present", () => {
   assert.match(styles, /@media \(max-width: 780px\)[\s\S]*\.admin-catalogue-row \{ grid-template-columns: 38px minmax\(0, 1fr\)/);
 });
 
-test("ordinary member album and song opening exits before catalogue writes", () => {
+test("ordinary member creation uses only the narrow server path", () => {
   const song = app.slice(app.indexOf("async function autoSaveSelectedSong()"), app.indexOf("const albumAutoSaveInFlight"));
   const album = app.slice(app.indexOf("async function autoSaveSelectedAlbum()"), app.indexOf("async function importSelectedAlbum()"));
   assert.ok(song.indexOf("return savedSong || null;") < song.indexOf('.from("songs")'));
-  assert.ok(album.indexOf("return existingCatalogueAlbum;") < album.indexOf('.from("albums")'));
-  assert.match(app, /Not yet in the BOM catalogue/);
+  const activeAlbum = album.slice(0, album.indexOf("const key ="));
+  assert.match(activeAlbum, /functions\.invoke\("remote-album-catalogue"/);
+  assert.doesNotMatch(activeAlbum, /\.from\(["'](?:albums|songs)["']\)/);
+  assert.match(app, /This album needs catalogue confirmation before ratings can be saved/);
   assert.match(app, /Legacy direct import is intentionally retired[\s\S]*window\.BOMAdminCatalogue\?\.render\(\);[\s\S]*return;/);
 });
 
