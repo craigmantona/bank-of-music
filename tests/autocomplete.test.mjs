@@ -40,33 +40,32 @@ test('seven suggestions and more flag only when extra matches exist', () => {
 
 const app = await readFile(new URL('../app.js', import.meta.url), 'utf8');
 const adapterSource = app.slice(app.indexOf('let predictiveCataloguePromise = null;'), app.indexOf('let searchDebounceTimer = null;'));
-function loadAdapter(read) {
+function loadAdapter(albums = [], songs = []) {
   const context = { window: { BOMAutocomplete: { buildCatalogue: (albums, songs) => ({ albums, songs }) } },
-    supabaseClient: { from: (table) => ({ select: () => ({ order: () => ({ range: (start, end) => read(table, start, end) }) }) }) },
-    getAlbumArtworkUrl: () => '', readArtistImageCache: () => null, Date };
+    allAlbums: albums, allSongs: songs,
+    getAlbumArtworkUrl: () => '', readArtistImageCache: () => null };
   vm.createContext(context);
   vm.runInContext(adapterSource, context);
   return context;
 }
-test('catalogue uses one shared paginated request and caches subsequent searches', async () => {
-  const calls = [];
-  const context = loadAdapter(async (table, start, end) => {
-    calls.push([table, start, end]);
-    return { data: Array.from({length: start === 0 ? 1000 : 1}, (_, n) => ({ id: start + n })) };
-  });
+test('catalogue uses the already-loaded library without independent pagination', async () => {
+  const albums = [{ id: 1, title: 'Local album' }];
+  const songs = [{ id: 2, title: 'Local track' }];
+  const context = loadAdapter(albums, songs);
   const first = context.getPredictiveCatalogue();
   assert.equal(first, context.getPredictiveCatalogue());
   const data = await first;
-  assert.equal(data.albums.length, 1001);
-  assert.equal(data.songs.length, 1001);
-  assert.equal(calls.length, 4);
-  await context.getPredictiveCatalogue();
-  assert.equal(calls.length, 4);
+  assert.equal(data.albums, albums);
+  assert.equal(data.songs, songs);
+  assert.doesNotMatch(adapterSource, /supabaseClient|\.range\(|300000/);
 });
-test('failed catalogue requests can retry rather than caching an error or partial data', async () => {
-  let fail = true;
-  const context = loadAdapter(async () => fail ? { error: new Error('offline') } : { data: [] });
-  await assert.rejects(context.getPredictiveCatalogue(), /offline/);
-  fail = false;
-  assert.equal((await context.getPredictiveCatalogue()).albums.length, 0);
+test('autocomplete index survives the former five-minute expiry and rebuilds only for new library arrays', async () => {
+  const context = loadAdapter([{ id: 1 }], [{ id: 2 }]);
+  const first = context.getPredictiveCatalogue();
+  await first;
+  assert.equal(context.getPredictiveCatalogue(), first);
+  context.allAlbums = [{ id: 3 }];
+  const rebuilt = context.getPredictiveCatalogue();
+  assert.notEqual(rebuilt, first);
+  assert.equal((await rebuilt).albums[0].id, 3);
 });

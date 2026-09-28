@@ -4094,40 +4094,60 @@ function sortBySearchScore(items, query) {
 
 
 
-// One shared, read-only catalogue snapshot; typing never fans out into requests.
+// One shared search index over the catalogue already loaded by loadLibrary().
 let predictiveCataloguePromise = null;
-let predictiveCatalogueLoadedAt = 0;
+let predictiveCatalogueAlbums = null;
+let predictiveCatalogueSongs = null;
+function invalidatePredictiveCatalogue() {
+  predictiveCataloguePromise = null;
+  predictiveCatalogueAlbums = null;
+  predictiveCatalogueSongs = null;
+}
 function getPredictiveCatalogue() {
-  if (predictiveCatalogueLoadedAt && Date.now() - predictiveCatalogueLoadedAt > 300000) predictiveCataloguePromise = null;
+  if (predictiveCatalogueAlbums !== allAlbums || predictiveCatalogueSongs !== allSongs) {
+    predictiveCataloguePromise = null;
+  }
   if (!predictiveCataloguePromise) {
-    predictiveCatalogueLoadedAt = 0;
-    const read = async (table) => {
-      const rows = [];
-      for (let offset = 0; ; offset += 1000) {
-        const { data, error } = await supabaseClient.from(table).select("*")
-          .order("id", { ascending: true }).range(offset, offset + 999);
-        if (error) throw error;
-        rows.push(...(data || []));
-        if (!data || data.length < 1000) return rows;
-      }
-    };
-    predictiveCataloguePromise = Promise.all([read("albums"), read("songs")])
-      .then(([albums, songs]) => {
-        predictiveCatalogueLoadedAt = Date.now();
-        return window.BOMAutocomplete.buildCatalogue(albums, songs, getAlbumArtworkUrl, (name) => readArtistImageCache(name)?.url || "");
-      })
-      .catch((error) => { predictiveCataloguePromise = null; throw error; });
+    predictiveCatalogueAlbums = allAlbums;
+    predictiveCatalogueSongs = allSongs;
+    predictiveCataloguePromise = Promise.resolve().then(() => window.BOMAutocomplete.buildCatalogue(
+      predictiveCatalogueAlbums,
+      predictiveCatalogueSongs,
+      getAlbumArtworkUrl,
+      (name) => readArtistImageCache(name)?.url || ""
+    ));
   }
   return predictiveCataloguePromise;
 }
 
 let searchDebounceTimer = null;
+let globalSearchGeneration = 0;
+let globalSearchAbortController = null;
+const MUSICBRAINZ_REQUEST_TIMEOUT_MS = 8000;
+
+async function fetchMusicBrainz(url, { signal, timeoutMs = MUSICBRAINZ_REQUEST_TIMEOUT_MS } = {}) {
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  if (signal?.aborted) abort();
+  else signal?.addEventListener("abort", abort, { once: true });
+  const timeout = window.setTimeout(abort, timeoutMs);
+  try {
+    return await fetch(url, { headers: { Accept: "application/json" }, signal: controller.signal });
+  } finally {
+    window.clearTimeout(timeout);
+    signal?.removeEventListener("abort", abort);
+  }
+}
 
 
 
 async function runGlobalSearch(forceOpenBest = false) {
 
   const query = globalSearchInput?.value.trim();
+
+  const searchGeneration = ++globalSearchGeneration;
+  globalSearchAbortController?.abort();
+  globalSearchAbortController = null;
 
 
 
@@ -4142,6 +4162,9 @@ async function runGlobalSearch(forceOpenBest = false) {
   }
 
 
+
+  const searchController = new AbortController();
+  globalSearchAbortController = searchController;
 
   setMessage(globalSearchMessage, "Searching...");
   if (isStageOnePresentation() && window.BOMSearchUI) {
@@ -4323,25 +4346,15 @@ ${item.versionCount > 1 ? `<div class="result-meta">+ ${item.versionCount - 1} o
 
     const [artistRes, albumRes, songRes] = await Promise.all([
 
-      fetch(`https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}&fmt=json&limit=15`, {
+      fetchMusicBrainz(`https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}&fmt=json&limit=15`, { signal: searchController.signal }),
 
-        headers: { Accept: "application/json" }
+      fetchMusicBrainz(`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=60`, { signal: searchController.signal }),
 
-      }),
-
-      fetch(`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=60`, {
-
-        headers: { Accept: "application/json" }
-
-      }),
-
-      fetch(`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=25`, {
-
-        headers: { Accept: "application/json" }
-
-      })
+      fetchMusicBrainz(`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=25`, { signal: searchController.signal })
 
     ]);
+
+    if (searchGeneration !== globalSearchGeneration) return;
 
 
 
@@ -4350,6 +4363,8 @@ ${item.versionCount > 1 ? `<div class="result-meta">+ ${item.versionCount - 1} o
     const albumData = await albumRes.json();
 
     const songData = await songRes.json();
+
+    if (searchGeneration !== globalSearchGeneration) return;
 
 
 
@@ -4736,6 +4751,8 @@ const songs = sortBySearchScore(
 
   } catch (err) {
 
+    if (searchGeneration !== globalSearchGeneration || (searchController.signal.aborted && err?.name === "AbortError")) return;
+
     console.error("Search failed", err);
 
     setMessage(globalSearchMessage, "Search failed.");
@@ -4743,6 +4760,8 @@ const songs = sortBySearchScore(
       globalSearchResults.innerHTML = window.BOMSearchUI.renderError(query);
     }
 
+  } finally {
+    if (globalSearchAbortController === searchController) globalSearchAbortController = null;
   }
 
 }
@@ -5146,17 +5165,25 @@ async function fetchMostCompleteArtistDiscography({
   };
 }
 
+const artistDiscographyCache = new Map();
+
 async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
   const resolvedArtistId = artistId || await resolveArtistIdByName(artistName);
 
   if (!resolvedArtistId) return [];
 
+  if (artistDiscographyCache.has(resolvedArtistId)) {
+    return artistDiscographyCache.get(resolvedArtistId);
+  }
+
+  const request = (async () => {
+
   try {
 
     const url = `https://musicbrainz.org/ws/2/release-group?artist=${encodeURIComponent(resolvedArtistId)}&type=album&fmt=json&limit=100`;
 
-    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    const response = await fetchMusicBrainz(url);
 
     if (!response.ok) return [];
 
@@ -5192,6 +5219,11 @@ async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
   }
 
+  })();
+
+  artistDiscographyCache.set(resolvedArtistId, request);
+  return request;
+
 }
 
 
@@ -5204,13 +5236,24 @@ async function fetchArtistAlbumsFromApi(artistName, artistId = "") {
 
 
 
+const artistDetailCache = new Map();
+
 async function fetchArtistDetail(externalId) {
   if (!externalId) return null;
+
+  if (artistDetailCache.has(externalId)) return artistDetailCache.get(externalId);
+
+  const request = (async () => {
 
   const url = `https://musicbrainz.org/ws/2/artist/${encodeURIComponent(externalId)}?inc=tags+genres+aliases+url-rels&fmt=json`;
 
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    let response;
+    try {
+      response = await fetchMusicBrainz(url);
+    } catch {
+      return null;
+    }
     if (response.ok) return await response.json();
     if (attempt < 2 && (response.status === 503 || response.status === 429)) {
       await new Promise((resolve) => window.setTimeout(resolve, 1200));
@@ -5219,6 +5262,11 @@ async function fetchArtistDetail(externalId) {
     return null;
   }
   return null;
+
+  })();
+
+  artistDetailCache.set(externalId, request);
+  return request;
 
 }
 
@@ -6166,9 +6214,13 @@ async function renderStageOneArtist(model, sourceAlbums) {
   updateStickyPlayer(selectedItem);
 }
 
+let artistRenderGeneration = 0;
+
 async function renderArtistDetail(artistItem) {
 
   if (!artistItem) return;
+
+  const renderGeneration = ++artistRenderGeneration;
 
   const artistName =
     artistItem.name ||
@@ -6185,6 +6237,32 @@ async function renderArtistDetail(artistItem) {
 
   const savedSongs =
     getSavedSongsByArtist(artistName);
+
+  // The useful BOM catalogue is already local. Show it before any optional
+  // MusicBrainz or artwork enrichment so remote latency cannot blank the page.
+  if (isStageOnePresentation()) {
+    const localAlbums = savedAlbums.map((album) => ({
+      type: "album",
+      title: album.title || "Untitled",
+      artist: album.artist || artistName,
+      externalId: album.external_id || "",
+      releaseGroupId: album.musicbrainz_release_group_id || album.release_group_id || "",
+      artistId: album.musicbrainz_artist_id || album.artist_id || "",
+      releaseDate: album.original_release_date || album.release_date || "",
+      release_date_precision: album.release_date_precision || "stored",
+      coverUrl: getAlbumArtworkUrl(album),
+      savedAlbumId: album.id,
+      localAlbumId: album.id
+    })).sort((a, b) => String(a.releaseDate || "9999-99-99").localeCompare(String(b.releaseDate || "9999-99-99")) || String(a.title).localeCompare(String(b.title)));
+    await renderStageOneArtist(buildStageOneArtistModel({
+      artistName,
+      artistDetail: null,
+      artistItem,
+      imageUrl: "",
+      albums: localAlbums,
+      savedSongs
+    }), localAlbums);
+  }
 
   const preferredArtistMusicBrainzId =
     artistItem.externalId ||
@@ -6379,6 +6457,8 @@ async function renderArtistDetail(artistItem) {
       .slice(0, 6)
       .map((tag) => tag.name)
       .filter(Boolean);
+
+  if (renderGeneration !== artistRenderGeneration || selectedItem !== artistItem) return;
 
   if (isStageOnePresentation()) {
     await renderStageOneArtist(buildStageOneArtistModel({
@@ -9288,8 +9368,7 @@ async function autoSaveSelectedAlbum() {
     await loadLibrary();
     if (!allAlbums.some((album) => Number(album.id) === Number(savedAlbum.id))) allAlbums.push(savedAlbum);
     for (const song of knownTracks) if (!allSongs.some((row) => Number(row.id) === Number(song.id))) allSongs.push(song);
-    predictiveCataloguePromise = null;
-    predictiveCatalogueLoadedAt = 0;
+    invalidatePredictiveCatalogue();
     renderLibrary();
     renderRecommendations();
     return savedAlbum;
