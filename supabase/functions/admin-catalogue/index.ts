@@ -42,6 +42,14 @@ function uuid(value: unknown) {
     .test(String(value || ""));
 }
 
+function validFullIsoDate(value: unknown) {
+  const date = String(value || "").trim();
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (!match) return false;
+  const parsed = new Date(`${date}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === date;
+}
+
 async function reserveMusicBrainzSlot() {
   const { data, error } = await service.rpc("admin_catalogue_musicbrainz_slot");
   if (error) throw new Error(`MusicBrainz coordination failed: ${error.message}`);
@@ -175,6 +183,24 @@ Deno.serve(async (request) => {
       global: { headers: { Authorization: authorizationHeader }, fetch: catalogueFetch },
       auth: { persistSession: false, autoRefreshToken: false }
     });
+
+    if (body?.action === "edit_album_date") {
+      const albumId = Number(body.album_id);
+      const originalReleaseDate = String(body.original_release_date || "").trim();
+      if (!Number.isSafeInteger(albumId) || albumId <= 0) {
+        return json(request, { ok: false, error: "Choose a valid BOM album." }, 400);
+      }
+      if (!validFullIsoDate(originalReleaseDate)) {
+        return json(request, { ok: false, error: "Enter a valid full release date in YYYY-MM-DD format." }, 400);
+      }
+      const { data, error } = await userClient.from("albums")
+        .update({ original_release_date: originalReleaseDate })
+        .eq("id", albumId)
+        .select("id, artist, title, original_release_date")
+        .single();
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, album: data });
+    }
 
     if (body?.action === "delete_album_preview" || body?.action === "delete_album") {
       const albumId = Number(body.album_id);

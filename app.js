@@ -473,7 +473,7 @@ window.BOMPresentationBridge = Object.freeze({
     selectedItem = {
       type: item.kind === "Album" ? "album" : "song", title: row.title, artist: row.artist,
       externalId: row.external_id || "", coverUrl: item.artworkUrl,
-      releaseDate: row.release_date || "", albumId: item.kind === "Album" ? row.id : row.album_id,
+      releaseDate: (item.kind === "Album" ? row.original_release_date : item.album?.original_release_date) || row.release_date || "", albumId: item.kind === "Album" ? row.id : row.album_id,
       ...(item.kind === "Album" ? { savedAlbumId: row.id } : { savedSongId: row.id })
     };
     showOnlySection("detailSection");
@@ -1010,7 +1010,7 @@ function buildStageOneChartsModel(albumRows, songRows) {
       id: row.item_id,
       title: row.title || "Untitled album",
       artist: row.artist || album?.artist || "Unknown artist",
-      year: String(album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      year: String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: row.cover_art_url || row.cover_url || row.image_url || (album ? getAlbumArtworkUrl(album) : ""),
       averageRating: row.average_rating,
       ratingCount: row.rating_count
@@ -1025,7 +1025,7 @@ function buildStageOneChartsModel(albumRows, songRows) {
       title: row.title || "Untitled track",
       artist: row.artist || song?.artist || album?.artist || "Unknown artist",
       albumTitle: album?.title || "",
-      year: String(album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      year: String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
       averageRating: row.average_rating,
       ratingCount: row.rating_count
@@ -3207,7 +3207,7 @@ async function buildMoreFromArtistSection(artistName, currentAlbumId = null) {
       externalId: album.external_id || "",
       releaseGroupId: album.release_group_id || album.releaseGroupId || "",
       artistId: selectedArtistId || album.artist_id || "",
-      releaseDate: album.release_date || "",
+      releaseDate: album.original_release_date || album.release_date || "",
       coverUrl: getAlbumArtworkUrl(album),
       savedAlbumId: album.id,
       localAlbumId: album.id
@@ -3727,7 +3727,7 @@ function buildStageOneRatingsModel() {
       id: album.id,
       title: album.title || "Untitled album",
       artist: album.artist || "Unknown artist",
-      year: String(album.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      year: String(album.original_release_date || album.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: getAlbumArtworkUrl(album),
       personal: Number(ratingRow.rating),
       community: community ? { average: community.avg, count: community.count } : null
@@ -3744,7 +3744,7 @@ function buildStageOneRatingsModel() {
       artist: track.artist || album?.artist || "Unknown artist",
       albumId: album?.id || null,
       albumTitle: album?.title || "",
-      year: String(album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
+      year: String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
       personal: Number(ratingRow.rating),
       community: community ? { average: community.avg, count: community.count } : null
@@ -3756,7 +3756,7 @@ function buildStageOneRatingsModel() {
 async function openStageOneRatingsAlbum(albumId) {
   const album = allAlbums.find((row) => Number(row.id) === Number(albumId));
   if (!album) return;
-  selectedItem = { type: "album", title: album.title, artist: album.artist, externalId: album.external_id || "", releaseDate: album.release_date || "", coverUrl: getAlbumArtworkUrl(album), savedAlbumId: album.id, albumId: album.id };
+  selectedItem = { type: "album", title: album.title, artist: album.artist, externalId: album.external_id || "", releaseDate: album.original_release_date || album.release_date || "", coverUrl: getAlbumArtworkUrl(album), savedAlbumId: album.id, albumId: album.id };
   showOnlySection("detailSection");
   await renderSelectedItem();
 }
@@ -6180,7 +6180,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
         title: song.title || "Untitled track",
         albumId: album?.id || "",
         albumTitle: album?.title || getAlbumNameById(song.album_id) || "",
-        albumYear: String(album?.release_date || "").slice(0, 4),
+        albumYear: String(album?.original_release_date || album?.release_date || "").slice(0, 4),
         artworkUrl: album ? getAlbumArtworkUrl(album) : "",
         community: { average: Number(average.avg), count: Number(average.count || 0) },
         personal: getYourSongRating(song.id)
@@ -6366,6 +6366,7 @@ async function renderArtistDetail(artistItem) {
           "",
 
         releaseDate:
+          savedAlbum?.original_release_date ||
           savedAlbum?.release_date ||
           savedAlbum?.releaseDate ||
           remoteAlbum.releaseDate ||
@@ -6405,6 +6406,7 @@ async function renderArtistDetail(artistItem) {
         savedAlbum.artist_id ||
         "",
       releaseDate:
+        savedAlbum.original_release_date ||
         savedAlbum.release_date ||
         savedAlbum.releaseDate ||
         "",
@@ -8579,6 +8581,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
                   <div class="detail-meta-value">
                     ${escapeHtml(
+                      immediatelySavedAlbum.original_release_date ||
                       immediatelySavedAlbum.release_date ||
                       immediatelySavedAlbum.releaseDate ||
                       "Unknown"
@@ -9299,7 +9302,7 @@ async function autoSaveSelectedAlbum() {
     item.externalId = existingCatalogueAlbum.musicbrainz_release_id || existingCatalogueAlbum.external_id || item.externalId;
     item.releaseGroupId = existingCatalogueAlbum.musicbrainz_release_group_id || item.releaseGroupId;
     item.coverUrl = getAlbumArtworkUrl(existingCatalogueAlbum) || item.coverUrl || "";
-    item.releaseDate = existingCatalogueAlbum.release_date || item.releaseDate || "";
+    item.releaseDate = existingCatalogueAlbum.original_release_date || existingCatalogueAlbum.release_date || item.releaseDate || "";
     item.catalogueAutoAddStatus = "ready";
   }
   if (existingCatalogueAlbum) return existingCatalogueAlbum;
@@ -9319,7 +9322,7 @@ async function autoSaveSelectedAlbum() {
       item.externalId = album.musicbrainz_release_id || album.external_id || item.externalId;
       item.releaseGroupId = album.musicbrainz_release_group_id || item.releaseGroupId;
       item.coverUrl = getAlbumArtworkUrl(album) || item.coverUrl || "";
-      item.releaseDate = album.release_date || item.releaseDate || "";
+      item.releaseDate = album.original_release_date || album.release_date || item.releaseDate || "";
       item.catalogueAutoAddStatus = "ready";
       return album;
     };
@@ -9377,7 +9380,7 @@ async function autoSaveSelectedAlbum() {
     item.externalId = album.musicbrainz_release_id || album.external_id || item.externalId;
     item.releaseGroupId = album.musicbrainz_release_group_id || item.releaseGroupId;
     item.coverUrl = getAlbumArtworkUrl(album) || item.coverUrl || "";
-    item.releaseDate = album.release_date || item.releaseDate || "";
+    item.releaseDate = album.original_release_date || album.release_date || item.releaseDate || "";
     return album;
   };
 
@@ -9575,7 +9578,7 @@ async function importSelectedAlbum() {
 
       externalId: importedAlbum.external_id || selectedItem.externalId,
 
-      releaseDate: importedAlbum.release_date || selectedItem.releaseDate || "",
+      releaseDate: importedAlbum.original_release_date || importedAlbum.release_date || selectedItem.releaseDate || "",
 
       coverUrl: importedAlbum.cover_art_url || selectedItem.coverUrl || "",
 
@@ -10629,7 +10632,7 @@ async function adminOpenAlbum(albumId) {
 
     externalId: album.external_id || "",
 
-    releaseDate: album.release_date || "",
+    releaseDate: album.original_release_date || album.release_date || "",
 
     coverUrl: getAlbumArtworkUrl(album),
 
@@ -10839,7 +10842,7 @@ if (albumsList) {
       title: album.title,
       artist: album.artist,
       externalId: album.external_id || "",
-      releaseDate: album.release_date || "",
+      releaseDate: album.original_release_date || album.release_date || "",
       coverUrl: album.cover_art_url || "",
       savedAlbumId: album.id
     };
@@ -11331,7 +11334,7 @@ document.addEventListener("click", async (event) => {
       title: album.title,
       artist: album.artist,
       externalId: album.external_id || "",
-      releaseDate: album.release_date || "",
+      releaseDate: album.original_release_date || album.release_date || "",
       coverUrl: getAlbumArtworkUrl(album),
       savedAlbumId: album.id
     };
@@ -11903,7 +11906,7 @@ if (
         title: album.title,
         artist: album.artist,
         externalId: album.external_id || "",
-        releaseDate: album.release_date || "",
+        releaseDate: album.original_release_date || album.release_date || "",
         coverUrl: getAlbumArtworkUrl(album),
         savedAlbumId: album.id,
         albumId: album.id
@@ -12006,7 +12009,7 @@ if (openAlbumBtn) {
     title: album.title,
     artist: album.artist,
     externalId: album.external_id || "",
-    releaseDate: album.release_date || "",
+    releaseDate: album.original_release_date || album.release_date || "",
     coverUrl: getAlbumArtworkUrl(album),
     savedAlbumId: album.id,
     albumId: album.id
@@ -12044,7 +12047,7 @@ if (songAlbumLink) {
     title: album.title,
     artist: album.artist,
     externalId: album.external_id || "",
-    releaseDate: album.release_date || "",
+    releaseDate: album.original_release_date || album.release_date || "",
     coverUrl: getAlbumArtworkUrl(album),
     savedAlbumId: album.id,
     albumId: album.id
@@ -12171,7 +12174,7 @@ if (profileModal) {
       title: album.title,
       artist: album.artist,
       externalId: album.external_id || "",
-      releaseDate: album.release_date || "",
+      releaseDate: album.original_release_date || album.release_date || "",
       coverUrl: getAlbumArtworkUrl(album),
       savedAlbumId: album.id,
       albumId: album.id
@@ -14091,7 +14094,7 @@ document.addEventListener("click", async (event) => {
       title: album.title,
       artist: album.artist,
       externalId: album.external_id || "",
-      releaseDate: album.release_date || "",
+      releaseDate: album.original_release_date || album.release_date || "",
       coverUrl: getAlbumArtworkUrl(album),
       savedAlbumId: album.id
     };
@@ -14187,7 +14190,7 @@ function getAlbumSwipeCandidates() {
       artist: album.artist,
       externalId: album.external_id || "",
       releaseGroupId: album.release_group_id || album.releaseGroupId || "",
-      releaseDate: album.release_date || "",
+      releaseDate: album.original_release_date || album.release_date || "",
       coverUrl: getAlbumArtworkUrl(album),
       savedAlbumId: album.id,
       artistId: album.artist_id || selectedItem.artistId || ""
@@ -14591,7 +14594,7 @@ if (albumError) {
       title: albumData.title,
       artist: albumData.artist,
       externalId: albumData.external_id,
-      releaseDate: albumData.release_date || "",
+      releaseDate: albumData.original_release_date || albumData.release_date || "",
       coverUrl: getAlbumArtworkUrl(albumData),
       savedAlbumId: albumData.id
     };

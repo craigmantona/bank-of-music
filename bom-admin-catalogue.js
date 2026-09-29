@@ -60,7 +60,7 @@
       </div>
       <div class="admin-catalogue-existing">
         <h4>Already in BOM (${albums.length})</h4>
-        ${albums.length ? `<div>${albums.map(album => `<span>${escape(album.title)}${album.release_date ? ` <small>${escape(String(album.release_date).slice(0, 4))}</small>` : ""}<button type="button" class="danger-btn" data-catalogue-delete-album="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Delete album</button></span>`).join("")}</div>` : "<p class=\"small\">No albums for this artist are currently in BOM.</p>"}
+        ${albums.length ? `<div>${albums.map(album => `<span>${escape(album.title)}${album.original_release_date || album.release_date ? ` <small>${escape(String(album.original_release_date || album.release_date))}</small>` : ""}<button type="button" class="secondary-btn" data-catalogue-edit-date="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Edit release date</button><button type="button" class="danger-btn" data-catalogue-delete-album="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Delete album</button></span>`).join("")}</div>` : "<p class=\"small\">No albums for this artist are currently in BOM.</p>"}
       </div>`;
     }
     return `<div class="admin-catalogue-artist-search">
@@ -220,6 +220,26 @@
     finally { state.busy = false; render(); }
   }
 
+  async function editAlbumDate(albumId) {
+    const album = existingAlbums().find(item => Number(item.id) === Number(albumId));
+    if (!album) { state.message = "Choose an existing BOM album."; render(); return; }
+    const currentDate = String(album.original_release_date || album.release_date || "");
+    const nextDate = global.prompt(`Edit original release date\n\n${album.artist} — ${album.title}\nCurrent: ${currentDate || "Unknown"}\n\nEnter a full date (YYYY-MM-DD):`, currentDate);
+    if (nextDate === null) { state.message = "Release date edit cancelled."; render(); return; }
+    const value = String(nextDate).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) { state.message = "Enter a valid full release date in YYYY-MM-DD format."; render(); return; }
+    if (!global.confirm(`${album.artist} — ${album.title}\n\nChange original release date from ${currentDate || "Unknown"} to ${value}?\n\nSelected-edition provenance will not be changed.`)) {
+      state.message = "Release date edit cancelled."; render(); return;
+    }
+    state.busy = true; state.message = "Updating original release date…"; render();
+    try {
+      await invoke({ action: "edit_album_date", album_id: Number(album.id), original_release_date: value });
+      state.message = `${album.artist} — ${album.title} now uses ${value} for chronology.`;
+      await host.refreshAfterCommit();
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
   function resetArtist() {
     state.artist = null; state.artistCandidates = []; state.previews = []; state.results = [];
     state.rows.forEach(row => { row.selected = false; row.release_group_id = ""; row.release_id = ""; });
@@ -264,6 +284,8 @@
     });
 
     adminDashboard.addEventListener("click", async event => {
+    const editDateButton = event.target.closest("[data-catalogue-edit-date]");
+    if (editDateButton) { await editAlbumDate(Number(editDateButton.dataset.catalogueEditDate)); return; }
     const deleteButton = event.target.closest("[data-catalogue-delete-album]");
     if (deleteButton) { await deleteAlbum(Number(deleteButton.dataset.catalogueDeleteAlbum)); return; }
     if (event.target.closest("[data-catalogue-search-artist]")) { await searchArtist(); return; }

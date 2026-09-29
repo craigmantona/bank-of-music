@@ -15,7 +15,7 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration] = await P
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=128") < html.indexOf("bom-admin-catalogue.js?v=3"));
+  assert.ok(html.indexOf("app.js?v=129") < html.indexOf("bom-admin-catalogue.js?v=4"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -104,6 +104,56 @@ test("album deletion previews dependencies, confirms explicitly and refreshes au
   assert.ok(source.indexOf('action: "delete_album"') < source.indexOf("await host.refreshAfterCommit();"));
   assert.doesNotMatch(source, /\.from\(|\.delete\(|is_deleted\s*=/);
   assert.match(app, /getExistingAlbums:[\s\S]*!album\.is_deleted/);
+});
+
+test("album date editing is explicit, refreshes authoritative data and sends only the chronology field", async () => {
+  let panel = null;
+  let clickHandler = null;
+  let refreshes = 0;
+  const calls = [];
+  const root = {
+    addEventListener(name, handler) { if (name === "click") clickHandler = handler; },
+    prepend(value) { panel = value; },
+    querySelector(selector) { return selector === "[data-admin-catalogue]" ? panel : null; },
+    querySelectorAll() { return []; }
+  };
+  const document = { addEventListener() {}, createElement() { return { className: "", dataset: {}, innerHTML: "" }; }, querySelector() { return panel; } };
+  const album = { id: 27, artist: "The Example", title: "A Reissue", original_release_date: "2001-02-03", release_date: "2024-04-05", canonical_release_date: "2024-04-05" };
+  const host = Object.freeze({
+    getRoot: () => root, canRender: () => true, getExistingAlbums: () => [album],
+    invoke: async body => { calls.push(body); return { data: { ok: true, album: { ...album, original_release_date: body.original_release_date } }, error: null }; },
+    refreshAfterCommit: async () => { refreshes += 1; }, openAdmin() {}, installRenderExtension() {}
+  });
+  const window = { BOMAdminCatalogueHost: host, prompt: () => "1987-06-15", confirm: () => true };
+  vm.runInNewContext(catalogue, { window, document, crypto: webcrypto, console });
+  window.BOMAdminCatalogue.state.artist = { name: "The Example" };
+  window.BOMAdminCatalogue.render();
+  const button = { dataset: { catalogueEditDate: "27" } };
+  await clickHandler({ target: { closest: selector => selector === "[data-catalogue-edit-date]" ? button : null } });
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [{ action: "edit_album_date", album_id: 27, original_release_date: "1987-06-15" }]);
+  assert.equal(refreshes, 1);
+  assert.match(panel.innerHTML, /now uses 1987-06-15 for chronology/);
+});
+
+test("album date Edge action validates a full real ISO date and updates only original_release_date", () => {
+  assert.match(edge, /body\?\.action === "edit_album_date"/);
+  assert.match(edge, /validFullIsoDate\(originalReleaseDate\)/);
+  assert.match(edge, /parsed\.toISOString\(\)\.slice\(0, 10\) === date/);
+  const start = edge.indexOf('body?.action === "edit_album_date"');
+  const end = edge.indexOf('body?.action === "delete_album_preview"', start);
+  const source = edge.slice(start, end);
+  assert.match(source, /\.update\(\{ original_release_date: originalReleaseDate \}\)/);
+  assert.doesNotMatch(source, /canonical_release_date|canonical_release_country|musicbrainz_release|external_id|(?<!original_)release_date:/);
+  assert.ok(edge.indexOf("await requireAdminUser(request)") < start);
+});
+
+test("chronology and material album cards prefer original date with historical fallback", () => {
+  assert.match(app, /savedAlbum\?\.original_release_date \|\|[\s\S]{0,80}savedAlbum\?\.release_date/);
+  assert.match(app, /savedAlbum\.original_release_date \|\|[\s\S]{0,80}savedAlbum\.release_date/);
+  assert.match(app, /year: String\(album\?\.original_release_date \|\| album\?\.release_date \|\| ""\)/);
+  assert.match(app, /year: String\(album\.original_release_date \|\| album\.release_date \|\| ""\)/);
+  assert.match(app, /releaseDate: album\.original_release_date \|\| album\.release_date \|\| ""/);
+  assert.match(app, /immediatelySavedAlbum\.original_release_date \|\|[\s\S]{0,80}immediatelySavedAlbum\.release_date/);
 });
 
 test("successful album deletion refreshes counts through the normal authoritative host", async () => {
