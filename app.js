@@ -121,6 +121,8 @@ let allSongRatings = [];
 
 let followedArtists = [];
 
+let excludedReleaseGroupIds = new Set();
+
 let selectedItem = null;
 let currentSectionId = "searchSection";
 let stageOneInitialDataReady = false;
@@ -2555,7 +2557,7 @@ passwordRecovery = window.BOMPasswordRecovery?.create({
   onExit: () => refreshSessionUI()
 }) || null;
 
-async function fetchAllRows(tableName, orderColumn = "id", columns = "*") {
+async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBreakerColumn = "id") {
   let allRows = [];
   let from = 0;
   const size = 1000;
@@ -2566,7 +2568,9 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*") {
       .select(columns)
       .order(orderColumn, { ascending: true });
 
-    if (orderColumn !== "id") query = query.order("id", { ascending: true });
+    if (orderColumn !== "id" && tieBreakerColumn) {
+      query = query.order(tieBreakerColumn, { ascending: true });
+    }
 
     const { data, error } = await query.range(from, from + size - 1);
 
@@ -2618,6 +2622,13 @@ allSongs = songs;
     "artist_name"
   );
 
+  const exclusions = await fetchAllRows(
+    "catalogue_release_group_exclusions",
+    "musicbrainz_release_group_id",
+    "musicbrainz_release_group_id",
+    null
+  );
+
 
 
   allAlbums = albums || [];
@@ -2629,6 +2640,8 @@ allSongs = songs;
   allSongRatings = songRatings || [];
 
   followedArtists = followed || [];
+
+  excludedReleaseGroupIds = new Set((exclusions || []).map((row) => String(row.musicbrainz_release_group_id || "").toLowerCase()).filter(Boolean));
 
 }
 
@@ -5187,6 +5200,7 @@ async function fetchSharedArtistEnrichment(artistId) {
 function mapArtistReleaseGroups(releaseGroups, artistId, artistName) {
   return sortReleaseGroupsByDate(releaseGroups || [])
     .filter(isStudioReleaseGroup)
+    .filter((releaseGroup) => !excludedReleaseGroupIds.has(String(releaseGroup.id || "").toLowerCase()))
     .map((releaseGroup) => ({
       type: "album",
       title: releaseGroup.title || "Untitled",

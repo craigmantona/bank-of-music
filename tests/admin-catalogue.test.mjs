@@ -4,18 +4,19 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
-const [app, catalogue, html, styles, edge, migration, deleteMigration] = await Promise.all([
+const [app, catalogue, html, styles, edge, migration, deleteMigration, exclusionMigration] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-admin-catalogue.js", import.meta.url), "utf8"),
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../style.css", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260926120000_admin_catalogue_v1.sql", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8")
+  readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20260929092636_catalogue_release_group_exclusions.sql", import.meta.url), "utf8")
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=130") < html.indexOf("bom-admin-catalogue.js?v=5"));
+  assert.ok(html.indexOf("app.js?v=131") < html.indexOf("bom-admin-catalogue.js?v=6"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -121,7 +122,11 @@ test("Please Please Me album card exposes and routes the existing release-date w
   const album = { id: 27, artist: "The Beatles", title: "Please Please Me", original_release_date: "1987-02-26", release_date: "1987-02-26", canonical_release_date: "1987-02-26" };
   const host = Object.freeze({
     getRoot: () => root, canRender: () => true, getExistingAlbums: () => [album],
-    invoke: async body => { calls.push(body); return { data: { ok: true, album: { ...album, original_release_date: body.original_release_date } }, error: null }; },
+    invoke: async body => {
+      if (body.action === "list_exclusions") return { data: { ok: true, exclusions: [] }, error: null };
+      calls.push(body);
+      return { data: { ok: true, album: { ...album, original_release_date: body.original_release_date } }, error: null };
+    },
     refreshAfterCommit: async () => { refreshes += 1; }, openAdmin() {}, installRenderExtension() {}
   });
   let promptMessage = "";
@@ -184,7 +189,11 @@ test("successful album deletion refreshes counts through the normal authoritativ
     getRoot: () => root,
     canRender: () => true,
     getExistingAlbums: () => [{ id: 27, artist: "The Example", title: "Delete Me" }],
-    invoke: async body => { calls.push(body); return { data: { ok: true, deletion }, error: null }; },
+    invoke: async body => {
+      if (body.action === "list_exclusions") return { data: { ok: true, exclusions: [] }, error: null };
+      calls.push(body);
+      return { data: { ok: true, deletion }, error: null };
+    },
     refreshAfterCommit: async () => { refreshes += 1; },
     openAdmin() {},
     installRenderExtension() {}
@@ -212,6 +221,87 @@ test("album deletion is routed through the authenticated transactional RPC", () 
   assert.match(deleteMigration, /delete from public\.songs[\s\S]*where album_id = p_album_id/);
   assert.match(deleteMigration, /update public\.songs[\s\S]*set is_deleted = true[\s\S]*where album_id = p_album_id/);
   assert.match(deleteMigration, /revoke all on function public\.admin_catalogue_delete_album[\s\S]*from anon/);
+});
+
+test("excluded albums can be restored without creating catalogue rows", async () => {
+  let panel = null;
+  let clickHandler = null;
+  let refreshes = 0;
+  const calls = [];
+  const exclusion = {
+    musicbrainz_release_group_id: "653895d1-b592-3758-8bb1-8b9ba2bd6cb0",
+    artist: "The Beatles",
+    title: "Introducing… The Beatles"
+  };
+  const root = {
+    addEventListener(name, handler) { if (name === "click") clickHandler = handler; },
+    prepend(value) { panel = value; },
+    querySelector(selector) { return selector === "[data-admin-catalogue]" ? panel : null; },
+    querySelectorAll() { return []; }
+  };
+  const document = {
+    addEventListener() {},
+    createElement() { return { className: "", dataset: {}, innerHTML: "" }; },
+    querySelector() { return panel; }
+  };
+  const host = Object.freeze({
+    getRoot: () => root, canRender: () => true, getExistingAlbums: () => [],
+    invoke: async body => {
+      calls.push(body);
+      if (body.action === "list_exclusions") return { data: { ok: true, exclusions: [exclusion] }, error: null };
+      return { data: { ok: true, restored: exclusion }, error: null };
+    },
+    refreshAfterCommit: async () => { refreshes += 1; }, openAdmin() {}, installRenderExtension() {}
+  });
+  const window = { BOMAdminCatalogueHost: host, confirm: () => true };
+  vm.runInNewContext(catalogue, { window, document, crypto: webcrypto, console });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.match(panel.innerHTML, /Excluded albums \(1\)/);
+  assert.match(panel.innerHTML, /Introducing… The Beatles/);
+  const button = { dataset: { catalogueRestoreExclusion: exclusion.musicbrainz_release_group_id } };
+  await clickHandler({ target: { closest: selector => selector === "[data-catalogue-restore-exclusion]" ? button : null } });
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [
+    { action: "list_exclusions" },
+    { action: "restore_exclusion", musicbrainz_release_group_id: exclusion.musicbrainz_release_group_id }
+  ]);
+  assert.equal(refreshes, 1);
+  assert.equal(window.BOMAdminCatalogue.state.exclusions.length, 0);
+  assert.match(panel.innerHTML, /No album was created/);
+  const restoreStart = edge.indexOf('body?.action === "restore_exclusion"');
+  const restoreEnd = edge.indexOf('body?.action === "edit_album_date"', restoreStart);
+  const restoreSource = edge.slice(restoreStart, restoreEnd);
+  assert.match(restoreSource, /catalogue_release_group_exclusions[\s\S]*\.delete\(\)/);
+  assert.doesNotMatch(restoreSource, /albums|songs|admin_add_catalogue_album/);
+});
+
+test("release-group exclusions are seeded, admin-managed and transactionally recorded on deletion", () => {
+  for (const id of [
+    "653895d1-b592-3758-8bb1-8b9ba2bd6cb0",
+    "387bc6cc-ac60-365f-819b-fbc78c486065",
+    "d0c93a59-fc4d-3d76-ac38-9c1d11071802"
+  ]) assert.match(exclusionMigration, new RegExp(id));
+  assert.match(exclusionMigration, /security invoker/);
+  assert.match(exclusionMigration, /insert into public\.catalogue_release_group_exclusions[\s\S]*if v_has_user_data then/);
+  assert.match(edge, /await requireAdminUser\(request\)[\s\S]*body\?\.action === "list_exclusions"/);
+  assert.match(edge, /body\?\.action === "restore_exclusion"/);
+});
+
+test("artist enrichment filters excluded release groups but retains unrelated MusicBrainz albums", () => {
+  const start = app.indexOf("function mapArtistReleaseGroups(");
+  const end = app.indexOf("const artistDiscographyCache", start);
+  const context = vm.createContext({
+    excludedReleaseGroupIds: new Set(["653895d1-b592-3758-8bb1-8b9ba2bd6cb0"]),
+    sortReleaseGroupsByDate: groups => groups,
+    isStudioReleaseGroup: () => true,
+    selectedItem: null
+  });
+  vm.runInContext(app.slice(start, end), context);
+  const mapped = context.mapArtistReleaseGroups([
+    { id: "653895d1-b592-3758-8bb1-8b9ba2bd6cb0", title: "Introducing… The Beatles" },
+    { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", title: "A Legitimate Album" }
+  ], "artist-id", "The Beatles");
+  assert.deepEqual(JSON.parse(JSON.stringify(mapped.map(album => album.title))), ["A Legitimate Album"]);
+  assert.match(app, /fetchAllRows\([\s\S]*"catalogue_release_group_exclusions"[\s\S]*"musicbrainz_release_group_id"/);
 });
 
 test("workflow requires explicit artist choice, preview and selected commit", () => {

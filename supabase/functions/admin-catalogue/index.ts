@@ -184,6 +184,25 @@ Deno.serve(async (request) => {
       auth: { persistSession: false, autoRefreshToken: false }
     });
 
+    if (body?.action === "list_exclusions") {
+      const { data, error } = await userClient.from("catalogue_release_group_exclusions")
+        .select("musicbrainz_release_group_id,artist,title,excluded_at")
+        .order("artist").order("title");
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, exclusions: data || [] });
+    }
+
+    if (body?.action === "restore_exclusion") {
+      const releaseGroupId = String(body.musicbrainz_release_group_id || "").trim().toLowerCase();
+      if (!uuid(releaseGroupId)) return json(request, { ok: false, error: "Choose a valid release-group exclusion." }, 400);
+      const { data, error } = await userClient.from("catalogue_release_group_exclusions")
+        .delete().eq("musicbrainz_release_group_id", releaseGroupId)
+        .select("musicbrainz_release_group_id,artist,title").maybeSingle();
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      if (!data) return json(request, { ok: false, error: "Catalogue exclusion not found." }, 404);
+      return json(request, { ok: true, restored: data });
+    }
+
     if (body?.action === "edit_album_date") {
       const albumId = Number(body.album_id);
       const originalReleaseDate = String(body.original_release_date || "").trim();

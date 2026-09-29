@@ -10,6 +10,7 @@
     rows: [{ client_id: crypto.randomUUID(), title: "", uk_release_date: "", release_group_id: "", release_id: "", selected: false }],
     previews: [],
     results: [],
+    exclusions: [],
     busy: false,
     message: ""
   };
@@ -48,6 +49,14 @@
 
   function existingAlbums() {
     return state.artist ? host.getExistingAlbums(state.artist.name) : [];
+  }
+
+  function exclusionsMarkup() {
+    return `<div class="admin-catalogue-existing" data-catalogue-exclusions>
+      <h4>Excluded albums (${state.exclusions.length})</h4>
+      ${state.exclusions.length ? `<div>${state.exclusions.map(item => `<span><strong>${escape(item.artist)}</strong> — ${escape(item.title)} <small>${escape(item.musicbrainz_release_group_id)}</small><button type="button" class="secondary-btn" data-catalogue-restore-exclusion="${escape(item.musicbrainz_release_group_id)}" ${state.busy ? "disabled" : ""}>Restore</button></span>`).join("")}</div>` : `<p class="small">No MusicBrainz albums are currently excluded.</p>`}
+      <p class="small">Restore removes only the exclusion. It does not create an album.</p>
+    </div>`;
   }
 
   function artistMarkup() {
@@ -150,7 +159,7 @@
     panel.innerHTML = `<header class="admin-catalogue-header"><div><span>Catalogue</span><h3>Add Artist &amp; Albums</h3>
       <p>Confirm one artist, preview up to 10 explicitly requested albums, then add only your selected matches.</p></div></header>
       ${state.message ? `<p class="admin-catalogue-message" role="status">${escape(state.message)}</p>` : ""}
-      ${artistMarkup()}${albumsMarkup()}`;
+      ${exclusionsMarkup()}${artistMarkup()}${albumsMarkup()}`;
   }
 
   async function invoke(body) {
@@ -158,6 +167,30 @@
     if (error) throw new Error(error.message || "Admin Catalogue request failed.");
     if (!data?.ok) throw new Error(data?.error || "Admin Catalogue request failed.");
     return data;
+  }
+
+  async function loadExclusions() {
+    try {
+      const data = await invoke({ action: "list_exclusions" });
+      state.exclusions = data.exclusions || [];
+    } catch (error) {
+      state.message = error.message;
+    }
+    render();
+  }
+
+  async function restoreExclusion(releaseGroupId) {
+    const exclusion = state.exclusions.find(item => item.musicbrainz_release_group_id === releaseGroupId);
+    if (!exclusion) { state.message = "Catalogue exclusion not found."; render(); return; }
+    if (!global.confirm(`Restore ${exclusion.artist} — ${exclusion.title}?\n\nThis removes only the exclusion. It will not create an album.`)) return;
+    state.busy = true; state.message = "Restoring MusicBrainz album visibility…"; render();
+    try {
+      await invoke({ action: "restore_exclusion", musicbrainz_release_group_id: releaseGroupId });
+      state.exclusions = state.exclusions.filter(item => item.musicbrainz_release_group_id !== releaseGroupId);
+      state.message = `${exclusion.artist} — ${exclusion.title} can appear remotely again. No album was created.`;
+      await host.refreshAfterCommit();
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
   }
 
   async function searchArtist() {
@@ -215,6 +248,7 @@
       state.message = result.status === "deleted"
         ? `${result.artist} — ${result.title} was permanently deleted.`
         : `${result.artist} — ${result.title} was hidden because user data is attached.`;
+      await loadExclusions();
       await host.refreshAfterCommit();
     } catch (error) { state.message = error.message; }
     finally { state.busy = false; render(); }
@@ -287,6 +321,8 @@
     });
 
     adminDashboard.addEventListener("click", async event => {
+    const restoreButton = event.target.closest("[data-catalogue-restore-exclusion]");
+    if (restoreButton) { await restoreExclusion(restoreButton.dataset.catalogueRestoreExclusion); return; }
     const editDateButton = event.target.closest("[data-catalogue-edit-date]");
     if (editDateButton) { await editAlbumDate(Number(editDateButton.dataset.catalogueEditDate)); return; }
     const deleteButton = event.target.closest("[data-catalogue-delete-album]");
@@ -318,6 +354,7 @@
     host.installRenderExtension(render);
     render();
     global.BOMAdminCatalogue = Object.freeze({ render, state, editAlbumDate });
+    void loadExclusions();
   }
 
   document.addEventListener("click", event => {

@@ -70,6 +70,16 @@ async function artworkAvailable(url: string) {
   }
 }
 
+async function isReleaseGroupExcluded(releaseGroupId: string) {
+  if (!uuid(releaseGroupId)) return false;
+  const { data, error } = await service.from("catalogue_release_group_exclusions")
+    .select("musicbrainz_release_group_id")
+    .eq("musicbrainz_release_group_id", releaseGroupId)
+    .maybeSingle();
+  if (error) throw new Error("Catalogue exclusion lookup failed");
+  return Boolean(data);
+}
+
 async function findExisting(identity: any) {
   const select = "id,title,artist,is_deleted,external_source,external_id,musicbrainz_release_id,musicbrainz_release_group_id";
   for (const [exact, query] of [
@@ -119,6 +129,9 @@ Deno.serve(async (request) => {
     if (!uuid(releaseId) || (expectedGroupId && !uuid(expectedGroupId))) {
       return json(request, { ok: false, status: "needs_correction", reason: "exact_release_identity_required" }, 400);
     }
+    if (expectedGroupId && await isReleaseGroupExcluded(expectedGroupId)) {
+      return json(request, { ok: true, status: "needs_correction", reason: "release_group_excluded_by_administrator" });
+    }
 
     const exactRelease = await musicBrainzGet(
       `/release/${encodeURIComponent(releaseId)}?inc=recordings+artist-credits+release-groups&fmt=json`
@@ -129,6 +142,9 @@ Deno.serve(async (request) => {
     if (exactRelease?.id !== releaseId || !uuid(groupId) || !artist || !title ||
         (expectedGroupId && expectedGroupId !== groupId)) {
       return json(request, { ok: true, status: "needs_correction", reason: "release_identity_validation_failed" });
+    }
+    if (await isReleaseGroupExcluded(groupId)) {
+      return json(request, { ok: true, status: "needs_correction", reason: "release_group_excluded_by_administrator" });
     }
 
     const preview = await resolveRequestedAlbum({

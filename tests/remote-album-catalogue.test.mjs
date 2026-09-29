@@ -2,12 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [app, edge, migration, adminEdge, deleteMigration, occurrenceTests, quickRateTests] = await Promise.all([
+const [app, edge, migration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/remote-album-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260928103000_authenticated_remote_album_creation.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20260929092636_catalogue_release_group_exclusions.sql", import.meta.url), "utf8"),
   readFile(new URL("./song-occurrence-identity.test.mjs", import.meta.url), "utf8"),
   readFile(new URL("./quick-rate.test.mjs", import.meta.url), "utf8")
 ]);
@@ -32,6 +33,20 @@ test("server derives artist, title, group and complete tracks from MusicBrainz",
   assert.match(edge, /expectedGroupId && expectedGroupId !== groupId/);
   assert.match(edge, /request: \{ title, release_group_id: groupId, release_id: releaseId \}/);
   assert.match(edge, /preview\.status !== "ready"/);
+});
+
+test("excluded release groups are rejected before catalogue resolution while unrelated releases retain the normal path", () => {
+  assert.match(edge, /async function isReleaseGroupExcluded/);
+  assert.match(edge, /\.from\("catalogue_release_group_exclusions"\)/);
+  assert.match(edge, /reason: "release_group_excluded_by_administrator"/);
+  const earlyCheck = edge.indexOf("await isReleaseGroupExcluded(expectedGroupId)");
+  const musicBrainzLookup = edge.indexOf("const exactRelease = await musicBrainzGet", earlyCheck);
+  assert.ok(earlyCheck >= 0 && musicBrainzLookup > earlyCheck);
+  const confirmedCheck = edge.indexOf("await isReleaseGroupExcluded(groupId)");
+  const resolution = edge.indexOf("await resolveRequestedAlbum", confirmedCheck);
+  assert.ok(confirmedCheck >= 0 && resolution > confirmedCheck);
+  assert.match(edge.slice(resolution), /service\.rpc\("admin_add_catalogue_album"/);
+  assert.match(exclusionMigration, /catalogue_release_group_exclusions/);
 });
 
 test("album opening renders remote content before background creation and then rerenders", () => {
