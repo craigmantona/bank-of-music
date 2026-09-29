@@ -192,6 +192,20 @@ Deno.serve(async (request) => {
       return json(request, { ok: true, exclusions: data || [] });
     }
 
+    if (body?.action === "exclude_release_group") {
+      const releaseGroupId = String(body.musicbrainz_release_group_id || "").trim().toLowerCase();
+      const artist = String(body.artist || "").trim();
+      const title = String(body.title || "").trim();
+      if (!uuid(releaseGroupId) || !artist || !title || artist.length > 300 || title.length > 300) {
+        return json(request, { ok: false, error: "Choose a valid remote MusicBrainz album." }, 400);
+      }
+      const { data, error } = await userClient.from("catalogue_release_group_exclusions")
+        .insert({ musicbrainz_release_group_id: releaseGroupId, artist, title })
+        .select("musicbrainz_release_group_id,artist,title,excluded_at").single();
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, exclusion: data });
+    }
+
     if (body?.action === "restore_exclusion") {
       const releaseGroupId = String(body.musicbrainz_release_group_id || "").trim().toLowerCase();
       if (!uuid(releaseGroupId)) return json(request, { ok: false, error: "Choose a valid release-group exclusion." }, 400);

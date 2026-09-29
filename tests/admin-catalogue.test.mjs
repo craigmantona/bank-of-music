@@ -16,7 +16,7 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration, exclusion
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=131") < html.indexOf("bom-admin-catalogue.js?v=6"));
+  assert.ok(html.indexOf("app.js?v=132") < html.indexOf("bom-admin-catalogue.js?v=7"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -284,6 +284,30 @@ test("release-group exclusions are seeded, admin-managed and transactionally rec
   assert.match(exclusionMigration, /insert into public\.catalogue_release_group_exclusions[\s\S]*if v_has_user_data then/);
   assert.match(edge, /await requireAdminUser\(request\)[\s\S]*body\?\.action === "list_exclusions"/);
   assert.match(edge, /body\?\.action === "restore_exclusion"/);
+});
+
+test("remote artist-card exclusion reuses the admin action without catalogue creation", () => {
+  const actionStart = edge.indexOf('body?.action === "exclude_release_group"');
+  const actionEnd = edge.indexOf('body?.action === "restore_exclusion"', actionStart);
+  const actionSource = edge.slice(actionStart, actionEnd);
+  assert.ok(actionStart >= 0 && actionEnd > actionStart);
+  assert.match(actionSource, /catalogue_release_group_exclusions/);
+  assert.match(actionSource, /\.insert\(\{ musicbrainz_release_group_id: releaseGroupId, artist, title \}\)/);
+  assert.doesNotMatch(actionSource, /\.from\(["'](?:albums|songs)["']\)|admin_add_catalogue_album/);
+  assert.ok(edge.indexOf("await requireAdminUser(request)") < actionStart);
+
+  const bridgeStart = app.indexOf("async function excludeRemoteArtistAlbum");
+  const bridgeEnd = app.indexOf("window.BOMArtistBridge", bridgeStart);
+  const bridgeSource = app.slice(bridgeStart, bridgeEnd);
+  assert.match(bridgeSource, /!currentUser \|\| !isAdmin/);
+  assert.match(bridgeSource, /album\?\.albumId \|\| album\?\.savedAlbumId/);
+  assert.match(bridgeSource, /action: "exclude_release_group"/);
+  assert.match(bridgeSource, /await loadLibrary\(\)/);
+  assert.match(bridgeSource, /loadExclusions/);
+  assert.match(bridgeSource, /await renderSelectedItem\(\)/);
+  assert.doesNotMatch(bridgeSource, /remote-album-catalogue|\.from\(["'](?:albums|songs)["']\)/);
+  assert.match(app, /completeDiscography\.albums[\s\S]*excludedReleaseGroupIds\.has/);
+  assert.match(catalogue, /Object\.freeze\(\{ render, state, editAlbumDate, loadExclusions \}\)/);
 });
 
 test("artist enrichment filters excluded release groups but retains unrelated MusicBrainz albums", () => {

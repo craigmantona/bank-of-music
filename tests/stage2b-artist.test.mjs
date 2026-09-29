@@ -13,7 +13,7 @@ const [html, app, artist, styles] = await Promise.all([
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-album\.js\?v=3/);
-  assert.match(html, /bom-artist\.js\?v=8/);
+  assert.match(html, /bom-artist\.js\?v=9/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
 
@@ -44,6 +44,38 @@ test("Discography supports release, community and personal ordering", () => {
   assert.match(artist, /value="personal">Highest personally rated/);
   assert.match(artist, /data-library-type="album"/);
   assert.match(artist, /data-artist-album-index/);
+});
+
+test("only admins can exclude uncatalogued MusicBrainz albums from artist cards", () => {
+  const buildSource = app.slice(app.indexOf("function buildStageOneArtistModel"), app.indexOf("async function renderStageOneArtist"));
+  function modelFor(admin, album) {
+    const context = {
+      isAdmin: admin,
+      getAlbumAverage: () => null,
+      getYourAlbumRating: () => null,
+      getSongAverage: () => null,
+      getYourSongRating: () => null,
+      allAlbums: [],
+      getAlbumNameById: () => "",
+      getAlbumArtworkUrl: () => "",
+      isArtistFollowed: () => false,
+      buildSelectedBackButton: () => ""
+    };
+    vm.runInNewContext(buildSource, context);
+    return context.buildStageOneArtistModel({
+      artistName: "The Beatles", artistDetail: null, artistItem: {}, imageUrl: "",
+      albums: [album], savedSongs: []
+    }).albums[0];
+  }
+  const remote = { title: "Meet The Beatles!", artist: "The Beatles", releaseGroupId: "924a902a-d17e-3f81-84e8-cdb8e2790090" };
+  assert.equal(modelFor(true, remote).canExclude, true);
+  assert.equal(modelFor(true, { ...remote, title: "Twist and Shout", releaseGroupId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" }).canExclude, true);
+  assert.equal(modelFor(false, remote).canExclude, false);
+  assert.equal(modelFor(true, { ...remote, savedAlbumId: 42 }).canExclude, false);
+  assert.match(artist, /data-bom-exclude-remote-album/);
+  assert.match(artist, />Exclude from BOM</);
+  assert.match(artist, /confirm\(`Exclude \$\{album\.artist\} — \$\{album\.title\} from BOM\?`\)/);
+  assert.ok(app.indexOf('event.target.closest("[data-bom-exclude-remote-album]")') < app.indexOf('const artistAlbumCard = event.target.closest("[data-artist-album-index]")'));
 });
 
 test("Top tracks use community track ratings with competition ranks and Top 10 or 50", () => {

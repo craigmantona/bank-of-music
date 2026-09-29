@@ -79,11 +79,15 @@
       : `data-artist-album-index="${album.sourceIndex}"`;
     const community = album.community ? `${album.community.average.toFixed(1)} <small>/ 10 community</small>` : "Not rated";
     const personal = album.personal !== null ? `<span class="bom-v1-artist-album-personal">You ${album.personal} / 10</span>` : "";
+    const exclude = album.canExclude
+      ? `<button type="button" class="secondary-btn" data-bom-exclude-remote-album="${escapeHtml(album.sourceIndex)}">Exclude from BOM</button>`
+      : "";
     return `<article class="bom-v1-artist-album-card" ${attributes} tabindex="0" role="link" aria-label="Open ${escapeHtml(album.title)}">
       <div class="bom-v1-artist-album-art">${artwork(album)}</div>
       <h3>${escapeHtml(album.title)}</h3>
       <p>${escapeHtml(releaseLabel(album.releaseDate, album.releaseDatePrecision) || "Release date unavailable")}</p>
       <div class="bom-v1-artist-album-ratings"><span>${community}</span>${personal}</div>
+      ${exclude}
     </article>`;
   }
 
@@ -203,6 +207,19 @@
   });
 
   document.addEventListener("click", async (event) => {
+    const exclude = event.target.closest("[data-bom-exclude-remote-album]");
+    if (exclude) {
+      event.preventDefault();
+      event.stopPropagation();
+      const album = currentModel?.albums?.find((item) => Number(item.sourceIndex) === Number(exclude.dataset.bomExcludeRemoteAlbum));
+      if (!album?.canExclude || !window.BOMArtistBridge) return;
+      if (!window.confirm(`Exclude ${album.artist} — ${album.title} from BOM?`)) return;
+      exclude.disabled = true;
+      exclude.textContent = "Excluding…";
+      const result = await window.BOMArtistBridge.excludeRemoteAlbum(album);
+      if (!result?.ok) { exclude.disabled = false; exclude.textContent = result?.message || "Exclude from BOM"; }
+      return;
+    }
     const adminRoot = event.target.closest("[data-bom-artist-hero-admin]");
     if (adminRoot && event.target.closest("[data-bom-artist-hero-pick]")) {
       adminRoot.querySelector("[data-bom-artist-hero-input]")?.click();
@@ -247,6 +264,7 @@
   });
 
   document.addEventListener("click", (event) => {
+    if (event.target.closest("[data-bom-exclude-remote-album]")) return;
     const albumLink = event.target.closest(".bom-v1-artist [data-library-type='album'], .bom-v1-artist [data-artist-album-index]");
     if (!albumLink) return;
     window.history.pushState({ bomShare: true, itemType: "artist" }, "", window.location.href);

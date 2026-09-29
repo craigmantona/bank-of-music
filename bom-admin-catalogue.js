@@ -353,7 +353,7 @@
 
     host.installRenderExtension(render);
     render();
-    global.BOMAdminCatalogue = Object.freeze({ render, state, editAlbumDate });
+    global.BOMAdminCatalogue = Object.freeze({ render, state, editAlbumDate, loadExclusions });
     void loadExclusions();
   }
 

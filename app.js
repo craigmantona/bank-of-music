@@ -2793,6 +2793,24 @@ async function removeManualArtistHero() {
   return { ok: true, message: "Automatic artist image restored." };
 }
 
+async function excludeRemoteArtistAlbum(album) {
+  if (!currentUser || !isAdmin || selectedItem?.type !== "artist" || album?.albumId || album?.savedAlbumId) {
+    return { ok: false, message: "Admin access to an uncatalogued album is required." };
+  }
+  const releaseGroupId = String(album?.releaseGroupId || "").trim().toLowerCase();
+  const artist = String(album?.artist || selectedItem.name || selectedItem.artist || "").trim();
+  const title = String(album?.title || "").trim();
+  if (!releaseGroupId || !artist || !title) return { ok: false, message: "The MusicBrainz release group could not be confirmed." };
+  const { data, error } = await supabaseClient.functions.invoke("admin-catalogue", {
+    body: { action: "exclude_release_group", musicbrainz_release_group_id: releaseGroupId, artist, title }
+  });
+  if (error || !data?.ok) return { ok: false, message: error?.message || data?.error || "The album could not be excluded." };
+  await loadLibrary();
+  await window.BOMAdminCatalogue?.loadExclusions?.();
+  if (selectedItem?.type === "artist") await renderSelectedItem();
+  return { ok: true, message: `${artist} — ${title} was excluded from BOM.` };
+}
+
 window.BOMArtistBridge = Object.freeze({
   async setFollowing(shouldFollow) {
     if (selectedItem?.type !== "artist") return false;
@@ -2804,7 +2822,8 @@ window.BOMArtistBridge = Object.freeze({
     return changed;
   },
   saveHero: (file) => saveManualArtistHero(file),
-  removeHero: () => removeManualArtistHero()
+  removeHero: () => removeManualArtistHero(),
+  excludeRemoteAlbum: (album) => excludeRemoteArtistAlbum(album)
 });
 
 
@@ -6176,6 +6195,9 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
       artworkUrl: album.coverUrl || "",
       releaseDate: album.releaseDate || "",
       releaseDatePrecision: album.release_date_precision || (albumId ? "stored" : "external"),
+      artist: album.artist || artistName,
+      releaseGroupId: album.releaseGroupId || album.release_group_id || "",
+      canExclude: Boolean(isAdmin && !albumId && (album.releaseGroupId || album.release_group_id)),
       community: average ? { average: Number(average.avg), count: Number(average.count || 0) } : null,
       personal: albumId ? getYourAlbumRating(albumId) : null
     };
@@ -6344,7 +6366,9 @@ async function renderArtistDetail(artistItem) {
   }
 
   const remoteAlbums =
-    completeDiscography.albums || [];
+    (completeDiscography.albums || []).filter((album) =>
+      !excludedReleaseGroupIds.has(String(album.releaseGroupId || album.release_group_id || album.id || "").toLowerCase())
+    );
 
   /*
     Build the displayed discography from MusicBrainz first,
@@ -11944,6 +11968,8 @@ if (
       await renderSelectedItem();
       return;
     }
+
+    if (event.target.closest("[data-bom-exclude-remote-album]")) return;
 
     const artistAlbumCard = event.target.closest("[data-artist-album-index]");
 
