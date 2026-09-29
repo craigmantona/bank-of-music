@@ -220,8 +220,11 @@
     finally { state.busy = false; render(); }
   }
 
-  async function editAlbumDate(albumId) {
-    const album = existingAlbums().find(item => Number(item.id) === Number(albumId));
+  async function editAlbumDate(albumOrId) {
+    if (!host?.canRender()) return;
+    const album = typeof albumOrId === "object" && albumOrId
+      ? albumOrId
+      : existingAlbums().find(item => Number(item.id) === Number(albumOrId));
     if (!album) { state.message = "Choose an existing BOM album."; render(); return; }
     const currentDate = String(album.original_release_date || album.release_date || "");
     const nextDate = global.prompt(`Edit original release date\n\n${album.artist} — ${album.title}\nCurrent: ${currentDate || "Unknown"}\n\nEnter a full date (YYYY-MM-DD):`, currentDate);
@@ -314,7 +317,7 @@
 
     host.installRenderExtension(render);
     render();
-    global.BOMAdminCatalogue = Object.freeze({ render, state });
+    global.BOMAdminCatalogue = Object.freeze({ render, state, editAlbumDate });
   }
 
   document.addEventListener("click", event => {

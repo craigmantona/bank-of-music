@@ -10482,6 +10482,8 @@ function renderAdminDashboard() {
 
               <button class="admin-edit-track-listing-btn secondary-btn" data-album-id="${album.id}">Edit track listing</button>
 
+              <button class="admin-edit-release-date-btn secondary-btn" data-album-id="${album.id}">Edit release date</button>
+
               <button class="admin-edit-cover-btn" data-album-id="${album.id}">Edit cover</button>
 
               <button class="admin-delete-album-btn danger-btn" data-album-id="${album.id}">Delete</button>
@@ -11006,6 +11008,18 @@ if (adminDashboard) {
     }
 
     const editCoverButton = event.target.closest(".admin-edit-cover-btn");
+
+    const editReleaseDateButton = event.target.closest(".admin-edit-release-date-btn");
+
+    if (editReleaseDateButton) {
+
+      const album = allAlbums.find((item) => Number(item.id) === Number(editReleaseDateButton.dataset.albumId));
+
+      await window.BOMAdminCatalogue?.editAlbumDate(album);
+
+      return;
+
+    }
 
     if (editCoverButton) {
 

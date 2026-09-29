@@ -15,7 +15,7 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration] = await P
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=129") < html.indexOf("bom-admin-catalogue.js?v=4"));
+  assert.ok(html.indexOf("app.js?v=130") < html.indexOf("bom-admin-catalogue.js?v=5"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -106,7 +106,7 @@ test("album deletion previews dependencies, confirms explicitly and refreshes au
   assert.match(app, /getExistingAlbums:[\s\S]*!album\.is_deleted/);
 });
 
-test("album date editing is explicit, refreshes authoritative data and sends only the chronology field", async () => {
+test("Please Please Me album card exposes and routes the existing release-date workflow", async () => {
   let panel = null;
   let clickHandler = null;
   let refreshes = 0;
@@ -118,21 +118,24 @@ test("album date editing is explicit, refreshes authoritative data and sends onl
     querySelectorAll() { return []; }
   };
   const document = { addEventListener() {}, createElement() { return { className: "", dataset: {}, innerHTML: "" }; }, querySelector() { return panel; } };
-  const album = { id: 27, artist: "The Example", title: "A Reissue", original_release_date: "2001-02-03", release_date: "2024-04-05", canonical_release_date: "2024-04-05" };
+  const album = { id: 27, artist: "The Beatles", title: "Please Please Me", original_release_date: "1987-02-26", release_date: "1987-02-26", canonical_release_date: "1987-02-26" };
   const host = Object.freeze({
     getRoot: () => root, canRender: () => true, getExistingAlbums: () => [album],
     invoke: async body => { calls.push(body); return { data: { ok: true, album: { ...album, original_release_date: body.original_release_date } }, error: null }; },
     refreshAfterCommit: async () => { refreshes += 1; }, openAdmin() {}, installRenderExtension() {}
   });
-  const window = { BOMAdminCatalogueHost: host, prompt: () => "1987-06-15", confirm: () => true };
+  let promptMessage = "";
+  const window = { BOMAdminCatalogueHost: host, prompt: message => { promptMessage = message; return "1963-03-22"; }, confirm: () => true };
   vm.runInNewContext(catalogue, { window, document, crypto: webcrypto, console });
-  window.BOMAdminCatalogue.state.artist = { name: "The Example" };
+  window.BOMAdminCatalogue.state.artist = { name: "The Beatles" };
   window.BOMAdminCatalogue.render();
-  const button = { dataset: { catalogueEditDate: "27" } };
-  await clickHandler({ target: { closest: selector => selector === "[data-catalogue-edit-date]" ? button : null } });
-  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [{ action: "edit_album_date", album_id: 27, original_release_date: "1987-06-15" }]);
+  assert.match(app, /admin-edit-release-date-btn[\s\S]*Edit release date/);
+  assert.match(app, /window\.BOMAdminCatalogue\?\.editAlbumDate\(album\)/);
+  await window.BOMAdminCatalogue.editAlbumDate(album);
+  assert.match(promptMessage, /The Beatles — Please Please Me[\s\S]*Current: 1987-02-26/);
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [{ action: "edit_album_date", album_id: 27, original_release_date: "1963-03-22" }]);
   assert.equal(refreshes, 1);
-  assert.match(panel.innerHTML, /now uses 1987-06-15 for chronology/);
+  assert.match(panel.innerHTML, /now uses 1963-03-22 for chronology/);
 });
 
 test("album date Edge action validates a full real ISO date and updates only original_release_date", () => {
