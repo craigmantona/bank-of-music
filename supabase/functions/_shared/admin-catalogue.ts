@@ -107,7 +107,7 @@ async function completeRelease(
   );
 }
 
-function flattenTracks(release: any, fallbackArtist: string) {
+export function flattenTracks(release: any, fallbackArtist: string) {
   const tracks: any[] = [];
   for (const medium of release?.media || []) {
     if (!Array.isArray(medium?.tracks) || !medium.tracks.length) return [];
@@ -137,6 +137,48 @@ export type RequestedAlbum = {
   release_group_id?: string;
   release_id?: string;
 };
+
+export async function resolveExistingAlbumRelease({
+  album,
+  musicBrainzGet
+}: {
+  album: any;
+  musicBrainzGet: (path: string) => Promise<any>;
+}) {
+  const releaseId = String(album?.musicbrainz_release_id ||
+    (album?.external_source === "musicbrainz" ? album?.external_id : "") || "").trim().toLowerCase();
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(releaseId)) {
+    return { status: "needs_correction", reason: "stored_release_identity_required" };
+  }
+
+  const detail = await completeRelease(releaseId, musicBrainzGet);
+  const groupId = String(detail?.["release-group"]?.id || "").trim().toLowerCase();
+  const resolvedTitle = String(detail?.title || "").trim();
+  const resolvedArtist = artistName(detail);
+  if (detail?.id !== releaseId ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(groupId) ||
+      !resolvedTitle || !resolvedArtist ||
+      normaliseCatalogueText(resolvedTitle) !== normaliseCatalogueText(album?.title) ||
+      normaliseCatalogueText(resolvedArtist) !== normaliseCatalogueText(album?.artist) ||
+      (album?.musicbrainz_release_group_id &&
+        String(album.musicbrainz_release_group_id).toLowerCase() !== groupId)) {
+    return { status: "needs_correction", reason: "stored_release_identity_mismatch" };
+  }
+
+  const tracks = flattenTracks(detail, resolvedArtist);
+  if (!tracks.length) return { status: "failed", reason: "complete_track_listing_unavailable" };
+  return {
+    status: "ready",
+    album: {
+      id: Number(album.id),
+      title: resolvedTitle,
+      artist: resolvedArtist,
+      musicbrainz_release_id: releaseId,
+      musicbrainz_release_group_id: groupId
+    },
+    tracks
+  };
+}
 
 export async function resolveRequestedAlbum({
   artist,

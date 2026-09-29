@@ -16,7 +16,7 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration, exclusion
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=132") < html.indexOf("bom-admin-catalogue.js?v=7"));
+  assert.ok(html.indexOf("app.js?v=133") < html.indexOf("bom-admin-catalogue.js?v=8"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -105,6 +105,16 @@ test("album deletion previews dependencies, confirms explicitly and refreshes au
   assert.ok(source.indexOf('action: "delete_album"') < source.indexOf("await host.refreshAfterCommit();"));
   assert.doesNotMatch(source, /\.from\(|\.delete\(|is_deleted\s*=/);
   assert.match(app, /getExistingAlbums:[\s\S]*!album\.is_deleted/);
+});
+
+test("incomplete existing albums expose an explicit admin-only reconciliation action", () => {
+  assert.match(app, /catalogue_reconciliation_needed:[\s\S]*!album\.musicbrainz_release_id[\s\S]*!Number\(song\.track_position\)/);
+  assert.match(catalogue, /data-catalogue-reconcile-album=/);
+  assert.match(catalogue, /action: "reconcile_album", album_id: Number\(album\.id\)/);
+  assert.match(edge, /body\?\.action === "reconcile_album"/);
+  assert.match(edge, /resolveExistingAlbumRelease\(\{ album, musicBrainzGet \}\)/);
+  assert.match(edge, /userClient\.rpc\("admin_reconcile_catalogue_album"/);
+  assert.ok(edge.indexOf("await requireAdminUser(request)") < edge.indexOf('body?.action === "reconcile_album"'));
 });
 
 test("Please Please Me album card exposes and routes the existing release-date workflow", async () => {

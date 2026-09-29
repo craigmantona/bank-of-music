@@ -69,7 +69,7 @@
       </div>
       <div class="admin-catalogue-existing">
         <h4>Already in BOM (${albums.length})</h4>
-        ${albums.length ? `<div>${albums.map(album => `<span>${escape(album.title)}${album.original_release_date || album.release_date ? ` <small>${escape(String(album.original_release_date || album.release_date))}</small>` : ""}<button type="button" class="secondary-btn" data-catalogue-edit-date="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Edit release date</button><button type="button" class="danger-btn" data-catalogue-delete-album="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Delete album</button></span>`).join("")}</div>` : "<p class=\"small\">No albums for this artist are currently in BOM.</p>"}
+        ${albums.length ? `<div>${albums.map(album => `<span>${escape(album.title)}${album.original_release_date || album.release_date ? ` <small>${escape(String(album.original_release_date || album.release_date))}</small>` : ""}${album.catalogue_reconciliation_needed ? `<button type="button" class="secondary-btn" data-catalogue-reconcile-album="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Repair tracks</button>` : ""}<button type="button" class="secondary-btn" data-catalogue-edit-date="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Edit release date</button><button type="button" class="danger-btn" data-catalogue-delete-album="${escape(album.id)}" ${state.busy ? "disabled" : ""}>Delete album</button></span>`).join("")}</div>` : "<p class=\"small\">No albums for this artist are currently in BOM.</p>"}
       </div>`;
     }
     return `<div class="admin-catalogue-artist-search">
@@ -254,6 +254,25 @@
     finally { state.busy = false; render(); }
   }
 
+  async function reconcileAlbum(albumId) {
+    const album = existingAlbums().find(item => Number(item.id) === Number(albumId));
+    if (!album?.catalogue_reconciliation_needed) return;
+    if (!global.confirm(`${album.artist} — ${album.title}\n\nValidate its stored MusicBrainz release and atomically repair missing track occurrences? Existing matching track IDs and user data will be retained.`)) return;
+    state.busy = true; state.message = "Validating and reconciling the authoritative release…"; render();
+    try {
+      const result = (await invoke({ action: "reconcile_album", album_id: Number(album.id) })).reconciliation;
+      if (result.status !== "reconciled" && result.status !== "unchanged") {
+        state.message = `Repair stopped: ${reasonLabel(result.reason || result.status)}`;
+        return;
+      }
+      state.message = result.status === "unchanged"
+        ? `${album.artist} — ${album.title} is already complete.`
+        : `${album.artist} — ${album.title} repaired: ${result.track_count} tracks, ${result.inserted_count} added.`;
+      await host.refreshAfterCommit();
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
   async function editAlbumDate(albumOrId) {
     if (!host?.canRender()) return;
     const album = typeof albumOrId === "object" && albumOrId
@@ -325,6 +344,8 @@
     if (restoreButton) { await restoreExclusion(restoreButton.dataset.catalogueRestoreExclusion); return; }
     const editDateButton = event.target.closest("[data-catalogue-edit-date]");
     if (editDateButton) { await editAlbumDate(Number(editDateButton.dataset.catalogueEditDate)); return; }
+    const reconcileButton = event.target.closest("[data-catalogue-reconcile-album]");
+    if (reconcileButton) { await reconcileAlbum(Number(reconcileButton.dataset.catalogueReconcileAlbum)); return; }
     const deleteButton = event.target.closest("[data-catalogue-delete-album]");
     if (deleteButton) { await deleteAlbum(Number(deleteButton.dataset.catalogueDeleteAlbum)); return; }
     if (event.target.closest("[data-catalogue-search-artist]")) { await searchArtist(); return; }

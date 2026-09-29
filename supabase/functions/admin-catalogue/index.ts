@@ -4,6 +4,7 @@ import { catalogueFetch, musicBrainzIdentity } from "../_shared/catalogue-worker
 import {
   ADMIN_CATALOGUE_MAX_ALBUMS,
   normaliseCatalogueText,
+  resolveExistingAlbumRelease,
   resolveRequestedAlbum,
   searchArtistCandidates,
   type RequestedAlbum
@@ -246,6 +247,30 @@ Deno.serve(async (request) => {
       });
       if (error) return json(request, { ok: false, error: error.message }, 400);
       return json(request, { ok: true, deletion: data });
+    }
+
+    if (body?.action === "reconcile_album") {
+      const albumId = Number(body.album_id);
+      if (!Number.isSafeInteger(albumId) || albumId <= 0) {
+        return json(request, { ok: false, error: "Choose a valid BOM album." }, 400);
+      }
+      const { data: album, error: albumError } = await service.from("albums")
+        .select("id,title,artist,is_deleted,external_source,external_id,musicbrainz_release_id,musicbrainz_release_group_id")
+        .eq("id", albumId).maybeSingle();
+      if (albumError) return json(request, { ok: false, error: albumError.message }, 400);
+      if (!album || album.is_deleted) return json(request, { ok: false, error: "Active BOM album not found." }, 404);
+
+      const resolved = await resolveExistingAlbumRelease({ album, musicBrainzGet });
+      if (resolved.status !== "ready") {
+        return json(request, { ok: true, reconciliation: resolved });
+      }
+      const { data, error } = await userClient.rpc("admin_reconcile_catalogue_album", {
+        p_album_id: albumId,
+        p_album: resolved.album,
+        p_tracks: resolved.tracks
+      });
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, reconciliation: data });
     }
 
     if (body?.action === "search_artist") {

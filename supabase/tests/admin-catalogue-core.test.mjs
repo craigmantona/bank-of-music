@@ -1,9 +1,52 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  flattenTracks,
+  resolveExistingAlbumRelease,
   resolveRequestedAlbum,
   searchArtistCandidates
 } from "../functions/_shared/admin-catalogue.ts";
+
+test("multi-medium flattening assigns album-wide positions and retains disc metadata", () => {
+  const detail = {
+    media: [
+      { position: 1, "track-count": 17, tracks: Array.from({ length: 17 }, (_, index) => ({ position: index + 1, title: `A${index + 1}`, recording: { id: `00000000-0000-4000-8001-${String(index + 1).padStart(12, "0")}` } })) },
+      { position: 2, "track-count": 13, tracks: Array.from({ length: 13 }, (_, index) => ({ position: index + 1, title: `B${index + 1}`, recording: { id: `00000000-0000-4000-8002-${String(index + 1).padStart(12, "0")}` } })) }
+    ]
+  };
+  const tracks = flattenTracks(detail, "The Example");
+  assert.deepEqual(tracks.map(track => track.position), Array.from({ length: 30 }, (_, index) => index + 1));
+  assert.equal(tracks[17].medium_position, 2);
+  assert.equal(tracks[17].medium_track_position, 1);
+});
+
+test("existing album repair resolves only its stored exact release identity", async () => {
+  const fixture = musicBrainzFixture();
+  const result = await resolveExistingAlbumRelease({
+    album: {
+      id: 283, title: "First Album", artist: "The Example",
+      external_source: "musicbrainz", external_id: UK_RELEASE_ID,
+      musicbrainz_release_id: null, musicbrainz_release_group_id: null
+    },
+    musicBrainzGet: fixture.get
+  });
+  assert.equal(result.status, "ready");
+  assert.equal(result.album.musicbrainz_release_id, UK_RELEASE_ID);
+  assert.equal(result.album.musicbrainz_release_group_id, GROUP_ID);
+  assert.deepEqual(fixture.calls, [`/release/${UK_RELEASE_ID}?inc=recordings+artist-credits+release-groups&fmt=json`]);
+});
+
+test("existing album repair rejects release identity mismatches", async () => {
+  const result = await resolveExistingAlbumRelease({
+    album: {
+      id: 283, title: "Different Album", artist: "The Example",
+      external_source: "musicbrainz", external_id: UK_RELEASE_ID
+    },
+    musicBrainzGet: musicBrainzFixture().get
+  });
+  assert.equal(result.status, "needs_correction");
+  assert.equal(result.reason, "stored_release_identity_mismatch");
+});
 
 const ARTIST_ID = "11111111-1111-4111-8111-111111111111";
 const GROUP_ID = "22222222-2222-4222-8222-222222222222";

@@ -11,6 +11,10 @@ const occurrenceIdentityMigration = await readFile(
   new URL("../migrations/20260927120000_album_track_occurrence_identity.sql", import.meta.url),
   "utf8"
 );
+const reconciliationMigration = await readFile(
+  new URL("../migrations/20260929120000_admin_catalogue_album_reconciliation.sql", import.meta.url),
+  "utf8"
+);
 const ADMIN_ID = "11111111-1111-4111-8111-111111111111";
 const MEMBER_ID = "22222222-2222-4222-8222-222222222222";
 const RELEASE_ID = "33333333-3333-4333-8333-333333333333";
@@ -88,6 +92,7 @@ async function fixture({ applyOccurrenceIdentity = true } = {}) {
   `);
   await db.exec(adminCatalogueMigration);
   if (applyOccurrenceIdentity) await db.exec(occurrenceIdentityMigration);
+  if (applyOccurrenceIdentity) await db.exec(reconciliationMigration);
   return db;
 }
 
@@ -112,6 +117,85 @@ async function add(db, userId = ADMIN_ID, requestedAlbum = album, requestedTrack
     "select admin_add_catalogue_album($1::jsonb,$2::jsonb) result",
     [JSON.stringify(requestedAlbum), JSON.stringify(requestedTracks)]);
 }
+
+async function reconcile(db, userId, albumId, requestedAlbum, requestedTracks) {
+  return asUser(db, userId,
+    "select admin_reconcile_catalogue_album($1,$2::jsonb,$3::jsonb) result",
+    [albumId, JSON.stringify({ id: albumId, ...requestedAlbum }), JSON.stringify(requestedTracks)]);
+}
+
+test("incomplete albums reconcile atomically while retaining matching song IDs and ratings", async () => {
+  const db = await fixture();
+  try {
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id)
+      values(283,'First Album','The Example','musicbrainz','${RELEASE_ID}');
+      insert into songs(id,title,artist,album_id,external_source,external_id,track_position)
+      values(16789,'Opening Track','The Example',283,'musicbrainz','${RECORDING_ID}',null);
+      insert into song_ratings(user_id,song_id,rating) values('${MEMBER_ID}',16789,9);`);
+    const completeTracks = [tracks[0], {
+      position: 2, title: "Second Track", artist: "The Example",
+      musicbrainz_recording_id: "66666666-6666-4666-8666-666666666666"
+    }];
+    const result = (await reconcile(db, ADMIN_ID, 283, album, completeTracks)).rows[0].result;
+    assert.equal(result.status, "reconciled");
+    assert.equal(result.retained_count, 1);
+    assert.equal(result.inserted_count, 1);
+    const savedAlbum = (await db.query("select * from albums where id=283")).rows[0];
+    assert.equal(savedAlbum.musicbrainz_release_id, RELEASE_ID);
+    assert.equal(savedAlbum.musicbrainz_release_group_id, GROUP_ID);
+    const savedSongs = (await db.query("select id,track_position from songs where album_id=283 order by track_position")).rows;
+    assert.equal(Number(savedSongs[0].id), 16789);
+    assert.equal(savedSongs[0].track_position, 1);
+    assert.notEqual(Number(savedSongs[1].id), 16789);
+    assert.equal(savedSongs[1].track_position, 2);
+    assert.equal(Number((await db.query("select song_id from song_ratings")).rows[0].song_id), 16789);
+
+    const again = (await reconcile(db, ADMIN_ID, 283, album, completeTracks)).rows[0].result;
+    assert.equal(again.status, "unchanged");
+    assert.equal(again.inserted_count, 0);
+    assert.equal((await db.query("select count(*)::int n from songs where album_id=283")).rows[0].n, 2);
+  } finally { await db.close(); }
+});
+
+test("reconciliation conflicts roll back provenance, positions and inserts", async () => {
+  const db = await fixture();
+  try {
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id)
+      values(283,'First Album','The Example','musicbrainz','${RELEASE_ID}');
+      insert into songs(id,title,artist,album_id,external_source,external_id,track_position)
+      values(16789,'Unrelated','The Example',283,'musicbrainz','77777777-7777-4777-8777-777777777777',7);`);
+    await assert.rejects(reconcile(db, ADMIN_ID, 283, album, tracks), /conflict/i);
+    const savedAlbum = (await db.query("select * from albums where id=283")).rows[0];
+    const savedSong = (await db.query("select * from songs where id=16789")).rows[0];
+    assert.equal(savedAlbum.musicbrainz_release_id, null);
+    assert.equal(savedSong.track_position, 7);
+    assert.equal((await db.query("select count(*)::int n from songs where album_id=283")).rows[0].n, 1);
+  } finally { await db.close(); }
+});
+
+test("ordinary users cannot invoke catalogue reconciliation", async () => {
+  const db = await fixture();
+  try {
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id)
+      values(283,'First Album','The Example','musicbrainz','${RELEASE_ID}')`);
+    await assert.rejects(reconcile(db, MEMBER_ID, 283, album, tracks), /Admin access required/);
+    assert.equal((await db.query("select count(*)::int n from songs where album_id=283")).rows[0].n, 0);
+  } finally { await db.close(); }
+});
+
+test("complete existing albums remain unchanged", async () => {
+  const db = await fixture();
+  try {
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id,musicbrainz_release_id,musicbrainz_release_group_id)
+      values(283,'First Album','The Example','musicbrainz','${RELEASE_ID}','${RELEASE_ID}','${GROUP_ID}');
+      insert into songs(id,title,artist,album_id,external_source,external_id,track_position)
+      values(16789,'Opening Track','The Example',283,'musicbrainz','${RECORDING_ID}',1);`);
+    const result = (await reconcile(db, ADMIN_ID, 283, album, tracks)).rows[0].result;
+    assert.equal(result.status, "unchanged");
+    assert.equal(result.retained_count, 1);
+    assert.equal(result.inserted_count, 0);
+  } finally { await db.close(); }
+});
 
 test("migration closes member inserts and removes automatic tracked-artist creation", async () => {
   const db = await fixture();

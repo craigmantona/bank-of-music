@@ -6019,25 +6019,6 @@ async function fetchReleaseGroupCover(releaseGroupId) {
 
 
 
-const autoSavedTrackAlbums = new Set();
-
-async function ensureTrackSongs(albumDetail, savedAlbumId) {
-  if (!albumDetail || !savedAlbumId) return;
-
-  const key = String(savedAlbumId);
-  if (autoSavedTrackAlbums.has(key)) return;
-  autoSavedTrackAlbums.add(key);
-
-  for (const medium of albumDetail.media || []) {
-    for (const track of medium.tracks || []) {
-      await saveTrackFromAlbum(
-        track.title || track.recording?.title || "",
-        track.recording?.id || track.id || "",
-        savedAlbumId
-      );
-    }
-  }
-}
 
 
 
@@ -6844,10 +6825,10 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
   const seenExternalIds = new Set();
   let fallbackNumber = 1;
 
-  const addTrack = ({ track = null, savedSong = null, isManual = false }) => {
+  const addTrack = ({ track = null, savedSong = null, isManual = false, albumPosition = null, mediumPosition = null, mediumTrackPosition = null }) => {
     const rawTitle = savedSong?.title || track?.title || track?.recording?.title || "Untitled track";
     const title = String(rawTitle).replace(/\\[uU]([0-9a-fA-F]{4})/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
-    const number = Number(savedSong?.track_position || track?.position || fallbackNumber) || fallbackNumber;
+    const number = Number(savedSong?.track_position || albumPosition || fallbackNumber) || fallbackNumber;
     const externalId = savedSong?.external_id || track?.recording?.id || "";
     const averageData = savedSong ? getSongAverage(savedSong.id) : null;
     const community = averageData ? { average: Number(averageData.avg), count: Number(averageData.count || 0) } : null;
@@ -6858,19 +6839,29 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
       index: Math.max(0, number - 1), number, title, artist, album: albumTitle,
       durationMs: Number(track?.length || track?.recording?.length || 0) || null,
       songId: savedSong?.id || null, externalId, community, personal, isManual,
+      mediumPosition, mediumTrackPosition,
       ratingControlHtml: savedSong?.id ? buildCompactTrackRatingControl(savedSong.id, personal) : "",
-      saveControlHtml: savedSong?.id ? "" : `<button class="save-track-btn" data-action="save-track" data-track-title="${escapeHtml(title)}" data-track-external-id="${escapeHtml(externalId)}" data-album-id="${savedAlbumId || ""}" aria-label="Save ${escapeHtml(title)}">Save</button>`
+      saveControlHtml: ""
     });
     fallbackNumber += 1;
   };
 
+  let albumPosition = 0;
   for (const medium of detail?.media || []) {
     for (const track of medium.tracks || []) {
+      albumPosition += 1;
       const trackTitle = track.title || track.recording?.title || "Untitled track";
       const externalId = track.recording?.id || "";
       const savedSong = albumSongs.find((song) => externalId && String(song.external_id || "") === String(externalId)) ||
         albumSongs.find((song) => normaliseCompare(song.title || "") === normaliseCompare(trackTitle)) || null;
-      addTrack({ track, savedSong, isManual: savedSong?.external_source === "manual" });
+      addTrack({
+        track,
+        savedSong,
+        isManual: savedSong?.external_source === "manual",
+        albumPosition,
+        mediumPosition: Number(medium?.position || 1),
+        mediumTrackPosition: Number(track?.position || albumPosition)
+      });
     }
   }
 
@@ -7047,16 +7038,6 @@ function buildTrackListHtml(detail, savedAlbumId) {
             <span class="track-preview-label">Play preview</span>
           </button>
 
-          ${savedSong?.id
-            ? ""
-            : `<button class="save-track-btn"
-                 data-action="save-track"
-                 data-track-title="${escapeHtml(title)}"
-                 data-track-external-id="${escapeHtml(externalId)}"
-                 data-album-id="${savedAlbumId}">
-                 💾
-               </button>`
-          }
         </div>
       </div>
     `
@@ -9665,86 +9646,6 @@ async function importSelectedSong() {
 
 
 
-async function saveTrackFromAlbum(trackTitle, trackExternalId, albumId) {
-  if (!selectedItem || selectedItem.type !== "album") return null;
-
-  const finalAlbumId = Number(
-    albumId ||
-    selectedItem.savedAlbumId ||
-    selectedItem.albumId
-  );
-
-  if (!finalAlbumId) {
-    console.error("NO ALBUM ID FOUND FOR TRACK SAVE", { trackTitle, trackExternalId, selectedItem });
-    return null;
-  }
-
-  const cleanTitle = normaliseText(trackTitle);
-  const cleanArtist = normaliseText(selectedItem.artist);
-
-  // First check if this track already exists on THIS album by title
-  const existing = allSongs.find((song) =>
-    Number(song.album_id) === Number(finalAlbumId) &&
-    (
-      normaliseCompare(song.title) === normaliseCompare(cleanTitle) ||
-      (
-        trackExternalId &&
-        String(song.external_source || "") === "musicbrainz" &&
-        String(song.external_id || "") === String(trackExternalId)
-      )
-    )
-  );
-
-  let result;
-
-  if (existing) {
-    result = await supabaseClient
-      .from("songs")
-      .update({
-        title: cleanTitle,
-        artist: cleanArtist,
-        album_id: finalAlbumId,
-        external_source: trackExternalId ? "musicbrainz" : existing.external_source || "manual",
-        external_id: trackExternalId || existing.external_id || null
-      })
-      .eq("id", existing.id)
-      .select()
-      .single();
-  } else {
-    result = await supabaseClient
-      .from("songs")
-      .insert([{
-        title: cleanTitle,
-        artist: cleanArtist,
-        album_id: finalAlbumId,
-        external_source: trackExternalId ? "musicbrainz" : "manual",
-        external_id: trackExternalId || null
-      }])
-      .select()
-      .single();
-  }
-
-  if (result.error) {
-    console.error("SAVE TRACK ERROR", result.error);
-    setMessage(globalSearchMessage, result.error.message);
-    return null;
-  }
-  
-  if (result.data) {
-  allSongs = (allSongs || []).filter(song => Number(song.id) !== Number(result.data.id));
-  allSongs.push(result.data);
-}
-
-  await loadLibrary();
-  renderLibrary();
-  renderRecommendations();
-
-  setMessage(globalSearchMessage, "Track saved.");
-  return result.data;
-}
-
-
-
 // Quick Rate keeps its queue and skips in memory only.
 function buildQuickRateQueue(songs, ratings, userId, random = Math.random) {
   const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.song_id)));
@@ -11788,56 +11689,6 @@ function bindCardClicks(container) {
   if (!container) return;
 
   container.addEventListener("click", async (event) => {
-    const saveTrackBtn = event.target.closest(".save-track-btn");
-
-if (saveTrackBtn) {
-	console.log("SAVE TRACK CLICKED", saveTrackBtn.dataset);
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-
-  const title = saveTrackBtn.dataset.trackTitle || "";
-  const externalId = saveTrackBtn.dataset.trackExternalId || "";
-
-  const albumId = Number(
-    saveTrackBtn.dataset.albumId ||
-    selectedItem.savedAlbumId ||
-    selectedItem.albumId
-  );
-
-  const savedTrack = await saveTrackFromAlbum(title, externalId, albumId);
-  
-  await loadLibrary();
-
-const track = Array.isArray(savedTrack) ? savedTrack[0] : savedTrack;
-
-if (track) {
-  allSongs = [
-    ...allSongs.filter(song => Number(song.id) !== Number(track.id)),
-    track
-  ];
-}
-
-console.log("AFTER SAVE allSongs contains:", allSongs.filter(song =>
-  Number(song.album_id) === Number(albumId)
-));
-
-await renderSelectedItem();
-
-return false;
-
-await loadLibrary();
-
-if (savedTrack) {
-  const track = Array.isArray(savedTrack) ? savedTrack[0] : savedTrack;
-  allSongs.push(track);
-}
-
-await renderSelectedItem();
-
-return false;
-}
-
 if (
   event.target.closest(".star-option") ||
   event.target.closest(".delete-track-rating-btn") ||
@@ -14946,9 +14797,20 @@ window.addEventListener("scroll", handleScrollState, { passive: true });
 window.BOMAdminCatalogueHost = Object.freeze({
   getRoot: () => adminDashboard,
   canRender: () => Boolean(currentUser && isAdmin),
-  getExistingAlbums: (artistName) => allAlbums.filter(
-    (album) => !album.is_deleted && normaliseCompare(album.artist) === normaliseCompare(artistName)
-  ),
+  getExistingAlbums: (artistName) => allAlbums
+    .filter((album) => !album.is_deleted && normaliseCompare(album.artist) === normaliseCompare(artistName))
+    .map((album) => {
+      const albumSongs = allSongs.filter((song) => !song.is_deleted && Number(song.album_id) === Number(album.id));
+      return {
+        ...album,
+        catalogue_reconciliation_needed: Boolean(
+          !album.musicbrainz_release_id ||
+          !album.musicbrainz_release_group_id ||
+          !albumSongs.length ||
+          albumSongs.some((song) => !Number(song.track_position))
+        )
+      };
+    }),
   invoke: (body) => supabaseClient.functions.invoke("admin-catalogue", { body }),
   refreshAfterCommit: async () => {
     await loadLibrary();
