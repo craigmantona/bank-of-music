@@ -41,6 +41,23 @@ test("persisted IDs work with an empty browser cache", async () => {
   assert.equal(resolverCalls, 0);
 });
 
+test("progress reports all pre-existing stored IDs before reaching them", async () => {
+  const progress = [];
+  await sync.resolveDesiredTracks({
+    tracks: [
+      { title: "First", artist: "Artist", spotify_track_id: "" },
+      { title: "Later", artist: "Artist", spotify_track_id: id(88) }
+    ],
+    getRecordingMatch: async () => ({ id: id(87) }),
+    getCachedMatch: () => null,
+    resolveMissing: async () => { throw new Error("recording reuse should precede search"); },
+    onProgress: value => progress.push(value)
+  });
+  assert.equal(progress[0].storedTotal, 1);
+  assert.equal(progress[0].recordingReused, 1);
+  assert.equal(progress[0].newlyMatched, 0);
+});
+
 test("existing playlist contents are paginated and compared", async () => {
   const requests = [];
   const first = id(1);
@@ -175,7 +192,7 @@ test("playlist integration uses the trusted resolver and preserves playlist defi
     readFile(new URL("../supabase/functions/rapid-processor/spotify-token.ts", import.meta.url), "utf8")
   ]);
   assert.match(app, /resolveQuickRateSpotifyTrack\(track\.song\)/);
-  assert.match(resolver, /update\(\{ spotify_track_id: match\.id, spotify_matched_at: matchedAt \}\)/);
+  assert.match(resolver, /persistSpotifyTrackId\(admin, song\.id, match\.id\)/);
   for (const threshold of [7, 8, 9, 10]) {
     assert.match(html, new RegExp(`data-minimum-rating="${threshold}"`));
   }

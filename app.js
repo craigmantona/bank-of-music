@@ -9731,6 +9731,7 @@ async function resolveQuickRateSpotifyTrack(song) {
   const spotifyItem = {
     id: data.spotify_track_id,
     uri: `spotify:track:${data.spotify_track_id}`,
+    identitySource: data.identity_source || "spotify",
     external_urls: { spotify: `https://open.spotify.com/track/${data.spotify_track_id}` }
   };
   cacheSpotifyMatch(song, spotifyItem);
@@ -12714,9 +12715,22 @@ function buildSpotifyTrack(song, extra = {}) {
     artist,
     album: album?.title || "",
     spotify_track_id: song.spotify_track_id || "",
+    recording_spotify_track_id: getSharedRecordingSpotifyTrackId(song),
     song,
     ...extra
   };
+}
+
+function getSharedRecordingSpotifyTrackId(song) {
+  if (!song || song.spotify_track_id) return "";
+  const recordingId = getConfirmedMusicBrainzRecordingId(song);
+  if (!recordingId) return "";
+  const occurrence = allSongs.find((candidate) => (
+    Number(candidate.id) !== Number(song.id) &&
+    getConfirmedMusicBrainzRecordingId(candidate) === recordingId &&
+    /^[A-Za-z0-9]{22}$/.test(String(candidate.spotify_track_id || ""))
+  ));
+  return occurrence?.spotify_track_id || "";
 }
 
 function getCurrentUserRatedTracksForSpotify(minimumRating) {
@@ -13078,6 +13092,13 @@ async function synchroniseSpotifyPlaylist({
 
     const resolution = await window.BOMSpotifyPlaylistSync.resolveDesiredTracks({
       tracks,
+      getRecordingMatch: async (track) => {
+        if (!window.BOMSpotifyPlaylistSync.isValidSpotifyTrackId(track.recording_spotify_track_id)) {
+          return null;
+        }
+        const confirmed = await resolveQuickRateSpotifyTrack(track.song);
+        return confirmed?.identitySource === "recording" ? confirmed : null;
+      },
       getCachedMatch: getCachedSpotifyMatch,
       resolveMissing: async (track) => {
         const spotifyTrack = await resolveQuickRateSpotifyTrack(track.song);
@@ -13097,7 +13118,8 @@ async function synchroniseSpotifyPlaylist({
           progress.completed,
           progress.total,
           `Resolved ${progress.completed} of ${progress.total} ` +
-            `(${progress.reused} stored, ${progress.cached} cached, ${progress.newlyMatched} new)`
+            `(${progress.storedTotal} stored, ${progress.recordingReused} recording reuse, ` +
+            `${progress.cached} cached, ${progress.newlyMatched} new)`
         );
       }
     });

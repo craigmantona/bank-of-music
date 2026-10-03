@@ -24,6 +24,7 @@
 
   async function resolveDesiredTracks({
     tracks,
+    getRecordingMatch,
     getCachedMatch,
     resolveMissing,
     onProgress = () => {},
@@ -33,6 +34,8 @@
   }) {
     const resolved = [];
     let reused = 0;
+    const storedTotal = tracks.filter((track) => isValidSpotifyTrackId(track.spotify_track_id)).length;
+    let recordingReused = 0;
     let cached = 0;
     let newlyMatched = 0;
 
@@ -45,6 +48,14 @@
       if (spotifyTrackId) {
         reused += 1;
       } else {
+        const recordingMatch = await getRecordingMatch?.(track);
+        if (isValidSpotifyTrackId(recordingMatch?.id)) {
+          spotifyTrackId = recordingMatch.id;
+          recordingReused += 1;
+        }
+      }
+
+      if (!spotifyTrackId) {
         const cachedMatch = getCachedMatch?.(track);
         if (isValidSpotifyTrackId(cachedMatch?.id)) {
           spotifyTrackId = cachedMatch.id;
@@ -63,7 +74,8 @@
               throw error;
             }
             spotifyTrackId = match.id;
-            newlyMatched += 1;
+            if (match.identitySource === "recording") recordingReused += 1;
+            else newlyMatched += 1;
           } catch (error) {
             if (error?.status !== 429 && !error?.retryAfter) throw error;
             const retryAfter = readRetryAfterSeconds(error);
@@ -88,12 +100,14 @@
         completed: index + 1,
         total: tracks.length,
         reused,
+        storedTotal,
+        recordingReused,
         cached,
         newlyMatched
       });
     }
 
-    return { tracks: resolved, reused, cached, newlyMatched };
+    return { tracks: resolved, reused, storedTotal, recordingReused, cached, newlyMatched };
   }
 
   async function fetchSpotifyPlaylistTrackIds(request, playlistId) {

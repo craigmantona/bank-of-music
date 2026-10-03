@@ -42,6 +42,9 @@ function createJsonResponse(
 
 let spotifyAppAccessToken = "";
 let spotifyAppAccessTokenExpiresAt = 0;
+const MUSICBRAINZ_RECORDING_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const SPOTIFY_TRACK_ID = /^[A-Za-z0-9]{22}$/;
+const ISRC = /^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$/;
 
 class SpotifyRateLimitError extends Error {
   retryAfter: number;
@@ -151,18 +154,93 @@ async function getSpotifyAppAccessToken(clientId: string, clientSecret: string) 
   return spotifyAppAccessToken;
 }
 
+async function persistSpotifyTrackId(admin: any, songId: number, spotifyTrackId: string) {
+  const matchedAt = new Date().toISOString();
+  const { data: updated, error: updateError } = await admin
+    .from("songs")
+    .update({ spotify_track_id: spotifyTrackId, spotify_matched_at: matchedAt })
+    .eq("id", songId)
+    .is("spotify_track_id", null)
+    .select("spotify_track_id,spotify_matched_at")
+    .maybeSingle();
+  if (updateError) throw updateError;
+  if (updated?.spotify_track_id) return updated.spotify_track_id;
+
+  const { data: raced, error: racedError } = await admin
+    .from("songs")
+    .select("spotify_track_id")
+    .eq("id", songId)
+    .maybeSingle();
+  if (racedError) throw racedError;
+  return raced?.spotify_track_id || "";
+}
+
+async function searchSpotifyTracks(accessToken: string, query: string) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/search?${new URLSearchParams({
+      q: query,
+      type: "track",
+      limit: "10"
+    }).toString()}`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (response.status === 429) throw new SpotifyRateLimitError(readRetryAfter(response));
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data?.error?.message || `Spotify search failed with HTTP ${response.status}.`);
+  }
+  return data?.tracks?.items || [];
+}
+
+async function fetchMusicBrainzIsrcs(recordingId: string) {
+  const response = await fetch(
+    `https://musicbrainz.org/ws/2/recording/${encodeURIComponent(recordingId)}?inc=isrcs&fmt=json`,
+    { headers: { "User-Agent": "BankOfMusic/1.0 (https://thebankofmusic.com)" } }
+  );
+  if (!response.ok) throw new Error(`MusicBrainz recording lookup failed with HTTP ${response.status}.`);
+  const data = await response.json();
+  if (String(data?.id || "").toLowerCase() !== recordingId.toLowerCase()) return [];
+  return [...new Set((data?.isrcs || [])
+    .map((value: unknown) => String(value || "").toUpperCase())
+    .filter((value: string) => ISRC.test(value)))];
+}
+
 async function resolveSpotifyTrack(songId: number, clientId: string, clientSecret: string) {
   const admin = getAdminClient();
   const { data: song, error: songError } = await admin
     .from("songs")
-    .select("id,title,artist,album_id,is_deleted,spotify_track_id,spotify_matched_at")
+    .select("id,title,artist,album_id,is_deleted,external_source,external_id,spotify_track_id,spotify_matched_at")
     .eq("id", songId)
     .maybeSingle();
 
   if (songError) throw songError;
   if (!song || song.is_deleted === true) return { status: "not_found" };
-  if (song.spotify_track_id) {
-    return { status: "matched", spotify_track_id: song.spotify_track_id, cached: true };
+  if (SPOTIFY_TRACK_ID.test(song.spotify_track_id || "")) {
+    return { status: "matched", spotify_track_id: song.spotify_track_id, cached: true, identity_source: "stored" };
+  }
+
+  const recordingId = song.external_source === "musicbrainz" &&
+    MUSICBRAINZ_RECORDING_ID.test(song.external_id || "")
+    ? String(song.external_id).toLowerCase()
+    : "";
+  if (recordingId) {
+    const { data: occurrences, error: occurrenceError } = await admin
+      .from("songs")
+      .select("id,spotify_track_id")
+      .eq("external_source", "musicbrainz")
+      .ilike("external_id", recordingId)
+      .not("spotify_track_id", "is", null);
+    if (occurrenceError) throw occurrenceError;
+    const sharedId = (occurrences || [])
+      .filter((occurrence: any) => Number(occurrence.id) !== Number(song.id))
+      .map((occurrence: any) => occurrence.spotify_track_id)
+      .find((value: unknown) => SPOTIFY_TRACK_ID.test(String(value || "")));
+    if (sharedId) {
+      const persistedId = await persistSpotifyTrackId(admin, song.id, sharedId);
+      if (SPOTIFY_TRACK_ID.test(persistedId)) {
+        return { status: "matched", spotify_track_id: persistedId, cached: true, identity_source: "recording" };
+      }
+    }
   }
 
   let albumTitle = "";
@@ -178,53 +256,35 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
 
   const accessToken = await getSpotifyAppAccessToken(clientId, clientSecret);
   const query = [`track:${song.title}`, `artist:${song.artist}`].join(" ");
-  const searchResponse = await fetch(
-    `https://api.spotify.com/v1/search?${new URLSearchParams({
-      q: query,
-      type: "track",
-      limit: "10"
-    }).toString()}`,
-    { headers: { Authorization: `Bearer ${accessToken}` } }
-  );
-
-  if (searchResponse.status === 429) {
-    throw new SpotifyRateLimitError(readRetryAfter(searchResponse));
-  }
-
-  const searchData = await searchResponse.json();
-  if (!searchResponse.ok) {
-    throw new Error(searchData?.error?.message || `Spotify search failed with HTTP ${searchResponse.status}.`);
-  }
-
-  const match = scoreSpotifyTrackCandidates(
+  const candidates = await searchSpotifyTracks(accessToken, query);
+  let match = scoreSpotifyTrackCandidates(
     song,
     albumTitle,
-    searchData?.tracks?.items || []
+    candidates
   );
+  let identitySource = "strict";
+
+  if (!match && recordingId) {
+    const authoritativeIsrcs = await fetchMusicBrainzIsrcs(recordingId);
+    for (const isrc of authoritativeIsrcs) {
+      const isrcCandidates = await searchSpotifyTracks(accessToken, `isrc:${isrc}`);
+      match = isrcCandidates.find((candidate: any) => (
+        SPOTIFY_TRACK_ID.test(candidate?.id || "") &&
+        candidate?.is_local !== true &&
+        candidate?.is_playable !== false &&
+        String(candidate?.external_ids?.isrc || "").toUpperCase() === isrc
+      ));
+      if (match) {
+        identitySource = "isrc";
+        break;
+      }
+  }
+  }
   if (!match) return { status: "no_match" };
 
-  const matchedAt = new Date().toISOString();
-  const { data: updated, error: updateError } = await admin
-    .from("songs")
-    .update({ spotify_track_id: match.id, spotify_matched_at: matchedAt })
-    .eq("id", song.id)
-    .is("spotify_track_id", null)
-    .select("spotify_track_id,spotify_matched_at")
-    .maybeSingle();
-  if (updateError) throw updateError;
-
-  if (updated?.spotify_track_id) {
-    return { status: "matched", spotify_track_id: updated.spotify_track_id, cached: false };
-  }
-
-  const { data: raced, error: racedError } = await admin
-    .from("songs")
-    .select("spotify_track_id")
-    .eq("id", song.id)
-    .maybeSingle();
-  if (racedError) throw racedError;
-  return raced?.spotify_track_id
-    ? { status: "matched", spotify_track_id: raced.spotify_track_id, cached: true }
+  const persistedId = await persistSpotifyTrackId(admin, song.id, match.id);
+  return SPOTIFY_TRACK_ID.test(persistedId)
+    ? { status: "matched", spotify_track_id: persistedId, cached: false, identity_source: identitySource }
     : { status: "no_match" };
 }
 
