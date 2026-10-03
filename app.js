@@ -12501,7 +12501,7 @@ async function getValidSpotifyAccessToken() {
   return accessToken;
 }
 
-async function spotifyApiRequest(path, options = {}) {
+async function spotifyApiRequest(path, options = {}, retryState = {}) {
   const accessToken =
     await getValidSpotifyAccessToken();
 
@@ -12534,7 +12534,14 @@ async function spotifyApiRequest(path, options = {}) {
       );
     }
 
-    return spotifyApiRequest(path, options);
+    if (retryState.authRetried) {
+      throw new Error("Spotify connection expired. Please reconnect.");
+    }
+
+    return spotifyApiRequest(path, options, {
+      ...retryState,
+      authRetried: true
+    });
   }
 
   if (response.status === 204) {
@@ -12547,6 +12554,32 @@ try {
   data = await response.json();
 } catch {
   data = null;
+}
+
+if (response.status === 429) {
+  const retryAfter = Number(response.headers.get("Retry-After") || 1);
+  const safeRetryAfter = Number.isFinite(retryAfter) && retryAfter >= 0
+    ? retryAfter
+    : 1;
+  const rateLimitRetries = Number(retryState.rateLimitRetries || 0);
+  const maximumRetries = window.BOMSpotifyPlaylistSync?.MAX_RATE_LIMIT_RETRIES ?? 2;
+  const maximumWait = window.BOMSpotifyPlaylistSync?.MAX_RETRY_AFTER_SECONDS ?? 60;
+
+  if (rateLimitRetries < maximumRetries && safeRetryAfter <= maximumWait) {
+    await new Promise((resolve) => setTimeout(resolve, safeRetryAfter * 1000));
+    return spotifyApiRequest(path, options, {
+      ...retryState,
+      rateLimitRetries: rateLimitRetries + 1
+    });
+  }
+
+  const error = new Error(
+    data?.error?.message ||
+    `Spotify rate limit exceeded. Try again after ${safeRetryAfter} second${safeRetryAfter === 1 ? "" : "s"}.`
+  );
+  error.status = 429;
+  error.retryAfter = safeRetryAfter;
+  throw error;
 }
 
 if (!response.ok) {
@@ -12680,6 +12713,8 @@ function buildSpotifyTrack(song, extra = {}) {
     title,
     artist,
     album: album?.title || "",
+    spotify_track_id: song.spotify_track_id || "",
+    song,
     ...extra
   };
 }
@@ -12759,6 +12794,8 @@ function getGlobalTop100TracksForSpotify() {
       title: track.title,
       artist: track.artist,
       album: track.album,
+      spotify_track_id: track.spotify_track_id || "",
+      song: track.song,
       rating: track.ratingTotal / track.ratingCount,
       ratingCount: track.ratingCount
     }))
@@ -12919,33 +12956,6 @@ async function getOrCreateSpotifyPlaylist({
   return { playlist, created: true };
 }
 
-async function replaceSpotifyPlaylistItems(playlistId, uris) {
-  const uniqueUris = [...new Set(uris.filter(Boolean))];
-  const firstBatch = uniqueUris.slice(0, 100);
-
-  await spotifyApiRequest(
-    `/playlists/${encodeURIComponent(playlistId)}/items`,
-    {
-      method: "PUT",
-      body: JSON.stringify({ uris: firstBatch })
-    }
-  );
-
-  for (let start = 100; start < uniqueUris.length; start += 100) {
-    await spotifyApiRequest(
-      `/playlists/${encodeURIComponent(playlistId)}/items`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          uris: uniqueUris.slice(start, start + 100)
-        })
-      }
-    );
-  }
-
-  return uniqueUris;
-}
-
 function renderSpotifySyncResult({
   playlist,
   playlistName,
@@ -13040,83 +13050,100 @@ async function synchroniseSpotifyPlaylist({
     ? "the BoM Global Top 100"
     : `your ${minimumRating}+ ratings`;
 
-  if (!tracks.length) {
-    setSpotifyMessage(
-      isTop100
-        ? "No songs currently have the minimum three ratings needed for the Global Top 100."
-        : `You do not currently have any tracks rated ${minimumRating} or above.`
-    );
-    return;
-  }
-
   resetSpotifyExportDisplay();
   setSpotifySyncButtonsDisabled(true, button);
 
-  const matched = [];
-  const unmatched = [];
-
   try {
+    if (!window.BOMSpotifyPlaylistSync) {
+      throw new Error("Spotify playlist synchronisation is unavailable.");
+    }
+
+    setSpotifyMessage(`Reading "${playlistName}"…`);
+    const existingPlaylist = await findSpotifyPlaylistByName(playlistName);
+    const existingTrackIds = existingPlaylist?.id
+      ? await window.BOMSpotifyPlaylistSync.fetchSpotifyPlaylistTrackIds(
+          spotifyApiRequest,
+          existingPlaylist.id
+        )
+      : [];
+
+    const requiringMatch = tracks.filter(
+      (track) => !window.BOMSpotifyPlaylistSync.isValidSpotifyTrackId(track.spotify_track_id)
+    ).length;
     setSpotifyMessage(
-      `Matching ${tracks.length} track${tracks.length === 1 ? "" : "s"} with Spotify…`
+      requiringMatch
+        ? `Reusing ${tracks.length - requiringMatch} Spotify IDs; matching ${requiringMatch}…`
+        : `Reusing all ${tracks.length} Spotify IDs…`
     );
 
-    for (let index = 0; index < tracks.length; index += 1) {
-      const bomTrack = tracks[index];
-
-      updateSpotifyExportProgress(
-        index,
-        tracks.length,
-        `Finding ${bomTrack.title} — ${bomTrack.artist}`
-      );
-
-      try {
-        const spotifyTrack = await searchSpotifyTrackForBoMTrack(bomTrack);
-
-        if (spotifyTrack?.uri) {
-          matched.push({ bomTrack, spotifyTrack });
-        } else {
-          unmatched.push(bomTrack);
+    const resolution = await window.BOMSpotifyPlaylistSync.resolveDesiredTracks({
+      tracks,
+      getCachedMatch: getCachedSpotifyMatch,
+      resolveMissing: async (track) => {
+        const spotifyTrack = await resolveQuickRateSpotifyTrack(track.song);
+        if (spotifyTrack?.uri) cacheSpotifyMatch(track, spotifyTrack);
+        return spotifyTrack;
+      },
+      onProgress: (progress) => {
+        if (progress.phase === "rate-limit") {
+          updateSpotifyExportProgress(
+            progress.index,
+            progress.total,
+            `Spotify is busy; resuming this track in ${progress.retryAfter}s…`
+          );
+          return;
         }
-      } catch (error) {
-        console.error("Spotify track matching failed:", bomTrack, error);
-        unmatched.push(bomTrack);
+        updateSpotifyExportProgress(
+          progress.completed,
+          progress.total,
+          `Resolved ${progress.completed} of ${progress.total} ` +
+            `(${progress.reused} stored, ${progress.cached} cached, ${progress.newlyMatched} new)`
+        );
       }
+    });
 
-      updateSpotifyExportProgress(
-        index + 1,
-        tracks.length,
-        `Matched ${matched.length} of ${tracks.length}`
-      );
-    }
+    const matched = resolution.tracks.map((bomTrack) => ({
+      bomTrack,
+      spotifyTrack: { id: bomTrack.spotify_track_id, uri: bomTrack.uri }
+    }));
+    const unmatched = [];
 
-    if (!matched.length) {
-      throw new Error(
-        "Spotify could not match any of the selected BoM tracks."
-      );
-    }
-
-    setSpotifyMessage(`Preparing "${playlistName}"…`);
+    setSpotifyMessage(`Comparing "${playlistName}"…`);
 
     const description = isTop100
       ? "The 100 highest-rated songs on Bank of Music with at least three ratings."
       : `Tracks you rated ${minimumRating}/10 or higher in Bank of Music.`;
 
-    const { playlist, created } = await getOrCreateSpotifyPlaylist({
+    const delta = window.BOMSpotifyPlaylistSync.calculateSpotifyPlaylistDelta(
+      resolution.tracks.map((track) => track.spotify_track_id),
+      existingTrackIds
+    );
+
+    if (!existingPlaylist?.id && !delta.desired.length) {
+      updateSpotifyExportProgress(0, 0, "Already up to date: no qualifying tracks.");
+      setSpotifyMessage(`"${playlistName}" is already up to date; no playlist changes were needed.`);
+      return;
+    }
+
+    const created = !existingPlaylist?.id;
+    const playlist = existingPlaylist || await createSpotifyPlaylist(
       playlistName,
       description
-    });
+    );
+    if (!playlist?.id) throw new Error("Spotify did not return a playlist ID.");
 
-    const uniqueUris = await replaceSpotifyPlaylistItems(
+    const writes = await window.BOMSpotifyPlaylistSync.applySpotifyPlaylistDelta(
+      spotifyApiRequest,
       playlist.id,
-      matched.map((item) => item.spotifyTrack.uri)
+      delta
     );
 
     updateSpotifyExportProgress(
       tracks.length,
       tracks.length,
-      created
-        ? "Playlist created successfully."
-        : "Playlist synchronised successfully."
+      writes
+        ? `Added ${delta.additions.length}; removed ${delta.removals.length}.`
+        : `Already up to date: ${delta.alreadyPresent.length} tracks.`
     );
 
     renderSpotifySyncResult({
@@ -13129,8 +13156,11 @@ async function synchroniseSpotifyPlaylist({
     });
 
     setSpotifyMessage(
-      `${created ? "Created" : "Synchronised"} "${playlistName}" ` +
-      `with ${uniqueUris.length} track${uniqueUris.length === 1 ? "" : "s"}.`
+      writes
+        ? `${created ? "Created" : "Synchronised"} "${playlistName}": ` +
+          `${delta.additions.length} added, ${delta.removals.length} removed, ` +
+          `${delta.alreadyPresent.length} already present.`
+        : `"${playlistName}" is already up to date; no playlist changes were needed.`
     );
   } catch (error) {
     console.error("Spotify playlist synchronisation failed:", error);

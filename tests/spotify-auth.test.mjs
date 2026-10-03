@@ -19,11 +19,12 @@ function createStorage(values = {}) {
   };
 }
 
-function createContext({ response }) {
+function createContext({ response, storageValues = {}, setTimeoutImpl = setTimeout }) {
   const localStorage = createStorage({
     bom_spotify_access_token: "expired-access",
     bom_spotify_refresh_token: "persistent-refresh",
-    bom_spotify_expires_at: "1"
+    bom_spotify_expires_at: "1",
+    ...storageValues
   });
   const requests = [];
   const context = vm.createContext({
@@ -32,6 +33,7 @@ function createContext({ response }) {
     Date,
     localStorage,
     TextEncoder,
+    setTimeout: setTimeoutImpl,
     URL,
     URLSearchParams,
     window: {
@@ -120,4 +122,38 @@ test("an invalid Spotify refresh grant clears stale connection state", async () 
   assert.equal(await context.getValidSpotifyAccessToken(), null);
   assert.equal(localStorage.getItem("bom_spotify_access_token"), null);
   assert.equal(localStorage.getItem("bom_spotify_refresh_token"), null);
+});
+
+test("Spotify API requests respect Retry-After and retry the same request only", async () => {
+  const delays = [];
+  let calls = 0;
+  const { context, requests } = createContext({
+    storageValues: {
+      bom_spotify_access_token: "current-access",
+      bom_spotify_expires_at: String(Date.now() + 60000)
+    },
+    setTimeoutImpl(callback, milliseconds) {
+      delays.push(milliseconds);
+      callback();
+    },
+    response: () => {
+      calls += 1;
+      if (calls === 1) {
+        return new Response(JSON.stringify({ error: { message: "API rate limit exceeded" } }), {
+          status: 429,
+          headers: { "Content-Type": "application/json", "Retry-After": "7" }
+        });
+      }
+      return new Response(JSON.stringify({ id: "spotify-user" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  });
+
+  assert.deepEqual(await context.spotifyApiRequest("/me"), { id: "spotify-user" });
+  assert.deepEqual(delays, [7000]);
+  assert.equal(requests.length, 2);
+  assert.equal(requests[0][0], "https://api.spotify.com/v1/me");
+  assert.equal(requests[1][0], "https://api.spotify.com/v1/me");
 });
