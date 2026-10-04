@@ -60,8 +60,20 @@ export function normaliseSpotifyMatchText(value: unknown) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function shareSpotifyRecordingIdentity(candidates: any[]) {
+  if (!candidates.length) return false;
+  const isrcs = candidates.map(({ candidate }) =>
+    String(candidate?.external_ids?.isrc || "").toUpperCase()
+  );
+  const durations = candidates.map(({ candidate }) => Number(candidate?.duration_ms));
+  return isrcs.every((isrc) => ISRC.test(isrc) && isrc === isrcs[0]) &&
+    durations.every((duration) => Number.isFinite(duration) && duration > 0) &&
+    Math.max(...durations) - Math.min(...durations) <= 2000;
 }
 
 function stripSpotifyRemasterSuffix(value: unknown) {
@@ -119,7 +131,10 @@ export function scoreSpotifyTrackCandidates(
   const best = scored[0];
   const runnerUp = scored[1];
   if (!best) return null;
-  if (runnerUp && best.score - runnerUp.score < 20) return null;
+  if (runnerUp && best.score - runnerUp.score < 20) {
+    const tied = scored.filter((entry: any) => best.score - entry.score < 20);
+    if (!shareSpotifyRecordingIdentity(tied)) return null;
+  }
   return best.candidate;
 }
 

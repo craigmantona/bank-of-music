@@ -14,15 +14,22 @@ const source = readFileSync(
 const spotifyId = number => String(number).padStart(22, "0");
 const recordingId = "d795c2fd-7d3b-4873-968a-968f9e33765e";
 
-function spotifyTrack(id, { title = "The Song", artist = "The Artist", album = "The Album" } = {}) {
+function spotifyTrack(id, {
+  title = "The Song",
+  artist = "The Artist",
+  album = "The Album",
+  durationMs = 180000,
+  isrc = null
+} = {}) {
   return {
     id,
     name: title,
     artists: [{ name: artist }],
     album: { name: album },
+    duration_ms: durationMs,
     is_local: false,
     is_playable: true,
-    external_ids: {}
+    external_ids: isrc ? { isrc } : {}
   };
 }
 
@@ -346,6 +353,64 @@ test("Spotify resolver does not persist an ambiguous match", async () => {
   assert.equal(result.response.status, 200);
   assert.deepEqual(result.body, { status: "no_match" });
   assert.equal(app.updates.length, 0);
+});
+
+test("Spotify resolver collapses ambiguous releases only by shared ISRC and duration", async () => {
+  const fixtures = [
+    [1049, "Buddy Holly", "Weezer"],
+    [1035, "Two Princes", "Spin Doctors"],
+    [4460, "Dirty Diana", "Michael Jackson"],
+    [7843, "If...", "The Bluetones"]
+  ];
+
+  for (const [songId, title, artist] of fixtures) {
+    const candidates = [
+      spotifyTrack(spotifyId(songId), { title, artist, isrc: "USRC17607839", durationMs: 180000 }),
+      spotifyTrack(spotifyId(songId + 10000), { title, artist, isrc: "USRC17607839", durationMs: 181200 })
+    ];
+    const app = resolver({
+      songOverrides: { id: songId, title, artist, external_id: null },
+      candidates
+    });
+    const result = await app.run();
+    assert.equal(result.body.spotify_track_id, spotifyId(songId), `${songId} should collapse safely`);
+    assert.equal(result.body.identity_source, "strict");
+  }
+
+  for (const candidates of [
+    [
+      spotifyTrack(spotifyId(31), { isrc: "USRC17607839", durationMs: 180000 }),
+      spotifyTrack(spotifyId(32), { isrc: "USRC17607840", durationMs: 180000 })
+    ],
+    [
+      spotifyTrack(spotifyId(33), { isrc: "USRC17607839", durationMs: 180000 }),
+      spotifyTrack(spotifyId(34), { isrc: "USRC17607839", durationMs: 183000 })
+    ]
+  ]) {
+    const app = resolver({ candidates });
+    const result = await app.run();
+    assert.deepEqual(result.body, { status: "no_match" });
+    assert.equal(app.updates.length, 0);
+  }
+});
+
+test("Spotify resolver treats ampersand and and equivalently before remaster matching", async () => {
+  const matchedId = spotifyId(6145);
+  const app = resolver({
+    songOverrides: {
+      id: 6145,
+      title: "The Long & Winding Road",
+      artist: "The Beatles",
+      external_id: null
+    },
+    candidates: [spotifyTrack(matchedId, {
+      title: "The Long And Winding Road - Remastered 2009",
+      artist: "The Beatles"
+    })]
+  });
+  const result = await app.run();
+  assert.equal(result.body.spotify_track_id, matchedId);
+  assert.equal(result.body.identity_source, "remaster");
 });
 
 test("Spotify resolver preserves 429 Retry-After and makes no write", async () => {
