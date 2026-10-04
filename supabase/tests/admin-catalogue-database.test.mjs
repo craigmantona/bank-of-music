@@ -15,6 +15,10 @@ const reconciliationMigration = await readFile(
   new URL("../migrations/20260929120000_admin_catalogue_album_reconciliation.sql", import.meta.url),
   "utf8"
 );
+const deterministicLegacyReconciliationMigration = await readFile(
+  new URL("../migrations/20261004120000_require_position_for_legacy_album_reconciliation.sql", import.meta.url),
+  "utf8"
+);
 const ADMIN_ID = "11111111-1111-4111-8111-111111111111";
 const MEMBER_ID = "22222222-2222-4222-8222-222222222222";
 const RELEASE_ID = "33333333-3333-4333-8333-333333333333";
@@ -93,6 +97,7 @@ async function fixture({ applyOccurrenceIdentity = true } = {}) {
   await db.exec(adminCatalogueMigration);
   if (applyOccurrenceIdentity) await db.exec(occurrenceIdentityMigration);
   if (applyOccurrenceIdentity) await db.exec(reconciliationMigration);
+  if (applyOccurrenceIdentity) await db.exec(deterministicLegacyReconciliationMigration);
   return db;
 }
 
@@ -143,9 +148,10 @@ test("incomplete albums reconcile atomically while retaining matching song IDs a
     const savedAlbum = (await db.query("select * from albums where id=283")).rows[0];
     assert.equal(savedAlbum.musicbrainz_release_id, RELEASE_ID);
     assert.equal(savedAlbum.musicbrainz_release_group_id, GROUP_ID);
-    const savedSongs = (await db.query("select id,track_position from songs where album_id=283 order by track_position")).rows;
+    const savedSongs = (await db.query("select id,track_position,external_id from songs where album_id=283 order by track_position")).rows;
     assert.equal(Number(savedSongs[0].id), 16789);
     assert.equal(savedSongs[0].track_position, 1);
+    assert.equal(savedSongs[0].external_id, RECORDING_ID);
     assert.notEqual(Number(savedSongs[1].id), 16789);
     assert.equal(savedSongs[1].track_position, 2);
     assert.equal(Number((await db.query("select song_id from song_ratings")).rows[0].song_id), 16789);
@@ -154,6 +160,149 @@ test("incomplete albums reconcile atomically while retaining matching song IDs a
     assert.equal(again.status, "unchanged");
     assert.equal(again.inserted_count, 0);
     assert.equal((await db.query("select count(*)::int n from songs where album_id=283")).rows[0].n, 2);
+  } finally { await db.close(); }
+});
+
+test("legacy positioned tracks gain recording provenance without replacing the song or its rating", async () => {
+  const db = await fixture();
+  try {
+    const targetRecordingId = "0cfa323c-e67d-4273-81aa-24a096146b80";
+    const everythingMustGo = {
+      title: "Everything Must Go", artist: "Manic Street Preachers",
+      musicbrainz_release_id: "dfaaddd9-622e-4e46-a572-4a6363abb1fb",
+      musicbrainz_release_group_id: "c26969b8-13ce-3bb5-996a-eed9e21e1149"
+    };
+    const authoritativeTracks = [{
+      position: 2, title: "A Design for Life", artist: "Manic Street Preachers",
+      musicbrainz_recording_id: targetRecordingId
+    }];
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id)
+      values(111,'Everything Must Go','Manic Street Preachers','musicbrainz','dfaaddd9-622e-4e46-a572-4a6363abb1fb');
+      insert into songs(id,title,artist,album_id,external_source,external_id,track_position)
+      values(7024,'A Design for Life','Manic Street Preachers',111,'manual',null,2);
+      insert into song_ratings(user_id,song_id,rating) values('${MEMBER_ID}',7024,9);`);
+
+    const result = (await reconcile(
+      db, ADMIN_ID, 111, everythingMustGo, authoritativeTracks
+    )).rows[0].result;
+    assert.equal(result.status, "reconciled");
+    assert.equal(result.retained_count, 1);
+    assert.equal(result.inserted_count, 0);
+
+    const savedSong = (await db.query(
+      "select id,external_source,external_id,track_position from songs where id=7024"
+    )).rows[0];
+    assert.equal(Number(savedSong.id), 7024);
+    assert.equal(savedSong.external_source, "musicbrainz");
+    assert.equal(savedSong.external_id, targetRecordingId);
+    assert.equal(savedSong.track_position, 2);
+    assert.equal(Number((await db.query(
+      "select song_id from song_ratings where user_id=$1", [MEMBER_ID]
+    )).rows[0].song_id), 7024);
+
+    const savedAlbum = (await db.query(
+      "select musicbrainz_release_id,musicbrainz_release_group_id from albums where id=111"
+    )).rows[0];
+    assert.equal(savedAlbum.musicbrainz_release_id, everythingMustGo.musicbrainz_release_id);
+    assert.equal(savedAlbum.musicbrainz_release_group_id, everythingMustGo.musicbrainz_release_group_id);
+
+    const again = (await reconcile(
+      db, ADMIN_ID, 111, everythingMustGo, authoritativeTracks
+    )).rows[0].result;
+    assert.equal(again.status, "unchanged");
+    assert.equal(again.inserted_count, 0);
+  } finally { await db.close(); }
+});
+
+test("legacy title matches at the wrong release position abort the entire reconciliation", async () => {
+  const db = await fixture();
+  try {
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id)
+      values(283,'First Album','The Example','musicbrainz','${RELEASE_ID}');
+      insert into songs(id,title,artist,album_id,external_source,external_id,track_position)
+      values(16789,'Opening Track','The Example',283,'manual',null,2);
+      insert into song_ratings(user_id,song_id,rating) values('${MEMBER_ID}',16789,9);`);
+
+    await assert.rejects(reconcile(db, ADMIN_ID, 283, album, tracks), /conflict/i);
+    const savedAlbum = (await db.query("select * from albums where id=283")).rows[0];
+    const savedSong = (await db.query("select * from songs where id=16789")).rows[0];
+    assert.equal(savedAlbum.musicbrainz_release_id, null);
+    assert.equal(savedSong.external_source, "manual");
+    assert.equal(savedSong.external_id, null);
+    assert.equal(savedSong.track_position, 2);
+    assert.equal(Number((await db.query("select song_id from song_ratings")).rows[0].song_id), 16789);
+  } finally { await db.close(); }
+});
+
+test("Everything Must Go preview retains all twelve occurrences and repairs song 7024", async () => {
+  const db = await fixture();
+  try {
+    const releaseId = "dfaaddd9-622e-4e46-a572-4a6363abb1fb";
+    const groupId = "c26969b8-13ce-3bb5-996a-eed9e21e1149";
+    const authoritativeTracks = [
+      [1, "Elvis Impersonator: Blackpool Pier", "e0a8be49-a7b0-43be-8038-75e7e5504350"],
+      [2, "A Design for Life", "0cfa323c-e67d-4273-81aa-24a096146b80"],
+      [3, "Kevin Carter", "12278e88-8507-4236-8307-ae2bf85140af"],
+      [4, "Enola/Alone", "0696a415-aec3-4481-ae86-f075a4d8041e"],
+      [5, "Everything Must Go", "84343403-333c-4f7e-8ba3-c16f4e7d5e14"],
+      [6, "Small Black Flowers That Grow in the Sky", "6173dd92-7f9c-497d-a4cf-9115cc9148ea"],
+      [7, "The Girl Who Wanted to Be God", "9c8c635b-04f9-451f-ad01-42e90adb1590"],
+      [8, "Removables", "02fbd1af-6f70-4355-b6d4-bb4597f712d5"],
+      [9, "Australia", "ac9a9096-6757-4d2b-b701-22335d45cff7"],
+      [10, "Interiors (Song for Willem de Kooning)", "c3f363a6-55ad-47b5-9dbd-f2b15f16e57d"],
+      [11, "Further Away", "f172936e-4c72-461f-8302-978c080b0efa"],
+      [12, "No Surface All Feeling", "84659a7f-e8c3-4999-b223-73618523c14e"]
+    ].map(([position, title, musicbrainz_recording_id]) => ({
+      position, title, artist: "Manic Street Preachers", musicbrainz_recording_id
+    }));
+    const ids = [4348, 7024, 7025, 7026, 4349, 7027, 7028, 7029, 7030, 7031, 7032, 7033];
+
+    await db.exec(`insert into albums(id,title,artist,external_source,external_id)
+      values(111,'Everything Must Go','Manic Street Preachers','musicbrainz','${releaseId}')`);
+    for (let index = 0; index < authoritativeTracks.length; index += 1) {
+      const track = authoritativeTracks[index];
+      const id = ids[index];
+      const hasRecording = track.position === 1 || track.position === 5;
+      await db.query(
+        `insert into songs(id,title,artist,album_id,external_source,external_id,track_position)
+         values($1,$2,'Manic Street Preachers',111,$3,$4,$5)`,
+        [id,
+          track.position === 10 ? "Interiors (Song for Willem De Kooning)" : track.title,
+          hasRecording ? "musicbrainz" : "manual",
+          hasRecording ? track.musicbrainz_recording_id : null,
+          track.position]
+      );
+      if (track.position <= 10) {
+        await db.query(
+          "insert into song_ratings(user_id,song_id,rating) values($1,$2,9)",
+          [MEMBER_ID, id]
+        );
+      }
+    }
+
+    const result = (await reconcile(db, ADMIN_ID, 111, {
+      title: "Everything Must Go", artist: "Manic Street Preachers",
+      musicbrainz_release_id: releaseId, musicbrainz_release_group_id: groupId
+    }, authoritativeTracks)).rows[0].result;
+    assert.equal(result.retained_count, 12);
+    assert.equal(result.inserted_count, 0);
+    assert.deepEqual(
+      (await db.query("select id from songs where album_id=111 order by track_position")).rows.map(row => Number(row.id)),
+      ids
+    );
+    assert.equal((await db.query(
+      "select external_id from songs where id=7024"
+    )).rows[0].external_id, "0cfa323c-e67d-4273-81aa-24a096146b80");
+    assert.equal((await db.query(
+      "select external_id from songs where id=4348"
+    )).rows[0].external_id, "e0a8be49-a7b0-43be-8038-75e7e5504350");
+    assert.equal((await db.query(
+      "select external_id from songs where id=4349"
+    )).rows[0].external_id, "84343403-333c-4f7e-8ba3-c16f4e7d5e14");
+    assert.equal((await db.query(
+      "select count(*)::int n from songs where album_id=111 and external_source='musicbrainz' and external_id is not null"
+    )).rows[0].n, 12);
+    assert.equal((await db.query("select count(*)::int n from song_ratings")).rows[0].n, 10);
   } finally { await db.close(); }
 });
 
