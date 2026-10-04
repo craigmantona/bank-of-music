@@ -60,16 +60,23 @@ export function normaliseSpotifyMatchText(value: unknown) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\([^)]*(remaster|remastered|live|edit|version)[^)]*\)/gi, "")
-    .replace(/\[[^\]]*(remaster|remastered|live|edit|version)[^\]]*\]/gi, "")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function stripSpotifyRemasterSuffix(value: unknown) {
+  const descriptor = "(?:remaster(?:ed)?(?:\\s+(?:version|[0-9]{4}))?|[0-9]{4}\\s+remaster(?:ed)?(?:\\s+version)?)";
+  return String(value || "").replace(
+    new RegExp(`\\s*(?:[-–—:]\\s*${descriptor}|\\(\\s*${descriptor}\\s*\\)|\\[\\s*${descriptor}\\s*\\])\\s*$`, "i"),
+    ""
+  ).trim();
 }
 
 export function scoreSpotifyTrackCandidates(
   song: { title: string; artist: string },
   albumTitle: string,
-  candidates: any[]
+  candidates: any[],
+  allowRemasterSuffix = false
 ) {
   const wantedTitle = normaliseSpotifyMatchText(song.title);
   const wantedArtist = normaliseSpotifyMatchText(song.artist);
@@ -89,13 +96,16 @@ export function scoreSpotifyTrackCandidates(
         .filter(Boolean);
       const candidateAlbum = normaliseSpotifyMatchText(candidate.album?.name);
       const exactTitle = candidateTitle === wantedTitle;
+      const remasterTitle = allowRemasterSuffix &&
+        stripSpotifyRemasterSuffix(candidate.name) !== String(candidate.name || "").trim() &&
+        normaliseSpotifyMatchText(stripSpotifyRemasterSuffix(candidate.name)) === wantedTitle;
       const exactArtist = candidateArtists.includes(wantedArtist);
       const albumExact = Boolean(wantedAlbum) && candidateAlbum === wantedAlbum;
       const albumContains = Boolean(wantedAlbum) && (
         candidateAlbum.includes(wantedAlbum) || wantedAlbum.includes(candidateAlbum)
       );
 
-      if (!exactTitle || !exactArtist) return null;
+      if ((!exactTitle && !remasterTitle) || !exactArtist) return null;
       if (wantedAlbum && !albumExact && !albumContains) return null;
 
       return {
@@ -278,7 +288,11 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
         identitySource = "isrc";
         break;
       }
+    }
   }
+  if (!match) {
+    match = scoreSpotifyTrackCandidates(song, albumTitle, candidates, true);
+    if (match) identitySource = "remaster";
   }
   if (!match) return { status: "no_match" };
 

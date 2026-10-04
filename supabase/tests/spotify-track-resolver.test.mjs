@@ -41,7 +41,7 @@ function resolver({
   const requests = [];
   const song = {
     id: 42,
-    title: "The Song (2011 Remaster)",
+    title: "The Song",
     artist: "The Artist",
     album_id: 9,
     is_deleted: false,
@@ -297,6 +297,47 @@ test("Spotify resolver rejects an ISRC candidate that does not exactly match Mus
   const result = await app.run();
   assert.deepEqual(result.body, { status: "no_match" });
   assert.equal(app.updates.length, 0);
+});
+
+test("Spotify resolver generically accepts only a conventional remaster title suffix", async () => {
+  for (const title of ["Get Back - Remastered 2009", "Get Back [2009 Remaster]"]) {
+    const matchedId = spotifyId(title.includes("[") ? 11 : 10);
+    const app = resolver({
+      songOverrides: {
+        title: "Get Back",
+        artist: "The Beatles",
+        external_id: null
+      },
+      candidates: [spotifyTrack(matchedId, {
+        title,
+        artist: "The Beatles",
+        album: "The Album"
+      })]
+    });
+    const result = await app.run();
+    assert.equal(result.body.spotify_track_id, matchedId);
+    assert.equal(result.body.identity_source, "remaster");
+  }
+});
+
+test("Spotify resolver rejects unsafe version suffixes", async () => {
+  const unsafe = [
+    "Live", "Remix", "Acoustic", "Demo", "Edit", "Radio Edit",
+    "Instrumental", "Karaoke", "Tribute"
+  ];
+  for (const suffix of unsafe) {
+    const app = resolver({
+      songOverrides: { title: "Get Back", artist: "The Beatles", external_id: null },
+      candidates: [spotifyTrack(spotifyId(20), {
+        title: `Get Back - ${suffix}`,
+        artist: "The Beatles",
+        album: "The Album"
+      })]
+    });
+    const result = await app.run();
+    assert.deepEqual(result.body, { status: "no_match" }, suffix);
+    assert.equal(app.updates.length, 0, suffix);
+  }
 });
 
 test("Spotify resolver does not persist an ambiguous match", async () => {

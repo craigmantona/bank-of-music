@@ -13026,7 +13026,7 @@ function renderSpotifySyncResult({
           ${unmatched.map((track) => `
             <div class="spotify-unmatched-row">
               <strong>${escapeHtml(track.title)}</strong>
-              <span>${escapeHtml(track.artist)}</span>
+              <span>${escapeHtml(track.artist)} · BOM song ${escapeHtml(track.songId ?? "unknown")}</span>
             </div>
           `).join("")}
         </div>
@@ -13117,9 +13117,10 @@ async function synchroniseSpotifyPlaylist({
         updateSpotifyExportProgress(
           progress.completed,
           progress.total,
-          `Resolved ${progress.completed} of ${progress.total} ` +
+            `Resolved ${progress.completed} of ${progress.total} ` +
             `(${progress.storedTotal} stored, ${progress.recordingReused} recording reuse, ` +
-            `${progress.cached} cached, ${progress.newlyMatched} new)`
+            `${progress.cached} cached, ${progress.newlyMatched} new, ` +
+            `${progress.unresolved} unresolved)`
         );
       }
     });
@@ -13128,7 +13129,7 @@ async function synchroniseSpotifyPlaylist({
       bomTrack,
       spotifyTrack: { id: bomTrack.spotify_track_id, uri: bomTrack.uri }
     }));
-    const unmatched = [];
+    const unmatched = resolution.unresolved;
 
     setSpotifyMessage(`Comparing "${playlistName}"…`);
 
@@ -13138,7 +13139,8 @@ async function synchroniseSpotifyPlaylist({
 
     const delta = window.BOMSpotifyPlaylistSync.calculateSpotifyPlaylistDelta(
       resolution.tracks.map((track) => track.spotify_track_id),
-      existingTrackIds
+      existingTrackIds,
+      { preserveExisting: unmatched.length > 0 }
     );
 
     if (!existingPlaylist?.id && !delta.desired.length) {
@@ -13164,8 +13166,10 @@ async function synchroniseSpotifyPlaylist({
       tracks.length,
       tracks.length,
       writes
-        ? `Added ${delta.additions.length}; removed ${delta.removals.length}.`
-        : `Already up to date: ${delta.alreadyPresent.length} tracks.`
+        ? `Added ${delta.additions.length}; removed ${delta.removals.length}; ` +
+          `${unmatched.length} unresolved.`
+        : `Already up to date: ${delta.alreadyPresent.length} tracks; ` +
+          `${unmatched.length} unresolved.`
     );
 
     renderSpotifySyncResult({
@@ -13181,8 +13185,9 @@ async function synchroniseSpotifyPlaylist({
       writes
         ? `${created ? "Created" : "Synchronised"} "${playlistName}": ` +
           `${delta.additions.length} added, ${delta.removals.length} removed, ` +
-          `${delta.alreadyPresent.length} already present.`
-        : `"${playlistName}" is already up to date; no playlist changes were needed.`
+          `${delta.alreadyPresent.length} already present, ${unmatched.length} unresolved.`
+        : `"${playlistName}" is already up to date; no playlist changes were needed. ` +
+          `${unmatched.length} unresolved.`
     );
   } catch (error) {
     console.error("Spotify playlist synchronisation failed:", error);

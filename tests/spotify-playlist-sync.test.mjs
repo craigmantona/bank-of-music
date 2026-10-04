@@ -150,17 +150,52 @@ test("new resolutions are retained and completed work is not restarted after 429
   assert.deepEqual(result.tracks.map((track) => track.spotify_track_id), [id(11), id(12), id(13)]);
 });
 
-test("failed or incomplete resolution happens before and prevents playlist mutation", async () => {
-  let writes = 0;
-  await assert.rejects(
-    sync.resolveDesiredTracks({
-      tracks: [{ title: "Missing", artist: "Artist" }],
-      getCachedMatch: () => null,
-      resolveMissing: async () => null
-    }),
-    /could not resolve/
+test("an unresolved track is reported while later tracks resolve", async () => {
+  const result = await sync.resolveDesiredTracks({
+    tracks: [
+      { song: { id: 41 }, title: "Missing", artist: "Artist" },
+      { song: { id: 42 }, title: "Later", artist: "Artist" }
+    ],
+    getCachedMatch: () => null,
+    resolveMissing: async (track) => track.title === "Missing" ? null : { id: id(42) }
+  });
+
+  assert.deepEqual(result.tracks.map(track => track.title), ["Later"]);
+  assert.deepEqual(result.unresolved.map(track => ({
+    songId: track.songId, artist: track.artist, title: track.title
+  })), [{ songId: 41, artist: "Artist", title: "Missing" }]);
+});
+
+test("unresolved tracks protect existing entries while resolved additions still sync", async () => {
+  const present = id(1);
+  const staleOrUnresolved = id(2);
+  const added = id(3);
+  const protectedDelta = sync.calculateSpotifyPlaylistDelta(
+    [present, added],
+    [present, staleOrUnresolved],
+    { preserveExisting: true }
   );
-  assert.equal(writes, 0);
+  assert.deepEqual(protectedDelta, {
+    desired: [present, added],
+    alreadyPresent: [present],
+    additions: [added],
+    removals: []
+  });
+
+  const writes = [];
+  await sync.applySpotifyPlaylistDelta(async (path, options) => {
+    writes.push({ path, options });
+  }, "playlist", protectedDelta);
+  assert.equal(writes.length, 1);
+  assert.equal(writes[0].options.method, "POST");
+
+  const fullyResolved = sync.calculateSpotifyPlaylistDelta([present, added], [present, staleOrUnresolved]);
+  assert.deepEqual(fullyResolved.additions, [added]);
+  assert.deepEqual(fullyResolved.removals, [staleOrUnresolved]);
+});
+
+test("rate-limit exhaustion still aborts resolution", async () => {
+  let writes = 0;
 
   let attempts = 0;
   const waits = [];

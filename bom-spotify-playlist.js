@@ -33,6 +33,7 @@
     maxRetryAfterSeconds = MAX_RETRY_AFTER_SECONDS
   }) {
     const resolved = [];
+    const unresolved = [];
     let reused = 0;
     const storedTotal = tracks.filter((track) => isValidSpotifyTrackId(track.spotify_track_id)).length;
     let recordingReused = 0;
@@ -69,9 +70,11 @@
           try {
             const match = await resolveMissing(track);
             if (!isValidSpotifyTrackId(match?.id)) {
-              const error = new Error(`Spotify could not resolve "${track.title}" by ${track.artist}.`);
-              error.code = "spotify_resolution_incomplete";
-              throw error;
+              unresolved.push({
+                ...track,
+                songId: track.song?.id ?? track.song_id ?? track.id ?? null
+              });
+              break;
             }
             spotifyTrackId = match.id;
             if (match.identitySource === "recording") recordingReused += 1;
@@ -94,7 +97,9 @@
         }
       }
 
-      resolved.push({ ...track, spotify_track_id: spotifyTrackId, uri: spotifyTrackUri(spotifyTrackId) });
+      if (spotifyTrackId) {
+        resolved.push({ ...track, spotify_track_id: spotifyTrackId, uri: spotifyTrackUri(spotifyTrackId) });
+      }
       onProgress({
         phase: "resolution",
         completed: index + 1,
@@ -103,11 +108,12 @@
         storedTotal,
         recordingReused,
         cached,
-        newlyMatched
+        newlyMatched,
+        unresolved: unresolved.length
       });
     }
 
-    return { tracks: resolved, reused, storedTotal, recordingReused, cached, newlyMatched };
+    return { tracks: resolved, unresolved, reused, storedTotal, recordingReused, cached, newlyMatched };
   }
 
   async function fetchSpotifyPlaylistTrackIds(request, playlistId) {
@@ -127,13 +133,21 @@
     return trackIds;
   }
 
-  function calculateSpotifyPlaylistDelta(desiredTrackIds, existingTrackIds) {
+  function calculateSpotifyPlaylistDelta(desiredTrackIds, existingTrackIds, { preserveExisting = false } = {}) {
     const desired = [...new Set(desiredTrackIds.filter(isValidSpotifyTrackId))];
     const existingCounts = new Map();
     existingTrackIds.filter(isValidSpotifyTrackId).forEach((id) => {
       existingCounts.set(id, (existingCounts.get(id) || 0) + 1);
     });
     const desiredSet = new Set(desired);
+    if (preserveExisting) {
+      return {
+        desired,
+        alreadyPresent: desired.filter((id) => existingCounts.has(id)),
+        additions: desired.filter((id) => !existingCounts.has(id)),
+        removals: []
+      };
+    }
     const duplicateDesired = new Set(
       [...existingCounts].filter(([id, count]) => desiredSet.has(id) && count > 1).map(([id]) => id)
     );
