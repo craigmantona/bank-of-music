@@ -7,6 +7,10 @@ const migration = await readFile(
   new URL("../migrations/20261004140000_convert_definitely_maybe_audio.sql", import.meta.url),
   "utf8"
 );
+const correctiveMigration = await readFile(
+  new URL("../migrations/20261004150000_fix_definitely_maybe_admin_delete.sql", import.meta.url),
+  "utf8"
+);
 
 const ADMIN_ID = "076d961e-c330-4cf7-a820-e0b45a8b8cd0";
 const BARCS_ID = "a9824c00-1aa0-4bd1-96d4-0c71f84ec5ca";
@@ -62,7 +66,7 @@ const songRatings = [
   [141,9,7],[4,10,9],[143,11,8],[144,12,8],[146,13,9],[147,14,9]
 ];
 
-async function fixture() {
+async function fixture({ applyCorrection = true } = {}) {
   const db = new PGlite();
   await db.exec(`
     create role anon; create role authenticated; create role service_role;
@@ -110,6 +114,14 @@ async function fixture() {
     grant select on public.profiles to authenticated;
     grant select,insert,update,delete on all tables in schema public to authenticated;
     grant usage,select on sequence public.songs_id_seq to authenticated;
+    alter table public.ratings enable row level security;
+    create policy "Public read ratings" on public.ratings for select using (true);
+    create policy "Users can delete own album ratings" on public.ratings for delete
+      to authenticated using (user_id = auth.uid());
+    alter table public.song_ratings enable row level security;
+    create policy "Public read song ratings" on public.song_ratings for select using (true);
+    create policy "Users can delete own song ratings" on public.song_ratings for delete
+      to authenticated using (user_id = auth.uid());
   `);
   for (const [id,title,recording,spotify] of sourceTracks) {
     await db.query(`insert into songs(id,title,artist,album_id,external_source,external_id,is_deleted,spotify_track_id)
@@ -123,6 +135,7 @@ async function fixture() {
   await db.query("insert into ratings(id,user_id,album_id,rating) values(14,$1,6,10),(60,$2,6,5)",
     [ADMIN_ID,BARCS_ID]);
   await db.exec(migration);
+  if (applyCorrection) await db.exec(correctiveMigration);
   return db;
 }
 
@@ -168,6 +181,18 @@ test("guarded conversion previews then atomically replaces the DVD catalogue wit
     assert.equal((await db.query("select count(*)::int n from ratings where album_id=6")).rows[0].n, 0);
     assert.equal((await db.query("select count(*)::int n from song_ratings")).rows[0].n, 0);
     assert.equal((await db.query("select count(*)::int n from catalogue_release_group_exclusions")).rows[0].n, 0);
+  } finally { await db.close(); }
+});
+
+test("the deployed invoker function reproduces the cross-user album-rating RLS failure", async () => {
+  const db = await fixture({ applyCorrection: false });
+  try {
+    const preview = (await asUser(db, ADMIN_ID, false)).rows[0].result;
+    assert.equal(preview.album_rating_deletions, 2);
+    await assert.rejects(asUser(db, ADMIN_ID, true), /Expected album ratings were not deleted/);
+    assert.equal((await db.query("select count(*)::int n from ratings where album_id=6")).rows[0].n, 2);
+    assert.equal((await db.query("select count(*)::int n from song_ratings")).rows[0].n, 12);
+    assert.equal((await db.query("select count(*)::int n from songs where album_id=6")).rows[0].n, 24);
   } finally { await db.close(); }
 });
 
