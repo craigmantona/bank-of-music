@@ -185,6 +185,15 @@ Deno.serve(async (request) => {
       auth: { persistSession: false, autoRefreshToken: false }
     });
 
+    if (body?.action === "convert_definitely_maybe_preview" ||
+        body?.action === "convert_definitely_maybe") {
+      const { data, error } = await userClient.rpc("admin_convert_definitely_maybe", {
+        p_execute: body.action === "convert_definitely_maybe"
+      });
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, conversion: data });
+    }
+
     if (body?.action === "list_exclusions") {
       const { data, error } = await userClient.from("catalogue_release_group_exclusions")
         .select("musicbrainz_release_group_id,artist,title,excluded_at")
