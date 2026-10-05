@@ -4,7 +4,9 @@ import {
   flattenTracks,
   resolveExistingAlbumRelease,
   resolveRequestedAlbum,
-  searchArtistCandidates
+  resolveSelectedRelease,
+  searchArtistCandidates,
+  searchReleaseCandidates
 } from "../functions/_shared/admin-catalogue.ts";
 
 test("multi-medium flattening assigns album-wide positions and retains disc metadata", () => {
@@ -176,4 +178,95 @@ test("incomplete track metadata fails instead of importing a partial album", asy
   const result = await resolve(musicBrainzFixture({ detail }));
   assert.equal(result.status, "failed");
   assert.equal(result.reason, "complete_track_listing_unavailable");
+});
+
+function manualReleaseDetail({
+  status = "Official",
+  primaryType = "Album",
+  secondaryTypes = ["Compilation"],
+  media = releaseDetail().media
+} = {}) {
+  return {
+    ...releaseDetail(),
+    status,
+    media,
+    "release-group": {
+      id: GROUP_ID,
+      title: "First Album",
+      "primary-type": primaryType,
+      "secondary-types": secondaryTypes,
+      "first-release-date": "1984-02-20"
+    }
+  };
+}
+
+test("manual release search includes official compilations and soundtracks without studio qualification", async () => {
+  const calls = [];
+  const releases = [
+    { ...ukRelease, score: 100, media: [{ format: "CD" }], "release-group": { ...group, "secondary-types": ["Compilation"] } },
+    { ...usRelease, score: 95, media: [{ format: "Digital Media" }], "release-group": { ...group, id: OTHER_GROUP_ID, "secondary-types": ["Soundtrack"] } }
+  ];
+  const results = await searchReleaseCandidates("The Example", "First Album", async path => {
+    calls.push(path);
+    return { releases };
+  });
+  assert.equal(results.length, 2);
+  assert.deepEqual(results.map(item => item.secondary_types[0]), ["Compilation", "Soundtrack"]);
+  assert.deepEqual(results.map(item => item.importable), [true, true]);
+  assert.match(decodeURIComponent(calls[0]), /artist:"The Example" AND release:"First Album"/);
+});
+
+test("exact selected release preview uses release artist credit and complete recording-backed tracks", async () => {
+  const detail = manualReleaseDetail();
+  const calls = [];
+  const result = await resolveSelectedRelease({
+    releaseId: UK_RELEASE_ID,
+    musicBrainzGet: async path => { calls.push(path); return detail; },
+    findExisting: async () => null,
+    artworkAvailable: async () => true
+  });
+  assert.equal(result.status, "ready");
+  assert.equal(result.album.artist, "The Example");
+  assert.equal(result.album.musicbrainz_release_id, UK_RELEASE_ID);
+  assert.equal(result.release_group.secondary_types[0], "Compilation");
+  assert.equal(result.tracks[0].musicbrainz_recording_id, RECORDING_ID);
+  assert.deepEqual(calls, [`/release/${UK_RELEASE_ID}?inc=recordings+artist-credits+release-groups&fmt=json`]);
+});
+
+test("exact selected release reports an existing identity without writing", async () => {
+  let duplicateIdentity;
+  const result = await resolveSelectedRelease({
+    releaseId: UK_RELEASE_ID,
+    musicBrainzGet: async () => manualReleaseDetail(),
+    findExisting: async identity => {
+      duplicateIdentity = identity;
+      return { id: 91, title: identity.title, artist: identity.artist };
+    },
+    artworkAvailable: async () => true
+  });
+  assert.equal(result.status, "already_exists");
+  assert.equal(result.existing_album_id, 91);
+  assert.equal(duplicateIdentity.musicbrainz_release_group_id, GROUP_ID);
+});
+
+test("manual exact-release preview rejects non-official and incomplete releases", async () => {
+  for (const status of ["Bootleg", "Pseudo-Release"]) {
+    const nonOfficial = await resolveSelectedRelease({
+      releaseId: UK_RELEASE_ID,
+      musicBrainzGet: async () => manualReleaseDetail({ status }),
+      findExisting: async () => null
+    });
+    assert.equal(nonOfficial.status, "failed");
+    assert.equal(nonOfficial.reason, "official_release_required");
+  }
+
+  const incomplete = await resolveSelectedRelease({
+    releaseId: UK_RELEASE_ID,
+    musicBrainzGet: async () => manualReleaseDetail({
+      media: [{ position: 1, "track-count": 2, tracks: releaseDetail().media[0].tracks }]
+    }),
+    findExisting: async () => null
+  });
+  assert.equal(incomplete.status, "failed");
+  assert.equal(incomplete.reason, "complete_track_listing_unavailable");
 });

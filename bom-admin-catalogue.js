@@ -10,6 +10,12 @@
     rows: [{ client_id: crypto.randomUUID(), title: "", uk_release_date: "", release_group_id: "", release_id: "", selected: false }],
     previews: [],
     results: [],
+    releaseArtistQuery: "",
+    releaseTitleQuery: "",
+    releaseCandidates: [],
+    selectedReleaseId: "",
+    releasePreview: null,
+    releaseResult: null,
     exclusions: [],
     busy: false,
     message: ""
@@ -143,6 +149,46 @@
     </div>`;
   }
 
+  function releaseTypeLabel(release) {
+    return [release.primary_type, ...(release.secondary_types || [])].filter(Boolean).join(" · ") || "Type unknown";
+  }
+
+  function addFromMusicBrainzMarkup() {
+    const preview = state.releasePreview;
+    const result = state.releaseResult;
+    const current = result || preview;
+    return `<div class="admin-catalogue-albums">
+      <div class="admin-catalogue-albums-heading"><div><h4>Add from MusicBrainz</h4>
+        <p class="small">Search and explicitly select one official release. Compilations and soundtracks are included.</p></div></div>
+      <div class="admin-catalogue-row">
+        <div class="admin-catalogue-row-number">MB</div>
+        <label>Artist<input data-catalogue-release-field="artist" value="${escape(state.releaseArtistQuery)}" placeholder="e.g. The Smiths"></label>
+        <label>Release title<input data-catalogue-release-field="title" value="${escape(state.releaseTitleQuery)}" placeholder="e.g. Hatful of Hollow"></label>
+        <button type="button" data-catalogue-search-releases ${state.busy ? "disabled" : ""}>Search MusicBrainz</button>
+      </div>
+      ${state.releaseCandidates.length ? `<div class="admin-catalogue-candidates" role="list">
+        ${state.releaseCandidates.map(release => `<button type="button" data-catalogue-preview-release="${escape(release.release_id)}" role="listitem" ${state.busy || !release.importable ? "disabled" : ""}>
+          <strong>${escape(release.artist || "Artist unknown")} — ${escape(release.title)}</strong>
+          <span>${escape(release.date || "Date unknown")} · ${escape(release.country || "Country unknown")} · ${escape(releaseTypeLabel(release))}</span>
+          <small>${escape(release.format || "Format unknown")} · ${escape(release.status || "Status unknown")}${release.importable ? " · Preview" : " · Not importable"}</small>
+        </button>`).join("")}
+      </div>` : ""}
+      ${current ? `<div class="admin-catalogue-preview is-${escape(current.status)}">
+        <div class="admin-catalogue-preview-heading">
+          ${preview?.album?.cover_art_url ? `<img src="${escape(preview.album.cover_art_url)}" alt="" loading="lazy">` : `<span class="admin-catalogue-no-art">bom</span>`}
+          <div><span class="admin-catalogue-status">${escape(statusLabel(current.status))}</span>
+            <strong>${escape(preview?.album?.artist || "")} — ${escape(preview?.album?.title || "Selected release")}</strong>
+            ${preview?.selected_release ? `<small>${escape(preview.selected_release.date || "Date unknown")} · ${escape(preview.selected_release.country || "Country unknown")} · ${escape(releaseTypeLabel(preview.selected_release))} · ${escape(preview.selected_release.format || "Format unknown")}</small>` : ""}
+          </div>
+        </div>
+        ${current.reason ? `<p class="admin-catalogue-warning">${escape(reasonLabel(current.reason))}</p>` : ""}
+        ${(preview?.warnings || []).map(warning => `<p class="admin-catalogue-warning">${escape(reasonLabel(warning))}</p>`).join("")}
+        ${preview?.tracks?.length ? `<details open><summary>${preview.tracks.length} tracks</summary><ol>${preview.tracks.map(track => `<li>${escape(track.title)}${normalise(track.artist) !== normalise(preview.album?.artist) ? ` — ${escape(track.artist)}` : ""}</li>`).join("")}</ol></details>` : ""}
+        ${preview?.status === "ready" && !result ? `<div class="admin-catalogue-actions"><button type="button" data-catalogue-add-release ${state.busy ? "disabled" : ""}>Add to BOM</button></div>` : ""}
+      </div>` : ""}
+    </div>`;
+  }
+
   function render() {
     const adminDashboard = host?.getRoot();
     if (!adminDashboard || !host.canRender()) return;
@@ -159,7 +205,7 @@
     panel.innerHTML = `<header class="admin-catalogue-header"><div><span>Catalogue</span><h3>Add Artist &amp; Albums</h3>
       <p>Confirm one artist, preview up to 10 explicitly requested albums, then add only your selected matches.</p></div></header>
       ${state.message ? `<p class="admin-catalogue-message" role="status">${escape(state.message)}</p>` : ""}
-      ${exclusionsMarkup()}${artistMarkup()}${albumsMarkup()}`;
+      ${exclusionsMarkup()}${artistMarkup()}${albumsMarkup()}${addFromMusicBrainzMarkup()}`;
   }
 
   async function invoke(body) {
@@ -230,6 +276,56 @@
       const data = await invoke({ action: "commit", artist: state.artist, albums: selected });
       state.results = data.results || [];
       state.message = state.results.map(result => `${result.requested_title}: ${statusLabel(result.status)}`).join(" · ");
+      await host.refreshAfterCommit();
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
+  async function searchReleases() {
+    if (!state.releaseArtistQuery.trim() || !state.releaseTitleQuery.trim()) {
+      state.message = "Enter an artist and release title."; render(); return;
+    }
+    state.busy = true; state.message = "Searching MusicBrainz releases…";
+    state.releaseCandidates = []; state.selectedReleaseId = "";
+    state.releasePreview = null; state.releaseResult = null; render();
+    try {
+      const data = await invoke({
+        action: "search_releases",
+        artist_name: state.releaseArtistQuery,
+        release_title: state.releaseTitleQuery
+      });
+      state.releaseCandidates = data.releases || [];
+      state.message = state.releaseCandidates.length
+        ? "Choose one official release to preview. Nothing has been written."
+        : "No matching MusicBrainz releases found.";
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
+  async function previewRelease(releaseId) {
+    state.busy = true; state.message = "Loading the exact MusicBrainz release…";
+    state.selectedReleaseId = releaseId; state.releasePreview = null; state.releaseResult = null; render();
+    try {
+      const data = await invoke({ action: "preview_release", release_id: releaseId });
+      state.releasePreview = data.preview || null;
+      state.message = state.releasePreview?.status === "ready"
+        ? "Release validated. Review the complete track list before adding."
+        : state.releasePreview?.status === "already_exists"
+          ? "BOM already contains this album or release."
+          : `Release cannot be added: ${reasonLabel(state.releasePreview?.reason || "validation failed")}.`;
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
+  async function addSelectedRelease() {
+    if (!state.selectedReleaseId || state.releasePreview?.status !== "ready") return;
+    state.busy = true; state.message = "Refetching and adding the selected release…"; render();
+    try {
+      const data = await invoke({ action: "add_release", release_id: state.selectedReleaseId });
+      state.releaseResult = data.result || null;
+      state.message = state.releaseResult?.status === "added"
+        ? `${state.releaseResult.artist} — ${state.releaseResult.title} added with ${state.releaseResult.track_count} tracks.`
+        : "BOM already contains this album or release.";
       await host.refreshAfterCommit();
     } catch (error) { state.message = error.message; }
     finally { state.busy = false; render(); }
@@ -309,6 +405,14 @@
     if (!adminDashboard) return;
 
     adminDashboard.addEventListener("input", event => {
+    const releaseField = event.target.closest("[data-catalogue-release-field]");
+    if (releaseField) {
+      if (releaseField.dataset.catalogueReleaseField === "artist") state.releaseArtistQuery = releaseField.value;
+      if (releaseField.dataset.catalogueReleaseField === "title") state.releaseTitleQuery = releaseField.value;
+      state.releaseCandidates = []; state.selectedReleaseId = "";
+      state.releasePreview = null; state.releaseResult = null;
+      return;
+    }
     const field = event.target.closest("[data-catalogue-field]");
     if (!field) return;
     const row = rowById(field.closest("[data-catalogue-row]")?.dataset.catalogueRow);
@@ -349,6 +453,10 @@
     const deleteButton = event.target.closest("[data-catalogue-delete-album]");
     if (deleteButton) { await deleteAlbum(Number(deleteButton.dataset.catalogueDeleteAlbum)); return; }
     if (event.target.closest("[data-catalogue-search-artist]")) { await searchArtist(); return; }
+    if (event.target.closest("[data-catalogue-search-releases]")) { await searchReleases(); return; }
+    const releasePreviewButton = event.target.closest("[data-catalogue-preview-release]");
+    if (releasePreviewButton) { await previewRelease(releasePreviewButton.dataset.cataloguePreviewRelease); return; }
+    if (event.target.closest("[data-catalogue-add-release]")) { await addSelectedRelease(); return; }
     const choice = event.target.closest("[data-catalogue-choose-artist]");
     if (choice) {
       state.artist = state.artistCandidates[Number(choice.dataset.catalogueChooseArtist)] || null;

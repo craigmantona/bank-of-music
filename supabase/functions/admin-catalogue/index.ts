@@ -6,7 +6,9 @@ import {
   normaliseCatalogueText,
   resolveExistingAlbumRelease,
   resolveRequestedAlbum,
+  resolveSelectedRelease,
   searchArtistCandidates,
+  searchReleaseCandidates,
   type RequestedAlbum
 } from "../_shared/admin-catalogue.ts";
 
@@ -184,6 +186,47 @@ Deno.serve(async (request) => {
       global: { headers: { Authorization: authorizationHeader }, fetch: catalogueFetch },
       auth: { persistSession: false, autoRefreshToken: false }
     });
+
+    if (body?.action === "search_releases") {
+      const artistName = String(body.artist_name || "").trim();
+      const releaseTitle = String(body.release_title || "").trim();
+      if (!artistName || !releaseTitle || artistName.length > 300 || releaseTitle.length > 300) {
+        return json(request, { ok: false, error: "Enter an artist and release title." }, 400);
+      }
+      const releases = await searchReleaseCandidates(artistName, releaseTitle, musicBrainzGet);
+      return json(request, { ok: true, releases });
+    }
+
+    if (body?.action === "preview_release" || body?.action === "add_release") {
+      const releaseId = String(body.release_id || "").trim().toLowerCase();
+      if (!uuid(releaseId)) {
+        return json(request, { ok: false, error: "Choose a valid MusicBrainz release." }, 400);
+      }
+      const preview = await resolveSelectedRelease({
+        releaseId, musicBrainzGet, findExisting, artworkAvailable
+      });
+      if (body.action === "preview_release") {
+        return json(request, { ok: true, preview });
+      }
+      if (preview.status === "already_exists") {
+        return json(request, {
+          ok: true,
+          result: { status: "already_exists", album_id: preview.existing_album_id }
+        });
+      }
+      if (preview.status !== "ready") {
+        return json(request, {
+          ok: false,
+          error: preview.reason || "The selected release is not ready to add."
+        }, 400);
+      }
+      const { data, error } = await userClient.rpc("admin_add_catalogue_album", {
+        p_album: preview.album,
+        p_tracks: preview.tracks
+      });
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, result: data });
+    }
 
     if (body?.action === "convert_definitely_maybe_preview" ||
         body?.action === "convert_definitely_maybe") {

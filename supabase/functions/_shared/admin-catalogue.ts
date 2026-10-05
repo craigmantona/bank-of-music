@@ -52,13 +52,46 @@ function candidateSummary(group: any) {
 }
 
 function releaseSummary(release: any) {
+  const releaseGroup = release?.["release-group"] || {};
+  const formats = [...new Set((release?.media || [])
+    .map((medium: any) => String(medium?.format || "").trim())
+    .filter(Boolean))];
   return {
     release_id: release.id,
     title: release.title || "",
+    artist: artistName(release),
     date: release.date || "",
     country: release.country || "",
-    status: release.status || ""
+    status: release.status || "",
+    format: formats.join(" + "),
+    release_group_id: releaseGroup.id || "",
+    primary_type: releaseGroup["primary-type"] || "",
+    secondary_types: releaseGroup["secondary-types"] || []
   };
+}
+
+export async function searchReleaseCandidates(
+  artistQuery: string,
+  titleQuery: string,
+  musicBrainzGet: (path: string) => Promise<any>
+) {
+  const artist = String(artistQuery || "").trim();
+  const title = String(titleQuery || "").trim();
+  if (!artist || !title) return [];
+  const cleanArtist = artist.replaceAll('"', "");
+  const cleanTitle = title.replaceAll('"', "");
+  const query = `artist:"${cleanArtist}" AND release:"${cleanTitle}"`;
+  const data = await musicBrainzGet(
+    `/release/?query=${encodeURIComponent(query)}&fmt=json&limit=20`
+  );
+  return (data.releases || [])
+    .filter((release: any) => release?.id && release?.["release-group"]?.id)
+    .slice(0, 20)
+    .map((release: any) => ({
+      ...releaseSummary(release),
+      score: Number(release.score || 0),
+      importable: release.status === "Official"
+    }));
 }
 
 export async function searchArtistCandidates(
@@ -128,6 +161,82 @@ export function flattenTracks(release: any, fallbackArtist: string) {
     }
   }
   return tracks;
+}
+
+export async function resolveSelectedRelease({
+  releaseId,
+  musicBrainzGet,
+  findExisting,
+  artworkAvailable = async () => true
+}: {
+  releaseId: string;
+  musicBrainzGet: (path: string) => Promise<any>;
+  findExisting: (identity: any) => Promise<any | null>;
+  artworkAvailable?: (url: string) => Promise<boolean>;
+}) {
+  const selectedId = String(releaseId || "").trim().toLowerCase();
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(selectedId)) {
+    return { status: "failed", reason: "valid_release_identity_required" };
+  }
+
+  const detail = await completeRelease(selectedId, musicBrainzGet);
+  const releaseGroup = detail?.["release-group"] || {};
+  const groupId = String(releaseGroup.id || "").trim().toLowerCase();
+  const title = String(detail?.title || "").trim();
+  const artist = artistName(detail);
+  if (detail?.id !== selectedId ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(groupId) ||
+      !title || !artist) {
+    return { status: "failed", reason: "release_identity_validation_failed" };
+  }
+  if (detail.status !== "Official") {
+    return {
+      status: "failed",
+      reason: "official_release_required",
+      selected_release: releaseSummary(detail)
+    };
+  }
+
+  const tracks = flattenTracks(detail, artist);
+  if (!tracks.length) {
+    return {
+      status: "failed",
+      reason: "complete_track_listing_unavailable",
+      selected_release: releaseSummary(detail)
+    };
+  }
+
+  const coverUrl = `https://coverartarchive.org/release-group/${encodeURIComponent(groupId)}/front-250`;
+  const hasArtwork = await artworkAvailable(coverUrl);
+  const identity = {
+    title,
+    artist,
+    musicbrainz_release_id: selectedId,
+    musicbrainz_release_group_id: groupId
+  };
+  const existing = await findExisting(identity);
+  return {
+    status: existing?.is_deleted ? "needs_correction" : existing ? "already_exists" : "ready",
+    reason: existing?.is_deleted ? "matching_album_is_deleted" : undefined,
+    existing_album_id: existing?.id || null,
+    warnings: [
+      ...(String(detail.country || "").toUpperCase() !== "GB" ? ["selected_release_is_not_uk"] : []),
+      ...(!hasArtwork ? ["artwork_unavailable"] : [])
+    ],
+    release_group: candidateSummary(releaseGroup),
+    selected_release: releaseSummary(detail),
+    album: {
+      ...identity,
+      cover_art_url: hasArtwork ? coverUrl : "",
+      uk_release_date: String(detail.country || "").toUpperCase() === "GB"
+        ? normaliseDateForDatabase(detail.date)
+        : null,
+      original_release_date: normaliseDateForDatabase(releaseGroup["first-release-date"] || detail.date),
+      canonical_release_date: normaliseDateForDatabase(detail.date),
+      canonical_release_country: String(detail.country || "").toUpperCase()
+    },
+    tracks
+  };
 }
 
 export type RequestedAlbum = {
