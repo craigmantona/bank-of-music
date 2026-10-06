@@ -13,7 +13,7 @@
   }
 
   function duration(value) {
-    if (!Number.isFinite(value) || value <= 0) return "—";
+    if (!Number.isFinite(value) || value <= 0) return "";
     const seconds = Math.round(value / 1000);
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
   }
@@ -109,5 +109,5 @@
     });
   });
 
-  window.BOMAlbumUI = Object.freeze({ render, renderReviews, formatReleaseDate });
+  window.BOMAlbumUI = Object.freeze({ render, renderReviews, formatReleaseDate, formatDuration: duration });
 })();

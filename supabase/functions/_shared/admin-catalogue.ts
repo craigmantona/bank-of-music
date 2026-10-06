@@ -149,6 +149,13 @@ export function flattenTracks(release: any, fallbackArtist: string) {
       const title = String(track?.title || track?.recording?.title || "").trim();
       const recordingId = String(track?.recording?.id || "").trim().toLowerCase();
       const trackArtist = artistName(track) || fallbackArtist;
+      const releaseTrackLength = Number(track?.length);
+      const recordingLength = Number(track?.recording?.length);
+      const durationMs = Number.isFinite(releaseTrackLength) && releaseTrackLength > 0
+        ? Math.trunc(releaseTrackLength)
+        : Number.isFinite(recordingLength) && recordingLength > 0
+          ? Math.trunc(recordingLength)
+          : null;
       if (!title || !recordingId || !trackArtist) return [];
       tracks.push({
         position: tracks.length + 1,
@@ -156,7 +163,8 @@ export function flattenTracks(release: any, fallbackArtist: string) {
         medium_track_position: Number(track.position || tracks.length + 1),
         title,
         artist: trackArtist,
-        musicbrainz_recording_id: recordingId
+        musicbrainz_recording_id: recordingId,
+        duration_ms: durationMs
       });
     }
   }

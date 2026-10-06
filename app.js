@@ -6837,7 +6837,7 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
     if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
     rows.push({
       index: Math.max(0, number - 1), number, title, artist, album: albumTitle,
-      durationMs: Number(track?.length || track?.recording?.length || 0) || null,
+      durationMs: Number(savedSong?.duration_ms) > 0 ? Number(savedSong.duration_ms) : null,
       songId: savedSong?.id || null, externalId, community, personal, isManual,
       mediumPosition, mediumTrackPosition,
       ratingControlHtml: savedSong?.id ? buildCompactTrackRatingControl(savedSong.id, personal) : "",
@@ -14557,6 +14557,13 @@ if (albumError) {
         if (!title) continue;
 
         const recordingId = track.recording?.id || null;
+        const releaseTrackLength = Number(track?.length);
+        const recordingLength = Number(track?.recording?.length);
+        const durationMs = Number.isFinite(releaseTrackLength) && releaseTrackLength > 0
+          ? Math.trunc(releaseTrackLength)
+          : Number.isFinite(recordingLength) && recordingLength > 0
+            ? Math.trunc(recordingLength)
+            : null;
 
         const songPayload = {
           album_id: albumData.id,
@@ -14565,6 +14572,7 @@ if (albumError) {
           track_position: trackNumber,
           external_source: "musicbrainz",
           external_id: recordingId,
+          duration_ms: durationMs,
           is_deleted: false
         };
 
