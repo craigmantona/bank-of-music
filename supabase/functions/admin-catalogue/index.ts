@@ -11,6 +11,11 @@ import {
   searchReleaseCandidates,
   type RequestedAlbum
 } from "../_shared/admin-catalogue.ts";
+import {
+  DURATION_BACKFILL_MAX_ALBUMS,
+  runDurationBackfillBatch,
+  storedMusicBrainzReleaseId
+} from "../_shared/musicbrainz-duration-backfill.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const adminKey = getAdminKey();
@@ -164,6 +169,59 @@ async function resolveAll(artist: any, albums: RequestedAlbum[]): Promise<any[]>
   return results;
 }
 
+async function durationBackfillBatch(body: any) {
+  const dryRun = body?.action === "duration_backfill_preview";
+  const afterAlbumId = Math.max(0, Number(body?.after_album_id || 0));
+  const requestedLimit = Number(body?.limit || DURATION_BACKFILL_MAX_ALBUMS);
+  if (!Number.isSafeInteger(afterAlbumId) || !Number.isSafeInteger(requestedLimit) ||
+      requestedLimit < 1 || requestedLimit > DURATION_BACKFILL_MAX_ALBUMS) {
+    throw new Error(`Duration backfill requires a valid cursor and a limit from 1 to ${DURATION_BACKFILL_MAX_ALBUMS}.`);
+  }
+  const { data, error } = await service.from("albums")
+    .select("id,musicbrainz_release_id,external_source,external_id")
+    .eq("is_deleted", false)
+    .gt("id", afterAlbumId)
+    .or("musicbrainz_release_id.not.is.null,and(external_source.eq.musicbrainz,external_id.not.is.null)")
+    .order("id")
+    .limit(requestedLimit);
+  if (error) throw new Error(`Duration album lookup failed: ${error.message}`);
+  const scanned = data || [];
+  const albums = scanned.filter(storedMusicBrainzReleaseId);
+  const report = await runDurationBackfillBatch({
+    albums,
+    dryRun,
+    fetchSongs: async albumId => {
+      const result = await service.from("songs")
+        .select("id,album_id,track_position,external_source,external_id,duration_ms,is_deleted")
+        .eq("album_id", albumId).eq("is_deleted", false).order("id");
+      if (result.error) throw new Error(`Song lookup failed: ${result.error.message}`);
+      return result.data || [];
+    },
+    fetchRelease: releaseId => musicBrainzGet(
+      `/release/${encodeURIComponent(releaseId)}?inc=recordings&fmt=json`
+    ),
+    updateDuration: async update => {
+      const result = await service.from("songs")
+        .update({ duration_ms: update.duration_ms })
+        .eq("id", update.song_id)
+        .eq("album_id", update.album_id)
+        .eq("is_deleted", false)
+        .is("duration_ms", null)
+        .select("id").maybeSingle();
+      if (result.error) throw new Error(`Duration update failed: ${result.error.message}`);
+      return Boolean(result.data?.id);
+    }
+  });
+  return {
+    ...report,
+    after_album_id: afterAlbumId,
+    next_after_album_id: scanned.length ? Number(scanned[scanned.length - 1].id) : afterAlbumId,
+    scanned_albums: scanned.length,
+    candidate_albums: albums.length,
+    has_more: scanned.length === requestedLimit
+  };
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: corsHeaders(request) });
@@ -186,6 +244,10 @@ Deno.serve(async (request) => {
       global: { headers: { Authorization: authorizationHeader }, fetch: catalogueFetch },
       auth: { persistSession: false, autoRefreshToken: false }
     });
+
+    if (body?.action === "duration_backfill_preview" || body?.action === "duration_backfill") {
+      return json(request, { ok: true, backfill: await durationBackfillBatch(body) });
+    }
 
     if (body?.action === "search_releases") {
       const artistName = String(body.artist_name || "").trim();
