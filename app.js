@@ -6905,6 +6905,46 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
   };
 }
 
+const albumDurationEnrichmentAttempted = new Set();
+
+function validStoredMusicBrainzReleaseId(album) {
+  const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return pattern.test(String(album?.musicbrainz_release_id || "")) ||
+    (album?.external_source === "musicbrainz" && pattern.test(String(album?.external_id || "")));
+}
+
+async function maybeEnrichAlbumDurations(albumId) {
+  const id = Number(albumId);
+  if (!currentUser || !Number.isSafeInteger(id) || id <= 0 || albumDurationEnrichmentAttempted.has(id)) return;
+  const album = (allAlbums || []).find(item => Number(item.id) === id && !item.is_deleted);
+  const songs = (allSongs || []).filter(song => Number(song.album_id) === id && !song.is_deleted);
+  if (!album || !validStoredMusicBrainzReleaseId(album) || !songs.length ||
+      songs.every(song => Number.isSafeInteger(Number(song.duration_ms)) && Number(song.duration_ms) > 0)) return;
+
+  albumDurationEnrichmentAttempted.add(id);
+  try {
+    const { data, error } = await supabaseClient.functions.invoke("remote-album-catalogue", {
+      body: { action: "enrich_album_durations", album_id: id }
+    });
+    if (error || !data?.ok || !Array.isArray(data?.enrichment?.durations)) return;
+    let changed = false;
+    const durations = new Map(data.enrichment.durations.map(item => [Number(item.id), Number(item.duration_ms)]));
+    for (const song of songs) {
+      const duration = durations.get(Number(song.id));
+      if ((!Number.isFinite(Number(song.duration_ms)) || Number(song.duration_ms) <= 0) &&
+          Number.isSafeInteger(duration) && duration > 0) {
+        song.duration_ms = duration;
+        changed = true;
+      }
+    }
+    if (changed && Number(selectedItem?.savedAlbumId || selectedItem?.albumId || selectedItem?.id) === id) {
+      window.setTimeout(() => { void renderSelectedItem(); }, 0);
+    }
+  } catch (error) {
+    console.warn("Album duration enrichment skipped", error?.message || error);
+  }
+}
+
 async function renderStageOneAlbum(model, { isCurrent = () => true } = {}) {
   if (!isCurrent()) return false;
   if (!window.BOMAlbumUI) {
@@ -6918,6 +6958,7 @@ async function renderStageOneAlbum(model, { isCurrent = () => true } = {}) {
   updateStickyPlayer(selectedItem);
   scheduleSpotifyTrackCacheWarmup();
   void hydrateStageOneAlbumReviews(model.albumId);
+  void maybeEnrichAlbumDurations(model.albumId);
   return true;
 }
 

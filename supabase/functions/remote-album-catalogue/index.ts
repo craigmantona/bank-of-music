@@ -5,6 +5,10 @@ import {
   normaliseCatalogueText,
   resolveRequestedAlbum
 } from "../_shared/admin-catalogue.ts";
+import {
+  runDurationBackfillBatch,
+  storedMusicBrainzReleaseId
+} from "../_shared/musicbrainz-duration-backfill.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const serviceKey = getAdminKey();
@@ -111,6 +115,51 @@ function artistFromRelease(detail: any) {
   return { id: ids[0], name, country: "" };
 }
 
+async function enrichAlbumDurations(albumId: number) {
+  const albumResult = await service.from("albums")
+    .select("id,is_deleted,musicbrainz_release_id,external_source,external_id")
+    .eq("id", albumId).eq("is_deleted", false).maybeSingle();
+  if (albumResult.error) throw new Error("Album duration lookup failed");
+  const album = albumResult.data;
+  if (!album || !storedMusicBrainzReleaseId(album)) {
+    return { status: "skipped", reason: "valid_stored_release_id_required" };
+  }
+  const fetchSongs = async () => {
+    const result = await service.from("songs")
+      .select("id,album_id,track_position,external_source,external_id,duration_ms,is_deleted")
+      .eq("album_id", albumId).eq("is_deleted", false).order("id");
+    if (result.error) throw new Error("Song duration lookup failed");
+    return result.data || [];
+  };
+  const songs = await fetchSongs();
+  if (songs.length && songs.every(song => Number.isSafeInteger(Number(song.duration_ms)) && Number(song.duration_ms) > 0)) {
+    return { status: "already_complete", songs_populated: 0, durations: songs.map(song => ({ id: song.id, duration_ms: song.duration_ms })) };
+  }
+  const report = await runDurationBackfillBatch({
+    albums: [album],
+    dryRun: false,
+    fetchSongs: async () => songs,
+    fetchRelease: releaseId => musicBrainzGet(
+      `/release/${encodeURIComponent(releaseId)}?inc=recordings&fmt=json`
+    ),
+    updateDuration: async update => {
+      const result = await service.from("songs")
+        .update({ duration_ms: update.duration_ms })
+        .eq("id", update.song_id).eq("album_id", update.album_id)
+        .eq("is_deleted", false).is("duration_ms", null)
+        .select("id").maybeSingle();
+      if (result.error) throw new Error("Song duration update failed");
+      return Boolean(result.data?.id);
+    }
+  });
+  const refreshed = await fetchSongs();
+  return {
+    status: report.failures.length ? "failed" : report.albums_skipped ? "skipped" : "processed",
+    ...report,
+    durations: refreshed.map(song => ({ id: song.id, duration_ms: song.duration_ms }))
+  };
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(request) });
   if (request.method !== "POST") return json(request, { ok: false, error: "Method not allowed." }, 405);
@@ -124,6 +173,13 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json();
+    if (body?.action === "enrich_album_durations") {
+      const albumId = Number(body.album_id);
+      if (!Number.isSafeInteger(albumId) || albumId <= 0) {
+        return json(request, { ok: false, error: "Choose a valid BOM album." }, 400);
+      }
+      return json(request, { ok: true, enrichment: await enrichAlbumDurations(albumId) });
+    }
     const releaseId = String(body?.release_id || "").trim().toLowerCase();
     const expectedGroupId = String(body?.release_group_id || "").trim().toLowerCase();
     if (!uuid(releaseId) || (expectedGroupId && !uuid(expectedGroupId))) {

@@ -5,7 +5,7 @@ import test from "node:test";
 const [app, edge, migration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/remote-album-catalogue/index.ts", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260928103000_authenticated_remote_album_creation.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20260928121724_authenticated_remote_album_creation.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260929092636_catalogue_release_group_exclusions.sql", import.meta.url), "utf8"),
@@ -22,7 +22,8 @@ test("ordinary users receive only an exact-release server-side catalogue operati
   assert.match(edge, /release_id/);
   assert.match(edge, /release_group_id/);
   assert.doesNotMatch(edge, /requireAdminUser|delete_album|search_artist/);
-  assert.doesNotMatch(edge, /\.from\(["'](?:albums|songs)["']\)\.(?:insert|upsert|update|delete)/);
+  assert.doesNotMatch(edge, /\.from\(["'](?:albums|songs)["']\)\.(?:insert|upsert|delete)/);
+  assert.match(edge, /\.update\(\{ duration_ms: update\.duration_ms \}\)/);
   assert.match(edge, /resolveRequestedAlbum/);
   assert.match(edge, /service\.rpc\("admin_add_catalogue_album"/);
 });
