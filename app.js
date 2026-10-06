@@ -9691,6 +9691,9 @@ function getQuickRateSpotifyItem(song, album) {
 }
 
 async function resolveQuickRateSpotifyTrack(song) {
+  const cooldown = getSpotifyResolverCooldown();
+  if (cooldown) throw createSpotifyResolverCooldownError(cooldown);
+
   const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
   if (sessionError || !session?.access_token) {
     throw new Error("Your Bank of Music session has expired. Please log in again.");
@@ -9715,9 +9718,13 @@ async function resolveQuickRateSpotifyTrack(song) {
 
   if (response.status === 429) {
     const retryAfter = Number(response.headers.get("Retry-After") || data.retry_after || 1);
-    const error = new Error("Spotify is temporarily busy.");
-    error.retryAfter = Number.isFinite(retryAfter) ? retryAfter : 1;
-    throw error;
+    const fallbackExpiry = Date.now() + (Number.isFinite(retryAfter) ? retryAfter : 1) * 1000;
+    const cooldown = {
+      expiresAt: Date.parse(data.cooldown_expires_at || "") || fallbackExpiry,
+      reason: String(data.reason || "")
+    };
+    localStorage.setItem(SPOTIFY_RESOLVER_COOLDOWN_KEY, JSON.stringify(cooldown));
+    throw createSpotifyResolverCooldownError(cooldown);
   }
 
   if (!response.ok) {
@@ -9738,13 +9745,44 @@ async function resolveQuickRateSpotifyTrack(song) {
   return spotifyItem;
 }
 
-function renderQuickRateSpotifyFailure(target, song, retryAfter = 0) {
+const SPOTIFY_RESOLVER_COOLDOWN_KEY = "bom_spotify_resolver_cooldown";
+
+function getSpotifyResolverCooldown() {
+  let cooldown = null;
+  try {
+    cooldown = JSON.parse(localStorage.getItem(SPOTIFY_RESOLVER_COOLDOWN_KEY) || "null");
+  } catch {
+    cooldown = null;
+  }
+  if (!Number.isFinite(Number(cooldown?.expiresAt)) || Number(cooldown.expiresAt) <= Date.now()) {
+    localStorage.removeItem(SPOTIFY_RESOLVER_COOLDOWN_KEY);
+    return null;
+  }
+  return cooldown;
+}
+
+function createSpotifyResolverCooldownError(cooldown) {
+  const expiry = new Date(Number(cooldown.expiresAt));
+  const time = expiry.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  const error = new Error(
+    `Spotify's API limit has been reached. New track matching is temporarily unavailable. ` +
+    `Please try again after approximately ${time}. Already-matched Spotify tracks can still be played.`
+  );
+  error.status = 429;
+  error.retryAfter = Math.max(1, Math.ceil((Number(cooldown.expiresAt) - Date.now()) / 1000));
+  error.cooldownExpiresAt = Number(cooldown.expiresAt);
+  error.reason = String(cooldown.reason || "");
+  return error;
+}
+
+function renderQuickRateSpotifyFailure(target, song, error = null) {
   if (!target) return;
   const fallbackUrl = getSpotifySearchFallbackUrl(song);
+  const rateLimited = Number(error?.status) === 429 || Number(error?.retryAfter) > 0;
   target.classList.remove("hidden");
   target.innerHTML = `<div class="spotify-embed-error">
-    <strong>${retryAfter ? "Spotify is temporarily busy." : "BoM could not find an exact Spotify match."}</strong>
-    <span>${retryAfter ? `Try again in about ${retryAfter} second${retryAfter === 1 ? "" : "s"}.` : "You can still search for it directly in Spotify."}</span>
+    <strong>${rateLimited ? "Spotify's API limit has been reached." : "BoM could not find an exact Spotify match."}</strong>
+    <span>${rateLimited ? escapeHtml(error.message) : "You can still search for it directly in Spotify."}</span>
     <a class="spotify-open-externally-btn" href="${escapeHtml(fallbackUrl)}" target="_blank" rel="noopener noreferrer">Search in Spotify</a>
   </div>`;
 }
@@ -9789,7 +9827,7 @@ async function listenToQuickRateTrack({ song, album, target, button }) {
     return true;
   } catch (error) {
     console.error("Quick Rate Spotify player failed:", error);
-    renderQuickRateSpotifyFailure(target, song, Number(error?.retryAfter || 0));
+    renderQuickRateSpotifyFailure(target, song, error);
     return false;
   } finally {
     button.disabled = false;

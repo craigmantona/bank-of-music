@@ -22,6 +22,15 @@
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   }
 
+  function formatRateLimitMessage(error) {
+    const expiry = new Date(error?.cooldownExpiresAt || Date.now() + readRetryAfterSeconds(error) * 1000);
+    const time = Number.isNaN(expiry.getTime())
+      ? "later"
+      : expiry.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    return `Spotify's API limit has been reached. New track matching is temporarily unavailable. ` +
+      `Please try again after approximately ${time}. Already-matched Spotify tracks can still be played.`;
+  }
+
   async function resolveDesiredTracks({
     tracks,
     getRecordingMatch,
@@ -83,11 +92,11 @@
             if (error?.status !== 429 && !error?.retryAfter) throw error;
             const retryAfter = readRetryAfterSeconds(error);
             if (rateLimitAttempts >= maxRateLimitRetries || retryAfter > maxRetryAfterSeconds) {
-              const exhausted = new Error(
-                `Spotify rate limit recovery failed. Try again after ${retryAfter} second${retryAfter === 1 ? "" : "s"}.`
-              );
+              const exhausted = new Error(formatRateLimitMessage(error));
               exhausted.status = 429;
               exhausted.retryAfter = retryAfter;
+              exhausted.cooldownExpiresAt = error?.cooldownExpiresAt;
+              exhausted.reason = error?.reason || "";
               throw exhausted;
             }
             rateLimitAttempts += 1;

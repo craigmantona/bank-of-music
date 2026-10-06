@@ -147,6 +147,7 @@ function quickRateSpotifyContext({ cached = null, response = null } = {}) {
   const rendered = [];
   const requests = [];
   const classList = { add() {}, remove() {} };
+  const storage = new Map();
   const context = vm.createContext({
     console: { error() {} },
     Date,
@@ -171,8 +172,13 @@ function quickRateSpotifyContext({ cached = null, response = null } = {}) {
     URLSearchParams,
     Response
   });
+  context.localStorage = {
+    getItem: key => storage.get(key) ?? null,
+    setItem: (key, value) => storage.set(key, String(value)),
+    removeItem: key => storage.delete(key)
+  };
   vm.runInContext(extract('function getQuickRateSpotifyItem', 'async function fetchQuickRateRows'), context);
-  return { context, rendered, requests, classList };
+  return { context, rendered, requests, classList, storage };
 }
 
 test('Quick Rate renders a centrally stored Spotify ID without resolver search', async () => {
@@ -205,6 +211,41 @@ test('Quick Rate resolves one unmatched song lazily and reuses the returned ID',
   assert.equal(await context.listenToQuickRateTrack({ song, album: { title: 'Album' }, target, button }), true);
   assert.equal(requests.length, 1);
   assert.equal(rendered[1].embedUrl, 'https://open.spotify.com/embed/track/resolved456');
+});
+
+test('Quick Rate shares a resolver cooldown while stored IDs still bypass matching', async () => {
+  const expiry = new Date(Date.now() + 3600000).toISOString();
+  const response = new Response(JSON.stringify({
+    error: 'Spotify is temporarily rate limited.',
+    retry_after: 3600,
+    cooldown_expires_at: expiry,
+    reason: 'QUOTA_EXCEEDED'
+  }), {
+    status: 429,
+    headers: { 'Content-Type': 'application/json', 'Retry-After': '3600' }
+  });
+  const { context, requests, classList } = quickRateSpotifyContext({ response });
+  const target = { classList, innerHTML: '' };
+  const button = { disabled: false, textContent: 'Listen on Spotify' };
+
+  assert.equal(await context.listenToQuickRateTrack({
+    song: { id: 35, title: 'Needs matching', artist: 'Artist' }, album: null, target, button
+  }), false);
+  assert.equal(requests.length, 1);
+  assert.match(target.innerHTML, /New track matching is temporarily unavailable/);
+
+  assert.equal(await context.listenToQuickRateTrack({
+    song: { id: 36, title: 'Also unmatched', artist: 'Artist' }, album: null, target, button
+  }), false);
+  assert.equal(requests.length, 1, 'browser cooldown must prevent another resolver request');
+
+  assert.equal(await context.listenToQuickRateTrack({
+    song: { id: 37, title: 'Stored', artist: 'Artist', spotify_track_id: 'stored789' },
+    album: null,
+    target,
+    button
+  }), true);
+  assert.equal(requests.length, 1, 'persisted Spotify IDs must bypass the resolver cooldown');
 });
 
 test('failed Spotify resolution leaves Quick Rate usable with its search fallback', async () => {

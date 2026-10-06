@@ -41,11 +41,17 @@ function resolver({
   isrcCandidates = [],
   songOverrides = {},
   searchStatus = 200,
-  retryAfter = null
+  retryAfter = null,
+  rateLimitReason = "",
+  now = Date.parse("2026-10-05T11:00:00Z")
 } = {}) {
   let handler;
   const updates = [];
   const requests = [];
+  let currentTime = now;
+  class TestDate extends Date {
+    static now() { return currentTime; }
+  }
   const song = {
     id: 42,
     title: "The Song",
@@ -89,6 +95,7 @@ function resolver({
 
   loadEdge(source.replace(/^export /gm, ""), {
     btoa: value => Buffer.from(value).toString("base64"),
+    Date: TestDate,
     URLSearchParams,
     Deno: {
       env: { get: name => ({
@@ -114,7 +121,9 @@ function resolver({
       const spotifyCandidates = decodeURIComponent(String(url)).includes("q=isrc:")
         ? isrcCandidates
         : candidates;
-      return new Response(JSON.stringify({ tracks: { items: spotifyCandidates } }), {
+      return new Response(JSON.stringify(searchStatus === 429
+        ? { error: { status: 429, message: "Quota exceeded", reason: rateLimitReason } }
+        : { tracks: { items: spotifyCandidates } }), {
         status: searchStatus,
         headers: {
           "Content-Type": "application/json",
@@ -127,6 +136,7 @@ function resolver({
   return {
     updates,
     requests,
+    advance: milliseconds => { currentTime += milliseconds; },
     run: async () => {
       const response = await handler(new Request("https://project.invalid/functions/v1/rapid-processor", {
         method: "POST",
@@ -414,12 +424,26 @@ test("Spotify resolver treats ampersand and and equivalently before remaster mat
 });
 
 test("Spotify resolver preserves 429 Retry-After and makes no write", async () => {
-  const app = resolver({ searchStatus: 429, retryAfter: 7 });
+  const app = resolver({ searchStatus: 429, retryAfter: 7, rateLimitReason: "QUOTA_EXCEEDED" });
   const result = await app.run();
   assert.equal(result.response.status, 429, JSON.stringify(result.body));
   assert.equal(result.response.headers.get("Retry-After"), "7");
   assert.equal(result.body.retry_after, 7);
+  assert.equal(result.body.reason, "QUOTA_EXCEEDED");
+  assert.equal(result.body.cooldown_expires_at, "2026-10-05T11:00:07.000Z");
   assert.equal(app.updates.length, 0);
+
+  const spotifyRequests = () => app.requests.filter(item => item.url.includes("spotify.com")).length;
+  const requestsAfterLimit = spotifyRequests();
+  const blocked = await app.run();
+  assert.equal(blocked.response.status, 429);
+  assert.equal(blocked.body.reason, "QUOTA_EXCEEDED");
+  assert.equal(spotifyRequests(), requestsAfterLimit, "active cooldown must prevent another Spotify request");
+
+  app.advance(7001);
+  const afterExpiry = await app.run();
+  assert.equal(afterExpiry.response.status, 429);
+  assert.equal(spotifyRequests(), requestsAfterLimit + 1, "expired cooldown must allow Spotify requests again");
 });
 
 test("Spotify match migration keeps fields nullable and blocks ordinary client assignment", () => {

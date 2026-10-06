@@ -42,17 +42,65 @@ function createJsonResponse(
 
 let spotifyAppAccessToken = "";
 let spotifyAppAccessTokenExpiresAt = 0;
+let spotifyResolverCooldownExpiresAt = 0;
+let spotifyResolverCooldownReason = "";
 const MUSICBRAINZ_RECORDING_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SPOTIFY_TRACK_ID = /^[A-Za-z0-9]{22}$/;
 const ISRC = /^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$/;
 
 class SpotifyRateLimitError extends Error {
   retryAfter: number;
+  reason: string;
+  cooldownExpiresAt: number;
 
-  constructor(retryAfter: number) {
+  constructor(retryAfter: number, reason = "", cooldownExpiresAt = Date.now() + retryAfter * 1000) {
     super("Spotify is temporarily rate limited.");
     this.retryAfter = retryAfter;
+    this.reason = reason;
+    this.cooldownExpiresAt = cooldownExpiresAt;
   }
+}
+
+function assertSpotifyResolverAvailable() {
+  const now = Date.now();
+  if (spotifyResolverCooldownExpiresAt <= now) {
+    spotifyResolverCooldownExpiresAt = 0;
+    spotifyResolverCooldownReason = "";
+    return;
+  }
+  const retryAfter = Math.max(1, Math.ceil((spotifyResolverCooldownExpiresAt - now) / 1000));
+  throw new SpotifyRateLimitError(
+    retryAfter,
+    spotifyResolverCooldownReason,
+    spotifyResolverCooldownExpiresAt
+  );
+}
+
+async function spotifyRateLimitError(response: Response, endpoint: string) {
+  const retryAfter = readRetryAfter(response);
+  let body: any = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+  const reason = String(body?.error?.reason || body?.reason || "").trim();
+  const cooldownExpiresAt = Date.now() + retryAfter * 1000;
+  if (cooldownExpiresAt > spotifyResolverCooldownExpiresAt) {
+    spotifyResolverCooldownExpiresAt = cooldownExpiresAt;
+    spotifyResolverCooldownReason = reason;
+  }
+  console.warn("Spotify resolver rate limited:", {
+    endpoint,
+    reason: reason || null,
+    retryAfter,
+    cooldownExpiresAt: new Date(spotifyResolverCooldownExpiresAt).toISOString()
+  });
+  return new SpotifyRateLimitError(
+    retryAfter,
+    reason,
+    spotifyResolverCooldownExpiresAt
+  );
 }
 
 export function normaliseSpotifyMatchText(value: unknown) {
@@ -168,7 +216,7 @@ async function getSpotifyAppAccessToken(clientId: string, clientSecret: string) 
     body: new URLSearchParams({ grant_type: "client_credentials" })
   });
 
-  if (response.status === 429) throw new SpotifyRateLimitError(readRetryAfter(response));
+  if (response.status === 429) throw await spotifyRateLimitError(response, "/api/token");
   const data = await response.json();
   if (!response.ok || !data?.access_token) {
     throw new Error(data?.error_description || data?.error || "Spotify app authorization failed.");
@@ -209,7 +257,7 @@ async function searchSpotifyTracks(accessToken: string, query: string) {
     }).toString()}`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   );
-  if (response.status === 429) throw new SpotifyRateLimitError(readRetryAfter(response));
+  if (response.status === 429) throw await spotifyRateLimitError(response, "/v1/search");
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data?.error?.message || `Spotify search failed with HTTP ${response.status}.`);
@@ -279,6 +327,7 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
     albumTitle = album?.title || "";
   }
 
+  assertSpotifyResolverAvailable();
   const accessToken = await getSpotifyAppAccessToken(clientId, clientSecret);
   const query = [`track:${song.title}`, `artist:${song.artist}`].join(" ");
   const candidates = await searchSpotifyTracks(accessToken, query);
@@ -470,7 +519,12 @@ Deno.serve(async (request) => {
 
     if (error instanceof SpotifyRateLimitError) {
       return jsonResponse(
-        { error: error.message, retry_after: error.retryAfter },
+        {
+          error: error.message,
+          retry_after: error.retryAfter,
+          cooldown_expires_at: new Date(error.cooldownExpiresAt).toISOString(),
+          ...(error.reason ? { reason: error.reason } : {})
+        },
         429,
         { "Retry-After": String(error.retryAfter) }
       );

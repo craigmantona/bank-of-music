@@ -213,7 +213,7 @@ test("rate-limit exhaustion still aborts resolution", async () => {
         throw error;
       }
     }),
-    /rate limit recovery failed/
+    /API limit has been reached/
   );
   assert.equal(attempts, 2);
   assert.deepEqual(waits, [2000]);
