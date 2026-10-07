@@ -240,6 +240,40 @@ test("only Ed Sheeran plus inherits the saved BOM identity and metadata", () => 
   }
 });
 
+test("a renamed self-titled album replaces its upstream title without a duplicate card", () => {
+  const identityStart = app.indexOf("function normaliseAlbumTitleKey");
+  const identityEnd = app.indexOf("function normaliseReleaseDate", identityStart);
+  const mergeStart = app.indexOf("function mergeArtistDiscographyAlbums");
+  const mergeEnd = app.indexOf("async function renderArtistDetail", mergeStart);
+  const context = {
+    normaliseCompare: value => String(value || "").toLowerCase().replace(/^the\s+/, "").replace(/[’'`]/g, "").replace(/&amp;/g, "&").replace(/[^a-z0-9]+/g, "").trim(),
+    getAlbumArtworkUrl: album => album?.cover_art_url || ""
+  };
+  vm.runInNewContext(app.slice(identityStart, identityEnd), context);
+  vm.runInNewContext(app.slice(mergeStart, mergeEnd), context);
+
+  const merged = context.mergeArtistDiscographyAlbums({
+    artistName: "Weezer",
+    artistMusicBrainzId: "weezer-artist",
+    remoteAlbums: [{
+      title: "Weezer", artist: "Weezer", releaseGroupId: "blue-group",
+      releaseDate: "1994-05-10", coverUrl: "remote-blue.jpg"
+    }],
+    savedAlbums: [{
+      id: 1460, title: "Weezer (Blue Album)", artist: "Weezer",
+      musicbrainz_release_group_id: "blue-group", musicbrainz_release_id: "blue-release",
+      external_source: "musicbrainz", external_id: "blue-release",
+      original_release_date: "1994-05-10", cover_art_url: "saved-blue.jpg"
+    }]
+  });
+
+  assert.equal(merged.length, 1);
+  assert.deepEqual(JSON.parse(JSON.stringify(merged[0])), {
+    title: "Weezer (Blue Album)", artist: "Weezer", releaseGroupId: "blue-group",
+    releaseDate: "1994-05-10", coverUrl: "saved-blue.jpg", savedAlbumId: 1460, localAlbumId: 1460
+  });
+});
+
 test("known vulnerable titles do not cross-match through an empty key", () => {
   const { albumIdentityMatches } = albumIdentityContext();
   const records = [

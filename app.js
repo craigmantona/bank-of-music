@@ -6257,6 +6257,50 @@ async function renderStageOneArtist(model, sourceAlbums) {
 
 let artistRenderGeneration = 0;
 
+function mergeArtistDiscographyAlbums({ remoteAlbums, savedAlbums, artistName, artistMusicBrainzId }) {
+  const seenAlbumKeys = new Set();
+  const matchedSavedAlbumIds = new Set();
+
+  const displayAlbums = remoteAlbums.map((remoteAlbum) => {
+    const albumKey = normaliseAlbumTitleKey(remoteAlbum.title || "");
+    const savedAlbum = savedAlbums.find((album) => albumIdentityMatches(album, remoteAlbum)) || null;
+
+    seenAlbumKeys.add(albumKey);
+    if (savedAlbum?.id) matchedSavedAlbumIds.add(Number(savedAlbum.id));
+
+    return {
+      ...remoteAlbum,
+      title: savedAlbum?.title || remoteAlbum.title,
+      artist: remoteAlbum.artist || savedAlbum?.artist || artistName,
+      coverUrl: getAlbumArtworkUrl(savedAlbum) || remoteAlbum.coverUrl || "",
+      releaseDate: savedAlbum?.original_release_date || savedAlbum?.release_date ||
+        savedAlbum?.releaseDate || remoteAlbum.releaseDate || "",
+      savedAlbumId: savedAlbum?.id || "",
+      localAlbumId: savedAlbum?.id || ""
+    };
+  });
+
+  savedAlbums.forEach((savedAlbum) => {
+    const albumKey = normaliseAlbumTitleKey(savedAlbum.title || "");
+    if (matchedSavedAlbumIds.has(Number(savedAlbum.id)) || !albumKey || seenAlbumKeys.has(albumKey)) return;
+
+    displayAlbums.push({
+      type: "album",
+      title: savedAlbum.title || "Untitled",
+      artist: savedAlbum.artist || artistName,
+      externalId: savedAlbum.external_id || "",
+      releaseGroupId: savedAlbum.release_group_id || savedAlbum.releaseGroupId || "",
+      artistId: artistMusicBrainzId || savedAlbum.artist_id || "",
+      releaseDate: savedAlbum.original_release_date || savedAlbum.release_date || savedAlbum.releaseDate || "",
+      coverUrl: getAlbumArtworkUrl(savedAlbum),
+      savedAlbumId: savedAlbum.id,
+      localAlbumId: savedAlbum.id
+    });
+  });
+
+  return displayAlbums;
+}
+
 async function renderArtistDetail(artistItem) {
 
   if (!artistItem) return;
@@ -6360,80 +6404,8 @@ async function renderArtistDetail(artistItem) {
     with one album saved in BoM displayed only that one album,
     even when MusicBrainz returned their full discography.
   */
-  const seenAlbumKeys = new Set();
-
-  const displayAlbums = remoteAlbums
-    .map((remoteAlbum) => {
-      const albumKey =
-        normaliseAlbumTitleKey(remoteAlbum.title || "");
-
-      const savedAlbum =
-        savedAlbums.find((album) => albumIdentityMatches(album, remoteAlbum)) || null;
-
-      seenAlbumKeys.add(albumKey);
-
-      return {
-        ...remoteAlbum,
-
-        artist:
-          remoteAlbum.artist ||
-          savedAlbum?.artist ||
-          artistName,
-
-        coverUrl:
-          getAlbumArtworkUrl(savedAlbum) ||
-          remoteAlbum.coverUrl ||
-          "",
-
-        releaseDate:
-          savedAlbum?.original_release_date ||
-          savedAlbum?.release_date ||
-          savedAlbum?.releaseDate ||
-          remoteAlbum.releaseDate ||
-          "",
-
-        savedAlbumId:
-          savedAlbum?.id || "",
-
-        localAlbumId:
-          savedAlbum?.id || ""
-      };
-    });
-
-  /*
-    Keep any locally saved albums that MusicBrainz did not return,
-    for example a manual import or an unusual release.
-  */
-  savedAlbums.forEach((savedAlbum) => {
-    const albumKey =
-      normaliseAlbumTitleKey(savedAlbum.title || "");
-
-    if (!albumKey || seenAlbumKeys.has(albumKey)) {
-      return;
-    }
-
-    displayAlbums.push({
-      type: "album",
-      title: savedAlbum.title || "Untitled",
-      artist: savedAlbum.artist || artistName,
-      externalId: savedAlbum.external_id || "",
-      releaseGroupId:
-        savedAlbum.release_group_id ||
-        savedAlbum.releaseGroupId ||
-        "",
-      artistId:
-        artistMusicBrainzId ||
-        savedAlbum.artist_id ||
-        "",
-      releaseDate:
-        savedAlbum.original_release_date ||
-        savedAlbum.release_date ||
-        savedAlbum.releaseDate ||
-        "",
-      coverUrl: getAlbumArtworkUrl(savedAlbum),
-      savedAlbumId: savedAlbum.id,
-      localAlbumId: savedAlbum.id
-    });
+  const displayAlbums = mergeArtistDiscographyAlbums({
+    remoteAlbums, savedAlbums, artistName, artistMusicBrainzId
   });
 
   displayAlbums.sort((a, b) => {
