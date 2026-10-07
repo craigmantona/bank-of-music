@@ -10,13 +10,13 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration, exclusion
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../style.css", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260926120000_admin_catalogue_v1.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20260926215806_admin_catalogue_v1.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260929092636_catalogue_release_group_exclusions.sql", import.meta.url), "utf8")
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=135") < html.indexOf("bom-admin-catalogue.js?v=8"));
+  assert.ok(html.indexOf("app.js?v=137") < html.indexOf("bom-admin-catalogue.js?v=10"));
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -162,6 +162,47 @@ test("album date Edge action validates a full real ISO date and updates only ori
   const source = edge.slice(start, end);
   assert.match(source, /\.update\(\{ original_release_date: originalReleaseDate \}\)/);
   assert.doesNotMatch(source, /canonical_release_date|canonical_release_country|musicbrainz_release|external_id|(?<!original_)release_date:/);
+  assert.ok(edge.indexOf("await requireAdminUser(request)") < start);
+});
+
+test("admin album title editing updates only the existing album title and refreshes it", async () => {
+  let panel = null;
+  let refreshes = 0;
+  const calls = [];
+  const root = {
+    addEventListener() {}, prepend(value) { panel = value; },
+    querySelector(selector) { return selector === "[data-admin-catalogue]" ? panel : null; },
+    querySelectorAll() { return []; }
+  };
+  const document = { addEventListener() {}, createElement() { return { className: "", dataset: {}, innerHTML: "" }; }, querySelector() { return panel; } };
+  const album = { id: 42, artist: "Weezer", title: "Weezer", external_id: "spotify-id", musicbrainz_release_group_id: "mbid" };
+  const host = Object.freeze({
+    getRoot: () => root, canRender: () => true, getExistingAlbums: () => [album],
+    invoke: async body => {
+      if (body.action === "list_exclusions") return { data: { ok: true, exclusions: [] }, error: null };
+      calls.push(body);
+      return { data: { ok: true, album: { id: album.id, artist: album.artist, title: body.title } }, error: null };
+    },
+    refreshAfterCommit: async () => { refreshes += 1; }, openAdmin() {}, installRenderExtension() {}
+  });
+  const window = { BOMAdminCatalogueHost: host, prompt: () => "  Weezer (Blue Album)  ", confirm: () => true };
+  vm.runInNewContext(catalogue, { window, document, crypto: webcrypto, console });
+  window.BOMAdminCatalogue.state.artist = { name: "Weezer" };
+  window.BOMAdminCatalogue.render();
+
+  assert.match(app, /admin-selected-edit-title-btn[\s\S]*Edit title/);
+  assert.match(app, /admin-edit-title-btn[\s\S]*Edit title/);
+  await window.BOMAdminCatalogue.editAlbumTitle(album);
+
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [{ action: "edit_album_title", album_id: 42, title: "Weezer (Blue Album)" }]);
+  assert.equal(refreshes, 1);
+  assert.match(panel.innerHTML, /Weezer — Weezer \(Blue Album\) was saved/);
+
+  const start = edge.indexOf('body?.action === "edit_album_title"');
+  const end = edge.indexOf('body?.action === "delete_album_preview"', start);
+  const source = edge.slice(start, end);
+  assert.match(source, /\.update\(\{ title \}\)/);
+  assert.doesNotMatch(source, /artist\s*:|tracks|ratings|spotify|musicbrainz|external_id|release_date/);
   assert.ok(edge.indexOf("await requireAdminUser(request)") < start);
 });
 
@@ -317,7 +358,7 @@ test("remote artist-card exclusion reuses the admin action without catalogue cre
   assert.match(bridgeSource, /await renderSelectedItem\(\)/);
   assert.doesNotMatch(bridgeSource, /remote-album-catalogue|\.from\(["'](?:albums|songs)["']\)/);
   assert.match(app, /completeDiscography\.albums[\s\S]*excludedReleaseGroupIds\.has/);
-  assert.match(catalogue, /Object\.freeze\(\{ render, state, editAlbumDate, loadExclusions \}\)/);
+  assert.match(catalogue, /Object\.freeze\(\{ render, state, editAlbumTitle, editAlbumDate, loadExclusions \}\)/);
 });
 
 test("artist enrichment filters excluded release groups but retains unrelated MusicBrainz albums", () => {

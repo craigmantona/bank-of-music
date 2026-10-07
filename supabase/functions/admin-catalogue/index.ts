@@ -350,6 +350,24 @@ Deno.serve(async (request) => {
       return json(request, { ok: true, album: data });
     }
 
+    if (body?.action === "edit_album_title") {
+      const albumId = Number(body.album_id);
+      const title = String(body.title || "").trim();
+      if (!Number.isSafeInteger(albumId) || albumId <= 0) {
+        return json(request, { ok: false, error: "Choose a valid BOM album." }, 400);
+      }
+      if (!title || title.length > 300) {
+        return json(request, { ok: false, error: "Enter an album title between 1 and 300 characters." }, 400);
+      }
+      const { data, error } = await userClient.from("albums")
+        .update({ title })
+        .eq("id", albumId)
+        .select("id, artist, title")
+        .single();
+      if (error) return json(request, { ok: false, error: error.message }, 400);
+      return json(request, { ok: true, album: data });
+    }
+
     if (body?.action === "delete_album_preview" || body?.action === "delete_album") {
       const albumId = Number(body.album_id);
       if (!Number.isSafeInteger(albumId) || albumId <= 0) {

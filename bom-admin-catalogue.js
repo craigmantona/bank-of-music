@@ -392,6 +392,30 @@
     finally { state.busy = false; render(); }
   }
 
+  async function editAlbumTitle(albumOrId) {
+    if (!host?.canRender()) return;
+    const album = typeof albumOrId === "object" && albumOrId
+      ? albumOrId
+      : existingAlbums().find(item => Number(item.id) === Number(albumOrId));
+    if (!album) { state.message = "Choose an existing BOM album."; render(); return; }
+    const currentTitle = String(album.title || "");
+    const nextTitle = global.prompt(`Edit album title\n\n${album.artist} — ${currentTitle}\n\nEnter the corrected title:`, currentTitle);
+    if (nextTitle === null) { state.message = "Album title edit cancelled."; render(); return; }
+    const value = String(nextTitle).trim();
+    if (!value || value.length > 300) { state.message = "Enter an album title between 1 and 300 characters."; render(); return; }
+    if (value === currentTitle) { state.message = "Album title is unchanged."; render(); return; }
+    if (!global.confirm(`${album.artist}\n\nChange album title from “${currentTitle}” to “${value}”?\n\nArtist, tracks and album identity will not be changed.`)) {
+      state.message = "Album title edit cancelled."; render(); return;
+    }
+    state.busy = true; state.message = "Updating album title…"; render();
+    try {
+      await invoke({ action: "edit_album_title", album_id: Number(album.id), title: value });
+      state.message = `${album.artist} — ${value} was saved.`;
+      await host.refreshAfterCommit();
+    } catch (error) { state.message = error.message; }
+    finally { state.busy = false; render(); }
+  }
+
   function resetArtist() {
     state.artist = null; state.artistCandidates = []; state.previews = []; state.results = [];
     state.rows.forEach(row => { row.selected = false; row.release_group_id = ""; row.release_id = ""; });
@@ -482,7 +506,7 @@
 
     host.installRenderExtension(render);
     render();
-    global.BOMAdminCatalogue = Object.freeze({ render, state, editAlbumDate, loadExclusions });
+    global.BOMAdminCatalogue = Object.freeze({ render, state, editAlbumTitle, editAlbumDate, loadExclusions });
     void loadExclusions();
   }
 

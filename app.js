@@ -1785,6 +1785,7 @@ function renderSelectedAdminControls(options = {}) {
   const buttons = [];
 
   if (albumId) {
+    buttons.push(`<button class="admin-selected-edit-title-btn" data-album-id="${albumId}">Edit title</button>`);
     buttons.push(`<button class="admin-selected-edit-cover-btn" data-album-id="${albumId}">🖼 Edit cover</button>`);
     buttons.push(`<button class="admin-selected-delete-album-btn danger-btn" data-album-id="${albumId}">🗑 Hide album</button>`);
   }
@@ -10501,6 +10502,8 @@ function renderAdminDashboard() {
 
               <button class="admin-edit-track-listing-btn secondary-btn" data-album-id="${album.id}">Edit track listing</button>
 
+              <button class="admin-edit-title-btn secondary-btn" data-album-id="${album.id}">Edit title</button>
+
               <button class="admin-edit-release-date-btn secondary-btn" data-album-id="${album.id}">Edit release date</button>
 
               <button class="admin-edit-cover-btn" data-album-id="${album.id}">Edit cover</button>
@@ -11026,6 +11029,18 @@ if (adminDashboard) {
 
     }
 
+    const editTitleButton = event.target.closest(".admin-edit-title-btn, .admin-selected-edit-title-btn");
+
+    if (editTitleButton) {
+
+      const album = allAlbums.find((item) => Number(item.id) === Number(editTitleButton.dataset.albumId));
+
+      await window.BOMAdminCatalogue?.editAlbumTitle(album);
+
+      return;
+
+    }
+
     const editCoverButton = event.target.closest(".admin-edit-cover-btn");
 
     const editReleaseDateButton = event.target.closest(".admin-edit-release-date-btn");
@@ -11100,6 +11115,16 @@ document.querySelector(".nav-left")?.addEventListener("click", () => {
 });
 
 selectedItemDetail?.addEventListener("click", async (event) => {
+
+  const editTitleButton = event.target.closest(".admin-selected-edit-title-btn");
+
+  if (editTitleButton) {
+    event.preventDefault();
+    event.stopPropagation();
+    const album = allAlbums.find((item) => Number(item.id) === Number(editTitleButton.dataset.albumId));
+    await window.BOMAdminCatalogue?.editAlbumTitle(album);
+    return;
+  }
 
   const ratingClick = event.target.closest(
     ".star, .rating-star, .star-selector, .track-rating, .album-rating, .star-rating-button"
