@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const [migration, edge, client, app, html, css, config] = await Promise.all([
-  readFile(new URL("../supabase/migrations/20261010120000_early_access_registration.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20261010083934_early_access_registration.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/early-access/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../bom-early-access.js", import.meta.url), "utf8"),
   readFile(new URL("../app.js", import.meta.url), "utf8"),
