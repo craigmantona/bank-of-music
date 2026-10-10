@@ -36,11 +36,12 @@
     });
     el("earlyAccessRequestForm")?.addEventListener("submit", async event => {
       event.preventDefault();
+      const form = event.currentTarget;
       const message = el("earlyAccessRequestMessage");
       try {
         const result = await invoke(client, { action: "request_access", name: el("earlyAccessName").value, email: el("earlyAccessEmail").value });
         message.textContent = result.message;
-        event.currentTarget.reset();
+        form.reset();
       } catch (error) { message.textContent = error.message; }
     });
   }

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
 
 const [migration, edge, client, app, html, css, config] = await Promise.all([
   readFile(new URL("../supabase/migrations/20261010083934_early_access_registration.sql", import.meta.url), "utf8"),
@@ -34,6 +35,54 @@ test("Early Access requests are normalized, deduplicated and enumeration-safe", 
   assert.match(migration, /early_access_requests_email_unique unique \(normalized_email\)/);
   assert.match(edge, /genericRequestMessage/);
   assert.match(edge, /await db\.from\("early_access_requests"\)\.insert/);
+});
+
+test("successful Early Access request shows confirmation and safely resets its form", async () => {
+  const listeners = new Map();
+  const elements = {
+    earlyAccessRequestForm: {
+      addEventListener(type, listener) { listeners.set(type, listener); },
+      reset() {
+        this.resetCount = (this.resetCount || 0) + 1;
+        elements.earlyAccessName.value = "";
+        elements.earlyAccessEmail.value = "";
+      }
+    },
+    earlyAccessName: { value: "BOM Test" },
+    earlyAccessEmail: { value: "test@example.com" },
+    earlyAccessRequestMessage: { textContent: "" }
+  };
+  const calls = [];
+  const window = {
+    document: { getElementById: id => elements[id] || null },
+    location: { search: "" }
+  };
+  vm.runInNewContext(client, { window, URLSearchParams });
+  const supabase = {
+    from() { return { select() { return { maybeSingle: async () => ({ data: { mode: "INVITATION_ONLY" } }) }; } }; },
+    functions: {
+      async invoke(name, options) {
+        calls.push({ name, options });
+        await Promise.resolve();
+        return { data: { ok: true, message: "Request received." }, error: null };
+      }
+    }
+  };
+  await window.BOMEarlyAccess.init(supabase);
+  const event = { preventDefault() {}, currentTarget: elements.earlyAccessRequestForm };
+  const submission = listeners.get("submit")(event);
+  event.currentTarget = null;
+  await submission;
+
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].name, "early-access");
+  assert.equal(calls[0].options.body.action, "request_access");
+  assert.equal(calls[0].options.body.name, "BOM Test");
+  assert.equal(calls[0].options.body.email, "test@example.com");
+  assert.equal(elements.earlyAccessRequestMessage.textContent, "Request received.");
+  assert.equal(elements.earlyAccessRequestForm.resetCount, 1);
+  assert.equal(elements.earlyAccessName.value, "");
+  assert.equal(elements.earlyAccessEmail.value, "");
 });
 
 test("admin approval and direct invitations use the same trusted server operation", () => {
