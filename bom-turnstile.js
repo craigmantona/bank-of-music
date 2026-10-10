@@ -13,6 +13,7 @@
     let token = "";
     let widgetId = null;
     let api = turnstileApi || window?.turnstile || null;
+    let unavailableMessage = "";
 
     function setMessage(text) {
       if (message) message.textContent = text || "";
@@ -21,34 +22,49 @@
     function render() {
       api = api || window?.turnstile || null;
       if (!enabled || !api || !widget || widgetId !== null) return;
-      widgetId = api.render(widget, {
-        sitekey: cleanSiteKey,
-        theme: "dark",
-        size: "flexible",
-        appearance: "interaction-only",
-        action: "bom_auth",
-        callback(response) {
-          token = String(response || "");
-          setMessage("");
-        },
-        "expired-callback"() {
-          token = "";
-          setMessage("Security check expired. Please try it again.");
-        },
-        "timeout-callback"() {
-          token = "";
-          setMessage("Security check timed out. Please try it again.");
-        },
-        "error-callback"() {
-          token = "";
-          setMessage("Security check is unavailable. Please try again.");
-        }
-      });
+      setMessage("Complete the security check to continue.");
+      try {
+        widgetId = api.render(widget, {
+          sitekey: cleanSiteKey,
+          theme: "dark",
+          size: "flexible",
+          appearance: "always",
+          execution: "render",
+          action: "bom_auth",
+          callback(response) {
+            token = String(response || "");
+            unavailableMessage = "";
+            setMessage("");
+          },
+          "expired-callback"() {
+            token = "";
+            setMessage("Security check expired. Please complete it again.");
+          },
+          "timeout-callback"() {
+            token = "";
+            setMessage("Security check timed out. Please complete it again.");
+          },
+          "unsupported-callback"() {
+            token = "";
+            unavailableMessage = "This browser cannot run the security check. Please use a supported browser.";
+            setMessage(unavailableMessage);
+          },
+          "error-callback"() {
+            token = "";
+            unavailableMessage = "Security check is unavailable. Please refresh and try again.";
+            setMessage(unavailableMessage);
+          }
+        });
+      } catch {
+        unavailableMessage = "Security check could not initialise. Please refresh and try again.";
+        setMessage(unavailableMessage);
+      }
     }
 
     function load() {
       if (!enabled) return Promise.resolve();
       container?.classList.remove("hidden");
+      setMessage("Loading security check…");
       if (api || window?.turnstile) {
         render();
         return Promise.resolve();
@@ -65,7 +81,8 @@
         };
         script.addEventListener("load", finish, { once: true });
         script.addEventListener("error", () => {
-          setMessage("Security check could not load. Please refresh and try again.");
+          unavailableMessage = "Security check could not load. Please refresh and try again.";
+          setMessage(unavailableMessage);
           resolve();
         }, { once: true });
         if (!existing) {
@@ -84,7 +101,9 @@
       if (!enabled) return null;
       await ready;
       if (token) return token;
-      const error = new Error("Complete the security check before continuing.");
+      const error = new Error(
+        unavailableMessage || "Complete the security check before continuing."
+      );
       error.isCaptchaRequired = true;
       throw error;
     }

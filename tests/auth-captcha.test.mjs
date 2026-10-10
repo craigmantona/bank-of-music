@@ -65,8 +65,10 @@ test("Managed Turnstile token is fresh, single-use and reset after an auth attem
   const { controller, elements } = setup({ siteKey: "public-site-key", api });
   assert.equal(controller.isEnabled(), true);
   assert.equal(elements.turnstileContainer.classList.contains("hidden"), false);
-  assert.equal(options.appearance, "interaction-only");
+  assert.equal(options.appearance, "always");
+  assert.equal(options.execution, "render");
   assert.equal(options.action, "bom_auth");
+  assert.match(elements.turnstileMessage.textContent, /complete the security check/i);
 
   options.callback("fresh-token");
   assert.equal(await controller.getToken(), "fresh-token");
@@ -84,7 +86,53 @@ test("expired and failed challenges discard tokens without exposing details", as
   await assert.rejects(controller.getToken(), /Complete the security check/);
   assert.match(elements.turnstileMessage.textContent, /expired/i);
   options["error-callback"]("internal-error-code");
+  await assert.rejects(controller.getToken(), /refresh and try again/i);
   assert.doesNotMatch(elements.turnstileMessage.textContent, /internal-error-code/);
+});
+
+test("initialisation failures are visible and prevent auth without weakening CAPTCHA", async () => {
+  const api = { render() { throw new Error("private detail"); } };
+  const { controller, elements } = setup({ siteKey: "public-site-key", api });
+  await assert.rejects(controller.getToken(), /could not initialise/i);
+  assert.match(elements.turnstileMessage.textContent, /could not initialise/i);
+  assert.doesNotMatch(elements.turnstileMessage.textContent, /private detail/i);
+});
+
+test("unsupported browsers receive a clear security-check message", async () => {
+  let options;
+  const api = { render(_element, value) { options = value; return "widget-3"; }, reset() {} };
+  const { controller, elements } = setup({ siteKey: "public-site-key", api });
+  options["unsupported-callback"]();
+  await assert.rejects(controller.getToken(), /supported browser/i);
+  assert.match(elements.turnstileMessage.textContent, /supported browser/i);
+});
+
+test("script load failures are reported and keep protected auth blocked", async () => {
+  const elements = {
+    turnstileContainer: element(),
+    turnstileWidget: element(false),
+    turnstileMessage: element(false)
+  };
+  const listeners = {};
+  const script = {
+    addEventListener(name, handler) { listeners[name] = handler; }
+  };
+  const window = {};
+  window.window = window;
+  const document = {
+    getElementById: id => elements[id] || null,
+    createElement: type => type === "script" ? script : null,
+    head: { appendChild() { listeners.error(); } }
+  };
+  const context = vm.createContext({ URLSearchParams, window });
+  vm.runInContext(source, context);
+  const controller = window.BOMTurnstile.create({
+    siteKey: "public-site-key",
+    document,
+    window
+  });
+  await assert.rejects(controller.getToken(), /could not load/i);
+  assert.match(elements.turnstileMessage.textContent, /could not load/i);
 });
 
 test("all protected Supabase auth calls receive captchaToken options", () => {
@@ -99,5 +147,5 @@ test("client integration contains only the configured public Site Key", () => {
   assert.match(config, /window\.TURNSTILE_SITE_KEY = "0x[^"]+"/);
   assert.doesNotMatch(`${source}\n${app}\n${config}`, /TURNSTILE_SECRET|secret.?key/i);
   assert.match(source, /https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js\?render=explicit/);
-  assert.match(html, /bom-turnstile\.js\?v=1/);
+  assert.match(html, /bom-turnstile\.js\?v=2/);
 });
