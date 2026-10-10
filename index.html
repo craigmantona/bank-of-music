@@ -76,6 +76,27 @@
  
    <section class="card" id="authCard">
      <h2>Login / Sign up</h2>
+
+     <div id="earlyAccessIntro" class="early-access-intro hidden">
+       <div class="early-access-kicker">The Bank of Music</div>
+       <h2>Early Access</h2>
+       <p>The Bank of Music is currently welcoming new members by invitation.</p>
+       <p>Join our growing community of music lovers, discover albums, rate your favourite tracks and help shape the future of The Bank of Music.</p>
+       <div class="button-row">
+         <button id="requestEarlyAccessBtn" type="button">Request Early Access</button>
+         <button id="activateInvitationBtn" type="button" class="secondary-btn">Activate your invitation</button>
+       </div>
+       <p class="small">Existing member? Use the login form below.</p>
+     </div>
+
+     <form id="earlyAccessRequestForm" class="early-access-form hidden" novalidate>
+       <label for="earlyAccessName">Name</label>
+       <input id="earlyAccessName" type="text" maxlength="120" autocomplete="name" required>
+       <label for="earlyAccessEmail">Email address</label>
+       <input id="earlyAccessEmail" type="email" maxlength="254" autocomplete="email" required>
+       <div class="button-row"><button type="submit">Send request</button><button id="cancelEarlyAccessRequestBtn" type="button" class="secondary-btn">Cancel</button></div>
+       <p id="earlyAccessRequestMessage" role="status" aria-live="polite"></p>
+     </form>
  
      <input id="email" type="email" placeholder="Email">
 
@@ -375,6 +396,7 @@
      </div>
  
      <p id="adminMessage" class="small"></p>
+     <div id="earlyAccessAdmin"></div>
      <div id="adminDashboard"></div>
    </section>
  
@@ -426,6 +448,7 @@
   <script src="bom-artist-hero.js?v=1"></script>
   <script src="bom-turnstile.js?v=1"></script>
   <script src="bom-password-recovery.js?v=1"></script>
+  <script src="bom-early-access.js?v=1"></script>
   <script src="bom-spotify-playlist.js?v=3"></script>
   <script src="app.js?v=138&autocomplete=1&search-autosave=1"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>

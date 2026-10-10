@@ -1169,7 +1169,7 @@ async function ensureUserProfile() {
   try {
     const { data: existing, error: selectError } = await supabaseClient
       .from("profiles")
-      .select("id, handle, member_number, created_at, is_admin, birth_year")
+      .select("id, handle, member_number, created_at, is_admin, birth_year, is_founding_member")
       .eq("id", currentUser.id)
       .maybeSingle();
 
@@ -1186,7 +1186,7 @@ async function ensureUserProfile() {
         birth_year: metadataBirthYear
       })
       .eq("id", currentUser.id)
-      .select("id, handle, member_number, created_at, is_admin, birth_year")
+      .select("id, handle, member_number, created_at, is_admin, birth_year, is_founding_member")
       .single();
 
     if (updateError) {
@@ -1212,7 +1212,7 @@ async function ensureUserProfile() {
         handle: preferredHandle,
         birth_year: metadataBirthYear
       })
-      .select("id, handle, member_number, created_at, is_admin, birth_year")
+      .select("id, handle, member_number, created_at, is_admin, birth_year, is_founding_member")
       .single();
 
     if (firstAttempt.error) {
@@ -1229,7 +1229,7 @@ async function ensureUserProfile() {
           handle: backupHandle,
           birth_year: metadataBirthYear
         })
-        .select("id, handle, member_number, created_at, is_admin, birth_year")
+        .select("id, handle, member_number, created_at, is_admin, birth_year, is_founding_member")
         .single();
 
       if (!secondAttempt.error) {
@@ -1375,7 +1375,7 @@ function renderProfileModalContent() {
 
          <div class="profile-kicker">Bank of Music profile</div>
 
-         <h2>${escapeHtml(displayHandle)}</h2>
+         <h2>${escapeHtml(displayHandle)}${window.BOMEarlyAccess?.badge(currentProfile?.is_founding_member) || ""}</h2>
 
          <p>Member ${escapeHtml(memberNumber)}</p>
 <button type="button" id="editHandleBtn" class="secondary-btn">Edit handle</button>
@@ -2404,7 +2404,10 @@ async function signUp() {
         emailRedirectTo: window.location.origin + window.location.pathname,
         data: {
           handle,
-          birth_year: birthYear
+          birth_year: birthYear,
+          ...(window.BOMEarlyAccess?.state.invitationToken
+            ? { invitation_token: window.BOMEarlyAccess.state.invitationToken }
+            : {})
         }
       }
     });
@@ -2420,6 +2423,12 @@ setMessage(
     authMessage,
     "Account created. Please check your email and click the confirmation link before logging in."
 );
+    if (window.BOMEarlyAccess?.state.invitationToken) {
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.searchParams.delete("invitation");
+      window.history.replaceState({}, document.title, cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+      window.BOMEarlyAccess.state.invitationToken = "";
+    }
   } catch (err) {
     setMessage(authMessage, "Error: " + err.message);
   } finally {
@@ -10594,6 +10603,7 @@ function renderAdminDashboard() {
   `;
 
 loadAdminStats();
+window.BOMEarlyAccess?.loadAdmin(supabaseClient);
 }
 
 async function loadAdminStats() {
@@ -13867,7 +13877,7 @@ async function findProfileByHandle(handle) {
 
   const { data, error } = await supabaseClient
     .from("profiles")
-    .select("id, handle, member_number, created_at, is_admin")
+    .select("id, handle, member_number, created_at, is_admin, is_founding_member")
     .eq("handle", clean)
     .maybeSingle();
 
@@ -13892,7 +13902,7 @@ async function updateCurrentUserHandle() {
     .from("profiles")
     .update({ handle: newHandle })
     .eq("id", currentUser.id)
-    .select("id, handle, member_number, created_at, is_admin, avatar_url, bio")
+    .select("id, handle, member_number, created_at, is_admin, avatar_url, bio, is_founding_member")
     .single();
 
   if (error) {
@@ -13949,7 +13959,7 @@ async function unfollowProfile(profileId) {
 async function openPublicProfileById(profileId) {
   const { data, error } = await supabaseClient
     .from("profiles")
-    .select("id, handle, member_number, created_at, is_admin")
+    .select("id, handle, member_number, created_at, is_admin, is_founding_member")
     .eq("id", profileId)
     .maybeSingle();
 
@@ -14011,7 +14021,7 @@ async function renderPublicProfile(profile) {
       <div class="profile-card-header">
         <div>
           <div class="profile-kicker">Bank of Music profile</div>
-          <h2>${escapeHtml(displayHandle)}</h2>
+          <h2>${escapeHtml(displayHandle)}${window.BOMEarlyAccess?.badge(profile.is_founding_member) || ""}</h2>
           <p>Member ${profile.member_number ? `#${escapeHtml(profile.member_number)}` : "number pending"}</p>
         </div>
         <button type="button" class="profile-close-btn" data-profile-close="true">×</button>
@@ -14450,7 +14460,7 @@ function renderProfileModalContent() {
       <div class="profile-card-header">
         <div>
           <div class="profile-kicker">Bank of Music profile</div>
-          <h2>${escapeHtml(displayHandle)}</h2>
+          <h2>${escapeHtml(displayHandle)}${window.BOMEarlyAccess?.badge(currentProfile?.is_founding_member) || ""}</h2>
           <p>Member ${escapeHtml(memberNumber)}</p>
 <button type="button" id="editHandleBtn" class="secondary-btn">Edit handle</button>
 
@@ -15027,9 +15037,32 @@ window.BOMAdminCatalogueHost = Object.freeze({
 });
 document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
 
+const earlyAccessAdmin = document.getElementById("earlyAccessAdmin");
+earlyAccessAdmin?.addEventListener("click", async event => {
+  const target = event.target.closest("[data-ea-approve], [data-ea-decline], [data-ea-revoke]");
+  if (target) await window.BOMEarlyAccess?.handleAdmin(supabaseClient, target);
+});
+earlyAccessAdmin?.addEventListener("change", async event => {
+  if (event.target.id !== "registrationModeSelect") return;
+  const message = document.getElementById("earlyAccessAdminMessage");
+  try {
+    await window.BOMEarlyAccess.invoke(supabaseClient, { action: "set_mode", mode: event.target.value });
+    message.textContent = `Registration mode changed to ${event.target.value.replace("_", " ")}.`;
+  } catch (error) { message.textContent = error.message; }
+});
+earlyAccessAdmin?.addEventListener("submit", async event => {
+  if (event.target.id !== "directInvitationForm") return;
+  event.preventDefault();
+  const message = document.getElementById("earlyAccessAdminMessage");
+  try {
+    await window.BOMEarlyAccess.invoke(supabaseClient, { action: "invite", email: document.getElementById("directInvitationEmail").value });
+    await window.BOMEarlyAccess.loadAdmin(supabaseClient);
+  } catch (error) { message.textContent = error.message; }
+});
+
 showOnlySection("recommendationsSection");
 
-refreshSessionUI().then(async () => {
+Promise.resolve(window.BOMEarlyAccess?.init(supabaseClient)).finally(() => refreshSessionUI()).then(async () => {
   stageOneInitialDataReady = true;
   await handleIncomingShareLink();
   await handleIncomingProfileLink();

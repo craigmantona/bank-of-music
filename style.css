@@ -2975,6 +2975,24 @@ body.profile-open {
  align-items: center;
  margin: 18px 0 20px;
 }
+
+.early-access-intro { padding: 18px 0; }
+.early-access-intro h2 { margin-top: 6px; font-size: clamp(2rem, 7vw, 4.5rem); }
+.early-access-kicker { color: #22f5a7; font-size: .72rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.early-access-form { display: grid; gap: 10px; margin: 18px 0; max-width: 560px; }
+.early-access-admin-panel { margin-bottom: 24px; }
+.early-access-admin-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.early-access-admin-heading select { margin-left: 8px; }
+.early-access-direct-form { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+.early-access-direct-form input { flex: 1 1 260px; }
+.founding-member-badge { display: inline-flex; align-items: center; gap: 7px; margin-left: 9px; color: #aeb7b2; font-size: .68rem; font-weight: 700; letter-spacing: .04em; vertical-align: middle; }
+.founding-member-record { position: relative; width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%; background: repeating-radial-gradient(circle at center,#171a1b 0 2px,#34393a 3px,#151718 4px 5px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12),0 1px 5px rgba(0,0,0,.45); }
+.founding-member-record::after { content:""; position:absolute; inset:7px; border-radius:50%; background:#22f5a7; box-shadow:0 0 0 1px #0b1511; }
+.founding-member-badge:focus-visible { outline: 2px solid #22f5a7; outline-offset: 3px; }
+@media (max-width: 600px) {
+ .founding-member-label { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+ .founding-member-badge:focus .founding-member-label { width:auto; height:auto; overflow:visible; clip-path:none; z-index:20; margin-top:52px; padding:7px 9px; color:#f4f4ef; background:#151918; border:1px solid rgba(255,255,255,.18); border-radius:4px; white-space:nowrap; }
+}
  
 .admin-toolbar input {
  margin-bottom: 0;
