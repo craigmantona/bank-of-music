@@ -6166,6 +6166,43 @@ function buildArtistTopRatedAlbumsHtml(artistName) {
 
 }
 
+function buildArtistRankedTracks(savedSongs) {
+  const tracksByRatingIdentity = new Map();
+
+  savedSongs.forEach((song) => {
+    const average = getSongAverage(song.id);
+    if (!average) return;
+    const album = song.album_id ? allAlbums.find((item) => Number(item.id) === Number(song.album_id) && !item.is_deleted) : null;
+    const recordingId = getConfirmedMusicBrainzRecordingId(song);
+    const identityKey = recordingId ? `musicbrainz:${recordingId}` : `song:${Number(song.id)}`;
+    const candidate = {
+      songId: song.id,
+      title: song.title || "Untitled track",
+      albumId: album?.id || "",
+      albumTitle: album?.title || getAlbumNameById(song.album_id) || "",
+      albumYear: String(album?.original_release_date || album?.release_date || "").slice(0, 4),
+      artworkUrl: album ? getAlbumArtworkUrl(album) : "",
+      community: { average: Number(average.avg), count: Number(average.count || 0) },
+      personal: getYourSongRating(song.id)
+    };
+    const existing = tracksByRatingIdentity.get(identityKey);
+    if (!existing || (!existing.albumId && candidate.albumId)) tracksByRatingIdentity.set(identityKey, candidate);
+  });
+
+  const rankedTracks = [...tracksByRatingIdentity.values()]
+    .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || a.albumYear.localeCompare(b.albumYear) || a.albumTitle.localeCompare(b.albumTitle) || a.title.localeCompare(b.title));
+
+  let priorDisplayedScore = null;
+  let priorRank = 0;
+  rankedTracks.forEach((track, index) => {
+    const displayedScore = track.community.average.toFixed(1);
+    if (displayedScore !== priorDisplayedScore) priorRank = index + 1;
+    track.rank = priorRank;
+    priorDisplayedScore = displayedScore;
+  });
+  return rankedTracks;
+}
+
 function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, imageMeta = null, albums, savedSongs }) {
   const normalizedAlbums = albums.map((album, sourceIndex) => {
     const albumId = album.savedAlbumId || album.localAlbumId || "";
@@ -6189,32 +6226,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
     .filter((album) => album.community)
     .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || String(a.releaseDate || "9999").localeCompare(String(b.releaseDate || "9999")) || a.title.localeCompare(b.title));
 
-  const rankedTracks = savedSongs
-    .map((song) => {
-      const average = getSongAverage(song.id);
-      const album = song.album_id ? allAlbums.find((item) => Number(item.id) === Number(song.album_id)) : null;
-      return average ? {
-        songId: song.id,
-        title: song.title || "Untitled track",
-        albumId: album?.id || "",
-        albumTitle: album?.title || getAlbumNameById(song.album_id) || "",
-        albumYear: String(album?.original_release_date || album?.release_date || "").slice(0, 4),
-        artworkUrl: album ? getAlbumArtworkUrl(album) : "",
-        community: { average: Number(average.avg), count: Number(average.count || 0) },
-        personal: getYourSongRating(song.id)
-      } : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || a.albumYear.localeCompare(b.albumYear) || a.albumTitle.localeCompare(b.albumTitle) || a.title.localeCompare(b.title));
-
-  let priorDisplayedScore = null;
-  let priorRank = 0;
-  rankedTracks.forEach((track, index) => {
-    const displayedScore = track.community.average.toFixed(1);
-    if (displayedScore !== priorDisplayedScore) priorRank = index + 1;
-    track.rank = priorRank;
-    priorDisplayedScore = displayedScore;
-  });
+  const rankedTracks = buildArtistRankedTracks(savedSongs);
 
   const metadata = [];
   const area = artistDetail?.area?.name || artistDetail?.begin_area?.name || "";

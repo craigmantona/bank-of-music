@@ -47,7 +47,7 @@ test("Discography supports release, community and personal ordering", () => {
 });
 
 test("only admins can exclude uncatalogued MusicBrainz albums from artist cards", () => {
-  const buildSource = app.slice(app.indexOf("function buildStageOneArtistModel"), app.indexOf("async function renderStageOneArtist"));
+  const buildSource = app.slice(app.indexOf("function buildArtistRankedTracks"), app.indexOf("async function renderStageOneArtist"));
   function modelFor(admin, album) {
     const context = {
       isAdmin: admin,
@@ -85,6 +85,43 @@ test("Top tracks use community track ratings with competition ranks and Top 10 o
   assert.match(artist, /trackLimit === 10 \? 50 : 10/);
   assert.match(artist, /View Top 50/);
   assert.match(artist, /community track rating/i);
+});
+
+test("top tracks deduplicate shared ratings by recording identity and prefer a saved album", () => {
+  const identityStart = app.indexOf("function getConfirmedMusicBrainzRecordingId");
+  const identityEnd = app.indexOf("function getSongRatingOccurrenceIds", identityStart);
+  const rankingStart = app.indexOf("function buildArtistRankedTracks");
+  const rankingEnd = app.indexOf("function buildStageOneArtistModel", rankingStart);
+  const sharedRecordingId = "11111111-1111-4111-8111-111111111111";
+  const distinctRecordingId = "22222222-2222-4222-8222-222222222222";
+  const context = {
+    allAlbums: [
+      { id: 10, title: "Weezer (Green Album)", original_release_date: "2001-05-07", cover_art_url: "green.jpg" },
+      { id: 20, title: "A Different Album", original_release_date: "2002-01-01", cover_art_url: "different.jpg" }
+    ],
+    getSongAverage: () => ({ avg: 8.5, count: 2 }),
+    getYourSongRating: () => 8,
+    getAlbumNameById: () => "",
+    getAlbumArtworkUrl: album => album?.cover_art_url || ""
+  };
+  vm.runInNewContext(app.slice(identityStart, identityEnd), context);
+  vm.runInNewContext(app.slice(rankingStart, rankingEnd), context);
+
+  const ranked = context.buildArtistRankedTracks([
+    { id: 1, album_id: 999, title: "Island in the Sun", external_source: "musicbrainz", external_id: sharedRecordingId },
+    { id: 2, album_id: 10, title: "Island in the Sun", external_source: "musicbrainz", external_id: sharedRecordingId },
+    { id: 3, album_id: 20, title: "Island in the Sun", external_source: "musicbrainz", external_id: distinctRecordingId }
+  ]);
+
+  assert.equal(ranked.length, 2);
+  assert.deepEqual(JSON.parse(JSON.stringify(ranked[0])), {
+    songId: 2, title: "Island in the Sun", albumId: 10, albumTitle: "Weezer (Green Album)",
+    albumYear: "2001", artworkUrl: "green.jpg", community: { average: 8.5, count: 2 }, personal: 8, rank: 1
+  });
+  assert.deepEqual(JSON.parse(JSON.stringify(ranked[1])), {
+    songId: 3, title: "Island in the Sun", albumId: 20, albumTitle: "A Different Album",
+    albumYear: "2002", artworkUrl: "different.jpg", community: { average: 8.5, count: 2 }, personal: 8, rank: 1
+  });
 });
 
 test("responsive Artist layouts and missing artwork states are present", () => {
