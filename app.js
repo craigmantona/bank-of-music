@@ -1018,21 +1018,29 @@ function buildStageOneChartsModel(albumRows, songRows) {
       ratingCount: row.rating_count
     };
   });
-  const tracks = (songRows || []).map((row) => {
+  const rowsByIdentity = new Map();
+  (songRows || []).forEach((row) => {
     const song = allSongs.find((item) => Number(item.id) === Number(row.item_id));
-    const albumId = row.album_id || song?.album_id;
-    const album = allAlbums.find((item) => Number(item.id) === Number(albumId));
+    if (!song) return;
+    const identity = getSongRatingIdentity(song);
+    if (!rowsByIdentity.has(identity)) rowsByIdentity.set(identity, { row, song });
+  });
+  const tracks = [...rowsByIdentity.values()].map(({ row, song }) => {
+    const occurrences = allSongs.filter(item => getSongRatingIdentity(item) === getSongRatingIdentity(song));
+    song = getPreferredSongOccurrence(occurrences) || song;
+    const album = allAlbums.find((item) => Number(item.id) === Number(song.album_id));
+    const sharedRating = getSongAverage(song.id);
     return {
-      id: row.item_id,
-      title: row.title || "Untitled track",
-      artist: row.artist || song?.artist || album?.artist || "Unknown artist",
+      id: song.id,
+      title: song.title || row.title || "Untitled track",
+      artist: song.artist || row.artist || album?.artist || "Unknown artist",
       albumTitle: album?.title || "",
       year: String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
-      averageRating: row.average_rating,
-      ratingCount: row.rating_count
+      averageRating: sharedRating?.avg ?? row.average_rating,
+      ratingCount: sharedRating?.count ?? row.rating_count
     };
-  });
+  }).sort((a, b) => b.averageRating - a.averageRating || b.ratingCount - a.ratingCount);
   return { albums, tracks };
 }
 
@@ -1952,12 +1960,14 @@ function getAlbumAverage(albumId) {
 
 
 function getSongAverage(songId) {
-
-  const ratings = allSongRatings
-
-    .filter((row) => Number(row.song_id) === Number(songId))
-
-    .map((row) => Number(row.rating));
+  const occurrenceIds = new Set(getSongRatingOccurrenceIds(songId));
+  const ratingsByUser = new Map();
+  allSongRatings.forEach((row) => {
+    if (occurrenceIds.has(Number(row.song_id)) && !ratingsByUser.has(row.user_id)) {
+      ratingsByUser.set(row.user_id, Number(row.rating));
+    }
+  });
+  const ratings = [...ratingsByUser.values()];
 
 
 
@@ -2014,6 +2024,11 @@ function getConfirmedMusicBrainzRecordingId(song) {
     : "";
 }
 
+function getSongRatingIdentity(song) {
+  const recordingId = getConfirmedMusicBrainzRecordingId(song);
+  return recordingId ? `musicbrainz:${recordingId}` : `song:${Number(song?.id)}`;
+}
+
 function getSongRatingOccurrenceIds(songId) {
   const selectedSong = allSongs.find(song => Number(song.id) === Number(songId));
   if (!selectedSong) return [];
@@ -2022,6 +2037,20 @@ function getSongRatingOccurrenceIds(songId) {
   return allSongs
     .filter(song => getConfirmedMusicBrainzRecordingId(song) === recordingId)
     .map(song => Number(song.id));
+}
+
+function getPreferredSongOccurrence(songs) {
+  return [...songs].sort((left, right) => {
+    const leftAlbum = allAlbums.find(album => Number(album.id) === Number(left.album_id) && !album.is_deleted);
+    const rightAlbum = allAlbums.find(album => Number(album.id) === Number(right.album_id) && !album.is_deleted);
+    const leftStudio = leftAlbum && isLikelyStudioAlbum(leftAlbum) ? 0 : 1;
+    const rightStudio = rightAlbum && isLikelyStudioAlbum(rightAlbum) ? 0 : 1;
+    if (leftStudio !== rightStudio) return leftStudio - rightStudio;
+    if (Boolean(leftAlbum) !== Boolean(rightAlbum)) return leftAlbum ? -1 : 1;
+    const leftDate = String(leftAlbum?.original_release_date || leftAlbum?.release_date || "9999-99-99");
+    const rightDate = String(rightAlbum?.original_release_date || rightAlbum?.release_date || "9999-99-99");
+    return leftDate.localeCompare(rightDate) || Number(left.id) - Number(right.id);
+  })[0] || null;
 }
 
 function renderStarSelector(targetId, currentValue = null) {
@@ -3043,7 +3072,7 @@ function isLikelyStudioAlbum(album) {
   const badTitleBits = [
     " single", " ep", "remix", "karaoke", "instrumental", "acoustic",
     "live", "demo", "edit", "radio edit", "session", "sessions",
-    "best of", "greatest hits", "collection", "compilation", "anthology",
+    "best of", "greatest hits", "singles", "collection", "compilation", "anthology",
     "now that's what", "now thats what", "soundtrack", "tribute"
   ];
 
@@ -3766,8 +3795,16 @@ function buildStageOneRatingsModel() {
       community: community ? { average: community.avg, count: community.count } : null
     };
   }).filter(Boolean);
-  const tracks = ownTrackRatings.map((ratingRow) => {
+  const ratedTrackIdentities = new Map();
+  ownTrackRatings.forEach((ratingRow) => {
     const track = allSongs.find((item) => Number(item.id) === Number(ratingRow.song_id));
+    if (!track) return;
+    const identity = getSongRatingIdentity(track);
+    if (!ratedTrackIdentities.has(identity)) ratedTrackIdentities.set(identity, { track, rating: Number(ratingRow.rating) });
+  });
+  const tracks = [...ratedTrackIdentities.values()].map(({ track, rating }) => {
+    const occurrences = allSongs.filter(item => getSongRatingIdentity(item) === getSongRatingIdentity(track));
+    track = getPreferredSongOccurrence(occurrences) || track;
     if (!track) return null;
     const album = allAlbums.find((item) => Number(item.id) === Number(track.album_id));
     const community = getSongAverage(track.id);
@@ -3779,7 +3816,7 @@ function buildStageOneRatingsModel() {
       albumTitle: album?.title || "",
       year: String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
-      personal: Number(ratingRow.rating),
+      personal: rating,
       community: community ? { average: community.avg, count: community.count } : null
     };
   }).filter(Boolean);
@@ -6173,8 +6210,7 @@ function buildArtistRankedTracks(savedSongs) {
     const average = getSongAverage(song.id);
     if (!average) return;
     const album = song.album_id ? allAlbums.find((item) => Number(item.id) === Number(song.album_id) && !item.is_deleted) : null;
-    const recordingId = getConfirmedMusicBrainzRecordingId(song);
-    const identityKey = recordingId ? `musicbrainz:${recordingId}` : `song:${Number(song.id)}`;
+    const identityKey = getSongRatingIdentity(song);
     const candidate = {
       songId: song.id,
       title: song.title || "Untitled track",
@@ -6183,11 +6219,20 @@ function buildArtistRankedTracks(savedSongs) {
       albumYear: String(album?.original_release_date || album?.release_date || "").slice(0, 4),
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
       community: { average: Number(average.avg), count: Number(average.count || 0) },
-      personal: getYourSongRating(song.id)
+      personal: getYourSongRating(song.id),
+      sourceSong: song
     };
     const existing = tracksByRatingIdentity.get(identityKey);
-    if (!existing || (!existing.albumId && candidate.albumId)) tracksByRatingIdentity.set(identityKey, candidate);
+    if (!existing) {
+      tracksByRatingIdentity.set(identityKey, candidate);
+      return;
+    }
+    const preferred = getPreferredSongOccurrence([existing.sourceSong, song]);
+    if (preferred === song) tracksByRatingIdentity.set(identityKey, candidate);
+    tracksByRatingIdentity.get(identityKey).sourceSong = preferred;
   });
+
+  tracksByRatingIdentity.forEach(track => { delete track.sourceSong; });
 
   const rankedTracks = [...tracksByRatingIdentity.values()]
     .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || a.albumYear.localeCompare(b.albumYear) || a.albumTitle.localeCompare(b.albumTitle) || a.title.localeCompare(b.title));

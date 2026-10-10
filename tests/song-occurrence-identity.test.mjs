@@ -55,7 +55,7 @@ test("album track modelling selects the occurrence belonging to that album", () 
 test("catalogue occurrences remain separate while user ratings may follow confirmed recordings", async () => {
   const ratingFunction = extract("async function saveTrackRating(", "async function deleteTrackRating");
   const catalogueMigration = await readFile(
-    new URL("../supabase/migrations/20260927120000_album_track_occurrence_identity.sql", import.meta.url),
+    new URL("../supabase/migrations/20260927105147_album_track_occurrence_identity.sql", import.meta.url),
     "utf8"
   );
   assert.match(ratingFunction, /getSongRatingOccurrenceIds/);
@@ -63,4 +63,24 @@ test("catalogue occurrences remain separate while user ratings may follow confir
   assert.match(catalogueMigration, /songs_album_external_source_external_id_unique/);
   assert.match(catalogueMigration, /songs_album_track_position_unique/);
   assert.doesNotMatch(app, /from\("songs"\)[\s\S]{0,200}?onConflict:\s*"external_source,external_id"/);
+});
+
+test("community ratings are shared by confirmed recording and count each user once", () => {
+  const context = vm.createContext({
+    allSongs: [
+      { id: 11, external_source: "musicbrainz", external_id: "11111111-1111-4111-8111-111111111111" },
+      { id: 22, external_source: "musicbrainz", external_id: "11111111-1111-4111-8111-111111111111" },
+      { id: 33, external_source: "musicbrainz", external_id: "22222222-2222-4222-8222-222222222222" }
+    ],
+    allSongRatings: [
+      { user_id: "alice", song_id: 11, rating: 8 },
+      { user_id: "alice", song_id: 22, rating: 8 },
+      { user_id: "bob", song_id: 11, rating: 10 },
+      { user_id: "carol", song_id: 33, rating: 2 }
+    ]
+  });
+  vm.runInContext(extract("function getSongAverage", "function getYourAlbumRating"), context);
+  vm.runInContext(extract("function getConfirmedMusicBrainzRecordingId", "function getPreferredSongOccurrence"), context);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.getSongAverage(22))), { avg: 9, count: 2 });
+  assert.deepEqual(JSON.parse(JSON.stringify(context.getSongAverage(33))), { avg: 2, count: 1 });
 });

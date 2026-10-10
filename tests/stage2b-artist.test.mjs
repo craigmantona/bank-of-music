@@ -87,7 +87,7 @@ test("Top tracks use community track ratings with competition ranks and Top 10 o
   assert.match(artist, /community track rating/i);
 });
 
-test("top tracks deduplicate shared ratings by recording identity and prefer a saved album", () => {
+test("top tracks deduplicate shared ratings by recording identity and prefer the original studio album", () => {
   const identityStart = app.indexOf("function getConfirmedMusicBrainzRecordingId");
   const identityEnd = app.indexOf("function getSongRatingOccurrenceIds", identityStart);
   const rankingStart = app.indexOf("function buildArtistRankedTracks");
@@ -97,18 +97,23 @@ test("top tracks deduplicate shared ratings by recording identity and prefer a s
   const context = {
     allAlbums: [
       { id: 10, title: "Weezer (Green Album)", original_release_date: "2001-05-07", cover_art_url: "green.jpg" },
+      { id: 99, title: "The Singles", original_release_date: "2005-01-01", cover_art_url: "singles.jpg" },
       { id: 20, title: "A Different Album", original_release_date: "2002-01-01", cover_art_url: "different.jpg" }
     ],
     getSongAverage: () => ({ avg: 8.5, count: 2 }),
     getYourSongRating: () => 8,
     getAlbumNameById: () => "",
-    getAlbumArtworkUrl: album => album?.cover_art_url || ""
+    getAlbumArtworkUrl: album => album?.cover_art_url || "",
+    isLikelyStudioAlbum: album => album?.title !== "The Singles"
   };
   vm.runInNewContext(app.slice(identityStart, identityEnd), context);
+  const preferenceStart = app.indexOf("function getPreferredSongOccurrence");
+  const preferenceEnd = app.indexOf("function renderStarSelector", preferenceStart);
+  vm.runInNewContext(app.slice(preferenceStart, preferenceEnd), context);
   vm.runInNewContext(app.slice(rankingStart, rankingEnd), context);
 
   const ranked = context.buildArtistRankedTracks([
-    { id: 1, album_id: 999, title: "Island in the Sun", external_source: "musicbrainz", external_id: sharedRecordingId },
+    { id: 1, album_id: 99, title: "Island in the Sun", external_source: "musicbrainz", external_id: sharedRecordingId },
     { id: 2, album_id: 10, title: "Island in the Sun", external_source: "musicbrainz", external_id: sharedRecordingId },
     { id: 3, album_id: 20, title: "Island in the Sun", external_source: "musicbrainz", external_id: distinctRecordingId }
   ]);
