@@ -11,7 +11,13 @@
 
   async function invoke(client, body) {
     const { data, error } = await client.functions.invoke("early-access", { body });
-    if (error) throw new Error(data?.error || error.message || "Early Access request failed.");
+    if (error) {
+      let structuredError = data?.error;
+      if (!structuredError && typeof error.context?.json === "function") {
+        try { structuredError = (await error.context.json())?.error; } catch { /* Use the safe fallback below. */ }
+      }
+      throw new Error(structuredError || error.message || "Early Access request failed.");
+    }
     if (!data?.ok) throw new Error(data?.error || "Early Access request failed.");
     return data;
   }

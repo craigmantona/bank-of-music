@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { stripTypeScriptTypes } from "node:module";
 import test from "node:test";
 import vm from "node:vm";
 
@@ -90,6 +91,172 @@ test("admin approval and direct invitations use the same trusted server operatio
   assert.match(edge, /action === "invite" \|\| action === "approve"/);
   assert.match(client, /data-ea-approve/);
   assert.match(client, /directInvitationForm/);
+});
+
+function earlyAccessEndpoint({ resendResponse, existingInvitation = null } = {}) {
+  let handler;
+  let invitationSequence = 0;
+  const request = { id: "request-1", email: "invitee@example.test", status: "PENDING" };
+  const invitations = existingInvitation ? [{ ...existingInvitation }] : [];
+  const logs = [];
+  const fetches = [];
+
+  const resolvingChain = apply => {
+    const filters = [];
+    const chain = {
+      eq(column, value) { filters.push([column, value]); return chain; },
+      is(column, value) { filters.push([column, value]); return chain; },
+      in() { return chain; },
+      then(resolve) { resolve(apply(filters)); }
+    };
+    return chain;
+  };
+  const matches = (row, filters) => filters.every(([column, value]) => row[column] === value);
+  const db = {
+    from(table) {
+      if (table === "early_access_requests") return {
+        select() {
+          const filters = [];
+          const chain = {
+            eq(column, value) { filters.push([column, value]); return chain; },
+            async maybeSingle() { return { data: matches(request, filters) ? { ...request } : null, error: null }; }
+          };
+          return chain;
+        },
+        update(values) {
+          return resolvingChain(filters => {
+            if (matches(request, filters)) Object.assign(request, values);
+            return { error: null };
+          });
+        }
+      };
+      if (table === "early_access_invitations") return {
+        insert(values) {
+          return { select() { return { async single() {
+            if (invitations.some(item => ["PENDING", "SENT"].includes(item.status) && item.email === values.email)) {
+              return { data: null, error: { message: "duplicate" } };
+            }
+            const invitation = { id: `new-invitation-${++invitationSequence}`, status: "PENDING", sent_at: null, accepted_at: null, ...values };
+            invitations.push(invitation);
+            return { data: { id: invitation.id }, error: null };
+          } }; } };
+        },
+        update(values) {
+          return resolvingChain(filters => {
+            invitations.filter(item => matches(item, filters)).forEach(item => Object.assign(item, values));
+            return { error: null };
+          });
+        },
+        delete() {
+          return resolvingChain(filters => {
+            for (let index = invitations.length - 1; index >= 0; index -= 1) {
+              if (matches(invitations[index], filters)) invitations.splice(index, 1);
+            }
+            return { error: null };
+          });
+        }
+      };
+      throw new Error(`Unexpected table ${table}`);
+    }
+  };
+  const context = {
+    btoa, crypto, TextEncoder, Request, Response, Headers, URL,
+    console: {
+      error(message, details) { logs.push({ level: "error", message, details }); },
+      warn(message, details) { logs.push({ level: "warn", message, details }); },
+      info(message, details) { logs.push({ level: "info", message, details }); }
+    },
+    Deno: {
+      env: { get: name => ({ SUPABASE_URL: "https://project.invalid", RESEND_API_KEY: "resend-secret", BOM_SITE_URL: "https://thebankofmusic.com" })[name] || "" },
+      serve(fn) { handler = fn; }
+    },
+    createClient: () => db,
+    getAdminKey: () => "service-key",
+    requireAdminUser: async () => ({ ok: true, kind: "admin", userId: "admin-1" }),
+    fetch: async (url, options) => {
+      fetches.push({ url: String(url), options });
+      return resendResponse ? resendResponse(options) : Response.json({ id: "resend-message-1" });
+    }
+  };
+  const runnable = stripTypeScriptTypes(edge.replace(/^import .*;\r?\n/gm, ""), { mode: "transform" });
+  vm.runInNewContext(runnable, context);
+  const approve = async () => {
+    const response = await handler(new Request("https://project.invalid/functions/v1/early-access", {
+      method: "POST", headers: { authorization: "Bearer admin", "content-type": "application/json" },
+      body: JSON.stringify({ action: "approve", requestId: request.id })
+    }));
+    return { status: response.status, body: await response.json() };
+  };
+  return { approve, request, invitations, logs, fetches };
+}
+
+test("successful invitation send retains and marks the new invitation", async () => {
+  const endpoint = earlyAccessEndpoint();
+  const result = await endpoint.approve();
+
+  assert.equal(result.status, 200);
+  assert.equal(endpoint.invitations.length, 1);
+  assert.equal(endpoint.invitations[0].status, "SENT");
+  assert.ok(endpoint.invitations[0].sent_at);
+  assert.equal(endpoint.request.status, "APPROVED");
+  assert.equal(endpoint.fetches.length, 1);
+  assert.equal(endpoint.logs[0].details.resendStatus, 200);
+  assert.equal(endpoint.logs[0].details.providerRequestId, "resend-message-1");
+});
+
+test("failed Resend send removes only its new invitation, leaves the request pending and permits retry", async () => {
+  let fail = true;
+  const preExisting = { id: "unrelated-invitation", email: "other@example.test", status: "SENT", sent_at: "2026-10-01T00:00:00Z", accepted_at: null };
+  const endpoint = earlyAccessEndpoint({
+    existingInvitation: preExisting,
+    resendResponse: options => fail
+      ? Response.json({ message: `recipient rejected ${JSON.parse(options.body).text} resend-secret`, token: "provider-secret" }, { status: 422, headers: { "x-request-id": "resend-request-1" } })
+      : Response.json({ id: "resend-message-2" })
+  });
+  const failed = await endpoint.approve();
+
+  assert.equal(failed.status, 502);
+  assert.equal(failed.body.error, "The invitation email could not be sent. No invitation was created; please try again.");
+  assert.equal(endpoint.request.status, "PENDING");
+  assert.deepEqual(endpoint.invitations.map(item => item.id), ["unrelated-invitation"]);
+  assert.equal(endpoint.logs[0].details.resendStatus, 422);
+  assert.equal(endpoint.logs[0].details.providerRequestId, "resend-request-1");
+  const sentPayload = JSON.parse(endpoint.fetches[0].options.body);
+  const invitationToken = new URL(sentPayload.text.match(/https:\/\/\S+/)[0]).searchParams.get("invitation");
+  const serializedLogs = JSON.stringify(endpoint.logs);
+  assert.ok(invitationToken);
+  assert.doesNotMatch(serializedLogs, new RegExp(invitationToken));
+  assert.doesNotMatch(serializedLogs, /resend-secret|provider-secret/);
+
+  fail = false;
+  const retried = await endpoint.approve();
+  assert.equal(retried.status, 200);
+  assert.equal(endpoint.invitations.length, 2);
+  assert.equal(endpoint.invitations.find(item => item.email === "invitee@example.test")?.status, "SENT");
+  assert.equal(endpoint.request.status, "APPROVED");
+});
+
+test("a pre-existing invitation is never deleted by an approval attempt", async () => {
+  const preExisting = { id: "existing-live-invitation", email: "invitee@example.test", status: "PENDING", sent_at: null, accepted_at: null };
+  const endpoint = earlyAccessEndpoint({ existingInvitation: preExisting });
+  const result = await endpoint.approve();
+
+  assert.equal(result.status, 409);
+  assert.deepEqual(endpoint.invitations, [preExisting]);
+  assert.equal(endpoint.fetches.length, 0);
+  assert.equal(endpoint.request.status, "PENDING");
+});
+
+test("Admin displays a structured Edge Function error with a safe fallback", async () => {
+  const window = { document: { getElementById: () => null }, location: { search: "" } };
+  vm.runInNewContext(client, { window, URLSearchParams });
+  const structured = {
+    functions: { invoke: async () => ({ data: null, error: { message: "Edge Function returned a non-2xx status code", context: Response.json({ error: "No invitation was created; please try again." }, { status: 502 }) } }) }
+  };
+  await assert.rejects(window.BOMEarlyAccess.invoke(structured, { action: "approve" }), /No invitation was created; please try again/);
+
+  const fallback = { functions: { invoke: async () => ({ data: null, error: { message: "Safe generic fallback" } }) } };
+  await assert.rejects(window.BOMEarlyAccess.invoke(fallback, { action: "approve" }), /Safe generic fallback/);
 });
 
 test("invitation tokens are random, hashed, email-bound, expiring and single-use", () => {

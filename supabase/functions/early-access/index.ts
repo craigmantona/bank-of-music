@@ -27,7 +27,22 @@ async function sha256(value: string) {
   return Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
-async function sendInvite(email: string, token: string) {
+function safeProviderError(value: unknown, sensitiveValues: string[]) {
+  if (!value || typeof value !== "object") return "Unknown provider error";
+  const candidate = value as Record<string, unknown>;
+  for (const key of ["message", "error", "name"]) {
+    if (typeof candidate[key] === "string") {
+      let message = candidate[key].slice(0, 300).replace(/invitation=[^\s&"']+/gi, "invitation=[REDACTED]");
+      for (const sensitiveValue of sensitiveValues) {
+        if (sensitiveValue) message = message.replaceAll(sensitiveValue, "[REDACTED]");
+      }
+      return message;
+    }
+  }
+  return "Unknown provider error";
+}
+
+async function sendInvite(email: string, token: string, context: { invitationId: string; requestId: string | null }) {
   const key = Deno.env.get("RESEND_API_KEY") || "";
   const siteUrl = (Deno.env.get("BOM_SITE_URL") || "https://thebankofmusic.com").replace(/\/$/, "");
   if (!key) throw new Error("Email service is not configured.");
@@ -42,7 +57,24 @@ async function sendInvite(email: string, token: string) {
       html: `<div style="background:#070b15;color:#f4f4ef;padding:32px;font-family:Arial,sans-serif"><p style="color:#22f5a7;letter-spacing:.12em">THE BANK OF MUSIC</p><h1>You’re invited to Early Access</h1><p>You’re joining BoM while we’re still building and growing the community, and your ratings will help shape the site.</p><p><a href="${activationUrl}" style="display:inline-block;background:#22f5a7;color:#07110d;padding:14px 20px;text-decoration:none;font-weight:700">Activate your invitation</a></p><p>This single-use invitation expires in 7 days.</p></div>`
     })
   });
-  if (!response.ok) throw new Error("Email provider rejected the invitation.");
+  const result = await response.json().catch(() => ({})) as Record<string, unknown>;
+  const providerRequestId = response.headers.get("x-request-id") || (typeof result.id === "string" ? result.id : null);
+  if (!response.ok) {
+    console.error("Early Access invitation email rejected", {
+      resendStatus: response.status,
+      providerError: safeProviderError(result, [token, key]),
+      providerRequestId,
+      invitationId: context.invitationId,
+      requestId: context.requestId
+    });
+    throw new Error("Email provider rejected the invitation.");
+  }
+  console.info("Early Access invitation email accepted", {
+    resendStatus: response.status,
+    providerRequestId,
+    invitationId: context.invitationId,
+    requestId: context.requestId
+  });
 }
 
 Deno.serve(async request => {
@@ -105,12 +137,27 @@ Deno.serve(async request => {
     const { data: invitation, error } = await db.from("early_access_invitations").insert({ email, token_hash: await sha256(token), expires_at: expiresAt, request_id: requestId, created_by: authorization.userId }).select("id").single();
     if (error) return reply({ ok: false, error: "An active invitation already exists for this email." }, 409);
     try {
-      await sendInvite(email, token);
+      await sendInvite(email, token, { invitationId: invitation.id, requestId });
       await db.from("early_access_invitations").update({ status: "SENT", sent_at: new Date().toISOString() }).eq("id", invitation.id);
       if (requestId) await db.from("early_access_requests").update({ status: "APPROVED", reviewed_at: new Date().toISOString(), reviewed_by: authorization.userId }).eq("id", requestId);
       return reply({ ok: true });
-    } catch {
-      return reply({ ok: false, error: "Invitation created, but the email could not be sent." }, 502);
+    } catch (sendError) {
+      const { error: cleanupError } = await db.from("early_access_invitations").delete()
+        .eq("id", invitation.id).eq("status", "PENDING").is("sent_at", null).is("accepted_at", null);
+      if (cleanupError) {
+        console.error("Early Access invitation cleanup failed", {
+          invitationId: invitation.id,
+          requestId,
+          error: cleanupError.message || "Unknown database error"
+        });
+        return reply({ ok: false, error: "The invitation email failed and cleanup could not be confirmed. Please contact support before retrying." }, 500);
+      }
+      console.warn("Early Access invitation removed after email failure", {
+        invitationId: invitation.id,
+        requestId,
+        error: sendError instanceof Error ? sendError.message : "Unknown email error"
+      });
+      return reply({ ok: false, error: "The invitation email could not be sent. No invitation was created; please try again." }, 502);
     }
   }
 
