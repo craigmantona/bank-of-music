@@ -154,7 +154,10 @@ let lastMusicProviderInteractionAt = 0;
 
 function setMessage(element, text) {
 
-  if (element) element.textContent = text || "";
+  if (element) {
+    element.textContent = text || "";
+    if (element === authMessage) element.classList.remove("auth-error");
+  }
 
 }
 
@@ -2475,7 +2478,9 @@ async function logIn() {
 
     if (error) {
 
-      setMessage(authMessage, error.message);
+      const invalidCredentials = error.code === "invalid_credentials" || /invalid login credentials/i.test(error.message || "");
+      setMessage(authMessage, invalidCredentials ? "Invalid email or password." : error.message);
+      authMessage?.classList.toggle("auth-error", invalidCredentials);
 
       return;
 

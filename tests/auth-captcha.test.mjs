@@ -52,7 +52,7 @@ test("empty Site Key keeps CAPTCHA disabled and existing auth unaffected", async
   assert.equal(elements.turnstileContainer.classList.contains("hidden"), true);
 });
 
-test("Managed Turnstile token is fresh, single-use and reset after an auth attempt", async () => {
+test("Turnstile success becomes a neutral compact state and successful login remains distinct", async () => {
   let options;
   const resets = [];
   const api = {
@@ -71,10 +71,24 @@ test("Managed Turnstile token is fresh, single-use and reset after an auth attem
   assert.match(elements.turnstileMessage.textContent, /complete the security check/i);
 
   options.callback("fresh-token");
+  assert.equal(elements.turnstileContainer.classList.contains("is-complete"), true);
+  assert.equal(elements.turnstileMessage.textContent, "Security check complete.");
+  assert.doesNotMatch(elements.turnstileMessage.textContent, /^success!?$/i);
   assert.equal(await controller.getToken(), "fresh-token");
+  assert.match(app, /setMessage\(authMessage, "Logged in successfully\."\)/);
   controller.reset();
   assert.deepEqual(resets, ["widget-1"]);
+  assert.equal(elements.turnstileContainer.classList.contains("is-complete"), false);
+  assert.match(elements.turnstileMessage.textContent, /complete the security check/i);
   await assert.rejects(controller.getToken(), /Complete the security check/);
+});
+
+test("invalid credentials are prominent and cannot be confused with Turnstile success", () => {
+  assert.match(app, /error\.code === "invalid_credentials"/);
+  assert.match(app, /Invalid email or password\./);
+  assert.match(app, /classList\.toggle\("auth-error", invalidCredentials\)/);
+  assert.match(html, /id="authMessage" role="status" aria-live="polite"/);
+  assert.match(html, /bom-turnstile\.js\?v=3/);
 });
 
 test("expired and failed challenges discard tokens without exposing details", async () => {
@@ -82,7 +96,9 @@ test("expired and failed challenges discard tokens without exposing details", as
   const api = { render(_element, value) { options = value; return "widget-2"; }, reset() {} };
   const { controller, elements } = setup({ siteKey: "public-site-key", api });
   options.callback("soon-expired-token");
+  assert.equal(elements.turnstileContainer.classList.contains("is-complete"), true);
   options["expired-callback"]();
+  assert.equal(elements.turnstileContainer.classList.contains("is-complete"), false);
   await assert.rejects(controller.getToken(), /Complete the security check/);
   assert.match(elements.turnstileMessage.textContent, /expired/i);
   options["error-callback"]("internal-error-code");
@@ -147,5 +163,5 @@ test("client integration contains only the configured public Site Key", () => {
   assert.match(config, /window\.TURNSTILE_SITE_KEY = "0x[^"]+"/);
   assert.doesNotMatch(`${source}\n${app}\n${config}`, /TURNSTILE_SECRET|secret.?key/i);
   assert.match(source, /https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js\?render=explicit/);
-  assert.match(html, /bom-turnstile\.js\?v=2/);
+  assert.match(html, /bom-turnstile\.js\?v=3/);
 });

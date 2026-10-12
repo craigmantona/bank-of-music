@@ -586,10 +586,26 @@ button:hover { transform: translateY(-1px); }
 
 #turnstileWidget { max-width: 100%; }
 
+.turnstile-container.is-complete #turnstileWidget { display: none; }
+
+.turnstile-container.is-complete {
+ margin-bottom: 10px;
+}
+
 #turnstileMessage {
  margin: 8px 0 0;
  color: var(--muted);
  font-size: .9rem;
+}
+
+#authMessage.auth-error {
+ margin: 10px 0 0;
+ padding: 12px 14px;
+ border: 1px solid rgba(255, 92, 122, .72);
+ border-radius: 12px;
+ background: rgba(150, 24, 52, .2);
+ color: #ffb6c5;
+ font-weight: 800;
 }
 
 .password-recovery-card {

@@ -19,6 +19,10 @@
       if (message) message.textContent = text || "";
     }
 
+    function showRequiredState() {
+      container?.classList.remove("is-complete");
+    }
+
     function render() {
       api = api || window?.turnstile || null;
       if (!enabled || !api || !widget || widgetId !== null) return;
@@ -34,23 +38,28 @@
           callback(response) {
             token = String(response || "");
             unavailableMessage = "";
-            setMessage("");
+            container?.classList.add("is-complete");
+            setMessage("Security check complete.");
           },
           "expired-callback"() {
             token = "";
+            showRequiredState();
             setMessage("Security check expired. Please complete it again.");
           },
           "timeout-callback"() {
             token = "";
+            showRequiredState();
             setMessage("Security check timed out. Please complete it again.");
           },
           "unsupported-callback"() {
             token = "";
+            showRequiredState();
             unavailableMessage = "This browser cannot run the security check. Please use a supported browser.";
             setMessage(unavailableMessage);
           },
           "error-callback"() {
             token = "";
+            showRequiredState();
             unavailableMessage = "Security check is unavailable. Please refresh and try again.";
             setMessage(unavailableMessage);
           }
@@ -110,7 +119,8 @@
 
     function reset() {
       token = "";
-      setMessage("");
+      showRequiredState();
+      setMessage("Complete the security check to continue.");
       api = api || window?.turnstile || null;
       if (api && widgetId !== null) api.reset(widgetId);
       else render();
