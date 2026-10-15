@@ -235,3 +235,22 @@ test("playlist integration uses the trusted resolver and preserves playlist defi
   assert.match(app, /track\.ratingCount >= 3/);
   assert.match(app, /\.slice\(0, 100\)/);
 });
+
+test("album rendering does not automatically schedule Spotify track searches", async () => {
+  const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
+  const calls = app.match(/scheduleSpotifyTrackCacheWarmup\(\);/g) || [];
+  assert.equal(calls.length, 0);
+  assert.match(app, /getQuickRateSpotifyItem\(song, album\) \|\|\s*await resolveQuickRateSpotifyTrack\(song\)/);
+});
+
+test("shared Spotify track search reuses a valid stored song ID first", async () => {
+  const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
+  const searchFunction = app.slice(
+    app.indexOf("async function searchSpotifyTrackForBoMTrack"),
+    app.indexOf("async function findSpotifyPlaylistByName")
+  );
+  assert.ok(
+    searchFunction.indexOf("bomTrack?.spotify_track_id") < searchFunction.indexOf("spotifyApiRequest("),
+    "stored Spotify IDs must be checked before Spotify search"
+  );
+});

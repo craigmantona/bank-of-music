@@ -7000,7 +7000,6 @@ async function renderStageOneAlbum(model, { isCurrent = () => true } = {}) {
   selectedItemDetail.dataset.bomAlbumSource = model.albumId ? "production" : "external";
   performance.mark?.("bom-album-useful-content");
   updateStickyPlayer(selectedItem);
-  scheduleSpotifyTrackCacheWarmup();
   void hydrateStageOneAlbumReviews(model.albumId);
   void maybeEnrichAlbumDurations(model.albumId);
   return true;
@@ -7209,8 +7208,6 @@ console.log("SAVED SONG FOUND?", {
   if (trackRows.length === 0) {
     return `<p class="small">No track list available.</p>`;
   }
-
-  scheduleSpotifyTrackCacheWarmup();
 
   return `
     <div class="section-divider">Tracks</div>
@@ -12329,6 +12326,8 @@ const SPOTIFY_STORAGE_KEYS = {
   state: "bom_spotify_auth_state"
 };
 
+const SPOTIFY_ACCOUNT_CACHE_KEY = "bom_spotify_current_user";
+
 let spotifyConnectionState = false;
 let spotifyRefreshPromise = null;
 
@@ -12393,6 +12392,10 @@ async function createSpotifyCodeChallenge(verifier) {
 
 function saveSpotifyTokens(tokenData) {
   if (tokenData.access_token) {
+    if (tokenData.access_token !== getStoredSpotifyAccessToken()) {
+      clearSpotifyAccountCache();
+    }
+
     localStorage.setItem(
       SPOTIFY_STORAGE_KEYS.accessToken,
       tokenData.access_token
@@ -12418,6 +12421,8 @@ function saveSpotifyTokens(tokenData) {
 }
 
 function clearSpotifyTokens() {
+  clearSpotifyAccountCache();
+
   Object.values(SPOTIFY_STORAGE_KEYS).forEach((key) => {
     localStorage.removeItem(key);
   });
@@ -12748,7 +12753,44 @@ if (!response.ok) {
 }
 
 async function getSpotifyCurrentUser() {
-  return spotifyApiRequest("/me");
+  const cachedUser = getCachedSpotifyCurrentUser();
+  if (cachedUser) return cachedUser;
+
+  const spotifyUser = await spotifyApiRequest("/me");
+  cacheSpotifyCurrentUser(spotifyUser);
+  return spotifyUser;
+}
+
+function getCachedSpotifyCurrentUser() {
+  try {
+    const cached = JSON.parse(
+      sessionStorage.getItem(SPOTIFY_ACCOUNT_CACHE_KEY) || "null"
+    );
+    return cached?.id ? cached : null;
+  } catch {
+    return null;
+  }
+}
+
+function cacheSpotifyCurrentUser(spotifyUser) {
+  if (!spotifyUser?.id) return;
+
+  try {
+    sessionStorage.setItem(
+      SPOTIFY_ACCOUNT_CACHE_KEY,
+      JSON.stringify(spotifyUser)
+    );
+  } catch {
+    // A blocked session store should not prevent Spotify connection checks.
+  }
+}
+
+function clearSpotifyAccountCache() {
+  try {
+    sessionStorage.removeItem(SPOTIFY_ACCOUNT_CACHE_KEY);
+  } catch {
+    // A blocked session store should not prevent token cleanup.
+  }
 }
 
 /* ============================================================
@@ -13005,6 +13047,15 @@ function cacheSpotifyMatch(bomTrack, spotifyTrack) {
 }
 
 async function searchSpotifyTrackForBoMTrack(bomTrack) {
+  const storedTrackId = String(bomTrack?.spotify_track_id || "");
+  if (/^[A-Za-z0-9]{22}$/.test(storedTrackId)) {
+    return {
+      id: storedTrackId,
+      uri: `spotify:track:${storedTrackId}`,
+      externalUrl: `https://open.spotify.com/track/${storedTrackId}`
+    };
+  }
+
   const cachedMatch = getCachedSpotifyMatch(bomTrack);
   if (cachedMatch) return cachedMatch;
 

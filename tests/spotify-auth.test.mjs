@@ -27,11 +27,13 @@ function createContext({ response, storageValues = {}, setTimeoutImpl = setTimeo
     ...storageValues
   });
   const requests = [];
+  const sessionStorage = createStorage();
   const context = vm.createContext({
     console: { error() {} },
     CustomEvent: class CustomEvent { constructor(type, init) { this.type = type; this.detail = init?.detail; } },
     Date,
     localStorage,
+    sessionStorage,
     TextEncoder,
     setTimeout: setTimeoutImpl,
     URL,
@@ -55,7 +57,7 @@ function createContext({ response, storageValues = {}, setTimeoutImpl = setTimeo
     }
   });
   vm.runInContext(spotifyAuth, context);
-  return { context, localStorage, requests };
+  return { context, localStorage, sessionStorage, requests };
 }
 
 test("expired Spotify access tokens refresh through the existing authenticated edge function", async () => {
@@ -156,4 +158,39 @@ test("Spotify API requests respect Retry-After and retry the same request only",
   assert.equal(requests.length, 2);
   assert.equal(requests[0][0], "https://api.spotify.com/v1/me");
   assert.equal(requests[1][0], "https://api.spotify.com/v1/me");
+});
+
+test("successful Spotify account checks are cached for the browser session", async () => {
+  const { context, requests } = createContext({
+    storageValues: {
+      bom_spotify_access_token: "current-access",
+      bom_spotify_expires_at: String(Date.now() + 60000)
+    },
+    response: () => new Response(JSON.stringify({ id: "spotify-user" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    })
+  });
+
+  assert.equal((await context.getSpotifyCurrentUser()).id, "spotify-user");
+  assert.equal((await context.getSpotifyCurrentUser()).id, "spotify-user");
+  assert.equal(requests.length, 1);
+});
+
+test("Spotify account cache is cleared by token replacement and disconnect", () => {
+  const { context, sessionStorage } = createContext({
+    storageValues: {
+      bom_spotify_access_token: "current-access",
+      bom_spotify_expires_at: String(Date.now() + 60000)
+    },
+    response: () => { throw new Error("unexpected request"); }
+  });
+
+  sessionStorage.setItem("bom_spotify_current_user", JSON.stringify({ id: "first-user" }));
+  context.saveSpotifyTokens({ access_token: "replacement-access", expires_in: 3600 });
+  assert.equal(sessionStorage.getItem("bom_spotify_current_user"), null);
+
+  sessionStorage.setItem("bom_spotify_current_user", JSON.stringify({ id: "second-user" }));
+  context.clearSpotifyTokens();
+  assert.equal(sessionStorage.getItem("bom_spotify_current_user"), null);
 });
