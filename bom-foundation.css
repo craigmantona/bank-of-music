@@ -86,6 +86,7 @@
   min-height: 98px;
   margin: 0 auto;
   padding: var(--bom-v1-space-4) clamp(20px, 4vw, 56px);
+  padding-block: 9px;
   display: grid;
   grid-template-columns: auto auto minmax(240px, 320px) auto;
   align-items: center;
@@ -105,14 +106,18 @@
 
 .bom-shell-v1 .bom-v1-brand {
   padding: 0;
-  font-size: 29px;
-  font-weight: 800;
-  letter-spacing: -0.08em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   background: transparent !important;
 }
 
-.bom-shell-v1 .bom-v1-brand-mark { color: var(--bom-v1-accent); }
+.bom-shell-v1 .bom-v1-brand img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
 
 .bom-shell-v1 .bom-v1-nav {
   display: flex;
@@ -333,7 +338,9 @@
   .bom-shell-v1 .bom-v1-header {
     grid-template-columns: auto 1fr auto;
     gap: 16px 24px;
+    padding-block: var(--bom-v1-space-4);
   }
+  .bom-shell-v1 .bom-v1-brand img { height: 58px; }
   .bom-shell-v1 .bom-v1-nav { justify-self: center; }
   .bom-shell-v1 .bom-v1-search { grid-column: 1 / -1; grid-row: 2; }
 }
@@ -345,7 +352,7 @@
     grid-template-columns: 1fr auto;
     gap: 12px;
   }
-  .bom-shell-v1 .bom-v1-brand { font-size: 28px; }
+  .bom-shell-v1 .bom-v1-brand img { height: 50px; }
   .bom-shell-v1 .bom-v1-account { grid-column: 2; grid-row: 1; }
   .bom-shell-v1 .bom-v1-search { grid-column: 1 / -1; grid-row: 2; }
   .bom-shell-v1 .bom-v1-nav {

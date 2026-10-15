@@ -59,7 +59,7 @@
 
   root.innerHTML = `
     <header class="bom-v1-header">
-      <button type="button" class="bom-v1-brand" data-bom-route="discover" aria-label="Bank of Music, Discover">bo<span class="bom-v1-brand-mark">m</span></button>
+      <button type="button" class="bom-v1-brand" data-bom-route="discover" aria-label="Bank of Music, Discover"><img src="assets/bom-header-logo.png" alt="The Bank of Music"></button>
       <nav class="bom-v1-nav" aria-label="Main navigation">
         <button type="button" data-bom-route="discover" aria-current="page">Discover</button>
         <button type="button" data-bom-route="charts">Charts</button>
