@@ -11,9 +11,10 @@ const [html, app, shell, styles] = await Promise.all([
 
 test("the approved shell is default and legacy remains an explicit rollback", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
-  assert.match(html, /style\.css\?v=82/);
+  assert.match(html, /style\.css\?v=83/);
+  assert.match(html, /bom-foundation\.css\?v=28/);
   assert.match(html, /config\.js\?v=3/);
-  assert.match(html, /app\.js\?v=138/);
+  assert.match(html, /app\.js\?v=139/);
   assert.match(shell, /params\.get\("ui"\) === "legacy"/);
 });
 
@@ -56,8 +57,16 @@ test("Spotify connection lives with the account control and leaves mobile naviga
   assert.match(styles, /\.bom-v1-account \{[\s\S]*display: flex/);
   assert.match(shell, /bom-v1-spotify-compact[^>]*aria-hidden="true">✓/);
   assert.doesNotMatch(shell, /bom-v1-spotify-compact[^>]*>Connected/);
-  assert.match(styles, /\.bom-v1-spotify-control\.is-connected \{ min-height: 42px; padding-inline: 8px/);
+  assert.match(styles, /\.bom-v1-spotify-control\.is-connected \{ min-height: 40px; padding-inline: 7px/);
   assert.match(styles, /\.bom-v1-nav \{[\s\S]*justify-content: space-between/);
+});
+
+test("the mobile header keeps its controls within narrow phone widths", () => {
+  const mobileStyles = styles.slice(styles.indexOf("@media (max-width: 600px)"));
+  assert.match(mobileStyles, /grid-template-columns: minmax\(0, 1fr\) auto/);
+  assert.match(mobileStyles, /\.bom-v1-brand img \{ width: 124px; height: auto; \}/);
+  assert.match(mobileStyles, /\.bom-v1-account \{ gap: 6px; \}/);
+  assert.match(mobileStyles, /\.bom-v1-spotify-control \{ min-height: 40px; padding-inline: 7px; gap: 5px;/);
 });
 
 test("the new presentation is namespaced and contains no data access", () => {

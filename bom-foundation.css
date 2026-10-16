@@ -349,10 +349,11 @@
   .bom-shell-v1 .bom-v1-header {
     min-height: 172px;
     padding: 16px 20px 0;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
   }
-  .bom-shell-v1 .bom-v1-brand img { height: 50px; }
+  .bom-shell-v1 .bom-v1-brand { justify-self: start; }
+  .bom-shell-v1 .bom-v1-brand img { width: 124px; height: auto; }
   .bom-shell-v1 .bom-v1-account { grid-column: 2; grid-row: 1; }
   .bom-shell-v1 .bom-v1-search { grid-column: 1 / -1; grid-row: 2; }
   .bom-shell-v1 .bom-v1-nav {
@@ -363,9 +364,9 @@
     gap: 10px;
   }
   .bom-shell-v1 .bom-v1-nav button { font-size: 12px; }
-  .bom-shell-v1 .bom-v1-account { gap: 8px; }
-  .bom-shell-v1 .bom-v1-spotify-control { min-height: 44px; padding-inline: 9px; font-size: 10px; }
-  .bom-shell-v1 .bom-v1-spotify-control.is-connected { min-height: 42px; padding-inline: 8px; gap: 5px; justify-content: center; }
+  .bom-shell-v1 .bom-v1-account { gap: 6px; }
+  .bom-shell-v1 .bom-v1-spotify-control { min-height: 40px; padding-inline: 7px; gap: 5px; font-size: 10px; }
+  .bom-shell-v1 .bom-v1-spotify-control.is-connected { min-height: 40px; padding-inline: 7px; gap: 5px; justify-content: center; }
   .bom-shell-v1 .bom-v1-spotify-control.is-connected .bom-v1-spotify-compact { font-size: 13px; font-weight: 600; }
   .bom-shell-v1 .bom-v1-spotify-wide { display: none; }
   .bom-shell-v1 .bom-v1-spotify-compact { display: inline; }
