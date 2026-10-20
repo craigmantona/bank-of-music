@@ -9,6 +9,7 @@ const cors = {
 const genericRequestMessage = "Thanks! Your Early Access request has been received. We’ll be in touch if your invitation is approved.";
 const validEmail = (value: unknown): value is string => typeof value === "string" && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const reply = (body: Record<string, unknown>, status = 200) => Response.json(body, { status, headers: { ...cors, "Cache-Control": "no-store" } });
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" } as Record<string, string>)[character] || character);
 
 function adminClient() {
   const url = Deno.env.get("SUPABASE_URL") || "";
@@ -77,6 +78,39 @@ async function sendInvite(email: string, token: string, context: { invitationId:
   });
 }
 
+async function sendRequestNotification(name: string, email: string, requestId: string) {
+  const key = Deno.env.get("RESEND_API_KEY") || "";
+  const siteUrl = (Deno.env.get("BOM_SITE_URL") || "https://thebankofmusic.com").replace(/\/$/, "");
+  if (!key) throw new Error("Email service is not configured.");
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: "Bank of Music <hello@thebankofmusic.com>",
+      to: ["earlyaccess@thebankofmusic.com"],
+      subject: "New Early Access Request — The Bank of Music",
+      text: `A new Early Access request is waiting for review.\n\nName: ${name}\nEmail: ${email}\n\nReview the request in BOM Admin: ${siteUrl}`,
+      html: `<div style="background:#070b15;color:#f4f4ef;padding:32px;font-family:Arial,sans-serif"><p style="color:#22f5a7;letter-spacing:.12em">THE BANK OF MUSIC</p><h1>New Early Access Request</h1><p>A new Early Access request is waiting for review.</p><p><strong>Name:</strong> ${escapeHtml(name)}<br><strong>Email:</strong> ${escapeHtml(email)}</p><p><a href="${escapeHtml(siteUrl)}" style="display:inline-block;background:#22f5a7;color:#07110d;padding:14px 20px;text-decoration:none;font-weight:700">Open BOM Admin</a></p></div>`
+    })
+  });
+  const result = await response.json().catch(() => ({})) as Record<string, unknown>;
+  const providerRequestId = response.headers.get("x-request-id") || (typeof result.id === "string" ? result.id : null);
+  if (!response.ok) {
+    console.error("Early Access request notification rejected", {
+      resendStatus: response.status,
+      providerError: safeProviderError(result, [key, name, email]),
+      providerRequestId,
+      requestId
+    });
+    throw new Error("Email provider rejected the request notification.");
+  }
+  console.info("Early Access request notification accepted", {
+    resendStatus: response.status,
+    providerRequestId,
+    requestId
+  });
+}
+
 Deno.serve(async request => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (request.method !== "POST") return reply({ ok: false, error: "Method not allowed." }, 405);
@@ -89,7 +123,20 @@ Deno.serve(async request => {
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
     if (!name || name.length > 120 || !validEmail(email)) return reply({ ok: false, error: "Please enter a valid name and email address." }, 422);
-    await db.from("early_access_requests").insert({ name, email });
+    const { data: accessRequest, error } = await db.from("early_access_requests").insert({ name, email }).select("id").single();
+    if (error) {
+      if (error.code === "23505") return reply({ ok: true, message: genericRequestMessage });
+      console.error("Early Access request could not be stored", { error: error.message || "Unknown database error" });
+      return reply({ ok: false, error: "Your request could not be submitted. Please try again." }, 500);
+    }
+    try {
+      await sendRequestNotification(name, email, accessRequest.id);
+    } catch (notificationError) {
+      console.warn("Early Access request stored but notification failed", {
+        requestId: accessRequest.id,
+        error: notificationError instanceof Error ? notificationError.message : "Unknown email error"
+      });
+    }
     return reply({ ok: true, message: genericRequestMessage });
   }
 

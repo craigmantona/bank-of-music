@@ -93,10 +93,11 @@ test("admin approval and direct invitations use the same trusted server operatio
   assert.match(client, /directInvitationForm/);
 });
 
-function earlyAccessEndpoint({ resendResponse, existingInvitation = null } = {}) {
+function earlyAccessEndpoint({ resendResponse, existingInvitation = null, requestInsertError = null } = {}) {
   let handler;
   let invitationSequence = 0;
   const request = { id: "request-1", email: "invitee@example.test", status: "PENDING" };
+  const submittedRequests = [];
   const invitations = existingInvitation ? [{ ...existingInvitation }] : [];
   const logs = [];
   const fetches = [];
@@ -115,6 +116,14 @@ function earlyAccessEndpoint({ resendResponse, existingInvitation = null } = {})
   const db = {
     from(table) {
       if (table === "early_access_requests") return {
+        insert(values) {
+          return { select() { return { async single() {
+            if (requestInsertError) return { data: null, error: requestInsertError };
+            const submitted = { id: "submitted-request-1", status: "PENDING", ...values };
+            submittedRequests.push(submitted);
+            return { data: { id: submitted.id }, error: null };
+          } }; } };
+        },
         select() {
           const filters = [];
           const chain = {
@@ -187,8 +196,76 @@ function earlyAccessEndpoint({ resendResponse, existingInvitation = null } = {})
     }));
     return { status: response.status, body: await response.json() };
   };
-  return { approve, request, invitations, logs, fetches };
+  const requestAccess = async (name = "Applicant <One>", email = "applicant@example.test") => {
+    const response = await handler(new Request("https://project.invalid/functions/v1/early-access", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ action: "request_access", name, email })
+    }));
+    return { status: response.status, body: await response.json() };
+  };
+  return { approve, requestAccess, request, submittedRequests, invitations, logs, fetches };
 }
+
+test("a newly stored Early Access request sends the branded review notification", async () => {
+  const endpoint = earlyAccessEndpoint();
+  const result = await endpoint.requestAccess();
+
+  assert.equal(result.status, 200);
+  assert.equal(result.body.ok, true);
+  assert.equal(endpoint.submittedRequests.length, 1);
+  assert.equal(endpoint.fetches.length, 1);
+  const notification = JSON.parse(endpoint.fetches[0].options.body);
+  assert.deepEqual(notification.to, ["earlyaccess@thebankofmusic.com"]);
+  assert.equal(notification.subject, "New Early Access Request — The Bank of Music");
+  assert.match(notification.text, /Name: Applicant <One>/);
+  assert.match(notification.text, /Email: applicant@example\.test/);
+  assert.match(notification.text, /Review the request in BOM Admin: https:\/\/thebankofmusic\.com/);
+  assert.match(notification.html, /Applicant &lt;One&gt;/);
+  assert.doesNotMatch(notification.html, /Applicant <One>/);
+  assert.equal(endpoint.logs[0].message, "Early Access request notification accepted");
+  assert.equal(endpoint.logs[0].details.requestId, "submitted-request-1");
+});
+
+test("notification failure keeps the stored request and still confirms submission", async () => {
+  const endpoint = earlyAccessEndpoint({
+    resendResponse: options => Response.json(
+      { message: `rejected ${JSON.parse(options.body).text} resend-secret` },
+      { status: 503, headers: { "x-request-id": "notification-request-1" } }
+    )
+  });
+  const result = await endpoint.requestAccess();
+
+  assert.equal(result.status, 200);
+  assert.equal(result.body.ok, true);
+  assert.equal(endpoint.submittedRequests.length, 1);
+  assert.deepEqual(endpoint.logs.map(item => item.message), [
+    "Early Access request notification rejected",
+    "Early Access request stored but notification failed"
+  ]);
+  assert.equal(endpoint.logs[0].details.providerRequestId, "notification-request-1");
+  assert.doesNotMatch(JSON.stringify(endpoint.logs), /applicant@example\.test|Applicant <One>|resend-secret/);
+});
+
+test("duplicate Early Access requests remain enumeration-safe and do not send another notification", async () => {
+  const endpoint = earlyAccessEndpoint({ requestInsertError: { code: "23505", message: "duplicate" } });
+  const result = await endpoint.requestAccess();
+
+  assert.equal(result.status, 200);
+  assert.equal(result.body.ok, true);
+  assert.equal(endpoint.submittedRequests.length, 0);
+  assert.equal(endpoint.fetches.length, 0);
+});
+
+test("a storage failure is reported without attempting the notification", async () => {
+  const endpoint = earlyAccessEndpoint({ requestInsertError: { code: "XX000", message: "storage unavailable" } });
+  const result = await endpoint.requestAccess();
+
+  assert.equal(result.status, 500);
+  assert.equal(result.body.ok, false);
+  assert.equal(endpoint.submittedRequests.length, 0);
+  assert.equal(endpoint.fetches.length, 0);
+  assert.equal(endpoint.logs[0].message, "Early Access request could not be stored");
+});
 
 test("successful invitation send retains and marks the new invitation", async () => {
   const endpoint = earlyAccessEndpoint();
