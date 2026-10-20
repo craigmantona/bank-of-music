@@ -118,6 +118,66 @@ test('track rating follows an exact confirmed MusicBrainz recording across album
   assert.equal(context.getYourSongRating(202), null);
 });
 
+test('deleting a track rating removes only the user canonical occurrences without changing catalogue identity', async () => {
+  const recordingId = 'cae8bbec-c2ff-4972-9218-8f90acb07b1b';
+  const unrelatedId = '11111111-1111-4111-8111-111111111111';
+  const calls = [];
+  const removed = [];
+  const refreshed = [];
+  const songs = [
+    {id:11,title:'Shared',artist:'Artist',external_source:'musicbrainz',external_id:recordingId},
+    {id:22,title:'Shared',artist:'Artist',external_source:'musicbrainz',external_id:recordingId},
+    {id:33,title:'Unrelated',artist:'Artist',external_source:'musicbrainz',external_id:unrelatedId}
+  ];
+  const catalogueBefore = JSON.stringify(songs);
+  const query = {
+    delete() { calls.push(['delete']); return this; },
+    eq(column, value) { calls.push(['eq', column, value]); return this; },
+    async in(column, values) { calls.push(['in', column, [...values]]); return {error:null}; }
+  };
+  const context = vm.createContext({
+    currentUser:{id:'me'},
+    allSongs:songs,
+    allSongRatings:[
+      {user_id:'me',song_id:11,rating:7},
+      {user_id:'me',song_id:22,rating:7},
+      {user_id:'me',song_id:33,rating:9},
+      {user_id:'other',song_id:11,rating:6}
+    ],
+    supabaseClient:{from:table=>{ calls.push(['from', table]); return query; }},
+    globalSearchMessage:{},
+    setMessage(){},
+    removeLocalSongRating:id=>{
+      removed.push(Number(id));
+      context.allSongRatings = context.allSongRatings.filter(row =>
+        !(row.user_id === 'me' && Number(row.song_id) === Number(id))
+      );
+    },
+    updateTrackRowUi:id=>refreshed.push(Number(id)),
+    renderLibrary(){}
+  });
+  vm.runInContext(extract('function getConfirmedMusicBrainzRecordingId', 'function getPreferredSongOccurrence'), context);
+  vm.runInContext(extract('async function deleteTrackRating', '/* PASTE NEW FUNCTION HERE */'), context);
+
+  assert.equal(await context.deleteTrackRating(22), true);
+  assert.deepEqual(calls, [
+    ['from','song_ratings'],
+    ['delete'],
+    ['eq','user_id','me'],
+    ['in','song_id',[11,22]]
+  ]);
+  assert.deepEqual(removed, [11,22]);
+  assert.deepEqual(refreshed, [11,22]);
+  assert.deepEqual(context.allSongRatings, [
+    {user_id:'me',song_id:33,rating:9},
+    {user_id:'other',song_id:11,rating:6}
+  ]);
+  assert.equal(JSON.stringify(songs), catalogueBefore);
+  assert.equal(songs[0].external_id, recordingId);
+  assert.equal(songs[1].external_id, recordingId);
+  assert.equal(songs[2].external_id, unrelatedId);
+});
+
 test('Quick Rate does not overwrite a different selected track detail rating', async () => {
   const writes = [], local = [];
   const detailRating = {textContent:'4/10'};
@@ -266,27 +326,158 @@ test('failed Spotify resolution leaves Quick Rate usable with its search fallbac
   assert.equal(button.textContent, 'Listen on Spotify');
 });
 
-test('rating and Skip do not trigger Spotify resolution', () => {
+test('UK Singles Quick Rate does not trigger Spotify resolution while rating or switching year', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  const listenStart = quickRate.indexOf('card.querySelector("[data-quick-listen]").onclick');
-  const skipStart = quickRate.indexOf('card.querySelector("[data-quick-skip]").onclick');
-  const listenHandler = quickRate.slice(listenStart, skipStart);
-  const skipHandler = quickRate.slice(skipStart, quickRate.indexOf('dialog.saveRating'));
-  const ratingHandler = quickRate.slice(quickRate.indexOf('dialog.saveRating'));
-  assert.ok(listenStart >= 0 && skipStart > listenStart);
-  assert.match(listenHandler, /listenToQuickRateTrack/);
-  assert.doesNotMatch(skipHandler, /listenToQuickRateTrack|resolveQuickRateSpotifyTrack/);
-  assert.doesNotMatch(ratingHandler, /listenToQuickRateTrack|resolveQuickRateSpotifyTrack/);
+  assert.match(quickRate, /data-quick-year/);
+  assert.match(quickRate, /dialog\.saveRating/);
+  assert.doesNotMatch(quickRate, /listenToQuickRateTrack|resolveQuickRateSpotifyTrack/);
 });
 
-test('Quick Rate track card keeps the requested metadata, Skip, and responsive rating layout', () => {
+test('Quick Rate year page keeps chart metadata, progress, and responsive rating layout', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
   assert.match(quickRate, /song\.title/);
   assert.match(quickRate, /song\.artist/);
   assert.match(quickRate, /album\.title/);
-  assert.match(quickRate, /getStageOneDiscoverYear\(album\)/);
-  assert.match(quickRate, /data-quick-skip/);
-  assert.match(quickRate, /Skipped\. No rating saved\./);
-  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-track-rating-popover \{ grid-template-columns: repeat\(5, 1fr\)/);
-  assert.match(discover, /One track at a time/);
+  assert.match(quickRate, /UK Singles/);
+  assert.match(quickRate, /data-quick-progress-count/);
+  assert.match(quickRate, /Not yet in the BOM catalogue/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-track-rating-popover \{ grid-template-columns: repeat\(5, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rate h1 \{ font-size: 30px !important/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rating \{ grid-column: 1 \/ -1/);
+  assert.match(discover, /UK singles by year/);
+});
+
+test('chart entries reuse one confirmed canonical recording and reject ambiguity', () => {
+  const recordingId = 'cae8bbec-c2ff-4972-9218-8f90acb07b1b';
+  const context = vm.createContext({
+    normaliseCompare: value => String(value || '').toLowerCase(),
+    allAlbums: [],
+    isLikelyStudioAlbum: () => true
+  });
+  vm.runInContext(extract('function getConfirmedMusicBrainzRecordingId', 'function renderStarSelector'), context);
+  vm.runInContext(extract('function resolveQuickRateChartEntry', '// The original random queue'), context);
+  const occurrences = [
+    {id:1,album_id:10,title:'Bitter Sweet Symphony',artist:'The Verve',external_source:'musicbrainz',external_id:recordingId},
+    {id:2,album_id:20,title:'Bitter Sweet Symphony',artist:'The Verve',external_source:'musicbrainz',external_id:recordingId}
+  ];
+  const matched = context.resolveQuickRateChartEntry({title:'Bitter Sweet Symphony',artist:'The Verve',musicbrainz_recording_id:recordingId}, occurrences);
+  assert.equal(matched.status, 'matched');
+  assert.equal(matched.song.id, 1);
+  const ambiguous = context.resolveQuickRateChartEntry({title:'Song',artist:'Artist'}, [
+    {id:3,title:'Song',artist:'Artist'}, {id:4,title:'Song',artist:'Artist'}
+  ]);
+  assert.equal(ambiguous.status, 'ambiguous');
+  assert.equal(ambiguous.song, null);
+});
+
+test('Quick Rate progress counts canonical recordings once and updates percentage', () => {
+  const recordingId = 'cae8bbec-c2ff-4972-9218-8f90acb07b1b';
+  const songs = [
+    {id:1,external_source:'musicbrainz',external_id:recordingId},
+    {id:2,external_source:'musicbrainz',external_id:recordingId},
+    {id:3}
+  ];
+  const context = vm.createContext({
+    allSongs:songs,
+    allSongRatings:[{user_id:'me',song_id:2,rating:9}],
+    currentUser:{id:'me'}
+  });
+  vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
+  vm.runInContext(extract('function getQuickRateProgress', '// The original random queue'), context);
+  const result = context.getQuickRateProgress([
+    {status:'matched',song:songs[0]},
+    {status:'matched',song:songs[1]},
+    {status:'matched',song:songs[2]},
+    {status:'unmatched',song:null}
+  ], 'me');
+  assert.deepEqual({...result}, {rated:1,total:2,pending:1,percentage:50});
+});
+
+test('All and Unrated filters use canonical shared rating state', () => {
+  const recordingId = 'cae8bbec-c2ff-4972-9218-8f90acb07b1b';
+  const songs = [
+    {id:1,external_source:'musicbrainz',external_id:recordingId},
+    {id:2,external_source:'musicbrainz',external_id:recordingId},
+    {id:3}
+  ];
+  const context = vm.createContext({
+    allSongs:songs,
+    allSongRatings:[{user_id:'me',song_id:2,rating:8}],
+    currentUser:{id:'me'}
+  });
+  vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
+  vm.runInContext(extract('function isQuickRateEntryRated', '// The original random queue'), context);
+  const entries = [
+    {status:'matched',song:songs[0]},
+    {status:'matched',song:songs[2]},
+    {status:'unmatched',song:null}
+  ];
+  assert.equal(context.filterQuickRateEntries(entries, 'all').length, 3);
+  const unrated = context.filterQuickRateEntries(entries, 'unrated');
+  assert.deepEqual(Array.from(unrated, entry => entry.song.id), [3]);
+});
+
+test('Next unrated excludes rated, unmatched and ambiguous entries and wraps cleanly', () => {
+  const songs = [{id:1},{id:2},{id:3}];
+  const context = vm.createContext({
+    allSongs:songs,
+    allSongRatings:[{user_id:'me',song_id:1,rating:7}],
+    currentUser:{id:'me'}
+  });
+  vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
+  vm.runInContext(extract('function isQuickRateEntryRated', '// The original random queue'), context);
+  const entries = [
+    {status:'matched',song:songs[0]},
+    {status:'unmatched',song:null},
+    {status:'matched',song:songs[1]},
+    {status:'ambiguous',song:null},
+    {status:'matched',song:songs[2]}
+  ];
+  assert.equal(context.getNextUnratedQuickRateEntry(entries).song.id, 2);
+  assert.equal(context.getNextUnratedQuickRateEntry(entries, 2).song.id, 3);
+  assert.equal(context.getNextUnratedQuickRateEntry(entries, 3).song.id, 2);
+});
+
+test('progress changes only when canonical rated state is added or removed', () => {
+  const songs = [{id:1},{id:2}];
+  const context = vm.createContext({allSongs:songs,allSongRatings:[],currentUser:{id:'me'}});
+  vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
+  vm.runInContext(extract('function getQuickRateProgress', '// The original random queue'), context);
+  const entries = songs.map(song => ({status:'matched',song}));
+  assert.deepEqual({...context.getQuickRateProgress(entries,'me')}, {rated:0,total:2,pending:0,percentage:0});
+  context.allSongRatings.push({user_id:'me',song_id:1,rating:6});
+  assert.deepEqual({...context.getQuickRateProgress(entries,'me')}, {rated:1,total:2,pending:0,percentage:50});
+  context.allSongRatings[0].rating = 9;
+  assert.deepEqual({...context.getQuickRateProgress(entries,'me')}, {rated:1,total:2,pending:0,percentage:50});
+  context.allSongRatings.length = 0;
+  assert.deepEqual({...context.getQuickRateProgress(entries,'me')}, {rated:0,total:2,pending:0,percentage:0});
+});
+
+test('97 rated canonical tracks out of 97 rateable tracks is complete with unresolved reported separately', () => {
+  const songs = Array.from({length:97}, (_, index) => ({id:index + 1}));
+  const context = vm.createContext({
+    allSongs:songs,
+    allSongRatings:songs.map(song => ({user_id:'me',song_id:song.id,rating:8})),
+    currentUser:{id:'me'}
+  });
+  vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
+  vm.runInContext(extract('function getQuickRateProgress', '// The original random queue'), context);
+  const entries = [
+    ...songs.map(song => ({status:'matched',song})),
+    {status:'unmatched',song:null},
+    {status:'ambiguous',song:null},
+    {status:'unmatched',song:null}
+  ];
+  assert.deepEqual({...context.getQuickRateProgress(entries,'me')}, {rated:97,total:97,pending:3,percentage:100});
+});
+
+test('year switching and Phase 1.1 controls rerender from selected state', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /selectedYear = year;[\s\S]*?render\(true\)/);
+  assert.match(quickRate, /selectedFilter = filterButton\.dataset\.quickFilter/);
+  assert.match(quickRate, /data-quick-next/);
+  assert.match(quickRate, /scrollIntoView\(\{ behavior: "smooth", block: "center" \}\)/);
+  assert.match(quickRate, /getNextUnratedQuickRateEntry\(yearEntries/);
+  assert.match(quickRate, /catalogue match/);
+  assert.doesNotMatch(quickRate, /Phase 1 sample/);
 });

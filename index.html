@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=28&autocomplete=1";
+    foundationStyles.href = "bom-foundation.css?v=29&autocomplete=1";
     document.head.appendChild(foundationStyles);
 
   }
@@ -450,7 +450,7 @@
   <script src="bom-password-recovery.js?v=1"></script>
   <script src="bom-early-access.js?v=4"></script>
   <script src="bom-spotify-playlist.js?v=3"></script>
-  <script src="app.js?v=139&autocomplete=1&search-autosave=1"></script>
+  <script src="app.js?v=140&autocomplete=1&search-autosave=1"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
@@ -464,7 +464,7 @@
         artistScript.src = "bom-artist.js?v=9";
         artistScript.addEventListener("load", function () {
           var discoverScript = document.createElement("script");
-          discoverScript.src = "bom-discover.js?v=2";
+          discoverScript.src = "bom-discover.js?v=3";
           discoverScript.addEventListener("load", function () {
             var chartsScript = document.createElement("script");
             chartsScript.src = "bom-charts.js?v=3";

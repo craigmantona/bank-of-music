@@ -9728,7 +9728,103 @@ async function importSelectedSong() {
 
 
 
-// Quick Rate keeps its queue and skips in memory only.
+// Phase 1 chart data is deliberately small and read-only. It is shaped like the
+// eventual licensed import so the UI and matching code do not need to change.
+const QUICK_RATE_UK_SINGLES = Object.freeze({
+  1994: [
+    { artist: "Oasis", title: "Live Forever" },
+    { artist: "Blur", title: "Parklife" },
+    { artist: "Pulp", title: "Do You Remember the First Time?" },
+    { artist: "Whigfield", title: "Saturday Night" },
+    { artist: "East 17", title: "Stay Another Day" }
+  ],
+  1995: [
+    { artist: "Pulp", title: "Common People" },
+    { artist: "Oasis", title: "Wonderwall" },
+    { artist: "Blur", title: "Country House" },
+    { artist: "Edwyn Collins", title: "A Girl Like You" },
+    { artist: "Everything but the Girl", title: "Missing" }
+  ],
+  1996: [
+    { artist: "Oasis", title: "Don't Look Back in Anger" },
+    { artist: "Spice Girls", title: "Wannabe" },
+    { artist: "The Prodigy", title: "Firestarter" },
+    { artist: "Underworld", title: "Born Slippy .NUXX" },
+    { artist: "The Chemical Brothers", title: "Setting Sun" }
+  ],
+  1997: [
+    { artist: "The Verve", title: "Bitter Sweet Symphony" },
+    { artist: "Blur", title: "Song 2" },
+    { artist: "Radiohead", title: "Paranoid Android" },
+    { artist: "Chumbawamba", title: "Tubthumping" },
+    { artist: "No Doubt", title: "Don't Speak" }
+  ],
+  1998: [
+    { artist: "Massive Attack", title: "Teardrop" },
+    { artist: "Brandy & Monica", title: "The Boy Is Mine" },
+    { artist: "Cornershop", title: "Brimful of Asha" },
+    { artist: "Stardust", title: "Music Sounds Better with You" },
+    { artist: "Radiohead", title: "No Surprises" }
+  ]
+});
+
+function resolveQuickRateChartEntry(entry, songs) {
+  const available = songs.filter(song => song?.id && !song.is_deleted);
+  const recordingId = String(entry?.musicbrainz_recording_id || "").trim().toLowerCase();
+  let matches = recordingId
+    ? available.filter(song => getConfirmedMusicBrainzRecordingId(song) === recordingId)
+    : [];
+  let matchMethod = matches.length ? "musicbrainz" : "";
+  if (!recordingId && !matches.length) {
+    matches = available.filter(song =>
+      normaliseCompare(song.title) === normaliseCompare(entry?.title) &&
+      normaliseCompare(song.artist) === normaliseCompare(entry?.artist)
+    );
+    matchMethod = matches.length ? "title_artist" : "";
+  }
+  const identities = new Set(matches.map(getSongRatingIdentity));
+  if (!matches.length) return { ...entry, status: "unmatched", song: null, matchMethod: "" };
+  if (identities.size !== 1) return { ...entry, status: "ambiguous", song: null, matchMethod };
+  return { ...entry, status: "matched", song: getPreferredSongOccurrence(matches), matchMethod };
+}
+
+function buildQuickRateYearModel(entries, songs) {
+  return (entries || []).map(entry => resolveQuickRateChartEntry(entry, songs));
+}
+
+function getQuickRateProgress(entries, userId) {
+  const rateable = entries.filter(entry => entry.status === "matched" && entry.song);
+  const rateableIdentities = new Set(rateable.map(entry => getSongRatingIdentity(entry.song)));
+  const ratedIdentities = new Set();
+  rateable.forEach(entry => {
+    if (getYourSongRating(entry.song.id) !== null) ratedIdentities.add(getSongRatingIdentity(entry.song));
+  });
+  const total = rateableIdentities.size;
+  const rated = ratedIdentities.size;
+  const pending = entries.filter(entry => entry.status === "unmatched" || entry.status === "ambiguous").length;
+  return { rated, total, pending, percentage: total ? Math.round((rated / total) * 100) : 0 };
+}
+
+function isQuickRateEntryRated(entry) {
+  return Boolean(entry?.status === "matched" && entry.song && getYourSongRating(entry.song.id) !== null);
+}
+
+function filterQuickRateEntries(entries, filter = "all") {
+  return filter === "unrated"
+    ? entries.filter(entry => entry?.status === "matched" && entry.song && !isQuickRateEntryRated(entry))
+    : [...entries];
+}
+
+function getNextUnratedQuickRateEntry(entries, currentSongId = null) {
+  const candidates = entries.filter(entry =>
+    entry?.status === "matched" && entry.song && !isQuickRateEntryRated(entry)
+  );
+  if (!candidates.length) return null;
+  const currentIndex = candidates.findIndex(entry => Number(entry.song.id) === Number(currentSongId));
+  return candidates[(currentIndex + 1) % candidates.length];
+}
+
+// The original random queue remains available for existing callers and tests.
 function buildQuickRateQueue(songs, ratings, userId, random = Math.random) {
   const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.song_id)));
   const getTrackKey = song => {
@@ -9936,12 +10032,15 @@ async function openQuickRate() {
   dialog.id = "bomQuickRate";
   dialog.className = "bom-v1-quick-rate bom-v1-album";
   dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
-  dialog.innerHTML = `<header><h1 id="bomQuickRateTitle">Quick Rate</h1><button type="button" data-quick-exit>Exit Quick Rate</button></header>
-    <p data-quick-count>0 rated this session</p><div data-quick-card></div><p data-quick-status role="status">Loading unrated tracks…</p>`;
+  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK Singles by Year</h1></div><button type="button" data-quick-exit>Exit</button></header>
+    <div data-quick-years aria-label="Choose a UK singles year"></div>
+    <div data-quick-card></div><p data-quick-status role="status">Loading UK singles…</p>`;
   document.body.append(dialog);
   const card = dialog.querySelector("[data-quick-card]");
   const status = dialog.querySelector("[data-quick-status]");
-  let queue = [], index = 0, count = 0, busy = false;
+  const years = Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
+  let selectedYear = years[0], selectedFilter = "all";
+  let songs = [], albums = [], yearEntries = [], busy = false, lastNavigatedSongId = null;
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
   dialog.showModal();
@@ -9949,83 +10048,117 @@ async function openQuickRate() {
   function render(focus = false) {
     if (!dialog.open) return;
     if (currentUser?.id !== userId) { dialog.close(); return; }
-    while (queue[index] && allSongRatings.some(row => row.user_id === userId && Number(row.song_id) === Number(queue[index].id))) index++;
-    const song = queue[index];
-    if (!song) {
-      card.innerHTML = `<h2>You’re all caught up for this round.</h2><p>Skipped tracks are available again next time.</p>`;
-      status.textContent = "No more unrated tracks in this round.";
-      dialog.querySelector("[data-quick-exit]").focus();
-      return;
-    }
-    const album = allAlbums.find(row => Number(row.id) === Number(song.album_id));
-    const artwork = getAlbumArtworkUrl(album);
-    const control = buildCompactTrackRatingControl(song.id, null)
-      .replace('<details ', '<details open ')
-      .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
-    const albumMeta = album
-      ? `${escapeHtml(album.title)}${getStageOneDiscoverYear(album) ? ` · ${escapeHtml(getStageOneDiscoverYear(album))}` : ""}`
-      : "Album unavailable";
-    card.innerHTML = `<div class="bom-quick-art">${artwork ? `<img src="${escapeHtml(artwork)}" alt="${escapeHtml(album?.title || song.title)} cover" onerror="this.hidden=true">` : ''}<span>bom</span></div>
-      <h2>${escapeHtml(song.title)}</h2><p>${escapeHtml(song.artist)}</p><p>${albumMeta}</p>
-      <button type="button" data-quick-listen>Listen on Spotify</button>
-      <div class="spotify-embed-container hidden bom-quick-spotify" data-quick-spotify aria-live="polite"></div>
-      <p>Your rating / 10</p>${control}<button type="button" data-quick-skip>Skip →</button>`;
-    card.querySelector("[data-quick-listen]").onclick = event => {
-      void listenToQuickRateTrack({
-        song,
-        album,
-        target: card.querySelector("[data-quick-spotify]"),
-        button: event.currentTarget
-      });
-    };
-    card.querySelector("[data-quick-skip]").onclick = () => {
-      if (busy) return;
-      index++;
-      status.textContent = "Skipped. No rating saved.";
-      render(true);
-    };
-    if (focus) card.querySelector(".bom-v1-track-rating-choice").focus();
+    yearEntries = buildQuickRateYearModel(QUICK_RATE_UK_SINGLES[selectedYear], songs);
+    const progress = getQuickRateProgress(yearEntries, userId);
+    const visibleEntries = filterQuickRateEntries(yearEntries, selectedFilter);
+    const nextUnrated = getNextUnratedQuickRateEntry(yearEntries);
+    dialog.querySelector("[data-quick-years]").innerHTML = years.map(year =>
+      `<button type="button" data-quick-year="${year}" aria-pressed="${year === selectedYear}">${year}</button>`
+    ).join("");
+    card.innerHTML = `<section class="bom-v1-quick-year" aria-labelledby="bomQuickYearTitle">
+      <div class="bom-v1-quick-progress"><div><h2 id="bomQuickYearTitle">${selectedYear} UK Singles</h2>${progress.pending ? `<small>${progress.pending} catalogue match${progress.pending === 1 ? "" : "es"} pending</small>` : ""}</div><div><strong data-quick-progress-count>${progress.rated} / ${progress.total} rated <span aria-hidden="true">·</span> <span data-quick-progress-percent>${progress.percentage}% complete</span></strong></div></div>
+      <div class="bom-v1-quick-progress-track" role="progressbar" aria-label="${progress.rated} of ${progress.total} UK singles rated" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percentage}"><span style="width:${progress.percentage}%"></span></div>
+      <div class="bom-v1-quick-tools"><div class="bom-v1-quick-filter" role="group" aria-label="Filter UK singles"><button type="button" data-quick-filter="all" aria-pressed="${selectedFilter === "all"}">All</button><button type="button" data-quick-filter="unrated" aria-pressed="${selectedFilter === "unrated"}">Unrated</button></div><button type="button" data-quick-next${nextUnrated ? "" : " disabled"}>Next unrated ↓</button></div>
+      <div class="bom-v1-quick-list">${visibleEntries.length ? visibleEntries.map((entry, entryIndex) => {
+        if (entry.status !== "matched" || !entry.song) {
+          const reason = entry.status === "ambiguous" ? "Catalogue match needs review" : "Not yet in the BOM catalogue";
+          return `<article class="bom-v1-quick-row is-unavailable"><div class="bom-v1-quick-thumb"><span>bom</span></div><div class="bom-v1-quick-track"><strong>${escapeHtml(entry.title)}</strong><span>${escapeHtml(entry.artist)}</span><small>${reason}</small></div></article>`;
+        }
+        const song = entry.song;
+        const album = albums.find(row => Number(row.id) === Number(song.album_id));
+        const artwork = getAlbumArtworkUrl(album);
+        const rating = getYourSongRating(song.id);
+        const control = buildCompactTrackRatingControl(song.id, rating)
+          .replace('<details ', '<details open ')
+          .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
+        return `<article class="bom-v1-quick-row" data-quick-entry="${entryIndex}" data-quick-song-id="${song.id}" tabindex="-1">
+          <div class="bom-v1-quick-thumb">${artwork ? `<img src="${escapeHtml(artwork)}" alt="" onerror="this.hidden=true">` : ""}<span>bom</span></div>
+          <div class="bom-v1-quick-track"><strong>${escapeHtml(song.title)}</strong><span>${escapeHtml(song.artist)}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}</div>
+          <div class="bom-v1-quick-rating"><span>Your rating${rating !== null ? ` · ${rating}/10` : ""}</span>${control}</div>
+        </article>`;
+      }).join("") : `<p class="bom-v1-quick-empty">Everything rateable in ${selectedYear} has a rating.</p>`}</div></section>`;
+    status.textContent = yearEntries.some(entry => entry.status === "matched") ? "Ratings save to the same recording everywhere in BOM." : "No entries for this sample year currently match the BOM catalogue.";
+    if (focus) card.querySelector(".bom-v1-track-rating-choice")?.focus();
   }
 
   dialog.saveRating = async (button) => {
-    if (busy || currentUser?.id !== userId || !queue[index]) return;
+    const songId = Number(String(button.dataset.targetInput || "").replace("track-rating-", ""));
+    if (busy || currentUser?.id !== userId || !songId) return;
     busy = true;
-    card.querySelectorAll("button").forEach(item => item.disabled = true);
+    button.closest(".bom-v1-quick-row")?.querySelectorAll("button").forEach(item => item.disabled = true);
     status.textContent = "Saving…";
     try {
-      const song = queue[index];
-      if (!allSongs.some(row => Number(row.id) === Number(song.id))) allSongs.push(song);
-      const saved = await saveTrackRating(song.id, Number(button.dataset.rating));
+      const saved = await saveTrackRating(songId, Number(button.dataset.rating));
       if (!dialog.open || currentUser?.id !== userId) return;
       if (!saved) throw new Error("Rating not saved");
-      count++;
-      dialog.querySelector("[data-quick-count]").textContent = `${count} rated this session`;
       status.textContent = `Saved ${button.dataset.rating} / 10`;
-      button.classList.add("is-selected");
-      await new Promise(resolve => setTimeout(resolve, 350));
-      index++;
-      render(true);
+      render();
     } catch (error) {
       status.textContent = "Couldn’t save your rating. Please try again.";
     } finally {
       busy = false;
       card.querySelectorAll("button").forEach(item => item.disabled = false);
-      if (dialog.open) card.querySelector(".bom-v1-track-rating-choice")?.focus();
     }
   };
 
+  dialog.querySelector("[data-quick-years]").addEventListener("click", event => {
+    const year = Number(event.target.closest("[data-quick-year]")?.dataset.quickYear);
+    if (!year || busy || year === selectedYear) return;
+    selectedYear = year;
+    lastNavigatedSongId = null;
+    status.textContent = `Showing UK singles for ${year}.`;
+    render(true);
+  });
+
+  card.addEventListener("click", async event => {
+    const filterButton = event.target.closest("[data-quick-filter]");
+    if (filterButton) {
+      selectedFilter = filterButton.dataset.quickFilter === "unrated" ? "unrated" : "all";
+      render();
+      card.querySelector(`[data-quick-filter="${selectedFilter}"]`)?.focus();
+      return;
+    }
+    const nextButton = event.target.closest("[data-quick-next]");
+    if (nextButton) {
+      const nextEntry = getNextUnratedQuickRateEntry(yearEntries, lastNavigatedSongId);
+      const row = nextEntry ? card.querySelector(`[data-quick-song-id="${nextEntry.song.id}"]`) : null;
+      if (!row) return;
+      lastNavigatedSongId = Number(nextEntry.song.id);
+      row.scrollIntoView({ behavior: "smooth", block: "center" });
+      row.querySelector(".bom-v1-track-rating-choice")?.focus({ preventScroll: true });
+      return;
+    }
+    const clearButton = event.target.closest("[data-clear-track-rating]");
+    if (!clearButton || busy) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    busy = true;
+    status.textContent = "Removing rating…";
+    const removed = await deleteTrackRating(clearButton.dataset.clearTrackRating);
+    busy = false;
+    if (dialog.open) {
+      render();
+      status.textContent = removed ? "Rating removed." : "Couldn’t remove your rating. Please try again.";
+    }
+  });
+
   try {
-    const [songs, albums, ratings] = await Promise.all([
+    const loaded = await Promise.all([
       fetchQuickRateRows("songs", "*"),
       fetchQuickRateRows("albums", "*"),
       fetchQuickRateRows("song_ratings", "id,user_id,song_id,rating", userId)
     ]);
+    [songs, albums] = loaded;
+    const ratings = loaded[2];
     if (!dialog.open || currentUser?.id !== userId) return;
+    songs.forEach(song => {
+      if (!allSongs.some(row => Number(row.id) === Number(song.id))) allSongs.push(song);
+    });
     albums.forEach(album => {
       if (!allAlbums.some(row => Number(row.id) === Number(album.id))) allAlbums.push(album);
     });
-    queue = buildQuickRateQueue(songs, ratings, userId);
-    status.textContent = "Choose a rating, or skip a track you don’t know.";
+    const otherUsersRows = allSongRatings.filter(row => row.user_id !== userId);
+    allSongRatings = [...otherUsersRows, ...ratings];
     render();
   } catch (error) {
     status.textContent = "Couldn’t load tracks. Exit Quick Rate and try again.";
@@ -10277,7 +10410,7 @@ async function deleteTrackRating(songId) {
 
     setMessage(globalSearchMessage, "You must be logged in first.");
 
-    return;
+    return false;
 
   }
 
@@ -10300,7 +10433,7 @@ async function deleteTrackRating(songId) {
 
     setMessage(globalSearchMessage, error.message);
 
-    return;
+    return false;
 
   }
 
@@ -10314,6 +10447,8 @@ async function deleteTrackRating(songId) {
   renderLibrary();
 
   setMessage(globalSearchMessage, "Track rating deleted.");
+
+  return true;
 
 }
 
