@@ -119,6 +119,8 @@ let allAlbumRatings = [];
 
 let allSongRatings = [];
 
+let allCanonicalRecordings = [];
+
 let followedArtists = [];
 
 let excludedReleaseGroupIds = new Set();
@@ -1963,6 +1965,18 @@ function getAlbumAverage(albumId) {
 
 
 function getSongAverage(songId) {
+  const selectedSong = allSongs.find(song => Number(song.id) === Number(songId));
+  const canonicalId = getCanonicalSongId(selectedSong);
+  const canonicalRows = canonicalId
+    ? allSongRatings.filter(row => row.canonical_song_id === canonicalId)
+    : [];
+  if (canonicalRows.length) {
+    const ratings = canonicalRows.map(row => Number(row.rating));
+    return {
+      avg: ratings.reduce((sum, value) => sum + value, 0) / ratings.length,
+      count: ratings.length
+    };
+  }
   const occurrenceIds = new Set(getSongRatingOccurrenceIds(songId));
   const ratingsByUser = new Map();
   allSongRatings.forEach((row) => {
@@ -2008,6 +2022,12 @@ function getYourSongRating(songId) {
 
   if (!currentUser) return null;
 
+  const selectedSong = allSongs.find(song => Number(song.id) === Number(songId));
+  const canonicalId = getCanonicalSongId(selectedSong);
+  const canonicalRow = canonicalId ? allSongRatings.find(
+    rating => rating.user_id === currentUser.id && rating.canonical_song_id === canonicalId
+  ) : null;
+  if (canonicalRow) return Number(canonicalRow.rating);
   const occurrenceIds = new Set(getSongRatingOccurrenceIds(songId));
   const row = allSongRatings.find(
 
@@ -2027,7 +2047,24 @@ function getConfirmedMusicBrainzRecordingId(song) {
     : "";
 }
 
+function getCanonicalSongId(song) {
+  const value = String(song?.canonical_song_id || "").trim().toLowerCase();
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(value)
+    ? value
+    : "";
+}
+
+function getYourCanonicalRecordingRating(canonicalSongId) {
+  if (!currentUser || !canonicalSongId) return null;
+  const row = allSongRatings.find(rating =>
+    rating.user_id === currentUser.id && rating.canonical_song_id === canonicalSongId
+  );
+  return row ? Number(row.rating) : null;
+}
+
 function getSongRatingIdentity(song) {
+  const canonicalId = getCanonicalSongId(song);
+  if (canonicalId) return `canonical:${canonicalId}`;
   const recordingId = getConfirmedMusicBrainzRecordingId(song);
   return recordingId ? `musicbrainz:${recordingId}` : `song:${Number(song?.id)}`;
 }
@@ -2035,6 +2072,10 @@ function getSongRatingIdentity(song) {
 function getSongRatingOccurrenceIds(songId) {
   const selectedSong = allSongs.find(song => Number(song.id) === Number(songId));
   if (!selectedSong) return [];
+  const canonicalId = getCanonicalSongId(selectedSong);
+  if (canonicalId) return allSongs
+    .filter(song => getCanonicalSongId(song) === canonicalId)
+    .map(song => Number(song.id));
   const recordingId = getConfirmedMusicBrainzRecordingId(selectedSong);
   if (!recordingId) return [Number(selectedSong.id)];
   return allSongs
@@ -2171,17 +2212,17 @@ function updateStageOneAlbumRatingUi(albumId) {
 
 
 
-function upsertLocalSongRating(songId, rating) {
+function upsertLocalSongRating(songId, rating, canonicalSongId = "") {
 
   if (!currentUser) return;
 
 
 
-  const existingIndex = allSongRatings.findIndex(
-
-    (row) => row.user_id === currentUser.id && Number(row.song_id) === Number(songId)
-
-  );
+  const existingIndex = allSongRatings.findIndex((row) => row.user_id === currentUser.id && (
+    canonicalSongId
+      ? row.canonical_song_id === canonicalSongId
+      : Number(row.song_id) === Number(songId)
+  ));
 
 
 
@@ -2189,7 +2230,9 @@ function upsertLocalSongRating(songId, rating) {
 
     user_id: currentUser.id,
 
-    song_id: Number(songId),
+    song_id: canonicalSongId ? null : Number(songId),
+
+    canonical_song_id: canonicalSongId || null,
 
     rating: Number(rating)
 
@@ -2223,6 +2266,18 @@ function removeLocalSongRating(songId) {
 
   );
 
+}
+
+function removeLocalCanonicalRating(canonicalSongId) {
+  if (!currentUser || !canonicalSongId) return;
+  const occurrenceIds = new Set(allSongs
+    .filter(song => getCanonicalSongId(song) === canonicalSongId)
+    .map(song => Number(song.id)));
+  allSongRatings = allSongRatings.filter(row => !(
+    row.user_id === currentUser.id && (
+      row.canonical_song_id === canonicalSongId || occurrenceIds.has(Number(row.song_id))
+    )
+  ));
 }
 
 
@@ -2655,7 +2710,12 @@ allSongs = songs;
   const songRatings = await fetchAllRows(
     "song_ratings",
     "id",
-    "user_id, song_id, rating"
+    "user_id, song_id, canonical_song_id, rating"
+  );
+
+  const canonicalRecordings = await fetchAllRows(
+    "canonical_recordings",
+    "created_at"
   );
 
 
@@ -2682,6 +2742,8 @@ allSongs = songs;
   allAlbumRatings = albumRatings || [];
 
   allSongRatings = songRatings || [];
+
+  allCanonicalRecordings = canonicalRecordings || [];
 
   followedArtists = followed || [];
 
@@ -6833,6 +6895,22 @@ function buildCompactTrackRatingControl(songId, currentValue) {
   </details><input type="hidden" id="${targetId}" value="${hasRating ? Number(currentValue) : ""}">`;
 }
 
+function buildCompactCanonicalRatingControl(canonicalSongId, currentValue) {
+  if (!canonicalSongId) return "";
+  const hasRating = currentValue !== null && Number.isFinite(Number(currentValue));
+  const targetId = `canonical-rating-${canonicalSongId}`;
+  return `<details class="bom-v1-track-rating-control" open>
+    <summary class="bom-v1-track-rating-trigger">${hasRating ? `${Number(currentValue)} / 10` : "Rate +"}</summary>
+    <div class="bom-v1-track-rating-popover" role="group" aria-label="Rate this track from 1 to 10">
+      ${Array.from({ length: 10 }, (_, index) => {
+        const rating = index + 1;
+        return `<button type="button" class="bom-v1-track-rating-choice${rating === Number(currentValue) ? " is-selected" : ""}" data-target-input="${targetId}" data-rating="${rating}" onclick="handleQuickRateClick(event, this); return false;">${rating}</button>`;
+      }).join("")}
+      ${hasRating ? `<button type="button" class="bom-v1-track-rating-clear delete-track-rating-btn" data-clear-canonical-rating="${canonicalSongId}">Clear</button>` : ""}
+    </div>
+  </details>`;
+}
+
 function buildCompactAlbumRatingControl(albumId, currentValue) {
   if (!albumId) return "";
   const hasRating = currentValue !== null && Number.isFinite(Number(currentValue));
@@ -9792,12 +9870,40 @@ function buildQuickRateYearModel(entries, songs) {
   return (entries || []).map(entry => resolveQuickRateChartEntry(entry, songs));
 }
 
+function buildImportedQuickRateYearModel(rows, songs, canonicalRecordings, year) {
+  return (rows || []).filter(row => Number(row.chart_year) === Number(year)).map(row => {
+    const song = row.song_id ? songs.find(candidate => Number(candidate.id) === Number(row.song_id) && !candidate.is_deleted) : null;
+    const canonicalRecording = row.canonical_song_id
+      ? canonicalRecordings.find(candidate => candidate.id === row.canonical_song_id)
+      : null;
+    return {
+      ...row,
+      status: canonicalRecording || song ? "matched" : row.match_status === "ambiguous" ? "ambiguous" : "unmatched",
+      song: song || null,
+      canonicalRecording: canonicalRecording || null,
+      matchMethod: row.match_method || ""
+    };
+  });
+}
+
+function getQuickRateEntryIdentity(entry) {
+  return entry?.canonical_song_id
+    ? `canonical:${entry.canonical_song_id}`
+    : entry?.song ? getSongRatingIdentity(entry.song) : "";
+}
+
+function getQuickRateEntryRating(entry) {
+  return entry?.canonical_song_id
+    ? getYourCanonicalRecordingRating(entry.canonical_song_id)
+    : entry?.song ? getYourSongRating(entry.song.id) : null;
+}
+
 function getQuickRateProgress(entries, userId) {
-  const rateable = entries.filter(entry => entry.status === "matched" && entry.song);
-  const rateableIdentities = new Set(rateable.map(entry => getSongRatingIdentity(entry.song)));
+  const rateable = entries.filter(entry => entry.status === "matched" && (entry.song || entry.canonical_song_id));
+  const rateableIdentities = new Set(rateable.map(getQuickRateEntryIdentity));
   const ratedIdentities = new Set();
   rateable.forEach(entry => {
-    if (getYourSongRating(entry.song.id) !== null) ratedIdentities.add(getSongRatingIdentity(entry.song));
+    if (getQuickRateEntryRating(entry) !== null) ratedIdentities.add(getQuickRateEntryIdentity(entry));
   });
   const total = rateableIdentities.size;
   const rated = ratedIdentities.size;
@@ -9806,21 +9912,23 @@ function getQuickRateProgress(entries, userId) {
 }
 
 function isQuickRateEntryRated(entry) {
-  return Boolean(entry?.status === "matched" && entry.song && getYourSongRating(entry.song.id) !== null);
+  return Boolean(entry?.status === "matched" && (entry.song || entry.canonical_song_id) && getQuickRateEntryRating(entry) !== null);
 }
 
 function filterQuickRateEntries(entries, filter = "all") {
   return filter === "unrated"
-    ? entries.filter(entry => entry?.status === "matched" && entry.song && !isQuickRateEntryRated(entry))
+    ? entries.filter(entry => entry?.status === "matched" && (entry.song || entry.canonical_song_id) && !isQuickRateEntryRated(entry))
     : [...entries];
 }
 
-function getNextUnratedQuickRateEntry(entries, currentSongId = null) {
+function getNextUnratedQuickRateEntry(entries, currentIdentity = "") {
   const candidates = entries.filter(entry =>
-    entry?.status === "matched" && entry.song && !isQuickRateEntryRated(entry)
+    entry?.status === "matched" && (entry.song || entry.canonical_song_id) && !isQuickRateEntryRated(entry)
   );
   if (!candidates.length) return null;
-  const currentIndex = candidates.findIndex(entry => Number(entry.song.id) === Number(currentSongId));
+  const currentIndex = candidates.findIndex(entry =>
+    getQuickRateEntryIdentity(entry) === currentIdentity || Number(entry.song?.id) === Number(currentIdentity)
+  );
   return candidates[(currentIndex + 1) % candidates.length];
 }
 
@@ -9828,6 +9936,8 @@ function getNextUnratedQuickRateEntry(entries, currentSongId = null) {
 function buildQuickRateQueue(songs, ratings, userId, random = Math.random) {
   const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.song_id)));
   const getTrackKey = song => {
+    const canonicalId = getCanonicalSongId(song);
+    if (canonicalId) return `canonical:${canonicalId}`;
     const recordingId = getConfirmedMusicBrainzRecordingId(song);
     return recordingId ? `musicbrainz:${recordingId}` : `song:${Number(song.id)}`;
   };
@@ -10033,14 +10143,16 @@ async function openQuickRate() {
   dialog.className = "bom-v1-quick-rate bom-v1-album";
   dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
   dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK Singles by Year</h1></div><button type="button" data-quick-exit>Exit</button></header>
+    <div data-quick-collections role="group" aria-label="Choose a Quick Rate collection"><button type="button" data-quick-collection="uk-singles" aria-pressed="true">UK Singles by Year</button><button type="button" data-quick-collection="uk-number-ones" aria-pressed="false">UK No.1s</button></div>
     <div data-quick-years aria-label="Choose a UK singles year"></div>
     <div data-quick-card></div><p data-quick-status role="status">Loading UK singles…</p>`;
   document.body.append(dialog);
   const card = dialog.querySelector("[data-quick-card]");
   const status = dialog.querySelector("[data-quick-status]");
-  const years = Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
+  let selectedCollection = "uk-singles";
+  let years = Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
   let selectedYear = years[0], selectedFilter = "all";
-  let songs = [], albums = [], yearEntries = [], busy = false, lastNavigatedSongId = null;
+  let songs = [], albums = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false, lastNavigatedIdentity = null;
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
   dialog.showModal();
@@ -10048,47 +10160,70 @@ async function openQuickRate() {
   function render(focus = false) {
     if (!dialog.open) return;
     if (currentUser?.id !== userId) { dialog.close(); return; }
-    yearEntries = buildQuickRateYearModel(QUICK_RATE_UK_SINGLES[selectedYear], songs);
+    const isNumberOnes = selectedCollection === "uk-number-ones";
+    yearEntries = isNumberOnes
+      ? buildImportedQuickRateYearModel(importedEntries, songs, canonicalRecordings, selectedYear)
+      : buildQuickRateYearModel(QUICK_RATE_UK_SINGLES[selectedYear], songs);
     const progress = getQuickRateProgress(yearEntries, userId);
     const visibleEntries = filterQuickRateEntries(yearEntries, selectedFilter);
     const nextUnrated = getNextUnratedQuickRateEntry(yearEntries);
+    dialog.querySelectorAll("[data-quick-collection]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.quickCollection === selectedCollection)));
+    dialog.querySelector("#bomQuickRateTitle").textContent = isNumberOnes ? "UK No.1s" : "UK Singles by Year";
     dialog.querySelector("[data-quick-years]").innerHTML = years.map(year =>
       `<button type="button" data-quick-year="${year}" aria-pressed="${year === selectedYear}">${year}</button>`
     ).join("");
     card.innerHTML = `<section class="bom-v1-quick-year" aria-labelledby="bomQuickYearTitle">
-      <div class="bom-v1-quick-progress"><div><h2 id="bomQuickYearTitle">${selectedYear} UK Singles</h2>${progress.pending ? `<small>${progress.pending} catalogue match${progress.pending === 1 ? "" : "es"} pending</small>` : ""}</div><div><strong data-quick-progress-count>${progress.rated} / ${progress.total} rated <span aria-hidden="true">·</span> <span data-quick-progress-percent>${progress.percentage}% complete</span></strong></div></div>
+      <div class="bom-v1-quick-progress"><div><h2 id="bomQuickYearTitle">${selectedYear} ${isNumberOnes ? "UK No.1s" : "UK Singles"}</h2>${progress.pending ? `<small>${progress.pending} catalogue match${progress.pending === 1 ? "" : "es"} pending</small>` : ""}</div><div><strong data-quick-progress-count>${progress.rated} / ${progress.total} rated <span aria-hidden="true">·</span> <span data-quick-progress-percent>${progress.percentage}% complete</span></strong></div></div>
       <div class="bom-v1-quick-progress-track" role="progressbar" aria-label="${progress.rated} of ${progress.total} UK singles rated" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percentage}"><span style="width:${progress.percentage}%"></span></div>
       <div class="bom-v1-quick-tools"><div class="bom-v1-quick-filter" role="group" aria-label="Filter UK singles"><button type="button" data-quick-filter="all" aria-pressed="${selectedFilter === "all"}">All</button><button type="button" data-quick-filter="unrated" aria-pressed="${selectedFilter === "unrated"}">Unrated</button></div><button type="button" data-quick-next${nextUnrated ? "" : " disabled"}>Next unrated ↓</button></div>
       <div class="bom-v1-quick-list">${visibleEntries.length ? visibleEntries.map((entry, entryIndex) => {
-        if (entry.status !== "matched" || !entry.song) {
-          const reason = entry.status === "ambiguous" ? "Catalogue match needs review" : "Not yet in the BOM catalogue";
+        if (entry.status !== "matched" || (!entry.song && !entry.canonicalRecording)) {
+          const reason = entry.status === "ambiguous"
+            ? (isNumberOnes ? "Recording identity needs review" : "Catalogue match needs review")
+            : (isNumberOnes ? "Recording not yet resolved in BOM" : "Not yet in the BOM catalogue");
           return `<article class="bom-v1-quick-row is-unavailable"><div class="bom-v1-quick-thumb"><span>bom</span></div><div class="bom-v1-quick-track"><strong>${escapeHtml(entry.title)}</strong><span>${escapeHtml(entry.artist)}</span><small>${reason}</small></div></article>`;
         }
         const song = entry.song;
-        const album = albums.find(row => Number(row.id) === Number(song.album_id));
+        const recording = entry.canonicalRecording;
+        const album = song ? albums.find(row => Number(row.id) === Number(song.album_id)) : null;
         const artwork = getAlbumArtworkUrl(album);
-        const rating = getYourSongRating(song.id);
-        const control = buildCompactTrackRatingControl(song.id, rating)
-          .replace('<details ', '<details open ')
-          .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
-        return `<article class="bom-v1-quick-row" data-quick-entry="${entryIndex}" data-quick-song-id="${song.id}" tabindex="-1">
+        const rating = getQuickRateEntryRating(entry);
+        const control = entry.canonical_song_id
+          ? buildCompactCanonicalRatingControl(entry.canonical_song_id, rating)
+          : buildCompactTrackRatingControl(song.id, rating)
+            .replace('<details ', '<details open ')
+            .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
+        const identity = getQuickRateEntryIdentity(entry);
+        const title = song ? song.title : recording?.title || entry.title;
+        const artist = song ? song.artist : recording?.artist || entry.artist;
+        const canonicalSpotify = recording?.preferred_spotify_track_id || "";
+        const listen = song
+          ? `<button type="button" class="bom-v1-quick-listen" data-quick-listen="${song.id}" onclick="return handleQuickRateListen(event,this)">Listen on Spotify</button><div class="bom-quick-spotify hidden" data-quick-player></div>`
+          : canonicalSpotify
+            ? `<button type="button" class="bom-v1-quick-listen" data-quick-canonical-listen="${recording.id}" onclick="return handleQuickRateListen(event,this)">Listen on Spotify</button><div class="bom-quick-spotify hidden" data-quick-player></div>`
+            : "";
+        return `<article class="bom-v1-quick-row" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
           <div class="bom-v1-quick-thumb">${artwork ? `<img src="${escapeHtml(artwork)}" alt="" onerror="this.hidden=true">` : ""}<span>bom</span></div>
-          <div class="bom-v1-quick-track"><strong>${escapeHtml(song.title)}</strong><span>${escapeHtml(song.artist)}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}</div>
+          <div class="bom-v1-quick-track"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}${listen}</div>
           <div class="bom-v1-quick-rating"><span>Your rating${rating !== null ? ` · ${rating}/10` : ""}</span>${control}</div>
         </article>`;
-      }).join("") : `<p class="bom-v1-quick-empty">Everything rateable in ${selectedYear} has a rating.</p>`}</div></section>`;
+      }).join("") : `<p class="bom-v1-quick-empty">Everything rateable in ${selectedYear} has a rating.</p>`}</div>${isNumberOnes ? '<p class="bom-v1-quick-source">Source: Wikimedia / Wikidata</p>' : ""}</section>`;
     status.textContent = yearEntries.some(entry => entry.status === "matched") ? "Ratings save to the same recording everywhere in BOM." : "No entries for this sample year currently match the BOM catalogue.";
     if (focus) card.querySelector(".bom-v1-track-rating-choice")?.focus();
   }
 
   dialog.saveRating = async (button) => {
-    const songId = Number(String(button.dataset.targetInput || "").replace("track-rating-", ""));
-    if (busy || currentUser?.id !== userId || !songId) return;
+    const target = String(button.dataset.targetInput || "");
+    const canonicalSongId = target.startsWith("canonical-rating-") ? target.replace("canonical-rating-", "") : "";
+    const songId = target.startsWith("track-rating-") ? Number(target.replace("track-rating-", "")) : 0;
+    if (busy || currentUser?.id !== userId || (!songId && !canonicalSongId)) return;
     busy = true;
     button.closest(".bom-v1-quick-row")?.querySelectorAll("button").forEach(item => item.disabled = true);
     status.textContent = "Saving…";
     try {
-      const saved = await saveTrackRating(songId, Number(button.dataset.rating));
+      const saved = canonicalSongId
+        ? await saveCanonicalRecordingRating(canonicalSongId, Number(button.dataset.rating))
+        : await saveTrackRating(songId, Number(button.dataset.rating));
       if (!dialog.open || currentUser?.id !== userId) return;
       if (!saved) throw new Error("Rating not saved");
       status.textContent = `Saved ${button.dataset.rating} / 10`;
@@ -10101,11 +10236,24 @@ async function openQuickRate() {
     }
   };
 
+  dialog.querySelector("[data-quick-collections]").addEventListener("click", event => {
+    const collection = event.target.closest("[data-quick-collection]")?.dataset.quickCollection;
+    if (!collection || busy || collection === selectedCollection) return;
+    selectedCollection = collection;
+    years = collection === "uk-number-ones"
+      ? Array.from({ length: 10 }, (_, index) => 1999 - index)
+      : Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
+    selectedYear = years[0];
+    selectedFilter = "all";
+    lastNavigatedIdentity = null;
+    render(true);
+  });
+
   dialog.querySelector("[data-quick-years]").addEventListener("click", event => {
     const year = Number(event.target.closest("[data-quick-year]")?.dataset.quickYear);
     if (!year || busy || year === selectedYear) return;
     selectedYear = year;
-    lastNavigatedSongId = null;
+    lastNavigatedIdentity = null;
     status.textContent = `Showing UK singles for ${year}.`;
     render(true);
   });
@@ -10120,21 +10268,25 @@ async function openQuickRate() {
     }
     const nextButton = event.target.closest("[data-quick-next]");
     if (nextButton) {
-      const nextEntry = getNextUnratedQuickRateEntry(yearEntries, lastNavigatedSongId);
-      const row = nextEntry ? card.querySelector(`[data-quick-song-id="${nextEntry.song.id}"]`) : null;
+      const nextEntry = getNextUnratedQuickRateEntry(yearEntries, lastNavigatedIdentity);
+      const identity = nextEntry ? getQuickRateEntryIdentity(nextEntry) : "";
+      const row = identity ? [...card.querySelectorAll("[data-quick-identity]")].find(item => item.dataset.quickIdentity === identity) : null;
       if (!row) return;
-      lastNavigatedSongId = Number(nextEntry.song.id);
+      lastNavigatedIdentity = identity;
       row.scrollIntoView({ behavior: "smooth", block: "center" });
       row.querySelector(".bom-v1-track-rating-choice")?.focus({ preventScroll: true });
       return;
     }
     const clearButton = event.target.closest("[data-clear-track-rating]");
-    if (!clearButton || busy) return;
+    const clearCanonicalButton = event.target.closest("[data-clear-canonical-rating]");
+    if ((!clearButton && !clearCanonicalButton) || busy) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     busy = true;
     status.textContent = "Removing rating…";
-    const removed = await deleteTrackRating(clearButton.dataset.clearTrackRating);
+    const removed = clearCanonicalButton
+      ? await deleteCanonicalRecordingRating(clearCanonicalButton.dataset.clearCanonicalRating)
+      : await deleteTrackRating(clearButton.dataset.clearTrackRating);
     busy = false;
     if (dialog.open) {
       render();
@@ -10146,10 +10298,13 @@ async function openQuickRate() {
     const loaded = await Promise.all([
       fetchQuickRateRows("songs", "*"),
       fetchQuickRateRows("albums", "*"),
-      fetchQuickRateRows("song_ratings", "id,user_id,song_id,rating", userId)
+      fetchQuickRateRows("canonical_recordings", "*"),
+      fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
+      fetchQuickRateRows("quick_rate_collection_tracks", "*")
     ]);
-    [songs, albums] = loaded;
-    const ratings = loaded[2];
+    [songs, albums, canonicalRecordings, , importedEntries] = loaded;
+    allCanonicalRecordings = canonicalRecordings;
+    const ratings = loaded[3];
     if (!dialog.open || currentUser?.id !== userId) return;
     songs.forEach(song => {
       if (!allSongs.some(row => Number(row.id) === Number(song.id))) allSongs.push(song);
@@ -10169,6 +10324,25 @@ window.handleQuickRateClick = function (event, button) {
   event.preventDefault();
   event.stopImmediatePropagation();
   void document.getElementById("bomQuickRate")?.saveRating(button);
+  return false;
+};
+
+window.handleQuickRateListen = function (event, button) {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  let song = allSongs.find(candidate => Number(candidate.id) === Number(button.dataset.quickListen));
+  if (!song && button.dataset.quickCanonicalListen) {
+    const recording = allCanonicalRecordings.find(candidate => candidate.id === button.dataset.quickCanonicalListen);
+    if (recording?.preferred_spotify_track_id) song = {
+      id: `canonical:${recording.id}`,
+      title: recording.title,
+      artist: recording.artist,
+      spotify_track_id: recording.preferred_spotify_track_id
+    };
+  }
+  const album = song ? allAlbums.find(candidate => Number(candidate.id) === Number(song.album_id)) : null;
+  const target = button.closest(".bom-v1-quick-row")?.querySelector("[data-quick-player]");
+  void listenToQuickRateTrack({ song, album, target, button });
   return false;
 };
 
@@ -10314,16 +10488,19 @@ async function saveTrackRating(songId, ratingValue = null) {
   }
 
   const ratingSongIds = getSongRatingOccurrenceIds(selectedSong.id);
-  const ratingRows = ratingSongIds.map((ratingSongId) => ({
-    user_id: currentUser.id,
-    song_id: ratingSongId,
-    rating
-  }));
+  const canonicalSongId = getCanonicalSongId(selectedSong);
+  const ratingRows = canonicalSongId
+    ? [{ user_id: currentUser.id, song_id: null, canonical_song_id: canonicalSongId, rating }]
+    : ratingSongIds.map((ratingSongId) => ({
+      user_id: currentUser.id,
+      song_id: ratingSongId,
+      rating
+    }));
 
   const { error } = await supabaseClient
     .from("song_ratings")
     .upsert(ratingRows, {
-      onConflict: "user_id,song_id"
+      onConflict: canonicalSongId ? "user_id,canonical_song_id" : "user_id,song_id"
     });
 
   if (error) {
@@ -10334,8 +10511,9 @@ async function saveTrackRating(songId, ratingValue = null) {
     return;
   }
 
+  if (canonicalSongId) upsertLocalSongRating(null, rating, canonicalSongId);
   ratingSongIds.forEach((ratingSongId) => {
-    upsertLocalSongRating(ratingSongId, rating);
+    if (!canonicalSongId) upsertLocalSongRating(ratingSongId, rating);
     updateTrackRowUi(ratingSongId);
   });
 
@@ -10404,6 +10582,45 @@ async function saveTrackRating(songId, ratingValue = null) {
   return true;
 }
 
+async function saveCanonicalRecordingRating(canonicalSongId, rating) {
+  if (!currentUser || !canonicalSongId || !Number.isFinite(Number(rating)) || rating < 0 || rating > 10) return false;
+  const { error } = await supabaseClient.from("song_ratings").upsert([{
+    user_id: currentUser.id,
+    song_id: null,
+    canonical_song_id: canonicalSongId,
+    rating: Number(rating)
+  }], { onConflict: "user_id,canonical_song_id" });
+  if (error) {
+    setMessage(globalSearchMessage, error.message);
+    return false;
+  }
+  upsertLocalSongRating(null, Number(rating), canonicalSongId);
+  getSongRatingOccurrenceIdsForCanonical(canonicalSongId).forEach(updateTrackRowUi);
+  renderLibrary();
+  return true;
+}
+
+function getSongRatingOccurrenceIdsForCanonical(canonicalSongId) {
+  return allSongs.filter(song => getCanonicalSongId(song) === canonicalSongId).map(song => Number(song.id));
+}
+
+async function deleteCanonicalRecordingRating(canonicalSongId) {
+  if (!currentUser || !canonicalSongId) return false;
+  const occurrenceIds = getSongRatingOccurrenceIdsForCanonical(canonicalSongId);
+  const { error } = await supabaseClient.from("song_ratings").delete()
+    .eq("user_id", currentUser.id).eq("canonical_song_id", canonicalSongId);
+  if (error) return false;
+  if (occurrenceIds.length) {
+    const legacy = await supabaseClient.from("song_ratings").delete()
+      .eq("user_id", currentUser.id).in("song_id", occurrenceIds);
+    if (legacy.error) return false;
+  }
+  removeLocalCanonicalRating(canonicalSongId);
+  occurrenceIds.forEach(updateTrackRowUi);
+  renderLibrary();
+  return true;
+}
+
 async function deleteTrackRating(songId) {
 
   if (!currentUser) {
@@ -10416,16 +10633,19 @@ async function deleteTrackRating(songId) {
 
 
 
+  const selectedSong = allSongs.find(song => Number(song.id) === Number(songId));
+  const canonicalSongId = getCanonicalSongId(selectedSong);
   const ratingSongIds = getSongRatingOccurrenceIds(songId);
-  const { error } = await supabaseClient
+  const query = supabaseClient
 
     .from("song_ratings")
 
     .delete()
 
-    .eq("user_id", currentUser.id)
-
-    .in("song_id", ratingSongIds);
+    .eq("user_id", currentUser.id);
+  const { error } = canonicalSongId
+    ? await query.eq("canonical_song_id", canonicalSongId)
+    : await query.in("song_id", ratingSongIds);
 
 
 
@@ -10439,8 +10659,17 @@ async function deleteTrackRating(songId) {
 
 
 
+  if (canonicalSongId) {
+    const legacyDelete = await supabaseClient.from("song_ratings").delete()
+      .eq("user_id", currentUser.id).in("song_id", ratingSongIds);
+    if (legacyDelete.error) {
+      setMessage(globalSearchMessage, legacyDelete.error.message);
+      return false;
+    }
+    removeLocalCanonicalRating(canonicalSongId);
+  }
   ratingSongIds.forEach((ratingSongId) => {
-    removeLocalSongRating(ratingSongId);
+    if (!canonicalSongId) removeLocalSongRating(ratingSongId);
     updateTrackRowUi(ratingSongId);
   });
 
@@ -13048,6 +13277,21 @@ function buildSpotifyTrack(song, extra = {}) {
 
 function getSharedRecordingSpotifyTrackId(song) {
   if (!song || song.spotify_track_id) return "";
+  const canonicalId = getCanonicalSongId(song);
+  const canonical = canonicalId
+    ? allCanonicalRecordings.find(recording => recording.id === canonicalId)
+    : null;
+  if (/^[A-Za-z0-9]{22}$/.test(String(canonical?.preferred_spotify_track_id || ""))) {
+    return canonical.preferred_spotify_track_id;
+  }
+  if (canonicalId) {
+    const occurrence = allSongs.find(candidate =>
+      Number(candidate.id) !== Number(song.id) &&
+      getCanonicalSongId(candidate) === canonicalId &&
+      /^[A-Za-z0-9]{22}$/.test(String(candidate.spotify_track_id || ""))
+    );
+    if (occurrence) return occurrence.spotify_track_id;
+  }
   const recordingId = getConfirmedMusicBrainzRecordingId(song);
   if (!recordingId) return "";
   const occurrence = allSongs.find((candidate) => (

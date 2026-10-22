@@ -128,7 +128,7 @@ test("loadLibrary paginates ratings, song ratings, and followed artists", async 
     ]);
   }
   assert.equal(calls.find(call => call[0] === "ratings" && call[1] === "select")?.[2], "user_id, album_id, rating");
-  assert.equal(calls.find(call => call[0] === "song_ratings" && call[1] === "select")?.[2], "user_id, song_id, rating");
+  assert.equal(calls.find(call => call[0] === "song_ratings" && call[1] === "select")?.[2], "user_id, song_id, canonical_song_id, rating");
   assert.equal(calls.find(call => call[0] === "followed_artists" && call[1] === "select")?.[2], "artist_name");
 });
 

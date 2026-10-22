@@ -58,7 +58,7 @@ test('Quick Rate reuses track rating upsert and reports success only after persi
     allSongs:[{id:123,title:'Track',artist:'Artist'}], allSongRatings:[],
     supabaseClient:{from:()=>tableClient},
     setMessage(){}, normaliseCompare:value=>String(value).toLowerCase(), upsertLocalSongRating:(...args)=>local.push(args),
-    getSongRatingOccurrenceIds:id=>[Number(id)], updateTrackRowUi(){}, updateStarSelector(){}, renderLibrary(){}
+    getCanonicalSongId:()=>'', getSongRatingOccurrenceIds:id=>[Number(id)], updateTrackRowUi(){}, updateStarSelector(){}, renderLibrary(){}
   });
   vm.runInContext(extract('async function saveTrackRating(', 'async function deleteTrackRating'),context);
   assert.equal(await context.saveTrackRating(123, 8), true);
@@ -116,6 +116,35 @@ test('track rating follows an exact confirmed MusicBrainz recording across album
   assert.equal(context.getYourSongRating(6665), 8);
   assert.equal(context.getYourSongRating(16592), 8);
   assert.equal(context.getYourSongRating(202), null);
+});
+
+test('canonical save writes one authoritative rating and all occurrences read it', async () => {
+  const canonicalId = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd';
+  const writes = [];
+  const context = vm.createContext({
+    currentUser:{id:'me'}, document:{getElementById:()=>null}, globalSearchMessage:{},
+    selectedItem:null, selectedItemDetail:null,
+    allSongs:[
+      {id:1,canonical_song_id:canonicalId,title:'Track',artist:'Artist'},
+      {id:2,canonical_song_id:canonicalId,title:'Track',artist:'Artist'}
+    ],
+    allSongRatings:[],
+    supabaseClient:{from:()=>({
+      upsert:async(rows,options)=>{writes.push({rows,options});return {error:null}},
+      select(){return this},eq(){return Promise.resolve({data:context.allSongRatings,error:null})}
+    })},
+    setMessage(){}, updateTrackRowUi(){}, updateStarSelector(){}, renderLibrary(){},
+    upsertLocalSongRating(songId,rating,id){context.allSongRatings=[{user_id:'me',song_id:null,canonical_song_id:id,rating}]}
+  });
+  vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
+  vm.runInContext(extract('async function saveTrackRating(', 'async function deleteTrackRating'), context);
+  assert.equal(await context.saveTrackRating(1, 9), true);
+  assert.equal(writes[0].rows.length, 1);
+  assert.equal(writes[0].rows[0].canonical_song_id, canonicalId);
+  assert.equal(writes[0].rows[0].song_id, null);
+  assert.equal(writes[0].options.onConflict, 'user_id,canonical_song_id');
+  assert.equal(context.getYourSongRating(1), 9);
+  assert.equal(context.getYourSongRating(2), 9);
 });
 
 test('deleting a track rating removes only the user canonical occurrences without changing catalogue identity', async () => {
@@ -192,7 +221,7 @@ test('Quick Rate does not overwrite a different selected track detail rating', a
     allSongs:[{id:1,title:'Track A',artist:'Artist A'}, {id:2,title:'Track B',artist:'Artist B'}],
     allSongRatings:[], supabaseClient:{from:()=>tableClient},
     setMessage(){}, normaliseCompare:value=>String(value).toLowerCase(),
-    upsertLocalSongRating:(...args)=>local.push(args), getSongRatingOccurrenceIds:id=>[Number(id)],
+    upsertLocalSongRating:(...args)=>local.push(args), getCanonicalSongId:()=>'', getSongRatingOccurrenceIds:id=>[Number(id)],
     updateTrackRowUi(){}, updateStarSelector(){}, renderLibrary(){}
   });
   vm.runInContext(extract('async function saveTrackRating(', 'async function deleteTrackRating'),context);
@@ -383,7 +412,7 @@ test('Quick Rate progress counts canonical recordings once and updates percentag
     currentUser:{id:'me'}
   });
   vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
-  vm.runInContext(extract('function getQuickRateProgress', '// The original random queue'), context);
+  vm.runInContext(extract('function getQuickRateEntryIdentity', '// The original random queue'), context);
   const result = context.getQuickRateProgress([
     {status:'matched',song:songs[0]},
     {status:'matched',song:songs[1]},
@@ -406,7 +435,7 @@ test('All and Unrated filters use canonical shared rating state', () => {
     currentUser:{id:'me'}
   });
   vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
-  vm.runInContext(extract('function isQuickRateEntryRated', '// The original random queue'), context);
+  vm.runInContext(extract('function getQuickRateEntryIdentity', '// The original random queue'), context);
   const entries = [
     {status:'matched',song:songs[0]},
     {status:'matched',song:songs[2]},
@@ -425,7 +454,7 @@ test('Next unrated excludes rated, unmatched and ambiguous entries and wraps cle
     currentUser:{id:'me'}
   });
   vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
-  vm.runInContext(extract('function isQuickRateEntryRated', '// The original random queue'), context);
+  vm.runInContext(extract('function getQuickRateEntryIdentity', '// The original random queue'), context);
   const entries = [
     {status:'matched',song:songs[0]},
     {status:'unmatched',song:null},
@@ -442,7 +471,7 @@ test('progress changes only when canonical rated state is added or removed', () 
   const songs = [{id:1},{id:2}];
   const context = vm.createContext({allSongs:songs,allSongRatings:[],currentUser:{id:'me'}});
   vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
-  vm.runInContext(extract('function getQuickRateProgress', '// The original random queue'), context);
+  vm.runInContext(extract('function getQuickRateEntryIdentity', '// The original random queue'), context);
   const entries = songs.map(song => ({status:'matched',song}));
   assert.deepEqual({...context.getQuickRateProgress(entries,'me')}, {rated:0,total:2,pending:0,percentage:0});
   context.allSongRatings.push({user_id:'me',song_id:1,rating:6});
@@ -461,7 +490,7 @@ test('97 rated canonical tracks out of 97 rateable tracks is complete with unres
     currentUser:{id:'me'}
   });
   vm.runInContext(extract('function getYourSongRating', 'function renderStarSelector'), context);
-  vm.runInContext(extract('function getQuickRateProgress', '// The original random queue'), context);
+  vm.runInContext(extract('function getQuickRateEntryIdentity', '// The original random queue'), context);
   const entries = [
     ...songs.map(song => ({status:'matched',song})),
     {status:'unmatched',song:null},

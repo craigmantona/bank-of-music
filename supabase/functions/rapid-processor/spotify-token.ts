@@ -282,7 +282,7 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
   const admin = getAdminClient();
   const { data: song, error: songError } = await admin
     .from("songs")
-    .select("id,title,artist,album_id,is_deleted,external_source,external_id,spotify_track_id,spotify_matched_at")
+    .select("id,title,artist,album_id,is_deleted,external_source,external_id,canonical_song_id,spotify_track_id,spotify_matched_at")
     .eq("id", songId)
     .maybeSingle();
 
@@ -290,6 +290,33 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
   if (!song || song.is_deleted === true) return { status: "not_found" };
   if (SPOTIFY_TRACK_ID.test(song.spotify_track_id || "")) {
     return { status: "matched", spotify_track_id: song.spotify_track_id, cached: true, identity_source: "stored" };
+  }
+
+  if (song.canonical_song_id) {
+    const { data: canonical, error: canonicalError } = await admin
+      .from("canonical_recordings")
+      .select("preferred_spotify_track_id")
+      .eq("id", song.canonical_song_id)
+      .maybeSingle();
+    if (canonicalError) throw canonicalError;
+    if (SPOTIFY_TRACK_ID.test(canonical?.preferred_spotify_track_id || "")) {
+      const persistedId = await persistSpotifyTrackId(admin, song.id, canonical.preferred_spotify_track_id);
+      return { status: "matched", spotify_track_id: persistedId, cached: true, identity_source: "canonical" };
+    }
+    const { data: canonicalOccurrences, error: canonicalOccurrenceError } = await admin
+      .from("songs")
+      .select("id,spotify_track_id")
+      .eq("canonical_song_id", song.canonical_song_id)
+      .not("spotify_track_id", "is", null);
+    if (canonicalOccurrenceError) throw canonicalOccurrenceError;
+    const sharedCanonicalId = (canonicalOccurrences || [])
+      .filter((occurrence: any) => Number(occurrence.id) !== Number(song.id))
+      .map((occurrence: any) => occurrence.spotify_track_id)
+      .find((value: unknown) => SPOTIFY_TRACK_ID.test(String(value || "")));
+    if (sharedCanonicalId) {
+      const persistedId = await persistSpotifyTrackId(admin, song.id, sharedCanonicalId);
+      return { status: "matched", spotify_track_id: persistedId, cached: true, identity_source: "canonical_occurrence" };
+    }
   }
 
   const recordingId = song.external_source === "musicbrainz" &&
@@ -361,6 +388,14 @@ async function resolveSpotifyTrack(songId: number, clientId: string, clientSecre
   if (!match) return { status: "no_match" };
 
   const persistedId = await persistSpotifyTrackId(admin, song.id, match.id);
+  if (song.canonical_song_id && SPOTIFY_TRACK_ID.test(persistedId)) {
+    const { error: canonicalPersistError } = await admin
+      .from("canonical_recordings")
+      .update({ preferred_spotify_track_id: persistedId, updated_at: new Date().toISOString() })
+      .eq("id", song.canonical_song_id)
+      .is("preferred_spotify_track_id", null);
+    if (canonicalPersistError) throw canonicalPersistError;
+  }
   return SPOTIFY_TRACK_ID.test(persistedId)
     ? { status: "matched", spotify_track_id: persistedId, cached: false, identity_source: identitySource }
     : { status: "no_match" };
