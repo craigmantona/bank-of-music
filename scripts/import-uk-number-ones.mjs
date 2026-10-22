@@ -3,7 +3,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import {
   applyMusicBrainzEnrichment, applyWikidata, matchCollectionEntries, musicBrainzSearchPath,
-  canonicalRecordingSeed, normalise, parseNumberOneWikitext, sourcePagesForRange, summariseMatches,
+  canonicalRecordingSeed, classifyCanonicalEligibility, normalise, parseNumberOneWikitext,
+  sourcePagesForRange, summariseCanonicalClassification, summariseMatches,
   summariseMusicBrainzEnrichment, wikidataSparql
 } from "./uk-number-ones-lib.mjs";
 
@@ -14,6 +15,7 @@ function option(name, fallback = "") {
 
 const startYear = Number(option("start-year", "1990"));
 const endYear = Number(option("end-year", "1999"));
+const sourceRevision = option("source-revision");
 const commit = process.argv.includes("--commit");
 const useMusicBrainz = process.argv.includes("--musicbrainz");
 let supabaseUrl = process.env.SUPABASE_URL || "";
@@ -41,7 +43,7 @@ const sourceFile = option("source-file");
 const sourcePages = option("source-page") ? [option("source-page")] : sourcePagesForRange(startYear, endYear);
 const sources = sourceFile
   ? [JSON.parse(await readFile(sourceFile, "utf8"))]
-  : await Promise.all(sourcePages.map(page => json(`https://en.wikipedia.org/w/api.php?action=parse&page=${page}&prop=wikitext%7Crevid&format=json&formatversion=2`)));
+  : await Promise.all(sourcePages.map(page => json(`https://en.wikipedia.org/w/api.php?action=parse&${sourceRevision ? `oldid=${encodeURIComponent(sourceRevision)}` : `page=${page}`}&prop=wikitext%7Crevid&format=json&formatversion=2`)));
 const parsed = sources.flatMap((source, index) => parseNumberOneWikitext(source.parse.wikitext, {
   startYear, endYear, revision: source.parse.revid,
   sourceUrl: `https://en.wikipedia.org/wiki/${sourceFile ? source.parse.title.replaceAll(" ", "_") : sourcePages[index]}`
@@ -70,6 +72,25 @@ let matched = matchCollectionEntries(applyWikidata(parsed, enrichedResponse.resu
 const report = { range: `${startYear}-${endYear}`, external_requests: (sourceFile ? 0 : sources.length) + (wikidataFile ? 0 : 1), ...summariseMatches(matched) };
 console.log(JSON.stringify(report, null, 2));
 console.log(JSON.stringify(matched.filter(row => row.match_status === "ambiguous").slice(0, 12).map(row => ({ year: row.chart_year, artist: row.artist, title: row.title, reason: row.match_notes })), null, 2));
+
+let canonicalRecordings = [];
+if (supabaseUrl && supabaseKey) {
+  for (let offset = 0; ; offset += 1000) {
+    const page = await json(`${supabaseUrl}/rest/v1/canonical_recordings?select=id,title,artist,musicbrainz_recording_id,origin_key&order=created_at.asc`, { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, Range: `${offset}-${offset + 999}` } });
+    canonicalRecordings.push(...page);
+    if (page.length < 1000) break;
+  }
+}
+const classified = classifyCanonicalEligibility(matched, canonicalRecordings);
+if (option("classification-output")) await writeFile(option("classification-output"), `${JSON.stringify(classified, null, 2)}\n`);
+console.log(JSON.stringify({ canonical_classification: summariseCanonicalClassification(classified) }, null, 2));
+for (const classification of ["A", "B", "C"]) {
+  console.log(JSON.stringify({ classification, examples: classified.filter(row => row.classification === classification).slice(0, 12).map(row => ({
+    year: row.chart_year, artist: row.artist, title: row.title,
+    reason: row.classification_reason, canonical_song_id: row.canonical_song_id,
+    musicbrainz_recording_id: row.approved_musicbrainz_recording_id
+  })) }, null, 2));
+}
 
 if (useMusicBrainz) {
   const cacheFile = option("musicbrainz-cache", new URL(".cache/uk-number-ones-musicbrainz.json", import.meta.url).pathname);
@@ -114,13 +135,19 @@ if (useMusicBrainz) {
 }
 
 if (commit) {
-  let persistedRows = matched.map(row => {
+  let persistedRows = classified.filter(row => ["A", "B"].includes(row.classification)).map(row => {
     const { musicbrainz_enrichment: enrichment, ...persisted } = row;
-    if (!enrichment) return persisted;
+    const approvedMbid = row.approved_musicbrainz_recording_id ||
+      (enrichment?.confidence === "high" ? enrichment.candidate_mbid : null);
     return {
       ...persisted,
-      musicbrainz_recording_id: enrichment.confidence === "high" ? enrichment.candidate_mbid : persisted.musicbrainz_recording_id,
-      source_metadata: { ...persisted.source_metadata, musicbrainz_enrichment: enrichment }
+      musicbrainz_recording_id: approvedMbid || persisted.musicbrainz_recording_id,
+      source_metadata: {
+        ...persisted.source_metadata,
+        canonical_classification: row.classification,
+        classification_reason: row.classification_reason,
+        ...(enrichment ? { musicbrainz_enrichment: enrichment } : {})
+      }
     };
   });
   const canonicalHeaders = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, "Content-Type": "application/json" };

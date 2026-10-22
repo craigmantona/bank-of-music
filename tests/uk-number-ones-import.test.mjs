@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
-  applyMusicBrainzEnrichment, applyWikidata, canonicalRecordingSeed, collapseNumberOneRuns, evaluateMusicBrainzCandidates,
+  APPROVED_EXACT_MBIDS, applyMusicBrainzEnrichment, applyWikidata, canonicalRecordingSeed,
+  classifyCanonicalEligibility, collapseNumberOneRuns, evaluateMusicBrainzCandidates,
   matchCollectionEntries, musicBrainzSearchPath, parseNumberOneWikitext, sourcePagesForRange,
-  summariseMatches, summariseMusicBrainzEnrichment, wikidataSparql
+  summariseCanonicalClassification, summariseMatches, summariseMusicBrainzEnrichment, wikidataSparql
 } from "../scripts/uk-number-ones-lib.mjs";
 
 const fixture = `==Number-one singles==
@@ -158,6 +159,34 @@ test("straightforward collection evidence can seed a BOM recording while double 
   assert.equal(seed.wikidata_qid, "Q123");
   assert.equal(seed.musicbrainz_recording_id, null);
   assert.equal(canonicalRecordingSeed({ ...base, match_status: "ambiguous", source_metadata: { article_titles: ["A", "B"] } }), null);
+});
+
+test("canonical classification reuses accepted identities, seeds clear singles and reviews multi-recording rows", () => {
+  const canonicalId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+  const rows = [
+    { artist: "Existing", title: "Single", canonical_song_id: canonicalId, match_status: "title_artist", source_metadata: { article_titles: ["Single"], isrcs: [], spotify_track_ids: [] } },
+    { artist: "Bombalurina", title: "Itsy Bitsy Teenie Weenie Yellow Polka Dot Bikini", match_status: "unresolved", source_metadata: { article_titles: ["Itsy Bitsy Teenie Weenie Yellow Polka Dot Bikini"], isrcs: [], spotify_track_ids: [] } },
+    { artist: "Erasure", title: "Abba-esque (EP)", match_status: "unresolved", source_metadata: { article_titles: ["Abba-esque"], isrcs: [], spotify_track_ids: [] } },
+    { artist: "Dunblane", title: "Knockin' on Heaven's Door\" / \"Throw These Guns Away", match_status: "unresolved", source_metadata: { article_titles: ["Knockin' on Heaven's Door"], isrcs: [], spotify_track_ids: [] } }
+  ];
+  const classified = classifyCanonicalEligibility(rows, []);
+  assert.deepEqual(classified.map(row => row.classification), ["A", "B", "C", "C"]);
+  assert.equal(classified[1].approved_musicbrainz_recording_id, APPROVED_EXACT_MBIDS[0].mbid);
+  assert.deepEqual(summariseCanonicalClassification(classified), {
+    total_source_entries: 4, category_a_existing_canonical: 1, category_b_new_bom_canonical: 1,
+    category_c_review: 2, known_exact_mbid_entries: 1, entries_with_wikidata_qid: 0,
+    entries_with_isrc: 0, entries_with_source_spotify_id: 0, combined_or_double_a_side: 1,
+    ep_or_multi_recording: 1, other_ambiguous: 0, carry_over_from_1989: 0,
+    immediately_rateable: 2, immediately_rateable_percentage: 50, non_rateable: 2,
+    rateable_without_exact_mbid: 1
+  });
+});
+
+test("production import pins the reviewed revision and persists only approved A/B classifications", async () => {
+  const importer = await readFile(new URL("../scripts/import-uk-number-ones.mjs", import.meta.url), "utf8");
+  assert.match(importer, /sourceRevision \? `oldid=/);
+  assert.match(importer, /classified\.filter\(row => \["A", "B"\]\.includes\(row\.classification\)\)/);
+  assert.doesNotMatch(importer, /classified\.filter\(row => \["A", "B", "C"\]/);
 });
 
 test("normalization and source keys are stable for duplicate-safe reruns", () => {

@@ -4,6 +4,12 @@ export const COLLECTION_KEY = "uk-number-ones";
 export const SOURCE_PAGE = "List_of_UK_singles_chart_number_ones_of_the_1990s";
 export const SOURCE_URL = `https://en.wikipedia.org/wiki/${SOURCE_PAGE}`;
 
+export const APPROVED_EXACT_MBIDS = Object.freeze([
+  { artist: "Bombalurina", title: "Itsy Bitsy Teenie Weenie Yellow Polka Dot Bikini", mbid: "6ed2bc7c-05b6-4d5e-8622-5d6b18438e4b" },
+  { artist: "Ace of Base", title: "All That She Wants", mbid: "d36508eb-ec76-41b8-aa10-a5286e883f2c" },
+  { artist: "Teletubbies", title: "Teletubbies Say ‘Eh-oh!’", mbid: "19f944e6-de67-48ce-8c87-f3cc3f61d2a7" }
+]);
+
 export function sourcePagesForRange(startYear, endYear) {
   const pages = [];
   for (let decade = Math.floor(startYear / 10) * 10; decade <= endYear; decade += 10) {
@@ -188,10 +194,82 @@ export function canonicalRecordingSeed(row) {
       source_name: row.source_name,
       source_url: row.source_url,
       source_revision: row.source_revision,
+      collection_key: row.collection_key,
+      chart_year: row.chart_year,
+      first_number_one_date: row.first_number_one_date,
+      weeks_at_number_one: row.weeks_at_number_one,
+      number_one_runs: row.number_one_runs,
       match_status: row.match_status,
       match_method: row.match_method,
       isrc: row.isrc || null
     }
+  };
+}
+
+function approvedExactMbid(row) {
+  return APPROVED_EXACT_MBIDS.find(candidate =>
+    normalise(candidate.artist) === normalise(row.artist) &&
+    normalise(candidate.title) === normalise(row.title)
+  )?.mbid || null;
+}
+
+export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
+  const canonicalByMbid = new Map((canonicalRecordings || [])
+    .filter(row => MBID.test(row.musicbrainz_recording_id || ""))
+    .map(row => [String(row.musicbrainz_recording_id).toLowerCase(), row]));
+  return (rows || []).map(row => {
+    const articleTitles = row.source_metadata?.article_titles || [];
+    const combined = articleTitles.length > 1 || /["”]\s*\/\s*["“]/.test(row.title || "");
+    const ep = /\(\s*EP\s*\)/i.test(row.title || "");
+    const multiRecording = /\b(?:medley|mega\s*mix|megamix)\b/i.test(row.title || "");
+    const exactMbid = approvedExactMbid(row) || row.musicbrainz_recording_id || null;
+    const exactCanonical = exactMbid ? canonicalByMbid.get(exactMbid.toLowerCase()) : null;
+
+    if (combined || ep || multiRecording) {
+      return { ...row, classification: "C",
+        classification_reason: combined ? "combined_or_double_a_side" : ep ? "ep_multi_recording" : "medley_or_megamix",
+        approved_musicbrainz_recording_id: exactMbid };
+    }
+    if (exactCanonical) {
+      return { ...row, canonical_song_id: exactCanonical.id, classification: "A",
+        classification_reason: "exact_known_mbid", approved_musicbrainz_recording_id: exactMbid };
+    }
+    if (row.canonical_song_id && ["direct_mbid", "identifier", "title_artist"].includes(row.match_status)) {
+      return { ...row, classification: "A",
+        classification_reason: row.match_status === "title_artist"
+          ? "previously_accepted_unique_catalogue_match"
+          : `existing_${row.match_method || row.match_status}`,
+        approved_musicbrainz_recording_id: exactMbid };
+    }
+    return { ...row, classification: "B",
+      classification_reason: exactMbid ? "safe_new_canonical_with_exact_mbid" : "safe_new_bom_native_canonical",
+      approved_musicbrainz_recording_id: exactMbid };
+  });
+}
+
+export function summariseCanonicalClassification(rows) {
+  const category = value => rows.filter(row => row.classification === value);
+  const combined = rows.filter(row => row.classification_reason === "combined_or_double_a_side");
+  const eps = rows.filter(row => row.classification_reason === "ep_multi_recording");
+  const otherAmbiguous = category("C").filter(row => !combined.includes(row) && !eps.includes(row));
+  const rateable = category("A").length + category("B").length;
+  return {
+    total_source_entries: rows.length,
+    category_a_existing_canonical: category("A").length,
+    category_b_new_bom_canonical: category("B").length,
+    category_c_review: category("C").length,
+    known_exact_mbid_entries: rows.filter(row => MBID.test(row.approved_musicbrainz_recording_id || "")).length,
+    entries_with_wikidata_qid: rows.filter(row => row.wikidata_qid).length,
+    entries_with_isrc: rows.filter(row => (row.source_metadata?.isrcs || []).length > 0).length,
+    entries_with_source_spotify_id: rows.filter(row => (row.source_metadata?.spotify_track_ids || []).length > 0).length,
+    combined_or_double_a_side: combined.length,
+    ep_or_multi_recording: eps.length,
+    other_ambiguous: otherAmbiguous.length,
+    carry_over_from_1989: rows.filter(row => String(row.first_number_one_date).startsWith("1989-")).length,
+    immediately_rateable: rateable,
+    immediately_rateable_percentage: rows.length ? Number((rateable * 100 / rows.length).toFixed(1)) : 0,
+    non_rateable: category("C").length,
+    rateable_without_exact_mbid: rows.filter(row => ["A", "B"].includes(row.classification) && !row.approved_musicbrainz_recording_id).length
   };
 }
 
