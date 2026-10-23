@@ -76,7 +76,7 @@ console.log(JSON.stringify(matched.filter(row => row.match_status === "ambiguous
 let canonicalRecordings = [];
 if (supabaseUrl && supabaseKey) {
   for (let offset = 0; ; offset += 1000) {
-    const page = await json(`${supabaseUrl}/rest/v1/canonical_recordings?select=id,title,artist,musicbrainz_recording_id,origin_key&order=created_at.asc`, { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, Range: `${offset}-${offset + 999}` } });
+    const page = await json(`${supabaseUrl}/rest/v1/canonical_recordings?select=id,title,artist,musicbrainz_recording_id,wikidata_qid,origin_key&order=created_at.asc`, { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, Range: `${offset}-${offset + 999}` } });
     canonicalRecordings.push(...page);
     if (page.length < 1000) break;
   }
@@ -153,6 +153,8 @@ if (commit) {
   const canonicalHeaders = { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, "Content-Type": "application/json" };
   const existingCanonical = await json(`${supabaseUrl}/rest/v1/canonical_recordings?select=*`, { headers: canonicalHeaders });
   const byMbid = new Map(existingCanonical.filter(row => row.musicbrainz_recording_id).map(row => [row.musicbrainz_recording_id.toLowerCase(), row]));
+  const qidGroups = Map.groupBy(existingCanonical.filter(row => row.wikidata_qid), row => row.wikidata_qid);
+  const byQid = new Map([...qidGroups].filter(([, rows]) => rows.length === 1).map(([qid, rows]) => [qid, rows[0]]));
   const byOrigin = new Map(existingCanonical.filter(row => row.origin_key).map(row => [row.origin_key, row]));
   const seeds = [], seedKeys = new Set(), identifierUpdates = [];
   for (const row of persistedRows) {
@@ -161,6 +163,7 @@ if (commit) {
     if (!seed) continue;
     const originExisting = byOrigin.get(seed.origin_key);
     const mbidExisting = seed.musicbrainz_recording_id && byMbid.get(seed.musicbrainz_recording_id.toLowerCase());
+    const qidExisting = seed.wikidata_qid && byQid.get(seed.wikidata_qid);
     if (originExisting) {
       row.canonical_song_id = originExisting.id;
       if (seed.musicbrainz_recording_id && !originExisting.musicbrainz_recording_id && !mbidExisting) {
@@ -170,8 +173,10 @@ if (commit) {
       }
     }
     else if (mbidExisting) row.canonical_song_id = mbidExisting.id;
+    else if (qidExisting) row.canonical_song_id = qidExisting.id;
     else {
-      const seedKey = seed.musicbrainz_recording_id ? `mbid:${seed.musicbrainz_recording_id.toLowerCase()}` : seed.origin_key;
+      const seedKey = seed.musicbrainz_recording_id ? `mbid:${seed.musicbrainz_recording_id.toLowerCase()}` :
+        seed.wikidata_qid ? `qid:${seed.wikidata_qid}` : seed.origin_key;
       if (!seedKeys.has(seedKey)) { seeds.push(seed); seedKeys.add(seedKey); }
     }
   }
@@ -194,11 +199,13 @@ if (commit) {
     created.forEach(row => {
       if (row.origin_key) byOrigin.set(row.origin_key, row);
       if (row.musicbrainz_recording_id) byMbid.set(row.musicbrainz_recording_id.toLowerCase(), row);
+      if (row.wikidata_qid) byQid.set(row.wikidata_qid, row);
     });
     persistedRows = persistedRows.map(row => ({
       ...row,
       canonical_song_id: row.canonical_song_id ||
         (row.musicbrainz_recording_id && byMbid.get(row.musicbrainz_recording_id.toLowerCase())?.id) ||
+        (row.wikidata_qid && byQid.get(row.wikidata_qid)?.id) ||
         byOrigin.get(`quick-rate:${row.collection_key}:${row.source_entry_key}`)?.id || null
     }));
   }

@@ -158,6 +158,47 @@ test("reuses only the explicitly approved 1959 boundary canonical", () => {
   assert.equal(classified.canonical_song_id, canonicalId);
 });
 
+test("preserves the true 2019 date for the first 2020 chart period", () => {
+  const current = `==Number-one singles==
+{|class="wikitable"
+|-class="unsortable"
+!scope=row colspan=6|{{anchor|2020}}{{sort|1360.1|2020}}
+|-
+!scope=row|1361
+| [[Ellie Goulding]] || "[[River (Joni Mitchell song)#Ellie Goulding version|River]]"
+|Polydor || {{dts|format=dmy|2020|1|2}}||align="center"|1
+|}
+==By artist==`;
+  const [row] = parseNumberOneWikitext(current, { startYear: 2020, endYear: 2026 });
+  assert.equal(row.chart_year, 2020);
+  assert.equal(row.first_number_one_date, "2019-12-27");
+});
+
+test("uses only a unique exact Wikidata QID as an existing canonical identity", () => {
+  const base = { source_entry_key: "2026:1:test artist:test song", artist: "Test Artist", title: "Test Song",
+    wikidata_qid: "Q123", match_status: "title_artist", source_metadata: { article_titles: ["Test Song"] } };
+  const [matched] = classifyCanonicalEligibility([base], [{ id: "canonical-1", wikidata_qid: "Q123" }]);
+  assert.equal(matched.classification, "A");
+  assert.equal(matched.classification_reason, "existing_exact_wikidata_qid");
+  const [ambiguous] = classifyCanonicalEligibility([base], [
+    { id: "canonical-1", wikidata_qid: "Q123" }, { id: "canonical-2", wikidata_qid: "Q123" }
+  ]);
+  assert.equal(ambiguous.classification, "C");
+  assert.equal(ambiguous.classification_reason, "ambiguous_existing_wikidata_qid_candidates");
+});
+
+test("an exact prior source origin supports safe incremental reruns", () => {
+  const row = { collection_key: "uk-number-ones", source_entry_key: "2026:1459:taylor swift:patient zero",
+    artist: "Taylor Swift", title: "Patient Zero", match_status: "unresolved",
+    source_metadata: { article_titles: ["Patient Zero (song)"] } };
+  const [classified] = classifyCanonicalEligibility([row], [{
+    id: "canonical-1", origin_key: "quick-rate:uk-number-ones:2026:1459:taylor swift:patient zero"
+  }]);
+  assert.equal(classified.classification, "A");
+  assert.equal(classified.classification_reason, "existing_exact_source_origin");
+  assert.equal(classified.canonical_song_id, "canonical-1");
+});
+
 test("builds one batched Wikidata query and applies QID/P4404 enrichment", () => {
   const rows = parseNumberOneWikitext(fixture, { startYear: 1995, endYear: 1995 });
   const query = wikidataSparql(rows.flatMap(row => row.article_titles));
@@ -312,6 +353,26 @@ test("production import pins the reviewed revision and persists only approved A/
   assert.match(importer, /sourceRevision \? `oldid=/);
   assert.match(importer, /classified\.filter\(row => \["A", "B"\]\.includes\(row\.classification\)\)/);
   assert.doesNotMatch(importer, /classified\.filter\(row => \["A", "B", "C"\]/);
+  assert.match(importer, /seed\.wikidata_qid \? `qid:/);
+  assert.match(importer, /row\.wikidata_qid && byQid\.get\(row\.wikidata_qid\)/);
+  assert.match(importer, /on_conflict=collection_key,chart_year,source_entry_key/);
+});
+
+test("a pinned partial current year imports only represented chart periods", () => {
+  const partial = `==Number-one singles==
+{|class="wikitable"
+|-class="unsortable"
+!scope=row colspan=6|{{anchor|2026}}{{sort|1459.1|2026}}
+|-
+!scope=row|1460
+| [[Jamie Miller (singer)|Jamie Miller]] || "[[Babydoll (Jamie Miller song)|Babydoll]]"
+|Republic || {{dts|format=dmy|2026|10|29}}||align="center"|1
+|}
+==By artist==`;
+  const rows = parseNumberOneWikitext(partial, { startYear: 2020, endYear: 2026, revision: 1381558626 });
+  assert.deepEqual(rows.map(row => [row.chart_year, row.first_number_one_date, row.source_revision]), [
+    [2026, "2026-10-29", "1381558626"]
+  ]);
 });
 
 test("normalization and source keys are stable for duplicate-safe reruns", () => {
@@ -340,6 +401,7 @@ test("Quick Rate exposes UK No.1s separately without replacing the existing samp
   assert.match(app, /data-quick-collection="uk-number-ones"/);
   assert.match(app, /Source: Wikimedia \/ Wikidata/);
   assert.match(app, /fetchQuickRateRows\("quick_rate_collection_tracks"/);
+  assert.match(app, /\.range\(offset, offset \+ 999\)/);
   assert.match(app, /filter\(row => row\.collection_key === "uk-number-ones"\)/);
   assert.match(app, /map\(row => Number\(row\.chart_year\)\)/);
   assert.doesNotMatch(app, /Array\.from\(\{ length: 10 \}, \(_, index\) => 1999 - index\)/);

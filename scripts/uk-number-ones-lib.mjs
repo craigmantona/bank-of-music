@@ -14,6 +14,10 @@ export const APPROVED_CANONICAL_REUSES = Object.freeze({
   "1959:94:emile ford and the checkmates:what do you want to make those eyes at me for": "a55e5149-7949-42d9-b503-8dc51754f912"
 });
 
+export const APPROVED_FIRST_NUMBER_ONE_DATES = Object.freeze({
+  "2020:1361:ellie goulding:river": "2019-12-27"
+});
+
 export function sourcePagesForRange(startYear, endYear) {
   const pages = [];
   for (let decade = Math.floor(startYear / 10) * 10; decade <= endYear; decade += 10) {
@@ -102,11 +106,13 @@ export function parseNumberOneWikitext(wikitext, { startYear = 1990, endYear = 1
       const sortTarget = titleCell.match(/\{\{sortname\|[^|{}]+\|[^|{}]+\|([^|{}]+)(?:\|[^{}]+)?\}\}/i)?.[1];
       articles.push(stripMarkup(sortTarget || title));
     }
-    const firstDate = `${date[1]}-${date[2].padStart(2, "0")}-${date[3].padStart(2, "0")}`;
+    const entryKey = sourceKey(year, number, artist, title);
+    const sourceDate = `${date[1]}-${date[2].padStart(2, "0")}-${date[3].padStart(2, "0")}`;
+    const firstDate = APPROVED_FIRST_NUMBER_ONE_DATES[entryKey] || sourceDate;
     rows.push({
       collection_key: COLLECTION_KEY,
       chart_year: year,
-      source_entry_key: sourceKey(year, number, artist, title),
+      source_entry_key: entryKey,
       source_name: "wikimedia",
       source_url: sourceUrl,
       source_revision: String(revision || ""),
@@ -239,6 +245,8 @@ function approvedExactMbid(row) {
 
 export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
   const canonicalById = new Map((canonicalRecordings || []).map(row => [row.id, row]));
+  const canonicalByOrigin = new Map((canonicalRecordings || []).filter(row => row.origin_key).map(row => [row.origin_key, row]));
+  const canonicalQidGroups = Map.groupBy((canonicalRecordings || []).filter(row => row.wikidata_qid), row => row.wikidata_qid);
   const canonicalByMbid = new Map((canonicalRecordings || [])
     .filter(row => MBID.test(row.musicbrainz_recording_id || ""))
     .map(row => [String(row.musicbrainz_recording_id).toLowerCase(), row]));
@@ -249,8 +257,11 @@ export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
     const multiRecording = /\b(?:medley|mega\s*mix|megamix)\b/i.test(row.title || "");
     const exactMbid = approvedExactMbid(row) || row.musicbrainz_recording_id || null;
     const exactCanonical = exactMbid ? canonicalByMbid.get(exactMbid.toLowerCase()) : null;
+    const qidCandidates = row.wikidata_qid ? canonicalQidGroups.get(row.wikidata_qid) || [] : [];
+    const exactQidCanonical = qidCandidates.length === 1 ? qidCandidates[0] : null;
     const approvedCanonicalId = APPROVED_CANONICAL_REUSES[row.source_entry_key] || null;
     const approvedCanonical = approvedCanonicalId ? canonicalById.get(approvedCanonicalId) : null;
+    const originCanonical = canonicalByOrigin.get(`quick-rate:${row.collection_key}:${row.source_entry_key}`) || null;
 
     if (combined || ep || multiRecording) {
       return { ...row, classification: "C",
@@ -261,13 +272,25 @@ export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
       return { ...row, classification: "C", classification_reason: "ambiguous_existing_canonical_candidates",
         approved_musicbrainz_recording_id: exactMbid };
     }
+    if (qidCandidates.length > 1) {
+      return { ...row, classification: "C", classification_reason: "ambiguous_existing_wikidata_qid_candidates",
+        approved_musicbrainz_recording_id: exactMbid };
+    }
     if (approvedCanonical) {
       return { ...row, canonical_song_id: approvedCanonical.id, classification: "A",
         classification_reason: "approved_boundary_canonical_reuse", approved_musicbrainz_recording_id: exactMbid };
     }
+    if (originCanonical) {
+      return { ...row, canonical_song_id: originCanonical.id, classification: "A",
+        classification_reason: "existing_exact_source_origin", approved_musicbrainz_recording_id: exactMbid };
+    }
     if (exactCanonical) {
       return { ...row, canonical_song_id: exactCanonical.id, classification: "A",
         classification_reason: "exact_known_mbid", approved_musicbrainz_recording_id: exactMbid };
+    }
+    if (exactQidCanonical) {
+      return { ...row, canonical_song_id: exactQidCanonical.id, classification: "A",
+        classification_reason: "existing_exact_wikidata_qid", approved_musicbrainz_recording_id: exactMbid };
     }
     if (row.canonical_song_id && ["direct_mbid", "identifier"].includes(row.match_status)) {
       return { ...row, classification: "A",
