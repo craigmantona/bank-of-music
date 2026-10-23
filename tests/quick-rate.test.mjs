@@ -395,7 +395,7 @@ test('Quick Rate reuses the closed Rate + and score interaction from main track 
 });
 
 test('Quick Rate derives year and decade navigation from available collection years', () => {
-  const context = vm.createContext({QUICK_RATE_UK_SINGLES:{2024:[],2023:[]}});
+  const context = vm.createContext({QUICK_RATE_UK_SINGLES:{2024:[],2023:[],1998:[]}});
   vm.runInContext(extract('function getQuickRateDecades', 'function isQuickRateEntryRated'), context);
   assert.deepEqual(Array.from(context.getQuickRateDecades([2026, 2025, 1999, 1952])), [1950, 1990, 2020]);
   assert.deepEqual({...context.getQuickRateYearNavigation([2026, 2024, 2023], 2024)}, {previous:2023,next:2026});
@@ -411,14 +411,49 @@ test('Quick Rate derives year and decade navigation from available collection ye
   assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('uk-number-ones', []), undefined), null);
   assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('uk-number-ones', imported), null), 2026);
   assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('uk-singles', imported), 2026), 2024);
+  const loading = context.getQuickRateCollectionYearState('uk-number-ones', [], null);
+  assert.deepEqual(Array.from(loading.years), []);
+  assert.equal(loading.selectedYear, null);
+  assert.equal(loading.pickerDecade, null);
+  const fresh = context.getQuickRateCollectionYearState('uk-number-ones', imported, null);
+  assert.deepEqual(Array.from(fresh.years), [2026,1952]);
+  assert.equal(fresh.selectedYear, Math.max(...fresh.years));
+  assert.equal(fresh.pickerDecade, 2020);
+  assert.equal(context.getQuickRateCollectionYearState('uk-number-ones', [
+    {collection_key:'uk-number-ones',chart_year:1973}
+  ], 1973).pickerDecade, 1970);
+  assert.equal(context.getQuickRateCollectionYearState('uk-number-ones', [
+    {collection_key:'uk-number-ones',chart_year:1979},
+    {collection_key:'uk-number-ones',chart_year:1980}
+  ], 1980).pickerDecade, 1980);
+  const singles1998 = context.getQuickRateCollectionYearState('uk-singles', imported, 1998);
+  assert.equal(singles1998.pickerDecade, 1990);
+  const numberOnesAfterSwitch = context.getQuickRateCollectionYearState('uk-number-ones', imported, null);
+  assert.equal(numberOnesAfterSwitch.selectedYear, 2026);
+  assert.equal(numberOnesAfterSwitch.pickerDecade, 2020);
+  const singlesAfterSwitchBack = context.getQuickRateCollectionYearState('uk-singles', imported, null);
+  assert.equal(singlesAfterSwitchBack.selectedYear, 2024);
+  assert.equal(singlesAfterSwitchBack.pickerDecade, 2020);
 });
 
 test('Quick Rate cannot render an undefined selected year while collection data loads', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  assert.match(quickRate, /selectedYear = getValidQuickRateYear\(years, selectedYear\)/);
+  assert.match(quickRate, /let selectedCollection = "uk-number-ones"/);
+  assert.match(quickRate, /let years = \[\], selectedYear = null/);
+  assert.match(quickRate, /getQuickRateCollectionYearState\(selectedCollection, importedEntries, selectedYear\)/);
   assert.match(quickRate, /if \(selectedYear === null\)/);
   assert.match(quickRate, /Loading available years/);
   assert.doesNotMatch(quickRate, /<h2[^>]*>\$\{selectedYear\}<\/h2>/);
+});
+
+test('Quick Rate defaults to UK No.1s and synchronises picker decade with collection and year changes', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /<h1 id="bomQuickRateTitle">UK No\.1s<\/h1>/);
+  assert.match(quickRate, /data-quick-collection="uk-number-ones" aria-pressed="true"/);
+  assert.match(quickRate, /data-quick-collection="uk-singles" aria-pressed="false"/);
+  assert.match(quickRate, /selectedCollection = collection;\s*selectedYear = null;\s*pickerDecade = null;/);
+  assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;/);
+  assert.doesNotMatch(quickRate, /selectedCollection = "uk-singles"/);
 });
 
 test('chart entries reuse one confirmed canonical recording and reject ambiguity', () => {
@@ -547,7 +582,7 @@ test('97 rated canonical tracks out of 97 rateable tracks is complete with unres
 
 test('year switching and Phase 1.1 controls rerender from selected state', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  assert.match(quickRate, /selectedYear = year;[\s\S]*?render\(true\)/);
+  assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;[\s\S]*?render\(true\)/);
   assert.match(quickRate, /selectedFilter = filterButton\.dataset\.quickFilter/);
   assert.match(quickRate, /data-quick-next/);
   assert.match(quickRate, /data-quick-picker-decade/);

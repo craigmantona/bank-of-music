@@ -9948,6 +9948,16 @@ function getQuickRateYearsInDecade(years, decade) {
   return [...(years || [])].map(Number).filter(year => year >= decade && year < decade + 10).sort((a, b) => a - b);
 }
 
+function getQuickRateCollectionYearState(collection, importedEntries, requestedYear = null) {
+  const years = getQuickRateAvailableYears(collection, importedEntries);
+  const selectedYear = getValidQuickRateYear(years, requestedYear);
+  return {
+    years,
+    selectedYear,
+    pickerDecade: selectedYear === null ? null : Math.floor(selectedYear / 10) * 10
+  };
+}
+
 function formatQuickRateChartDate(value) {
   if (!value) return "";
   const date = new Date(`${value}T12:00:00Z`);
@@ -10189,16 +10199,15 @@ async function openQuickRate() {
   dialog.id = "bomQuickRate";
   dialog.className = "bom-v1-quick-rate bom-v1-album";
   dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
-  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK Singles by Year</h1><p class="bom-v1-quick-subtitle" data-quick-subtitle>Rate standout UK singles, one year at a time</p></div><button type="button" data-quick-exit>Exit</button></header>
-    <div data-quick-collections role="group" aria-label="Choose a Quick Rate collection"><button type="button" data-quick-collection="uk-singles" aria-pressed="true">UK Singles by Year</button><button type="button" data-quick-collection="uk-number-ones" aria-pressed="false">UK No.1s</button></div>
+  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK No.1s</h1><p class="bom-v1-quick-subtitle" data-quick-subtitle>Rate every UK chart-topper from 1952 to today</p></div><button type="button" data-quick-exit>Exit</button></header>
+    <div data-quick-collections role="group" aria-label="Choose a Quick Rate collection"><button type="button" data-quick-collection="uk-singles" aria-pressed="false">UK Singles by Year</button><button type="button" data-quick-collection="uk-number-ones" aria-pressed="true">UK No.1s</button></div>
     <nav data-quick-years aria-label="Choose a UK singles year"></nav>
-    <div data-quick-card></div><p data-quick-status role="status">Loading UK singles…</p>`;
+    <div data-quick-card></div><p data-quick-status role="status">Loading UK No.1s…</p>`;
   document.body.append(dialog);
   const card = dialog.querySelector("[data-quick-card]");
   const status = dialog.querySelector("[data-quick-status]");
-  let selectedCollection = "uk-singles";
-  let years = Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
-  let selectedYear = years[0], selectedFilter = "all", pickerDecade = Math.floor(selectedYear / 10) * 10;
+  let selectedCollection = "uk-number-ones";
+  let years = [], selectedYear = null, selectedFilter = "all", pickerDecade = null;
   let songs = [], albums = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false, lastNavigatedIdentity = null;
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
@@ -10208,8 +10217,12 @@ async function openQuickRate() {
     if (!dialog.open) return;
     if (currentUser?.id !== userId) { dialog.close(); return; }
     const isNumberOnes = selectedCollection === "uk-number-ones";
-    years = getQuickRateAvailableYears(selectedCollection, importedEntries);
-    selectedYear = getValidQuickRateYear(years, selectedYear);
+    const selection = getQuickRateCollectionYearState(selectedCollection, importedEntries, selectedYear);
+    years = selection.years;
+    if (selection.selectedYear !== selectedYear) {
+      selectedYear = selection.selectedYear;
+      pickerDecade = selection.pickerDecade;
+    }
     dialog.querySelectorAll("[data-quick-collection]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.quickCollection === selectedCollection)));
     dialog.querySelector("#bomQuickRateTitle").textContent = isNumberOnes ? "UK No.1s" : "UK Singles by Year";
     dialog.querySelector("[data-quick-subtitle]").textContent = isNumberOnes
@@ -10315,8 +10328,8 @@ async function openQuickRate() {
     const collection = event.target.closest("[data-quick-collection]")?.dataset.quickCollection;
     if (!collection || busy || collection === selectedCollection) return;
     selectedCollection = collection;
-    years = getQuickRateAvailableYears(selectedCollection, importedEntries);
-    selectedYear = getValidQuickRateYear(years, null);
+    selectedYear = null;
+    pickerDecade = null;
     selectedFilter = "all";
     lastNavigatedIdentity = null;
     render(true);
@@ -10333,6 +10346,7 @@ async function openQuickRate() {
     const year = Number(event.target.closest("[data-quick-picker-year]")?.dataset.quickPickerYear || event.target.closest("[data-quick-year]")?.dataset.quickYear);
     if (!year || busy || year === selectedYear) return;
     selectedYear = year;
+    pickerDecade = Math.floor(selectedYear / 10) * 10;
     lastNavigatedIdentity = null;
     status.textContent = `Showing UK singles for ${year}.`;
     render(true);
