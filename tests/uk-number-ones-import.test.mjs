@@ -47,8 +47,24 @@ test("parses decade pages whose section headings contain Wikimedia spacing", () 
 });
 
 test("selects Wikimedia decade pages from a configurable year range", () => {
+  assert.deepEqual(sourcePagesForRange(1970, 1979), ["List_of_UK_singles_chart_number_ones_of_the_1970s"]);
   assert.deepEqual(sourcePagesForRange(1990, 1999), ["List_of_UK_singles_chart_number_ones_of_the_1990s"]);
   assert.deepEqual(sourcePagesForRange(1952, 2026), ["List_of_UK_singles_chart_number_ones_of_the_1950s", "List_of_UK_singles_chart_number_ones_of_the_1960s", "List_of_UK_singles_chart_number_ones_of_the_1970s", "List_of_UK_singles_chart_number_ones_of_the_1980s", "List_of_UK_singles_chart_number_ones_of_the_1990s", "List_of_UK_singles_chart_number_ones_of_the_2000s", "List_of_UK_singles_chart_number_ones_of_the_2010s", "List_of_UK_singles_chart_number_ones_of_the_2020s"]);
+});
+
+test("keeps a prior-decade carry-over in its occupied chart year with the historical first date", () => {
+  const carryOver = fixture
+    .replaceAll("1995", "1970")
+    .replace("{{dts|format=dmy|1970|4|29}}", "{{dts|format=dmy|1969|12|20}}");
+  const rows = parseNumberOneWikitext(carryOver, { startYear: 1970, endYear: 1970, revision: 1354857328 });
+  const classified = classifyCanonicalEligibility(rows.map(row => ({
+    ...row,
+    match_status: "unresolved",
+    source_metadata: { article_titles: row.article_titles, isrcs: [], spotify_track_ids: [] }
+  })), []);
+  assert.equal(classified[0].chart_year, 1970);
+  assert.equal(classified[0].first_number_one_date, "1969-12-20");
+  assert.equal(summariseCanonicalClassification(classified).carry_over_from_previous_year, 1);
 });
 
 test("builds one batched Wikidata query and applies QID/P4404 enrichment", () => {
