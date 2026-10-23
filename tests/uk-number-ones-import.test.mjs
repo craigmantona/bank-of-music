@@ -91,6 +91,34 @@ test("parses sort-wrapped historical chart numbers and collapses their re-entrie
   assert.equal(rows[0].number_one_runs, 2);
 });
 
+test("parses 2010s vertical cells, capitalized templates and re-entry rows", () => {
+  const vertical = `==Number-one singles==
+{|class="wikitable"
+|-class=unsortable
+!scope=row colspan=7|{{Anchor|2010}}{{Sort|1117.1|2010}}
+|-
+!scope=row|1118
+|{{Sortname|Joe|McElderry}}
+|"[[The Climb (song)#Joe McElderry version|The Climb]]"
+|Syco
+|{{dts|format=dmy|2010|01|02}}
+|align=center|1
+|-
+!scope=row|re
+|[[Lady Gaga]]
+|"[[Bad Romance]]"
+|Interscope
+|{{dts|format=dmy|2010|01|09}}
+| style="text-align:center;"|1
+|}
+==By artist==`;
+  const rows = parseNumberOneWikitext(vertical, { startYear: 2010, endYear: 2010, revision: 1356457366 });
+  assert.deepEqual(rows.map(row => [row.artist, row.title, row.first_number_one_date]), [
+    ["Joe McElderry", "The Climb", "2010-01-02"],
+    ["Lady Gaga", "Bad Romance", "2010-01-09"]
+  ]);
+});
+
 test("builds one batched Wikidata query and applies QID/P4404 enrichment", () => {
   const rows = parseNumberOneWikitext(fixture, { startYear: 1995, endYear: 1995 });
   const query = wikidataSparql(rows.flatMap(row => row.article_titles));

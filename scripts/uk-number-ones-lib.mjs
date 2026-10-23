@@ -61,21 +61,26 @@ export function parseNumberOneWikitext(wikitext, { startYear = 1990, endYear = 1
   let year = null;
   const rows = [];
   for (const block of section.split(/^\|-/m)) {
-    const yearMatch = block.match(/\{\{anchor\|(19\d{2}|20\d{2})\}\}/);
+    const yearMatch = block.match(/\{\{anchor\|(19\d{2}|20\d{2})\}\}/i);
     if (yearMatch) { year = Number(yearMatch[1]); continue; }
     if (!year || year < startYear || year > endYear) continue;
     const numberLine = block.split("\n").find(line => line.startsWith("!scope=row")) || "";
     const numberCell = numberLine.includes("|") ? numberLine.slice(numberLine.indexOf("|") + 1).trim() : "";
-    const number = stripMarkup(numberCell).match(/^\d+(?:\.\d+)?$/)?.[0] ||
+    let number = stripMarkup(numberCell).match(/^\d+(?:\.\d+)?$/)?.[0] ||
       numberCell.match(/\{\{sort\|(\d+(?:\.\d+)?)\|/i)?.[1];
     const date = block.match(/\{\{dts\|format=dmy\|(\d{4})\|(\d{1,2})\|(\d{1,2})\}\}/i);
-    const weeks = block.match(/\|\|align="center"\|\s*(\d+)/i)?.[1];
+    const weeks = block.match(/(?:\|\|?align=(?:"center"|center)|\|\s*style="text-align:center;")\|\s*(\d+)/i)?.[1];
+    if (!number && /^re$/i.test(stripMarkup(numberCell))) number = `re-${date?.slice(1).join("-")}`;
     if (!number || !date || !weeks) continue;
     const lines = block.split("\n").filter(line => line.startsWith("|") && !line.startsWith("|-"));
     const artistTitle = lines.find(line => line.includes("||") && !line.includes("{{dts"));
-    if (!artistTitle) continue;
-    const [artistCell, ...titleParts] = artistTitle.replace(/^\|\s*/, "").split("||");
-    const titleCell = titleParts.join("||");
+    const dateLineIndex = lines.findIndex(line => line.includes("{{dts"));
+    const [artistCell, titleCell] = artistTitle
+      ? (() => { const [artist, ...title] = artistTitle.replace(/^\|\s*/, "").split("||"); return [artist, title.join("||")]; })()
+      : dateLineIndex >= 3
+        ? [lines[dateLineIndex - 3].replace(/^\|\s*/, ""), lines[dateLineIndex - 2].replace(/^\|\s*/, "")]
+        : [];
+    if (!artistCell || !titleCell) continue;
     const artist = stripMarkup(artistCell);
     const title = stripMarkup(titleCell);
     const articles = [...new Set(linkedArticles(titleCell))];
