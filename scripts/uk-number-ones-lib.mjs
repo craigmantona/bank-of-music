@@ -10,6 +10,10 @@ export const APPROVED_EXACT_MBIDS = Object.freeze([
   { artist: "Teletubbies", title: "Teletubbies Say ‘Eh-oh!’", mbid: "19f944e6-de67-48ce-8c87-f3cc3f61d2a7" }
 ]);
 
+export const APPROVED_CANONICAL_REUSES = Object.freeze({
+  "1959:94:emile ford and the checkmates:what do you want to make those eyes at me for": "a55e5149-7949-42d9-b503-8dc51754f912"
+});
+
 export function sourcePagesForRange(startYear, endYear) {
   const pages = [];
   for (let decade = Math.floor(startYear / 10) * 10; decade <= endYear; decade += 10) {
@@ -54,6 +58,16 @@ function sourceKey(year, number, artist, title) {
   return `${year}:${number || "unknown"}:${normalise(artist)}:${normalise(title)}`;
 }
 
+function centredWeeks(block) {
+  const cell = block.match(/(?:\|\|?align=(?:"center"|center)|\|\s*style="text-align:center;")\s*(?:bgcolor=(?:"[^"]+"|[^|\s]+)\s*)?\|([^\n]*)/i)?.[1];
+  if (!cell) return null;
+  const visible = cell
+    .replace(/<span\b[^>]*>[\s\S]*?<\/span>/gi, "")
+    .replace(/<ref\b[^>]*>[\s\S]*?<\/ref>|<ref\b[^/>]*\/>/gi, "")
+    .replace(/\{\{[^{}]*\}\}/g, "");
+  return visible.match(/\d+/)?.[0] || null;
+}
+
 export function parseNumberOneWikitext(wikitext, { startYear = 1990, endYear = 1999, revision = "", sourceUrl = SOURCE_URL } = {}) {
   const section = String(wikitext)
     .split(/^==\s*Number-one singles\s*==\s*$/mi)[1]
@@ -69,7 +83,7 @@ export function parseNumberOneWikitext(wikitext, { startYear = 1990, endYear = 1
     let number = stripMarkup(numberCell).match(/^\d+(?:\.\d+)?$/)?.[0] ||
       numberCell.match(/\{\{sort\|(\d+(?:\.\d+)?)\|/i)?.[1];
     const date = block.match(/\{\{dts\|format=dmy\|(\d{4})\|(\d{1,2})\|(\d{1,2})\}\}/i);
-    const weeks = block.match(/(?:\|\|?align=(?:"center"|center)|\|\s*style="text-align:center;")\|\s*(\d+)/i)?.[1];
+    const weeks = centredWeeks(block);
     if (!number && /^re$/i.test(stripMarkup(numberCell))) number = `re-${date?.slice(1).join("-")}`;
     if (!number || !date || !weeks) continue;
     const lines = block.split("\n").filter(line => line.startsWith("|") && !line.startsWith("|-"));
@@ -224,6 +238,7 @@ function approvedExactMbid(row) {
 }
 
 export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
+  const canonicalById = new Map((canonicalRecordings || []).map(row => [row.id, row]));
   const canonicalByMbid = new Map((canonicalRecordings || [])
     .filter(row => MBID.test(row.musicbrainz_recording_id || ""))
     .map(row => [String(row.musicbrainz_recording_id).toLowerCase(), row]));
@@ -234,6 +249,8 @@ export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
     const multiRecording = /\b(?:medley|mega\s*mix|megamix)\b/i.test(row.title || "");
     const exactMbid = approvedExactMbid(row) || row.musicbrainz_recording_id || null;
     const exactCanonical = exactMbid ? canonicalByMbid.get(exactMbid.toLowerCase()) : null;
+    const approvedCanonicalId = APPROVED_CANONICAL_REUSES[row.source_entry_key] || null;
+    const approvedCanonical = approvedCanonicalId ? canonicalById.get(approvedCanonicalId) : null;
 
     if (combined || ep || multiRecording) {
       return { ...row, classification: "C",
@@ -243,6 +260,10 @@ export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
     if (row.match_status === "ambiguous") {
       return { ...row, classification: "C", classification_reason: "ambiguous_existing_canonical_candidates",
         approved_musicbrainz_recording_id: exactMbid };
+    }
+    if (approvedCanonical) {
+      return { ...row, canonical_song_id: approvedCanonical.id, classification: "A",
+        classification_reason: "approved_boundary_canonical_reuse", approved_musicbrainz_recording_id: exactMbid };
     }
     if (exactCanonical) {
       return { ...row, canonical_song_id: exactCanonical.id, classification: "A",

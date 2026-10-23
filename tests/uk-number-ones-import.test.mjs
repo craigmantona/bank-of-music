@@ -119,6 +119,45 @@ test("parses 2010s vertical cells, capitalized templates and re-entry rows", () 
   ]);
 });
 
+test("parses the 1952 chart start and styled historical weeks without pre-chart years", () => {
+  const historical = `==Number-one singles==
+{|class="wikitable"
+|-class="unsortable"
+!scope=row colspan=6|{{anchor|1952}}{{sort|00.1|1952}}
+|-
+!scope=row|{{sort|01|1}}
+| {{sortname|Al|Martino}} || "[[Here in My Heart]]"
+|Capitol || {{dts|format=dmy|1952|11|14}}||align="center"|9
+|-class="unsortable"
+!scope=row colspan=6|{{anchor|1959}}{{sort|78.1|1959}}
+|-
+!scope=row|94
+| [[Emile Ford|Emile Ford and the Checkmates]] || "[[What Do You Want to Make Those Eyes at Me For?]]"
+|Pye || {{dts|format=dmy|1959|12|18}}||align="center" bgcolor="lightgreen"|<span style="display:none">5.5</span>{{0|<sup>[nb 8]</sup>}}6<ref name="JointDec59" group="nb"/>
+|}
+==By artist==`;
+  const rows = parseNumberOneWikitext(historical, { startYear: 1952, endYear: 1959 });
+  assert.deepEqual(rows.map(row => [row.chart_year, row.artist, row.first_number_one_date, row.weeks_at_number_one]), [
+    [1952, "Al Martino", "1952-11-14", 9],
+    [1959, "Emile Ford and the Checkmates", "1959-12-18", 6]
+  ]);
+  assert.equal(rows.some(row => row.chart_year < 1952), false);
+});
+
+test("reuses only the explicitly approved 1959 boundary canonical", () => {
+  const canonicalId = "a55e5149-7949-42d9-b503-8dc51754f912";
+  const [classified] = classifyCanonicalEligibility([{
+    source_entry_key: "1959:94:emile ford and the checkmates:what do you want to make those eyes at me for",
+    artist: "Emile Ford and the Checkmates",
+    title: "What Do You Want to Make Those Eyes at Me For?",
+    match_status: "unresolved",
+    source_metadata: { article_titles: ["What Do You Want to Make Those Eyes at Me For?"] }
+  }], [{ id: canonicalId, title: "What Do You Want to Make Those Eyes at Me For?", artist: "Emile Ford and the Checkmates" }]);
+  assert.equal(classified.classification, "A");
+  assert.equal(classified.classification_reason, "approved_boundary_canonical_reuse");
+  assert.equal(classified.canonical_song_id, canonicalId);
+});
+
 test("builds one batched Wikidata query and applies QID/P4404 enrichment", () => {
   const rows = parseNumberOneWikitext(fixture, { startYear: 1995, endYear: 1995 });
   const query = wikidataSparql(rows.flatMap(row => row.article_titles));
