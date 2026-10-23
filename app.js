@@ -6899,8 +6899,8 @@ function buildCompactCanonicalRatingControl(canonicalSongId, currentValue) {
   if (!canonicalSongId) return "";
   const hasRating = currentValue !== null && Number.isFinite(Number(currentValue));
   const targetId = `canonical-rating-${canonicalSongId}`;
-  return `<details class="bom-v1-track-rating-control" open>
-    <summary class="bom-v1-track-rating-trigger">${hasRating ? `${Number(currentValue)} / 10` : "Rate +"}</summary>
+  return `<details class="bom-v1-track-rating-control">
+    <summary class="bom-v1-track-rating-trigger" aria-label="${hasRating ? `Change rating, currently ${Number(currentValue)} out of 10` : "Rate this track"}">${hasRating ? `${Number(currentValue)} / 10` : "Rate +"}</summary>
     <div class="bom-v1-track-rating-popover" role="group" aria-label="Rate this track from 1 to 10">
       ${Array.from({ length: 10 }, (_, index) => {
         const rating = index + 1;
@@ -9944,6 +9944,10 @@ function getQuickRateDecadeYear(years, decade) {
   return [...(years || [])].map(Number).filter(year => year >= decade && year < decade + 10).sort((a, b) => b - a)[0] || null;
 }
 
+function getQuickRateYearsInDecade(years, decade) {
+  return [...(years || [])].map(Number).filter(year => year >= decade && year < decade + 10).sort((a, b) => a - b);
+}
+
 function formatQuickRateChartDate(value) {
   if (!value) return "";
   const date = new Date(`${value}T12:00:00Z`);
@@ -10117,6 +10121,7 @@ function renderQuickRateSpotifyFailure(target, song, error = null) {
 async function listenToQuickRateTrack({ song, album, target, button }) {
   if (!song || !target || !button) return false;
   const originalText = button.textContent;
+  const originalHtml = typeof button.innerHTML === "string" ? button.innerHTML : "";
   button.disabled = true;
   button.textContent = "Finding on Spotify…";
   target.classList.remove("hidden");
@@ -10158,7 +10163,10 @@ async function listenToQuickRateTrack({ song, album, target, button }) {
     return false;
   } finally {
     button.disabled = false;
-    if (button.textContent !== "Player loaded") button.textContent = originalText;
+    if (button.textContent !== "Player loaded") {
+      if (originalHtml) button.innerHTML = originalHtml;
+      else button.textContent = originalText;
+    }
   }
 }
 
@@ -10190,7 +10198,7 @@ async function openQuickRate() {
   const status = dialog.querySelector("[data-quick-status]");
   let selectedCollection = "uk-singles";
   let years = Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
-  let selectedYear = years[0], selectedFilter = "all";
+  let selectedYear = years[0], selectedFilter = "all", pickerDecade = Math.floor(selectedYear / 10) * 10;
   let songs = [], albums = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false, lastNavigatedIdentity = null;
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
@@ -10221,6 +10229,8 @@ async function openQuickRate() {
     const nextUnrated = getNextUnratedQuickRateEntry(yearEntries);
     const yearNavigation = getQuickRateYearNavigation(years, selectedYear);
     const decades = getQuickRateDecades(years);
+    if (!decades.includes(pickerDecade)) pickerDecade = Math.floor(selectedYear / 10) * 10;
+    const pickerYears = getQuickRateYearsInDecade(years, pickerDecade);
     const overallProgress = isNumberOnes
       ? getQuickRateProgress(buildImportedQuickRateYearModel(importedEntries.filter(row => row.collection_key === "uk-number-ones"), songs, canonicalRecordings), userId)
       : null;
@@ -10231,12 +10241,11 @@ async function openQuickRate() {
       : "";
     dialog.querySelector("[data-quick-years]").innerHTML = `<div class="bom-v1-quick-year-picker">
       <button type="button" data-quick-year="${yearNavigation.previous || ""}" aria-label="Previous available year"${yearNavigation.previous ? "" : " disabled"}>← <span>${yearNavigation.previous || "Previous"}</span></button>
-      <label><span class="bom-v1-quick-sr-only">Selected year</span><select data-quick-year-select aria-label="Select year">${years.map(year => `<option value="${year}"${year === selectedYear ? " selected" : ""}>${year}</option>`).join("")}</select></label>
+      <details class="bom-v1-quick-year-control"><summary aria-label="Choose year, currently ${selectedYear}">${selectedYear} <span aria-hidden="true">▾</span></summary><div class="bom-v1-quick-year-panel"><strong>Choose year</strong><div class="bom-v1-quick-picker-decades">${decades.map(decade => `<button type="button" data-quick-picker-decade="${decade}" aria-pressed="${pickerDecade === decade}">${decade}s</button>`).join("")}</div><strong>${pickerDecade}s</strong><div class="bom-v1-quick-picker-years">${pickerYears.map(year => `<button type="button" data-quick-picker-year="${year}" aria-pressed="${selectedYear === year}">${year}</button>`).join("")}</div></div></details>
       <button type="button" data-quick-year="${yearNavigation.next || ""}" aria-label="Next available year"${yearNavigation.next ? "" : " disabled"}><span>${yearNavigation.next || "Next"}</span> →</button>
-    </div><div class="bom-v1-quick-decades" aria-label="Choose a decade">${decades.map(decade => `<button type="button" data-quick-decade="${decade}" aria-pressed="${selectedYear >= decade && selectedYear < decade + 10}">${decade}s</button>`).join("")}</div>`;
+    </div>`;
     card.innerHTML = `<section class="bom-v1-quick-year" aria-labelledby="bomQuickYearTitle">
-      ${overallProgress ? `<div class="bom-v1-quick-journey"><span>UK No.1 journey</span><strong>${overallProgress.rated.toLocaleString("en-GB")} / ${overallProgress.total.toLocaleString("en-GB")} · ${overallProgress.percentage}%</strong><div class="bom-v1-quick-progress-track" role="progressbar" aria-label="${overallProgress.rated} of ${overallProgress.total} UK number ones rated overall" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${overallProgress.percentage}"><span style="width:${overallProgress.percentage}%"></span></div></div>` : ""}
-      <div class="bom-v1-quick-progress"><div><p>${isNumberOnes ? "Chart year" : "Collection year"}</p><h2 id="bomQuickYearTitle">${selectedYear}<span>${isNumberOnes ? " UK No.1s" : " UK Singles"}</span></h2>${latestChartDate ? `<small>Updated through ${escapeHtml(formatQuickRateChartDate(latestChartDate))}</small>` : progress.pending ? `<small>${progress.pending} catalogue match${progress.pending === 1 ? "" : "es"} pending</small>` : ""}</div><div><strong data-quick-progress-count>${progress.rated} / ${progress.total} rated</strong><span data-quick-progress-percent>${progress.percentage}% complete</span></div></div>
+      <div class="bom-v1-quick-summary"><div><h2 id="bomQuickYearTitle">${selectedYear} <span>· ${yearEntries.length} ${isNumberOnes ? "No.1s" : "singles"}</span></h2><small><strong data-quick-progress-count>${progress.rated} rated</strong>${progress.pending ? ` · ${progress.pending} pending` : ""}${latestChartDate ? ` · Updated through ${escapeHtml(formatQuickRateChartDate(latestChartDate))}` : ""}</small></div>${overallProgress ? `<span class="bom-v1-quick-overall">Overall ${overallProgress.rated.toLocaleString("en-GB")} / ${overallProgress.total.toLocaleString("en-GB")} · ${overallProgress.percentage}%</span>` : `<span class="bom-v1-quick-overall">${progress.rated} / ${progress.total} rated</span>`}</div>
       <div class="bom-v1-quick-progress-track" role="progressbar" aria-label="${progress.rated} of ${progress.total} UK singles rated" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percentage}"><span style="width:${progress.percentage}%"></span></div>
       <div class="bom-v1-quick-tools"><div class="bom-v1-quick-filter" role="group" aria-label="Filter UK singles"><button type="button" data-quick-filter="all" aria-pressed="${selectedFilter === "all"}">All</button><button type="button" data-quick-filter="unrated" aria-pressed="${selectedFilter === "unrated"}">Unrated</button></div><button type="button" data-quick-next${nextUnrated ? "" : " disabled"}>Next unrated →</button></div>
       <div class="bom-v1-quick-list">${visibleEntries.length ? visibleEntries.map((entry, entryIndex) => {
@@ -10255,7 +10264,6 @@ async function openQuickRate() {
         const control = entry.canonical_song_id
           ? buildCompactCanonicalRatingControl(entry.canonical_song_id, rating)
           : buildCompactTrackRatingControl(song.id, rating)
-            .replace('<details ', '<details open ')
             .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
         const identity = getQuickRateEntryIdentity(entry);
         const title = song ? song.title : recording?.title || entry.title;
@@ -10263,19 +10271,20 @@ async function openQuickRate() {
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
         const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
         const listen = song
-          ? `<button type="button" class="bom-v1-quick-listen" data-quick-listen="${song.id}" onclick="return handleQuickRateListen(event,this)">Listen on Spotify</button><div class="bom-quick-spotify hidden" data-quick-player></div>`
+          ? `<button type="button" class="bom-v1-quick-listen" data-quick-listen="${song.id}" aria-label="Listen to ${escapeHtml(title)} on Spotify" onclick="return handleQuickRateListen(event,this)"><span aria-hidden="true">▶</span><span class="bom-v1-quick-listen-label">Listen</span></button>`
           : canonicalSpotify
-            ? `<button type="button" class="bom-v1-quick-listen" data-quick-canonical-listen="${recording.id}" onclick="return handleQuickRateListen(event,this)">Listen on Spotify</button><div class="bom-quick-spotify hidden" data-quick-player></div>`
+            ? `<button type="button" class="bom-v1-quick-listen" data-quick-canonical-listen="${recording.id}" aria-label="Listen to ${escapeHtml(title)} on Spotify" onclick="return handleQuickRateListen(event,this)"><span aria-hidden="true">▶</span><span class="bom-v1-quick-listen-label">Listen</span></button>`
             : "";
         return `<article class="bom-v1-quick-row" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
           <span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span>
           <div class="bom-v1-quick-thumb">${artwork ? `<img src="${escapeHtml(artwork)}" alt="" onerror="this.hidden=true">` : ""}<span aria-hidden="true">♪</span></div>
-          <div class="bom-v1-quick-track"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}${listen}</div>
-          <div class="bom-v1-quick-rating"><span class="bom-v1-quick-sr-only">Your rating${rating !== null ? `, ${rating} out of 10` : ""}</span>${control}</div>
+          <div class="bom-v1-quick-track"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}</div>
+          <div class="bom-v1-quick-actions">${listen}<div class="bom-v1-quick-rating"><span class="bom-v1-quick-sr-only">Your rating${rating !== null ? `, ${rating} out of 10` : ""}</span>${control}</div></div>
+          <div class="bom-quick-spotify hidden" data-quick-player></div>
         </article>`;
       }).join("") : `<p class="bom-v1-quick-empty">Everything rateable in ${selectedYear} has a rating.</p>`}</div>${isNumberOnes ? '<p class="bom-v1-quick-source">Source: Wikimedia / Wikidata</p>' : ""}</section>`;
     status.textContent = yearEntries.some(entry => entry.status === "matched") ? "Ratings save to the same recording everywhere in BOM." : "No entries for this sample year currently match the BOM catalogue.";
-    if (focus) card.querySelector(".bom-v1-track-rating-choice")?.focus();
+    if (focus) card.querySelector(".bom-v1-track-rating-trigger")?.focus();
   }
 
   dialog.saveRating = async (button) => {
@@ -10314,17 +10323,14 @@ async function openQuickRate() {
   });
 
   dialog.querySelector("[data-quick-years]").addEventListener("click", event => {
-    const decade = Number(event.target.closest("[data-quick-decade]")?.dataset.quickDecade);
-    const year = decade ? getQuickRateDecadeYear(years, decade) : Number(event.target.closest("[data-quick-year]")?.dataset.quickYear);
-    if (!year || busy || year === selectedYear) return;
-    selectedYear = year;
-    lastNavigatedIdentity = null;
-    status.textContent = `Showing UK singles for ${year}.`;
-    render(true);
-  });
-
-  dialog.querySelector("[data-quick-years]").addEventListener("change", event => {
-    const year = Number(event.target.closest("[data-quick-year-select]")?.value);
+    const decade = Number(event.target.closest("[data-quick-picker-decade]")?.dataset.quickPickerDecade);
+    if (decade) {
+      pickerDecade = decade;
+      render();
+      dialog.querySelector(".bom-v1-quick-year-control")?.setAttribute("open", "");
+      return;
+    }
+    const year = Number(event.target.closest("[data-quick-picker-year]")?.dataset.quickPickerYear || event.target.closest("[data-quick-year]")?.dataset.quickYear);
     if (!year || busy || year === selectedYear) return;
     selectedYear = year;
     lastNavigatedIdentity = null;
@@ -10348,7 +10354,7 @@ async function openQuickRate() {
       if (!row) return;
       lastNavigatedIdentity = identity;
       row.scrollIntoView({ behavior: "smooth", block: "center" });
-      row.querySelector(".bom-v1-track-rating-choice")?.focus({ preventScroll: true });
+      row.querySelector(".bom-v1-track-rating-trigger")?.focus({ preventScroll: true });
       return;
     }
     const clearButton = event.target.closest("[data-clear-track-rating]");

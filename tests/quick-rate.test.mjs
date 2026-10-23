@@ -370,14 +370,28 @@ test('Quick Rate year page keeps chart metadata, progress, and responsive rating
   assert.match(quickRate, /UK Singles/);
   assert.match(quickRate, /data-quick-progress-count/);
   assert.match(quickRate, /Not yet in the BOM catalogue/);
-  assert.match(quickRate, /UK No\.1 journey/);
-  assert.match(quickRate, /data-quick-year-select/);
-  assert.match(quickRate, /data-quick-decade/);
+  assert.match(quickRate, /bom-v1-quick-overall/);
+  assert.match(quickRate, /bom-v1-quick-year-control/);
+  assert.match(quickRate, /data-quick-picker-decade/);
+  assert.match(quickRate, /data-quick-picker-year/);
   assert.match(quickRate, /bom-v1-quick-index/);
-  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-track-rating-popover \{ grid-template-columns: repeat\(10, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-track-rating-popover \{ width: min\(290px/);
   assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rate h1 \{ font-size: 21px !important/);
-  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rating \{ grid-column: 2 \/ -1/);
+  assert.match(styles, /bom-v1-quick-rate \.bom-v1-track-rating-trigger \{ display: inline-flex/);
   assert.match(discover, /UK singles by year/);
+});
+
+test('Quick Rate reuses the closed Rate + and score interaction from main track ratings', () => {
+  const context = vm.createContext({});
+  vm.runInContext(extract('function buildCompactTrackRatingControl', 'function buildCompactAlbumRatingControl'), context);
+  const unrated = context.buildCompactTrackRatingControl(7, null);
+  const rated = context.buildCompactCanonicalRatingControl('canonical-1', 8);
+  assert.match(unrated, /<details class="bom-v1-track-rating-control">/);
+  assert.match(unrated, /Rate \+/);
+  assert.doesNotMatch(unrated, /<details[^>]* open/);
+  assert.match(rated, />8 \/ 10<\/summary>/);
+  assert.match(rated, /data-clear-canonical-rating="canonical-1"/);
+  assert.doesNotMatch(rated, /<details[^>]* open/);
 });
 
 test('Quick Rate derives year and decade navigation from available collection years', () => {
@@ -388,6 +402,7 @@ test('Quick Rate derives year and decade navigation from available collection ye
   assert.deepEqual({...context.getQuickRateYearNavigation([2026, 2024, 2023], 2023)}, {previous:null,next:2024});
   assert.equal(context.getQuickRateDecadeYear([1991, 1999, 2000], 1990), 1999);
   assert.equal(context.getQuickRateDecadeYear([1991, 1999, 2000], 1980), null);
+  assert.deepEqual(Array.from(context.getQuickRateYearsInDecade([1972,1970,1980,1973], 1970)), [1970,1972,1973]);
   const imported = [{collection_key:'uk-number-ones',chart_year:2026},{collection_key:'uk-number-ones',chart_year:1952}];
   assert.deepEqual(Array.from(context.getQuickRateAvailableYears('uk-number-ones', imported)), [2026,1952]);
   assert.equal(context.getValidQuickRateYear([2026,1952], undefined), 2026);
@@ -535,8 +550,11 @@ test('year switching and Phase 1.1 controls rerender from selected state', () =>
   assert.match(quickRate, /selectedYear = year;[\s\S]*?render\(true\)/);
   assert.match(quickRate, /selectedFilter = filterButton\.dataset\.quickFilter/);
   assert.match(quickRate, /data-quick-next/);
+  assert.match(quickRate, /data-quick-picker-decade/);
+  assert.match(quickRate, /data-quick-picker-year/);
+  assert.match(quickRate, /setAttribute\("open", ""\)/);
   assert.match(quickRate, /scrollIntoView\(\{ behavior: "smooth", block: "center" \}\)/);
   assert.match(quickRate, /getNextUnratedQuickRateEntry\(yearEntries/);
-  assert.match(quickRate, /catalogue match/);
+  assert.match(quickRate, /Catalogue match/);
   assert.doesNotMatch(quickRate, /Phase 1 sample/);
 });
