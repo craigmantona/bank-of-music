@@ -487,7 +487,7 @@ window.BOMPresentationBridge = Object.freeze({
     await renderSelectedItem();
   },
   openArtist: (artistName) => window.openArtistPage(artistName),
-  refreshDiscover: () => renderRecommendations(),
+  refreshDiscover: () => refreshCatalogueUI(),
   refreshCharts: () => loadCharts(),
   refreshRatings: async () => {
     const root = document.getElementById("librarySection");
@@ -2348,66 +2348,55 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
 
 
 
-async function refreshSessionUI() {
+function getBoundedCatalogueDiagnostic(error) {
+  return {
+    name: String(error?.name || "Error").slice(0, 80),
+    code: String(error?.code || "").slice(0, 80),
+    status: Number.isFinite(Number(error?.status)) ? Number(error.status) : null
+  };
+}
 
+function handleCatalogueLoadFailure(error) {
+  console.error("Catalogue load failed", getBoundedCatalogueDiagnostic(error));
+  renderStageOneDiscoverError();
+  return false;
+}
+
+async function refreshCatalogueUI() {
+  renderStageOneDiscoverLoading();
   try {
-
-    const {
-
-      data: { session },
-
-      error
-
-    } = await supabaseClient.auth.getSession();
-
-
-
-    if (error) {
-
-      currentUser = null;
-
-      setMessage(authMessage, error.message);
-
-    } else {
-
-      currentUser = session ? session.user : null;
-
-    }
-
-
-
-    if (passwordRecovery?.reconcileSession(session)) return;
-
-    await ensureUserProfile();
-
-    updateSessionUI();
-
-    renderStageOneDiscoverLoading();
-
     await loadLibrary();
-
     renderLibrary();
-
     renderRecommendations();
-
     renderAdminDashboard();
-
     await renderSelectedItem();
-
     handleScrollState();
+    return true;
+  } catch (error) {
+    return handleCatalogueLoadFailure(error);
+  }
+}
 
-  } catch (err) {
-
+async function refreshSessionUI() {
+  let session;
+  try {
+    const result = await supabaseClient.auth.getSession();
+    if (result.error) throw result.error;
+    session = result.data.session;
+  } catch (error) {
     currentUser = null;
-
     updateSessionUI();
-
-    setMessage(authMessage, "Session error: " + err.message);
-
+    setMessage(authMessage, "Session error. Please try signing in again.");
     renderStageOneDiscoverError();
-
+    return false;
   }
 
+  currentUser = session ? session.user : null;
+  if (passwordRecovery?.reconcileSession(session)) return true;
+
+  await ensureUserProfile();
+  updateSessionUI();
+  return refreshCatalogueUI();
 }
 
 
@@ -2674,7 +2663,7 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBre
     const { data, error } = await query.range(from, from + size - 1);
 
     if (error) {
-      console.error(`${tableName} load error`, error);
+      console.error(`${tableName} load error`, getBoundedCatalogueDiagnostic(error));
       throw error;
     }
 
@@ -2689,7 +2678,12 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBre
 }
 
 
+let libraryLoadPromise = null;
+
 async function loadLibrary() {
+  if (libraryLoadPromise) return libraryLoadPromise;
+
+  const load = (async () => {
 
   const albums = await fetchAllRows("albums", "title");
 	
@@ -2748,6 +2742,15 @@ allSongs = songs;
   followedArtists = followed || [];
 
   excludedReleaseGroupIds = new Set((exclusions || []).map((row) => String(row.musicbrainz_release_group_id || "").toLowerCase()).filter(Boolean));
+
+  })();
+
+  libraryLoadPromise = load;
+  try {
+    return await load;
+  } finally {
+    if (libraryLoadPromise === load) libraryLoadPromise = null;
+  }
 
 }
 
@@ -14292,25 +14295,12 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 
   if (passwordRecovery?.handleAuthEvent(event, session)) return;
 
-  ensureUserProfile().then(() => {
-
-    updateSessionUI();
-
-    renderStageOneDiscoverLoading();
-
-    loadLibrary().then(async () => {
-
-      renderLibrary();
-
-      renderRecommendations();
-
-      renderAdminDashboard();
-
-      await renderSelectedItem();
-
-    });
-
-  });
+  ensureUserProfile()
+    .then(() => {
+      updateSessionUI();
+      return refreshCatalogueUI();
+    })
+    .catch(handleCatalogueLoadFailure);
 
 });
 

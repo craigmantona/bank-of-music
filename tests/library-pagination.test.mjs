@@ -33,7 +33,8 @@ function createLibraryContext(tableRows, fail = null) {
         },
         async range(from, to) {
           calls.push([table, "range", from, to]);
-          if (fail?.table === table && fail?.from === from) {
+          if (fail?.table === table && fail?.from === from && fail.remaining !== 0) {
+            if (Number.isInteger(fail.remaining)) fail.remaining -= 1;
             return { data: null, error: new Error(fail.message) };
           }
           return { data: (tableRows[table] || []).slice(from, to + 1), error: null };
@@ -45,10 +46,12 @@ function createLibraryContext(tableRows, fail = null) {
   const context = vm.createContext({
     supabaseClient,
     console: { error() {} },
+    getBoundedCatalogueDiagnostic: error => ({ name: error?.name || "Error", code: "", status: null }),
     allAlbums: [],
     allSongs: [],
     allAlbumRatings: [],
     allSongRatings: [],
+    allCanonicalRecordings: [],
     followedArtists: []
   });
   vm.runInContext(
@@ -104,6 +107,34 @@ test("pagination propagates a later-page error instead of returning partial rows
   );
 
   await assert.rejects(context.fetchAllRows("albums", "title"), /page unavailable/);
+});
+
+test("simultaneous catalogue callers share one successful underlying load", async () => {
+  const { context, calls } = createLibraryContext({
+    albums: [], songs: [], ratings: [], song_ratings: [], canonical_recordings: [],
+    followed_artists: [], catalogue_release_group_exclusions: []
+  });
+
+  const results = await Promise.all([context.loadLibrary(), context.loadLibrary(), context.loadLibrary()]);
+
+  assert.equal(results.length, 3);
+  for (const table of ["albums", "songs", "ratings", "song_ratings", "canonical_recordings", "followed_artists", "catalogue_release_group_exclusions"]) {
+    assert.equal(calls.filter(call => call[0] === table && call[1] === "range").length, 1, table);
+  }
+});
+
+test("a failed shared catalogue load clears so a later call can retry", async () => {
+  const { context, calls } = createLibraryContext({
+    albums: [], songs: [], ratings: [], song_ratings: [], canonical_recordings: [],
+    followed_artists: [], catalogue_release_group_exclusions: []
+  }, { table: "albums", from: 0, message: "truncated response", remaining: 1 });
+
+  const failed = await Promise.allSettled([context.loadLibrary(), context.loadLibrary(), context.loadLibrary()]);
+  assert.deepEqual(failed.map(result => result.status), ["rejected", "rejected", "rejected"]);
+  assert.equal(calls.filter(call => call[0] === "albums" && call[1] === "range").length, 1);
+
+  await context.loadLibrary();
+  assert.equal(calls.filter(call => call[0] === "albums" && call[1] === "range").length, 2);
 });
 
 test("loadLibrary paginates ratings, song ratings, and followed artists", async () => {
