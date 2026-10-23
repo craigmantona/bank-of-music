@@ -370,10 +370,24 @@ test('Quick Rate year page keeps chart metadata, progress, and responsive rating
   assert.match(quickRate, /UK Singles/);
   assert.match(quickRate, /data-quick-progress-count/);
   assert.match(quickRate, /Not yet in the BOM catalogue/);
+  assert.match(quickRate, /Your UK No\.1 journey/);
+  assert.match(quickRate, /data-quick-year-select/);
+  assert.match(quickRate, /data-quick-decade/);
+  assert.match(quickRate, /bom-v1-quick-index/);
   assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-track-rating-popover \{ grid-template-columns: repeat\(5, minmax\(0, 1fr\)\)/);
-  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rate h1 \{ font-size: 30px !important/);
-  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rating \{ grid-column: 1 \/ -1/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rate h1 \{ font-size: 24px !important/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rating \{ grid-column: 2 \/ -1/);
   assert.match(discover, /UK singles by year/);
+});
+
+test('Quick Rate derives year and decade navigation from available collection years', () => {
+  const context = vm.createContext({});
+  vm.runInContext(extract('function getQuickRateDecades', 'function isQuickRateEntryRated'), context);
+  assert.deepEqual(Array.from(context.getQuickRateDecades([2026, 2025, 1999, 1952])), [1950, 1990, 2020]);
+  assert.deepEqual({...context.getQuickRateYearNavigation([2026, 2024, 2023], 2024)}, {previous:2023,next:2026});
+  assert.deepEqual({...context.getQuickRateYearNavigation([2026, 2024, 2023], 2023)}, {previous:null,next:2024});
+  assert.equal(context.getQuickRateDecadeYear([1991, 1999, 2000], 1990), 1999);
+  assert.equal(context.getQuickRateDecadeYear([1991, 1999, 2000], 1980), null);
 });
 
 test('chart entries reuse one confirmed canonical recording and reject ambiguity', () => {
