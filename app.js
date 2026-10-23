@@ -10241,7 +10241,10 @@ async function openQuickRate() {
     if (!collection || busy || collection === selectedCollection) return;
     selectedCollection = collection;
     years = collection === "uk-number-ones"
-      ? Array.from({ length: 10 }, (_, index) => 1999 - index)
+      ? [...new Set(importedEntries
+        .filter(row => row.collection_key === "uk-number-ones")
+        .map(row => Number(row.chart_year))
+        .filter(Number.isInteger))].sort((a, b) => b - a)
       : Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a);
     selectedYear = years[0];
     selectedFilter = "all";

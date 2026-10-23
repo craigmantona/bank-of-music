@@ -55,7 +55,9 @@ function sourceKey(year, number, artist, title) {
 }
 
 export function parseNumberOneWikitext(wikitext, { startYear = 1990, endYear = 1999, revision = "", sourceUrl = SOURCE_URL } = {}) {
-  const section = String(wikitext).split("==Number-one singles==")[1]?.split("===Additional information===")[0] || "";
+  const section = String(wikitext)
+    .split(/^==\s*Number-one singles\s*==\s*$/mi)[1]
+    ?.split(/^==[^=].*==\s*$/m)[0] || "";
   let year = null;
   const rows = [];
   for (const block of section.split(/^\|-/m)) {
@@ -230,15 +232,21 @@ export function classifyCanonicalEligibility(rows, canonicalRecordings = []) {
         classification_reason: combined ? "combined_or_double_a_side" : ep ? "ep_multi_recording" : "medley_or_megamix",
         approved_musicbrainz_recording_id: exactMbid };
     }
+    if (row.match_status === "ambiguous") {
+      return { ...row, classification: "C", classification_reason: "ambiguous_existing_canonical_candidates",
+        approved_musicbrainz_recording_id: exactMbid };
+    }
     if (exactCanonical) {
       return { ...row, canonical_song_id: exactCanonical.id, classification: "A",
         classification_reason: "exact_known_mbid", approved_musicbrainz_recording_id: exactMbid };
     }
-    if (row.canonical_song_id && ["direct_mbid", "identifier", "title_artist"].includes(row.match_status)) {
+    if (row.canonical_song_id && ["direct_mbid", "identifier"].includes(row.match_status)) {
       return { ...row, classification: "A",
-        classification_reason: row.match_status === "title_artist"
-          ? "previously_accepted_unique_catalogue_match"
-          : `existing_${row.match_method || row.match_status}`,
+        classification_reason: `existing_${row.match_method || row.match_status}`,
+        approved_musicbrainz_recording_id: exactMbid };
+    }
+    if (row.match_status === "title_artist") {
+      return { ...row, classification: "C", classification_reason: "title_artist_only_requires_review",
         approved_musicbrainz_recording_id: exactMbid };
     }
     return { ...row, classification: "B",
@@ -265,7 +273,9 @@ export function summariseCanonicalClassification(rows) {
     combined_or_double_a_side: combined.length,
     ep_or_multi_recording: eps.length,
     other_ambiguous: otherAmbiguous.length,
-    carry_over_from_1989: rows.filter(row => String(row.first_number_one_date).startsWith("1989-")).length,
+    carry_over_from_previous_year: rows.filter(row =>
+      Number(String(row.first_number_one_date).slice(0, 4)) < Number(row.chart_year)
+    ).length,
     immediately_rateable: rateable,
     immediately_rateable_percentage: rows.length ? Number((rateable * 100 / rows.length).toFixed(1)) : 0,
     non_rateable: category("C").length,

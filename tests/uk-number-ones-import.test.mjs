@@ -37,6 +37,15 @@ test("parses source rows, extracts song article titles and collapses repeat runs
   assert.equal(rows[1].first_number_one_date, "1995-05-06");
 });
 
+test("parses decade pages whose section headings contain Wikimedia spacing", () => {
+  const spaced = fixture
+    .replace("==Number-one singles==", "== Number-one singles ==")
+    .replace("===Additional information===", "==By artist==");
+  const rows = parseNumberOneWikitext(spaced, { startYear: 1995, endYear: 1995 });
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].title, "Some Might Say");
+});
+
 test("selects Wikimedia decade pages from a configurable year range", () => {
   assert.deepEqual(sourcePagesForRange(1990, 1999), ["List_of_UK_singles_chart_number_ones_of_the_1990s"]);
   assert.deepEqual(sourcePagesForRange(1952, 2026), ["List_of_UK_singles_chart_number_ones_of_the_1950s", "List_of_UK_singles_chart_number_ones_of_the_1960s", "List_of_UK_singles_chart_number_ones_of_the_1970s", "List_of_UK_singles_chart_number_ones_of_the_1980s", "List_of_UK_singles_chart_number_ones_of_the_1990s", "List_of_UK_singles_chart_number_ones_of_the_2000s", "List_of_UK_singles_chart_number_ones_of_the_2010s", "List_of_UK_singles_chart_number_ones_of_the_2020s"]);
@@ -164,7 +173,7 @@ test("straightforward collection evidence can seed a BOM recording while double 
 test("canonical classification reuses accepted identities, seeds clear singles and reviews multi-recording rows", () => {
   const canonicalId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
   const rows = [
-    { artist: "Existing", title: "Single", canonical_song_id: canonicalId, match_status: "title_artist", source_metadata: { article_titles: ["Single"], isrcs: [], spotify_track_ids: [] } },
+    { artist: "Existing", title: "Single", canonical_song_id: canonicalId, match_status: "identifier", match_method: "wikidata_spotify_track_id", source_metadata: { article_titles: ["Single"], isrcs: [], spotify_track_ids: [] } },
     { artist: "Bombalurina", title: "Itsy Bitsy Teenie Weenie Yellow Polka Dot Bikini", match_status: "unresolved", source_metadata: { article_titles: ["Itsy Bitsy Teenie Weenie Yellow Polka Dot Bikini"], isrcs: [], spotify_track_ids: [] } },
     { artist: "Erasure", title: "Abba-esque (EP)", match_status: "unresolved", source_metadata: { article_titles: ["Abba-esque"], isrcs: [], spotify_track_ids: [] } },
     { artist: "Dunblane", title: "Knockin' on Heaven's Door\" / \"Throw These Guns Away", match_status: "unresolved", source_metadata: { article_titles: ["Knockin' on Heaven's Door"], isrcs: [], spotify_track_ids: [] } }
@@ -176,10 +185,19 @@ test("canonical classification reuses accepted identities, seeds clear singles a
     total_source_entries: 4, category_a_existing_canonical: 1, category_b_new_bom_canonical: 1,
     category_c_review: 2, known_exact_mbid_entries: 1, entries_with_wikidata_qid: 0,
     entries_with_isrc: 0, entries_with_source_spotify_id: 0, combined_or_double_a_side: 1,
-    ep_or_multi_recording: 1, other_ambiguous: 0, carry_over_from_1989: 0,
+    ep_or_multi_recording: 1, other_ambiguous: 0, carry_over_from_previous_year: 0,
     immediately_rateable: 2, immediately_rateable_percentage: 50, non_rateable: 2,
     rateable_without_exact_mbid: 1
   });
+});
+
+test("title/artist alone never merges an existing canonical recording", () => {
+  const [row] = classifyCanonicalEligibility([{
+    artist: "Artist", title: "Song", canonical_song_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    match_status: "title_artist", source_metadata: { article_titles: ["Song"], isrcs: [], spotify_track_ids: [] }
+  }]);
+  assert.equal(row.classification, "C");
+  assert.equal(row.classification_reason, "title_artist_only_requires_review");
 });
 
 test("production import pins the reviewed revision and persists only approved A/B classifications", async () => {
@@ -215,6 +233,9 @@ test("Quick Rate exposes UK No.1s separately without replacing the existing samp
   assert.match(app, /data-quick-collection="uk-number-ones"/);
   assert.match(app, /Source: Wikimedia \/ Wikidata/);
   assert.match(app, /fetchQuickRateRows\("quick_rate_collection_tracks"/);
+  assert.match(app, /filter\(row => row\.collection_key === "uk-number-ones"\)/);
+  assert.match(app, /map\(row => Number\(row\.chart_year\)\)/);
+  assert.doesNotMatch(app, /Array\.from\(\{ length: 10 \}, \(_, index\) => 1999 - index\)/);
   assert.match(app, /data-quick-listen/);
   assert.match(app, /window\.handleQuickRateListen/);
   assert.doesNotMatch(app.slice(app.indexOf("async function openQuickRate"), app.indexOf("window.handleQuickRateClick")), /resolveQuickRateSpotifyTrack|listenToQuickRateTrack/);
