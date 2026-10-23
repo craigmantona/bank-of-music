@@ -49,6 +49,7 @@ test("parses decade pages whose section headings contain Wikimedia spacing", () 
 test("selects Wikimedia decade pages from a configurable year range", () => {
   assert.deepEqual(sourcePagesForRange(1970, 1979), ["List_of_UK_singles_chart_number_ones_of_the_1970s"]);
   assert.deepEqual(sourcePagesForRange(1990, 1999), ["List_of_UK_singles_chart_number_ones_of_the_1990s"]);
+  assert.deepEqual(sourcePagesForRange(2000, 2009), ["List_of_UK_singles_chart_number_ones_of_the_2000s"]);
   assert.deepEqual(sourcePagesForRange(1952, 2026), ["List_of_UK_singles_chart_number_ones_of_the_1950s", "List_of_UK_singles_chart_number_ones_of_the_1960s", "List_of_UK_singles_chart_number_ones_of_the_1970s", "List_of_UK_singles_chart_number_ones_of_the_1980s", "List_of_UK_singles_chart_number_ones_of_the_1990s", "List_of_UK_singles_chart_number_ones_of_the_2000s", "List_of_UK_singles_chart_number_ones_of_the_2010s", "List_of_UK_singles_chart_number_ones_of_the_2020s"]);
 });
 
