@@ -64,7 +64,10 @@ export function parseNumberOneWikitext(wikitext, { startYear = 1990, endYear = 1
     const yearMatch = block.match(/\{\{anchor\|(19\d{2}|20\d{2})\}\}/);
     if (yearMatch) { year = Number(yearMatch[1]); continue; }
     if (!year || year < startYear || year > endYear) continue;
-    const number = block.match(/!scope=row[^\n]*\|\s*(\d+)\s*\n/)?.[1];
+    const numberLine = block.split("\n").find(line => line.startsWith("!scope=row")) || "";
+    const numberCell = numberLine.includes("|") ? numberLine.slice(numberLine.indexOf("|") + 1).trim() : "";
+    const number = stripMarkup(numberCell).match(/^\d+(?:\.\d+)?$/)?.[0] ||
+      numberCell.match(/\{\{sort\|(\d+(?:\.\d+)?)\|/i)?.[1];
     const date = block.match(/\{\{dts\|format=dmy\|(\d{4})\|(\d{1,2})\|(\d{1,2})\}\}/i);
     const weeks = block.match(/\|\|align="center"\|\s*(\d+)/i)?.[1];
     if (!number || !date || !weeks) continue;

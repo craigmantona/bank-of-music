@@ -67,6 +67,29 @@ test("keeps a prior-decade carry-over in its occupied chart year with the histor
   assert.equal(summariseCanonicalClassification(classified).carry_over_from_previous_year, 1);
 });
 
+test("parses sort-wrapped historical chart numbers and collapses their re-entries", () => {
+  const historical = `==Number-one singles==
+{|class="wikitable"
+|-class="unsortable"
+!scope=row colspan=6|{{anchor|1960}}{{sort|093.1|1960}}
+|-
+!scope=row style="text-align:center;"|{{sort|094|94}}
+| [[Emile Ford|Emile Ford and the Checkmates]]|| "[[What Do You Want to Make Those Eyes at Me For?]]"
+| Pye||{{dts|format=dmy|1959|12|18}}||align="center"|6
+|-
+!scope=row style="text-align:center;"|{{sort|094.1|re}}
+| [[Emile Ford|Emile Ford and the Checkmates]]|| "[[What Do You Want to Make Those Eyes at Me For?]]"
+| Pye||{{dts|format=dmy|1960|1|8}}||align="center"|1
+|}
+==By artist==`;
+  const rows = parseNumberOneWikitext(historical, { startYear: 1960, endYear: 1960, revision: 1377220697 });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].source_number, 94);
+  assert.equal(rows[0].first_number_one_date, "1959-12-18");
+  assert.equal(rows[0].weeks_at_number_one, 7);
+  assert.equal(rows[0].number_one_runs, 2);
+});
+
 test("builds one batched Wikidata query and applies QID/P4404 enrichment", () => {
   const rows = parseNumberOneWikitext(fixture, { startYear: 1995, endYear: 1995 });
   const query = wikidataSparql(rows.flatMap(row => row.article_titles));
