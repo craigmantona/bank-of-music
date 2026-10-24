@@ -229,7 +229,7 @@ function renderClickableArtistName(artistName) {
 `;
 }
 
-window.openArtistPage = async function (artistName) {
+window.openArtistPage = async function (artistName, knownArtistId = "") {
 
   const cleanArtistName = normaliseText(artistName);
 
@@ -243,7 +243,7 @@ window.openArtistPage = async function (artistName) {
     artist ID. Resolve and retain that ID before rendering so both
     routes show the same complete studio discography.
   */
-  const artistId =
+  const artistId = knownArtistId ||
     getSelectedArtistIdFallback(cleanArtistName) ||
     await resolveArtistIdByName(cleanArtistName);
 
@@ -9988,6 +9988,18 @@ function getNextUnratedQuickRateEntry(entries, currentIdentity = "") {
   return candidates[(currentIndex + 1) % candidates.length];
 }
 
+function getQuickRateArtistDestination(song, album, artistIdentities = []) {
+  const artist = normaliseText(song?.artist || album?.artist || "");
+  if (!artist) return null;
+  const artistKey = normaliseCompare(artist);
+  const identities = new Set(
+    (artistIdentities || [])
+      .filter(candidate => candidate?.musicbrainz_artist_id && normaliseCompare(candidate.artist_name) === artistKey)
+      .map(candidate => String(candidate.musicbrainz_artist_id))
+  );
+  return identities.size === 1 ? { artist, artistId: [...identities][0] } : null;
+}
+
 // The original random queue remains available for existing callers and tests.
 function buildQuickRateQueue(songs, ratings, userId, random = Math.random) {
   const rated = new Set(ratings.filter(row => row.user_id === userId).map(row => Number(row.song_id)));
@@ -10195,6 +10207,20 @@ async function fetchQuickRateRows(table, columns, userId) {
   }
 }
 
+async function fetchQuickRateArtistIdentities() {
+  const rows = [];
+  for (let offset = 0; ; offset += 1000) {
+    const { data, error } = await supabaseClient.from("artist_catalog")
+      .select("artist_name,musicbrainz_artist_id")
+      .not("musicbrainz_artist_id", "is", null)
+      .order("artist_name", { ascending: true })
+      .range(offset, offset + 999);
+    if (error) throw error;
+    rows.push(...(data || []));
+    if (!data || data.length < 1000) return rows;
+  }
+}
+
 async function openQuickRate() {
   if (!currentUser || document.getElementById("bomQuickRate")) return;
   const userId = currentUser.id;
@@ -10210,8 +10236,8 @@ async function openQuickRate() {
   const card = dialog.querySelector("[data-quick-card]");
   const status = dialog.querySelector("[data-quick-status]");
   let selectedCollection = "uk-number-ones";
-  let years = [], selectedYear = null, selectedFilter = "all", pickerDecade = null;
-  let songs = [], albums = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false, lastNavigatedIdentity = null;
+  let years = [], selectedYear = null, selectedFilter = "all", pickerDecade = null, expandedIdentity = "";
+  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false, lastNavigatedIdentity = null;
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
   dialog.showModal();
@@ -10286,17 +10312,27 @@ async function openQuickRate() {
         const artist = song ? song.artist : recording?.artist || entry.artist;
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
         const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
+        const artistDestination = getQuickRateArtistDestination(song, album, artistIdentities);
+        const expanded = expandedIdentity === identity;
         const listen = song
           ? `<button type="button" class="bom-v1-quick-listen" data-quick-listen="${song.id}" aria-label="Listen to ${escapeHtml(title)} on Spotify" onclick="return handleQuickRateListen(event,this)"><span aria-hidden="true">▶</span><span class="bom-v1-quick-listen-label">Listen</span></button>`
           : canonicalSpotify
             ? `<button type="button" class="bom-v1-quick-listen" data-quick-canonical-listen="${recording.id}" aria-label="Listen to ${escapeHtml(title)} on Spotify" onclick="return handleQuickRateListen(event,this)"><span aria-hidden="true">▶</span><span class="bom-v1-quick-listen-label">Listen</span></button>`
             : "";
-        return `<article class="bom-v1-quick-row" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
+        const discoveryListen = listen
+          ? listen.replace('class="bom-v1-quick-listen"', 'class="bom-v1-quick-discovery-listen"').replace(/<span class="bom-v1-quick-listen-label">Listen<\/span>/, '<span>Listen on Spotify</span>')
+          : "";
+        const discovery = expanded ? `<div class="bom-v1-quick-discovery" data-quick-discovery>
+          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button></div>` : `<p>Artist exploration is not available for this catalogue entry.</p>`}
+          ${discoveryListen}
+          <div class="bom-quick-spotify hidden" data-quick-player></div>
+        </div>` : "";
+        return `<article class="bom-v1-quick-row${expanded ? " is-expanded" : ""}" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
           <span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span>
           <div class="bom-v1-quick-thumb">${artwork ? `<img src="${escapeHtml(artwork)}" alt="" onerror="this.hidden=true">` : ""}<span aria-hidden="true">♪</span></div>
-          <div class="bom-v1-quick-track"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}</div>
+          <button type="button" class="bom-v1-quick-track" data-quick-expand aria-expanded="${expanded}" aria-label="${expanded ? "Collapse" : "Explore"} ${escapeHtml(title)} by ${escapeHtml(artist)}"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}</button>
           <div class="bom-v1-quick-actions">${listen}<div class="bom-v1-quick-rating"><span class="bom-v1-quick-sr-only">Your rating${rating !== null ? `, ${rating} out of 10` : ""}</span>${control}</div></div>
-          <div class="bom-quick-spotify hidden" data-quick-player></div>
+          ${discovery}
         </article>`;
       }).join("") : `<p class="bom-v1-quick-empty">Everything rateable in ${selectedYear} has a rating.</p>`}</div>${isNumberOnes ? '<p class="bom-v1-quick-source">Source: Wikimedia / Wikidata</p>' : ""}</section>`;
     status.textContent = yearEntries.some(entry => entry.status === "matched") ? "Ratings save to the same recording everywhere in BOM." : "No entries for this sample year currently match the BOM catalogue.";
@@ -10334,6 +10370,7 @@ async function openQuickRate() {
     selectedYear = null;
     pickerDecade = null;
     selectedFilter = "all";
+    expandedIdentity = "";
     lastNavigatedIdentity = null;
     render(true);
   });
@@ -10350,21 +10387,41 @@ async function openQuickRate() {
     if (!year || busy || year === selectedYear) return;
     selectedYear = year;
     pickerDecade = Math.floor(selectedYear / 10) * 10;
+    expandedIdentity = "";
     lastNavigatedIdentity = null;
     status.textContent = `Showing UK singles for ${year}.`;
     render(true);
   });
 
   card.addEventListener("click", async event => {
+    const expandButton = event.target.closest("[data-quick-expand]");
+    if (expandButton) {
+      const identity = expandButton.closest("[data-quick-identity]")?.dataset.quickIdentity || "";
+      expandedIdentity = identity && expandedIdentity !== identity ? identity : "";
+      render();
+      card.querySelector(`[data-quick-identity="${CSS.escape(identity)}"] [data-quick-expand]`)?.focus();
+      return;
+    }
+    const artistButton = event.target.closest("[data-quick-artist]");
+    if (artistButton) {
+      const artistName = artistButton.dataset.quickArtistName || "";
+      const artistId = artistButton.dataset.quickArtist || "";
+      if (!artistName || !artistId) return;
+      dialog.close();
+      await window.openArtistPage(artistName, artistId);
+      return;
+    }
     const filterButton = event.target.closest("[data-quick-filter]");
     if (filterButton) {
       selectedFilter = filterButton.dataset.quickFilter === "unrated" ? "unrated" : "all";
+      expandedIdentity = "";
       render();
       card.querySelector(`[data-quick-filter="${selectedFilter}"]`)?.focus();
       return;
     }
     const nextButton = event.target.closest("[data-quick-next]");
     if (nextButton) {
+      expandedIdentity = "";
       const nextEntry = getNextUnratedQuickRateEntry(yearEntries, lastNavigatedIdentity);
       const identity = nextEntry ? getQuickRateEntryIdentity(nextEntry) : "";
       const row = identity ? [...card.querySelectorAll("[data-quick-identity]")].find(item => item.dataset.quickIdentity === identity) : null;
@@ -10397,9 +10454,10 @@ async function openQuickRate() {
       fetchQuickRateRows("albums", "*"),
       fetchQuickRateRows("canonical_recordings", "*"),
       fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
-      fetchQuickRateRows("quick_rate_collection_tracks", "*")
+      fetchQuickRateRows("quick_rate_collection_tracks", "*"),
+      fetchQuickRateArtistIdentities()
     ]);
-    [songs, albums, canonicalRecordings, , importedEntries] = loaded;
+    [songs, albums, canonicalRecordings, , importedEntries, artistIdentities] = loaded;
     allCanonicalRecordings = canonicalRecordings;
     const ratings = loaded[3];
     if (!dialog.open || currentUser?.id !== userId) return;

@@ -394,6 +394,35 @@ test('Quick Rate reuses the closed Rate + and score interaction from main track 
   assert.doesNotMatch(rated, /<details[^>]* open/);
 });
 
+test('Quick Rate resolves artist discovery only from one existing BOM artist identity', () => {
+  const context = vm.createContext({
+    normaliseText: value => String(value || '').trim().replace(/\s+/g, ' '),
+    normaliseCompare: value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '')
+  });
+  vm.runInContext(extract('function getQuickRateArtistDestination', '// The original random queue'), context);
+  const album = { artist: 'The Sweet' };
+  const identity = { artist_name: 'The Sweet', musicbrainz_artist_id: 'artist-1' };
+  assert.deepEqual({...context.getQuickRateArtistDestination({artist:'The Sweet'}, album, [identity])}, {artist:'The Sweet',artistId:'artist-1'});
+  assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, null, []), null);
+  assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, album, [identity,{artist_name:'The Sweet',musicbrainz_artist_id:'artist-2'}]), null);
+});
+
+test('Quick Rate discovery uses stable identity, keeps controls independent, and causes no eager resolution', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /expandedIdentity = ""/);
+  assert.match(quickRate, /expandedIdentity === identity/);
+  assert.match(quickRate, /data-quick-expand aria-expanded/);
+  assert.match(quickRate, /data-quick-artist=/);
+  assert.match(quickRate, /window\.openArtistPage\(artistName, artistId\)/);
+  assert.match(quickRate, /selectedFilter = filterButton[\s\S]*?expandedIdentity = ""/);
+  assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;\s*expandedIdentity = ""/);
+  assert.doesNotMatch(quickRate, /await resolveArtistIdByName/);
+  assert.doesNotMatch(quickRate, /await resolveQuickRateSpotifyTrack/);
+  assert.match(quickRate, /fetchQuickRateArtistIdentities\(\)/);
+  assert.match(styles, /bom-v1-quick-discovery/);
+  assert.match(styles, /bom-v1-quick-track:focus-visible/);
+});
+
 test('Quick Rate derives year and decade navigation from available collection years', () => {
   const context = vm.createContext({QUICK_RATE_UK_SINGLES:{2024:[],2023:[],1998:[]}});
   vm.runInContext(extract('function getQuickRateDecades', 'function isQuickRateEntryRated'), context);
