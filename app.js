@@ -10221,7 +10221,9 @@ async function fetchQuickRateArtistIdentities() {
   }
 }
 
-async function openQuickRate() {
+let quickRateHistoryRestore = null;
+
+async function openQuickRate(restoredState = null) {
   if (!currentUser || document.getElementById("bomQuickRate")) return;
   const userId = currentUser.id;
   const dialog = document.createElement("dialog");
@@ -10235,9 +10237,14 @@ async function openQuickRate() {
   document.body.append(dialog);
   const card = dialog.querySelector("[data-quick-card]");
   const status = dialog.querySelector("[data-quick-status]");
-  let selectedCollection = "uk-number-ones";
-  let years = [], selectedYear = null, selectedFilter = "all", pickerDecade = null, expandedIdentity = "";
-  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false, lastNavigatedIdentity = null;
+  let selectedCollection = restoredState?.selectedCollection || "uk-number-ones";
+  let years = [], selectedYear = restoredState?.selectedYear ?? null;
+  let selectedFilter = restoredState?.selectedFilter === "unrated" ? "unrated" : "all";
+  let pickerDecade = restoredState?.pickerDecade ?? null;
+  let expandedIdentity = restoredState?.expandedIdentity || "";
+  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false;
+  let lastNavigatedIdentity = restoredState?.lastNavigatedIdentity || null;
+  let restorePositionPending = Boolean(restoredState);
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
   dialog.showModal();
@@ -10337,6 +10344,22 @@ async function openQuickRate() {
       }).join("") : `<p class="bom-v1-quick-empty">Everything rateable in ${selectedYear} has a rating.</p>`}</div>${isNumberOnes ? '<p class="bom-v1-quick-source">Source: Wikimedia / Wikidata</p>' : ""}</section>`;
     status.textContent = yearEntries.some(entry => entry.status === "matched") ? "Ratings save to the same recording everywhere in BOM." : "No entries for this sample year currently match the BOM catalogue.";
     if (focus) card.querySelector(".bom-v1-track-rating-trigger")?.focus();
+    if (restorePositionPending) {
+      restorePositionPending = false;
+      window.requestAnimationFrame(() => {
+        const originRow = restoredState?.originIdentity
+          ? card.querySelector(`[data-quick-identity="${CSS.escape(restoredState.originIdentity)}"]`)
+          : null;
+        if (Number.isFinite(restoredState?.scrollTop)) dialog.scrollTop = restoredState.scrollTop;
+        if (originRow) {
+          const rowBounds = originRow.getBoundingClientRect();
+          const dialogBounds = dialog.getBoundingClientRect();
+          if (rowBounds.bottom < dialogBounds.top || rowBounds.top > dialogBounds.bottom) {
+            originRow.scrollIntoView({ block: "center" });
+          }
+        }
+      });
+    }
   }
 
   dialog.saveRating = async (button) => {
@@ -10407,6 +10430,24 @@ async function openQuickRate() {
       const artistName = artistButton.dataset.quickArtistName || "";
       const artistId = artistButton.dataset.quickArtist || "";
       if (!artistName || !artistId) return;
+      const originRow = artistButton.closest("[data-quick-identity]");
+      const restoreState = {
+        selectedCollection,
+        selectedYear,
+        selectedFilter,
+        pickerDecade,
+        expandedIdentity,
+        lastNavigatedIdentity,
+        scrollTop: dialog.scrollTop,
+        originIdentity: originRow?.dataset.quickIdentity || expandedIdentity
+      };
+      const restoreToken = `quick-rate-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      quickRateHistoryRestore = {
+        token: restoreToken,
+        data: { songs, albums, artistIdentities, canonicalRecordings, importedEntries }
+      };
+      window.history.replaceState({ ...(window.history.state || {}), bomQuickRate: { ...restoreState, restoreToken } }, "", window.location.href);
+      window.history.pushState({ bomQuickRateArtist: true }, "", window.location.href);
       dialog.close();
       await window.openArtistPage(artistName, artistId);
       return;
@@ -10424,6 +10465,7 @@ async function openQuickRate() {
       expandedIdentity = "";
       const nextEntry = getNextUnratedQuickRateEntry(yearEntries, lastNavigatedIdentity);
       const identity = nextEntry ? getQuickRateEntryIdentity(nextEntry) : "";
+      render();
       const row = identity ? [...card.querySelectorAll("[data-quick-identity]")].find(item => item.dataset.quickIdentity === identity) : null;
       if (!row) return;
       lastNavigatedIdentity = identity;
@@ -10449,14 +10491,20 @@ async function openQuickRate() {
   });
 
   try {
-    const loaded = await Promise.all([
-      fetchQuickRateRows("songs", "*"),
-      fetchQuickRateRows("albums", "*"),
-      fetchQuickRateRows("canonical_recordings", "*"),
-      fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
-      fetchQuickRateRows("quick_rate_collection_tracks", "*"),
-      fetchQuickRateArtistIdentities()
-    ]);
+    const cachedRestore = restoredState?.restoreToken && quickRateHistoryRestore?.token === restoredState.restoreToken
+      ? quickRateHistoryRestore.data
+      : null;
+    const loaded = cachedRestore
+      ? [cachedRestore.songs, cachedRestore.albums, cachedRestore.canonicalRecordings,
+        allSongRatings.filter(row => row.user_id === userId), cachedRestore.importedEntries, cachedRestore.artistIdentities]
+      : await Promise.all([
+        fetchQuickRateRows("songs", "*"),
+        fetchQuickRateRows("albums", "*"),
+        fetchQuickRateRows("canonical_recordings", "*"),
+        fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
+        fetchQuickRateRows("quick_rate_collection_tracks", "*"),
+        fetchQuickRateArtistIdentities()
+      ]);
     [songs, albums, canonicalRecordings, , importedEntries, artistIdentities] = loaded;
     allCanonicalRecordings = canonicalRecordings;
     const ratings = loaded[3];
@@ -14985,6 +15033,12 @@ window.toggleReviewEditor = function () {
 };
 
 window.addEventListener("popstate", async (event) => {
+  if (event.state?.bomQuickRate) {
+    selectedItem = null;
+    await openQuickRate(event.state.bomQuickRate);
+    return;
+  }
+  document.getElementById("bomQuickRate")?.close();
   if (isStageOnePresentation() && event.state?.bomDiscover) {
     selectedItem = null;
     showOnlySection("recommendationsSection");

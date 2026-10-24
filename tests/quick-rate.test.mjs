@@ -423,6 +423,32 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.match(styles, /bom-v1-quick-track:focus-visible/);
 });
 
+test('Quick Rate artist navigation restores transient collection context through browser history', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /async function openQuickRate\(restoredState = null\)/);
+  assert.match(quickRate, /selectedCollection = restoredState\?\.selectedCollection \|\| "uk-number-ones"/);
+  assert.match(quickRate, /selectedYear = restoredState\?\.selectedYear \?\? null/);
+  assert.match(quickRate, /selectedFilter = restoredState\?\.selectedFilter === "unrated" \? "unrated" : "all"/);
+  assert.match(quickRate, /scrollTop: dialog\.scrollTop/);
+  assert.match(quickRate, /originIdentity: originRow\?\.dataset\.quickIdentity \|\| expandedIdentity/);
+  assert.match(quickRate, /window\.history\.replaceState\([\s\S]*?bomQuickRate:/);
+  assert.match(quickRate, /window\.history\.pushState\(\{ bomQuickRateArtist: true \}/);
+  assert.match(quickRate, /cachedRestore[\s\S]*?quickRateHistoryRestore\?\.token === restoredState\.restoreToken/);
+  assert.match(quickRate, /dialog\.scrollTop = restoredState\.scrollTop/);
+  assert.doesNotMatch(quickRate, /ratingChooser|ratingControlOpen/);
+  assert.doesNotMatch(quickRate, /resolveQuickRateSpotifyTrack|resolveArtistIdByName/);
+
+  const popstate = extract('window.addEventListener("popstate"', 'window.addEventListener("click", (event) =>');
+  assert.match(popstate, /event\.state\?\.bomQuickRate/);
+  assert.match(popstate, /await openQuickRate\(event\.state\.bomQuickRate\)/);
+  assert.match(popstate, /return;/);
+});
+
+test('Next Unrated closes discovery before preserving its existing destination behaviour', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /const nextButton[\s\S]*?expandedIdentity = "";[\s\S]*?getNextUnratedQuickRateEntry\(yearEntries, lastNavigatedIdentity\);[\s\S]*?render\(\);[\s\S]*?scrollIntoView/);
+});
+
 test('Quick Rate derives year and decade navigation from available collection years', () => {
   const context = vm.createContext({QUICK_RATE_UK_SINGLES:{2024:[],2023:[],1998:[]}});
   vm.runInContext(extract('function getQuickRateDecades', 'function isQuickRateEntryRated'), context);
@@ -467,8 +493,8 @@ test('Quick Rate derives year and decade navigation from available collection ye
 
 test('Quick Rate cannot render an undefined selected year while collection data loads', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  assert.match(quickRate, /let selectedCollection = "uk-number-ones"/);
-  assert.match(quickRate, /let years = \[\], selectedYear = null/);
+  assert.match(quickRate, /let selectedCollection = restoredState\?\.selectedCollection \|\| "uk-number-ones"/);
+  assert.match(quickRate, /let years = \[\], selectedYear = restoredState\?\.selectedYear \?\? null/);
   assert.match(quickRate, /getQuickRateCollectionYearState\(selectedCollection, importedEntries, selectedYear\)/);
   assert.match(quickRate, /if \(selectedYear === null\)/);
   assert.match(quickRate, /Loading available years/);
