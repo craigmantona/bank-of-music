@@ -9988,16 +9988,16 @@ function getNextUnratedQuickRateEntry(entries, currentIdentity = "") {
   return candidates[(currentIndex + 1) % candidates.length];
 }
 
-function getQuickRateArtistDestination(song, album, artistIdentities = []) {
-  const artist = normaliseText(song?.artist || album?.artist || "");
+function getQuickRateArtistDestination(song, album, fallbackArtist = "", artistIdentities = []) {
+  const artist = normaliseText(song?.artist || album?.artist || fallbackArtist);
   if (!artist) return null;
   const artistKey = normaliseCompare(artist);
-  const identities = new Set(
-    (artistIdentities || [])
-      .filter(candidate => candidate?.musicbrainz_artist_id && normaliseCompare(candidate.artist_name) === artistKey)
-      .map(candidate => String(candidate.musicbrainz_artist_id))
-  );
-  return identities.size === 1 ? { artist, artistId: [...identities][0] } : null;
+  const matches = (artistIdentities || [])
+    .filter(candidate => candidate?.musicbrainz_artist_id && normaliseCompare(candidate.artist_name) === artistKey);
+  const identities = new Set(matches.map(candidate => String(candidate.musicbrainz_artist_id)));
+  return identities.size === 1
+    ? { artist, artistId: [...identities][0], imageUrl: matches.find(candidate => candidate.imageUrl)?.imageUrl || "" }
+    : null;
 }
 
 // The original random queue remains available for existing callers and tests.
@@ -10208,17 +10208,16 @@ async function fetchQuickRateRows(table, columns, userId) {
 }
 
 async function fetchQuickRateArtistIdentities() {
-  const rows = [];
-  for (let offset = 0; ; offset += 1000) {
-    const { data, error } = await supabaseClient.from("artist_catalog")
-      .select("artist_name,musicbrainz_artist_id")
-      .not("musicbrainz_artist_id", "is", null)
-      .order("artist_name", { ascending: true })
-      .range(offset, offset + 999);
-    if (error) throw error;
-    rows.push(...(data || []));
-    if (!data || data.length < 1000) return rows;
-  }
+  const [catalogue, heroes] = await Promise.all([
+    supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").not("musicbrainz_artist_id", "is", null),
+    supabaseClient.from("artist_hero_overrides").select("artist_name,musicbrainz_artist_id,storage_path,updated_at").not("musicbrainz_artist_id", "is", null)
+  ]);
+  if (catalogue.error) throw catalogue.error;
+  if (heroes.error) throw heroes.error;
+  return [...(catalogue.data || []), ...(heroes.data || []).map(row => ({
+    ...row,
+    imageUrl: getArtistHeroPublicUrl(row.storage_path, row.updated_at)
+  }))];
 }
 
 let quickRateHistoryRestore = null;
@@ -10319,7 +10318,7 @@ async function openQuickRate(restoredState = null) {
         const artist = song ? song.artist : recording?.artist || entry.artist;
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
         const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
-        const artistDestination = getQuickRateArtistDestination(song, album, artistIdentities);
+        const artistDestination = getQuickRateArtistDestination(song, album, artist, artistIdentities);
         const expanded = expandedIdentity === identity;
         const listen = song
           ? `<button type="button" class="bom-v1-quick-listen" data-quick-listen="${song.id}" aria-label="Listen to ${escapeHtml(title)} on Spotify" onclick="return handleQuickRateListen(event,this)"><span aria-hidden="true">▶</span><span class="bom-v1-quick-listen-label">Listen</span></button>`
@@ -10330,13 +10329,13 @@ async function openQuickRate(restoredState = null) {
           ? listen.replace('class="bom-v1-quick-listen"', 'class="bom-v1-quick-discovery-listen"').replace(/<span class="bom-v1-quick-listen-label">Listen<\/span>/, '<span>Listen on Spotify</span>')
           : "";
         const discovery = expanded ? `<div class="bom-v1-quick-discovery" data-quick-discovery>
-          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button></div>` : `<p>Artist exploration is not available for this catalogue entry.</p>`}
+          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button></div>` : `<div><span>${escapeHtml(artist)}</span><small>Artist page unavailable</small></div>`}
           ${discoveryListen}
           <div class="bom-quick-spotify hidden" data-quick-player></div>
         </div>` : "";
         return `<article class="bom-v1-quick-row${expanded ? " is-expanded" : ""}" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
           <span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span>
-          <div class="bom-v1-quick-thumb">${artwork ? `<img src="${escapeHtml(artwork)}" alt="" onerror="this.hidden=true">` : ""}<span aria-hidden="true">♪</span></div>
+          <div class="bom-v1-quick-thumb">${artwork || artistDestination?.imageUrl ? `<img src="${escapeHtml(artwork || artistDestination.imageUrl)}" alt="" loading="lazy" decoding="async" onerror="this.hidden=true">` : ""}<span aria-hidden="true">♪</span></div>
           <button type="button" class="bom-v1-quick-track" data-quick-expand aria-expanded="${expanded}" aria-label="${expanded ? "Collapse" : "Explore"} ${escapeHtml(title)} by ${escapeHtml(artist)}"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}</button>
           <div class="bom-v1-quick-actions">${listen}<div class="bom-v1-quick-rating"><span class="bom-v1-quick-sr-only">Your rating${rating !== null ? `, ${rating} out of 10` : ""}</span>${control}</div></div>
           ${discovery}

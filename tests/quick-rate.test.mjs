@@ -402,9 +402,27 @@ test('Quick Rate resolves artist discovery only from one existing BOM artist ide
   vm.runInContext(extract('function getQuickRateArtistDestination', '// The original random queue'), context);
   const album = { artist: 'The Sweet' };
   const identity = { artist_name: 'The Sweet', musicbrainz_artist_id: 'artist-1' };
-  assert.deepEqual({...context.getQuickRateArtistDestination({artist:'The Sweet'}, album, [identity])}, {artist:'The Sweet',artistId:'artist-1'});
-  assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, null, []), null);
-  assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, album, [identity,{artist_name:'The Sweet',musicbrainz_artist_id:'artist-2'}]), null);
+  assert.deepEqual({...context.getQuickRateArtistDestination({artist:'The Sweet'}, album, '', [identity])}, {artist:'The Sweet',artistId:'artist-1',imageUrl:''});
+  assert.deepEqual({...context.getQuickRateArtistDestination(null, null, 'The Sweet', [{...identity,imageUrl:'hero.jpg'}])}, {artist:'The Sweet',artistId:'artist-1',imageUrl:'hero.jpg'});
+  assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, null, '', []), null);
+  assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, album, '', [identity,{artist_name:'The Sweet',musicbrainz_artist_id:'artist-2'}]), null);
+  assert.equal(context.getQuickRateArtistDestination(null, null, 'Sweet', [identity]), null);
+});
+
+test('Quick Rate reuses catalogue identities and existing BOM artist heroes in one load', async () => {
+  const rows = {
+    artist_catalog: [{artist_name:'Oasis',musicbrainz_artist_id:'oasis-id'}],
+    artist_hero_overrides: [{artist_name:'U2',musicbrainz_artist_id:'u2-id',storage_path:'u2/photo.jpg',updated_at:'2026-01-01'}]
+  };
+  const context = vm.createContext({
+    Promise,
+    getArtistHeroPublicUrl: path => `https://images.example/${path}`,
+    supabaseClient:{from(table){return {select(){return this},not(){return Promise.resolve({data:rows[table],error:null})}}}}
+  });
+  vm.runInContext(extract('async function fetchQuickRateArtistIdentities', 'let quickRateHistoryRestore'), context);
+  const identities = await context.fetchQuickRateArtistIdentities();
+  assert.deepEqual(Array.from(identities, row => row.artist_name), ['Oasis','U2']);
+  assert.equal(identities[1].imageUrl, 'https://images.example/u2/photo.jpg');
 });
 
 test('Quick Rate discovery uses stable identity, keeps controls independent, and causes no eager resolution', () => {
@@ -419,6 +437,10 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.doesNotMatch(quickRate, /await resolveArtistIdByName/);
   assert.doesNotMatch(quickRate, /await resolveQuickRateSpotifyTrack/);
   assert.match(quickRate, /fetchQuickRateArtistIdentities\(\)/);
+  assert.match(quickRate, /artwork \|\| artistDestination\?\.imageUrl/);
+  assert.match(quickRate, /loading="lazy" decoding="async"/);
+  assert.match(quickRate, /Artist page unavailable/);
+  assert.doesNotMatch(quickRate, /Artist exploration is not available/);
   assert.match(styles, /bom-v1-quick-discovery/);
   assert.match(styles, /bom-v1-quick-track:focus-visible/);
 });
