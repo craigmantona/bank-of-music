@@ -410,6 +410,7 @@ test('Quick Rate resolves artist discovery only from one existing BOM artist ide
 });
 
 test('Quick Rate reuses catalogue identities and existing BOM artist heroes in one load', async () => {
+  const requests = [];
   const rows = {
     artist_catalog: [{artist_name:'Oasis',musicbrainz_artist_id:'oasis-id'}],
     artist_hero_overrides: [{artist_name:'U2',musicbrainz_artist_id:'u2-id',storage_path:'u2/photo.jpg',updated_at:'2026-01-01'}]
@@ -417,12 +418,63 @@ test('Quick Rate reuses catalogue identities and existing BOM artist heroes in o
   const context = vm.createContext({
     Promise,
     getArtistHeroPublicUrl: path => `https://images.example/${path}`,
-    supabaseClient:{from(table){return {select(){return this},not(){return Promise.resolve({data:rows[table],error:null})}}}}
+    supabaseClient:{from(table){requests.push(table);return {select(){return this},not(){return Promise.resolve({data:rows[table],error:null})}}}}
   });
   vm.runInContext(extract('async function fetchQuickRateArtistIdentities', 'let quickRateHistoryRestore'), context);
   const identities = await context.fetchQuickRateArtistIdentities();
   assert.deepEqual(Array.from(identities, row => row.artist_name), ['Oasis','U2']);
   assert.equal(identities[1].imageUrl, 'https://images.example/u2/photo.jpg');
+  assert.deepEqual(requests, ['artist_catalog','artist_hero_overrides']);
+});
+
+test('Quick Rate renders essential data before optional artist enrichment settles', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  const essentialLoad = quickRate.slice(quickRate.indexOf(': await Promise.all(['), quickRate.indexOf(']);', quickRate.indexOf(': await Promise.all([')) + 3);
+  assert.doesNotMatch(essentialLoad, /fetchQuickRateArtistIdentities/);
+  assert.ok(quickRate.indexOf('render();') < quickRate.indexOf('enrichQuickRateArtistIdentities('));
+  assert.match(quickRate, /fetchQuickRateRows\("quick_rate_collection_tracks", "\*"\)/);
+});
+
+test('delayed, rejected, empty, and stale artist enrichment cannot block Quick Rate', async () => {
+  let resolveIdentities;
+  let rejectIdentities;
+  let requests = 0;
+  const context = vm.createContext({
+    currentUser:{id:'me'},
+    fetchQuickRateArtistIdentities:() => {
+      requests += 1;
+      return new Promise((resolve, reject) => { resolveIdentities = resolve; rejectIdentities = reject; });
+    }
+  });
+  vm.runInContext(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), context);
+
+  const dialog = {open:true};
+  let enriched = null;
+  const delayed = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = Array.from(rows); });
+  assert.equal(enriched, null, 'optional enrichment may remain pending after core rendering');
+  assert.equal(requests, 1);
+  resolveIdentities([]);
+  await delayed;
+  assert.deepEqual(enriched, [], 'empty enrichment is a usable fallback state');
+
+  enriched = null;
+  const rejected = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = rows; });
+  rejectIdentities(new Error('hero unavailable'));
+  await rejected;
+  assert.equal(enriched, null, 'optional failure must not enter the core load error path');
+
+  enriched = null;
+  const successful = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = Array.from(rows); });
+  resolveIdentities([{artist_name:'U2',musicbrainz_artist_id:'u2-id',imageUrl:'hero.jpg'}]);
+  await successful;
+  assert.equal(enriched[0].imageUrl, 'hero.jpg');
+
+  enriched = null;
+  const stale = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = rows; });
+  dialog.open = false;
+  resolveIdentities([{artist_name:'U2'}]);
+  await stale;
+  assert.equal(enriched, null, 'closed dialogs must not be rerendered');
 });
 
 test('Quick Rate discovery uses stable identity, keeps controls independent, and causes no eager resolution', () => {
@@ -436,7 +488,8 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;\s*expandedIdentity = ""/);
   assert.doesNotMatch(quickRate, /await resolveArtistIdByName/);
   assert.doesNotMatch(quickRate, /await resolveQuickRateSpotifyTrack/);
-  assert.match(quickRate, /fetchQuickRateArtistIdentities\(\)/);
+  assert.match(quickRate, /enrichQuickRateArtistIdentities\(dialog, userId/);
+  assert.match(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /fetchQuickRateArtistIdentities\(\)/);
   assert.match(quickRate, /artwork \|\| artistDestination\?\.imageUrl/);
   assert.match(quickRate, /loading="lazy" decoding="async"/);
   assert.match(quickRate, /Artist page unavailable/);

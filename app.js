@@ -10220,6 +10220,13 @@ async function fetchQuickRateArtistIdentities() {
   }))];
 }
 
+function enrichQuickRateArtistIdentities(dialog, userId, onReady) {
+  return fetchQuickRateArtistIdentities().then(identities => {
+    if (!dialog.open || currentUser?.id !== userId) return;
+    onReady(identities || []);
+  }).catch(() => {});
+}
+
 let quickRateHistoryRestore = null;
 
 async function openQuickRate(restoredState = null) {
@@ -10501,10 +10508,10 @@ async function openQuickRate(restoredState = null) {
         fetchQuickRateRows("albums", "*"),
         fetchQuickRateRows("canonical_recordings", "*"),
         fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
-        fetchQuickRateRows("quick_rate_collection_tracks", "*"),
-        fetchQuickRateArtistIdentities()
+        fetchQuickRateRows("quick_rate_collection_tracks", "*")
       ]);
-    [songs, albums, canonicalRecordings, , importedEntries, artistIdentities] = loaded;
+    [songs, albums, canonicalRecordings, , importedEntries] = loaded;
+    artistIdentities = cachedRestore?.artistIdentities || [];
     allCanonicalRecordings = canonicalRecordings;
     const ratings = loaded[3];
     if (!dialog.open || currentUser?.id !== userId) return;
@@ -10517,6 +10524,14 @@ async function openQuickRate(restoredState = null) {
     const otherUsersRows = allSongRatings.filter(row => row.user_id !== userId);
     allSongRatings = [...otherUsersRows, ...ratings];
     render();
+    if (!cachedRestore) {
+      enrichQuickRateArtistIdentities(dialog, userId, identities => {
+        const scrollTop = dialog.scrollTop;
+        artistIdentities = identities;
+        render();
+        dialog.scrollTop = scrollTop;
+      });
+    }
   } catch (error) {
     status.textContent = "Couldn’t load tracks. Exit Quick Rate and try again.";
   }
