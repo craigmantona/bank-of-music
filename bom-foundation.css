@@ -671,12 +671,22 @@
 .bom-shell-v1 .bom-v1-artist-hero-editor div > div { display: flex; gap: 16px; margin-top: 6px; }
 .bom-shell-v1 .bom-v1-artist-hero-admin button:focus-visible,
 .bom-shell-v1 .bom-v1-artist-hero-admin input:focus-visible { outline: 3px solid var(--bom-v1-focus); outline-offset: 3px; }
-.bom-shell-v1 .bom-v1-artist-photo-wrap { min-width: 0; aspect-ratio: 2.75 / 1; overflow: hidden; background: var(--bom-v1-surface); border-radius: 2px; }
+.bom-shell-v1 .bom-v1-artist-photo-wrap { position: relative; min-width: 0; aspect-ratio: 2.75 / 1; overflow: hidden; background: var(--bom-v1-surface); border-radius: 2px; }
 .bom-shell-v1 .bom-v1-artist-photo { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; filter: grayscale(1); background: var(--bom-v1-surface); }
 .bom-shell-v1 .bom-v1-artist-photo.is-cover { object-fit: cover; object-position: center 32%; }
 .bom-shell-v1 .bom-v1-artist-photo-missing { display: grid; place-items: center; align-content: center; color: var(--bom-v1-muted); }
 .bom-shell-v1 .bom-v1-artist-photo-missing span { color: var(--bom-v1-accent); font-size: clamp(58px, 9vw, 112px); font-weight: 600; }
 .bom-shell-v1 .bom-v1-artist-photo-missing small { margin-top: 10px; }
+.bom-v1-image-credit { min-height: 30px; padding: 4px 8px; color: var(--bom-v1-muted); background: transparent; border: 0; font: inherit; font-size: 10px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.bom-v1-artist-photo-wrap > .bom-v1-image-credit { position: absolute; z-index: 2; right: 8px; bottom: 8px; color: #fff; background: rgba(0, 0, 0, .68); border-radius: 2px; }
+.bom-v1-image-credit:focus-visible { outline: 3px solid var(--bom-v1-focus); outline-offset: 2px; }
+.bom-v1-image-credit-dialog { width: min(420px, calc(100vw - 32px)); padding: 0; color: var(--bom-v1-text); background: var(--bom-v1-surface-raised); border: 1px solid var(--bom-v1-line); border-radius: 4px; }
+.bom-v1-image-credit-dialog::backdrop { background: rgba(0, 0, 0, .72); }
+.bom-v1-image-credit-dialog > div { display: grid; gap: 12px; padding: 24px; }
+.bom-v1-image-credit-dialog h2, .bom-v1-image-credit-dialog p { margin: 0; }
+.bom-v1-image-credit-dialog p, .bom-v1-image-credit-dialog small { overflow-wrap: anywhere; line-height: 1.5; }
+.bom-v1-image-credit-dialog a, .bom-v1-image-credit-dialog button { color: var(--bom-v1-accent); }
+.bom-v1-image-credit-dialog button { width: fit-content; min-height: 40px; padding: 7px 12px; background: transparent; border: 1px solid var(--bom-v1-line); }
 .bom-shell-v1 .bom-v1-artist [hidden] { display: none !important; }
 .bom-shell-v1 .bom-v1-artist-section { padding: 40px 0 8px; }
 .bom-shell-v1 .bom-v1-artist-section + .bom-v1-artist-section { margin-top: 52px; border-top: 1px solid var(--bom-v1-line); }

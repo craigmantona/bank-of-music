@@ -15,6 +15,27 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
   })[character]);
 
+  function completeImageAttribution(value = {}) {
+    const fields = ["image_credit", "image_source_url", "image_license_name", "image_license_url"];
+    if (!fields.every((field) => String(value[field] || "").trim())) return false;
+    try {
+      return [value.image_source_url, value.image_license_url]
+        .every((url) => new URL(url).protocol === "https:");
+    } catch {
+      return false;
+    }
+  }
+
+  function imageCredit(value = {}) {
+    if (!completeImageAttribution(value)) return "";
+    return `<button type="button" class="bom-v1-image-credit" data-bom-image-credit
+      data-image-credit="${escapeHtml(value.image_credit)}"
+      data-image-source-url="${escapeHtml(value.image_source_url)}"
+      data-image-license-name="${escapeHtml(value.image_license_name)}"
+      data-image-license-url="${escapeHtml(value.image_license_url)}"
+      data-image-modification-note="${escapeHtml(value.image_modification_note || "")}">Image credit</button>`;
+  }
+
   window.BOMUI = Object.freeze({
     Artwork({ src = "", alt = "", className = "" } = {}) {
       if (!src) return `<div class="bom-v1-artwork bom-v1-artwork-missing ${escapeHtml(className)}" role="img" aria-label="Artwork unavailable">Artwork unavailable</div>`;
@@ -42,6 +63,7 @@
     SegmentedControl({ label, options = [], selected = "" } = {}) {
       return `<div class="bom-v1-segmented-control" role="group" aria-label="${escapeHtml(label)}">${options.map(({ value, text }) => `<button type="button" data-value="${escapeHtml(value)}" aria-pressed="${value === selected}">${escapeHtml(text)}</button>`).join("")}</div>`;
     },
+    ImageCredit: imageCredit,
     AlbumCard({ id, title, artist = "", artworkUrl = "", year = "", community = null } = {}) {
       const score = Number(community?.average);
       const hasScore = community && Number.isFinite(score);
@@ -55,6 +77,23 @@
         <div class="bom-v1-music-card-foot"><span>${escapeHtml(year)}</span><span>${hasScore ? `${score.toFixed(1)} <small>/ 10</small>` : "Not rated"}</span></div>
       </article>`;
     }
+  });
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-bom-image-credit]");
+    if (!trigger) return;
+    const dialog = document.createElement("dialog");
+    dialog.className = "bom-v1-image-credit-dialog";
+    dialog.setAttribute("aria-labelledby", "bomImageCreditTitle");
+    dialog.innerHTML = `<div><h2 id="bomImageCreditTitle">Image credit</h2>
+      <p>${escapeHtml(trigger.dataset.imageCredit)}</p>
+      <p><a href="${escapeHtml(trigger.dataset.imageSourceUrl)}" target="_blank" rel="noopener noreferrer">Original image</a> · <a href="${escapeHtml(trigger.dataset.imageLicenseUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trigger.dataset.imageLicenseName)}</a></p>
+      ${trigger.dataset.imageModificationNote ? `<small>${escapeHtml(trigger.dataset.imageModificationNote)}</small>` : ""}
+      <button type="button" data-bom-image-credit-close>Close</button></div>`;
+    document.body.append(dialog);
+    dialog.addEventListener("close", () => { trigger.focus(); dialog.remove(); }, { once: true });
+    dialog.querySelector("[data-bom-image-credit-close]").onclick = () => dialog.close();
+    dialog.showModal();
   });
 
   root.innerHTML = `

@@ -3,12 +3,14 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
-const [html, app, artist, policySource, migration, styles] = await Promise.all([
+const [html, app, artist, foundation, policySource, migration, attributionMigration, styles] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-artist.js", import.meta.url), "utf8"),
+  readFile(new URL("../bom-foundation.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-artist-hero.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260917075006_artist_hero_overrides.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20261025135640_add_artist_hero_attribution.sql", import.meta.url), "utf8"),
   readFile(new URL("../bom-foundation.css", import.meta.url), "utf8")
 ]);
 
@@ -75,6 +77,48 @@ test("migration provides public reads with admin-only table and object mutation"
   assert.doesNotMatch(migration, /qualification|artist_import_queue|catalogue worker|cron/i);
 });
 
+test("artist hero attribution reuses the shared accessible dialog and escapes source metadata", () => {
+  assert.match(app, /image_credit, image_source_url, image_license_name, image_license_url, image_modification_note/);
+  assert.match(artist, /BOMUI\.ImageCredit\(model\.imageMeta\)/);
+  assert.match(foundation, /function imageCredit/);
+  assert.match(foundation, /<dialog|createElement\("dialog"\)/);
+  assert.match(foundation, /aria-labelledby/);
+  assert.match(foundation, /target="_blank" rel="noopener noreferrer"/);
+  assert.match(foundation, /escapeHtml\(trigger\.dataset\.imageCredit\)/);
+  assert.match(foundation, /dialog\.addEventListener\("close".*trigger\.focus/);
+  assert.match(styles, /max-width: 600px/);
+});
+
+test("image credit renders complete safe metadata only and escapes creator text", () => {
+  const source = foundation.slice(foundation.indexOf("const escapeHtml"), foundation.indexOf("window.BOMUI"));
+  const context = vm.createContext({ URL });
+  vm.runInContext(`${source};globalThis.imageCreditForTest=imageCredit`, context);
+  const complete = context.imageCreditForTest({
+    image_credit: '<img src=x onerror="bad"> Creator',
+    image_source_url: "https://commons.wikimedia.org/wiki/File:Artist.jpg",
+    image_license_name: "CC BY-SA 4.0",
+    image_license_url: "https://creativecommons.org/licenses/by-sa/4.0",
+    image_modification_note: "Resized and converted"
+  });
+  assert.match(complete, /Image credit/);
+  assert.match(complete, /&lt;img src=x onerror=&quot;bad&quot;&gt; Creator/);
+  assert.match(complete, /CC BY-SA 4\.0/);
+  assert.match(complete, /Resized and converted/);
+  assert.equal(context.imageCreditForTest({ image_credit: "Creator" }), "");
+  assert.equal(context.imageCreditForTest({
+    image_credit: "Creator", image_source_url: "javascript:alert(1)",
+    image_license_name: "CC BY", image_license_url: "https://creativecommons.org/licenses/by/4.0"
+  }), "");
+});
+
+test("NULL attribution renders nothing and manual replacement clears stale attribution", () => {
+  assert.match(foundation, /if \(!completeImageAttribution\(value\)\) return ""/);
+  for (const field of ["image_credit", "image_source_url", "image_license_name", "image_license_url", "image_modification_note"]) {
+    assert.match(app, new RegExp(`${field}: null`));
+    assert.match(attributionMigration, new RegExp(`add column ${field} text`));
+  }
+});
+
 test("the policy module loads before the application", () => {
-  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=140"));
+  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=141"));
 });

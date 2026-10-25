@@ -2869,6 +2869,11 @@ async function saveManualArtistHero(file) {
     mime_type: file.type,
     width: dimensions.width,
     height: dimensions.height,
+    image_credit: null,
+    image_source_url: null,
+    image_license_name: null,
+    image_license_url: null,
+    image_modification_note: null,
     uploaded_by: currentUser.id,
     updated_at: new Date().toISOString()
   };
@@ -5502,7 +5507,7 @@ async function loadManualArtistHero(artistName) {
   if (!artistKey) return null;
   const { data, error } = await supabaseClient
     .from("artist_hero_overrides")
-    .select("artist_key, artist_name, musicbrainz_artist_id, storage_path, mime_type, width, height, updated_at")
+    .select("artist_key, artist_name, musicbrainz_artist_id, storage_path, mime_type, width, height, image_credit, image_source_url, image_license_name, image_license_url, image_modification_note, updated_at")
     .eq("artist_key", artistKey)
     .maybeSingle();
   if (error) {
@@ -9995,8 +10000,9 @@ function getQuickRateArtistDestination(song, album, fallbackArtist = "", artistI
   const matches = (artistIdentities || [])
     .filter(candidate => candidate?.musicbrainz_artist_id && normaliseCompare(candidate.artist_name) === artistKey);
   const identities = new Set(matches.map(candidate => String(candidate.musicbrainz_artist_id)));
+  const hero = matches.find(candidate => candidate.imageUrl) || null;
   return identities.size === 1
-    ? { artist, artistId: [...identities][0], imageUrl: matches.find(candidate => candidate.imageUrl)?.imageUrl || "" }
+    ? { artist, artistId: [...identities][0], imageUrl: hero?.imageUrl || "", imageAttribution: hero }
     : null;
 }
 
@@ -10210,7 +10216,7 @@ async function fetchQuickRateRows(table, columns, userId) {
 async function fetchQuickRateArtistIdentities() {
   const [catalogue, heroes] = await Promise.all([
     supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").not("musicbrainz_artist_id", "is", null),
-    supabaseClient.from("artist_hero_overrides").select("artist_name,musicbrainz_artist_id,storage_path,updated_at").not("musicbrainz_artist_id", "is", null)
+    supabaseClient.from("artist_hero_overrides").select("artist_name,musicbrainz_artist_id,storage_path,updated_at,image_credit,image_source_url,image_license_name,image_license_url,image_modification_note").not("musicbrainz_artist_id", "is", null)
   ]);
   if (catalogue.error) throw catalogue.error;
   if (heroes.error) throw heroes.error;
@@ -10326,6 +10332,7 @@ async function openQuickRate(restoredState = null) {
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
         const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
         const artistDestination = getQuickRateArtistDestination(song, album, artist, artistIdentities);
+        const usesArtistHero = !artwork && Boolean(artistDestination?.imageUrl);
         const expanded = expandedIdentity === identity;
         const listen = song
           ? `<button type="button" class="bom-v1-quick-listen" data-quick-listen="${song.id}" aria-label="Listen to ${escapeHtml(title)} on Spotify" onclick="return handleQuickRateListen(event,this)"><span aria-hidden="true">▶</span><span class="bom-v1-quick-listen-label">Listen</span></button>`
@@ -10336,7 +10343,7 @@ async function openQuickRate(restoredState = null) {
           ? listen.replace('class="bom-v1-quick-listen"', 'class="bom-v1-quick-discovery-listen"').replace(/<span class="bom-v1-quick-listen-label">Listen<\/span>/, '<span>Listen on Spotify</span>')
           : "";
         const discovery = expanded ? `<div class="bom-v1-quick-discovery" data-quick-discovery>
-          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button></div>` : `<div><span>${escapeHtml(artist)}</span><small>Artist page unavailable</small></div>`}
+          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button>${usesArtistHero ? window.BOMUI.ImageCredit(artistDestination.imageAttribution) : ""}</div>` : `<div><span>${escapeHtml(artist)}</span><small>Artist page unavailable</small></div>`}
           ${discoveryListen}
           <div class="bom-quick-spotify hidden" data-quick-player></div>
         </div>` : "";

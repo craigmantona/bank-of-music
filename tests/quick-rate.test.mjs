@@ -402,8 +402,9 @@ test('Quick Rate resolves artist discovery only from one existing BOM artist ide
   vm.runInContext(extract('function getQuickRateArtistDestination', '// The original random queue'), context);
   const album = { artist: 'The Sweet' };
   const identity = { artist_name: 'The Sweet', musicbrainz_artist_id: 'artist-1' };
-  assert.deepEqual({...context.getQuickRateArtistDestination({artist:'The Sweet'}, album, '', [identity])}, {artist:'The Sweet',artistId:'artist-1',imageUrl:''});
-  assert.deepEqual({...context.getQuickRateArtistDestination(null, null, 'The Sweet', [{...identity,imageUrl:'hero.jpg'}])}, {artist:'The Sweet',artistId:'artist-1',imageUrl:'hero.jpg'});
+  assert.deepEqual({...context.getQuickRateArtistDestination({artist:'The Sweet'}, album, '', [identity])}, {artist:'The Sweet',artistId:'artist-1',imageUrl:'',imageAttribution:null});
+  const heroIdentity = {...identity,imageUrl:'hero.jpg',image_credit:'Creator'};
+  assert.deepEqual({...context.getQuickRateArtistDestination(null, null, 'The Sweet', [heroIdentity])}, {artist:'The Sweet',artistId:'artist-1',imageUrl:'hero.jpg',imageAttribution:heroIdentity});
   assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, null, '', []), null);
   assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, album, '', [identity,{artist_name:'The Sweet',musicbrainz_artist_id:'artist-2'}]), null);
   assert.equal(context.getQuickRateArtistDestination(null, null, 'Sweet', [identity]), null);
@@ -425,6 +426,15 @@ test('Quick Rate reuses catalogue identities and existing BOM artist heroes in o
   assert.deepEqual(Array.from(identities, row => row.artist_name), ['Oasis','U2']);
   assert.equal(identities[1].imageUrl, 'https://images.example/u2/photo.jpg');
   assert.deepEqual(requests, ['artist_catalog','artist_hero_overrides']);
+  assert.match(extract('async function fetchQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /image_credit,image_source_url,image_license_name,image_license_url,image_modification_note/);
+});
+
+test('Quick Rate attribution appears only in an expanded drawer using the artist hero', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /const usesArtistHero = !artwork && Boolean\(artistDestination\?\.imageUrl\)/);
+  assert.match(quickRate, /expanded \? `<div class="bom-v1-quick-discovery"/);
+  assert.match(quickRate, /usesArtistHero \? window\.BOMUI\.ImageCredit\(artistDestination\.imageAttribution\) : ""/);
+  assert.doesNotMatch(quickRate.slice(quickRate.indexOf('return `<article class="bom-v1-quick-row'), quickRate.indexOf('${discovery}')), /Image credit/);
 });
 
 test('Quick Rate renders essential data before optional artist enrichment settles', () => {
