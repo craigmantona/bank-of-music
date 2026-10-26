@@ -669,6 +669,8 @@
 .bom-shell-v1 .bom-v1-artist-hero-editor p { margin: 0 0 5px; color: var(--bom-v1-text); font-size: 11px; overflow-wrap: anywhere; }
 .bom-shell-v1 .bom-v1-artist-hero-editor span { display: block; color: var(--bom-v1-muted); font-size: 10px; line-height: 1.4; }
 .bom-shell-v1 .bom-v1-artist-hero-editor div > div { display: flex; gap: 16px; margin-top: 6px; }
+.bom-shell-v1 .bom-v1-artist-hero-editor [data-bom-artist-attribution-fields] { display: grid; gap: 6px; margin: 10px 0; }
+.bom-shell-v1 .bom-v1-artist-hero-editor [data-bom-artist-attribution-fields] input { width: 100%; }
 .bom-shell-v1 .bom-v1-artist-hero-admin button:focus-visible,
 .bom-shell-v1 .bom-v1-artist-hero-admin input:focus-visible { outline: 3px solid var(--bom-v1-focus); outline-offset: 3px; }
 .bom-shell-v1 .bom-v1-artist-photo-wrap { position: relative; min-width: 0; aspect-ratio: 2.75 / 1; overflow: hidden; background: var(--bom-v1-surface); border-radius: 2px; }

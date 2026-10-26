@@ -3186,7 +3186,7 @@ body.profile-open {
  
 .admin-toolbar {
  display: grid !important;
- grid-template-columns: 1fr auto !important;
+ grid-template-columns: 1fr auto auto !important;
  gap: 12px !important;
  align-items: center !important;
 }

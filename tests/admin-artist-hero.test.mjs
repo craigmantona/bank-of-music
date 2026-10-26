@@ -111,14 +111,17 @@ test("image credit renders complete safe metadata only and escapes creator text"
   }), "");
 });
 
-test("NULL attribution renders nothing and manual replacement clears stale attribution", () => {
+test("NULL attribution renders nothing and uploader supports attributed or cleared metadata", () => {
   assert.match(foundation, /if \(!completeImageAttribution\(value\)\) return ""/);
   for (const field of ["image_credit", "image_source_url", "image_license_name", "image_license_url", "image_modification_note"]) {
-    assert.match(app, new RegExp(`${field}: null`));
+    assert.match(app, new RegExp(`${field}: attribution\\.required \\?`));
     assert.match(attributionMigration, new RegExp(`add column ${field} text`));
   }
+  assert.match(artist, /Image requires attribution/);
+  assert.match(artist, /Credit, source URL, licence name and licence URL are required/);
+  assert.match(artist, /saveHero\(selectedHeroFile, attribution\)/);
 });
 
 test("the policy module loads before the application", () => {
-  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=141"));
+  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=142"));
 });

@@ -142,7 +142,7 @@
       <input type="file" data-bom-artist-hero-input accept="image/jpeg,image/png,image/webp" hidden>
       <div class="bom-v1-artist-hero-editor" data-bom-artist-hero-editor hidden>
         <img data-bom-artist-hero-preview alt="New artist hero preview">
-        <div><p data-bom-artist-hero-file></p><span data-bom-artist-hero-message role="status"></span><div><button type="button" data-bom-artist-hero-save>Save hero</button><button type="button" data-bom-artist-hero-cancel>Cancel</button></div></div>
+        <div><p data-bom-artist-hero-file></p><label><input type="checkbox" data-bom-artist-attribution-toggle> Image requires attribution</label><div data-bom-artist-attribution-fields hidden><input data-bom-artist-credit placeholder="Image credit / creator"><input type="url" data-bom-artist-source-url placeholder="Source URL"><input data-bom-artist-license-name placeholder="Licence name"><input type="url" data-bom-artist-license-url placeholder="Licence URL"><input data-bom-artist-modification-note placeholder="Modification note (optional)"></div><span data-bom-artist-hero-message role="status"></span><div><button type="button" data-bom-artist-hero-save>Save hero</button><button type="button" data-bom-artist-hero-cancel>Cancel</button></div></div>
       </div>
     </div>`;
   }
@@ -182,6 +182,10 @@
   }
 
   document.addEventListener("change", (event) => {
+    if (event.target.matches("[data-bom-artist-attribution-toggle]")) {
+      event.target.closest("[data-bom-artist-hero-editor]").querySelector("[data-bom-artist-attribution-fields]").hidden = !event.target.checked;
+      return;
+    }
     if (event.target.id === "bomV1ArtistSort") {
       discographySort = event.target.value;
       renderDiscography();
@@ -237,9 +241,12 @@
       const saveButton = event.target.closest("[data-bom-artist-hero-save]");
       const message = adminRoot.querySelector("[data-bom-artist-hero-message]");
       if (!selectedHeroFile || !window.BOMArtistBridge) return;
+      const required = adminRoot.querySelector("[data-bom-artist-attribution-toggle]").checked;
+      const attribution = { required, credit: adminRoot.querySelector("[data-bom-artist-credit]").value.trim(), sourceUrl: adminRoot.querySelector("[data-bom-artist-source-url]").value.trim(), licenseName: adminRoot.querySelector("[data-bom-artist-license-name]").value.trim(), licenseUrl: adminRoot.querySelector("[data-bom-artist-license-url]").value.trim(), modificationNote: adminRoot.querySelector("[data-bom-artist-modification-note]").value.trim() };
+      if (required && (!attribution.credit || !attribution.sourceUrl || !attribution.licenseName || !attribution.licenseUrl)) { message.textContent = "Credit, source URL, licence name and licence URL are required."; return; }
       saveButton.disabled = true;
       message.textContent = "Saving artist hero…";
-      const result = await window.BOMArtistBridge.saveHero(selectedHeroFile);
+      const result = await window.BOMArtistBridge.saveHero(selectedHeroFile, attribution);
       if (!result?.ok) { saveButton.disabled = false; message.textContent = result?.message || "The artist hero could not be saved."; }
       return;
     }

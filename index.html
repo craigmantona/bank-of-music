@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=30&autocomplete=1";
+    foundationStyles.href = "bom-foundation.css?v=31&autocomplete=1";
     document.head.appendChild(foundationStyles);
 
   }
@@ -391,8 +391,9 @@
      <p class="small">Manage albums, tracks and artwork. Only admin users can see this page.</p>
  
      <div class="admin-toolbar">
-       <input id="adminSearchInput" placeholder="Search local albums or songs to edit">
+       <input id="adminSearchInput" placeholder="Search local albums, songs or artists">
        <button id="adminRefreshBtn">Refresh admin data</button>
+       <button id="missingArtistArtworkBtn">Missing Artist Artwork</button>
      </div>
  
      <p id="adminMessage" class="small"></p>
@@ -450,7 +451,7 @@
   <script src="bom-password-recovery.js?v=1"></script>
   <script src="bom-early-access.js?v=4"></script>
   <script src="bom-spotify-playlist.js?v=3"></script>
-  <script src="app.js?v=141&autocomplete=1&search-autosave=1"></script>
+  <script src="app.js?v=142&autocomplete=1&search-autosave=1"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
@@ -461,7 +462,7 @@
       albumScript.src = "bom-album.js?v=3";
       albumScript.addEventListener("load", function () {
         var artistScript = document.createElement("script");
-        artistScript.src = "bom-artist.js?v=10";
+        artistScript.src = "bom-artist.js?v=11";
         artistScript.addEventListener("load", function () {
           var discoverScript = document.createElement("script");
           discoverScript.src = "bom-discover.js?v=3";

@@ -92,6 +92,7 @@ const adminDashboard = document.getElementById("adminDashboard");
 const adminSearchInput = document.getElementById("adminSearchInput");
 
 const adminRefreshBtn = document.getElementById("adminRefreshBtn");
+const missingArtistArtworkBtn = document.getElementById("missingArtistArtworkBtn");
 
 const adminMessage = document.getElementById("adminMessage");
 
@@ -106,6 +107,8 @@ const releaseGroupCoverCache = {};
 const albumTrackCache = {};
 
 let currentUser = null;
+let missingArtistArtworkRows = null;
+let missingArtistArtworkFilter = "all";
 
 let passwordRecovery = null;
 
@@ -229,7 +232,7 @@ function renderClickableArtistName(artistName) {
 `;
 }
 
-window.openArtistPage = async function (artistName, knownArtistId = "") {
+window.openArtistPage = async function (artistName, knownArtistId = "", openHeroEditor = false) {
 
   const cleanArtistName = normaliseText(artistName);
 
@@ -259,6 +262,7 @@ window.openArtistPage = async function (artistName, knownArtistId = "") {
   showOnlySection("detailSection");
 
   await renderSelectedItem();
+  if (openHeroEditor) selectedItemDetail?.querySelector("[data-bom-artist-hero-pick]")?.click();
 };
 
 
@@ -2836,10 +2840,16 @@ async function unfollowArtistByName(artistName) {
 
 }
 
-async function saveManualArtistHero(file) {
+async function saveManualArtistHero(file, attribution = {}) {
   if (!currentUser || !isAdmin || selectedItem?.type !== "artist") return { ok: false, message: "Admin access is required." };
   const validationMessage = validateArtistHeroFile(file);
   if (validationMessage) return { ok: false, message: validationMessage };
+  if (attribution.required) {
+    if (![attribution.credit, attribution.sourceUrl, attribution.licenseName, attribution.licenseUrl].every(value => normaliseText(value))) return { ok: false, message: "Complete the required image attribution." };
+    try {
+      if (![attribution.sourceUrl, attribution.licenseUrl].every(value => ["http:", "https:"].includes(new URL(value).protocol))) throw new Error();
+    } catch { return { ok: false, message: "Use valid web URLs for the image source and licence." }; }
+  }
   const artistName = selectedItem.name || selectedItem.artist || selectedItem.title || "";
   const artistKey = getArtistHeroKey(artistName);
   if (!artistKey) return { ok: false, message: "The artist could not be identified." };
@@ -2869,11 +2879,11 @@ async function saveManualArtistHero(file) {
     mime_type: file.type,
     width: dimensions.width,
     height: dimensions.height,
-    image_credit: null,
-    image_source_url: null,
-    image_license_name: null,
-    image_license_url: null,
-    image_modification_note: null,
+    image_credit: attribution.required ? normaliseText(attribution.credit) : null,
+    image_source_url: attribution.required ? normaliseText(attribution.sourceUrl) : null,
+    image_license_name: attribution.required ? normaliseText(attribution.licenseName) : null,
+    image_license_url: attribution.required ? normaliseText(attribution.licenseUrl) : null,
+    image_modification_note: attribution.required ? normaliseText(attribution.modificationNote) || null : null,
     uploaded_by: currentUser.id,
     updated_at: new Date().toISOString()
   };
@@ -2889,6 +2899,7 @@ async function saveManualArtistHero(file) {
     if (cleanupError) console.warn("Previous artist hero could not be removed", cleanupError);
   }
   clearAutomaticArtistImageCache(artistName, payload.musicbrainz_artist_id || "");
+  if (missingArtistArtworkRows) await loadMissingArtistArtwork();
   await renderSelectedItem();
   return { ok: true, message: "Artist hero saved." };
 }
@@ -2935,7 +2946,7 @@ window.BOMArtistBridge = Object.freeze({
     if (changed && selectedItem?.type === "artist") await renderSelectedItem();
     return changed;
   },
-  saveHero: (file) => saveManualArtistHero(file),
+  saveHero: (file, attribution) => saveManualArtistHero(file, attribution),
   removeHero: () => removeManualArtistHero(),
   excludeRemoteAlbum: (album) => excludeRemoteArtistAlbum(album)
 });
@@ -11029,6 +11040,54 @@ async function saveAdminTrackListing(editor) {
   await refreshAdminDashboard();
 }
 
+function buildMissingArtistArtworkRows(identities, heroes, songs, albums, ukRows) {
+  const heroMbids = new Set(heroes.map(row => row.musicbrainz_artist_id).filter(Boolean));
+  const heroKeys = new Set(heroes.map(row => normaliseCompare(row.artist_key || row.artist_name)).filter(Boolean));
+  const albumsById = new Map(albums.map(album => [Number(album.id), album]));
+  const seen = new Set();
+  return identities.flatMap(identity => {
+    const mbid = identity.musicbrainz_artist_id;
+    const artist = normaliseText(identity.artist_name);
+    const key = normaliseCompare(artist);
+    if (!mbid || !artist || seen.has(mbid) || heroMbids.has(mbid) || heroKeys.has(key)) return [];
+    seen.add(mbid);
+    const bomTracks = songs.filter(song => normaliseCompare(song.artist) === key);
+    const numberOnes = ukRows.filter(row => row.collection_key === "uk-number-ones" && normaliseCompare(row.artist) === key);
+    const releaseArtwork = numberOnes.filter(row => {
+      const song = songs.find(item => Number(item.id) === Number(row.song_id));
+      return Boolean(song && getAlbumArtworkUrl(albumsById.get(Number(song.album_id)) || {}));
+    }).length;
+    return [{ artist, mbid, bomCount: bomTracks.length, ukCount: numberOnes.length, releaseArtwork }];
+  }).sort((a, b) => b.ukCount - a.ukCount || b.bomCount - a.bomCount || a.artist.localeCompare(b.artist));
+}
+
+async function loadMissingArtistArtwork() {
+  if (!isAdmin) return;
+  try {
+    const [identities, heroes, ukRows] = await Promise.all([
+      supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").not("musicbrainz_artist_id", "is", null),
+      supabaseClient.from("artist_hero_overrides").select("artist_key,artist_name,musicbrainz_artist_id"),
+      fetchQuickRateRows("quick_rate_collection_tracks", "id,collection_key,artist,song_id")
+    ]);
+    const error = identities.error || heroes.error;
+    if (error) throw error;
+    missingArtistArtworkRows = buildMissingArtistArtworkRows(identities.data || [], heroes.data || [], allSongs, allAlbums, ukRows);
+    renderAdminDashboard();
+  } catch (error) { setMessage(adminMessage, error?.message || "Missing artwork could not be loaded."); }
+}
+
+function renderMissingArtistArtwork() {
+  if (!missingArtistArtworkRows) return "";
+  const query = normaliseCompare(adminSearchInput?.value || "");
+  const rows = missingArtistArtworkRows.filter(row =>
+    (missingArtistArtworkFilter === "all" || row.ukCount > 0) && (!query || normaliseCompare(row.artist).includes(query))
+  );
+  return `<div class="admin-panel" data-missing-artist-artwork><h3>Missing Artist Artwork</h3>
+    <p class="small">Trusted artist identities without an applicable hero, ordered by UK No.1 impact then wider BOM impact.</p>
+    <div class="admin-actions"><button data-missing-art-filter="all" aria-pressed="${missingArtistArtworkFilter === "all"}">All</button><button data-missing-art-filter="uk" aria-pressed="${missingArtistArtworkFilter === "uk"}">UK No.1s</button></div>
+    <div class="admin-list">${rows.length ? rows.map(row => `<div class="admin-row" data-missing-artist-mbid="${escapeHtml(row.mbid)}"><div class="admin-song-icon">♪</div><div class="admin-main"><div class="admin-title">${escapeHtml(row.artist)}</div><div class="admin-meta">${row.bomCount} BOM track${row.bomCount === 1 ? "" : "s"} · ${row.ukCount} UK No.1 track${row.ukCount === 1 ? "" : "s"}${row.ukCount ? ` · ${row.releaseArtwork}/${row.ukCount} with release artwork` : ""}</div></div><div class="admin-actions"><button data-add-missing-artist-image data-artist="${escapeHtml(row.artist)}" data-mbid="${escapeHtml(row.mbid)}">Add image</button></div></div>`).join("") : `<p class="small">No matching missing artist artwork.</p>`}</div></div>`;
+}
+
 function renderAdminDashboard() {
 
   if (!adminDashboard) return;
@@ -11097,6 +11156,8 @@ function renderAdminDashboard() {
       <div class="admin-stat-card"><div class="admin-stat-number">${allSongRatings.length}</div><div>Track ratings</div></div>
 
     </div>
+
+    ${renderMissingArtistArtwork()}
 
     ${renderAdminTrackListingEditor()}
 
@@ -11578,6 +11639,10 @@ if (adminRefreshBtn) {
 
 }
 
+if (missingArtistArtworkBtn) {
+  missingArtistArtworkBtn.addEventListener("click", loadMissingArtistArtwork);
+}
+
 
 
 if (adminSearchInput) {
@@ -11591,6 +11656,19 @@ if (adminSearchInput) {
 if (adminDashboard) {
 
   adminDashboard.addEventListener("click", async (event) => {
+
+    const missingFilter = event.target.closest("[data-missing-art-filter]");
+    if (missingFilter) {
+      missingArtistArtworkFilter = missingFilter.dataset.missingArtFilter;
+      renderAdminDashboard();
+      return;
+    }
+
+    const addMissingArtistImage = event.target.closest("[data-add-missing-artist-image]");
+    if (addMissingArtistImage) {
+      await window.openArtistPage(addMissingArtistImage.dataset.artist, addMissingArtistImage.dataset.mbid, true);
+      return;
+    }
 
     const editTrackListingButton = event.target.closest(".admin-edit-track-listing-btn");
 
