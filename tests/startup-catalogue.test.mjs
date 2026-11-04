@@ -35,6 +35,10 @@ function createStartupContext({ session = { user: { id: "user-1" } }, authError 
     handleScrollState: () => events.push(["scroll"])
   });
   vm.runInContext(extract("function getBoundedCatalogueDiagnostic", "async function signUp"), context);
+  context.loadDiscoverData = async () => {
+    const result = loadResults[loadIndex++] ?? { ok: true };
+    if (result.error) throw result.error;
+  };
   return { context, events, getLoadCount: () => loadIndex };
 }
 
@@ -56,7 +60,7 @@ test("catalogue failure can retry successfully without reauthentication", async 
   });
 
   assert.equal(await context.refreshSessionUI(), false);
-  assert.equal(await context.refreshCatalogueUI(), true);
+  assert.equal(await context.refreshDiscoverUI(), true);
   assert.equal(getLoadCount(), 2);
   assert.equal(context.currentUser.id, "user-1");
   assert.ok(events.some(event => event[0] === "recommendations"));
@@ -82,7 +86,7 @@ test("auth-state catalogue rejection is explicitly handled", async () => {
     supabaseClient: { auth: { onAuthStateChange: handler => { authHandler = handler; } } },
     ensureUserProfile: async () => {},
     updateSessionUI: () => events.push("session-ui"),
-    refreshCatalogueUI: async () => { throw new Error("render failure"); },
+    refreshDiscoverUI: async () => { throw new Error("render failure"); },
     handleCatalogueLoadFailure: () => { events.push("handled"); return false; }
   });
   vm.runInContext(extract("supabaseClient.auth.onAuthStateChange", "/* ============================================================\n   v29 SOCIAL UPGRADE"), context);
@@ -94,6 +98,21 @@ test("auth-state catalogue rejection is explicitly handled", async () => {
   assert.deepEqual(events, ["session-ui", "handled"]);
 });
 
-test("Discover retry starts the safe catalogue refresh path", () => {
-  assert.match(app, /refreshDiscover:\s*\(\)\s*=>\s*refreshCatalogueUI\(\)/);
+test("Discover retry starts the lightweight Discover refresh path", () => {
+  assert.match(app, /refreshDiscover:\s*\(\)\s*=>\s*refreshDiscoverUI\(\)/);
+});
+
+test("initial Discover data excludes songs, canonical recordings and song ratings", () => {
+  const source = extract("async function loadDiscoverData", "async function refreshDiscoverUI");
+  assert.match(source, /discover_album_catalogue/);
+  assert.doesNotMatch(source, /fetchAllRows\("songs"/);
+  assert.doesNotMatch(source, /canonical_recordings/);
+  assert.doesNotMatch(source, /song_ratings/);
+});
+
+test("features that need rich catalogue data use the guarded full loader", () => {
+  assert.match(app, /async function ensureFullCatalogue\(\)/);
+  assert.match(app, /async function renderSelectedItem\(\)[\s\S]*?await ensureFullCatalogue\(\)/);
+  assert.match(app, /async function runGlobalSearch\([\s\S]*?await ensureFullCatalogue\(\)/);
+  assert.match(app, /async function openQuickRate\([\s\S]*?await ensureFullCatalogue\(\)/);
 });

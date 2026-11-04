@@ -127,6 +127,8 @@ let allCanonicalRecordings = [];
 let followedArtists = [];
 
 let excludedReleaseGroupIds = new Set();
+let fullCatalogueReady = false;
+let discoverAlbumStatsById = new Map();
 
 let selectedItem = null;
 let currentSectionId = "searchSection";
@@ -239,6 +241,8 @@ window.openArtistPage = async function (artistName, knownArtistId = "", openHero
   if (!cleanArtistName) {
     return;
   }
+
+  await ensureFullCatalogue();
 
   /*
     Artist links from saved songs usually contain only the artist
@@ -446,7 +450,13 @@ function showOnlySection(targetId) {
   authentication, Spotify, rating, review or catalogue behaviour.
 */
 window.BOMPresentationBridge = Object.freeze({
-  showSection: (sectionId) => showOnlySection(sectionId),
+  showSection: async (sectionId) => {
+    if (sectionId === "adminSection") {
+      await ensureFullCatalogue();
+      renderAdminDashboard();
+    }
+    showOnlySection(sectionId);
+  },
   showDiscover: () => {
     selectedItem = null;
     showOnlySection("recommendationsSection");
@@ -455,8 +465,9 @@ window.BOMPresentationBridge = Object.freeze({
   showQuickRate: () => openQuickRate(),
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
-  showRatings: () => {
+  showRatings: async () => {
     showOnlySection("librarySection");
+    await ensureFullCatalogue();
     renderLibrary();
   },
   showSpotify: () => {
@@ -467,14 +478,20 @@ window.BOMPresentationBridge = Object.freeze({
     showOnlySection("settingsSection");
     return connectSpotify();
   },
-  showProfile: () => showUserProfile(),
+  showProfile: async () => {
+    await ensureFullCatalogue();
+    return showUserProfile();
+  },
   logout: () => logOut(),
   runSearch: (term) => {
     if (globalSearchInput) globalSearchInput.value = String(term || "");
     showOnlySection("searchSection");
     return runGlobalSearch();
   },
-  getSearchCatalogue: () => getPredictiveCatalogue(),
+  getSearchCatalogue: async () => {
+    await ensureFullCatalogue();
+    return getPredictiveCatalogue();
+  },
   openSearchSuggestion: async (item) => {
     if (item.kind === "Artist") return window.openArtistPage(item.title);
     const row = item.row;
@@ -491,8 +508,11 @@ window.BOMPresentationBridge = Object.freeze({
     await renderSelectedItem();
   },
   openArtist: (artistName) => window.openArtistPage(artistName),
-  refreshDiscover: () => refreshCatalogueUI(),
-  refreshCharts: () => loadCharts(),
+  refreshDiscover: () => refreshDiscoverUI(),
+  refreshCharts: async () => {
+    await ensureFullCatalogue();
+    return loadCharts();
+  },
   refreshRatings: async () => {
     const root = document.getElementById("librarySection");
     if (isStageOnePresentation() && window.BOMRatingsUI && root) root.innerHTML = window.BOMRatingsUI.renderLoading();
@@ -1944,6 +1964,14 @@ function getAlbumNameById(albumId) {
 
 function getAlbumAverage(albumId) {
 
+  const discoverStats = discoverAlbumStatsById.get(Number(albumId));
+  if (discoverStats && discoverStats.ratingCount > 0) {
+    return {
+      avg: discoverStats.averageRating,
+      count: discoverStats.ratingCount
+    };
+  }
+
   const ratings = allAlbumRatings
 
     .filter((row) => Number(row.album_id) === Number(albumId))
@@ -2381,6 +2409,56 @@ async function refreshCatalogueUI() {
   }
 }
 
+let discoverLoadPromise = null;
+
+async function loadDiscoverData() {
+  if (fullCatalogueReady) return;
+  if (discoverLoadPromise) return discoverLoadPromise;
+
+  const load = (async () => {
+    const albums = await fetchAllRows("discover_album_catalogue", "title");
+    let personalRatings = [];
+
+    if (currentUser) {
+      const { data, error } = await supabaseClient
+        .from("ratings")
+        .select("user_id, album_id, rating")
+        .eq("user_id", currentUser.id)
+        .order("id", { ascending: true });
+      if (error) throw error;
+      personalRatings = data || [];
+    }
+
+    if (fullCatalogueReady) return;
+    allAlbums = albums || [];
+    allAlbumRatings = personalRatings;
+    discoverAlbumStatsById = new Map(allAlbums.map((album) => [Number(album.id), {
+      trackCount: Number(album.discover_track_count || 0),
+      averageRating: Number(album.discover_average_rating || 0),
+      ratingCount: Number(album.discover_rating_count || 0)
+    }]));
+  })();
+
+  discoverLoadPromise = load;
+  try {
+    return await load;
+  } finally {
+    if (discoverLoadPromise === load) discoverLoadPromise = null;
+  }
+}
+
+async function refreshDiscoverUI() {
+  renderStageOneDiscoverLoading();
+  try {
+    await loadDiscoverData();
+    renderRecommendations();
+    handleScrollState();
+    return true;
+  } catch (error) {
+    return handleCatalogueLoadFailure(error);
+  }
+}
+
 async function refreshSessionUI() {
   let session;
   try {
@@ -2400,7 +2478,7 @@ async function refreshSessionUI() {
 
   await ensureUserProfile();
   updateSessionUI();
-  return refreshCatalogueUI();
+  return refreshDiscoverUI();
 }
 
 
@@ -2684,6 +2762,10 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBre
 
 let libraryLoadPromise = null;
 
+async function ensureFullCatalogue() {
+  if (!fullCatalogueReady) await loadLibrary();
+}
+
 async function loadLibrary() {
   if (libraryLoadPromise) return libraryLoadPromise;
 
@@ -2746,6 +2828,8 @@ allSongs = songs;
   followedArtists = followed || [];
 
   excludedReleaseGroupIds = new Set((exclusions || []).map((row) => String(row.musicbrainz_release_group_id || "").toLowerCase()).filter(Boolean));
+  fullCatalogueReady = true;
+  discoverAlbumStatsById = new Map();
 
   })();
 
@@ -3151,6 +3235,9 @@ function renderPosterCard(item, options = {}) {
 
 
 function getAlbumTrackCount(albumId) {
+
+  const discoverStats = discoverAlbumStatsById.get(Number(albumId));
+  if (discoverStats) return discoverStats.trackCount;
 
   return allSongs.filter((song) => Number(song.album_id) === Number(albumId)).length;
 
@@ -4325,6 +4412,8 @@ async function runGlobalSearch(forceOpenBest = false) {
     return;
 
   }
+
+  await ensureFullCatalogue();
 
 
 
@@ -8489,6 +8578,8 @@ async function renderSelectedItem() {
 
   }
 
+  await ensureFullCatalogue();
+
   updateStickyPlayer(selectedItem);
 
 
@@ -10248,6 +10339,7 @@ let quickRateHistoryRestore = null;
 
 async function openQuickRate(restoredState = null) {
   if (!currentUser || document.getElementById("bomQuickRate")) return;
+  await ensureFullCatalogue();
   const userId = currentUser.id;
   const dialog = document.createElement("dialog");
   dialog.id = "bomQuickRate";
@@ -14503,7 +14595,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
   ensureUserProfile()
     .then(() => {
       updateSessionUI();
-      return refreshCatalogueUI();
+      return refreshDiscoverUI();
     })
     .catch(handleCatalogueLoadFailure);
 
@@ -15834,6 +15926,7 @@ window.goCharts = async function () {
   showOnlySection("chartsSection");
 
   if (typeof loadCharts === "function") {
+    await ensureFullCatalogue();
     await loadCharts();
   }
 };
