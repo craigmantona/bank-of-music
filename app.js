@@ -483,6 +483,7 @@ window.BOMPresentationBridge = Object.freeze({
     return showUserProfile();
   },
   logout: () => logOut(),
+  prepareAuthentication: () => authCaptcha?.initialize(),
   runSearch: (term) => {
     if (globalSearchInput) globalSearchInput.value = String(term || "");
     showOnlySection("searchSection");
@@ -2719,6 +2720,14 @@ authCaptcha = window.BOMTurnstile?.create({
   document,
   window
 }) || null;
+
+authCard?.addEventListener("focusin", () => {
+  void authCaptcha?.initialize();
+});
+
+if (new URLSearchParams(window.location.search).has("invitation")) {
+  void authCaptcha?.initialize();
+}
 
 passwordRecovery = window.BOMPasswordRecovery?.create({
   auth: supabaseClient.auth,

@@ -14,6 +14,8 @@
     let widgetId = null;
     let api = turnstileApi || window?.turnstile || null;
     let unavailableMessage = "";
+    let ready = null;
+    let initialized = false;
 
     function setMessage(text) {
       if (message) message.textContent = text || "";
@@ -104,11 +106,17 @@
       });
     }
 
-    const ready = load();
+    function initialize() {
+      if (!enabled) return Promise.resolve();
+      if (ready) return ready;
+      initialized = true;
+      ready = load();
+      return ready;
+    }
 
     async function getToken() {
       if (!enabled) return null;
-      await ready;
+      await initialize();
       if (token) return token;
       const error = new Error(
         unavailableMessage || "Complete the security check before continuing."
@@ -118,6 +126,7 @@
     }
 
     function reset() {
+      if (!initialized) return;
       token = "";
       showRequiredState();
       setMessage("Complete the security check to continue.");
@@ -130,6 +139,8 @@
 
     return Object.freeze({
       isEnabled: () => enabled,
+      isInitialized: () => initialized,
+      initialize,
       getToken,
       reset
     });

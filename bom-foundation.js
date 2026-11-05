@@ -232,7 +232,10 @@
     if (action === "profile") await bridge().showProfile();
     if (action === "spotify") await bridge().showSpotify();
     if (action === "logout") await bridge().logout();
-    if (action === "signin") bridge().showSection("searchSection");
+    if (action === "signin") {
+      await bridge().prepareAuthentication?.();
+      bridge().showSection("searchSection");
+    }
     if (action === "admin") bridge().showSection("adminSection");
     activate();
   });
