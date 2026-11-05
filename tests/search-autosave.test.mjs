@@ -31,7 +31,7 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
     fetchAlbumDetail: async id => { fetches.push(id); if (failResolution) throw Error('MusicBrainz unavailable'); context.albumTrackCache[id] = detail; return detail; },
     getStoredAlbumDetail: () => null,
     fetchReleaseGroupCover: async () => '',
-    updateStickyPlayer() {}, renderLoadingSkeleton() {}, escapeHtml: value => String(value),
+    updateStickyPlayer() {}, renderLoadingSkeleton() {}, escapeHtml: value => String(value), loadAlbumDetailData: async () => null,
     isStageOnePresentation: () => true,
     getAlbumAverage: id => ({ avg: 8, count: 1, id }), getYourAlbumRating: () => null,
     buildStageOneAlbumTrackModels: (detail, albumId) => (detail.media || []).flatMap(m => (m.tracks || []).map(t => ({title:t.title,albumId}))),
@@ -134,6 +134,7 @@ test('changing selection during external resolution prevents saving or rendering
   const h = harness(); let resolve;
   h.context.fetchAlbumDetail = () => new Promise(r => {resolve = r;});
   const pending = h.context.renderSelectedItem();
+  for (let attempt = 0; attempt < 5 && !resolve; attempt += 1) await Promise.resolve();
   h.context.selectedItem = { type: 'artist', title: 'New selection' };
   h.context.selectedItemDetail.innerHTML = 'New selection';
   resolve(release()); await pending;

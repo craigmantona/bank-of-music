@@ -2771,6 +2771,103 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBre
 
 let libraryLoadPromise = null;
 
+const albumDetailLoadPromises = new Map();
+
+function mergeRowsById(existingRows, incomingRows) {
+  const merged = new Map((existingRows || []).map((row) => [String(row.id), row]));
+  (incomingRows || []).forEach((row) => {
+    const key = String(row?.id || "");
+    if (!key) return;
+    merged.set(key, { ...(merged.get(key) || {}), ...row });
+  });
+  return [...merged.values()];
+}
+
+function mergeRatingRows(existingRows, incomingRows, keyForRow) {
+  const merged = new Map();
+  (existingRows || []).forEach((row) => merged.set(keyForRow(row), row));
+  (incomingRows || []).forEach((row) => merged.set(keyForRow(row), row));
+  return [...merged.values()];
+}
+
+async function fetchRowsInChunks(tableName, columnName, values, columns = "*") {
+  const uniqueValues = [...new Set((values || []).filter((value) => value !== null && value !== undefined && value !== ""))];
+  if (!uniqueValues.length) return [];
+  const rows = [];
+  for (let offset = 0; offset < uniqueValues.length; offset += 100) {
+    const { data, error } = await supabaseClient
+      .from(tableName)
+      .select(columns)
+      .in(columnName, uniqueValues.slice(offset, offset + 100));
+    if (error) throw error;
+    rows.push(...(data || []));
+  }
+  return rows;
+}
+
+async function fetchSelectedAlbumRow(selection) {
+  const albumId = Number(selection?.savedAlbumId || selection?.albumId || selection?.album_id || selection?.id || 0);
+  let query = supabaseClient.from("albums").select("*").limit(1);
+  if (Number.isSafeInteger(albumId) && albumId > 0) {
+    query = query.eq("id", albumId);
+  } else if (selection?.externalId) {
+    query = query.eq("external_id", selection.externalId);
+  } else if (selection?.title && selection?.artist) {
+    query = query.eq("title", selection.title).eq("artist", selection.artist);
+  } else {
+    return null;
+  }
+  const { data, error } = await query.maybeSingle();
+  if (error) throw error;
+  return data || null;
+}
+
+async function loadAlbumDetailData(selection) {
+  if (fullCatalogueReady || selection?.type !== "album") return null;
+  const key = String(selection.savedAlbumId || selection.albumId || selection.album_id || selection.id || selection.externalId || `${selection.title || ""}\n${selection.artist || ""}`);
+  if (albumDetailLoadPromises.has(key)) return albumDetailLoadPromises.get(key);
+
+  const load = (async () => {
+    const album = await fetchSelectedAlbumRow(selection);
+    if (!album) return null;
+
+    const [{ data: albumSongs, error: songsError }, { data: albumRatings, error: ratingsError }] = await Promise.all([
+      supabaseClient.from("songs").select("*").eq("album_id", Number(album.id)).order("track_position", { ascending: true }),
+      supabaseClient.from("ratings").select("user_id,album_id,rating").eq("album_id", Number(album.id))
+    ]);
+    if (songsError) throw songsError;
+    if (ratingsError) throw ratingsError;
+
+    const visibleAlbumSongs = (albumSongs || []).filter((song) => !song.is_deleted);
+    const canonicalIds = visibleAlbumSongs.map((song) => getCanonicalSongId(song)).filter(Boolean);
+    const recordingIds = visibleAlbumSongs.map((song) => getConfirmedMusicBrainzRecordingId(song)).filter(Boolean);
+    const [canonicalOccurrences, recordingOccurrences] = await Promise.all([
+      fetchRowsInChunks("songs", "canonical_song_id", canonicalIds),
+      fetchRowsInChunks("songs", "external_id", recordingIds)
+    ]);
+    const relatedSongs = mergeRowsById(visibleAlbumSongs, [...canonicalOccurrences, ...recordingOccurrences])
+      .filter((song) => !song.is_deleted);
+    const relatedSongIds = relatedSongs.map((song) => Number(song.id)).filter(Number.isSafeInteger);
+    const [occurrenceRatings, canonicalRatings] = await Promise.all([
+      fetchRowsInChunks("song_ratings", "song_id", relatedSongIds, "user_id,song_id,canonical_song_id,rating"),
+      fetchRowsInChunks("song_ratings", "canonical_song_id", canonicalIds, "user_id,song_id,canonical_song_id,rating")
+    ]);
+
+    allAlbums = mergeRowsById(allAlbums, [album]);
+    allSongs = mergeRowsById(allSongs, relatedSongs);
+    allAlbumRatings = mergeRatingRows(allAlbumRatings, albumRatings || [], (row) => `${row.user_id}:${row.album_id}`);
+    allSongRatings = mergeRatingRows(allSongRatings, [...occurrenceRatings, ...canonicalRatings], (row) => `${row.user_id}:${row.canonical_song_id || `song:${row.song_id}`}`);
+    return { album, songs: visibleAlbumSongs };
+  })();
+
+  albumDetailLoadPromises.set(key, load);
+  try {
+    return await load;
+  } finally {
+    if (albumDetailLoadPromises.get(key) === load) albumDetailLoadPromises.delete(key);
+  }
+}
+
 async function ensureFullCatalogue() {
   if (!fullCatalogueReady) await loadLibrary();
 }
@@ -8577,6 +8674,7 @@ async function renderSelectedItem() {
 
   const renderGeneration = (renderSelectedItem.generation || 0) + 1;
   renderSelectedItem.generation = renderGeneration;
+  const requestedItem = selectedItem;
 
   if (!selectedItem) {
 
@@ -8587,7 +8685,12 @@ async function renderSelectedItem() {
 
   }
 
-  await ensureFullCatalogue();
+  if (selectedItem.type === "album") {
+    await loadAlbumDetailData(selectedItem);
+  } else {
+    await ensureFullCatalogue();
+  }
+  if (selectedItem !== requestedItem || renderSelectedItem.generation !== renderGeneration) return;
 
   updateStickyPlayer(selectedItem);
 
