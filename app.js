@@ -516,6 +516,63 @@ window.BOMPresentationBridge = Object.freeze({
     }
   },
   openAlbumById: (albumId) => openStageOneRatingsAlbum(albumId),
+  openTrackById: async (songId) => {
+    await ensureFullCatalogue();
+    const song = allSongs.find((item) => Number(item.id) === Number(songId));
+    if (!song) return;
+    selectedItem = {
+      type: "song", title: song.title, artist: song.artist,
+      externalId: song.external_id || "", savedSongId: song.id, albumId: song.album_id
+    };
+    showOnlySection("detailSection");
+    await renderSelectedItem();
+  },
+  loadHistoricalDiscovery: async () => {
+    const rows = [];
+    for (let offset = 0; ; offset += 1000) {
+      const result = await supabaseClient.from("quick_rate_collection_tracks")
+        .select("id,collection_key,chart_year,title,artist,first_number_one_date,weeks_at_number_one,number_one_runs,song_id,canonical_song_id,match_status")
+        .eq("collection_key", "uk-number-ones")
+        .order("id", { ascending: true })
+        .range(offset, offset + 999);
+      if (result.error) throw result.error;
+      rows.push(...(result.data || []));
+      if (!result.data || result.data.length < 1000) break;
+    }
+    const albumById = new Map(allAlbums.map((album) => [Number(album.id), album]));
+    const matchingRows = window.BOMDiscoverHelpers?.numberOnes?.(rows) || [];
+    const songIds = [...new Set(matchingRows.map((row) => Number(row.song_id)).filter(Boolean))];
+    let songs = [];
+    let ratings = [];
+    if (songIds.length) {
+      const [songsResult, ratingsResult] = await Promise.all([
+        supabaseClient.from("songs").select("id,title,artist,album_id,canonical_song_id").in("id", songIds),
+        currentUser
+          ? supabaseClient.from("song_ratings").select("song_id,rating").eq("user_id", currentUser.id).in("song_id", songIds)
+          : Promise.resolve({ data: [] })
+      ]);
+      if (!songsResult.error) songs = songsResult.data || [];
+      if (!ratingsResult.error) ratings = ratingsResult.data || [];
+    }
+    const songsById = new Map(songs.map((song) => [Number(song.id), song]));
+    const ratingBySongId = new Map(ratings.map((rating) => [Number(rating.song_id), Number(rating.rating)]));
+    return {
+      albums: allAlbums.filter((album) => !album.is_deleted).map((album) => ({
+        id: album.id, title: album.title, artist: album.artist,
+        artworkUrl: getAlbumArtworkUrl(album),
+        originalReleaseDate: album.original_release_date || "",
+        releaseDate: album.release_date || "",
+        releaseGroupId: album.musicbrainz_release_group_id || "",
+        rating: album.discover_average_rating ?? null,
+        ratingCount: Number(album.discover_rating_count || 0)
+      })),
+      numberOnes: matchingRows.map((row) => {
+        const song = songsById.get(Number(row.song_id));
+        const album = albumById.get(Number(song?.album_id));
+        return { ...row, artworkUrl: album ? getAlbumArtworkUrl(album) : "", personalRating: ratingBySongId.get(Number(row.song_id)) ?? null };
+      })
+    };
+  },
   openRequestedRoute: () => {
     const params = new URLSearchParams(window.location.search);
     if (!stageOneInitialDataReady || params.get("ui") === "legacy") return;
