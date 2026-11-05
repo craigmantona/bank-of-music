@@ -948,15 +948,16 @@
   .bom-shell-v1 .bom-v1-album-rating-popover { width: 244px; }
   .bom-shell-v1 .bom-v1-album .bom-v1-album-rating-choice { min-width: 40px; min-height: 40px; }
   .bom-shell-v1 .bom-v1-track-header { display: none; }
-  .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 28px minmax(0, 1fr) auto !important; grid-template-rows: auto auto auto !important; grid-template-areas: "number title actions" "number time time" "number community yours" !important; gap: 8px 12px !important; padding: 16px 0 18px 8px !important; }
+  .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 24px minmax(0, 1fr) auto !important; grid-template-rows: auto auto auto !important; grid-template-areas: "number title actions" "number time time" "number community yours" !important; gap: 4px 10px !important; padding: 10px 0 12px 4px !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-number { grid-area: number !important; align-self: start !important; padding-top: 2px !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-title { grid-area: title !important; padding-right: 0 !important; }
   .bom-shell-v1 .bom-v1-track-row .bom-v1-track-time { grid-area: time !important; }
+  .bom-shell-v1 .bom-v1-track-row .bom-v1-track-time:empty { display: none !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-average { grid-area: community !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-your-rating { grid-area: yours !important; text-align: right !important; }
   .bom-shell-v1 .bom-v1-track-row [data-label]::before { content: attr(data-label) " "; color: #7e8279; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
   .bom-shell-v1 .bom-v1-track-row .track-col-your-rating { align-items: center; }
-  .bom-shell-v1 .bom-v1-track-rating-trigger { min-height: 44px; padding-inline: 12px; }
+  .bom-shell-v1 .bom-v1-track-rating-trigger { min-height: 36px; padding: 4px 0; }
   .bom-shell-v1 .bom-v1-track-rating-popover { right: 0; width: 244px; }
   .bom-shell-v1 .bom-v1-album .bom-v1-track-rating-choice { min-width: 40px; min-height: 40px; }
   .bom-shell-v1 .bom-v1-track-row .track-col-actions { grid-area: actions !important; justify-self: end !important; }
