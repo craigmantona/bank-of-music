@@ -22,7 +22,7 @@ const root = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
  await page.locator('#bomV1Search').fill('ra');
  await page.waitForSelector('.bom-v1-suggestion',{timeout:60000});
  console.log('LIVE suggestions', await page.locator('.bom-v1-suggestion').allTextContents());
- const live = await page.evaluate(async()=> {const data=await window.BOMPresentationBridge.getSearchCatalogue(); return {count:data.length,kinds:[...new Set(data.map(x=>x.kind))]};});
+ const live = await page.evaluate(async()=> {const data=await window.BOMPresentationBridge.searchCatalogueSuggestions('radio'); return {count:data.items.length,kinds:[...new Set(data.items.map(x=>x.kind))]};});
  console.log('LIVE catalogue',live);
  await page.screenshot({path:`${tmpdir()}/bom-desktop.png`});
  for (const width of [390,320]) {
@@ -40,8 +40,9 @@ const root = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
  // Exercise real navigation adapters with production writes blocked.
  await page.route('https://musicbrainz.org/**', route => route.fulfill({ json: { artists: [], releases: [], recordings: [], 'release-groups': [] } }));
  await page.setViewportSize({width:390,height:844});
+ const navigationQueries = {Album:'OK Computer',Track:'Paranoid Android',Artist:'Radiohead'};
  for (const kind of ['Album', 'Track', 'Artist']) {
-  const title = await page.evaluate(async kind => (await window.BOMPresentationBridge.getSearchCatalogue()).find(item => item.kind === kind).title, kind);
+  const title = await page.evaluate(async ({kind,query}) => (await window.BOMPresentationBridge.searchCatalogueSuggestions(query)).items.find(item => item.kind === kind).title, {kind,query:navigationQueries[kind]});
   await page.locator('#bomV1Search').fill(title);
   const option = page.locator('.bom-v1-suggestion').filter({has:page.locator('small', {hasText: new RegExp(`^${kind}$`)})}).first();
   await option.waitFor(); await option.click();

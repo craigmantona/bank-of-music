@@ -205,7 +205,7 @@
   });
 
   window.BOMAutocomplete?.attach(searchInput, searchForm, {
-    load: () => bridge().getSearchCatalogue(),
+    search: (query, options) => bridge().searchCatalogueSuggestions(query, options),
     open: (item) => bridge().openSearchSuggestion(item)
   });
 

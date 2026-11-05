@@ -489,11 +489,14 @@ window.BOMPresentationBridge = Object.freeze({
     showOnlySection("searchSection");
     return runGlobalSearch();
   },
-  getSearchCatalogue: async () => {
-    await ensureFullCatalogue();
-    return getPredictiveCatalogue();
-  },
+  searchCatalogueSuggestions: (query, options) => searchCatalogueSuggestions(query, options),
   openSearchSuggestion: async (item) => {
+    if (item.selection) {
+      selectedItem = item.selection;
+      showOnlySection("detailSection");
+      await renderSelectedItem();
+      return;
+    }
     if (item.kind === "Artist") return window.openArtistPage(item.title);
     const row = item.row;
     if (item.album && !allAlbums.some((album) => album.id === item.album.id)) allAlbums.push(item.album);
@@ -4085,7 +4088,7 @@ function buildStageOneRatingsModel() {
       year: String(album.original_release_date || album.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: getAlbumArtworkUrl(album),
       personal: Number(ratingRow.rating),
-      community: community ? { average: community.avg, count: community.count } : null
+      community: community ? { average: community.average ?? community.avg, count: community.count } : null
     };
   }).filter(Boolean);
   const ratedTrackIdentities = new Map();
@@ -4110,7 +4113,7 @@ function buildStageOneRatingsModel() {
       year: String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || "",
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
       personal: rating,
-      community: community ? { average: community.avg, count: community.count } : null
+      community: community ? { average: community.average ?? community.avg, count: community.count } : null
     };
   }).filter(Boolean);
   return { authenticated: Boolean(currentUser), albums, tracks };
@@ -4457,6 +4460,159 @@ function sortBySearchScore(items, query) {
 
 
 
+const localCatalogueSearchCache = new Map();
+const LOCAL_CATALOGUE_SEARCH_LIMIT = 20;
+const LOCAL_CATALOGUE_SEARCH_CACHE_LIMIT = 24;
+
+function getSearchRowArtworkUrl(row) {
+  return row.custom_cover || row.cover_art_url || "";
+}
+
+function mapLocalCatalogueSearchRows(rows) {
+  const grouped = { artists: [], albums: [], songs: [] };
+  (rows || []).forEach((row) => {
+    const communityCount = Number(row.community_count || 0);
+    const communityAverage = Number(row.community_average);
+    const community = communityCount > 0 && Number.isFinite(communityAverage)
+      ? { average: communityAverage, count: communityCount }
+      : null;
+    const matchScore = Number(row.match_score || 0);
+
+    if (row.result_type === "artist") {
+      grouped.artists.push({
+        type: "artist",
+        name: row.title || row.artist || "Unknown artist",
+        title: row.title || row.artist || "Unknown artist",
+        artist: row.artist || row.title || "Unknown artist",
+        externalId: row.external_id || "",
+        artistId: row.external_id || "",
+        country: "",
+        disambiguation: "",
+        isLocal: true,
+        matchScore
+      });
+      return;
+    }
+
+    if (row.result_type === "album") {
+      grouped.albums.push({
+        type: "album",
+        title: row.title || "Untitled album",
+        artist: row.artist || "Unknown artist",
+        externalId: row.external_id || "",
+        releaseDate: row.release_date || "",
+        coverUrl: getSearchRowArtworkUrl(row),
+        savedAlbumId: Number(row.local_id),
+        albumId: Number(row.album_id || row.local_id),
+        community,
+        isLocal: true,
+        matchScore
+      });
+      return;
+    }
+
+    if (row.result_type === "song") {
+      grouped.songs.push({
+        type: "song",
+        title: row.title || "Untitled track",
+        artist: row.artist || "Unknown artist",
+        externalId: row.external_id || "",
+        releaseTitle: row.album_title || "",
+        releaseDate: row.release_date || "",
+        coverUrl: getSearchRowArtworkUrl(row),
+        savedSongId: Number(row.local_id),
+        songId: Number(row.local_id),
+        albumId: row.album_id ? Number(row.album_id) : null,
+        canonicalSongId: row.canonical_song_id || "",
+        community,
+        isLocal: true,
+        matchScore
+      });
+    }
+  });
+  return grouped;
+}
+
+async function searchLocalCatalogue(query, { signal } = {}) {
+  const normalisedQuery = window.BOMAutocomplete?.normalise(query) || String(query || "").trim().toLowerCase();
+  if (normalisedQuery.length < 2) return { artists: [], albums: [], songs: [] };
+  const cached = localCatalogueSearchCache.get(normalisedQuery);
+  if (cached) return cached;
+
+  let request = supabaseClient.rpc("search_catalogue", {
+    p_query: String(query || "").trim(),
+    p_per_type_limit: LOCAL_CATALOGUE_SEARCH_LIMIT
+  }, { get: true });
+  if (signal && typeof request.abortSignal === "function") request = request.abortSignal(signal);
+  const { data, error } = await request;
+  if (error) throw error;
+  const grouped = mapLocalCatalogueSearchRows(data);
+  localCatalogueSearchCache.set(normalisedQuery, grouped);
+  if (localCatalogueSearchCache.size > LOCAL_CATALOGUE_SEARCH_CACHE_LIMIT) {
+    localCatalogueSearchCache.delete(localCatalogueSearchCache.keys().next().value);
+  }
+  return grouped;
+}
+
+function searchCatalogueSuggestions(query, options = {}) {
+  return searchLocalCatalogue(query, options).then((grouped) => {
+    const items = [
+      ...grouped.artists.map((item) => ({
+        kind: "Artist", title: item.name, secondary: "", artist: item.name,
+        artworkUrl: "", matchScore: item.matchScore, selection: item
+      })),
+      ...grouped.albums.map((item) => ({
+        kind: "Album", title: item.title, secondary: item.artist, artist: item.artist,
+        artworkUrl: item.coverUrl, matchScore: item.matchScore, selection: item
+      })),
+      ...grouped.songs.map((item) => ({
+        kind: "Track", title: item.title,
+        secondary: [item.artist, item.releaseTitle].filter(Boolean).join(" · "),
+        artist: item.artist, artworkUrl: item.coverUrl, matchScore: item.matchScore, selection: item
+      }))
+    ].sort((left, right) => {
+      const kindOrder = { Artist: 0, Album: 1, Track: 2 };
+      return right.matchScore - left.matchScore || kindOrder[left.kind] - kindOrder[right.kind] ||
+        left.title.length - right.title.length || left.title.localeCompare(right.title);
+    });
+    return { items: items.slice(0, 7), more: items.length > 7 };
+  });
+}
+
+function mergeSearchResultGroups(local, remote) {
+  const mergeGroup = (localItems, remoteItems, type) => {
+    const result = [...localItems];
+    remoteItems.forEach((remoteItem) => {
+      const duplicateIndex = result.findIndex((localItem) => {
+        if (localItem.externalId && remoteItem.externalId && localItem.externalId === remoteItem.externalId) return true;
+        if (type === "artist") return normaliseCompare(localItem.name) === normaliseCompare(remoteItem.name);
+        return normaliseCompare(localItem.title) === normaliseCompare(remoteItem.title) &&
+          normaliseCompare(localItem.artist) === normaliseCompare(remoteItem.artist);
+      });
+      if (duplicateIndex < 0) {
+        result.push(remoteItem);
+        return;
+      }
+      const localItem = result[duplicateIndex];
+      result[duplicateIndex] = {
+        ...remoteItem,
+        ...localItem,
+        country: localItem.country || remoteItem.country || "",
+        disambiguation: localItem.disambiguation || remoteItem.disambiguation || "",
+        releaseDate: localItem.releaseDate || remoteItem.releaseDate || "",
+        releaseTitle: localItem.releaseTitle || remoteItem.releaseTitle || "",
+        coverUrl: localItem.coverUrl || remoteItem.coverUrl || ""
+      };
+    });
+    return result;
+  };
+  return {
+    artists: mergeGroup(local.artists, remote.artists, "artist").slice(0, 20),
+    albums: mergeGroup(local.albums, remote.albums, "album").slice(0, 30),
+    songs: mergeGroup(local.songs, remote.songs, "song").slice(0, 20)
+  };
+}
+
 // One shared search index over the catalogue already loaded by loadLibrary().
 let predictiveCataloguePromise = null;
 let predictiveCatalogueAlbums = null;
@@ -4524,10 +4680,6 @@ async function runGlobalSearch(forceOpenBest = false) {
 
   }
 
-  await ensureFullCatalogue();
-
-
-
   const searchController = new AbortController();
   globalSearchAbortController = searchController;
 
@@ -4537,6 +4689,15 @@ async function runGlobalSearch(forceOpenBest = false) {
   } else {
     renderLoadingSkeleton(globalSearchResults, "list");
   }
+
+  const musicBrainzPromise = Promise.all([
+    fetchMusicBrainz(`https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}&fmt=json&limit=15`, { signal: searchController.signal }),
+    fetchMusicBrainz(`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=60`, { signal: searchController.signal }),
+    fetchMusicBrainz(`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=25`, { signal: searchController.signal })
+  ]).then(
+    (responses) => ({ responses, error: null }),
+    (error) => ({ responses: null, error })
+  );
 
 
 
@@ -4705,19 +4866,45 @@ ${item.versionCount > 1 ? `<div class="result-meta">+ ${item.versionCount - 1} o
 
   }
 
+  function renderAvailableResults(groupedResults) {
+    globalSearchResults.dataset.results = JSON.stringify(groupedResults);
+    if (isStageOnePresentation() && window.BOMSearchUI) {
+      globalSearchResults.innerHTML = window.BOMSearchUI.render(buildStageOneSearchModel(query, groupedResults));
+      return;
+    }
+    globalSearchResults.innerHTML = `
+      <div class="search-tabs">
+        <button class="search-tab active-search-tab" data-search-filter="all">All</button>
+        <button class="search-tab" data-search-filter="artists">Artists</button>
+        <button class="search-tab" data-search-filter="albums">Albums</button>
+        <button class="search-tab" data-search-filter="songs">Tracks</button>
+      </div>
+      ${renderExpandableSection("Artists", "artists", groupedResults.artists, 5)}
+      ${renderExpandableSection("Albums", "albums", groupedResults.albums, 5)}
+      ${renderExpandableSection("Songs", "songs", groupedResults.songs, 8)}
+    `;
+  }
+
+  let localResults = { artists: [], albums: [], songs: [] };
+  try {
+    localResults = await searchLocalCatalogue(query, { signal: searchController.signal });
+    if (searchGeneration !== globalSearchGeneration) return;
+    if (localResults.artists.length || localResults.albums.length || localResults.songs.length) {
+      renderAvailableResults(localResults);
+      setMessage(globalSearchMessage, "");
+    }
+  } catch (error) {
+    if (searchController.signal.aborted || searchGeneration !== globalSearchGeneration) return;
+    console.error("Local catalogue search failed", error);
+  }
+
 
 
   try {
 
-    const [artistRes, albumRes, songRes] = await Promise.all([
-
-      fetchMusicBrainz(`https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}&fmt=json&limit=15`, { signal: searchController.signal }),
-
-      fetchMusicBrainz(`https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=60`, { signal: searchController.signal }),
-
-      fetchMusicBrainz(`https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=25`, { signal: searchController.signal })
-
-    ]);
+    const musicBrainzResult = await musicBrainzPromise;
+    if (musicBrainzResult.error) throw musicBrainzResult.error;
+    const [artistRes, albumRes, songRes] = musicBrainzResult.responses;
 
     if (searchGeneration !== globalSearchGeneration) return;
 
@@ -5016,7 +5203,7 @@ const songs = sortBySearchScore(
 
 
 
-    const groupedResults = { artists, albums, songs };
+    const groupedResults = mergeSearchResultGroups(localResults, { artists, albums, songs });
 
     globalSearchResults.dataset.results = JSON.stringify(groupedResults);
 
@@ -5077,28 +5264,7 @@ const songs = sortBySearchScore(
 
     }
 
-    if (isStageOnePresentation() && window.BOMSearchUI) {
-      globalSearchResults.innerHTML = window.BOMSearchUI.render(buildStageOneSearchModel(query, groupedResults));
-      setMessage(globalSearchMessage, "");
-      return;
-    }
-
-
-
-    globalSearchResults.innerHTML = `
-  <div class="search-tabs">
-    <button class="search-tab active-search-tab" data-search-filter="all">All</button>
-    <button class="search-tab" data-search-filter="artists">Artists</button>
-    <button class="search-tab" data-search-filter="albums">Albums</button>
-    <button class="search-tab" data-search-filter="songs">Tracks</button>
-  </div>
-
-  ${renderExpandableSection("Artists", "artists", artists, 5)}
-
-  ${renderExpandableSection("Albums", "albums", albums, 5)}
-
-  ${renderExpandableSection("Songs", "songs", songs, 8)}
-`;
+    renderAvailableResults(groupedResults);
 
 
 
@@ -5118,11 +5284,15 @@ const songs = sortBySearchScore(
 
     if (searchGeneration !== globalSearchGeneration || (searchController.signal.aborted && err?.name === "AbortError")) return;
 
-    console.error("Search failed", err);
+    console.error("MusicBrainz search failed", err);
 
-    setMessage(globalSearchMessage, "Search failed.");
-    if (isStageOnePresentation() && window.BOMSearchUI) {
-      globalSearchResults.innerHTML = window.BOMSearchUI.renderError(query);
+    if (localResults.artists.length || localResults.albums.length || localResults.songs.length) {
+      setMessage(globalSearchMessage, "Showing Bank of Music results. External results are temporarily unavailable.");
+    } else {
+      setMessage(globalSearchMessage, "Search failed.");
+      if (isStageOnePresentation() && window.BOMSearchUI) {
+        globalSearchResults.innerHTML = window.BOMSearchUI.renderError(query);
+      }
     }
 
   } finally {
@@ -5133,19 +5303,20 @@ const songs = sortBySearchScore(
 
 function buildStageOneSearchModel(query, groupedResults) {
   const findAlbum = (item) => allAlbums.find((album) =>
-    normaliseCompare(album.title) === normaliseCompare(item.title) &&
-    normaliseCompare(album.artist) === normaliseCompare(item.artist)
+    (item.savedAlbumId && Number(album.id) === Number(item.savedAlbumId)) ||
+    (normaliseCompare(album.title) === normaliseCompare(item.title) &&
+      normaliseCompare(album.artist) === normaliseCompare(item.artist))
   );
   const artists = groupedResults.artists.map((item, index) => ({ ...item, index, artworkUrl: "" }));
   const albums = groupedResults.albums.map((item, index) => {
     const saved = findAlbum(item);
-    const community = saved ? getAlbumAverage(saved.id) : null;
+    const community = item.community || (saved ? getAlbumAverage(saved.id) : null);
     return {
       ...item,
       index,
-      artworkUrl: saved ? getAlbumArtworkUrl(saved) : item.coverUrl,
+      artworkUrl: item.coverUrl || (saved ? getAlbumArtworkUrl(saved) : ""),
       year: String(saved?.original_release_date || saved?.release_date || item.releaseDate || "").match(/\b\d{4}\b/)?.[0] || "",
-      community: community ? { average: community.avg, count: community.count } : null
+      community: community ? { average: community.average ?? community.avg, count: community.count } : null
     };
   });
   const songs = groupedResults.songs.map((item, index) => {
@@ -5153,14 +5324,14 @@ function buildStageOneSearchModel(query, groupedResults) {
     const saved = getSavedSongByExternalId(item.externalId, { albumId: savedAlbum?.id }) ||
       getSavedSongByTitleArtist(item.title, item.artist, { albumId: savedAlbum?.id });
     const album = saved?.album_id ? allAlbums.find((row) => Number(row.id) === Number(saved.album_id)) : findAlbum({ title: item.releaseTitle, artist: item.artist });
-    const community = saved ? getSongAverage(saved.id) : null;
+    const community = item.community || (saved ? getSongAverage(saved.id) : null);
     return {
       ...item,
       index,
       albumTitle: album?.title || item.releaseTitle || "",
-      artworkUrl: album ? getAlbumArtworkUrl(album) : "",
+      artworkUrl: item.coverUrl || (album ? getAlbumArtworkUrl(album) : ""),
       year: String(album?.original_release_date || album?.release_date || item.releaseDate || "").match(/\b\d{4}\b/)?.[0] || "",
-      community: community ? { average: community.avg, count: community.count } : null
+      community: community ? { average: community.average ?? community.avg, count: community.count } : null
     };
   });
   return { query, artists, albums, songs };

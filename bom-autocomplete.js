@@ -55,9 +55,9 @@
     input.setAttribute("aria-autocomplete", "list");
     input.setAttribute("aria-controls", panel.id);
     input.setAttribute("aria-expanded", "false");
-    let timer, generation = 0, active = -1, results = [], composing = false;
+    let timer, generation = 0, active = -1, results = [], composing = false, requestController = null;
     function close() {
-      clearTimeout(timer); generation++; panel.hidden = true; active = -1;
+      clearTimeout(timer); generation++; requestController?.abort(); requestController = null; panel.hidden = true; active = -1;
       input.setAttribute("aria-expanded", "false"); input.removeAttribute("aria-activedescendant");
     }
     function position() {
@@ -77,9 +77,11 @@
       timer = setTimeout(async () => {
         show('<div class="bom-v1-suggestion-message">Searching…</div>');
         try {
-          const catalogue = await actions.load();
+          requestController = new AbortController();
+          const found = actions.search
+            ? await actions.search(query, { signal: requestController.signal })
+            : rank(await actions.load(), query);
           if (token !== generation || document.activeElement !== input) return;
-          const found = rank(catalogue, query);
           results = found.items;
           let html = results.map((item, index) => `<div role="option" aria-selected="false" id="bomSuggestion${index}" data-suggestion="${index}" class="bom-v1-suggestion">
             <span class="bom-v1-suggestion-art">${item.artworkUrl ? `<img src="${escape(item.artworkUrl)}" alt="" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden aria-hidden="true">♪</span>` : "♪"}</span>
@@ -87,7 +89,8 @@
           if (found.more || !results.length) html += `<div role="option" aria-selected="false" id="bomSuggestion${results.length}" data-suggestion="${results.length}" class="bom-v1-suggestion bom-v1-suggestion-all">See all results for ‘${escape(query)}’ <span aria-hidden="true">→</span></div>`;
           show(html);
           status.textContent = `${results.length} suggestions. Use up and down arrows to choose.`;
-        } catch {
+        } catch (error) {
+          if (error?.name === "AbortError") return;
           if (token !== generation) return;
           results = [];
           show('<div role="option" aria-selected="false" id="bomSuggestion0" data-suggestion="0" class="bom-v1-suggestion">Suggestions unavailable. Search all results →</div>');
@@ -131,5 +134,5 @@
     window.visualViewport?.addEventListener("resize", position);
     window.visualViewport?.addEventListener("scroll", position);
   }
-  window.BOMAutocomplete = Object.freeze({ buildCatalogue, rank, attach });
+  window.BOMAutocomplete = Object.freeze({ normalise, buildCatalogue, rank, attach });
 })();

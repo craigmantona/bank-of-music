@@ -113,6 +113,8 @@ test("initial Discover data excludes songs, canonical recordings and song rating
 test("features that need rich catalogue data use the guarded full loader", () => {
   assert.match(app, /async function ensureFullCatalogue\(\)/);
   assert.match(app, /async function renderSelectedItem\(\)[\s\S]*?await ensureFullCatalogue\(\)/);
-  assert.match(app, /async function runGlobalSearch\([\s\S]*?await ensureFullCatalogue\(\)/);
+  const searchSource = extract("async function runGlobalSearch", "function buildStageOneSearchModel");
+  assert.doesNotMatch(searchSource, /ensureFullCatalogue\(\)/);
+  assert.match(searchSource, /searchLocalCatalogue\(query/);
   assert.match(app, /async function openQuickRate\([\s\S]*?await ensureFullCatalogue\(\)/);
 });
