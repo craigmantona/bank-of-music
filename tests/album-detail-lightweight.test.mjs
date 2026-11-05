@@ -25,8 +25,9 @@ test("album detail fetches only the selected album and related rows", () => {
 });
 
 test("canonical and MusicBrainz duplicate occurrences remain available for ratings", () => {
-  assert.match(loader, /fetchRowsInChunks\("songs", "canonical_song_id", canonicalIds\)/);
-  assert.match(loader, /fetchRowsInChunks\("songs", "external_id", recordingIds\)/);
+  assert.match(loader, /fetchRowsInChunks\("songs", "canonical_song_id", canonicalIds, "\*", album\.id\)/);
+  assert.match(loader, /fetchRowsInChunks\("songs", "external_id", recordingIds, "\*", album\.id\)/);
+  assert.match(loader, /filter\(\(song\) => !getCanonicalSongId\(song\)\)/);
   assert.match(loader, /mergeRowsById\(visibleAlbumSongs, \[\.\.\.canonicalOccurrences, \.\.\.recordingOccurrences\]\)/);
 });
 
@@ -66,12 +67,13 @@ test("bounded loader merges album, duplicate occurrences and relevant ratings wi
       limit(value) { calls.push([table, "limit", value]); return query; },
       eq(column, value) { filters.push(["eq", column, value]); return query; },
       in(column, values) { filters.push(["in", column, values]); return query; },
+      neq(column, value) { filters.push(["neq", column, value]); return query; },
       order() { return query; },
       async maybeSingle() { const rows = run(); return { data: rows[0] || null, error: null }; },
       then(resolve) { return Promise.resolve({ data: run(), error: null }).then(resolve); }
     };
     function run() {
-      return (db[table] || []).filter(row => filters.every(([kind, column, value]) => kind === "eq" ? row[column] === value : value.includes(row[column])));
+      return (db[table] || []).filter(row => filters.every(([kind, column, value]) => kind === "eq" ? row[column] === value : kind === "neq" ? row[column] !== value : value.includes(row[column])));
     }
     return query;
   } };

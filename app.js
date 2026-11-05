@@ -2790,15 +2790,17 @@ function mergeRatingRows(existingRows, incomingRows, keyForRow) {
   return [...merged.values()];
 }
 
-async function fetchRowsInChunks(tableName, columnName, values, columns = "*") {
+async function fetchRowsInChunks(tableName, columnName, values, columns = "*", excludedAlbumId = null) {
   const uniqueValues = [...new Set((values || []).filter((value) => value !== null && value !== undefined && value !== ""))];
   if (!uniqueValues.length) return [];
   const rows = [];
   for (let offset = 0; offset < uniqueValues.length; offset += 100) {
-    const { data, error } = await supabaseClient
+    let query = supabaseClient
       .from(tableName)
       .select(columns)
       .in(columnName, uniqueValues.slice(offset, offset + 100));
+    if (excludedAlbumId !== null) query = query.neq("album_id", Number(excludedAlbumId));
+    const { data, error } = await query;
     if (error) throw error;
     rows.push(...(data || []));
   }
@@ -2840,10 +2842,13 @@ async function loadAlbumDetailData(selection) {
 
     const visibleAlbumSongs = (albumSongs || []).filter((song) => !song.is_deleted);
     const canonicalIds = visibleAlbumSongs.map((song) => getCanonicalSongId(song)).filter(Boolean);
-    const recordingIds = visibleAlbumSongs.map((song) => getConfirmedMusicBrainzRecordingId(song)).filter(Boolean);
+    const recordingIds = visibleAlbumSongs
+      .filter((song) => !getCanonicalSongId(song))
+      .map((song) => getConfirmedMusicBrainzRecordingId(song))
+      .filter(Boolean);
     const [canonicalOccurrences, recordingOccurrences] = await Promise.all([
-      fetchRowsInChunks("songs", "canonical_song_id", canonicalIds),
-      fetchRowsInChunks("songs", "external_id", recordingIds)
+      fetchRowsInChunks("songs", "canonical_song_id", canonicalIds, "*", album.id),
+      fetchRowsInChunks("songs", "external_id", recordingIds, "*", album.id)
     ]);
     const relatedSongs = mergeRowsById(visibleAlbumSongs, [...canonicalOccurrences, ...recordingOccurrences])
       .filter((song) => !song.is_deleted);
