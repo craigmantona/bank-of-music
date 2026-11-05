@@ -437,6 +437,19 @@ function showOnlySection(targetId) {
   It exposes existing application actions without duplicating their data,
   authentication, Spotify, rating, review or catalogue behaviour.
 */
+function resolveHistoricalSongCandidate(row, sources, artworkForSong = () => "") {
+  const directSong = sources.songsById.get(Number(row.song_id));
+  const canonicalCandidates = sources.songsByCanonicalId.get(String(row.canonical_song_id || "").trim()) || [];
+  const recordingCandidates = sources.songsByRecordingId.get(String(row.musicbrainz_recording_id || "").trim()) || [];
+  const identityCandidates = sources.songsByHistoricalIdentity.get(sources.historicalIdentity(row.title, row.artist)) || [];
+  const identityKeys = new Set(identityCandidates.map((song) => song.canonical_song_id ? `canonical:${song.canonical_song_id}` : `song:${song.id}`));
+  const safeIdentityCandidates = identityKeys.size === 1 ? identityCandidates : [];
+  return [...new Map([directSong, ...canonicalCandidates, ...recordingCandidates, ...safeIdentityCandidates]
+    .filter(Boolean)
+    .map((song) => [Number(song.id), song])).values()]
+    .sort((left, right) => Number(Boolean(artworkForSong(right))) - Number(Boolean(artworkForSong(left))) || Number(left.id) - Number(right.id))[0] || null;
+}
+
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
@@ -567,23 +580,18 @@ window.BOMPresentationBridge = Object.freeze({
     };
     const historicalIdentity = (title, artist) => `${normaliseCompare(title)}\n${normaliseCompare(artist)}`;
     const songsByHistoricalIdentity = new Map();
-    const songsByHistoricalTitle = new Map();
     songs.forEach((song) => {
       const key = historicalIdentity(song.title, song.artist);
       songsByHistoricalIdentity.set(key, [...(songsByHistoricalIdentity.get(key) || []), song]);
-      const titleKey = normaliseCompare(song.title);
-      songsByHistoricalTitle.set(titleKey, [...(songsByHistoricalTitle.get(titleKey) || []), song]);
     });
     const resolveHistoricalSong = (row) => {
-      const directSong = songsById.get(Number(row.song_id));
-      const canonicalCandidates = songsByCanonicalId.get(String(row.canonical_song_id || "").trim()) || [];
-      const recordingCandidates = songsByRecordingId.get(String(row.musicbrainz_recording_id || "").trim()) || [];
-      const identityCandidates = songsByHistoricalIdentity.get(historicalIdentity(row.title, row.artist)) || [];
-      const titleCandidates = songsByHistoricalTitle.get(normaliseCompare(row.title)) || [];
-      const titleIdentities = new Set(titleCandidates.map((song) => song.canonical_song_id ? `canonical:${song.canonical_song_id}` : `song:${song.id}`));
-      const safeTitleCandidates = titleIdentities.size === 1 ? titleCandidates : [];
-      return [...new Map([directSong, ...canonicalCandidates, ...recordingCandidates, ...identityCandidates, ...safeTitleCandidates].filter(Boolean).map((song) => [Number(song.id), song])).values()]
-        .sort((left, right) => Number(Boolean(artworkForSong(right))) - Number(Boolean(artworkForSong(left))) || Number(left.id) - Number(right.id))[0] || null;
+      return resolveHistoricalSongCandidate(row, {
+        songsById,
+        songsByCanonicalId,
+        songsByRecordingId,
+        songsByHistoricalIdentity,
+        historicalIdentity
+      }, artworkForSong);
     };
     const resolvedRows = matchingRows.map((row) => ({ row, song: resolveHistoricalSong(row) }));
     const resolvedSongIds = [...new Set(resolvedRows.map(({ song }) => Number(song?.id)).filter((id) => Number.isSafeInteger(id) && id > 0))];
