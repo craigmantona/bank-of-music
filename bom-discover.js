@@ -39,7 +39,7 @@
     return (rows||[]).flatMap(a => { const match=occurrenceInWeek(a.originalReleaseDate,week); if(!match) return []; const key=(a.releaseGroupId||`${a.artist}|${a.title}|${a.originalReleaseDate}`).toLowerCase(); if(seen.has(key)) return []; seen.add(key); const age=year-match.releaseYear; return [{...a,year:match.releaseYear,age,significant:anniversaries.has(age)}]; }).sort((a,b)=>b.year-a.year);
   }
   const numberOnes = (rows,now=new Date()) => (rows||[]).filter(r=>chartCoversWeek(r,currentLondonWeek(now))).sort((a,b)=>b.chart_year-a.chart_year);
-  const art = (item,label) => item?.artworkUrl ? `<img src="${esc(item.artworkUrl)}" alt="${esc(item.title)} artwork" loading="lazy" decoding="async">` : `<span class="bom-v1-discovery-art-fallback" aria-hidden="true">${label}</span>`;
+  const art = (item,label) => item?.artworkUrl ? `<img src="${esc(item.artworkUrl)}" alt="${esc(item.title)} artwork" loading="lazy" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bom-v1-discovery-art-fallback" aria-hidden="true" hidden>${label}</span>` : `<span class="bom-v1-discovery-art-fallback" aria-hidden="true">${label}</span>`;
 
   function albumRow(albums,label) {
     if(!albums.length) return ""; const id=`bomDiscoverRow-${Math.random().toString(36).slice(2)}`;
@@ -64,7 +64,7 @@
     return `<article class="bom-v1-discover bom-v1-history"><button class="bom-v1-history-back" data-bom-action="history-back">← Back to Discover</button><header><p class="bom-v1-discover-eyebrow">Discover music through the years</p><h1>${albums?"Released This Week":"UK No.1s This Week"}</h1><p>${albums?"Verified original album releases matching this Monday–Sunday calendar week.":"Verified singles whose actual UK No.1 run covered this calendar week."}</p></header>${rows.length?[...groups].map(([key,items])=>`<section><h2>${albums?key:`${key}s`}</h2><div class="bom-v1-history-grid">${items.map(item=>historyCard(item,albums)).join("")}</div></section>`).join(""):`<div class="bom-v1-history-empty"><h2>No verified matches yet</h2><p>${albums?"BOM needs more complete MusicBrainz release-group first-release dates for this week.":"The existing UK No.1 evidence has no chart run covering this week."}</p></div>`}</article>`;
   }
   function historyCard(item, albums) {
-    const destination = albums ? item.id : item.song_id;
+    const destination = albums ? item.id : item.resolvedSongId;
     const meta = albums && item.significant ? `${item.age} year anniversary` : albums ? item.originalReleaseDate : `${item.chart_year} · ${item.weeks_at_number_one||1} week${+item.weeks_at_number_one===1?"":"s"} at No.1`;
     const rating = albums ? (item.rating==null ? "Not rated" : `${Number(item.rating).toFixed(1)} / 10${item.ratingCount?` · ${item.ratingCount} ratings`:""}`) : (item.personalRating==null ? "Not rated by you" : `Your rating · ${item.personalRating} / 10`);
     return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" ${destination?'tabindex="0" role="link"':""} data-${albums?"album":"track"}-id="${esc(destination||"")}">${art(item,albums?"LP":"01")}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span><small>${rating}</small></div></article>`;

@@ -531,7 +531,7 @@ window.BOMPresentationBridge = Object.freeze({
     const rows = [];
     for (let offset = 0; ; offset += 1000) {
       const result = await supabaseClient.from("quick_rate_collection_tracks")
-        .select("id,collection_key,chart_year,title,artist,first_number_one_date,weeks_at_number_one,number_one_runs,song_id,canonical_song_id,match_status")
+        .select("id,collection_key,chart_year,title,artist,first_number_one_date,weeks_at_number_one,number_one_runs,musicbrainz_recording_id,song_id,canonical_song_id,match_status")
         .eq("collection_key", "uk-number-ones")
         .order("id", { ascending: true })
         .range(offset, offset + 999);
@@ -541,21 +541,65 @@ window.BOMPresentationBridge = Object.freeze({
     }
     const albumById = new Map(allAlbums.map((album) => [Number(album.id), album]));
     const matchingRows = window.BOMDiscoverHelpers?.numberOnes?.(rows) || [];
-    const songIds = [...new Set(matchingRows.map((row) => Number(row.song_id)).filter(Boolean))];
-    let songs = [];
-    let ratings = [];
-    if (songIds.length) {
-      const [songsResult, ratingsResult] = await Promise.all([
-        supabaseClient.from("songs").select("id,title,artist,album_id,canonical_song_id").in("id", songIds),
-        currentUser
-          ? supabaseClient.from("song_ratings").select("song_id,rating").eq("user_id", currentUser.id).in("song_id", songIds)
-          : Promise.resolve({ data: [] })
-      ]);
-      if (!songsResult.error) songs = songsResult.data || [];
-      if (!ratingsResult.error) ratings = ratingsResult.data || [];
-    }
+    const songIds = [...new Set(matchingRows.map((row) => Number(row.song_id)).filter((id) => Number.isSafeInteger(id) && id > 0))];
+    const canonicalIds = [...new Set(matchingRows.map((row) => String(row.canonical_song_id || "").trim()).filter(Boolean))];
+    const recordingIds = [...new Set(matchingRows.map((row) => String(row.musicbrainz_recording_id || "").trim()).filter(Boolean))];
+    const historicalTitles = [...new Set(matchingRows.map((row) => String(row.title || "").trim()).filter(Boolean))];
+    const [directSongs, canonicalSongs, recordingSongs, titleSongs] = await Promise.all([
+      fetchRowsInChunks("songs", "id", songIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
+      fetchRowsInChunks("songs", "canonical_song_id", canonicalIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
+      fetchRowsInChunks("songs", "external_id", recordingIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
+      fetchRowsInChunks("songs", "title", historicalTitles, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted")
+    ]);
+    const songs = mergeRowsById(directSongs, [...canonicalSongs, ...recordingSongs, ...titleSongs]).filter((song) => !song.is_deleted);
     const songsById = new Map(songs.map((song) => [Number(song.id), song]));
-    const ratingBySongId = new Map(ratings.map((rating) => [Number(rating.song_id), Number(rating.rating)]));
+    const songsByCanonicalId = new Map();
+    const songsByRecordingId = new Map();
+    songs.forEach((song) => {
+      const canonicalId = String(song.canonical_song_id || "").trim();
+      if (canonicalId) songsByCanonicalId.set(canonicalId, [...(songsByCanonicalId.get(canonicalId) || []), song]);
+      const recordingId = String(song.external_id || "").trim();
+      if (recordingId) songsByRecordingId.set(recordingId, [...(songsByRecordingId.get(recordingId) || []), song]);
+    });
+    const artworkForSong = (song) => {
+      const album = albumById.get(Number(song?.album_id));
+      return album ? getAlbumArtworkUrl(album) : "";
+    };
+    const historicalIdentity = (title, artist) => `${normaliseCompare(title)}\n${normaliseCompare(artist)}`;
+    const songsByHistoricalIdentity = new Map();
+    const songsByHistoricalTitle = new Map();
+    songs.forEach((song) => {
+      const key = historicalIdentity(song.title, song.artist);
+      songsByHistoricalIdentity.set(key, [...(songsByHistoricalIdentity.get(key) || []), song]);
+      const titleKey = normaliseCompare(song.title);
+      songsByHistoricalTitle.set(titleKey, [...(songsByHistoricalTitle.get(titleKey) || []), song]);
+    });
+    const resolveHistoricalSong = (row) => {
+      const directSong = songsById.get(Number(row.song_id));
+      const canonicalCandidates = songsByCanonicalId.get(String(row.canonical_song_id || "").trim()) || [];
+      const recordingCandidates = songsByRecordingId.get(String(row.musicbrainz_recording_id || "").trim()) || [];
+      const identityCandidates = songsByHistoricalIdentity.get(historicalIdentity(row.title, row.artist)) || [];
+      const titleCandidates = songsByHistoricalTitle.get(normaliseCompare(row.title)) || [];
+      const titleIdentities = new Set(titleCandidates.map((song) => song.canonical_song_id ? `canonical:${song.canonical_song_id}` : `song:${song.id}`));
+      const safeTitleCandidates = titleIdentities.size === 1 ? titleCandidates : [];
+      return [...new Map([directSong, ...canonicalCandidates, ...recordingCandidates, ...identityCandidates, ...safeTitleCandidates].filter(Boolean).map((song) => [Number(song.id), song])).values()]
+        .sort((left, right) => Number(Boolean(artworkForSong(right))) - Number(Boolean(artworkForSong(left))) || Number(left.id) - Number(right.id))[0] || null;
+    };
+    const resolvedRows = matchingRows.map((row) => ({ row, song: resolveHistoricalSong(row) }));
+    const resolvedSongIds = [...new Set(resolvedRows.map(({ song }) => Number(song?.id)).filter((id) => Number.isSafeInteger(id) && id > 0))];
+    const resolvedCanonicalIds = [...new Set(resolvedRows.map(({ song, row }) => String(song?.canonical_song_id || row.canonical_song_id || "").trim()).filter(Boolean))];
+    const [occurrenceRatingResult, canonicalRatingResult] = currentUser ? await Promise.all([
+      resolvedSongIds.length
+        ? supabaseClient.from("song_ratings").select("song_id,canonical_song_id,rating").eq("user_id", currentUser.id).in("song_id", resolvedSongIds)
+        : Promise.resolve({ data: [] }),
+      resolvedCanonicalIds.length
+        ? supabaseClient.from("song_ratings").select("song_id,canonical_song_id,rating").eq("user_id", currentUser.id).in("canonical_song_id", resolvedCanonicalIds)
+        : Promise.resolve({ data: [] })
+    ]) : [{ data: [] }, { data: [] }];
+    const occurrenceRatings = occurrenceRatingResult.error ? [] : occurrenceRatingResult.data || [];
+    const canonicalRatings = canonicalRatingResult.error ? [] : canonicalRatingResult.data || [];
+    const ratingBySongId = new Map(occurrenceRatings.map((rating) => [Number(rating.song_id), Number(rating.rating)]));
+    const ratingByCanonicalId = new Map(canonicalRatings.map((rating) => [String(rating.canonical_song_id || "").trim(), Number(rating.rating)]));
     return {
       albums: allAlbums.filter((album) => !album.is_deleted).map((album) => ({
         id: album.id, title: album.title, artist: album.artist,
@@ -566,10 +610,14 @@ window.BOMPresentationBridge = Object.freeze({
         rating: album.discover_average_rating ?? null,
         ratingCount: Number(album.discover_rating_count || 0)
       })),
-      numberOnes: matchingRows.map((row) => {
-        const song = songsById.get(Number(row.song_id));
-        const album = albumById.get(Number(song?.album_id));
-        return { ...row, artworkUrl: album ? getAlbumArtworkUrl(album) : "", personalRating: ratingBySongId.get(Number(row.song_id)) ?? null };
+      numberOnes: resolvedRows.map(({ row, song }) => {
+        const canonicalId = String(song?.canonical_song_id || row.canonical_song_id || "").trim();
+        return {
+          ...row,
+          resolvedSongId: song?.id || null,
+          artworkUrl: artworkForSong(song),
+          personalRating: ratingByCanonicalId.get(canonicalId) ?? ratingBySongId.get(Number(song?.id)) ?? null
+        };
       })
     };
   },
