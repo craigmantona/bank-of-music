@@ -242,25 +242,13 @@ window.openArtistPage = async function (artistName, knownArtistId = "", openHero
     return;
   }
 
-  await ensureFullCatalogue();
-
-  /*
-    Artist links from saved songs usually contain only the artist
-    name, whereas a search result already contains MusicBrainz's
-    artist ID. Resolve and retain that ID before rendering so both
-    routes show the same complete studio discography.
-  */
-  const artistId = knownArtistId ||
-    getSelectedArtistIdFallback(cleanArtistName) ||
-    await resolveArtistIdByName(cleanArtistName);
-
   selectedItem = {
     type: "artist",
     title: cleanArtistName,
     name: cleanArtistName,
     artist: cleanArtistName,
-    externalId: artistId,
-    artistId
+    externalId: knownArtistId,
+    artistId: knownArtistId
   };
 
   showOnlySection("detailSection");
@@ -2775,6 +2763,8 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBre
 let libraryLoadPromise = null;
 
 const albumDetailLoadPromises = new Map();
+const artistDetailLoadPromises = new Map();
+const artistDetailDataCache = new Map();
 
 function mergeRowsById(existingRows, incomingRows) {
   const merged = new Map((existingRows || []).map((row) => [String(row.id), row]));
@@ -2873,6 +2863,81 @@ async function loadAlbumDetailData(selection) {
     return await load;
   } finally {
     if (albumDetailLoadPromises.get(key) === load) albumDetailLoadPromises.delete(key);
+  }
+}
+
+function getArtistDetailDataKey(selection = {}) {
+  const artistId = String(selection.externalId || selection.artistId || "").trim().toLowerCase();
+  const artistName = normaliseCompare(selection.name || selection.artist || selection.title || "");
+  return artistId ? `id:${artistId}` : `name:${artistName}`;
+}
+
+async function loadArtistDetailData(selection) {
+  if (fullCatalogueReady || selection?.type !== "artist") return null;
+  const artistName = normaliseText(selection.name || selection.artist || selection.title || "");
+  if (!artistName) return null;
+  const key = getArtistDetailDataKey(selection);
+  if (artistDetailDataCache.has(key)) return artistDetailDataCache.get(key);
+  if (artistDetailLoadPromises.has(key)) return artistDetailLoadPromises.get(key);
+
+  const load = (async () => {
+    const artistId = String(selection.externalId || selection.artistId || "").trim();
+    const [albumsResult, songsResult, catalogResult, followedResult, exclusionsResult] = await Promise.all([
+      supabaseClient.from("albums").select("*").ilike("artist", artistName).eq("is_deleted", false).order("release_date", { ascending: true }),
+      supabaseClient.from("songs").select("*").ilike("artist", artistName).eq("is_deleted", false).order("id", { ascending: true }),
+      artistId
+        ? supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").eq("musicbrainz_artist_id", artistId).limit(1).maybeSingle()
+        : supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").ilike("artist_name", artistName).limit(1).maybeSingle(),
+      currentUser
+        ? supabaseClient.from("followed_artists").select("artist_name").ilike("artist_name", artistName)
+        : Promise.resolve({ data: [], error: null }),
+      supabaseClient.from("catalogue_release_group_exclusions").select("musicbrainz_release_group_id").ilike("artist", artistName)
+    ]);
+    const firstError = [albumsResult, songsResult, catalogResult, followedResult, exclusionsResult].find((result) => result?.error)?.error;
+    if (firstError) throw firstError;
+
+    const albums = (albumsResult.data || []).filter((album) => !album.is_deleted);
+    const artistSongs = (songsResult.data || []).filter((song) => !song.is_deleted);
+    const albumIds = albums.map((album) => Number(album.id)).filter(Number.isSafeInteger);
+    const canonicalIds = artistSongs.map((song) => getCanonicalSongId(song)).filter(Boolean);
+    const recordingIds = artistSongs
+      .filter((song) => !getCanonicalSongId(song))
+      .map((song) => getConfirmedMusicBrainzRecordingId(song))
+      .filter(Boolean);
+    const [albumRatings, recordingOccurrences] = await Promise.all([
+      fetchRowsInChunks("ratings", "album_id", albumIds, "user_id,album_id,rating"),
+      fetchRowsInChunks("songs", "external_id", recordingIds, "*")
+    ]);
+    const relatedSongs = mergeRowsById(artistSongs, recordingOccurrences)
+      .filter((song) => !song.is_deleted);
+    const relatedSongIds = relatedSongs.map((song) => Number(song.id)).filter(Number.isSafeInteger);
+    const [occurrenceRatings, canonicalRatings] = await Promise.all([
+      fetchRowsInChunks("song_ratings", "song_id", relatedSongIds, "user_id,song_id,canonical_song_id,rating"),
+      fetchRowsInChunks("song_ratings", "canonical_song_id", canonicalIds, "user_id,song_id,canonical_song_id,rating")
+    ]);
+    const resolvedArtistId = artistId || catalogResult.data?.musicbrainz_artist_id || "";
+    const data = {
+      artistName,
+      artistId: resolvedArtistId,
+      albums,
+      artistSongs,
+      relatedSongs,
+      albumRatings,
+      songRatings: mergeRatingRows([], [...occurrenceRatings, ...canonicalRatings], (row) => `${row.user_id}:${row.canonical_song_id || `song:${row.song_id}`}`),
+      followed: Boolean(followedResult.data?.length),
+      excludedReleaseGroupIds: new Set((exclusionsResult.data || []).map((row) => String(row.musicbrainz_release_group_id || "").toLowerCase()).filter(Boolean))
+    };
+    artistDetailDataCache.set(key, data);
+    artistDetailDataCache.set(`name:${normaliseCompare(artistName)}`, data);
+    if (resolvedArtistId) artistDetailDataCache.set(`id:${resolvedArtistId.toLowerCase()}`, data);
+    return data;
+  })();
+
+  artistDetailLoadPromises.set(key, load);
+  try {
+    return await load;
+  } finally {
+    if (artistDetailLoadPromises.get(key) === load) artistDetailLoadPromises.delete(key);
   }
 }
 
@@ -2992,7 +3057,12 @@ async function followArtistByName(artistName) {
 
 
 
-  await loadLibrary();
+  if (!followedArtists.some((row) => normaliseCompare(row.artist_name) === normaliseCompare(cleanName))) {
+    followedArtists = [...followedArtists, { artist_name: cleanName }];
+  }
+  artistDetailDataCache.forEach((data) => {
+    if (normaliseCompare(data.artistName) === normaliseCompare(cleanName)) data.followed = true;
+  });
 
   setMessage(followArtistMessage, `"${cleanName}" followed.`);
 
@@ -3030,7 +3100,10 @@ async function unfollowArtistByName(artistName) {
 
 
 
-  await loadLibrary();
+  followedArtists = followedArtists.filter((row) => normaliseCompare(row.artist_name) !== normaliseCompare(cleanName));
+  artistDetailDataCache.forEach((data) => {
+    if (normaliseCompare(data.artistName) === normaliseCompare(cleanName)) data.followed = false;
+  });
 
   setMessage(followArtistMessage, `"${cleanName}" unfollowed.`);
 
@@ -6669,13 +6742,50 @@ function buildArtistTopRatedAlbumsHtml(artistName) {
 
 }
 
-function buildArtistRankedTracks(savedSongs) {
+function buildArtistRankedTracks(savedSongs, artistData = null) {
+  const sourceAlbums = artistData?.albums || (typeof allAlbums === "undefined" ? [] : allAlbums);
+  const sourceSongs = artistData?.relatedSongs || (typeof allSongs === "undefined" ? savedSongs : allSongs);
+  const sourceRatings = artistData?.songRatings || (typeof allSongRatings === "undefined" ? [] : allSongRatings);
+  const getAverage = (song) => {
+    if (!artistData) return getSongAverage(song.id);
+    const canonicalId = getCanonicalSongId(song);
+    let rows = canonicalId ? sourceRatings.filter((row) => row.canonical_song_id === canonicalId) : [];
+    if (!rows.length) {
+      const recordingId = getConfirmedMusicBrainzRecordingId(song);
+      const occurrenceIds = new Set(sourceSongs
+        .filter((candidate) => Number(candidate.id) === Number(song.id) ||
+          (canonicalId && getCanonicalSongId(candidate) === canonicalId) ||
+          (!canonicalId && recordingId && getConfirmedMusicBrainzRecordingId(candidate) === recordingId))
+        .map((candidate) => Number(candidate.id)));
+      const byUser = new Map();
+      sourceRatings.forEach((row) => {
+        if (occurrenceIds.has(Number(row.song_id)) && !byUser.has(row.user_id)) byUser.set(row.user_id, row);
+      });
+      rows = [...byUser.values()];
+    }
+    if (!rows.length) return null;
+    const ratings = rows.map((row) => Number(row.rating));
+    return { avg: ratings.reduce((sum, value) => sum + value, 0) / ratings.length, count: ratings.length };
+  };
+  const getPersonal = (song) => {
+    if (!artistData || !currentUser) return artistData ? null : getYourSongRating(song.id);
+    const canonicalId = getCanonicalSongId(song);
+    const canonicalRow = canonicalId && sourceRatings.find((row) => row.user_id === currentUser.id && row.canonical_song_id === canonicalId);
+    if (canonicalRow) return Number(canonicalRow.rating);
+    const recordingId = getConfirmedMusicBrainzRecordingId(song);
+    const occurrenceIds = new Set(sourceSongs
+      .filter((candidate) => Number(candidate.id) === Number(song.id) ||
+        (recordingId && getConfirmedMusicBrainzRecordingId(candidate) === recordingId))
+      .map((candidate) => Number(candidate.id)));
+    const row = sourceRatings.find((rating) => rating.user_id === currentUser.id && occurrenceIds.has(Number(rating.song_id)));
+    return row ? Number(row.rating) : null;
+  };
   const tracksByRatingIdentity = new Map();
 
   savedSongs.forEach((song) => {
-    const average = getSongAverage(song.id);
+    const average = getAverage(song);
     if (!average) return;
-    const album = song.album_id ? allAlbums.find((item) => Number(item.id) === Number(song.album_id) && !item.is_deleted) : null;
+    const album = song.album_id ? sourceAlbums.find((item) => Number(item.id) === Number(song.album_id) && !item.is_deleted) : null;
     const identityKey = getSongRatingIdentity(song);
     const candidate = {
       songId: song.id,
@@ -6685,7 +6795,7 @@ function buildArtistRankedTracks(savedSongs) {
       albumYear: String(album?.original_release_date || album?.release_date || "").slice(0, 4),
       artworkUrl: album ? getAlbumArtworkUrl(album) : "",
       community: { average: Number(average.avg), count: Number(average.count || 0) },
-      personal: getYourSongRating(song.id),
+      personal: getPersonal(song),
       sourceSong: song
     };
     const existing = tracksByRatingIdentity.get(identityKey);
@@ -6714,10 +6824,24 @@ function buildArtistRankedTracks(savedSongs) {
   return rankedTracks;
 }
 
-function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, imageMeta = null, albums, savedSongs }) {
+function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, imageMeta = null, albums, savedSongs, artistData = null }) {
+  const albumRatings = artistData?.albumRatings || (typeof allAlbumRatings === "undefined" ? [] : allAlbumRatings);
+  const getArtistAlbumAverage = (albumId) => {
+    if (!artistData) return getAlbumAverage(albumId);
+    const rows = albumRatings.filter((row) => Number(row.album_id) === Number(albumId));
+    if (!rows.length) return null;
+    const values = rows.map((row) => Number(row.rating));
+    return { avg: values.reduce((sum, value) => sum + value, 0) / values.length, count: values.length };
+  };
+  const getArtistPersonalAlbumRating = (albumId) => {
+    if (!artistData) return getYourAlbumRating(albumId);
+    if (!currentUser) return null;
+    const row = albumRatings.find((rating) => rating.user_id === currentUser.id && Number(rating.album_id) === Number(albumId));
+    return row ? Number(row.rating) : null;
+  };
   const normalizedAlbums = albums.map((album, sourceIndex) => {
     const albumId = album.savedAlbumId || album.localAlbumId || "";
-    const average = albumId ? getAlbumAverage(albumId) : null;
+    const average = albumId ? getArtistAlbumAverage(albumId) : null;
     return {
       sourceIndex,
       albumId,
@@ -6729,7 +6853,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
       releaseGroupId: album.releaseGroupId || album.release_group_id || "",
       canExclude: Boolean(isAdmin && !albumId && (album.releaseGroupId || album.release_group_id)),
       community: average ? { average: Number(average.avg), count: Number(average.count || 0) } : null,
-      personal: albumId ? getYourAlbumRating(albumId) : null
+      personal: albumId ? getArtistPersonalAlbumRating(albumId) : null
     };
   });
 
@@ -6737,7 +6861,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
     .filter((album) => album.community)
     .sort((a, b) => b.community.average - a.community.average || b.community.count - a.community.count || String(a.releaseDate || "9999").localeCompare(String(b.releaseDate || "9999")) || a.title.localeCompare(b.title));
 
-  const rankedTracks = buildArtistRankedTracks(savedSongs);
+  const rankedTracks = buildArtistRankedTracks(savedSongs, artistData);
 
   const metadata = [];
   const area = artistDetail?.area?.name || artistDetail?.begin_area?.name || "";
@@ -6761,7 +6885,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
     highestTrack: rankedTracks[0] || null,
     heroAdmin: { enabled: Boolean(isAdmin), hasManual: Boolean(imageMeta?.isManual) },
     backControlHtml: buildSelectedBackButton(),
-    followControlHtml: isArtistFollowed(artistName)
+    followControlHtml: (artistData ? artistData.followed : isArtistFollowed(artistName))
       ? '<button type="button" class="bom-v1-artist-follow is-following" data-bom-artist-follow="false" aria-pressed="true">Following ✓</button>'
       : '<button type="button" class="bom-v1-artist-follow" data-bom-artist-follow="true" aria-pressed="false">+ Follow artist</button>'
   };
@@ -6824,7 +6948,7 @@ function mergeArtistDiscographyAlbums({ remoteAlbums, savedAlbums, artistName, a
   return displayAlbums;
 }
 
-async function renderArtistDetail(artistItem) {
+async function renderArtistDetail(artistItem, artistData = null) {
 
   if (!artistItem) return;
 
@@ -6840,10 +6964,10 @@ async function renderArtistDetail(artistItem) {
     if (window.BOMArtistUI) selectedItemDetail.innerHTML = window.BOMArtistUI.renderLoading(artistName, buildSelectedBackButton());
   }
 
-  const savedAlbums =
+  const savedAlbums = artistData?.albums ||
     getSavedAlbumsByArtist(artistName);
 
-  const savedSongs =
+  const savedSongs = artistData?.artistSongs ||
     getSavedSongsByArtist(artistName);
 
   // The useful BOM catalogue is already local. Show it before any optional
@@ -6868,13 +6992,15 @@ async function renderArtistDetail(artistItem) {
       artistItem,
       imageUrl: "",
       albums: localAlbums,
-      savedSongs
+      savedSongs,
+      artistData
     }), localAlbums);
   }
 
   const preferredArtistMusicBrainzId =
     artistItem.externalId ||
     artistItem.artistId ||
+    artistData?.artistId ||
     getSelectedArtistIdFallback(artistName) ||
     await resolveArtistIdByName(artistName);
 
@@ -6916,7 +7042,7 @@ async function renderArtistDetail(artistItem) {
 
   const remoteAlbums =
     (completeDiscography.albums || []).filter((album) =>
-      !excludedReleaseGroupIds.has(String(album.releaseGroupId || album.release_group_id || album.id || "").toLowerCase())
+      !(artistData?.excludedReleaseGroupIds || excludedReleaseGroupIds).has(String(album.releaseGroupId || album.release_group_id || album.id || "").toLowerCase())
     );
 
   /*
@@ -7012,7 +7138,8 @@ async function renderArtistDetail(artistItem) {
         : premiumArtistImage,
       imageMeta: artistImageResult,
       albums: displayAlbums,
-      savedSongs
+      savedSongs,
+      artistData
     }), displayAlbums);
     return;
   }
@@ -8861,8 +8988,11 @@ async function renderSelectedItem() {
 
   }
 
+  let artistData = null;
   if (selectedItem.type === "album") {
     await loadAlbumDetailData(selectedItem);
+  } else if (selectedItem.type === "artist") {
+    artistData = await loadArtistDetailData(selectedItem);
   } else {
     await ensureFullCatalogue();
   }
@@ -8874,7 +9004,7 @@ async function renderSelectedItem() {
 
   if (selectedItem.type === "artist") {
 
-    await renderArtistDetail(selectedItem);
+    await renderArtistDetail(selectedItem, artistData);
 
     return;
 
