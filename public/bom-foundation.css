@@ -870,7 +870,8 @@
 .bom-shell-v1 .bom-v1-track-detail-album { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-top: 20px; color: var(--bom-v1-muted); font-size: 14px; }
 .bom-shell-v1 .bom-v1-track-detail-album button,
 .bom-shell-v1 .bom-v1-track-detail-album strong { min-height: 44px; padding: 0; color: var(--bom-v1-text); background: transparent; border: 0; box-shadow: none; font: inherit; font-weight: 500; cursor: pointer; }
-.bom-shell-v1 .bom-v1-track-full-album { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; margin-top: 10px; padding: 10px 16px; color: var(--bom-v1-bg); background: var(--bom-v1-accent); background-image: none; border: 1px solid var(--bom-v1-accent); border-radius: var(--bom-v1-radius); box-shadow: none; font-size: 12px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: rgba(196, 219, 169, .2); }
+.bom-shell-v1 .bom-v1-track-album-actions { display:flex !important; margin-top:12px; }
+.bom-shell-v1 .bom-v1-track-full-album { display: inline-flex !important; align-items: center; justify-content: center; gap: 10px; min-height: 46px; margin:0; padding: 11px 18px; color: var(--bom-v1-bg) !important; background: var(--bom-v1-accent) !important; background-image: none !important; border: 1px solid var(--bom-v1-accent) !important; border-radius: var(--bom-v1-radius) !important; box-shadow: none !important; font-size: 13px; font-weight: 700; cursor: pointer; opacity:1 !important; visibility:visible !important; -webkit-tap-highlight-color: rgba(196, 219, 169, .2); }
 .bom-shell-v1 .bom-v1-track-full-album:hover { background: var(--bom-v1-focus); border-color: var(--bom-v1-focus); box-shadow: none; transform: none; }
 .bom-shell-v1 .bom-v1-track-full-album:focus-visible { outline: 2px solid var(--bom-v1-focus); outline-offset: 3px; }
 .bom-shell-v1 .bom-v1-track-full-album:active { transform: scale(.98); }
@@ -885,7 +886,8 @@
 .bom-shell-v1 .bom-v1-track-album-card small { margin-top: 5px; color: var(--bom-v1-muted); }
 .bom-shell-v1 .bom-v1-track-album-card em { margin-top: 12px; color: var(--bom-v1-accent); font-size: 11px; font-style: normal; }
 .bom-shell-v1 .bom-v1-track-related-list { margin-top: 30px; border-top: 1px solid var(--bom-v1-line); }
-.bom-shell-v1 .bom-v1-track-related-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(160px, .7fr); gap: 24px; align-items: center; width: 100%; min-height: 62px; padding: 10px 0; color: var(--bom-v1-text); text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--bom-v1-line); border-radius: 0; cursor: pointer; }
+.bom-shell-v1 .bom-v1-track-detail-related .bom-v1-track-related-row { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(160px, .7fr); gap: 24px; align-items: center; width: 100%; min-height: 62px; margin:0 !important; padding: 10px 0 !important; color: var(--bom-v1-text) !important; text-align: left; background: transparent !important; background-image:none !important; border: 0 !important; border-bottom: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow:none !important; filter:none !important; text-shadow:none !important; transform:none !important; cursor: pointer; }
+.bom-shell-v1 .bom-v1-track-detail-related .bom-v1-track-related-row:hover { background:rgba(255,255,255,.025) !important; box-shadow:none !important; transform:none !important; }
 .bom-shell-v1 .bom-v1-track-related-row span { color: var(--bom-v1-muted); overflow-wrap: anywhere; }
 
 .bom-shell-v1 .bom-v1-album-section { padding: clamp(44px, 6vw, 80px) 0; border-top: 1px solid var(--bom-v1-line); }
@@ -972,6 +974,8 @@
 
 @media (max-width: 600px) {
   .bom-shell-v1 .bom-v1-track-detail-album { align-items: center; }
+  .bom-shell-v1 .bom-v1-track-album-actions,
+  .bom-shell-v1 .bom-v1-track-full-album { width:100%; }
   .bom-shell-v1 .bom-v1-track-album-card { grid-template-columns: 72px minmax(0, 1fr); min-height: 96px; gap: 14px; padding: 10px; }
   .bom-shell-v1 .bom-v1-track-album-card img,
   .bom-shell-v1 .bom-v1-track-album-card .album-cover-placeholder { width: 72px; height: 72px; }
@@ -1189,6 +1193,11 @@
 .bom-shell-v1 .bom-v1-history-card p { margin:0 0 7px; color:var(--bom-v1-accent); font-size:9px; letter-spacing:.09em; text-transform:uppercase; }
 .bom-shell-v1 .bom-v1-history-card h3 { margin:0; font-size:17px; }
 .bom-shell-v1 .bom-v1-history-card span,.bom-shell-v1 .bom-v1-history-card small { display:block; margin-top:6px; color:var(--bom-v1-muted); font-size:11px; }
+.bom-shell-v1 .bom-v1-history-ratings { margin-top:9px; }
+.bom-shell-v1 .bom-v1-history-ratings .bom-v1-history-community { margin:0; color:var(--bom-v1-text); font-size:11px; }
+.bom-shell-v1 .bom-v1-history-ratings .bom-v1-history-community strong { color:var(--bom-v1-accent); font-size:16px; font-weight:700; }
+.bom-shell-v1 .bom-v1-history-ratings .bom-v1-history-community.is-empty { color:var(--bom-v1-muted); font-size:10px; }
+.bom-shell-v1 .bom-v1-history-ratings small { margin-top:3px; }
 .bom-shell-v1 .bom-v1-history-empty { padding:50px 0; }
 @media(max-width:700px){
  .bom-shell-v1 .bom-v1-discovery-carousel { margin:20px 0 4px; padding:12px; }

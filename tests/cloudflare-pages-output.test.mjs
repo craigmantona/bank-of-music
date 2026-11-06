@@ -38,5 +38,5 @@ test("the generated publication matches the approved source assets", async () =>
     const relative = path.relative(output, published);
     assert.deepEqual(await readFile(published), await readFile(path.join(root, relative)), `${relative} is stale`);
   }
-  assert.match(await readFile(path.join(output, "index.html"), "utf8"), /bom-foundation\.css\?v=35&autocomplete=1/);
+  assert.match(await readFile(path.join(output, "index.html"), "utf8"), /bom-foundation\.css\?v=36&autocomplete=1/);
 });

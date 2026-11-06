@@ -2,10 +2,23 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [discover, styles] = await Promise.all([
+const [app, discover, styles] = await Promise.all([
+  readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-discover.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-foundation.css", import.meta.url), "utf8")
 ]);
+
+test("historical songs distinguish canonical community ratings from personal ratings", () => {
+  assert.match(discover, /communityRatingCount/);
+  assert.match(discover, /communityAverage/);
+  assert.match(discover, /community rating/);
+  assert.match(discover, /No community ratings yet/);
+  assert.match(discover, /Your rating/);
+  assert.match(styles, /\.bom-v1-history-ratings \.bom-v1-history-community/);
+  const mapping = app.match(/numberOnes: resolvedRows\.map[\s\S]*?\n      \}\)/)?.[0] || "";
+  assert.match(mapping, /getSongAverage\(song\.id\)/);
+  assert.doesNotMatch(mapping, /supabaseClient|fetch\(/);
+});
 
 test("historical cards render one artwork surface and a separate No. 1 badge", () => {
   assert.match(discover, /const historyArt = .*bom-v1-history-art/);

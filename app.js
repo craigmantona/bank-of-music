@@ -620,10 +620,13 @@ window.BOMPresentationBridge = Object.freeze({
       })),
       numberOnes: resolvedRows.map(({ row, song }) => {
         const canonicalId = String(song?.canonical_song_id || row.canonical_song_id || "").trim();
+        const community = song?.id ? getSongAverage(song.id) : null;
         return {
           ...row,
           resolvedSongId: song?.id || null,
           artworkUrl: artworkForSong(song),
+          communityAverage: community?.avg ?? null,
+          communityRatingCount: Number(community?.count || 0),
           personalRating: ratingByCanonicalId.get(canonicalId) ?? ratingBySongId.get(Number(song?.id)) ?? null
         };
       })
@@ -9178,7 +9181,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
               ? `<button type="button" class="song-album-link" data-open-song-album-id="${linkedAlbum.id}">${escapeHtml(albumTitle)}</button>`
               : `<strong>${escapeHtml(albumTitle)}</strong>`}
           </div>
-          ${linkedAlbum ? `<button type="button" class="bom-v1-track-full-album" data-open-song-album-id="${linkedAlbum.id}">View full album <span aria-hidden="true">→</span></button>` : ""}
+          ${linkedAlbum ? `<div class="bom-v1-track-album-actions"><button type="button" class="bom-v1-track-full-album" data-open-song-album-id="${linkedAlbum.id}" aria-label="View full album ${escapeHtml(albumTitle)}">View full album <span aria-hidden="true">→</span></button></div>` : ""}
           <div class="bom-v1-album-ratings">
             <div><span>Community</span><div class="bom-v1-album-community">${avgData?.count
               ? `<strong>${avgData.avg.toFixed(1)}</strong><span>/ 10</span><small>${avgData.count} rating${avgData.count === 1 ? "" : "s"}</small>`

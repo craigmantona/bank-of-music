@@ -29,6 +29,7 @@ test("track detail retains navigation, linked entities, ratings and provider act
     /data-library-type="song"/
   ]) assert.match(selectedTrackBranch, contract);
   assert.match(selectedTrackBranch, /bom-v1-track-full-album/);
+  assert.match(selectedTrackBranch, /bom-v1-track-album-actions/);
   assert.match(selectedTrackBranch, /linkedAlbum\.id/);
   assert.doesNotMatch(selectedTrackBranch, /\$\{song\.album_id\s*\? `<button[^`]*data-open-song-album-id/);
 });
@@ -47,7 +48,12 @@ test("modern track album links and cards reset the legacy global button glow", (
 });
 
 test("the full-album action is prominent, keyboard visible and touch sized", () => {
-  assert.match(styles, /\.bom-v1-track-full-album \{[^}]*min-height: 44px;[^}]*background: var\(--bom-v1-accent\)/);
+  assert.match(styles, /\.bom-v1-track-full-album \{[^}]*display: inline-flex !important;[^}]*min-height: 46px;[^}]*background: var\(--bom-v1-accent\) !important;/);
   assert.match(styles, /\.bom-v1-track-full-album:focus-visible/);
   assert.match(styles, /\.bom-v1-track-full-album:active/);
+  assert.match(styles, /@media \(max-width: 600px\)[\s\S]*?\.bom-v1-track-album-actions,[\s\S]*?\.bom-v1-track-full-album \{ width:100%; \}/);
+});
+
+test("More from Artist rows cannot inherit legacy purple button styling", () => {
+  assert.match(styles, /\.bom-v1-track-detail-related \.bom-v1-track-related-row \{[^}]*background-image:none !important;[^}]*border-radius: 0 !important;[^}]*box-shadow:none !important;/);
 });

@@ -67,8 +67,11 @@
   function historyCard(item, albums) {
     const destination = albums ? item.id : item.resolvedSongId;
     const meta = albums && item.significant ? `${item.age} year anniversary` : albums ? item.originalReleaseDate : `${item.chart_year} · ${item.weeks_at_number_one||1} week${+item.weeks_at_number_one===1?"":"s"} at No.1`;
-    const rating = albums ? (item.rating==null ? "Not rated" : `${Number(item.rating).toFixed(1)} / 10${item.ratingCount?` · ${item.ratingCount} ratings`:""}`) : (item.personalRating==null ? "Not rated by you" : `Your rating · ${item.personalRating} / 10`);
-    return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" ${destination?'tabindex="0" role="link"':""} data-${albums?"album":"track"}-id="${esc(destination||"")}">${historyArt(item,albums)}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span><small>${rating}</small></div></article>`;
+    const albumRating = item.rating==null ? "Not rated" : `${Number(item.rating).toFixed(1)} / 10${item.ratingCount?` · ${item.ratingCount} ratings`:""}`;
+    const communityCount = Number(item.communityRatingCount||0), communityAverage = Number(item.communityAverage);
+    const community = communityCount>0&&Number.isFinite(communityAverage) ? `<span class="bom-v1-history-community"><strong>${communityAverage.toFixed(1)}</strong> / 10 · ${communityCount.toLocaleString()} community rating${communityCount===1?"":"s"}</span>` : `<span class="bom-v1-history-community is-empty">No community ratings yet</span>`;
+    const personal = item.personalRating==null ? "Not rated by you" : `Your rating · ${item.personalRating} / 10`;
+    return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" ${destination?'tabindex="0" role="link"':""} data-${albums?"album":"track"}-id="${esc(destination||"")}">${historyArt(item,albums)}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span>${albums?`<small>${albumRating}</small>`:`<div class="bom-v1-history-ratings">${community}<small>${personal}</small></div>`}</div></article>`;
   }
   function load() { if(!loading) loading=Promise.resolve(window.BOMPresentationBridge?.loadHistoricalDiscovery?.()).then(x=>data=x||{albums:[],numberOnes:[]}).catch(()=>data={albums:[],numberOnes:[]}); return loading; }
   function setCarousel(root) { root.querySelector(".bom-v1-discovery-track")?.style.setProperty("--bom-slide",index); root.querySelectorAll(".bom-v1-discovery-slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==index)); root.querySelectorAll("[data-bom-carousel-go]").forEach((x,i)=>x.setAttribute("aria-current",i===index)); }
