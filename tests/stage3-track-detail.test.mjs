@@ -29,7 +29,7 @@ test("track detail retains navigation, linked entities, ratings and provider act
     /data-library-type="song"/
   ]) assert.match(selectedTrackBranch, contract);
   assert.match(selectedTrackBranch, /bom-v1-track-full-album/);
-  assert.match(selectedTrackBranch, /bom-v1-track-album-actions/);
+  assert.match(selectedTrackBranch, /bom-v1-track-release-section/);
   assert.match(selectedTrackBranch, /linkedAlbum\.id/);
   assert.doesNotMatch(selectedTrackBranch, /\$\{song\.album_id\s*\? `<button[^`]*data-open-song-album-id/);
 });
@@ -51,9 +51,44 @@ test("the full-album action is prominent, keyboard visible and touch sized", () 
   assert.match(styles, /\.bom-v1-track-full-album \{[^}]*display: inline-flex !important;[^}]*min-height: 46px;[^}]*background: var\(--bom-v1-accent\) !important;/);
   assert.match(styles, /\.bom-v1-track-full-album:focus-visible/);
   assert.match(styles, /\.bom-v1-track-full-album:active/);
-  assert.match(styles, /@media \(max-width: 600px\)[\s\S]*?\.bom-v1-track-album-actions,[\s\S]*?\.bom-v1-track-full-album \{ width:100%; \}/);
+  assert.match(styles, /@media \(max-width: 600px\)[\s\S]*?\.bom-v1-track-release-layout \.bom-v1-track-full-album \{ width: 100%; \}/);
 });
 
 test("More from Artist rows cannot inherit legacy purple button styling", () => {
   assert.match(styles, /\.bom-v1-track-detail-related \.bom-v1-track-related-row \{[^}]*background-image:none !important;[^}]*border-radius: 0 !important;[^}]*box-shadow:none !important;/);
+});
+
+test("album context precedes ordered album tracks and secondary artist discovery", () => {
+  const releaseIndex = selectedTrackBranch.indexOf("bom-v1-track-release-section");
+  const albumTracksIndex = selectedTrackBranch.indexOf("bom-v1-track-album-tracks");
+  const artistIndex = selectedTrackBranch.indexOf("bom-v1-track-detail-related");
+  assert.ok(releaseIndex > 0);
+  assert.ok(albumTracksIndex > releaseIndex);
+  assert.ok(artistIndex > albumTracksIndex);
+  assert.match(selectedTrackBranch, /Number\(a\.track_position \|\| 9999\) - Number\(b\.track_position \|\| 9999\)/);
+  assert.match(selectedTrackBranch, /Also on this album/);
+  assert.match(selectedTrackBranch, /aria-current="true"/);
+  assert.match(selectedTrackBranch, /Now viewing/);
+});
+
+test("single-track releases stay compact and same-album tracks are excluded from artist discovery", () => {
+  assert.match(selectedTrackBranch, /const isSingleRelease = Boolean\(linkedAlbum && albumTracks\.length <= 1\)/);
+  assert.match(selectedTrackBranch, /isSingleRelease \? "Single release" : "From the album"/);
+  assert.match(selectedTrackBranch, /linkedAlbum && !isSingleRelease && albumTracks\.length/);
+  assert.match(selectedTrackBranch, /!albumTrackIds\.has\(Number\(candidate\.id\)\)/);
+  assert.match(selectedTrackBranch, /Number\(candidate\.album_id\) !== Number\(linkedAlbum\.id\)/);
+});
+
+test("album track navigation reuses loaded catalogue ratings without new requests", () => {
+  assert.match(selectedTrackBranch, /getSongAverage\(albumTrack\.id\)/);
+  assert.match(selectedTrackBranch, /getYourSongRating\(albumTrack\.id\)/);
+  assert.match(selectedTrackBranch, /data-library-type="song" data-song-id="\$\{albumTrack\.id\}"/);
+  assert.doesNotMatch(selectedTrackBranch, /supabase\.|fetch\(|musicbrainz/i);
+});
+
+test("album track rows are clean, responsive and keyboard visible", () => {
+  assert.match(styles, /\.bom-v1-track-album-row \{[^}]*background-image: none !important;[^}]*box-shadow: none !important;/);
+  assert.match(styles, /\.bom-v1-track-album-row\.is-current \{[^}]*var\(--bom-v1-accent\)/);
+  assert.match(styles, /button\.bom-v1-track-album-row:focus-visible/);
+  assert.match(styles, /@media \(max-width: 600px\)[\s\S]*?\.bom-v1-track-album-row \{[^}]*grid-template-areas:/);
 });

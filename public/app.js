@@ -9153,10 +9153,26 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
   const trackArtist = song.artist || selectedItem.artist || "Unknown artist";
   const albumTitle = linkedAlbum?.title || selectedItem.releaseTitle || "Unknown album";
   const artworkUrl = linkedAlbumCover || selectedItem.coverUrl || "";
+  const albumTracks = linkedAlbum
+    ? allSongs
+      .filter((candidate) =>
+        Number(candidate.is_deleted || 0) === 0 &&
+        Number(candidate.album_id) === Number(linkedAlbum.id)
+      )
+      .sort((a, b) =>
+        Number(a.track_position || 9999) - Number(b.track_position || 9999) ||
+        Number(a.id || 0) - Number(b.id || 0)
+      )
+    : [];
+  const isSingleRelease = Boolean(linkedAlbum && albumTracks.length <= 1);
+  const albumTrackIds = new Set(albumTracks.map((candidate) => Number(candidate.id)));
   const relatedSongs = allSongs
     .filter((candidate) =>
+      Number(candidate.is_deleted || 0) === 0 &&
       normaliseCompare(candidate.artist) === normaliseCompare(trackArtist) &&
-      Number(candidate.id) !== Number(song.id || songId)
+      Number(candidate.id) !== Number(song.id || songId) &&
+      !albumTrackIds.has(Number(candidate.id)) &&
+      (!linkedAlbum || Number(candidate.album_id) !== Number(linkedAlbum.id))
     )
     .slice(0, 8);
 
@@ -9181,7 +9197,6 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
               ? `<button type="button" class="song-album-link" data-open-song-album-id="${linkedAlbum.id}">${escapeHtml(albumTitle)}</button>`
               : `<strong>${escapeHtml(albumTitle)}</strong>`}
           </div>
-          ${linkedAlbum ? `<div class="bom-v1-track-album-actions"><button type="button" class="bom-v1-track-full-album" data-open-song-album-id="${linkedAlbum.id}" aria-label="View full album ${escapeHtml(albumTitle)}">View full album <span aria-hidden="true">→</span></button></div>` : ""}
           <div class="bom-v1-album-ratings">
             <div><span>Community</span><div class="bom-v1-album-community">${avgData?.count
               ? `<strong>${avgData.avg.toFixed(1)}</strong><span>/ 10</span><small>${avgData.count} rating${avgData.count === 1 ? "" : "s"}</small>`
@@ -9191,17 +9206,39 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
           <div class="bom-v1-album-actions">${buildMusicProviderPanel({ type: "song", title: trackTitle, artist: trackArtist, album: albumTitle })}</div>
         </div>
       </section>
-      ${(linkedAlbum || relatedSongs.length) ? `<section class="bom-v1-album-section bom-v1-track-detail-related">
+      ${linkedAlbum ? `<section class="bom-v1-album-section bom-v1-track-release-section">
+        <header class="bom-v1-album-section-header">
+          <div><span class="bom-v1-track-section-kicker">${isSingleRelease ? "Single release" : "From the album"}</span><h2>${escapeHtml(albumTitle)}</h2></div>
+        </header>
+        <div class="bom-v1-track-release-layout">
+          <button class="bom-v1-track-album-card open-album-btn" data-album-id="${linkedAlbum.id}" aria-label="Open ${escapeHtml(albumTitle)}">
+            ${getAlbumCoverMarkup(linkedAlbumCover, `${linkedAlbum.title} cover`)}
+            <span><strong>${escapeHtml(linkedAlbum.title)}</strong><small>${escapeHtml(linkedAlbum.artist)}</small><em>${isSingleRelease ? "Open release" : `${albumTracks.length} track${albumTracks.length === 1 ? "" : "s"}`}</em></span>
+          </button>
+          <button type="button" class="bom-v1-track-full-album" data-open-song-album-id="${linkedAlbum.id}" aria-label="${isSingleRelease ? "View release" : "View full album"} ${escapeHtml(albumTitle)}">${isSingleRelease ? "View release" : "View full album"} <span aria-hidden="true">→</span></button>
+        </div>
+      </section>` : ""}
+      ${linkedAlbum && !isSingleRelease && albumTracks.length ? `<section class="bom-v1-album-section bom-v1-track-album-tracks">
+        <header class="bom-v1-album-section-header"><h2>Also on this album</h2><span>${albumTracks.length} tracks</span></header>
+        <div class="bom-v1-track-album-list" role="list" aria-label="${escapeHtml(albumTitle)} track listing">
+          ${albumTracks.map((albumTrack, index) => {
+            const isCurrentTrack = Number(albumTrack.id) === Number(song.id || songId);
+            const albumTrackAverage = getSongAverage(albumTrack.id);
+            const albumTrackRating = getYourSongRating(albumTrack.id);
+            const rowContents = `<span class="bom-v1-track-album-number">${escapeHtml(albumTrack.track_position || index + 1)}</span><span class="bom-v1-track-album-title"><strong>${escapeHtml(albumTrack.title)}</strong>${isCurrentTrack ? `<small>Now viewing</small>` : ""}</span><span class="bom-v1-track-album-community">${albumTrackAverage?.count ? `${Number(albumTrackAverage.avg).toFixed(1)} <small>(${albumTrackAverage.count})</small>` : "—"}</span><span class="bom-v1-track-album-personal">${albumTrackRating !== null ? `${Number(albumTrackRating)}/10` : "—"}</span>`;
+            return isCurrentTrack
+              ? `<div class="bom-v1-track-album-row is-current" role="listitem" aria-current="true">${rowContents}</div>`
+              : `<button type="button" class="bom-v1-track-album-row" role="listitem" data-library-type="song" data-song-id="${albumTrack.id}" aria-label="Open ${escapeHtml(albumTrack.title)}">${rowContents}</button>`;
+          }).join("")}
+        </div>
+      </section>` : ""}
+      ${relatedSongs.length ? `<section class="bom-v1-album-section bom-v1-track-detail-related">
         <header class="bom-v1-album-section-header"><h2>More from ${escapeHtml(trackArtist)}</h2></header>
-        ${linkedAlbum ? `<button class="bom-v1-track-album-card open-album-btn" data-album-id="${linkedAlbum.id}">
-          ${getAlbumCoverMarkup(linkedAlbumCover, `${linkedAlbum.title} cover`)}
-          <span><strong>${escapeHtml(linkedAlbum.title)}</strong><small>${escapeHtml(linkedAlbum.artist)}</small><em>Open album</em></span>
-        </button>` : ""}
-        ${relatedSongs.length ? `<div class="bom-v1-track-related-list">${relatedSongs.map((relatedSong) => `
-          <button class="bom-v1-track-related-row" data-library-type="song" data-song-id="${relatedSong.id}">
+        <div class="bom-v1-track-related-list">${relatedSongs.map((relatedSong) => `
+          <button type="button" class="bom-v1-track-related-row" data-library-type="song" data-song-id="${relatedSong.id}" aria-label="Open ${escapeHtml(relatedSong.title)}">
             <strong>${escapeHtml(relatedSong.title)}</strong>
             <span>${escapeHtml(getAlbumNameById(relatedSong.album_id) || "Unknown album")}</span>
-          </button>`).join("")}</div>` : ""}
+          </button>`).join("")}</div>
       </section>` : ""}
     </article>
   `;

@@ -818,7 +818,7 @@
 .bom-shell-v1 .bom-v1-album-kind { margin-bottom: 12px; color: var(--bom-v1-accent); font-size: 12px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
 .bom-shell-v1 .bom-v1-album h1 { max-width: 18ch; margin: 0; color: var(--bom-v1-text); font-size: clamp(44px, 5.5vw, 84px); font-weight: 600; letter-spacing: -.055em; line-height: .98; overflow-wrap: anywhere; }
 .bom-shell-v1 .bom-v1-album-artist { margin-top: 18px; font-size: clamp(20px, 2vw, 28px); }
-.bom-shell-v1 .bom-v1-album-artist button { padding: 0; color: var(--bom-v1-text); background: transparent; border: 0; cursor: pointer; }
+.bom-shell-v1 .bom-v1-album-artist button { padding: 0; color: var(--bom-v1-text); background: transparent !important; background-image: none !important; border: 0; border-radius: 0; box-shadow: none !important; text-shadow: none; cursor: pointer; }
 .bom-shell-v1 .bom-v1-album-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; color: var(--bom-v1-muted); font-size: 14px; }
 .bom-shell-v1 .bom-v1-album-meta span + span::before { content: "·"; margin-right: 22px; color: #656960; }
 
@@ -885,6 +885,22 @@
 .bom-shell-v1 .bom-v1-track-album-card em { display: block; overflow-wrap: anywhere; }
 .bom-shell-v1 .bom-v1-track-album-card small { margin-top: 5px; color: var(--bom-v1-muted); }
 .bom-shell-v1 .bom-v1-track-album-card em { margin-top: 12px; color: var(--bom-v1-accent); font-size: 11px; font-style: normal; }
+.bom-shell-v1 .bom-v1-track-section-kicker { display: block; margin-bottom: 8px; color: var(--bom-v1-accent); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-track-release-layout { display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.bom-shell-v1 .bom-v1-track-release-layout .bom-v1-track-full-album { flex: 0 0 auto; }
+.bom-shell-v1 .bom-v1-track-album-list { border-top: 1px solid var(--bom-v1-line); }
+.bom-shell-v1 .bom-v1-track-album-row { display: grid !important; grid-template-columns: 44px minmax(0, 1fr) 96px 86px; align-items: center; gap: 16px; width: 100%; min-height: 62px; margin: 0 !important; padding: 10px 12px 10px 0 !important; color: var(--bom-v1-text) !important; text-align: left; background: transparent !important; background-image: none !important; border: 0 !important; border-bottom: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow: none !important; filter: none !important; text-shadow: none !important; transform: none !important; }
+.bom-shell-v1 button.bom-v1-track-album-row { cursor: pointer; }
+.bom-shell-v1 button.bom-v1-track-album-row:hover { background: rgba(255, 255, 255, .025) !important; }
+.bom-shell-v1 button.bom-v1-track-album-row:focus-visible { position: relative; z-index: 1; outline: 2px solid var(--bom-v1-focus); outline-offset: -2px; }
+.bom-shell-v1 .bom-v1-track-album-row.is-current { background: rgba(196, 211, 172, .08) !important; box-shadow: inset 3px 0 0 var(--bom-v1-accent) !important; }
+.bom-shell-v1 .bom-v1-track-album-number { color: var(--bom-v1-muted); text-align: center; font-variant-numeric: tabular-nums; }
+.bom-shell-v1 .bom-v1-track-album-title { min-width: 0; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-track-album-title strong { display: block; font-weight: 500; }
+.bom-shell-v1 .bom-v1-track-album-title small { display: block; margin-top: 3px; color: var(--bom-v1-accent); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.bom-shell-v1 .bom-v1-track-album-community,
+.bom-shell-v1 .bom-v1-track-album-personal { color: var(--bom-v1-muted); font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; }
+.bom-shell-v1 .bom-v1-track-album-community small { color: inherit; }
 .bom-shell-v1 .bom-v1-track-related-list { margin-top: 30px; border-top: 1px solid var(--bom-v1-line); }
 .bom-shell-v1 .bom-v1-track-detail-related .bom-v1-track-related-row { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(160px, .7fr); gap: 24px; align-items: center; width: 100%; min-height: 62px; margin:0 !important; padding: 10px 0 !important; color: var(--bom-v1-text) !important; text-align: left; background: transparent !important; background-image:none !important; border: 0 !important; border-bottom: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow:none !important; filter:none !important; text-shadow:none !important; transform:none !important; cursor: pointer; }
 .bom-shell-v1 .bom-v1-track-detail-related .bom-v1-track-related-row:hover { background:rgba(255,255,255,.025) !important; box-shadow:none !important; transform:none !important; }
@@ -979,7 +995,15 @@
   .bom-shell-v1 .bom-v1-track-album-card { grid-template-columns: 72px minmax(0, 1fr); min-height: 96px; gap: 14px; padding: 10px; }
   .bom-shell-v1 .bom-v1-track-album-card img,
   .bom-shell-v1 .bom-v1-track-album-card .album-cover-placeholder { width: 72px; height: 72px; }
-  .bom-shell-v1 .bom-v1-track-related-row { grid-template-columns: 1fr; gap: 4px; min-height: 68px; }
+  .bom-shell-v1 .bom-v1-track-detail-related .bom-v1-track-related-row { grid-template-columns: 1fr !important; gap: 4px; min-height: 68px; }
+  .bom-shell-v1 .bom-v1-track-release-layout { align-items: stretch; flex-direction: column; gap: 16px; }
+  .bom-shell-v1 .bom-v1-track-release-layout .bom-v1-track-full-album { width: 100%; }
+  .bom-shell-v1 .bom-v1-track-album-row { grid-template-columns: 30px minmax(0, 1fr) auto; grid-template-areas: "number title personal" "number community community"; gap: 3px 10px; min-height: 64px; padding-right: 4px !important; }
+  .bom-shell-v1 .bom-v1-track-album-number { grid-area: number; align-self: start; padding-top: 2px; }
+  .bom-shell-v1 .bom-v1-track-album-title { grid-area: title; }
+  .bom-shell-v1 .bom-v1-track-album-community { grid-area: community; text-align: left; }
+  .bom-shell-v1 .bom-v1-track-album-community:not(:empty)::before { content: "Community "; color: #7e8279; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
+  .bom-shell-v1 .bom-v1-track-album-personal { grid-area: personal; }
   .bom-shell-v1 .bom-v1-track-detail .bom-v1-track-rating-popover { position: fixed; top: auto; right: 16px; bottom: 16px; left: 16px; width: auto; }
 }
 
