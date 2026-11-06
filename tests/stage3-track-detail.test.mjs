@@ -28,6 +28,9 @@ test("track detail retains navigation, linked entities, ratings and provider act
     /buildMusicProviderPanel/,
     /data-library-type="song"/
   ]) assert.match(selectedTrackBranch, contract);
+  assert.match(selectedTrackBranch, /bom-v1-track-full-album/);
+  assert.match(selectedTrackBranch, /linkedAlbum\.id/);
+  assert.doesNotMatch(selectedTrackBranch, /\$\{song\.album_id\s*\? `<button[^`]*data-open-song-album-id/);
 });
 
 test("track detail follows the Album surface system and has focused mobile rules", () => {
@@ -41,4 +44,10 @@ test("track detail follows the Album surface system and has focused mobile rules
 test("modern track album links and cards reset the legacy global button glow", () => {
   assert.match(styles, /\.bom-v1-track-detail-album strong \{[^}]*box-shadow: none;/);
   assert.match(styles, /\.bom-v1-track-album-card \{[^}]*box-shadow: none;/);
+});
+
+test("the full-album action is prominent, keyboard visible and touch sized", () => {
+  assert.match(styles, /\.bom-v1-track-full-album \{[^}]*min-height: 44px;[^}]*background: var\(--bom-v1-accent\)/);
+  assert.match(styles, /\.bom-v1-track-full-album:focus-visible/);
+  assert.match(styles, /\.bom-v1-track-full-album:active/);
 });

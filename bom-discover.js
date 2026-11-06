@@ -40,6 +40,7 @@
   }
   const numberOnes = (rows,now=new Date()) => (rows||[]).filter(r=>chartCoversWeek(r,currentLondonWeek(now))).sort((a,b)=>b.chart_year-a.chart_year);
   const art = (item,label) => item?.artworkUrl ? `<img src="${esc(item.artworkUrl)}" alt="${esc(item.title)} artwork" loading="lazy" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bom-v1-discovery-art-fallback" aria-hidden="true" hidden>${label}</span>` : `<span class="bom-v1-discovery-art-fallback" aria-hidden="true">${label}</span>`;
+  const historyArt = (item,albums) => `<div class="bom-v1-history-art">${art(item,albums?"LP":"♪")}${albums?"":`<span class="bom-v1-history-position">No. 1</span>`}</div>`;
 
   function albumRow(albums,label) {
     if(!albums.length) return ""; const id=`bomDiscoverRow-${Math.random().toString(36).slice(2)}`;
@@ -67,7 +68,7 @@
     const destination = albums ? item.id : item.resolvedSongId;
     const meta = albums && item.significant ? `${item.age} year anniversary` : albums ? item.originalReleaseDate : `${item.chart_year} · ${item.weeks_at_number_one||1} week${+item.weeks_at_number_one===1?"":"s"} at No.1`;
     const rating = albums ? (item.rating==null ? "Not rated" : `${Number(item.rating).toFixed(1)} / 10${item.ratingCount?` · ${item.ratingCount} ratings`:""}`) : (item.personalRating==null ? "Not rated by you" : `Your rating · ${item.personalRating} / 10`);
-    return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" ${destination?'tabindex="0" role="link"':""} data-${albums?"album":"track"}-id="${esc(destination||"")}">${art(item,albums?"LP":"01")}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span><small>${rating}</small></div></article>`;
+    return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" ${destination?'tabindex="0" role="link"':""} data-${albums?"album":"track"}-id="${esc(destination||"")}">${historyArt(item,albums)}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span><small>${rating}</small></div></article>`;
   }
   function load() { if(!loading) loading=Promise.resolve(window.BOMPresentationBridge?.loadHistoricalDiscovery?.()).then(x=>data=x||{albums:[],numberOnes:[]}).catch(()=>data={albums:[],numberOnes:[]}); return loading; }
   function setCarousel(root) { root.querySelector(".bom-v1-discovery-track")?.style.setProperty("--bom-slide",index); root.querySelectorAll(".bom-v1-discovery-slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==index)); root.querySelectorAll("[data-bom-carousel-go]").forEach((x,i)=>x.setAttribute("aria-current",i===index)); }

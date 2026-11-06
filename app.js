@@ -9174,10 +9174,11 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
           </div>
           <div class="bom-v1-track-detail-album">
             <span>From</span>
-            ${song.album_id
-              ? `<button type="button" class="song-album-link" data-open-song-album-id="${song.album_id}">${escapeHtml(albumTitle)}</button>`
+            ${linkedAlbum
+              ? `<button type="button" class="song-album-link" data-open-song-album-id="${linkedAlbum.id}">${escapeHtml(albumTitle)}</button>`
               : `<strong>${escapeHtml(albumTitle)}</strong>`}
           </div>
+          ${linkedAlbum ? `<button type="button" class="bom-v1-track-full-album" data-open-song-album-id="${linkedAlbum.id}">View full album <span aria-hidden="true">→</span></button>` : ""}
           <div class="bom-v1-album-ratings">
             <div><span>Community</span><div class="bom-v1-album-community">${avgData?.count
               ? `<strong>${avgData.avg.toFixed(1)}</strong><span>/ 10</span><small>${avgData.count} rating${avgData.count === 1 ? "" : "s"}</small>`

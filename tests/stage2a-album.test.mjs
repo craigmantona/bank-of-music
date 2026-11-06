@@ -88,6 +88,11 @@ test("top track emphasis never draws a left-hand rule", () => {
   assert.match(styles, /\.bom-v1-track-row\.bom-v1-top-track \.track-col-average strong/);
 });
 
+test("album track rows override legacy card and glow styling only inside the track section", () => {
+  assert.match(styles, /\.bom-v1-tracks-section \.track-row-table\.bom-v1-track-row \{[^}]*background-image: none !important;[^}]*border-radius: 0 !important;[^}]*box-shadow: none !important;/);
+  assert.match(styles, /@media \(max-width: 900px\)[\s\S]*?\.bom-v1-tracks-section \.track-row-table\.bom-v1-track-row \{[^}]*min-height: 0 !important;/);
+});
+
 test("browser regression harness exercises the visible rating lifecycle", () => {
   for (const expectation of ["closed selector leaked choices", "rated selector did not open", "changed value did not update", "changed value was not selected on reopen", "clear did not reset control", "unrated selector did not open"]) {
     assert.match(browserRegression, new RegExp(expectation));
