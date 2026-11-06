@@ -1,0 +1,1390 @@
+{
+  "captured_at": "2026-11-06",
+  "rows": [
+    {
+      "id": 64,
+      "title": "The Most Beautiful Girl in the World",
+      "artist": "Prince",
+      "song_id": null,
+      "chart_year": 1994,
+      "match_status": "unresolved",
+      "canonical_song_id": "c8f6013e-81a4-4851-b069-7e4b8106502c",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 92,
+      "title": "How Deep Is Your Love",
+      "artist": "Take That",
+      "song_id": null,
+      "chart_year": 1996,
+      "match_status": "unresolved",
+      "canonical_song_id": "fe315190-bfa2-406a-8363-e192a2fcf5d2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 122,
+      "title": "I Wanna Be the Only One",
+      "artist": "Eternal featuring BeBe Winans",
+      "song_id": null,
+      "chart_year": 1997,
+      "match_status": "unresolved",
+      "canonical_song_id": "38b6b35f-2c07-491e-a907-b451908271f2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 142,
+      "title": "Turn Back Time",
+      "artist": "Aqua",
+      "song_id": null,
+      "chart_year": 1998,
+      "match_status": "unresolved",
+      "canonical_song_id": "f47ffd73-8915-4116-be29-d1ddad82d446",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 424,
+      "title": "My Camera Never Lies",
+      "artist": "Bucks Fizz",
+      "song_id": null,
+      "chart_year": 1982,
+      "match_status": "unresolved",
+      "canonical_song_id": "056fbdcf-dc2e-4a59-8742-5b85c7f26b1b",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 428,
+      "title": "Goody Two Shoes",
+      "artist": "Adam Ant",
+      "song_id": null,
+      "chart_year": 1982,
+      "match_status": "unresolved",
+      "canonical_song_id": "1f0e4856-1dd8-4d0c-b180-b1720669fb5a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 436,
+      "title": "I Don't Wanna Dance",
+      "artist": "Eddy Grant",
+      "song_id": null,
+      "chart_year": 1982,
+      "match_status": "unresolved",
+      "canonical_song_id": "0eb51e4d-e2bc-4c15-aeff-c314b06414c2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 710,
+      "title": "Yellow River",
+      "artist": "Christie",
+      "song_id": null,
+      "chart_year": 1970,
+      "match_status": "unresolved",
+      "canonical_song_id": "65924a30-7845-439a-b277-dc0d9ab77b2d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 716,
+      "title": "I Hear You Knocking",
+      "artist": "Dave Edmunds",
+      "song_id": null,
+      "chart_year": 1970,
+      "match_status": "unresolved",
+      "canonical_song_id": "547e2d0b-d4d9-4784-9c59-631d698eee92",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 726,
+      "title": "Hey Girl Don't Bother Me",
+      "artist": "The Tams",
+      "song_id": null,
+      "chart_year": 1971,
+      "match_status": "unresolved",
+      "canonical_song_id": "11cde505-7631-42a9-9108-6bd52322a56f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 762,
+      "title": "Billy Don't Be a Hero",
+      "artist": "Paper Lace",
+      "song_id": null,
+      "chart_year": 1974,
+      "match_status": "unresolved",
+      "canonical_song_id": "eaf5a3ce-9d0a-42ad-82a3-4f1d3f0a854f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 785,
+      "title": "Oh Boy",
+      "artist": "Mud",
+      "song_id": null,
+      "chart_year": 1975,
+      "match_status": "unresolved",
+      "canonical_song_id": "f843df75-469f-4263-8168-46cc8ce80115",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 791,
+      "title": "Barbados",
+      "artist": "Typically Tropical",
+      "song_id": null,
+      "chart_year": 1975,
+      "match_status": "unresolved",
+      "canonical_song_id": "b8c917cd-7452-44e1-a8f6-76c633f9a115",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 820,
+      "title": "Angelo",
+      "artist": "Brotherhood of Man",
+      "song_id": null,
+      "chart_year": 1977,
+      "match_status": "unresolved",
+      "canonical_song_id": "b151fdcc-2745-4cb0-9464-3f80dd712635",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1000,
+      "title": "Starry Eyed",
+      "artist": "Michael Holliday",
+      "song_id": null,
+      "chart_year": 1960,
+      "match_status": "unresolved",
+      "canonical_song_id": "68ceb09b-70c5-4163-ad6b-2268ca6d74c8",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1028,
+      "title": "Johnny Remember Me",
+      "artist": "John Leyton",
+      "song_id": null,
+      "chart_year": 1961,
+      "match_status": "unresolved",
+      "canonical_song_id": "84ab458b-5125-4f1b-a444-d0fb45b551b2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1105,
+      "title": "You Don't Have to Say You Love Me",
+      "artist": "Dusty Springfield",
+      "song_id": null,
+      "chart_year": 1966,
+      "match_status": "unresolved",
+      "canonical_song_id": "f675da66-d611-4abb-989a-b8038b729cfe",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1343,
+      "title": "Never Be the Same Again",
+      "artist": "Melanie C featuring Lisa \"Left Eye\" Lopes",
+      "song_id": null,
+      "chart_year": 2000,
+      "match_status": "unresolved",
+      "canonical_song_id": "fae7c11b-be96-4bb2-a773-622a7b86f044",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1372,
+      "title": "Love Don't Cost a Thing",
+      "artist": "Jennifer Lopez",
+      "song_id": null,
+      "chart_year": 2001,
+      "match_status": "unresolved",
+      "canonical_song_id": "6c4b0c89-462d-45b1-86f2-587c9dfd0e68",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1379,
+      "title": "Don't Stop Movin",
+      "artist": "S Club 7",
+      "song_id": null,
+      "chart_year": 2001,
+      "match_status": "unresolved",
+      "canonical_song_id": "bb9e88f6-2dd0-48d8-800c-7ef30910eb30",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1398,
+      "title": "Somethin' Stupid",
+      "artist": "Robbie Williams and Nicole Kidman",
+      "song_id": null,
+      "chart_year": 2001,
+      "match_status": "unresolved",
+      "canonical_song_id": "f6ee94cc-8f80-466d-b766-a4988ca506fb",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1404,
+      "title": "Unchained Melody",
+      "artist": "Gareth Gates",
+      "song_id": null,
+      "chart_year": 2002,
+      "match_status": "unresolved",
+      "canonical_song_id": "557af73e-803b-43c7-88a9-77dc61384703",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1406,
+      "title": "Kiss Kiss",
+      "artist": "Holly Valance",
+      "song_id": null,
+      "chart_year": 2002,
+      "match_status": "unresolved",
+      "canonical_song_id": "773098a5-79f4-4d1c-9624-07c9b3e8ee56",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1412,
+      "title": "Colourblind",
+      "artist": "Darius",
+      "song_id": null,
+      "chart_year": 2002,
+      "match_status": "unresolved",
+      "canonical_song_id": "86c9a8df-ea8e-4ad0-aa92-5b72822abd42",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1434,
+      "title": "Bring Me to Life",
+      "artist": "Evanescence",
+      "song_id": null,
+      "chart_year": 2003,
+      "match_status": "unresolved",
+      "canonical_song_id": "11feb1b5-e055-435c-a074-2205811d14f9",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1518,
+      "title": "Beautiful Liar",
+      "artist": "Beyoncé and Shakira",
+      "song_id": null,
+      "chart_year": 2007,
+      "match_status": "unresolved",
+      "canonical_song_id": "30a3b56c-d27b-4d15-ada2-5e0e3dcb5df5",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1548,
+      "title": "Number 1",
+      "artist": "Tinchy Stryder featuring N-Dubz",
+      "song_id": null,
+      "chart_year": 2009,
+      "match_status": "unresolved",
+      "canonical_song_id": "52a47fef-4bf2-4762-8d37-8b24ec06cb2d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1824,
+      "title": "All Time Low",
+      "artist": "The Wanted",
+      "song_id": null,
+      "chart_year": 2010,
+      "match_status": "unresolved",
+      "canonical_song_id": "f8f6a64a-e1c5-4097-a298-fb1a6d3e55e9",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1835,
+      "title": "Love You More",
+      "artist": "JLS",
+      "song_id": null,
+      "chart_year": 2010,
+      "match_status": "unresolved",
+      "canonical_song_id": "2cb91ba4-7fd2-40f4-8382-72515039b5a2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1850,
+      "title": "She Makes Me Wanna",
+      "artist": "JLS featuring Dev",
+      "song_id": null,
+      "chart_year": 2011,
+      "match_status": "unresolved",
+      "canonical_song_id": "d12b263b-036c-4773-b5fc-5adcdc80f89f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1869,
+      "title": "Somebody That I Used to Know",
+      "artist": "Gotye featuring Kimbra",
+      "song_id": null,
+      "chart_year": 2012,
+      "match_status": "unresolved",
+      "canonical_song_id": "a1dc3b7c-38f9-4bca-9298-f4d46999244e",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1876,
+      "title": "We Are Young",
+      "artist": "Fun featuring Janelle Monáe",
+      "song_id": null,
+      "chart_year": 2012,
+      "match_status": "unresolved",
+      "canonical_song_id": "d302d5fc-e0d8-4522-b5f7-844e23355f0c",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1945,
+      "title": "Problem",
+      "artist": "Ariana Grande featuring Iggy Azalea",
+      "song_id": null,
+      "chart_year": 2014,
+      "match_status": "unresolved",
+      "canonical_song_id": "47862a33-ef1d-4398-b2f4-35d342e604bf",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1954,
+      "title": "Changing",
+      "artist": "Sigma featuring Paloma Faith",
+      "song_id": null,
+      "chart_year": 2014,
+      "match_status": "unresolved",
+      "canonical_song_id": "cda2456d-80ef-4367-80e8-7e715a9c53c3",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2276,
+      "title": "Oh Mein Papa",
+      "artist": "Eddie Calvert",
+      "song_id": null,
+      "chart_year": 1954,
+      "match_status": "unresolved",
+      "canonical_song_id": "065bd447-3662-4d07-9c15-73e50d84902e",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2292,
+      "title": "Cherry Pink (and Apple Blossom White)",
+      "artist": "Eddie Calvert",
+      "song_id": null,
+      "chart_year": 1955,
+      "match_status": "unresolved",
+      "canonical_song_id": "b2a6669a-a7d0-4c5d-9294-164a9dd47620",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2317,
+      "title": "Cumberland Gap",
+      "artist": "Lonnie Donegan",
+      "song_id": null,
+      "chart_year": 1957,
+      "match_status": "unresolved",
+      "canonical_song_id": "db2e6888-8293-4a48-a1b7-0f31372c1939",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2334,
+      "title": "Hoots Mon",
+      "artist": "Lord Rockingham's XI",
+      "song_id": null,
+      "chart_year": 1958,
+      "match_status": "unresolved",
+      "canonical_song_id": "c415497b-8a1d-4913-ba13-1ad7aaa39c82",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2442,
+      "title": "No Time to Die",
+      "artist": "Billie Eilish",
+      "song_id": null,
+      "chart_year": 2020,
+      "match_status": "unresolved",
+      "canonical_song_id": "d1740f5c-0472-4c0a-a228-ce1f1cebc4c6",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2458,
+      "title": "Montero (Call Me by Your Name)",
+      "artist": "Lil Nas X",
+      "song_id": null,
+      "chart_year": 2021,
+      "match_status": "unresolved",
+      "canonical_song_id": "65150a13-6d81-49d8-8e93-f621c746881a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2496,
+      "title": "That's So True",
+      "artist": "Gracie Abrams",
+      "song_id": null,
+      "chart_year": 2024,
+      "match_status": "unresolved",
+      "canonical_song_id": "e6b4276a-684b-4baa-b90e-cd48bb35963b",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2499,
+      "title": "Not Like Us",
+      "artist": "Kendrick Lamar",
+      "song_id": null,
+      "chart_year": 2025,
+      "match_status": "unresolved",
+      "canonical_song_id": "383838ec-69ff-4edc-a393-dd8e90a008bb",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2511,
+      "title": "Opalite",
+      "artist": "Taylor Swift",
+      "song_id": null,
+      "chart_year": 2026,
+      "match_status": "unresolved",
+      "canonical_song_id": "52ecd7d4-0811-4a88-ba94-bf445f4030c4",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 18,
+      "title": "Bring Your Daughter... to the Slaughter",
+      "artist": "Iron Maiden",
+      "song_id": null,
+      "chart_year": 1991,
+      "match_status": "unresolved",
+      "canonical_song_id": "a6d666dc-6617-482a-b2cd-847fd15a0ed4",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 46,
+      "title": "Oh Carolina",
+      "artist": "Shaggy",
+      "song_id": null,
+      "chart_year": 1993,
+      "match_status": "unresolved",
+      "canonical_song_id": "cab54c91-8913-4104-8aec-d7db11f3e066",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 54,
+      "title": "Boom! Shake the Room",
+      "artist": "DJ Jazzy Jeff & the Fresh Prince",
+      "song_id": null,
+      "chart_year": 1993,
+      "match_status": "unresolved",
+      "canonical_song_id": "dd0fccc3-082d-4435-91c3-95a7d9c466ac",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 60,
+      "title": "Things Can Only Get Better",
+      "artist": "D:Ream",
+      "song_id": null,
+      "chart_year": 1994,
+      "match_status": "unresolved",
+      "canonical_song_id": "a622554d-209c-4002-9291-b78c7efeb46b",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 62,
+      "title": "Doop",
+      "artist": "Doop",
+      "song_id": null,
+      "chart_year": 1994,
+      "match_status": "unresolved",
+      "canonical_song_id": "0ede7ad5-5eb8-43de-85a2-3afd44750d0f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 96,
+      "title": "Ooh Aah... Just a Little Bit",
+      "artist": "Gina G",
+      "song_id": null,
+      "chart_year": 1996,
+      "match_status": "unresolved",
+      "canonical_song_id": "51e60a6a-60f2-46f9-bde9-50839317527d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 97,
+      "title": "Three Lions",
+      "artist": "Baddiel, Skinner and The Lightning Seeds",
+      "song_id": null,
+      "chart_year": 1996,
+      "match_status": "unresolved",
+      "canonical_song_id": "d5add943-d61e-46f3-9cca-03f78133b765",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 117,
+      "title": "Block Rockin' Beats",
+      "artist": "The Chemical Brothers",
+      "song_id": null,
+      "chart_year": 1997,
+      "match_status": "unresolved",
+      "canonical_song_id": "cc03945a-81f9-4b6d-a910-9c8929926061",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 120,
+      "title": "Love Won't Wait",
+      "artist": "Gary Barlow",
+      "song_id": null,
+      "chart_year": 1997,
+      "match_status": "unresolved",
+      "canonical_song_id": "7bed0d45-bbfd-4086-9195-dc439b664788",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 398,
+      "title": "Use It Up and Wear It Out",
+      "artist": "Odyssey",
+      "song_id": null,
+      "chart_year": 1980,
+      "match_status": "unresolved",
+      "canonical_song_id": "cf4982e7-ec8b-401b-8148-e131996f629d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 419,
+      "title": "Don't You Want Me",
+      "artist": "The Human League",
+      "song_id": null,
+      "chart_year": 1981,
+      "match_status": "unresolved",
+      "canonical_song_id": "fdddff39-4174-4bf1-8d1e-c1392c27fa07",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 420,
+      "title": "The Land of Make Believe",
+      "artist": "Bucks Fizz",
+      "song_id": null,
+      "chart_year": 1982,
+      "match_status": "unresolved",
+      "canonical_song_id": "ffcb5183-1352-45b3-b087-7980d6d82abd",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 440,
+      "title": "Too Shy",
+      "artist": "Kajagoogoo",
+      "song_id": null,
+      "chart_year": 1983,
+      "match_status": "unresolved",
+      "canonical_song_id": "ba07e814-8992-4617-b252-d8c87cd18b58",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 443,
+      "title": "Is There Something I Should Know?",
+      "artist": "Duran Duran",
+      "song_id": null,
+      "chart_year": 1983,
+      "match_status": "unresolved",
+      "canonical_song_id": "7633e9f2-a169-4b70-ba51-1ef8aa0f43d9",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 510,
+      "title": "China in Your Hand",
+      "artist": "T'Pau",
+      "song_id": null,
+      "chart_year": 1987,
+      "match_status": "unresolved",
+      "canonical_song_id": "198d0f05-58aa-491d-bb64-4c61f604cea6",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 514,
+      "title": "I Should Be So Lucky",
+      "artist": "Kylie Minogue",
+      "song_id": null,
+      "chart_year": 1988,
+      "match_status": "unresolved",
+      "canonical_song_id": "14dde850-b6b9-46f8-9603-a984ddb56073",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 538,
+      "title": "Swing the Mood",
+      "artist": "Jive Bunny and the Mastermixers",
+      "song_id": null,
+      "chart_year": 1989,
+      "match_status": "unresolved",
+      "canonical_song_id": "13f620cb-2fc9-4161-835a-e2969e8002bf",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 723,
+      "title": "Chirpy Chirpy Cheep Cheep",
+      "artist": "Middle of the Road",
+      "song_id": null,
+      "chart_year": 1971,
+      "match_status": "unresolved",
+      "canonical_song_id": "9712d04a-94d0-4fd9-9edf-5bef71cd74e2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 760,
+      "title": "Devil Gate Drive",
+      "artist": "Suzi Quatro",
+      "song_id": null,
+      "chart_year": 1974,
+      "match_status": "unresolved",
+      "canonical_song_id": "45edab96-0af5-470f-a68f-b10a17e3a26a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 776,
+      "title": "Gonna Make You a Star",
+      "artist": "David Essex",
+      "song_id": null,
+      "chart_year": 1974,
+      "match_status": "unresolved",
+      "canonical_song_id": "f86c7fc8-b05d-43f2-a9c5-66ed5d8d131f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 836,
+      "title": "Y.M.C.A.",
+      "artist": "Village People",
+      "song_id": null,
+      "chart_year": 1979,
+      "match_status": "unresolved",
+      "canonical_song_id": "3e43c4fe-4518-4194-b60e-19606c13eaf3",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 844,
+      "title": "Cars",
+      "artist": "Gary Numan",
+      "song_id": null,
+      "chart_year": 1979,
+      "match_status": "unresolved",
+      "canonical_song_id": "439b9990-5938-46f8-a538-1830173a5d4f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1008,
+      "title": "Good Timin",
+      "artist": "Jimmy Jones",
+      "song_id": null,
+      "chart_year": 1960,
+      "match_status": "unresolved",
+      "canonical_song_id": "e868c436-5959-467e-86d9-061a99e8608a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1043,
+      "title": "Return to Sender",
+      "artist": "Elvis Presley",
+      "song_id": null,
+      "chart_year": 1962,
+      "match_status": "unresolved",
+      "canonical_song_id": "a28b2f95-2a35-4a81-ae69-26546add868a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1048,
+      "title": "Foot Tapper",
+      "artist": "The Shadows",
+      "song_id": null,
+      "chart_year": 1963,
+      "match_status": "unresolved",
+      "canonical_song_id": "e8e81358-43ec-4564-9a8d-7f3e3f1423ba",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1067,
+      "title": "Don't Throw Your Love Away",
+      "artist": "The Searchers",
+      "song_id": null,
+      "chart_year": 1964,
+      "match_status": "unresolved",
+      "canonical_song_id": "19109b79-b7a2-47df-a234-17d4bd0d5bb4",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1075,
+      "title": "I'm Into Something Good",
+      "artist": "Herman's Hermits",
+      "song_id": null,
+      "chart_year": 1964,
+      "match_status": "unresolved",
+      "canonical_song_id": "927e0274-51bb-4bfc-ae74-ae49949531f0",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1084,
+      "title": "Tired of Waiting for You",
+      "artist": "The Kinks",
+      "song_id": null,
+      "chart_year": 1965,
+      "match_status": "unresolved",
+      "canonical_song_id": "19f222a8-d059-4b1d-aabd-199e885f6621",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1099,
+      "title": "The Carnival Is Over",
+      "artist": "The Seekers",
+      "song_id": null,
+      "chart_year": 1965,
+      "match_status": "unresolved",
+      "canonical_song_id": "934bab27-c7d8-400f-93d1-553ce63e954a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1112,
+      "title": "With a Girl Like You",
+      "artist": "The Troggs",
+      "song_id": null,
+      "chart_year": 1966,
+      "match_status": "unresolved",
+      "canonical_song_id": "c43219aa-0f92-4f64-bd78-5580ea3137a4",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1134,
+      "title": "The Legend of Xanadu",
+      "artist": "Dave Dee, Dozy, Beaky, Mick & Tich",
+      "song_id": null,
+      "chart_year": 1968,
+      "match_status": "unresolved",
+      "canonical_song_id": "c8920037-7163-4cf6-b842-7a15ba8bc5d1",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1154,
+      "title": "(If Paradise Is) Half as Nice",
+      "artist": "Amen Corner",
+      "song_id": null,
+      "chart_year": 1969,
+      "match_status": "unresolved",
+      "canonical_song_id": "cee9237f-fafe-45bc-b09a-e5749b43645f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1345,
+      "title": "Toca's Miracle",
+      "artist": "Fragma",
+      "song_id": null,
+      "chart_year": 2000,
+      "match_status": "unresolved",
+      "canonical_song_id": "c38c9bd3-ab07-418a-b3f1-30e76f0dba8d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1354,
+      "title": "Life Is a Rollercoaster",
+      "artist": "Ronan Keating",
+      "song_id": null,
+      "chart_year": 2000,
+      "match_status": "unresolved",
+      "canonical_song_id": "3d993048-37df-495a-abc5-359e32d002da",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1846,
+      "title": "Changed the Way You Kiss Me",
+      "artist": "Example",
+      "song_id": null,
+      "chart_year": 2011,
+      "match_status": "unresolved",
+      "canonical_song_id": "976913e9-53b6-45d9-aba4-b7f66628bb98",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1858,
+      "title": "Loca People",
+      "artist": "Sak Noel",
+      "song_id": null,
+      "chart_year": 2011,
+      "match_status": "unresolved",
+      "canonical_song_id": "274deae2-c9b2-4921-bbe3-3285a3c4c0c0",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1944,
+      "title": "Gecko (Overdrive)",
+      "artist": "Oliver Heldens and Becky Hill",
+      "song_id": null,
+      "chart_year": 2014,
+      "match_status": "unresolved",
+      "canonical_song_id": "1098c6c0-71b6-44c7-a4ba-afda10e70dfc",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2261,
+      "title": "Here in My Heart",
+      "artist": "Al Martino",
+      "song_id": null,
+      "chart_year": 1952,
+      "match_status": "unresolved",
+      "canonical_song_id": "ece123f7-ddbe-4db3-8ec6-48bc5fcdc365",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2326,
+      "title": "Jailhouse Rock",
+      "artist": "Elvis Presley",
+      "song_id": null,
+      "chart_year": 1958,
+      "match_status": "unresolved",
+      "canonical_song_id": "b000a8e2-97d0-4f58-9475-416756e6f92a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2329,
+      "title": "Whole Lotta Woman",
+      "artist": "Marvin Rainwater",
+      "song_id": null,
+      "chart_year": 1958,
+      "match_status": "unresolved",
+      "canonical_song_id": "fe0d7fa7-02d3-4f3c-b506-152afc3d9c70",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 849,
+      "title": "Walking on the Moon",
+      "artist": "The Police",
+      "song_id": null,
+      "chart_year": 1979,
+      "match_status": "unresolved",
+      "canonical_song_id": "57b49672-4162-4e99-9db0-223ec80966ab",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1088,
+      "title": "Concrete and Clay",
+      "artist": "Unit 4 + 2",
+      "song_id": null,
+      "chart_year": 1965,
+      "match_status": "unresolved",
+      "canonical_song_id": "601edd4c-46e5-4686-a6e8-d22a6d6cca5d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1501,
+      "title": "I Wish I Was a Punk Rocker (With Flowers in My Hair)",
+      "artist": "| Sandi Thom",
+      "song_id": null,
+      "chart_year": 2006,
+      "match_status": "unresolved",
+      "canonical_song_id": "a8b6f1c3-a615-4397-8c87-b3df2904a99e",
+      "musicbrainz_recording_id": null
+    }
+  ],
+  "canonical_placeholders": {
+    "c8f6013e-81a4-4851-b069-7e4b8106502c": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c8f6013e-81a4-4851-b069-7e4b8106502c",
+      "musicbrainz_recording_id": null
+    },
+    "fe315190-bfa2-406a-8363-e192a2fcf5d2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fe315190-bfa2-406a-8363-e192a2fcf5d2",
+      "musicbrainz_recording_id": null
+    },
+    "38b6b35f-2c07-491e-a907-b451908271f2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "38b6b35f-2c07-491e-a907-b451908271f2",
+      "musicbrainz_recording_id": null
+    },
+    "f47ffd73-8915-4116-be29-d1ddad82d446": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f47ffd73-8915-4116-be29-d1ddad82d446",
+      "musicbrainz_recording_id": null
+    },
+    "056fbdcf-dc2e-4a59-8742-5b85c7f26b1b": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "056fbdcf-dc2e-4a59-8742-5b85c7f26b1b",
+      "musicbrainz_recording_id": null
+    },
+    "1f0e4856-1dd8-4d0c-b180-b1720669fb5a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "1f0e4856-1dd8-4d0c-b180-b1720669fb5a",
+      "musicbrainz_recording_id": null
+    },
+    "0eb51e4d-e2bc-4c15-aeff-c314b06414c2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "0eb51e4d-e2bc-4c15-aeff-c314b06414c2",
+      "musicbrainz_recording_id": null
+    },
+    "65924a30-7845-439a-b277-dc0d9ab77b2d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "65924a30-7845-439a-b277-dc0d9ab77b2d",
+      "musicbrainz_recording_id": null
+    },
+    "547e2d0b-d4d9-4784-9c59-631d698eee92": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "547e2d0b-d4d9-4784-9c59-631d698eee92",
+      "musicbrainz_recording_id": null
+    },
+    "11cde505-7631-42a9-9108-6bd52322a56f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "11cde505-7631-42a9-9108-6bd52322a56f",
+      "musicbrainz_recording_id": null
+    },
+    "eaf5a3ce-9d0a-42ad-82a3-4f1d3f0a854f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "eaf5a3ce-9d0a-42ad-82a3-4f1d3f0a854f",
+      "musicbrainz_recording_id": null
+    },
+    "f843df75-469f-4263-8168-46cc8ce80115": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f843df75-469f-4263-8168-46cc8ce80115",
+      "musicbrainz_recording_id": null
+    },
+    "b8c917cd-7452-44e1-a8f6-76c633f9a115": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "b8c917cd-7452-44e1-a8f6-76c633f9a115",
+      "musicbrainz_recording_id": null
+    },
+    "b151fdcc-2745-4cb0-9464-3f80dd712635": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "b151fdcc-2745-4cb0-9464-3f80dd712635",
+      "musicbrainz_recording_id": null
+    },
+    "68ceb09b-70c5-4163-ad6b-2268ca6d74c8": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "68ceb09b-70c5-4163-ad6b-2268ca6d74c8",
+      "musicbrainz_recording_id": null
+    },
+    "84ab458b-5125-4f1b-a444-d0fb45b551b2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "84ab458b-5125-4f1b-a444-d0fb45b551b2",
+      "musicbrainz_recording_id": null
+    },
+    "f675da66-d611-4abb-989a-b8038b729cfe": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f675da66-d611-4abb-989a-b8038b729cfe",
+      "musicbrainz_recording_id": null
+    },
+    "fae7c11b-be96-4bb2-a773-622a7b86f044": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fae7c11b-be96-4bb2-a773-622a7b86f044",
+      "musicbrainz_recording_id": null
+    },
+    "6c4b0c89-462d-45b1-86f2-587c9dfd0e68": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "6c4b0c89-462d-45b1-86f2-587c9dfd0e68",
+      "musicbrainz_recording_id": null
+    },
+    "bb9e88f6-2dd0-48d8-800c-7ef30910eb30": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "bb9e88f6-2dd0-48d8-800c-7ef30910eb30",
+      "musicbrainz_recording_id": null
+    },
+    "f6ee94cc-8f80-466d-b766-a4988ca506fb": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f6ee94cc-8f80-466d-b766-a4988ca506fb",
+      "musicbrainz_recording_id": null
+    },
+    "557af73e-803b-43c7-88a9-77dc61384703": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "557af73e-803b-43c7-88a9-77dc61384703",
+      "musicbrainz_recording_id": null
+    },
+    "773098a5-79f4-4d1c-9624-07c9b3e8ee56": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "773098a5-79f4-4d1c-9624-07c9b3e8ee56",
+      "musicbrainz_recording_id": null
+    },
+    "86c9a8df-ea8e-4ad0-aa92-5b72822abd42": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "86c9a8df-ea8e-4ad0-aa92-5b72822abd42",
+      "musicbrainz_recording_id": null
+    },
+    "11feb1b5-e055-435c-a074-2205811d14f9": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "11feb1b5-e055-435c-a074-2205811d14f9",
+      "musicbrainz_recording_id": null
+    },
+    "30a3b56c-d27b-4d15-ada2-5e0e3dcb5df5": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "30a3b56c-d27b-4d15-ada2-5e0e3dcb5df5",
+      "musicbrainz_recording_id": null
+    },
+    "52a47fef-4bf2-4762-8d37-8b24ec06cb2d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "52a47fef-4bf2-4762-8d37-8b24ec06cb2d",
+      "musicbrainz_recording_id": null
+    },
+    "f8f6a64a-e1c5-4097-a298-fb1a6d3e55e9": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f8f6a64a-e1c5-4097-a298-fb1a6d3e55e9",
+      "musicbrainz_recording_id": null
+    },
+    "2cb91ba4-7fd2-40f4-8382-72515039b5a2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "2cb91ba4-7fd2-40f4-8382-72515039b5a2",
+      "musicbrainz_recording_id": null
+    },
+    "d12b263b-036c-4773-b5fc-5adcdc80f89f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d12b263b-036c-4773-b5fc-5adcdc80f89f",
+      "musicbrainz_recording_id": null
+    },
+    "a1dc3b7c-38f9-4bca-9298-f4d46999244e": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a1dc3b7c-38f9-4bca-9298-f4d46999244e",
+      "musicbrainz_recording_id": null
+    },
+    "d302d5fc-e0d8-4522-b5f7-844e23355f0c": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d302d5fc-e0d8-4522-b5f7-844e23355f0c",
+      "musicbrainz_recording_id": null
+    },
+    "47862a33-ef1d-4398-b2f4-35d342e604bf": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "47862a33-ef1d-4398-b2f4-35d342e604bf",
+      "musicbrainz_recording_id": null
+    },
+    "cda2456d-80ef-4367-80e8-7e715a9c53c3": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cda2456d-80ef-4367-80e8-7e715a9c53c3",
+      "musicbrainz_recording_id": null
+    },
+    "065bd447-3662-4d07-9c15-73e50d84902e": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "065bd447-3662-4d07-9c15-73e50d84902e",
+      "musicbrainz_recording_id": null
+    },
+    "b2a6669a-a7d0-4c5d-9294-164a9dd47620": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "b2a6669a-a7d0-4c5d-9294-164a9dd47620",
+      "musicbrainz_recording_id": null
+    },
+    "db2e6888-8293-4a48-a1b7-0f31372c1939": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "db2e6888-8293-4a48-a1b7-0f31372c1939",
+      "musicbrainz_recording_id": null
+    },
+    "c415497b-8a1d-4913-ba13-1ad7aaa39c82": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c415497b-8a1d-4913-ba13-1ad7aaa39c82",
+      "musicbrainz_recording_id": null
+    },
+    "d1740f5c-0472-4c0a-a228-ce1f1cebc4c6": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d1740f5c-0472-4c0a-a228-ce1f1cebc4c6",
+      "musicbrainz_recording_id": null
+    },
+    "65150a13-6d81-49d8-8e93-f621c746881a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "65150a13-6d81-49d8-8e93-f621c746881a",
+      "musicbrainz_recording_id": null
+    },
+    "e6b4276a-684b-4baa-b90e-cd48bb35963b": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "e6b4276a-684b-4baa-b90e-cd48bb35963b",
+      "musicbrainz_recording_id": null
+    },
+    "383838ec-69ff-4edc-a393-dd8e90a008bb": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "383838ec-69ff-4edc-a393-dd8e90a008bb",
+      "musicbrainz_recording_id": null
+    },
+    "52ecd7d4-0811-4a88-ba94-bf445f4030c4": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "52ecd7d4-0811-4a88-ba94-bf445f4030c4",
+      "musicbrainz_recording_id": null
+    },
+    "a6d666dc-6617-482a-b2cd-847fd15a0ed4": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a6d666dc-6617-482a-b2cd-847fd15a0ed4",
+      "musicbrainz_recording_id": null
+    },
+    "cab54c91-8913-4104-8aec-d7db11f3e066": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cab54c91-8913-4104-8aec-d7db11f3e066",
+      "musicbrainz_recording_id": null
+    },
+    "dd0fccc3-082d-4435-91c3-95a7d9c466ac": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "dd0fccc3-082d-4435-91c3-95a7d9c466ac",
+      "musicbrainz_recording_id": null
+    },
+    "a622554d-209c-4002-9291-b78c7efeb46b": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a622554d-209c-4002-9291-b78c7efeb46b",
+      "musicbrainz_recording_id": null
+    },
+    "0ede7ad5-5eb8-43de-85a2-3afd44750d0f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "0ede7ad5-5eb8-43de-85a2-3afd44750d0f",
+      "musicbrainz_recording_id": null
+    },
+    "51e60a6a-60f2-46f9-bde9-50839317527d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "51e60a6a-60f2-46f9-bde9-50839317527d",
+      "musicbrainz_recording_id": null
+    },
+    "d5add943-d61e-46f3-9cca-03f78133b765": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d5add943-d61e-46f3-9cca-03f78133b765",
+      "musicbrainz_recording_id": null
+    },
+    "cc03945a-81f9-4b6d-a910-9c8929926061": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cc03945a-81f9-4b6d-a910-9c8929926061",
+      "musicbrainz_recording_id": null
+    },
+    "7bed0d45-bbfd-4086-9195-dc439b664788": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "7bed0d45-bbfd-4086-9195-dc439b664788",
+      "musicbrainz_recording_id": null
+    },
+    "cf4982e7-ec8b-401b-8148-e131996f629d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cf4982e7-ec8b-401b-8148-e131996f629d",
+      "musicbrainz_recording_id": null
+    },
+    "fdddff39-4174-4bf1-8d1e-c1392c27fa07": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fdddff39-4174-4bf1-8d1e-c1392c27fa07",
+      "musicbrainz_recording_id": null
+    },
+    "ffcb5183-1352-45b3-b087-7980d6d82abd": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "ffcb5183-1352-45b3-b087-7980d6d82abd",
+      "musicbrainz_recording_id": null
+    },
+    "ba07e814-8992-4617-b252-d8c87cd18b58": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "ba07e814-8992-4617-b252-d8c87cd18b58",
+      "musicbrainz_recording_id": null
+    },
+    "7633e9f2-a169-4b70-ba51-1ef8aa0f43d9": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "7633e9f2-a169-4b70-ba51-1ef8aa0f43d9",
+      "musicbrainz_recording_id": null
+    },
+    "198d0f05-58aa-491d-bb64-4c61f604cea6": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "198d0f05-58aa-491d-bb64-4c61f604cea6",
+      "musicbrainz_recording_id": null
+    },
+    "14dde850-b6b9-46f8-9603-a984ddb56073": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "14dde850-b6b9-46f8-9603-a984ddb56073",
+      "musicbrainz_recording_id": null
+    },
+    "13f620cb-2fc9-4161-835a-e2969e8002bf": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "13f620cb-2fc9-4161-835a-e2969e8002bf",
+      "musicbrainz_recording_id": null
+    },
+    "9712d04a-94d0-4fd9-9edf-5bef71cd74e2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "9712d04a-94d0-4fd9-9edf-5bef71cd74e2",
+      "musicbrainz_recording_id": null
+    },
+    "45edab96-0af5-470f-a68f-b10a17e3a26a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "45edab96-0af5-470f-a68f-b10a17e3a26a",
+      "musicbrainz_recording_id": null
+    },
+    "f86c7fc8-b05d-43f2-a9c5-66ed5d8d131f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f86c7fc8-b05d-43f2-a9c5-66ed5d8d131f",
+      "musicbrainz_recording_id": null
+    },
+    "3e43c4fe-4518-4194-b60e-19606c13eaf3": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "3e43c4fe-4518-4194-b60e-19606c13eaf3",
+      "musicbrainz_recording_id": null
+    },
+    "439b9990-5938-46f8-a538-1830173a5d4f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "439b9990-5938-46f8-a538-1830173a5d4f",
+      "musicbrainz_recording_id": null
+    },
+    "e868c436-5959-467e-86d9-061a99e8608a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "e868c436-5959-467e-86d9-061a99e8608a",
+      "musicbrainz_recording_id": null
+    },
+    "a28b2f95-2a35-4a81-ae69-26546add868a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a28b2f95-2a35-4a81-ae69-26546add868a",
+      "musicbrainz_recording_id": null
+    },
+    "e8e81358-43ec-4564-9a8d-7f3e3f1423ba": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "e8e81358-43ec-4564-9a8d-7f3e3f1423ba",
+      "musicbrainz_recording_id": null
+    },
+    "19109b79-b7a2-47df-a234-17d4bd0d5bb4": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "19109b79-b7a2-47df-a234-17d4bd0d5bb4",
+      "musicbrainz_recording_id": null
+    },
+    "927e0274-51bb-4bfc-ae74-ae49949531f0": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "927e0274-51bb-4bfc-ae74-ae49949531f0",
+      "musicbrainz_recording_id": null
+    },
+    "19f222a8-d059-4b1d-aabd-199e885f6621": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "19f222a8-d059-4b1d-aabd-199e885f6621",
+      "musicbrainz_recording_id": null
+    },
+    "934bab27-c7d8-400f-93d1-553ce63e954a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "934bab27-c7d8-400f-93d1-553ce63e954a",
+      "musicbrainz_recording_id": null
+    },
+    "c43219aa-0f92-4f64-bd78-5580ea3137a4": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c43219aa-0f92-4f64-bd78-5580ea3137a4",
+      "musicbrainz_recording_id": null
+    },
+    "c8920037-7163-4cf6-b842-7a15ba8bc5d1": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c8920037-7163-4cf6-b842-7a15ba8bc5d1",
+      "musicbrainz_recording_id": null
+    },
+    "cee9237f-fafe-45bc-b09a-e5749b43645f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cee9237f-fafe-45bc-b09a-e5749b43645f",
+      "musicbrainz_recording_id": null
+    },
+    "c38c9bd3-ab07-418a-b3f1-30e76f0dba8d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c38c9bd3-ab07-418a-b3f1-30e76f0dba8d",
+      "musicbrainz_recording_id": null
+    },
+    "3d993048-37df-495a-abc5-359e32d002da": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "3d993048-37df-495a-abc5-359e32d002da",
+      "musicbrainz_recording_id": null
+    },
+    "976913e9-53b6-45d9-aba4-b7f66628bb98": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "976913e9-53b6-45d9-aba4-b7f66628bb98",
+      "musicbrainz_recording_id": null
+    },
+    "274deae2-c9b2-4921-bbe3-3285a3c4c0c0": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "274deae2-c9b2-4921-bbe3-3285a3c4c0c0",
+      "musicbrainz_recording_id": null
+    },
+    "1098c6c0-71b6-44c7-a4ba-afda10e70dfc": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "1098c6c0-71b6-44c7-a4ba-afda10e70dfc",
+      "musicbrainz_recording_id": null
+    },
+    "ece123f7-ddbe-4db3-8ec6-48bc5fcdc365": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "ece123f7-ddbe-4db3-8ec6-48bc5fcdc365",
+      "musicbrainz_recording_id": null
+    },
+    "b000a8e2-97d0-4f58-9475-416756e6f92a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "b000a8e2-97d0-4f58-9475-416756e6f92a",
+      "musicbrainz_recording_id": null
+    },
+    "fe0d7fa7-02d3-4f3c-b506-152afc3d9c70": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fe0d7fa7-02d3-4f3c-b506-152afc3d9c70",
+      "musicbrainz_recording_id": null
+    },
+    "57b49672-4162-4e99-9db0-223ec80966ab": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "57b49672-4162-4e99-9db0-223ec80966ab",
+      "musicbrainz_recording_id": null
+    },
+    "601edd4c-46e5-4686-a6e8-d22a6d6cca5d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "601edd4c-46e5-4686-a6e8-d22a6d6cca5d",
+      "musicbrainz_recording_id": null
+    },
+    "a8b6f1c3-a615-4397-8c87-b3df2904a99e": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a8b6f1c3-a615-4397-8c87-b3df2904a99e",
+      "musicbrainz_recording_id": null
+    }
+  },
+  "existing_matches": {},
+  "albums": [],
+  "rating_integrity": {
+    "sum": 12698,
+    "hash": "5e82b62c9fe5c0fe125429fb5ecba6e4",
+    "rows": 1633
+  }
+}

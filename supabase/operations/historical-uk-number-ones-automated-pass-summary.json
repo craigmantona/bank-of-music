@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-11-06T12:35:59.674Z",
+  "total": 703,
+  "totals": {
+    "SAFE": 86,
+    "REVIEW": 226,
+    "UNAVAILABLE": 391
+  },
+  "by_decade": {
+    "1990s": {
+      "SAFE": 13,
+      "REVIEW": 38,
+      "UNAVAILABLE": 38
+    },
+    "1980s": {
+      "SAFE": 11,
+      "REVIEW": 37,
+      "UNAVAILABLE": 37
+    },
+    "1970s": {
+      "SAFE": 13,
+      "REVIEW": 17,
+      "UNAVAILABLE": 59
+    },
+    "1960s": {
+      "SAFE": 14,
+      "REVIEW": 15,
+      "UNAVAILABLE": 88
+    },
+    "2000s": {
+      "SAFE": 13,
+      "REVIEW": 50,
+      "UNAVAILABLE": 47
+    },
+    "2010s": {
+      "SAFE": 10,
+      "REVIEW": 46,
+      "UNAVAILABLE": 43
+    },
+    "1950s": {
+      "SAFE": 7,
+      "REVIEW": 3,
+      "UNAVAILABLE": 62
+    },
+    "2020s": {
+      "SAFE": 5,
+      "REVIEW": 20,
+      "UNAVAILABLE": 17
+    }
+  },
+  "by_reason": {
+    "automated_pass_no_qualifying_contemporary_official_release": 391,
+    "automated_pass_no_single_official_release_validates_recording": 115,
+    "automated_pass_unique_verified_official_recording": 86,
+    "rated_placeholder_protected": 72,
+    "automated_pass_multiple_versions_remain_tied": 32,
+    "duplicate_recording_relationship_requires_manual_review": 3,
+    "placeholder_identity_changed_since_first_pass": 3,
+    "automated_pass_duplicate_recording_requires_manual_link_after_chart_2496": 1
+  },
+  "requests": 798,
+  "cache_hits": 1419,
+  "rating_integrity_baseline": {
+    "sum": 12698,
+    "hash": "5e82b62c9fe5c0fe125429fb5ecba6e4",
+    "rows": 1633
+  }
+}
