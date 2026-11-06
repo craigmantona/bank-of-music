@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
   DEFAULT_MANIFEST, buildPlan, generateTransactionSql, validateManifest,
-  validateMusicBrainzRelease
+  postgresDateOrNull, validateMusicBrainzRelease
 } from "../scripts/historical-uk-number-ones-pilot.mjs";
 
 const manifest = validateManifest(JSON.parse(await readFile(DEFAULT_MANIFEST, "utf8")));
@@ -38,6 +38,27 @@ test("reviewed manifest has the exact bounded pilot shape", () => {
   assert.deepEqual(manifest.entries.filter(e => e.reuse_album_id).map(e => e.reuse_album_id), [100, 380]);
   assert.equal(manifest.entries[0].recording_mbid, "530def51-6d66-4700-b64c-d98a2b12e103");
   assert.notEqual(manifest.entries[0].recording_mbid, "40e901c4-2e12-43eb-bc43-ddf93fb5601b");
+});
+
+test("PostgreSQL album dates require a real full ISO calendar date", () => {
+  assert.equal(postgresDateOrNull("2000-02-29"), "2000-02-29");
+  assert.equal(postgresDateOrNull("2001-02-28"), "2001-02-28");
+  assert.equal(postgresDateOrNull("2004-11"), null);
+  assert.equal(postgresDateOrNull("2004"), null);
+  for (const invalid of ["", "unknown", "2001-02-29", "1900-02-29", "2000-02-30", "2000-13-01", "2000-00-10", "2000-01-00", "2000-1-01"]) {
+    assert.equal(postgresDateOrNull(invalid), null, invalid);
+  }
+  assert.equal(postgresDateOrNull("2000-02-29"), "2000-02-29");
+  assert.equal(postgresDateOrNull("1900-02-29"), null);
+});
+
+test("partial MusicBrainz dates stay in the plan audit payload but write NULL", () => {
+  const releases = Object.fromEntries(manifest.entries.map(e => [e.source_release_mbid, releaseFor(e)]));
+  releases[manifest.entries[1].source_release_mbid].date = "2000-05";
+  const plan = buildPlan(manifest, unresolvedSnapshot(), releases);
+  const album = plan.album_actions.find(action => action.release_mbid === manifest.entries[1].source_release_mbid);
+  assert.equal(album.release_date_raw, "2000-05");
+  assert.equal(album.release_date, null);
 });
 
 test("MusicBrainz validation enforces source, version, artist, position and duration", () => {

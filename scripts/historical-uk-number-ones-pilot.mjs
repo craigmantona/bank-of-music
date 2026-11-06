@@ -22,6 +22,19 @@ export function normalise(value) {
     .replace(/&/g, " and ").replace(/[^\p{L}\p{N}]+/gu, " ").trim().toLowerCase();
 }
 
+export function postgresDateOrNull(value) {
+  const raw = String(value || "").trim();
+  const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (month < 1 || month > 12) return null;
+  const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return day >= 1 && day <= days[month - 1] ? raw : null;
+}
+
 export function validateManifest(manifest) {
   if (manifest?.schema_version !== 1 || manifest?.expected_chart_rows !== 20 || manifest?.entries?.length !== 20) {
     throw new Error("Pilot manifest must contain exactly 20 reviewed chart rows.");
@@ -165,7 +178,15 @@ export function buildPlan(manifest, snapshot, releases = {}) {
       albumActions.set(entry.source_release_mbid, { action: "reuse", album_id: Number(album.id), release_mbid: entry.source_release_mbid, title: entry.source_album_title });
     } else if (!albumActions.has(entry.source_release_mbid)) {
       const release = releases[entry.source_release_mbid];
-      albumActions.set(entry.source_release_mbid, { action: "insert", release_mbid: entry.source_release_mbid, release_group_mbid: entry.release_group_mbid, title: entry.source_album_title, artist: entry.source_album_artist || entry.artist, release_date: release?.date || null, country: entry.source_release_country, cover_art_url: `https://coverartarchive.org/release-group/${entry.release_group_mbid}/front-500` });
+      albumActions.set(entry.source_release_mbid, {
+        action: "insert", release_mbid: entry.source_release_mbid,
+        release_group_mbid: entry.release_group_mbid, title: entry.source_album_title,
+        artist: entry.source_album_artist || entry.artist,
+        release_date: postgresDateOrNull(release?.date),
+        release_date_raw: release?.date || null,
+        country: entry.source_release_country,
+        cover_art_url: `https://coverartarchive.org/release-group/${entry.release_group_mbid}/front-500`
+      });
     }
     entries.push({ ...entry, action: alreadyLinked ? "unchanged" : "insert_and_link" });
   }
