@@ -3,9 +3,7 @@ import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  normalise, postgresDateOrNull, validateMusicBrainzRelease
-} from "./historical-uk-number-ones-pilot.mjs";
+import { postgresDateOrNull, validateMusicBrainzRelease } from "./historical-uk-number-ones-pilot.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REJECTED_VERSION = /\b(live|demo|remix|karaoke|cover|instrumental|re[ -]?record(?:ed|ing)?)\b/i;
@@ -63,12 +61,12 @@ function identifiers(row, candidates = [], review = null) {
 
 export function classifyRows(snapshot, reviewRows, verifiedEntries = [], releaseCache = {}) {
   const reviewById = new Map(reviewRows.map(row => [Number(row.chart_row_id), row]));
-  const verifiedByIdentity = new Map(verifiedEntries.map(entry => [`${normalise(entry.artist)}|||${normalise(entry.title)}`, entry]));
+  const verifiedById = new Map(verifiedEntries.map(entry => [Number(entry.chart_row_id), entry]));
   const result = [];
   for (const row of snapshot.rows) {
     const candidates = uniqueSongs(snapshot.existing_matches?.[String(row.id)] || []);
     const review = reviewById.get(Number(row.id));
-    const verified = verifiedByIdentity.get(`${normalise(row.artist)}|||${normalise(row.title)}`);
+    const verified = verifiedById.get(Number(row.id));
     if (candidates.length === 1) {
       const candidate = candidates[0];
       const placeholder = snapshot.canonical_placeholders?.[String(row.canonical_song_id)];

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "selection": "Deterministic decade-stratified sample from the 958 UNAVAILABLE rows: three per decade, plus a fourth from the 2000s; duplicate normalised artist/title pairs excluded.",
+  "entries": [
+    { "chart_id": 2261, "chart_year": 1952, "artist": "Al Martino", "title": "Here in My Heart" },
+    { "chart_id": 2303, "chart_year": 1956, "artist": "The Dream Weavers", "title": "It's Almost Tomorrow" },
+    { "chart_id": 2349, "chart_year": 1959, "artist": "Emile Ford and the Checkmates", "title": "What Do You Want to Make Those Eyes at Me For?" },
+    { "chart_id": 1000, "chart_year": 1960, "artist": "Michael Holliday", "title": "Starry Eyed" },
+    { "chart_id": 1083, "chart_year": 1965, "artist": "The Righteous Brothers", "title": "You've Lost That Lovin' Feelin" },
+    { "chart_id": 1167, "chart_year": 1969, "artist": "Rolf Harris", "title": "Two Little Boys" },
+    { "chart_id": 704, "chart_year": 1970, "artist": "Edison Lighthouse", "title": "Love Grows (Where My Rosemary Goes)" },
+    { "chart_id": 774, "chart_year": 1974, "artist": "Sweet Sensation", "title": "Sad Sweet Dreamer" },
+    { "chart_id": 850, "chart_year": 1979, "artist": "Pink Floyd", "title": "Another Brick in the Wall (Part II)" },
+    { "chart_id": 388, "chart_year": 1980, "artist": "Pretenders", "title": "Brass in Pocket" },
+    { "chart_id": 465, "chart_year": 1985, "artist": "Dead or Alive", "title": "You Spin Me Round (Like a Record)" },
+    { "chart_id": 544, "chart_year": 1989, "artist": "Band Aid II", "title": "Do They Know It's Christmas?" },
+    { "chart_id": 2, "chart_year": 1990, "artist": "New Kids on the Block", "title": "Hangin' Tough" },
+    { "chart_id": 101, "chart_year": 1996, "artist": "Peter Andre", "title": "Flava" },
+    { "chart_id": 193, "chart_year": 1999, "artist": "Cliff Richard", "title": "The Millennium Prayer" },
+    { "chart_id": 1337, "chart_year": 2000, "artist": "Manic Street Preachers", "title": "The Masses Against the Classes" },
+    { "chart_id": 1410, "chart_year": 2002, "artist": "Elvis vs. JXL", "title": "A Little Less Conversation" },
+    { "chart_id": 1488, "chart_year": 2005, "artist": "Sugababes", "title": "Push the Button" },
+    { "chart_id": 1570, "chart_year": 2009, "artist": "Rage Against the Machine", "title": "Killing in the Name" },
+    { "chart_id": 1805, "chart_year": 2010, "artist": "Joe McElderry", "title": "The Climb" },
+    { "chart_id": 1916, "chart_year": 2013, "artist": "Katy Perry", "title": "Roar" },
+    { "chart_id": 2032, "chart_year": 2019, "artist": "LadBaby", "title": "I Love Sausage Rolls" },
+    { "chart_id": 2441, "chart_year": 2020, "artist": "Eminem featuring Juice Wrld", "title": "Godzilla" },
+    { "chart_id": 2480, "chart_year": 2023, "artist": "Billie Eilish", "title": "What Was I Made For?" },
+    { "chart_id": 2517, "chart_year": 2026, "artist": "Taylor Swift", "title": "Patient Zero" }
+  ]
+}

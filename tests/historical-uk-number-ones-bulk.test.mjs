@@ -60,6 +60,15 @@ test("seeded ambiguities stay REVIEW and unsupported rows stay UNAVAILABLE", () 
   assert.match(classified[0].candidate_identifiers, /song:44/);
 });
 
+test("verified discovery evidence applies only to its reviewed chart row ID", () => {
+  const rows = [chart({ id: 10 }), chart({ id: 11 })];
+  const verified = [{ chart_row_id: 10, artist: "Lady Gaga", title: "Bad Romance", source_release_mbid: "release" }];
+  const classified = classifyRows({ rows, existing_matches: {} }, [], verified, {});
+  assert.equal(classified[0].category, "REVIEW");
+  assert.match(classified[0].reason, /release response is not cached/);
+  assert.equal(classified[1].category, "UNAVAILABLE");
+});
+
 test("batches are bounded at 25 records", () => {
   assert.deepEqual(createBatches(Array.from({ length: 51 }, (_, id) => ({ id }))).map(batch => batch.records.length), [25, 25, 1]);
   assert.throws(() => createBatches([], 26), /between 1 and 25/);

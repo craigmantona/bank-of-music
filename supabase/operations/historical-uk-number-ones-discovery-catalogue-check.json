@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-11-06",
+  "project_id": "xevxjggauscyrvvtmftx",
+  "recordings": {},
+  "releases": {},
+  "release_groups": {},
+  "notes": "Read-only production recheck found no active BOM song occurrence or album matching any SAFE recording, source release or release group MBID.",
+  "placeholders": {
+    "2": { "canonical_song_id": "44853f87-faf1-4f04-931f-5d11185f9e8f", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "193": { "canonical_song_id": "1c378ac6-df16-484c-a24b-18cafe375696", "musicbrainz_recording_id": null, "rating_rows": 1, "song_occurrences": 0 },
+    "388": { "canonical_song_id": "d7b9e625-29b9-4353-a8cf-03786f72a250", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "465": { "canonical_song_id": "094fd639-f5ba-4e80-8982-dcb2c322240b", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "544": { "canonical_song_id": "c5860049-074a-40a1-8597-31c6fb8a8ba8", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "850": { "canonical_song_id": "3056768d-e2e1-4863-904f-302b7366812f", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "1337": { "canonical_song_id": "cf1b0c07-82df-4721-91a9-b8e296bd8d91", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "1570": { "canonical_song_id": "ef17fae1-4bc1-4ca1-b089-c4d29c2fb15b", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "1805": { "canonical_song_id": "771dd0f3-6c6b-4552-afb4-0dc60a74119a", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "1916": { "canonical_song_id": "df3faf45-0894-4380-ab7b-f1c4b3150a35", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "2032": { "canonical_song_id": "0a902351-ac7b-49b6-a602-f4961dbd1d11", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 },
+    "2517": { "canonical_song_id": "873239df-58a6-4422-b433-7d9d84dc9288", "musicbrainz_recording_id": null, "rating_rows": 0, "song_occurrences": 0 }
+  }
+}
