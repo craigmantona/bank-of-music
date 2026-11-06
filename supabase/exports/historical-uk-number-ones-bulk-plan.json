@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-11-06T10:02:28.181Z",
+  "source_snapshot": "supabase/operations/historical-uk-number-ones-bulk-audit-snapshot-20261106.json",
+  "dry_run": true,
+  "safeguards": {
+    "maximum_batch_size": 25,
+    "transaction_scope": "one record per transaction within independently resumable batches",
+    "failure_policy": "rollback the affected record, record the reason, and continue",
+    "dates": "only valid YYYY-MM-DD values are written; partial dates remain NULL",
+    "ratings": "rated canonical placeholders are rejected and existing rating rows are never updated"
+  },
+  "post_import_verification": [
+    "Compare global album, song, canonical attachment and historical-link counts with this plan.",
+    "Verify each linked chart row resolves through its intended canonical recording and source album.",
+    "Confirm cover-art resolution and existing track navigation for every completed record.",
+    "Compare rating rows and aggregate rating counts with the pre-import snapshot.",
+    "Check for duplicate recording MBIDs, release MBIDs and canonical identities.",
+    "Rerun the dry-run from a fresh snapshot and require zero proposed changes for completed records."
+  ],
+  "risks": [
+    "REVIEW records require human identity/version decisions before any import.",
+    "UNAVAILABLE records have no sufficiently verified cached recording/release evidence and must not be auto-imported.",
+    "A future production run must use a fresh read-only snapshot so stale preconditions fail closed."
+  ],
+  "summary": {
+    "total": 1227,
+    "SAFE": 1,
+    "REVIEW": 268,
+    "UNAVAILABLE": 958,
+    "expected": {
+      "album_inserts": 0,
+      "canonical_attachments": 0,
+      "song_occurrences": 0,
+      "historical_links": 1
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "records": [
+        {
+          "chart_id": 1806,
+          "action": "link_existing",
+          "sql": "begin;\nset local lock_timeout = '10s';\nset local statement_timeout = '60s';\nselect pg_advisory_xact_lock(hashtextextended('bom-historical-bulk:1806', 0));\ndo $record$\ndeclare n integer;\nbegin\n  perform 1 from public.quick_rate_collection_tracks where id=1806 and song_id is null and match_status='unresolved' for update;\n  if not found then raise exception 'chart precondition failed for 1806'; end if;\n  perform 1 from public.songs where id=19451 and not coalesce(is_deleted,false) and canonical_song_id='0a5b0716-545b-4171-8b00-03088aa43aa0'::uuid for update;\n  if not found then raise exception 'song identity failed for 1806'; end if;\n  perform 1 from public.canonical_recordings where id='c9ae11d8-ca81-4a23-ba5c-6ae72d00d5d8'::uuid and musicbrainz_recording_id is null for update;\n  if not found then raise exception 'placeholder canonical precondition failed for 1806'; end if;\n  if exists(select 1 from public.song_ratings where canonical_song_id='c9ae11d8-ca81-4a23-ba5c-6ae72d00d5d8'::uuid) or\n     exists(select 1 from public.songs where canonical_song_id='c9ae11d8-ca81-4a23-ba5c-6ae72d00d5d8'::uuid and not coalesce(is_deleted,false)) then\n    raise exception 'placeholder canonical is no longer empty for 1806';\n  end if;\n  update public.quick_rate_collection_tracks set song_id=19451, canonical_song_id='0a5b0716-545b-4171-8b00-03088aa43aa0'::uuid,\n    musicbrainz_recording_id='6926be9f-2405-4b68-9080-42410be08312',\n    match_status='direct_mbid', match_method='bulk_unique_existing',\n    match_notes='Uniquely matched to existing BOM canonical recording',updated_at=timezone('utc',now()) where id=1806 and song_id is null;\n  get diagnostics n=row_count; if n<>1 then raise exception 'exact chart update count failed for 1806'; end if;\nend $record$;\ncommit;\n"
+        }
+      ]
+    }
+  ]
+}
