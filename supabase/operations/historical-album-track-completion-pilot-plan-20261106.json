@@ -1,0 +1,385 @@
+{
+  "albums": [
+    {
+      "album_id": 1513,
+      "title": "The Black Parade",
+      "artist": "My Chemical Romance",
+      "release_mbid": "d09de1f8-0ad8-37cc-ac71-342890279916",
+      "release_group_mbid": "bcba43e7-2f72-3b60-b234-577e77fd2d9e",
+      "expected_track_count": 14,
+      "historical_chart_rows": [
+        1507
+      ],
+      "cover_art_url": "https://coverartarchive.org/release-group/bcba43e7-2f72-3b60-b234-577e77fd2d9e/front-500",
+      "tracks": [
+        {
+          "position": 1,
+          "title": "The End.",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "b88efe95-3f4d-4851-8b0d-e5795277b70b",
+          "duration_ms": 112920,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 2,
+          "title": "Dead!",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "6247902c-2ad9-4fe8-b7c1-f668d2b7c641",
+          "duration_ms": 195520,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 3,
+          "title": "This Is How I Disappear",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "eabf4ab3-ef7a-4462-b71a-9f94f5c91d04",
+          "duration_ms": 239053,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 4,
+          "title": "The Sharpest Lives",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "bc25529c-ea16-46cb-8bb5-792b10ecf5a2",
+          "duration_ms": 200880,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 5,
+          "title": "Welcome to the Black Parade",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "28982738-839e-4c97-89ec-6ad0446c8e56",
+          "duration_ms": 311106,
+          "action": "unchanged",
+          "song_id": 19443,
+          "canonical_id": "643f2771-e365-4fa9-9592-c32a76e65499"
+        },
+        {
+          "position": 6,
+          "title": "I Don’t Love You",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "0d132658-6c53-4866-bf37-c25190b1fa24",
+          "duration_ms": 238680,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 7,
+          "title": "House of Wolves",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "fffaca7f-0175-49c4-aad3-6add051444f5",
+          "duration_ms": 184000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 8,
+          "title": "Cancer",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "7ed0e283-55dc-4832-90c1-ec014c9a5feb",
+          "duration_ms": 142973,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 9,
+          "title": "Mama",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "f228732b-b041-431b-83df-ca56c039d0a4",
+          "duration_ms": 279026,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 10,
+          "title": "Sleep",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "7e1b7d1e-16f9-40c8-9e42-f591d46b4d5f",
+          "duration_ms": 283466,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 11,
+          "title": "Teenagers",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "7ff393b8-befa-4211-9dba-09b9656b344e",
+          "duration_ms": 161920,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 12,
+          "title": "Disenchanted",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "5fa13852-f014-4d1c-ab3e-37c8cdb2fb7e",
+          "duration_ms": 295000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 13,
+          "title": "Famous Last Words",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "234cdfbd-4d58-417d-ab85-590e4aab1f9c",
+          "duration_ms": 299226,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 14,
+          "title": "Blood",
+          "artist": "My Chemical Romance",
+          "recording_mbid": "268cb43d-de3b-4d85-9402-6e2db95d6469",
+          "duration_ms": 173533,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        }
+      ],
+      "counts": {
+        "album_inserts": 0,
+        "song_occurrence_inserts": 13,
+        "canonical_inserts": 13,
+        "canonical_reuses": 0,
+        "historical_link_updates": 0,
+        "rating_updates": 0,
+        "unchanged_tracks": 1
+      },
+      "protected_rating_rows": 1,
+      "historical_baseline": [
+        {
+          "id": 1507,
+          "song_id": 19443,
+          "canonical_song_id": "643f2771-e365-4fa9-9592-c32a76e65499",
+          "musicbrainz_recording_id": "28982738-839e-4c97-89ec-6ad0446c8e56"
+        }
+      ]
+    },
+    {
+      "album_id": 1517,
+      "title": "Spirit",
+      "artist": "Leona Lewis",
+      "release_mbid": "4ffe60a8-f09c-474d-a80e-7b52e41a407f",
+      "release_group_mbid": "9f5df671-c5f4-3431-874c-37fec2635ee6",
+      "expected_track_count": 14,
+      "historical_chart_rows": [
+        1524
+      ],
+      "cover_art_url": "https://coverartarchive.org/release-group/9f5df671-c5f4-3431-874c-37fec2635ee6/front-500",
+      "tracks": [
+        {
+          "position": 1,
+          "title": "Bleeding Love",
+          "artist": "Leona Lewis",
+          "recording_mbid": "4a607ce9-031b-4fa8-9793-32f9a71a8ae7",
+          "duration_ms": 263000,
+          "action": "unchanged",
+          "song_id": 19447,
+          "canonical_id": "571ab5d9-f279-43fb-a386-df48b737b6bc"
+        },
+        {
+          "position": 2,
+          "title": "Whatever It Takes",
+          "artist": "Leona Lewis",
+          "recording_mbid": "7462c678-c98f-432a-a260-422ddb57b4a3",
+          "duration_ms": 207000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 3,
+          "title": "Homeless",
+          "artist": "Leona Lewis",
+          "recording_mbid": "a7956126-288c-4f3c-94c3-e4c52f5a55f6",
+          "duration_ms": 230000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 4,
+          "title": "Better in Time",
+          "artist": "Leona Lewis",
+          "recording_mbid": "f98ede27-e3e2-4ea3-bcd6-e29e4ae5cc0a",
+          "duration_ms": 234000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 5,
+          "title": "Yesterday",
+          "artist": "Leona Lewis",
+          "recording_mbid": "ebb1ef53-4afc-4c4c-8168-927692d32336",
+          "duration_ms": 234000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 6,
+          "title": "Take a Bow",
+          "artist": "Leona Lewis",
+          "recording_mbid": "52c833a4-82b8-4eb3-8dac-6b50306607a4",
+          "duration_ms": 234000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 7,
+          "title": "I Will Be",
+          "artist": "Leona Lewis",
+          "recording_mbid": "d0b070b2-7a8c-4130-9bea-739272d32d2c",
+          "duration_ms": 239000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 8,
+          "title": "Angel",
+          "artist": "Leona Lewis",
+          "recording_mbid": "8038c69d-29b8-4904-a308-bbff76f66eef",
+          "duration_ms": 254000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 9,
+          "title": "Here I Am",
+          "artist": "Leona Lewis",
+          "recording_mbid": "ca8dfd65-85d2-4a93-b1d0-3b375ccf4d5d",
+          "duration_ms": 292000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 10,
+          "title": "I’m You",
+          "artist": "Leona Lewis",
+          "recording_mbid": "21aad959-9ce4-4f87-bc86-fa0a93ea959c",
+          "duration_ms": 228000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 11,
+          "title": "The Best You Never Had",
+          "artist": "Leona Lewis",
+          "recording_mbid": "ecc6529f-8c3f-4ae2-84b5-c649b7d1ab9c",
+          "duration_ms": 223000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 12,
+          "title": "The First Time Ever I Saw Your Face",
+          "artist": "Leona Lewis",
+          "recording_mbid": "9ba9f78c-1a26-4f4e-9c9c-eb50fd8b7ca1",
+          "duration_ms": 266000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 13,
+          "title": "Footprints in the Sand",
+          "artist": "Leona Lewis",
+          "recording_mbid": "1a8e402f-e44b-49a9-b8af-8324eb6f0fc6",
+          "duration_ms": 248000,
+          "action": "insert_canonical_and_occurrence",
+          "canonical_id": null,
+          "existing_occurrence_ids": [],
+          "existing_rating_rows": 0
+        },
+        {
+          "position": 14,
+          "title": "A Moment Like This",
+          "artist": "Leona Lewis",
+          "recording_mbid": "5c822182-9f2e-432a-a2da-196699ccb87d",
+          "duration_ms": 257000,
+          "action": "insert_occurrence_reuse_canonical",
+          "canonical_id": "18170ebc-d391-4a91-8796-c69216a80d1c",
+          "existing_occurrence_ids": [
+            19592
+          ],
+          "existing_rating_rows": 0
+        }
+      ],
+      "counts": {
+        "album_inserts": 0,
+        "song_occurrence_inserts": 13,
+        "canonical_inserts": 12,
+        "canonical_reuses": 1,
+        "historical_link_updates": 0,
+        "rating_updates": 0,
+        "unchanged_tracks": 1
+      },
+      "protected_rating_rows": 1,
+      "historical_baseline": [
+        {
+          "id": 1524,
+          "song_id": 19447,
+          "canonical_song_id": "571ab5d9-f279-43fb-a386-df48b737b6bc",
+          "musicbrainz_recording_id": "4a607ce9-031b-4fa8-9793-32f9a71a8ae7"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "album_inserts": 0,
+    "song_occurrence_inserts": 26,
+    "canonical_inserts": 25,
+    "canonical_reuses": 1,
+    "historical_link_updates": 0,
+    "rating_updates": 0,
+    "unchanged_tracks": 2
+  }
+}

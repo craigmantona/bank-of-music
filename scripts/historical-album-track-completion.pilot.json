@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "albums": [
+    {
+      "album_id": 1513,
+      "title": "The Black Parade",
+      "artist": "My Chemical Romance",
+      "release_mbid": "d09de1f8-0ad8-37cc-ac71-342890279916",
+      "release_group_mbid": "bcba43e7-2f72-3b60-b234-577e77fd2d9e",
+      "expected_track_count": 14,
+      "historical_chart_rows": [1507]
+    },
+    {
+      "album_id": 1517,
+      "title": "Spirit",
+      "artist": "Leona Lewis",
+      "release_mbid": "4ffe60a8-f09c-474d-a80e-7b52e41a407f",
+      "release_group_mbid": "9f5df671-c5f4-3431-874c-37fec2635ee6",
+      "expected_track_count": 14,
+      "historical_chart_rows": [1524]
+    }
+  ]
+}
