@@ -1,0 +1,723 @@
+{
+  "rows": [
+    {
+      "id": 20,
+      "title": "Innuendo",
+      "artist": "Queen",
+      "song_id": null,
+      "chart_year": 1991,
+      "match_status": "unresolved",
+      "canonical_song_id": "76a5a9d9-6a6b-46d3-8026-9d15bc7e024d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 85,
+      "title": "Boombastic",
+      "artist": "Shaggy",
+      "song_id": null,
+      "chart_year": 1995,
+      "match_status": "unresolved",
+      "canonical_song_id": "fe23f5d0-9f1b-4472-bd60-e1ba9c55ad94",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 88,
+      "title": "Earth Song",
+      "artist": "Michael Jackson",
+      "song_id": null,
+      "chart_year": 1995,
+      "match_status": "unresolved",
+      "canonical_song_id": "ffcf0406-04d2-42f4-ae4a-dcf511a4cb42",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 109,
+      "title": "A Different Beat",
+      "artist": "Boyzone",
+      "song_id": null,
+      "chart_year": 1996,
+      "match_status": "unresolved",
+      "canonical_song_id": "cd4c8b92-43bb-4d4d-9418-369b951b58e1",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 112,
+      "title": "Your Woman",
+      "artist": "White Town",
+      "song_id": null,
+      "chart_year": 1997,
+      "match_status": "unresolved",
+      "canonical_song_id": "c5242b16-19ef-4bb0-9f64-6ab29446ecd2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 150,
+      "title": "No Matter What",
+      "artist": "Boyzone",
+      "song_id": null,
+      "chart_year": 1998,
+      "match_status": "unresolved",
+      "canonical_song_id": "d0017cd9-7344-40b4-bd9b-9a76d84af84b",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 389,
+      "title": "Coward of the County",
+      "artist": "Kenny Rogers",
+      "song_id": null,
+      "chart_year": 1980,
+      "match_status": "unresolved",
+      "canonical_song_id": "814517b9-37d4-4384-bcc8-51672c40dc11",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 416,
+      "title": "It's My Party",
+      "artist": "Dave Stewart with Barbara Gaskin",
+      "song_id": null,
+      "chart_year": 1981,
+      "match_status": "unresolved",
+      "canonical_song_id": "d234be2f-6a23-47c9-a231-50e04607a4e2",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 426,
+      "title": "A Little Peace",
+      "artist": "Nicole",
+      "song_id": null,
+      "chart_year": 1982,
+      "match_status": "unresolved",
+      "canonical_song_id": "5d8ec437-dae5-42f2-80c0-f322ee7b65b5",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 487,
+      "title": "The Lady in Red",
+      "artist": "Chris de Burgh",
+      "song_id": null,
+      "chart_year": 1986,
+      "match_status": "unresolved",
+      "canonical_song_id": "eb535368-a397-460a-aa3d-b6eef7c2bb21",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 513,
+      "title": "I Think We're Alone Now",
+      "artist": "Tiffany",
+      "song_id": null,
+      "chart_year": 1988,
+      "match_status": "unresolved",
+      "canonical_song_id": "364ed509-e104-4518-b675-30a39eb6d371",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 544,
+      "title": "Do They Know It's Christmas?",
+      "artist": "Band Aid II",
+      "song_id": null,
+      "chart_year": 1989,
+      "match_status": "unresolved",
+      "canonical_song_id": "c5860049-074a-40a1-8597-31c6fb8a8ba8",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 704,
+      "title": "Love Grows (Where My Rosemary Goes)",
+      "artist": "Edison Lighthouse",
+      "song_id": null,
+      "chart_year": 1970,
+      "match_status": "unresolved",
+      "canonical_song_id": "07c6270e-9974-48f3-88b9-5d0a613c76a5",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 767,
+      "title": "Always Yours",
+      "artist": "Gary Glitter",
+      "song_id": null,
+      "chart_year": 1974,
+      "match_status": "unresolved",
+      "canonical_song_id": "9ebe3380-eac9-48ed-874a-a1c2692dd1d7",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 771,
+      "title": "Love Me for a Reason",
+      "artist": "The Osmonds",
+      "song_id": null,
+      "chart_year": 1974,
+      "match_status": "unresolved",
+      "canonical_song_id": "fade59b3-62be-4e32-9487-7785259ef838",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 824,
+      "title": "Yes Sir, I Can Boogie",
+      "artist": "Baccara",
+      "song_id": null,
+      "chart_year": 1977,
+      "match_status": "unresolved",
+      "canonical_song_id": "f46d2012-5f33-4561-ac35-5be55d59a39f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 841,
+      "title": "Are 'Friends' Electric?",
+      "artist": "Tubeway Army",
+      "song_id": null,
+      "chart_year": 1979,
+      "match_status": "unresolved",
+      "canonical_song_id": "6247b09a-7bcf-4330-8279-e58f8361a876",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 848,
+      "title": "When You're in Love with a Beautiful Woman",
+      "artist": "Dr. Hook",
+      "song_id": null,
+      "chart_year": 1979,
+      "match_status": "unresolved",
+      "canonical_song_id": "da1d1217-9f09-4d8e-bf8f-da50e1611069",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 850,
+      "title": "Another Brick in the Wall (Part II)",
+      "artist": "Pink Floyd",
+      "song_id": null,
+      "chart_year": 1979,
+      "match_status": "unresolved",
+      "canonical_song_id": "3056768d-e2e1-4863-904f-302b7366812f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1060,
+      "title": "Glad All Over",
+      "artist": "The Dave Clark Five",
+      "song_id": null,
+      "chart_year": 1964,
+      "match_status": "unresolved",
+      "canonical_song_id": "30733fd8-3efe-4aa5-ac0e-8c995bda09ea",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1104,
+      "title": "Somebody Help Me",
+      "artist": "The Spencer Davis Group",
+      "song_id": null,
+      "chart_year": 1966,
+      "match_status": "unresolved",
+      "canonical_song_id": "fb059ec5-8a72-401a-9945-bbc7e0246f1e",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1108,
+      "title": "Strangers in the Night",
+      "artist": "Frank Sinatra",
+      "song_id": null,
+      "chart_year": 1966,
+      "match_status": "unresolved",
+      "canonical_song_id": "7a26429b-e1de-498a-9a57-cfbbbb1db130",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1427,
+      "title": "All the Things She Said",
+      "artist": "t.A.T.u.",
+      "song_id": null,
+      "chart_year": 2003,
+      "match_status": "unresolved",
+      "canonical_song_id": "1c35585f-aeb2-41ac-b799-75631723059a",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1442,
+      "title": "Slow",
+      "artist": "Kylie Minogue",
+      "song_id": null,
+      "chart_year": 2003,
+      "match_status": "unresolved",
+      "canonical_song_id": "3cd9d638-1110-46ba-ab7c-4af990f1b5dc",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1488,
+      "title": "Push the Button",
+      "artist": "Sugababes",
+      "song_id": null,
+      "chart_year": 2005,
+      "match_status": "unresolved",
+      "canonical_song_id": "52cb998a-72f7-4b42-8719-1ace4ce72f1f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1528,
+      "title": "Mercy",
+      "artist": "Duffy",
+      "song_id": null,
+      "chart_year": 2008,
+      "match_status": "unresolved",
+      "canonical_song_id": "a34a77aa-fa0b-4de8-88ac-d025a071f872",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1567,
+      "title": "Meet Me Halfway",
+      "artist": "The Black Eyed Peas",
+      "song_id": null,
+      "chart_year": 2009,
+      "match_status": "unresolved",
+      "canonical_song_id": "a5fd4dcb-5edf-475a-b902-8d353854172f",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1807,
+      "title": "Replay",
+      "artist": "Iyaz",
+      "song_id": null,
+      "chart_year": 2010,
+      "match_status": "unresolved",
+      "canonical_song_id": "36779154-d473-4b6f-a507-63d2e96d5c01",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1837,
+      "title": "The Time (Dirty Bit)",
+      "artist": "The Black Eyed Peas",
+      "song_id": null,
+      "chart_year": 2010,
+      "match_status": "unresolved",
+      "canonical_song_id": "d4574bf1-24ed-4735-a9e4-853d89bd0cf3",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1872,
+      "title": "Turn Up the Music",
+      "artist": "Chris Brown",
+      "song_id": null,
+      "chart_year": 2012,
+      "match_status": "unresolved",
+      "canonical_song_id": "cb061d4f-3a39-4baa-b0c0-a9a6b637eb09",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1935,
+      "title": "Nobody to Love",
+      "artist": "Sigma",
+      "song_id": null,
+      "chart_year": 2014,
+      "match_status": "unresolved",
+      "canonical_song_id": "7e8bf228-cc1d-4239-a068-1fd377a18996",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1963,
+      "title": "Uptown Funk",
+      "artist": "Mark Ronson featuring Bruno Mars",
+      "song_id": null,
+      "chart_year": 2015,
+      "match_status": "unresolved",
+      "canonical_song_id": "4efc92f7-ca47-4743-a529-f7d5b20fa8fd",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 1964,
+      "title": "Love Me like You Do",
+      "artist": "Ellie Goulding",
+      "song_id": null,
+      "chart_year": 2015,
+      "match_status": "unresolved",
+      "canonical_song_id": "37063af5-d0dc-4a63-86a5-7db1837d4710",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2011,
+      "title": "Nice for What",
+      "artist": "Drake",
+      "song_id": null,
+      "chart_year": 2018,
+      "match_status": "unresolved",
+      "canonical_song_id": "33100777-7935-4008-b5a4-a3549df29c47",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2336,
+      "title": "The Day the Rains Came",
+      "artist": "Jane Morgan",
+      "song_id": null,
+      "chart_year": 1959,
+      "match_status": "unresolved",
+      "canonical_song_id": "939ed787-4e1f-4d90-8eaf-a9c6d09fb719",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2481,
+      "title": "Dance the Night",
+      "artist": "Dua Lipa",
+      "song_id": null,
+      "chart_year": 2023,
+      "match_status": "unresolved",
+      "canonical_song_id": "bffa2e05-a86d-466d-8053-276cf2d8571d",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2482,
+      "title": "Paint the Town Red",
+      "artist": "Doja Cat",
+      "song_id": null,
+      "chart_year": 2023,
+      "match_status": "unresolved",
+      "canonical_song_id": "545fdbc8-6f3a-4971-9025-ce0d7b071d72",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2513,
+      "title": "Hate That I Made You Love Me",
+      "artist": "Ariana Grande",
+      "song_id": null,
+      "chart_year": 2026,
+      "match_status": "unresolved",
+      "canonical_song_id": "7eaaa833-1a66-4830-b359-69ef468ce51e",
+      "musicbrainz_recording_id": null
+    },
+    {
+      "id": 2516,
+      "title": "Great Expectation",
+      "artist": "Sienna Spiro",
+      "song_id": null,
+      "chart_year": 2026,
+      "match_status": "unresolved",
+      "canonical_song_id": "80623baf-23e2-4693-9d33-8e2308bac493",
+      "musicbrainz_recording_id": null
+    }
+  ],
+  "albums": [
+    {
+      "id": 1522,
+      "title": "Do They Know It's Christmas",
+      "artist": "Band Aid II",
+      "created_at": "2026-11-06T11:19:28.649445+00:00",
+      "is_deleted": false,
+      "external_id": "b93a0781-0a7c-4db7-acb0-2f9d289bf5a4",
+      "custom_cover": null,
+      "release_date": null,
+      "cover_art_url": "https://coverartarchive.org/release-group/cdf66816-5f62-40fe-ae6f-fac6f952ea07/front-500",
+      "external_source": "musicbrainz",
+      "original_release_date": null,
+      "canonical_release_date": null,
+      "musicbrainz_release_id": "b93a0781-0a7c-4db7-acb0-2f9d289bf5a4",
+      "canonical_release_country": "GB",
+      "catalogue_selection_version": 1,
+      "musicbrainz_release_group_id": "cdf66816-5f62-40fe-ae6f-fac6f952ea07"
+    },
+    {
+      "id": 1544,
+      "title": "Another Brick in the Wall, Part II / One of My Turns",
+      "artist": "Pink Floyd",
+      "created_at": "2026-11-06T11:19:28.649445+00:00",
+      "is_deleted": false,
+      "external_id": "7e2ade39-7b6e-45cb-9986-4fe8b44ef548",
+      "custom_cover": null,
+      "release_date": "1979-11-16",
+      "cover_art_url": "https://coverartarchive.org/release-group/d39c40ba-c173-309c-a374-97c0ccdf2a19/front-500",
+      "external_source": "musicbrainz",
+      "original_release_date": null,
+      "canonical_release_date": "1979-11-16",
+      "musicbrainz_release_id": "7e2ade39-7b6e-45cb-9986-4fe8b44ef548",
+      "canonical_release_country": "GB",
+      "catalogue_selection_version": 1,
+      "musicbrainz_release_group_id": "d39c40ba-c173-309c-a374-97c0ccdf2a19"
+    },
+    {
+      "id": 1702,
+      "title": "Uptown Funk!",
+      "artist": "Mark Ronson",
+      "created_at": "2026-11-06T11:20:29.641644+00:00",
+      "is_deleted": false,
+      "external_id": "b5056c9d-9d10-4bf5-a7f6-afac691ca0c6",
+      "custom_cover": null,
+      "release_date": null,
+      "cover_art_url": "https://coverartarchive.org/release-group/bce20d09-d903-4370-8047-0f589a5258c2/front-500",
+      "external_source": "musicbrainz",
+      "original_release_date": null,
+      "canonical_release_date": null,
+      "musicbrainz_release_id": "b5056c9d-9d10-4bf5-a7f6-afac691ca0c6",
+      "canonical_release_country": "GB",
+      "catalogue_selection_version": 1,
+      "musicbrainz_release_group_id": "bce20d09-d903-4370-8047-0f589a5258c2"
+    }
+  ],
+  "project_id": "xevxjggauscyrvvtmftx",
+  "captured_at": "2026-11-06T11:47:24.396896",
+  "existing_matches": {
+    "544": [
+      {
+        "title": "Do They Know It's Christmas?",
+        "artist": "Band Aid II",
+        "song_id": 19462,
+        "album_id": 1522,
+        "external_id": "99dae576-583a-4d20-925b-ee35532807b9",
+        "external_source": "musicbrainz",
+        "canonical_song_id": "83bc61ed-30e6-48fd-8938-ec9f28e93eed"
+      }
+    ],
+    "850": [
+      {
+        "title": "Another Brick in the Wall (Part II)",
+        "artist": "Pink Floyd",
+        "song_id": 19484,
+        "album_id": 1544,
+        "external_id": "10acbb87-d5f1-432e-bdb4-db0d93d223b0",
+        "external_source": "musicbrainz",
+        "canonical_song_id": "df71cbad-7f6f-4700-8ce3-74fe4debfed4"
+      }
+    ],
+    "1963": [
+      {
+        "title": "Uptown Funk",
+        "artist": "Mark Ronson featuring Bruno Mars",
+        "song_id": 19642,
+        "album_id": 1702,
+        "external_id": "38e06968-af06-44ea-9eba-a1a275832767",
+        "external_source": "musicbrainz",
+        "canonical_song_id": "f060cb15-1bd8-4ba1-8632-4c92abc77553"
+      }
+    ]
+  },
+  "canonical_placeholders": {
+    "07c6270e-9974-48f3-88b9-5d0a613c76a5": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "07c6270e-9974-48f3-88b9-5d0a613c76a5",
+      "musicbrainz_recording_id": null
+    },
+    "1c35585f-aeb2-41ac-b799-75631723059a": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "1c35585f-aeb2-41ac-b799-75631723059a",
+      "musicbrainz_recording_id": null
+    },
+    "3056768d-e2e1-4863-904f-302b7366812f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "3056768d-e2e1-4863-904f-302b7366812f",
+      "musicbrainz_recording_id": null
+    },
+    "30733fd8-3efe-4aa5-ac0e-8c995bda09ea": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "30733fd8-3efe-4aa5-ac0e-8c995bda09ea",
+      "musicbrainz_recording_id": null
+    },
+    "33100777-7935-4008-b5a4-a3549df29c47": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "33100777-7935-4008-b5a4-a3549df29c47",
+      "musicbrainz_recording_id": null
+    },
+    "364ed509-e104-4518-b675-30a39eb6d371": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "364ed509-e104-4518-b675-30a39eb6d371",
+      "musicbrainz_recording_id": null
+    },
+    "36779154-d473-4b6f-a507-63d2e96d5c01": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "36779154-d473-4b6f-a507-63d2e96d5c01",
+      "musicbrainz_recording_id": null
+    },
+    "37063af5-d0dc-4a63-86a5-7db1837d4710": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "37063af5-d0dc-4a63-86a5-7db1837d4710",
+      "musicbrainz_recording_id": null
+    },
+    "3cd9d638-1110-46ba-ab7c-4af990f1b5dc": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "3cd9d638-1110-46ba-ab7c-4af990f1b5dc",
+      "musicbrainz_recording_id": null
+    },
+    "4efc92f7-ca47-4743-a529-f7d5b20fa8fd": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "4efc92f7-ca47-4743-a529-f7d5b20fa8fd",
+      "musicbrainz_recording_id": null
+    },
+    "52cb998a-72f7-4b42-8719-1ace4ce72f1f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "52cb998a-72f7-4b42-8719-1ace4ce72f1f",
+      "musicbrainz_recording_id": null
+    },
+    "545fdbc8-6f3a-4971-9025-ce0d7b071d72": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "545fdbc8-6f3a-4971-9025-ce0d7b071d72",
+      "musicbrainz_recording_id": null
+    },
+    "5d8ec437-dae5-42f2-80c0-f322ee7b65b5": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "5d8ec437-dae5-42f2-80c0-f322ee7b65b5",
+      "musicbrainz_recording_id": null
+    },
+    "6247b09a-7bcf-4330-8279-e58f8361a876": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "6247b09a-7bcf-4330-8279-e58f8361a876",
+      "musicbrainz_recording_id": null
+    },
+    "76a5a9d9-6a6b-46d3-8026-9d15bc7e024d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "76a5a9d9-6a6b-46d3-8026-9d15bc7e024d",
+      "musicbrainz_recording_id": null
+    },
+    "7a26429b-e1de-498a-9a57-cfbbbb1db130": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "7a26429b-e1de-498a-9a57-cfbbbb1db130",
+      "musicbrainz_recording_id": null
+    },
+    "7e8bf228-cc1d-4239-a068-1fd377a18996": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "7e8bf228-cc1d-4239-a068-1fd377a18996",
+      "musicbrainz_recording_id": null
+    },
+    "7eaaa833-1a66-4830-b359-69ef468ce51e": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "7eaaa833-1a66-4830-b359-69ef468ce51e",
+      "musicbrainz_recording_id": null
+    },
+    "80623baf-23e2-4693-9d33-8e2308bac493": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "80623baf-23e2-4693-9d33-8e2308bac493",
+      "musicbrainz_recording_id": null
+    },
+    "814517b9-37d4-4384-bcc8-51672c40dc11": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "814517b9-37d4-4384-bcc8-51672c40dc11",
+      "musicbrainz_recording_id": null
+    },
+    "939ed787-4e1f-4d90-8eaf-a9c6d09fb719": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "939ed787-4e1f-4d90-8eaf-a9c6d09fb719",
+      "musicbrainz_recording_id": null
+    },
+    "9ebe3380-eac9-48ed-874a-a1c2692dd1d7": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "9ebe3380-eac9-48ed-874a-a1c2692dd1d7",
+      "musicbrainz_recording_id": null
+    },
+    "a34a77aa-fa0b-4de8-88ac-d025a071f872": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a34a77aa-fa0b-4de8-88ac-d025a071f872",
+      "musicbrainz_recording_id": null
+    },
+    "a5fd4dcb-5edf-475a-b902-8d353854172f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "a5fd4dcb-5edf-475a-b902-8d353854172f",
+      "musicbrainz_recording_id": null
+    },
+    "bffa2e05-a86d-466d-8053-276cf2d8571d": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "bffa2e05-a86d-466d-8053-276cf2d8571d",
+      "musicbrainz_recording_id": null
+    },
+    "c5242b16-19ef-4bb0-9f64-6ab29446ecd2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c5242b16-19ef-4bb0-9f64-6ab29446ecd2",
+      "musicbrainz_recording_id": null
+    },
+    "c5860049-074a-40a1-8597-31c6fb8a8ba8": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "c5860049-074a-40a1-8597-31c6fb8a8ba8",
+      "musicbrainz_recording_id": null
+    },
+    "cb061d4f-3a39-4baa-b0c0-a9a6b637eb09": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cb061d4f-3a39-4baa-b0c0-a9a6b637eb09",
+      "musicbrainz_recording_id": null
+    },
+    "cd4c8b92-43bb-4d4d-9418-369b951b58e1": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "cd4c8b92-43bb-4d4d-9418-369b951b58e1",
+      "musicbrainz_recording_id": null
+    },
+    "d0017cd9-7344-40b4-bd9b-9a76d84af84b": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d0017cd9-7344-40b4-bd9b-9a76d84af84b",
+      "musicbrainz_recording_id": null
+    },
+    "d234be2f-6a23-47c9-a231-50e04607a4e2": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d234be2f-6a23-47c9-a231-50e04607a4e2",
+      "musicbrainz_recording_id": null
+    },
+    "d4574bf1-24ed-4735-a9e4-853d89bd0cf3": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "d4574bf1-24ed-4735-a9e4-853d89bd0cf3",
+      "musicbrainz_recording_id": null
+    },
+    "da1d1217-9f09-4d8e-bf8f-da50e1611069": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "da1d1217-9f09-4d8e-bf8f-da50e1611069",
+      "musicbrainz_recording_id": null
+    },
+    "eb535368-a397-460a-aa3d-b6eef7c2bb21": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "eb535368-a397-460a-aa3d-b6eef7c2bb21",
+      "musicbrainz_recording_id": null
+    },
+    "f46d2012-5f33-4561-ac35-5be55d59a39f": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "f46d2012-5f33-4561-ac35-5be55d59a39f",
+      "musicbrainz_recording_id": null
+    },
+    "fade59b3-62be-4e32-9487-7785259ef838": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fade59b3-62be-4e32-9487-7785259ef838",
+      "musicbrainz_recording_id": null
+    },
+    "fb059ec5-8a72-401a-9945-bbc7e0246f1e": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fb059ec5-8a72-401a-9945-bbc7e0246f1e",
+      "musicbrainz_recording_id": null
+    },
+    "fe23f5d0-9f1b-4472-bd60-e1ba9c55ad94": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "fe23f5d0-9f1b-4472-bd60-e1ba9c55ad94",
+      "musicbrainz_recording_id": null
+    },
+    "ffcf0406-04d2-42f4-ae4a-dcf511a4cb42": {
+      "rating_rows": 0,
+      "song_occurrences": 0,
+      "canonical_song_id": "ffcf0406-04d2-42f4-ae4a-dcf511a4cb42",
+      "musicbrainz_recording_id": null
+    }
+  }
+}
