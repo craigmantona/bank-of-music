@@ -1,0 +1,150 @@
+(function initialiseBOMTurnstile(global) {
+  "use strict";
+
+  const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+  const SCRIPT_ID = "bomTurnstileScript";
+
+  function create({ siteKey, document, window, turnstileApi } = {}) {
+    const cleanSiteKey = String(siteKey || "").trim();
+    const container = document?.getElementById("turnstileContainer");
+    const widget = document?.getElementById("turnstileWidget");
+    const message = document?.getElementById("turnstileMessage");
+    const enabled = Boolean(cleanSiteKey);
+    let token = "";
+    let widgetId = null;
+    let api = turnstileApi || window?.turnstile || null;
+    let unavailableMessage = "";
+    let ready = null;
+    let initialized = false;
+
+    function setMessage(text) {
+      if (message) message.textContent = text || "";
+    }
+
+    function showRequiredState() {
+      container?.classList.remove("is-complete");
+    }
+
+    function render() {
+      api = api || window?.turnstile || null;
+      if (!enabled || !api || !widget || widgetId !== null) return;
+      setMessage("Complete the security check to continue.");
+      try {
+        widgetId = api.render(widget, {
+          sitekey: cleanSiteKey,
+          theme: "dark",
+          size: "flexible",
+          appearance: "always",
+          execution: "render",
+          action: "bom_auth",
+          callback(response) {
+            token = String(response || "");
+            unavailableMessage = "";
+            container?.classList.add("is-complete");
+            setMessage("Security check complete.");
+          },
+          "expired-callback"() {
+            token = "";
+            showRequiredState();
+            setMessage("Security check expired. Please complete it again.");
+          },
+          "timeout-callback"() {
+            token = "";
+            showRequiredState();
+            setMessage("Security check timed out. Please complete it again.");
+          },
+          "unsupported-callback"() {
+            token = "";
+            showRequiredState();
+            unavailableMessage = "This browser cannot run the security check. Please use a supported browser.";
+            setMessage(unavailableMessage);
+          },
+          "error-callback"() {
+            token = "";
+            showRequiredState();
+            unavailableMessage = "Security check is unavailable. Please refresh and try again.";
+            setMessage(unavailableMessage);
+          }
+        });
+      } catch {
+        unavailableMessage = "Security check could not initialise. Please refresh and try again.";
+        setMessage(unavailableMessage);
+      }
+    }
+
+    function load() {
+      if (!enabled) return Promise.resolve();
+      container?.classList.remove("hidden");
+      setMessage("Loading security check…");
+      if (api || window?.turnstile) {
+        render();
+        return Promise.resolve();
+      }
+
+      return new Promise((resolve) => {
+        const existing = document?.getElementById(SCRIPT_ID);
+        const script = existing || document?.createElement("script");
+        if (!script) return resolve();
+        const finish = () => {
+          api = window?.turnstile || null;
+          render();
+          resolve();
+        };
+        script.addEventListener("load", finish, { once: true });
+        script.addEventListener("error", () => {
+          unavailableMessage = "Security check could not load. Please refresh and try again.";
+          setMessage(unavailableMessage);
+          resolve();
+        }, { once: true });
+        if (!existing) {
+          script.id = SCRIPT_ID;
+          script.src = SCRIPT_URL;
+          script.async = true;
+          script.defer = true;
+          document.head.appendChild(script);
+        }
+      });
+    }
+
+    function initialize() {
+      if (!enabled) return Promise.resolve();
+      if (ready) return ready;
+      initialized = true;
+      ready = load();
+      return ready;
+    }
+
+    async function getToken() {
+      if (!enabled) return null;
+      await initialize();
+      if (token) return token;
+      const error = new Error(
+        unavailableMessage || "Complete the security check before continuing."
+      );
+      error.isCaptchaRequired = true;
+      throw error;
+    }
+
+    function reset() {
+      if (!initialized) return;
+      token = "";
+      showRequiredState();
+      setMessage("Complete the security check to continue.");
+      api = api || window?.turnstile || null;
+      if (api && widgetId !== null) api.reset(widgetId);
+      else render();
+    }
+
+    if (!enabled) container?.classList.add("hidden");
+
+    return Object.freeze({
+      isEnabled: () => enabled,
+      isInitialized: () => initialized,
+      initialize,
+      getToken,
+      reset
+    });
+  }
+
+  global.BOMTurnstile = Object.freeze({ create, SCRIPT_URL });
+})(window);

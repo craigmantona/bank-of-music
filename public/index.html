@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <meta name="theme-color" content="#070b15" />
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-title" content="Bank of Music" />
+ 
+ <title>Bank of Music</title>
+ 
+ <link rel="stylesheet" href="style.css?v=83" />
+ <script>
+  /* Stage 1 assets are development-only and add no requests to the legacy UI. */
+  if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
+    ["regular", "semibold", "extrabold"].forEach(function (weight) {
+      var preload = document.createElement("link");
+      preload.rel = "preload";
+      preload.as = "font";
+      preload.type = "font/ttf";
+      preload.crossOrigin = "anonymous";
+      preload.href = "assets/fonts/manrope-" + weight + ".ttf";
+      document.head.appendChild(preload);
+    });
+
+    var foundationStyles = document.createElement("link");
+    foundationStyles.rel = "stylesheet";
+    foundationStyles.href = "bom-foundation.css?v=35&autocomplete=1";
+    document.head.appendChild(foundationStyles);
+
+  }
+ </script>
+ <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+ <script src="config.js?v=3"></script>
+</head>
+ 
+<body>
+ <div id="bomStageOneShell" class="bom-v1-shell" hidden></div>
+ <div class="container">
+ 
+   <header class="hero" id="mainHeader">
+     <img src="logo.jpeg?v=1" class="hero-logo" alt="Bank of Music logo">
+ 
+     <p class="subtitle">Discover, rate and save music</p>
+ 
+     <div id="sessionStatus" class="session-bar">
+       Checking login...
+     </div>
+   </header>
+ 
+   <nav class="top-nav glass-nav">
+     <div class="nav-left" role="button" tabindex="0" aria-label="Go to home search"
+     onclick="window.showOnlySection && window.showOnlySection('searchSection')">
+       <img src="logo.jpeg?v=1" class="nav-logo" alt="BoM logo">
+       <span class="nav-title">BoM</span>
+     </div>
+ 
+     <div class="nav-right">
+       <button class="top-nav-btn active-nav" data-target="searchSection">🔎 Search</button>
+       <button class="top-nav-btn" data-target="librarySection">🎵 Ratings</button>
+       <button class="top-nav-btn" data-target="detailSection">⭐ Selected</button>
+	   <button class="top-nav-btn" type="button" data-target="chartsSection" onclick="window.goCharts(); return false;">🏆 Charts</button>
+       <button class="top-nav-btn" data-target="settingsSection">
+  🎵 Spotify Sync
+</button>
+	   <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
+     </div>
+	 <select class="mobile-more-nav" onchange="showOnlySection(this.value); this.value='';">
+  <option value="">More</option>
+  <option value="librarySection">Ratings</option>
+  <option value="detailSection">Selected</option>
+<option value="settingsSection">Spotify Sync</option>
+<option value="adminSection">Admin</option>
+</select>
+   </nav>
+ 
+   <section class="card" id="authCard">
+     <h2>Login / Sign up</h2>
+
+     <div id="earlyAccessIntro" class="early-access-intro hidden">
+       <div class="early-access-kicker">The Bank of Music</div>
+       <h2>Early Access</h2>
+       <p>The Bank of Music is currently welcoming new members by invitation.</p>
+       <p>Join our growing community of music lovers, discover albums, rate your favourite tracks and help shape the future of The Bank of Music.</p>
+       <div class="button-row">
+         <button id="requestEarlyAccessBtn" type="button">Request Early Access</button>
+         <button id="activateInvitationBtn" type="button" class="secondary-btn">Activate your invitation</button>
+       </div>
+       <p class="small">Existing member? Use the login form below.</p>
+     </div>
+
+     <form id="earlyAccessRequestForm" class="early-access-form hidden" novalidate>
+       <label for="earlyAccessName">Name</label>
+       <input id="earlyAccessName" type="text" maxlength="120" autocomplete="name" required>
+       <label for="earlyAccessEmail">Email address</label>
+       <input id="earlyAccessEmail" type="email" maxlength="254" autocomplete="email" required>
+       <div class="button-row"><button type="submit">Send request</button><button id="cancelEarlyAccessRequestBtn" type="button" class="secondary-btn">Cancel</button></div>
+       <p id="earlyAccessRequestMessage" role="status" aria-live="polite"></p>
+     </form>
+ 
+     <input id="email" type="email" placeholder="Email">
+
+<input id="password" type="password" placeholder="Password">
+
+<input
+  id="birthYear"
+  type="number"
+  min="1900"
+  max="2026"
+  placeholder="Year of birth, e.g. 1985"
+>
+
+<input
+  id="handleInput"
+  type="text"
+  maxlength="20"
+  placeholder="Choose a handle (3-20 characters)"
+>
+
+<div id="turnstileContainer" class="turnstile-container hidden">
+  <div id="turnstileWidget"></div>
+  <p id="turnstileMessage" role="status" aria-live="polite"></p>
+</div>
+ 
+     <div class="button-row">
+  <button id="signupBtn">Sign up</button>
+  <button id="loginBtn">Login</button>
+  <button id="forgotPasswordBtn" class="secondary-btn">Forgot password?</button>
+  <button id="logoutBtn" class="secondary-btn">Logout</button>
+</div>
+ 
+     <p id="authMessage" role="status" aria-live="polite"></p>
+   </section>
+
+   <section class="card password-recovery-card hidden" id="passwordRecoveryCard" aria-labelledby="passwordRecoveryTitle">
+     <div class="password-recovery-kicker">Account recovery</div>
+     <h2 id="passwordRecoveryTitle">Set new password</h2>
+     <p class="small">Choose a new password for your Bank of Music account.</p>
+     <form id="passwordRecoveryForm" novalidate>
+       <label for="newPassword">New password</label>
+       <input id="newPassword" type="password" autocomplete="new-password" minlength="6" required>
+       <label for="confirmNewPassword">Confirm new password</label>
+       <input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="6" required>
+       <button id="setNewPasswordBtn" type="submit">Set new password</button>
+     </form>
+     <p id="passwordRecoveryMessage" role="status" aria-live="polite"></p>
+     <button id="passwordRecoveryContinueBtn" type="button" class="hidden">Continue to Bank of Music</button>
+   </section>
+ 
+   <section class="card" id="searchSection">
+     <h2>Search</h2>
+ 
+     <div class="search-bar-row">
+       <input id="globalSearchInput" placeholder="Search artists, albums and songs">
+       <button id="globalSearchBtn">Search</button>
+     </div>
+ 
+     <p id="globalSearchMessage"></p>
+     <div id="globalSearchResults"></div>
+   </section>
+   
+   <section class="card hidden" id="chartsSection">
+  <h2>Top 10 Charts</h2>
+  <p class="small">Global and age-range music charts.</p>
+
+  <div class="charts-grid">
+
+  <div>
+    <h3>Global Top Albums</h3>
+    <div id="globalAlbumCharts"></div>
+  </div>
+
+  <div>
+    <h3>Your Age Range Top Albums</h3>
+    <div id="ageAlbumCharts"></div>
+  </div>
+
+</div>
+</section>
+
+ 
+   <section class="card" id="recommendationsSection">
+     <h2>Recommended Albums</h2>
+     <p class="small">Albums you may want to rate next.</p>
+     <div id="recommendationsList"></div>
+   </section>
+ 
+   <section class="card hidden" id="librarySection">
+     <h2>Your Ratings</h2>
+ 
+     <button id="refreshLibraryBtn">Refresh</button>
+ 
+     <h3>Albums</h3>
+     <div id="albumsList"></div>
+ 
+     <h3>Songs</h3>
+     <div id="songsList"></div>
+   </section>
+ 
+   <section class="card hidden" id="detailSection">
+     <h2>Selected item</h2>
+     <div id="selectedItemDetail"></div>
+   </section>
+   
+   <section class="card hidden" id="settingsSection">
+  <div class="settings-page-header">
+  <div>
+    <div class="settings-kicker">
+      Spotify integration
+    </div>
+
+    <h2>Spotify Playlist Sync</h2>
+
+    <p class="small">
+      Create and keep your Spotify playlists synchronised
+      with your Bank of Music ratings.
+    </p>
+  </div>
+</div>
+
+  <div class="settings-panel spotify-settings-panel">
+    <div class="settings-service-header">
+      <div class="spotify-service-icon" aria-hidden="true">
+        ♪
+      </div>
+
+      <div>
+        <h3>Spotify</h3>
+
+        <p class="small">
+          Create and synchronise personal and community BoM playlists.
+        </p>
+      </div>
+    </div>
+
+    <div id="spotifyConnectionStatus" class="spotify-status-card">
+      <div class="spotify-status-dot"></div>
+
+      <div>
+        <strong>Checking Spotify connection…</strong>
+      </div>
+    </div>
+
+    <div id="spotifyConnectedAccount" class="hidden"></div>
+
+    <div class="settings-actions">
+  <button id="connectSpotifyBtn" type="button">
+    Connect Spotify
+  </button>
+
+  <button
+    id="disconnectSpotifyBtn"
+    type="button"
+    class="secondary-btn hidden"
+  >
+    Disconnect Spotify
+  </button>
+</div>
+
+<div id="spotifyExportPanel" class="spotify-export-panel hidden">
+  <div class="spotify-export-heading">
+    <div>
+      <h3>Sync your BoM playlists</h3>
+
+      <p class="small">
+  Tap a playlist below to create it or keep it
+  synchronised with your latest ratings.
+</p>
+    </div>
+  </div>
+
+  <div class="spotify-playlist-buttons">
+
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="7"
+      data-playlist-name="BoM • Rated 7+"
+    >
+      <span class="spotify-sync-rating">7+</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Rated 7+</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="8"
+      data-playlist-name="BoM • Rated 8+"
+    >
+      <span class="spotify-sync-rating">8+</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Rated 8+</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="9"
+      data-playlist-name="BoM • Rated 9+"
+    >
+      <span class="spotify-sync-rating">9+</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Rated 9+</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="spotify-sync-playlist-btn"
+      data-minimum-rating="10"
+      data-playlist-name="BoM • Perfect 10s"
+    >
+      <span class="spotify-sync-rating">10</span>
+
+      <span class="spotify-sync-button-text">
+        <strong>BoM Perfect 10s</strong>
+        <small>Create or sync playlist</small>
+      </span>
+    </button>
+	
+	<button
+  type="button"
+  id="spotifyTop100Btn"
+  class="spotify-sync-playlist-btn spotify-top-100-btn"
+  data-playlist-type="global-top-100"
+  data-playlist-name="BoM • Global Top 100"
+>
+  <span class="spotify-sync-rating">🏆</span>
+
+  <span class="spotify-sync-button-text">
+    <strong>BoM Global Top 100</strong>
+    <small>
+      Highest-rated songs with at least 3 ratings
+    </small>
+  </span>
+</button>
+
+  </div>
+
+  <div
+    id="spotifyExportProgress"
+    class="spotify-export-progress hidden"
+  >
+    <div class="spotify-progress-track">
+      <div
+        id="spotifyProgressBar"
+        class="spotify-progress-fill"
+      ></div>
+    </div>
+
+    <p
+      id="spotifyProgressText"
+      class="spotify-progress-text"
+    ></p>
+  </div>
+
+  <div
+    id="spotifyExportResult"
+    class="spotify-export-result hidden"
+  ></div>
+</div>
+
+<p id="spotifyMessage" class="small"></p>
+  </div>
+
+  <div class="settings-panel">
+    <div class="settings-service-header">
+      <div class="apple-service-icon" aria-hidden="true">
+        ♪
+      </div>
+
+      <div>
+        <h3>Apple Music</h3>
+        <p class="small">Coming later.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+   <section class="card hidden" id="adminSection">
+     <h2>Admin Dashboard</h2>
+     <p class="small">Manage albums, tracks and artwork. Only admin users can see this page.</p>
+ 
+     <div class="admin-toolbar">
+       <input id="adminSearchInput" placeholder="Search local albums, songs or artists">
+       <button id="adminRefreshBtn">Refresh admin data</button>
+       <button id="missingArtistArtworkBtn">Missing Artist Artwork</button>
+     </div>
+ 
+     <p id="adminMessage" class="small"></p>
+     <div id="earlyAccessAdmin"></div>
+     <div id="adminDashboard"></div>
+   </section>
+ 
+ </div>
+ 
+ <div id="stickyPlayer" class="sticky-player hidden" aria-live="polite">
+   <button id="stickyPlayerOpenBtn" class="sticky-player-main" type="button">
+     <div id="stickyPlayerCover" class="sticky-player-cover">♪</div>
+     <div class="sticky-player-text">
+       <div id="stickyPlayerTitle" class="sticky-player-title">Nothing selected</div>
+       <div id="stickyPlayerArtist" class="sticky-player-artist">Select an album or song</div>
+     </div>
+   </button>
+   <button id="stickyPlayerShareBtn" class="sticky-player-action" type="button">Send</button>
+ </div>
+ 
+ <div id="profileModal" class="profile-modal hidden" aria-hidden="true"></div>
+ 
+ <script>
+  /*
+    Preserve Spotify's callback before any other BoM code
+    can alter or clean the address.
+  */
+  (function preserveSpotifyCallback() {
+    const params = new URLSearchParams(window.location.search);
+
+    if (!params.has("code") && !params.has("error")) {
+      return;
+    }
+
+    sessionStorage.setItem(
+      "bom_spotify_pending_callback",
+      JSON.stringify({
+        code: params.get("code") || "",
+        state: params.get("state") || "",
+        error: params.get("error") || "",
+        errorDescription:
+          params.get("error_description") || "",
+        expectedState:
+          localStorage.getItem(
+            "bom_spotify_auth_state"
+          ) || ""
+      })
+    );
+  })();
+</script>
+
+  <script src="bom-autocomplete.js?v=2"></script>
+  <script src="bom-artist-hero.js?v=1"></script>
+  <script src="bom-turnstile.js?v=4"></script>
+  <script src="bom-password-recovery.js?v=1"></script>
+  <script src="bom-early-access.js?v=4"></script>
+  <script src="bom-spotify-playlist.js?v=3"></script>
+  <script src="app.js?v=151&autocomplete=2&search-autosave=1"></script>
+  <script src="bom-admin-catalogue.js?v=10"></script>
+<script>
+  if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
+    var foundationScript = document.createElement("script");
+    foundationScript.src = "bom-foundation.js?v=11&autocomplete=2";
+    foundationScript.addEventListener("load", function () {
+      var albumScript = document.createElement("script");
+      albumScript.src = "bom-album.js?v=3";
+      albumScript.addEventListener("load", function () {
+        var artistScript = document.createElement("script");
+        artistScript.src = "bom-artist.js?v=11";
+        artistScript.addEventListener("load", function () {
+          var discoverScript = document.createElement("script");
+          discoverScript.src = "bom-discover.js?v=3&history=2";
+          discoverScript.addEventListener("load", function () {
+            var chartsScript = document.createElement("script");
+            chartsScript.src = "bom-charts.js?v=3";
+            chartsScript.addEventListener("load", function () {
+              var ratingsScript = document.createElement("script");
+              ratingsScript.src = "bom-ratings.js?v=2";
+              ratingsScript.addEventListener("load", function () {
+                var searchScript = document.createElement("script");
+                searchScript.src = "bom-search.js?v=2";
+                searchScript.addEventListener("load", function () {
+                  window.BOMPresentationBridge && window.BOMPresentationBridge.refreshDiscover();
+                });
+                document.body.appendChild(searchScript);
+              });
+              document.body.appendChild(ratingsScript);
+            });
+            document.body.appendChild(chartsScript);
+          });
+          document.body.appendChild(discoverScript);
+        });
+        document.body.appendChild(artistScript);
+      });
+      document.body.appendChild(albumScript);
+    });
+    document.body.appendChild(foundationScript);
+  }
+</script>
+ <!-- v32: production polish, sticky player, swipe gestures and deep links are powered by app.js -->
+</body>
+</html>
+ 
