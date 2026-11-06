@@ -381,6 +381,59 @@ function goToSection(targetId) {
 
 }
 
+let pendingSongNavigationKey = "";
+let lastSongNavigationKey = "";
+let lastSongNavigationAt = 0;
+
+function scrollSelectedSongToTop() {
+  const detail = document.getElementById("detailSection");
+  if (!detail) return;
+  detail.scrollTop = 0;
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo(0, detail.getBoundingClientRect().top + window.scrollY);
+  root.style.scrollBehavior = previousScrollBehavior;
+}
+
+function markSongNavigation(trigger, active) {
+  if (!trigger) return;
+  trigger.classList.toggle("is-song-navigating", active);
+  if (active) trigger.setAttribute("aria-busy", "true");
+  else trigger.removeAttribute("aria-busy");
+}
+
+async function openSongDetail(song, trigger = null) {
+  if (!song) return;
+  const songId = Number(song.id || song.savedSongId || song.songId || 0);
+  const key = songId ? `song:${songId}` : `recording:${song.external_id || song.externalId || ""}`;
+  if (pendingSongNavigationKey === key || (lastSongNavigationKey === key && Date.now() - lastSongNavigationAt < 700)) return;
+  pendingSongNavigationKey = key;
+  lastSongNavigationKey = key;
+  lastSongNavigationAt = Date.now();
+  markSongNavigation(trigger, true);
+  selectedItem = {
+    type: "song",
+    title: song.title,
+    artist: song.artist,
+    externalId: song.external_id || song.externalId || "",
+    releaseTitle: song.releaseTitle || (song.album_id ? getAlbumNameById(song.album_id) : ""),
+    savedSongId: songId || "",
+    albumId: song.album_id || song.albumId || "",
+    coverUrl: song.cover_art_url || song.coverUrl || ""
+  };
+  showOnlySection("detailSection");
+  scrollSelectedSongToTop();
+  try {
+    await renderSelectedItem();
+    selectedItemDetail.querySelector("h1")?.focus({ preventScroll: true });
+    requestAnimationFrame(() => requestAnimationFrame(scrollSelectedSongToTop));
+  } finally {
+    markSongNavigation(trigger, false);
+    if (pendingSongNavigationKey === key) pendingSongNavigationKey = "";
+  }
+}
+
 
 
 
@@ -529,16 +582,10 @@ window.BOMPresentationBridge = Object.freeze({
     }
   },
   openAlbumById: (albumId) => openStageOneRatingsAlbum(albumId),
-  openTrackById: async (songId) => {
-    await ensureFullCatalogue();
+  openTrackById: async (songId, trigger = null) => {
     const song = allSongs.find((item) => Number(item.id) === Number(songId));
     if (!song) return;
-    selectedItem = {
-      type: "song", title: song.title, artist: song.artist,
-      externalId: song.external_id || "", savedSongId: song.id, albumId: song.album_id
-    };
-    showOnlySection("detailSection");
-    await renderSelectedItem();
+    await openSongDetail(song, trigger);
   },
   loadHistoricalDiscovery: async () => {
     const rows = [];
@@ -565,6 +612,7 @@ window.BOMPresentationBridge = Object.freeze({
       fetchRowsInChunks("songs", "title", historicalTitles, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted")
     ]);
     const songs = mergeRowsById(directSongs, [...canonicalSongs, ...recordingSongs, ...titleSongs]).filter((song) => !song.is_deleted);
+    allSongs = mergeRowsById(allSongs, songs);
     const songsById = new Map(songs.map((song) => [Number(song.id), song]));
     const songsByCanonicalId = new Map();
     const songsByRecordingId = new Map();
@@ -2879,6 +2927,9 @@ async function fetchAllRows(tableName, orderColumn = "id", columns = "*", tieBre
 let libraryLoadPromise = null;
 
 const albumDetailLoadPromises = new Map();
+const loadedAlbumDetailIds = new Set();
+const songDetailLoadPromises = new Map();
+const loadedSongDetailIds = new Set();
 const artistDetailLoadPromises = new Map();
 const artistDetailDataCache = new Map();
 
@@ -2897,6 +2948,25 @@ function mergeRatingRows(existingRows, incomingRows, keyForRow) {
   (existingRows || []).forEach((row) => merged.set(keyForRow(row), row));
   (incomingRows || []).forEach((row) => merged.set(keyForRow(row), row));
   return [...merged.values()];
+}
+
+async function loadSongDetailOccurrence(songId) {
+  const id = Number(songId);
+  if (!Number.isSafeInteger(id) || id <= 0 || loadedSongDetailIds.has(id)) return null;
+  if (songDetailLoadPromises.has(id)) return songDetailLoadPromises.get(id);
+  const load = (async () => {
+    const { data, error } = await supabaseClient.from("songs").select("*").eq("id", id).limit(1).maybeSingle();
+    if (error) throw error;
+    loadedSongDetailIds.add(id);
+    if (data && !data.is_deleted) allSongs = mergeRowsById(allSongs, [data]);
+    return data || null;
+  })();
+  songDetailLoadPromises.set(id, load);
+  try {
+    return await load;
+  } finally {
+    if (songDetailLoadPromises.get(id) === load) songDetailLoadPromises.delete(id);
+  }
 }
 
 async function fetchRowsInChunks(tableName, columnName, values, columns = "*", excludedAlbumId = null) {
@@ -2971,6 +3041,7 @@ async function loadAlbumDetailData(selection) {
     allSongs = mergeRowsById(allSongs, relatedSongs);
     allAlbumRatings = mergeRatingRows(allAlbumRatings, albumRatings || [], (row) => `${row.user_id}:${row.album_id}`);
     allSongRatings = mergeRatingRows(allSongRatings, [...occurrenceRatings, ...canonicalRatings], (row) => `${row.user_id}:${row.canonical_song_id || `song:${row.song_id}`}`);
+    loadedAlbumDetailIds.add(Number(album.id));
     return { album, songs: visibleAlbumSongs };
   })();
 
@@ -3930,7 +4001,7 @@ async function handleIncomingShareLink() {
       savedAlbumId: params.get("albumId") || ""
     };
   } else if (shareType === "song") {
-    selectedItem = {
+    await openSongDetail({
       type: "song",
       title,
       artist,
@@ -3938,7 +4009,8 @@ async function handleIncomingShareLink() {
       releaseTitle: params.get("release") || "",
       coverUrl: params.get("cover") || "",
       savedSongId: params.get("songId") || ""
-    };
+    });
+    return;
   } else if (shareType === "artist") {
     selectedItem = {
       type: "artist",
@@ -9109,8 +9181,6 @@ async function renderSelectedItem() {
     await loadAlbumDetailData(selectedItem);
   } else if (selectedItem.type === "artist") {
     artistData = await loadArtistDetailData(selectedItem);
-  } else {
-    await ensureFullCatalogue();
   }
   if (selectedItem !== requestedItem || renderSelectedItem.generation !== renderGeneration) return;
 
@@ -9134,9 +9204,23 @@ async function renderSelectedItem() {
       albumId: selectedItem.albumId || selectedItem.album_id
     }) || selectedItem;
   
-  const linkedAlbum = song.album_id
-  ? allAlbums.find((a) => Number(a.id) === Number(song.album_id))
+  const linkedAlbumId = song.album_id || song.albumId || selectedItem.albumId || selectedItem.album_id;
+  const linkedAlbum = linkedAlbumId
+  ? allAlbums.find((a) => Number(a.id) === Number(linkedAlbumId))
   : null;
+
+  const albumDetailPending = Boolean(
+    linkedAlbumId &&
+    !fullCatalogueReady &&
+    !loadedAlbumDetailIds.has(Number(linkedAlbumId))
+  );
+  const songOccurrencePending = Boolean(
+    songId &&
+    !song.album_id &&
+    !song.albumId &&
+    !loadedSongDetailIds.has(Number(songId))
+  );
+  const secondaryDetailPending = songOccurrencePending || albumDetailPending;
 
 const linkedAlbumCover = linkedAlbum ? getAlbumArtworkUrl(linkedAlbum) : "";
 
@@ -9177,7 +9261,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
     .slice(0, 8);
 
   selectedItemDetail.innerHTML = `
-    <article class="bom-v1-album bom-v1-track-detail" data-bom-track-id="${escapeHtml(song.id || songId || "")}">
+    <article class="bom-v1-album bom-v1-track-detail" data-bom-track-id="${escapeHtml(song.id || songId || "")}" ${secondaryDetailPending ? `aria-busy="true"` : ""}>
       <div class="bom-v1-album-back">${buildSelectedBackButton()}</div>
       <section class="bom-v1-album-hero bom-v1-track-detail-hero">
         <div class="bom-v1-album-artwork-wrap">
@@ -9187,7 +9271,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
         </div>
         <div class="bom-v1-album-identity">
           <div class="bom-v1-album-kind">Track</div>
-          <h1>${escapeHtml(trackTitle)}</h1>
+          <h1 tabindex="-1">${escapeHtml(trackTitle)}</h1>
           <div class="bom-v1-album-artist">
             <button class="song-artist-link" data-artist-name="${escapeHtml(trackArtist)}">${escapeHtml(trackArtist)}</button>
           </div>
@@ -9206,6 +9290,7 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
           <div class="bom-v1-album-actions">${buildMusicProviderPanel({ type: "song", title: trackTitle, artist: trackArtist, album: albumTitle })}</div>
         </div>
       </section>
+      ${secondaryDetailPending ? `<div class="bom-v1-track-detail-loading" role="status"><span aria-hidden="true"></span> Loading album tracks and ratings…</div>` : ""}
       ${linkedAlbum ? `<section class="bom-v1-album-section bom-v1-track-release-section">
         <header class="bom-v1-album-section-header">
           <div><span class="bom-v1-track-section-kicker">${isSingleRelease ? "Single release" : "From the album"}</span><h2>${escapeHtml(albumTitle)}</h2></div>
@@ -9242,6 +9327,35 @@ const yourRating = yourRatingRow ? Number(yourRatingRow.rating) : null;
       </section>` : ""}
     </article>
   `;
+
+  if (songOccurrencePending) {
+    void loadSongDetailOccurrence(songId).then(() => {
+      if (selectedItem === requestedItem && renderSelectedItem.generation === renderGeneration) {
+        void renderSelectedItem();
+      }
+    }).catch((error) => {
+      console.error("Track occurrence load error", getBoundedCatalogueDiagnostic(error));
+      selectedItemDetail.querySelector(".bom-v1-track-detail")?.removeAttribute("aria-busy");
+      selectedItemDetail.querySelector(".bom-v1-track-detail-loading")?.remove();
+    });
+  } else if (albumDetailPending) {
+    const albumSelection = {
+      type: "album",
+      savedAlbumId: linkedAlbumId,
+      albumId: linkedAlbumId,
+      title: linkedAlbum?.title || selectedItem.releaseTitle || "",
+      artist: linkedAlbum?.artist || trackArtist
+    };
+    void loadAlbumDetailData(albumSelection).then(() => {
+      if (selectedItem === requestedItem && renderSelectedItem.generation === renderGeneration) {
+        void renderSelectedItem();
+      }
+    }).catch((error) => {
+      console.error("Track album detail load error", getBoundedCatalogueDiagnostic(error));
+      selectedItemDetail.querySelector(".bom-v1-track-detail")?.removeAttribute("aria-busy");
+      selectedItemDetail.querySelector(".bom-v1-track-detail-loading")?.remove();
+    });
+  }
 
   return;
 }
@@ -12249,27 +12363,7 @@ songsList?.addEventListener("click", async (event) => {
 
 
 
-  selectedItem = {
-
-    type: "song",
-
-    title: song.title,
-
-    artist: song.artist,
-
-    externalId: song.external_id || "",
-
-    albumId: song.album_id || "",
-
-    coverUrl: song.cover_art_url || ""
-
-  };
-
-
-
-  await renderSelectedItem();
-
-  showOnlySection("detailSection");
+  await openSongDetail(song, card);
 
 });
 
@@ -13460,18 +13554,7 @@ if (songAlbumLink) {
 
       if (!song) return;
 
-      selectedItem = {
-        type: "song",
-        title: song.title,
-        artist: song.artist,
-        externalId: song.external_id || "",
-        releaseTitle: song.album_id ? getAlbumNameById(song.album_id) : "",
-        savedSongId: song.id,
-        albumId: song.album_id || ""
-      };
-
-      showOnlySection("detailSection");
-      await renderSelectedItem();
+      await openSongDetail(song, songCard);
       return;
     }
 	

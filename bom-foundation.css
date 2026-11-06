@@ -866,6 +866,11 @@
 .bom-shell-v1 .bom-v1-album .selected-admin-buttons button { min-height: 40px !important; padding: 8px 10px !important; color: var(--bom-v1-muted) !important; background: transparent !important; background-image: none !important; border: 1px solid var(--bom-v1-line) !important; border-radius: var(--bom-v1-radius) !important; box-shadow: none !important; transform: none !important; }
 
 /* Selected track detail reuses the production Album hierarchy and controls. */
+.bom-shell-v1 .is-song-navigating { opacity: .68; cursor: progress !important; }
+.bom-shell-v1 .bom-v1-track-detail-loading { display: flex; align-items: center; gap: 9px; min-height: 42px; margin-top: 18px; color: var(--bom-v1-muted); font-size: 12px; }
+.bom-shell-v1 .bom-v1-track-detail-loading span { width: 14px; height: 14px; border: 2px solid var(--bom-v1-line); border-top-color: var(--bom-v1-accent); border-radius: 50%; animation: bom-track-detail-spin .7s linear infinite; }
+@keyframes bom-track-detail-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .bom-shell-v1 .bom-v1-track-detail-loading span { animation: none; border-top-color: var(--bom-v1-line); background: var(--bom-v1-accent); } }
 .bom-shell-v1 .bom-v1-track-detail-hero { grid-template-columns: minmax(260px, 440px) minmax(380px, 1fr); }
 .bom-shell-v1 .bom-v1-track-detail-album { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-top: 20px; color: var(--bom-v1-muted); font-size: 14px; }
 .bom-shell-v1 .bom-v1-track-detail-album button,

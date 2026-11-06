@@ -86,6 +86,26 @@ test("album track navigation reuses loaded catalogue ratings without new request
   assert.doesNotMatch(selectedTrackBranch, /supabase\.|fetch\(|musicbrainz/i);
 });
 
+test("song navigation paints before targeted album hydration and never blocks on the full catalogue", () => {
+  const preamble = app.match(/async function renderSelectedItem\(\) \{[\s\S]*?if \(selectedItem\.type === "song"\) \{/)?.[0] || "";
+  assert.doesNotMatch(preamble, /else \{\s*await ensureFullCatalogue\(\)/);
+  assert.match(selectedTrackBranch, /albumDetailPending/);
+  assert.match(selectedTrackBranch, /loadAlbumDetailData\(albumSelection\)\.then/);
+  assert.match(selectedTrackBranch, /loadSongDetailOccurrence\(songId\)\.then/);
+  assert.match(selectedTrackBranch, /Loading album tracks and ratings/);
+});
+
+test("shared song transition resets scroll before paint and suppresses repeated taps", () => {
+  const transition = app.match(/async function openSongDetail\(song, trigger = null\) \{[\s\S]*?\n\}/)?.[0] || "";
+  assert.match(transition, /pendingSongNavigationKey === key/);
+  assert.ok(transition.indexOf('showOnlySection("detailSection")') < transition.indexOf("await renderSelectedItem()"));
+  assert.ok(transition.indexOf("scrollSelectedSongToTop()") < transition.indexOf("await renderSelectedItem()"));
+  assert.match(transition, /requestAnimationFrame\(\(\) => requestAnimationFrame\(scrollSelectedSongToTop\)\)/);
+  assert.match(transition, /focus\(\{ preventScroll: true \}\)/);
+  assert.match(app, /openSongDetail\(song, songCard\)/);
+  assert.match(app, /openSongDetail\(song, trigger\)/);
+});
+
 test("album track rows are clean, responsive and keyboard visible", () => {
   assert.match(styles, /\.bom-v1-track-album-row \{[^}]*background-image: none !important;[^}]*box-shadow: none !important;/);
   assert.match(styles, /\.bom-v1-track-album-row\.is-current \{[^}]*var\(--bom-v1-accent\)/);
