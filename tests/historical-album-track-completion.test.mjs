@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildPlan, generateAlbumSql, validateRelease } from "../scripts/historical-album-track-completion.mjs";
+import { buildPlan, generateAlbumSql, indexReleaseCache, validateRelease } from "../scripts/historical-album-track-completion.mjs";
 
 const uuid = n => `${String(n).padStart(8,"0")}-0000-4000-8000-${String(n).padStart(12,"0")}`;
 const album = { album_id: 10, title: "Album", artist: "Artist", release_mbid: uuid(1), release_group_mbid: uuid(2), expected_track_count: 2, historical_chart_rows: [20] };
@@ -39,4 +39,9 @@ test("a completed album is idempotent", () => {
   const data=snapshot(); data.albumSongs.push({id:31,album_id:10,title:"Track 2",artist:"Artist",track_position:2,external_source:"musicbrainz",external_id:uuid(4),canonical_song_id:uuid(40),is_deleted:false}); data.canonicals.push({id:uuid(40),title:"Track 2",artist:"Artist",musicbrainz_recording_id:uuid(4)});
   const plan=buildPlan(manifest,{[uuid(1)]:release},data);
   assert.equal(plan.totals.song_occurrence_inserts,0); assert.equal(plan.totals.canonical_inserts,0); assert.equal(plan.totals.unchanged_tracks,2);
+});
+
+test("indexes both direct and persistent MusicBrainz response caches", () => {
+  assert.equal(indexReleaseCache({ [uuid(1)]: release })[uuid(1)].id, uuid(1));
+  assert.equal(indexReleaseCache({ [`https://musicbrainz.org/ws/2/release/${uuid(1)}?fmt=json`]: release })[uuid(1)].id, uuid(1));
 });

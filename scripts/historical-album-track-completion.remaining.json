@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-11-06",
+  "scope": "fresh-production-verified-remaining-studio-albums",
+  "albums": [
+    {"album_id":1599,"title":"Tears on My Pillow","artist":"Johnny Nash","release_mbid":"a3e1b267-e6e6-413d-8977-c83e54965f2e","release_group_mbid":"63d883ae-6c43-4332-9683-7fcd17a02dfa","expected_track_count":10,"historical_chart_rows":[789]},
+    {"album_id":1611,"title":"Running Bear","artist":"Johnny Preston","release_mbid":"7114af5d-0cd5-453d-9c1f-d7ffd41acfb1","release_group_mbid":"ce872370-57d7-4085-b7d8-43ea0a8e77be","expected_track_count":12,"historical_chart_rows":[1003]},
+    {"album_id":1615,"title":"Pretty Flamingo","artist":"Manfred Mann","release_mbid":"5dbcabd4-0881-4632-a5c5-860956bd8d24","release_group_mbid":"e4184dfa-7074-38a9-b7bf-41e2357a3262","expected_track_count":11,"historical_chart_rows":[1106]},
+    {"album_id":1617,"title":"The Last Waltz","artist":"Engelbert Humperdinck","release_mbid":"ac5406e3-c3f7-45ed-a3d9-2adedb55bc3b","release_group_mbid":"59f3a267-2c88-34a2-824c-704d003806bb","expected_track_count":12,"historical_chart_rows":[1126]},
+    {"album_id":1618,"title":"Let the Heartaches Begin","artist":"Long John Baldry","release_mbid":"a0ea1b89-0f8f-4075-860e-06961375336a","release_group_mbid":"aaf8f323-800d-4405-9a95-28a2fad71c74","expected_track_count":12,"historical_chart_rows":[1128]},
+    {"album_id":1621,"title":"I Pretend","artist":"Des O’Connor","release_mbid":"09cd1bbb-f13e-4619-9103-63319bcd7583","release_group_mbid":"30c7d2fa-1d6c-4093-b67c-605d48890256","expected_track_count":14,"historical_chart_rows":[1141]},
+    {"album_id":1642,"title":"Changes","artist":"Kelly Osbourne","release_mbid":"1a580926-cb0b-437d-8aa1-bba6a9eb593f","release_group_mbid":"d1164788-4bf1-3e0f-990d-bb332c53dea5","expected_track_count":17,"historical_chart_rows":[1446]},
+    {"album_id":1504,"title":"Oops!… I Did It Again","artist":"Britney Spears","release_mbid":"ee9b865d-8c40-42b4-9355-e58b5205032e","release_group_mbid":"f2708dcf-14e6-31f1-90e0-b3e933a0c8a3","expected_track_count":13,"historical_chart_rows":[1347]},
+    {"album_id":1505,"title":"Sing When You’re Winning","artist":"Robbie Williams","release_mbid":"274d5115-0a52-4ca5-a0f1-fda5444b7eb5","release_group_mbid":"182a0548-d7ca-3664-962c-a484cc993d80","expected_track_count":13,"historical_chart_rows":[1357]},
+    {"album_id":1506,"title":"Fever","artist":"Kylie","release_mbid":"b8f29d96-38ad-46ed-9ea4-5d6327d98633","release_group_mbid":"d691b0b0-33c2-393a-bc63-dbb681ee662c","expected_track_count":12,"historical_chart_rows":[1392]},
+    {"album_id":1509,"title":"In the Zone","artist":"Britney Spears","release_mbid":"9fbd20e6-9ca7-3c89-bd89-e87d329e9053","release_group_mbid":"add6cf16-f4c1-3d50-9b28-633b35ca8189","expected_track_count":15,"historical_chart_rows":[1453]},
+    {"album_id":1510,"title":"How to Dismantle an Atomic Bomb","artist":"U2","release_mbid":"2cd060f2-990b-4e05-8338-288cc0f8a3eb","release_group_mbid":"3ab33753-c16f-3e44-ae67-2fba4fd0e823","expected_track_count":11,"historical_chart_rows":[1477]},
+    {"album_id":1512,"title":"Face to Face","artist":"Westlife","release_mbid":"ee99133c-2a6a-4284-aa50-49080bdba6cd","release_group_mbid":"35fc6b9c-58be-320d-b86c-3af8917a506d","expected_track_count":12,"historical_chart_rows":[1489]},
+    {"album_id":1514,"title":"Motion in the Ocean","artist":"McFly","release_mbid":"c2c2e704-00f3-4236-84c2-4cb0a3470413","release_group_mbid":"726af347-4be7-3a0c-b907-f1296fa06a62","expected_track_count":11,"historical_chart_rows":[1508]},
+    {"album_id":1515,"title":"Yours Truly, Angry Mob","artist":"Kaiser Chiefs","release_mbid":"0c6a7cbd-a439-4271-93e8-14d1a0393628","release_group_mbid":"ecf45e1e-59a2-3c80-9267-9ed617133608","expected_track_count":12,"historical_chart_rows":[1514]},
+    {"album_id":1516,"title":"Change","artist":"Sugababes","release_mbid":"3bc43105-9f72-4fe8-8eb8-ff089c0fc8af","release_group_mbid":"e7484b99-a5c4-3e48-b35f-65b2666c6673","expected_track_count":12,"historical_chart_rows":[1523]},
+    {"album_id":1518,"title":"All I Ever Wanted","artist":"Kelly Clarkson","release_mbid":"17813ea6-83e3-3eb8-949f-d6a4f1fb157d","release_group_mbid":"50e5e68b-626a-3bde-904d-5649163ebecd","expected_track_count":16,"historical_chart_rows":[1544]},
+    {"album_id":1519,"title":"The E.N.D.","artist":"The Black Eyed Peas","release_mbid":"a2929e4f-9676-3775-8080-ab3ac45dcf56","release_group_mbid":"bb022fc8-55f5-4f4d-82d9-0b504099a3b1","expected_track_count":16,"historical_chart_rows":[1549,1556]},
+    {"album_id":1523,"title":"Hangin’ Tough","artist":"New Kids on the Block","release_mbid":"1f8ea7e2-6cfa-4172-96ef-e2e0e4980508","release_group_mbid":"6cdfe30c-1548-3206-90e3-f1442097bb42","expected_track_count":10,"historical_chart_rows":[2]},
+    {"album_id":1552,"title":"This Ole House","artist":"Shakin’ Stevens","release_mbid":"446b38be-f8bb-41c9-9731-e31b47d06032","release_group_mbid":"225d85a8-bf15-343d-a4da-2cf213296cbe","expected_track_count":12,"historical_chart_rows":[408]},
+    {"album_id":1553,"title":"Being With You","artist":"Smokey Robinson","release_mbid":"1db703aa-581e-464b-b6fb-0f8a05c9422b","release_group_mbid":"28c2b05b-d6b5-350b-81f5-bf3581c54ab1","expected_track_count":8,"historical_chart_rows":[410]},
+    {"album_id":1561,"title":"Candy Girl","artist":"New Edition","release_mbid":"2b6228fc-8aa6-4541-8d76-9bc46625f555","release_group_mbid":"d4c6dc78-cb1a-3709-a6bd-8f7a5a76770d","expected_track_count":10,"historical_chart_rows":[446]}
+  ]
+}

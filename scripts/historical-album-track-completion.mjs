@@ -9,6 +9,12 @@ export const DEFAULT_MANIFEST = resolve(HERE, "historical-album-track-completion
 export const DEFAULT_CACHE = resolve(HERE, "../supabase/operations/historical-album-track-audit-pilot-releases.json");
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+function groupBy(rows, key) {
+  const groups = new Map();
+  for (const row of rows) groups.set(key(row), [...(groups.get(key(row)) || []), row]);
+  return groups;
+}
+
 function option(name, fallback = "") {
   const inline = process.argv.find(value => value.startsWith(`--${name}=`));
   if (inline) return inline.slice(name.length + 3);
@@ -77,13 +83,22 @@ export function validateRelease(album, release) {
   }));
 }
 
+export function indexReleaseCache(cache) {
+  const releases = {};
+  for (const [key, value] of Object.entries(cache || {})) {
+    if (value?.id && Array.isArray(value.media)) releases[value.id.toLowerCase()] = value;
+    else if (UUID.test(key) && value?.id) releases[key.toLowerCase()] = value;
+  }
+  return releases;
+}
+
 export function buildPlan(manifest, releases, snapshot) {
   const albumById = new Map(snapshot.albums.map(row => [Number(row.id), row]));
-  const albumSongs = Map.groupBy(snapshot.albumSongs || [], row => Number(row.album_id));
-  const canonicalsByMbid = Map.groupBy((snapshot.canonicals || []).filter(row => row.musicbrainz_recording_id), row => row.musicbrainz_recording_id.toLowerCase());
+  const albumSongs = groupBy(snapshot.albumSongs || [], row => Number(row.album_id));
+  const canonicalsByMbid = groupBy((snapshot.canonicals || []).filter(row => row.musicbrainz_recording_id), row => row.musicbrainz_recording_id.toLowerCase());
   const canonicalsById = new Map((snapshot.canonicals || []).map(row => [row.id, row]));
-  const occurrencesByMbid = Map.groupBy((snapshot.occurrences || []).filter(row => row.external_id), row => row.external_id.toLowerCase());
-  const ratingsByCanonical = Map.groupBy(snapshot.ratings || [], row => row.canonical_song_id);
+  const occurrencesByMbid = groupBy((snapshot.occurrences || []).filter(row => row.external_id), row => row.external_id.toLowerCase());
+  const ratingsByCanonical = groupBy(snapshot.ratings || [], row => row.canonical_song_id);
   const chartById = new Map((snapshot.chartRows || []).map(row => [Number(row.id), row]));
   const albums = [];
 
@@ -200,7 +215,9 @@ commit;
 export async function main() {
   const commit = process.argv.includes("--commit");
   const manifest = validateManifest(JSON.parse(await readFile(resolve(option("manifest", DEFAULT_MANIFEST)), "utf8")));
-  const releases = JSON.parse(await readFile(resolve(option("cache", DEFAULT_CACHE)), "utf8"));
+  const cachePaths = option("cache", DEFAULT_CACHE).split(",").map(value => value.trim()).filter(Boolean);
+  const releases = {};
+  for (const cachePath of cachePaths) Object.assign(releases, indexReleaseCache(JSON.parse(await readFile(resolve(cachePath), "utf8"))));
   const snapshotPath = option("snapshot");
   if (!snapshotPath) throw new Error("Dry-run requires a fresh read-only --snapshot.");
   const snapshot = JSON.parse(await readFile(resolve(snapshotPath), "utf8"));
@@ -211,11 +228,27 @@ export async function main() {
   if (!commit) { console.log("Dry run succeeded. No database rows were written."); return; }
   if (process.env.BOM_ALBUM_COMPLETION_WRITE_AUTH !== "explicitly-authorised") throw new Error("Production writes are disabled without separate BOM_ALBUM_COMPLETION_WRITE_AUTH.");
   if (!process.env.BOM_DATABASE_URL) throw new Error("--commit requires BOM_DATABASE_URL.");
-  for (const album of plan.albums) {
-    const result = spawnSync(option("psql", "psql"), ["--no-psqlrc", "--set", "ON_ERROR_STOP=1", process.env.BOM_DATABASE_URL], { input: generateAlbumSql(album), encoding: "utf8" });
-    if (result.error) throw result.error;
-    if (result.status !== 0) throw new Error(`Album ${album.album_id} rolled back: ${result.stderr.trim()}`);
+  const checkpointPath = option("checkpoint");
+  let checkpoint = { schema_version: 1, albums: {} };
+  if (checkpointPath) {
+    try { checkpoint = JSON.parse(await readFile(resolve(checkpointPath), "utf8")); } catch (error) { if (error.code !== "ENOENT") throw error; }
   }
+  const failures = [];
+  for (const album of plan.albums) {
+    const prior = checkpoint.albums?.[album.album_id];
+    if (prior?.status === "committed") {
+      if (prior.release_mbid !== album.release_mbid) throw new Error(`Checkpoint identity mismatch for album ${album.album_id}.`);
+      continue;
+    }
+    const result = spawnSync(option("psql", "psql"), ["--no-psqlrc", "--set", "ON_ERROR_STOP=1", process.env.BOM_DATABASE_URL], { input: generateAlbumSql(album), encoding: "utf8" });
+    const failure = result.error?.message || (result.status !== 0 ? result.stderr.trim() : "");
+    checkpoint.albums ||= {};
+    checkpoint.albums[album.album_id] = { status: failure ? "rolled_back" : "committed", release_mbid: album.release_mbid,
+      counts: album.counts, error: failure || null, updated_at: new Date().toISOString() };
+    if (checkpointPath) await writeFile(resolve(checkpointPath), `${JSON.stringify(checkpoint, null, 2)}\n`);
+    if (failure) failures.push(`Album ${album.album_id} rolled back: ${failure}`);
+  }
+  if (failures.length) throw new Error(failures.join("\n"));
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch(error => { console.error(error.message); process.exitCode = 1; });

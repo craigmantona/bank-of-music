@@ -1,0 +1,42 @@
+{
+  "mode": "fresh-production-read-only-dry-run",
+  "production_writes": 0,
+  "prior_expected_remaining_albums": 35,
+  "fresh_verified_ready_albums": 22,
+  "excluded_pending_reconciliation": 13,
+  "reason": "The prior 35-album aggregate cannot be reproduced from current production album identities and the existing exact-release caches. Only 22 incomplete albums retain a unique stored release MBID, matching release-group MBID, official single-medium Album payload, exact artist/title identity and intact historical link guards.",
+  "expected_changes": {
+    "album_inserts": 0,
+    "album_updates": 0,
+    "song_occurrence_inserts": 248,
+    "canonical_inserts": 248,
+    "canonical_reuses": 0,
+    "historical_link_updates": 0,
+    "rating_updates": 0
+  },
+  "production_baseline": {
+    "albums": 1696,
+    "songs": 15384,
+    "canonicals": 16233,
+    "historical_links": 413,
+    "song_rating_rows": 1635,
+    "song_rating_sum": 12714,
+    "song_rating_hash": "5d9a6b4f3549504448ae11112df66a9c"
+  },
+  "verification": {
+    "official_single_medium_studio_releases": 22,
+    "complete_release_track_positions": true,
+    "unique_release_recording_mbids": true,
+    "competing_canonical_identities": 0,
+    "occupied_position_conflicts": 0,
+    "rating_conflicts": 0,
+    "musicbrainz_requests_made": 0,
+    "transaction_model": "one guarded transaction per album",
+    "idempotence": "existing occurrences are unchanged; a completed rerun plans zero inserts",
+    "rollback": "each album transaction has advisory locking, exact insert counts, final track count, rating and historical-link integrity assertions"
+  },
+  "limitations": [
+    "Node, psql, Bun and Deno are unavailable in this environment, so the Node test runner and generated SQL execution were not run.",
+    "The 13-record difference from the earlier aggregate remains excluded and must be reconciled to exact album IDs and release editions before any production authorisation."
+  ]
+}

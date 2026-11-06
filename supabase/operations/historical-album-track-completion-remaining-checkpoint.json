@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mode": "prepared-dry-run-only",
+  "albums": {
+    "1599":{"status":"pending","release_mbid":"a3e1b267-e6e6-413d-8977-c83e54965f2e"},
+    "1611":{"status":"pending","release_mbid":"7114af5d-0cd5-453d-9c1f-d7ffd41acfb1"},
+    "1615":{"status":"pending","release_mbid":"5dbcabd4-0881-4632-a5c5-860956bd8d24"},
+    "1617":{"status":"pending","release_mbid":"ac5406e3-c3f7-45ed-a3d9-2adedb55bc3b"},
+    "1618":{"status":"pending","release_mbid":"a0ea1b89-0f8f-4075-860e-06961375336a"},
+    "1621":{"status":"pending","release_mbid":"09cd1bbb-f13e-4619-9103-63319bcd7583"},
+    "1642":{"status":"pending","release_mbid":"1a580926-cb0b-437d-8aa1-bba6a9eb593f"},
+    "1504":{"status":"pending","release_mbid":"ee9b865d-8c40-42b4-9355-e58b5205032e"},
+    "1505":{"status":"pending","release_mbid":"274d5115-0a52-4ca5-a0f1-fda5444b7eb5"},
+    "1506":{"status":"pending","release_mbid":"b8f29d96-38ad-46ed-9ea4-5d6327d98633"},
+    "1509":{"status":"pending","release_mbid":"9fbd20e6-9ca7-3c89-bd89-e87d329e9053"},
+    "1510":{"status":"pending","release_mbid":"2cd060f2-990b-4e05-8338-288cc0f8a3eb"},
+    "1512":{"status":"pending","release_mbid":"ee99133c-2a6a-4284-aa50-49080bdba6cd"},
+    "1514":{"status":"pending","release_mbid":"c2c2e704-00f3-4236-84c2-4cb0a3470413"},
+    "1515":{"status":"pending","release_mbid":"0c6a7cbd-a439-4271-93e8-14d1a0393628"},
+    "1516":{"status":"pending","release_mbid":"3bc43105-9f72-4fe8-8eb8-ff089c0fc8af"},
+    "1518":{"status":"pending","release_mbid":"17813ea6-83e3-3eb8-949f-d6a4f1fb157d"},
+    "1519":{"status":"pending","release_mbid":"a2929e4f-9676-3775-8080-ab3ac45dcf56"},
+    "1523":{"status":"pending","release_mbid":"1f8ea7e2-6cfa-4172-96ef-e2e0e4980508"},
+    "1552":{"status":"pending","release_mbid":"446b38be-f8bb-41c9-9731-e31b47d06032"},
+    "1553":{"status":"pending","release_mbid":"1db703aa-581e-464b-b6fb-0f8a05c9422b"},
+    "1561":{"status":"pending","release_mbid":"2b6228fc-8aa6-4541-8d76-9bc46625f555"}
+  }
+}
