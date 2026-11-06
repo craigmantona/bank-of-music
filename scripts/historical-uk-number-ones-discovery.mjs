@@ -238,46 +238,137 @@ export function resultsCsv(results) {
   return `${headers.join(",")}\n${results.map(row => headers.map(key => cell(key === "candidate_evidence" ? JSON.stringify(row[key] || []) : row[key])).join(",")).join("\n")}\n`;
 }
 
+export function parseCsv(text) {
+  const rows = []; let row = [], cell = "", quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index], next = text[index + 1];
+    if (quoted && char === '"' && next === '"') { cell += '"'; index += 1; }
+    else if (char === '"') quoted = !quoted;
+    else if (!quoted && char === ",") { row.push(cell); cell = ""; }
+    else if (!quoted && (char === "\n" || char === "\r")) {
+      if (char === "\r" && next === "\n") index += 1;
+      row.push(cell); if (row.some(value => value !== "")) rows.push(row); row = []; cell = "";
+    } else cell += char;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  const [headers, ...values] = rows;
+  return values.map(valuesRow => Object.fromEntries(headers.map((header, index) => [header, valuesRow[index] || ""])));
+}
+
+export function reconcileResults(entries, results) {
+  const expected = entries.map(row => Number(row.chart_id));
+  const duplicates = expected.filter((id, index) => expected.indexOf(id) !== index);
+  const missing = expected.filter(id => !results.find(row => Number(row?.chart_id) === id));
+  const unexpected = results.filter(row => !expected.includes(Number(row?.chart_id))).map(row => Number(row.chart_id));
+  if (duplicates.length || missing.length || unexpected.length || results.length !== entries.length) {
+    throw new Error(`Discovery reconciliation failed: duplicate=${duplicates.length}, missing=${missing.length}, unexpected=${unexpected.length}`);
+  }
+}
+
+export function quarantineDuplicateRecordings(results) {
+  const seen = new Map();
+  return results.map(row => {
+    if (row.category !== "SAFE" || !row.recording_mbid) return row;
+    const primary = seen.get(row.recording_mbid);
+    if (!primary) { seen.set(row.recording_mbid, row.chart_id); return row; }
+    return { ...row, category: "REVIEW", reason: `duplicate_verified_recording_requires_sequenced_link_after_chart_${primary}`,
+      duplicate_primary_chart_id: primary };
+  });
+}
+
+export function discoverySummary(results) {
+  const categories = ["SAFE", "REVIEW", "UNAVAILABLE"];
+  const totals = Object.fromEntries(categories.map(category => [category, results.filter(row => row.category === category).length]));
+  const decades = {};
+  for (const row of results) {
+    const decade = `${Math.floor(Number(row.chart_year) / 10) * 10}s`;
+    decades[decade] ||= Object.fromEntries(categories.map(category => [category, 0]));
+    decades[decade][row.category] += 1;
+  }
+  const reasons = {};
+  for (const row of results) reasons[row.reason] = (reasons[row.reason] || 0) + 1;
+  return { total: results.length, totals, by_decade: decades,
+    by_reason: Object.fromEntries(Object.entries(reasons).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))) };
+}
+
 async function main() {
   if (process.argv.includes("--commit")) throw new Error("Discovery is dry-run only and does not support --commit.");
-  const sample = JSON.parse(await readFile(resolve(option("sample", resolve(HERE, "historical-uk-number-ones-discovery.sample.json"))), "utf8"));
-  if (sample.entries?.length !== 25) throw new Error("Discovery sample must contain exactly 25 entries.");
+  const sourceCsv = option("source-csv");
+  const sample = sourceCsv ? { entries: parseCsv(await readFile(resolve(sourceCsv), "utf8")).map(row => ({
+    chart_id: Number(row.chart_id), chart_year: Number(row.chart_year), artist: row.artist, title: row.title
+  })) } : JSON.parse(await readFile(resolve(option("sample", resolve(HERE, "historical-uk-number-ones-discovery.sample.json"))), "utf8"));
+  if (!sample.entries?.length) throw new Error("Discovery input must contain at least one entry.");
+  const batchSize = Number(option("batch-size", "25"));
+  if (!Number.isInteger(batchSize) || batchSize < 1 || batchSize > 25) throw new Error("Batch size must be between 1 and 25.");
   const cachePath = resolve(option("cache", resolve(HERE, ".cache/historical-uk-number-ones-discovery.json")));
   const statePath = resolve(option("state", resolve(HERE, ".cache/historical-uk-number-ones-discovery-state.json")));
-  const outputPath = resolve(option("output", resolve(HERE, "../supabase/exports/historical-uk-number-ones-discovery-sample.csv")));
+  const outputPath = resolve(option("output", resolve(HERE, "../supabase/exports/historical-uk-number-ones-discovery-review.csv")));
+  const unavailablePath = resolve(option("unavailable-output", resolve(HERE, "../supabase/exports/historical-uk-number-ones-discovery-unavailable.csv")));
+  const summaryPath = resolve(option("summary-output", resolve(HERE, "../supabase/operations/historical-uk-number-ones-discovery-summary.json")));
   const manifestPath = resolve(option("manifest-output", resolve(HERE, "historical-uk-number-ones-discovery.safe-manifest.json")));
   const releaseCachePath = resolve(option("release-cache-output", resolve(HERE, "../supabase/operations/historical-uk-number-ones-discovery-validated-releases.json")));
   const cataloguePath = option("catalogue-check");
   const catalogue = cataloguePath ? JSON.parse(await readFile(resolve(cataloguePath), "utf8")) : {};
+  const auditPath = option("audit-snapshot");
+  if (auditPath) {
+    const audit = JSON.parse(await readFile(resolve(auditPath), "utf8"));
+    catalogue.placeholders ||= {};
+    for (const row of audit.rows || []) catalogue.placeholders[String(row.id)] ||= {
+      canonical_song_id: row.canonical_song_id, musicbrainz_recording_id: row.musicbrainz_recording_id,
+      rating_rows: 0, song_occurrences: 0
+    };
+  }
   let state = { results: {} };
   try { state = JSON.parse(await readFile(statePath, "utf8")); } catch (error) { if (error.code !== "ENOENT") throw error; }
   catalogue.results = state.results;
   catalogue.refresh = process.argv.includes("--refresh");
   const mb = new CachedMusicBrainz(cachePath, Number(option("interval-ms", "1100"))); await mb.load();
-  for (const entry of sample.entries) {
-    const result = await discoverEntry(entry, mb, catalogue);
-    state.results[String(entry.chart_id)] = result;
-    await mkdir(dirname(statePath), { recursive: true });
-    await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+  for (let offset = 0; offset < sample.entries.length; offset += batchSize) {
+    const batch = sample.entries.slice(offset, offset + batchSize);
+    for (const entry of batch) {
+      const result = await discoverEntry(entry, mb, catalogue);
+      state.results[String(entry.chart_id)] = result;
+      await mkdir(dirname(statePath), { recursive: true });
+      await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+    }
+    const completed = sample.entries.slice(0, offset + batch.length).map(entry => state.results[String(entry.chart_id)]);
+    console.log(JSON.stringify({ checkpoint: Math.floor(offset / batchSize) + 1, completed: completed.length,
+      total: sample.entries.length, ...discoverySummary(completed).totals, requests: mb.requests, cache_hits: mb.cacheHits }));
   }
-  const results = sample.entries.map(entry => state.results[String(entry.chart_id)]);
-  await mkdir(dirname(outputPath), { recursive: true }); await writeFile(outputPath, resultsCsv(results));
+  let results = sample.entries.map(entry => state.results[String(entry.chart_id)]);
+  reconcileResults(sample.entries, results);
+  results = quarantineDuplicateRecordings(results);
+  for (const row of results) state.results[String(row.chart_id)] = row;
+  await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+  await mkdir(dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, resultsCsv(results.filter(row => row.category === "REVIEW")));
+  await writeFile(unavailablePath, resultsCsv(results.filter(row => row.category === "UNAVAILABLE")));
   const safe = results.filter(row => row.category === "SAFE");
-  const manifest = { schema_version: 1, pilot: "historical-uk-number-ones-automated-discovery-sample-v1", expected_chart_rows: safe.length,
-    entries: safe.map(row => ({ chart_row_id: row.chart_id, chart_year: row.chart_year, title: row.title, artist: row.artist,
-      placeholder_canonical_id: catalogue.placeholders?.[String(row.chart_id)]?.canonical_song_id || null,
-      recording_mbid: row.recording_mbid, release_group_mbid: row.release_group_mbid, source_release_mbid: row.source_release_mbid,
-      source_album_title: row.source_release_title, source_album_artist: row.source_release_artist || row.artist,
-      source_release_country: row.source_release_country, track_position: row.track_position, duration_ms: row.duration_ms,
-      duration_tolerance_ms: 5000, reuse_album_id: row.existing_album_id || null, version_note: "automatically verified original chart recording on contemporary official source release" })) };
+  const manifest = { schema_version: 1, pilot: "historical-uk-number-ones-automated-discovery-full-v1", expected_chart_rows: safe.length,
+    entries: safe.map(row => {
+      const release = mb.cache[mb.releaseUrl(row.source_release_mbid)];
+      const track = (release?.media || []).flatMap(medium => medium.tracks || []).find(value => value.recording?.id === row.recording_mbid);
+      const acceptedArtistCredits = [...new Set([row.artist_credit, creditText(track?.["artist-credit"] || []),
+        creditText(track?.recording?.["artist-credit"] || [])].filter(Boolean))];
+      return { chart_row_id: row.chart_id, chart_year: row.chart_year, title: row.title, artist: row.artist,
+        placeholder_canonical_id: catalogue.placeholders?.[String(row.chart_id)]?.canonical_song_id || null,
+        recording_mbid: row.recording_mbid, release_group_mbid: row.release_group_mbid, source_release_mbid: row.source_release_mbid,
+        source_album_title: row.source_release_title, source_album_artist: row.source_release_artist || row.artist,
+        source_release_country: row.source_release_country, track_position: row.track_position, duration_ms: row.duration_ms,
+        accepted_artist_credits: acceptedArtistCredits,
+        duration_tolerance_ms: 5000, reuse_album_id: row.existing_album_id || null,
+        version_note: "automatically verified original chart recording on contemporary official source release" };
+    }) };
   if (manifest.entries.some(entry => !entry.placeholder_canonical_id)) throw new Error("SAFE manifest requires a current catalogue placeholder check.");
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   const validatedReleases = {};
   for (const row of safe) validatedReleases[row.source_release_mbid] = mb.cache[mb.releaseUrl(row.source_release_mbid)];
   await writeFile(releaseCachePath, `${JSON.stringify(validatedReleases)}\n`);
-  const counts = Object.fromEntries(["SAFE","REVIEW","UNAVAILABLE"].map(category => [category, results.filter(row => row.category === category).length]));
-  console.log(JSON.stringify({ mode: "discovery_dry_run", sample: results.length, ...counts, requests: mb.requests, cache_hits: mb.cacheHits,
-    output: outputPath, safe_manifest: manifestPath, validated_release_cache: releaseCachePath }, null, 2));
+  const summary = discoverySummary(results);
+  await writeFile(summaryPath, `${JSON.stringify({ generated_at: new Date().toISOString(), ...summary }, null, 2)}\n`);
+  console.log(JSON.stringify({ mode: "discovery_dry_run", records: results.length, ...summary.totals, requests: mb.requests, cache_hits: mb.cacheHits,
+    review_output: outputPath, unavailable_output: unavailablePath, summary_output: summaryPath,
+    safe_manifest: manifestPath, validated_release_cache: releaseCachePath }, null, 2));
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch(error => { console.error(error.message); process.exitCode = 1; });

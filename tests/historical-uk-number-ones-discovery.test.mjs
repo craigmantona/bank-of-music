@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { artistCompatible, classifySearch, discoverEntry, eligibleCandidates, resultsCsv, selectRelease } from "../scripts/historical-uk-number-ones-discovery.mjs";
+import { artistCompatible, classifySearch, discoverEntry, discoverySummary, eligibleCandidates, parseCsv,
+  quarantineDuplicateRecordings, reconcileResults, resultsCsv, selectRelease } from "../scripts/historical-uk-number-ones-discovery.mjs";
 
 const entry = { chart_id: 1, chart_year: 1980, artist: "Pretenders", title: "Brass in Pocket" };
 const release = (overrides = {}) => ({ id: "11111111-1111-4111-8111-111111111111", status: "Official", title: "Brass in Pocket", date: "1980-01-01", country: "GB", "release-group": { id: "22222222-2222-4222-8222-222222222222", title: "Brass in Pocket", "secondary-types": [] }, ...overrides });
@@ -60,4 +61,38 @@ test("a title-only fallback still requires the exact expected artist credit", as
   };
   const result = await discoverEntry(collaboration, mb, {});
   assert.equal(result.category, "UNAVAILABLE");
+});
+
+test("full discovery input parsing preserves quoted chart evidence", () => {
+  const rows = parseCsv('chart_id,chart_year,artist,title\n"1","1990","Artist, The","A ""Quoted"" Song"\n');
+  assert.deepEqual(rows, [{ chart_id: "1", chart_year: "1990", artist: "Artist, The", title: 'A "Quoted" Song' }]);
+});
+
+test("reconciliation rejects missing and duplicate chart rows", () => {
+  assert.doesNotThrow(() => reconcileResults([{ chart_id: 1 }, { chart_id: 2 }], [{ chart_id: 1 }, { chart_id: 2 }]));
+  assert.throws(() => reconcileResults([{ chart_id: 1 }, { chart_id: 1 }], [{ chart_id: 1 }, { chart_id: 1 }]), /reconciliation failed/);
+  assert.throws(() => reconcileResults([{ chart_id: 1 }, { chart_id: 2 }], [{ chart_id: 1 }]), /missing=1/);
+});
+
+test("duplicate recording identities are quarantined for sequenced review", () => {
+  const rows = quarantineDuplicateRecordings([
+    { chart_id: 1, category: "SAFE", recording_mbid: "same" },
+    { chart_id: 2, category: "SAFE", recording_mbid: "same" },
+    { chart_id: 3, category: "REVIEW", recording_mbid: "same" }
+  ]);
+  assert.equal(rows[0].category, "SAFE");
+  assert.equal(rows[1].category, "REVIEW");
+  assert.match(rows[1].reason, /chart_1/);
+  assert.equal(rows[2].category, "REVIEW");
+});
+
+test("summary reconciles category totals by decade and reason", () => {
+  const summary = discoverySummary([
+    { chart_year: 1980, category: "SAFE", reason: "verified" },
+    { chart_year: 1989, category: "REVIEW", reason: "ambiguous" },
+    { chart_year: 1990, category: "UNAVAILABLE", reason: "missing" }
+  ]);
+  assert.deepEqual(summary.totals, { SAFE: 1, REVIEW: 1, UNAVAILABLE: 1 });
+  assert.deepEqual(summary.by_decade["1980s"], { SAFE: 1, REVIEW: 1, UNAVAILABLE: 0 });
+  assert.equal(summary.by_reason.verified, 1);
 });
