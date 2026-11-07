@@ -53,7 +53,7 @@ test("every historical chart card has an accessible destination", () => {
   assert.match(card, /data-history-id/);
   assert.match(discover, /openHistoricalDetail\(item\)/);
   assert.match(app, /openHistoricalDetail\?\.\(entry,\{origin:\"quick-rate\"\}\)/);
-  assert.match(discover, /Recording not yet verified/);
+  assert.match(discover, /recording not yet verified/);
 });
 
 test("unresolved historical details use chart-entry ratings and cached chart facts", () => {
@@ -62,8 +62,18 @@ test("unresolved historical details use chart-entry ratings and cached chart fac
   assert.match(detail, /number_one_runs/);
   assert.match(detail, /first_number_one_date/);
   assert.match(detail, /historicalRatingPanel\(item\)/);
-  assert.match(detail, /Historical-entry ratings are available/);
+  assert.match(detail, /bom-v1-historical-copy/);
+  assert.doesNotMatch(detail, /bom-v1-historical-unverified/);
   assert.doesNotMatch(detail, /supabaseClient|MusicBrainz/);
+});
+
+test("historical-only details use the compact responsive hero and rating layout", () => {
+  assert.match(styles, /\.bom-v1-historical-detail \{ padding:18px 0 64px/);
+  assert.match(styles, /\.bom-v1-historical-rating-panel \{ grid-column:2;[^}]+background:transparent/);
+  assert.match(styles, /@media\(max-width:700px\)[\s\S]+\.bom-v1-historical-hero \{ grid-template-columns:88px minmax\(0,1fr\)/);
+  assert.match(styles, /\.bom-v1-historical-rating-panel \{ grid-column:1 \/ -1;[^}]+padding-top:14px/);
+  assert.match(styles, /\.bom-v1-historical-rating-choices button \{ min-width:38px; min-height:44px/);
+  assert.doesNotMatch(styles, /\.bom-v1-historical-unverified/);
 });
 
 test("provisional ratings use bridge RPCs, preserve zero and remain separately labelled", () => {
@@ -73,7 +83,7 @@ test("provisional ratings use bridge RPCs, preserve zero and remain separately l
   assert.match(discover, /Array\.from\(\{length:11\}/);
   assert.match(discover, /data-historical-rating-value="\$\{rating\}"/);
   assert.match(discover, /Historical community/);
-  assert.match(discover, /kept separate from verified recording ratings/);
+  assert.match(discover, /Historical chart rating — recording not yet verified/);
   assert.match(discover, /data-historical-rating-clear/);
   assert.doesNotMatch(discover, /\.from\("song_ratings"\)|canonical_recordings/);
 });

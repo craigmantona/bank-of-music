@@ -50,6 +50,6 @@ test("historical artwork is cached once, keyed only by chart ID, and never repla
   assert.match(discover, /item\.artworkUrl\?`<img[^`]+loading="lazy"[^`]+onerror="this\.style\.display='none'/);
   assert.match(styles, /\.bom-v1-historical-placeholder img \{[^}]+object-fit:cover/);
   assert.match(html, /app\.js\?v=162/);
-  assert.match(html, /bom-discover\.js\?v=9&history=7/);
-  assert.match(html, /bom-foundation\.css\?v=42/);
+  assert.match(html, /bom-discover\.js\?v=10&history=8/);
+  assert.match(html, /bom-foundation\.css\?v=43/);
 });
