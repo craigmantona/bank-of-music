@@ -45,3 +45,52 @@ test("indexes both direct and persistent MusicBrainz response caches", () => {
   assert.equal(indexReleaseCache({ [uuid(1)]: release })[uuid(1)].id, uuid(1));
   assert.equal(indexReleaseCache({ [`https://musicbrainz.org/ws/2/release/${uuid(1)}?fmt=json`]: release })[uuid(1)].id, uuid(1));
 });
+
+test("plans guarded album identity and existing-track metadata corrections", () => {
+  const data = snapshot();
+  data.albums[0].musicbrainz_release_id = null;
+  data.albums[0].musicbrainz_release_group_id = null;
+  data.albumSongs[0].track_position = null;
+  data.albumSongs[0].duration_ms = null;
+  const corrected = structuredClone(album);
+  corrected.album_identity_correction = { expected_release_mbid: null, expected_release_group_mbid: null };
+  corrected.existing_track_corrections = [{
+    song_id: 30, recording_mbid: uuid(3), canonical_id: uuid(30),
+    expected_track_position: null, new_track_position: 1, expected_duration_ms: null, new_duration_ms: 200000
+  }];
+  const plan = buildPlan({ schema_version: 1, albums: [corrected] }, { [uuid(1)]: release }, data);
+  assert.equal(plan.totals.unchanged_tracks, 1);
+  assert.equal(plan.totals.song_occurrence_inserts, 1);
+  const sql = generateAlbumSql(plan.albums[0]);
+  assert.match(sql, /a\.musicbrainz_release_id is null/);
+  assert.match(sql, /update public\.albums set musicbrainz_release_id/);
+  assert.match(sql, /where id=30 and album_id=10/);
+  assert.match(sql, /track_position is null/);
+  assert.match(sql, /duration_ms is null/);
+  assert.match(sql, /Album rating integrity changed/);
+});
+
+test("rejects stale metadata-correction preconditions", () => {
+  const data = snapshot();
+  data.albums[0].musicbrainz_release_id = uuid(99);
+  const corrected = { ...album, album_identity_correction: { expected_release_mbid: null, expected_release_group_mbid: null } };
+  assert.throws(() => buildPlan({ schema_version: 1, albums: [corrected] }, { [uuid(1)]: release }, data), /correction precondition/);
+});
+
+test("metadata corrections are idempotent after they are applied", () => {
+  const data = snapshot();
+  data.albumSongs[0].duration_ms = 200000;
+  const corrected = structuredClone(album);
+  corrected.album_identity_correction = { expected_release_mbid: null, expected_release_group_mbid: null };
+  corrected.existing_track_corrections = [{
+    song_id: 30, recording_mbid: uuid(3), canonical_id: uuid(30),
+    expected_track_position: null, new_track_position: 1, expected_duration_ms: null, new_duration_ms: 200000
+  }];
+  data.albumSongs.push({id:31,album_id:10,title:"Track 2",artist:"Artist",track_position:2,external_source:"musicbrainz",external_id:uuid(4),canonical_song_id:uuid(40),duration_ms:200000,is_deleted:false});
+  data.canonicals.push({id:uuid(40),title:"Track 2",artist:"Artist",musicbrainz_recording_id:uuid(4)});
+  const plan = buildPlan({ schema_version: 1, albums: [corrected] }, { [uuid(1)]: release }, data);
+  assert.equal(plan.totals.song_occurrence_inserts, 0);
+  assert.equal(plan.totals.unchanged_tracks, 2);
+  assert.equal(plan.albums[0].album_identity_correction, null);
+  assert.deepEqual(plan.albums[0].existing_track_corrections, []);
+});

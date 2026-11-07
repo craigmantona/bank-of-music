@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "albums": [
+    {
+      "album_id": 100,
+      "title": "Standing on the Shoulder of Giants",
+      "artist": "Oasis",
+      "release_mbid": "846c8c38-b9c2-35d1-a1c3-60e174784b5d",
+      "release_group_mbid": "4ad23d4c-520e-39a3-8d7e-e4d396d24bfe",
+      "expected_track_count": 10,
+      "historical_chart_rows": [1339],
+      "album_identity_correction": {
+        "expected_release_mbid": null,
+        "expected_release_group_mbid": null
+      },
+      "existing_track_corrections": [
+        {
+          "song_id": 5941,
+          "recording_mbid": "74f6fedc-5c43-4670-8367-2ff55be2c1d5",
+          "canonical_id": "f961886c-c6ad-457d-ad11-3ed3d22020e4",
+          "expected_track_position": null,
+          "new_track_position": 1,
+          "expected_duration_ms": null,
+          "new_duration_ms": 198533
+        }
+      ]
+    },
+    {
+      "album_id": 380,
+      "title": "Language.Sex.Violence.Other?",
+      "artist": "Stereophonics",
+      "release_mbid": "689c2964-20bd-496c-9801-8dc3763250be",
+      "release_group_mbid": "82785d3e-4488-3e02-a077-c44f46ecbf9c",
+      "expected_track_count": 11,
+      "historical_chart_rows": [1480],
+      "album_identity_correction": {
+        "expected_release_mbid": null,
+        "expected_release_group_mbid": null
+      }
+    },
+    {
+      "album_id": 1813,
+      "title": "Jukebox",
+      "artist": "JLS",
+      "release_mbid": "b4dfbac3-c2b2-4dd0-bd2d-914d4d1a17e2",
+      "release_group_mbid": "1dac3d6c-2bd9-4f29-a8ef-7e07cee07dda",
+      "expected_track_count": 12,
+      "historical_chart_rows": [1850],
+      "album_identity_correction": {
+        "expected_release_mbid": "3ae79b34-5131-4171-80d6-5b5863752ada",
+        "expected_release_group_mbid": "1dac3d6c-2bd9-4f29-a8ef-7e07cee07dda"
+      }
+    }
+  ]
+}

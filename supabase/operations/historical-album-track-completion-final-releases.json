@@ -1,0 +1,29 @@
+{
+  "b4dfbac3-c2b2-4dd0-bd2d-914d4d1a17e2": {
+    "id": "b4dfbac3-c2b2-4dd0-bd2d-914d4d1a17e2",
+    "status": "Official",
+    "title": "Jukebox",
+    "country": "GB",
+    "date": "2011-11-14",
+    "artist-credit": [{"name": "JLS"}],
+    "release-group": {"id": "1dac3d6c-2bd9-4f29-a8ef-7e07cee07dda", "title": "Jukebox", "primary-type": "Album", "secondary-types": []},
+    "media": [{
+      "position": 1,
+      "format": "CD",
+      "tracks": [
+        {"position":1,"number":"1","title":"She Makes Me Wanna","length":221000,"artist-credit":[{"name":"JLS featuring Dev"}],"recording":{"id":"53360076-5033-4b3e-bc45-f503d8848694","title":"She Makes Me Wanna","length":219867}},
+        {"position":2,"number":"2","title":"Do You Feel What I Feel","length":193000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"bcb5b2eb-67f5-4758-b6e1-a7734b1edd89","title":"Do You Feel What I Feel?","length":192786}},
+        {"position":3,"number":"3","title":"Teach Me How to Dance","length":210000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"8226c374-1a23-4751-a499-937116050dae","title":"Teach Me How to Dance","length":209227}},
+        {"position":4,"number":"4","title":"Take a Chance on Me","length":216000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"a169f3c3-b6c6-40ef-a504-4a7b42d10dda","title":"Take a Chance on Me","length":215653}},
+        {"position":5,"number":"5","title":"Go Harder","length":201000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"0db9bd61-5545-4d7f-a327-1a7715e7ef35","title":"Go Harder","length":200080}},
+        {"position":6,"number":"6","title":"So Many Girls","length":204000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"d91357ac-1634-4ecf-976b-975549279fe6","title":"So Many Girls","length":202293}},
+        {"position":7,"number":"7","title":"3D","length":251000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"2275f91d-6719-466b-ae48-0c34c5bf8737","title":"3D","length":248480}},
+        {"position":8,"number":"8","title":"Take You Down","length":243000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"e18cc7fe-b006-4bc4-bb69-3950385df3a8","title":"Take You Down","length":241827}},
+        {"position":9,"number":"9","title":"Innocence","length":197000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"1eb04316-7f5d-402f-be48-bd6f72dc673f","title":"Innocence","length":195200}},
+        {"position":10,"number":"10","title":"Killed by Love","length":223000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"a5dbc2d2-677a-4e74-b2a3-fc7891c0e714","title":"Killed by Love","length":223080}},
+        {"position":11,"number":"11","title":"Never Gonna Stop","length":196000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"b8f14f56-3bc5-45a9-b5b4-53b125ab3d89","title":"Never Gonna Stop","length":194213}},
+        {"position":12,"number":"12","title":"Shy of the Cool","length":263000,"artist-credit":[{"name":"JLS"}],"recording":{"id":"30d28d96-13d4-4ab3-81d7-d420b6b6ba15","title":"Shy of the Cool","length":263453}}
+      ]
+    }]
+  }
+}

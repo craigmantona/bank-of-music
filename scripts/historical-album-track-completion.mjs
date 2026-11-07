@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -48,6 +48,25 @@ export function validateManifest(manifest) {
     }
     if (!Array.isArray(album.historical_chart_rows) || !album.historical_chart_rows.length || album.historical_chart_rows.some(id => !Number.isSafeInteger(id))) {
       throw new Error(`Historical link guards are required for album ${album.album_id}.`);
+    }
+    const identity = album.album_identity_correction;
+    if (identity) {
+      for (const key of ["expected_release_mbid", "expected_release_group_mbid"]) {
+        if (identity[key] !== null && !UUID.test(identity[key] || "")) throw new Error(`Invalid ${key} correction guard for album ${album.album_id}.`);
+      }
+    }
+    const corrections = album.existing_track_corrections || [];
+    if (!Array.isArray(corrections)) throw new Error(`Track corrections must be an array for album ${album.album_id}.`);
+    const correctedSongs = new Set();
+    for (const correction of corrections) {
+      if (!Number.isSafeInteger(correction.song_id) || correctedSongs.has(correction.song_id) || !UUID.test(correction.recording_mbid || "") ||
+          !UUID.test(correction.canonical_id || "")) throw new Error(`Invalid track correction identity for album ${album.album_id}.`);
+      correctedSongs.add(correction.song_id);
+      for (const key of ["expected_track_position", "new_track_position", "expected_duration_ms", "new_duration_ms"]) {
+        if (correction[key] !== null && (!Number.isSafeInteger(correction[key]) || correction[key] < 1)) {
+          throw new Error(`Invalid ${key} for corrected song ${correction.song_id}.`);
+        }
+      }
     }
   }
   return manifest;
@@ -106,12 +125,46 @@ export function buildPlan(manifest, releases, snapshot) {
     const release = releases[expected.release_mbid];
     const tracks = validateRelease(expected, release);
     const album = albumById.get(expected.album_id);
-    if (!album || album.is_deleted || album.musicbrainz_release_id?.toLowerCase() !== expected.release_mbid ||
-        album.musicbrainz_release_group_id?.toLowerCase() !== expected.release_group_mbid || normalise(album.title) !== normalise(expected.title) ||
-        normalise(album.artist) !== normalise(expected.artist)) throw new Error(`Stored album identity guard failed for ${expected.album_id}.`);
+    if (!album || album.is_deleted || normalise(album.title) !== normalise(expected.title) || normalise(album.artist) !== normalise(expected.artist)) {
+      throw new Error(`Stored album identity guard failed for ${expected.album_id}.`);
+    }
+    const lowerOrNull = value => value == null ? null : String(value).toLowerCase();
+    const requestedIdentityCorrection = expected.album_identity_correction || null;
+    let identityCorrection = null;
+    if (requestedIdentityCorrection) {
+      const alreadyCorrected = lowerOrNull(album.musicbrainz_release_id) === expected.release_mbid &&
+        lowerOrNull(album.musicbrainz_release_group_id) === expected.release_group_mbid;
+      const correctionPrecondition = lowerOrNull(album.musicbrainz_release_id) === lowerOrNull(requestedIdentityCorrection.expected_release_mbid) &&
+        lowerOrNull(album.musicbrainz_release_group_id) === lowerOrNull(requestedIdentityCorrection.expected_release_group_mbid);
+      if (!alreadyCorrected && !correctionPrecondition) {
+        throw new Error(`Stored album correction precondition failed for ${expected.album_id}.`);
+      }
+      if (correctionPrecondition && !alreadyCorrected) identityCorrection = requestedIdentityCorrection;
+    } else if (lowerOrNull(album.musicbrainz_release_id) !== expected.release_mbid ||
+        lowerOrNull(album.musicbrainz_release_group_id) !== expected.release_group_mbid) {
+      throw new Error(`Stored album identity guard failed for ${expected.album_id}.`);
+    }
     if (!album.cover_art_url) throw new Error(`Stored artwork guard failed for album ${expected.album_id}.`);
 
-    const stored = albumSongs.get(expected.album_id) || [];
+    const stored = (albumSongs.get(expected.album_id) || []).map(song => ({ ...song }));
+    const trackCorrections = [];
+    for (const correction of expected.existing_track_corrections || []) {
+      const song = stored.find(row => Number(row.id) === correction.song_id);
+      const track = tracks.find(row => row.recording_mbid === correction.recording_mbid.toLowerCase());
+      if (!song || song.is_deleted || song.external_source !== "musicbrainz" || song.external_id?.toLowerCase() !== correction.recording_mbid.toLowerCase() ||
+          song.canonical_song_id !== correction.canonical_id || !track || track.position !== correction.new_track_position ||
+          track.duration_ms !== correction.new_duration_ms) throw new Error(`Existing track correction guard failed for song ${correction.song_id}.`);
+      const canonical = canonicalsById.get(song.canonical_song_id);
+      if (!canonical || canonical.musicbrainz_recording_id?.toLowerCase() !== correction.recording_mbid.toLowerCase()) {
+        throw new Error(`Corrected track canonical guard failed for song ${correction.song_id}.`);
+      }
+      const alreadyCorrected = song.track_position === correction.new_track_position && song.duration_ms === correction.new_duration_ms;
+      const correctionPrecondition = song.track_position === correction.expected_track_position && song.duration_ms === correction.expected_duration_ms;
+      if (!alreadyCorrected && !correctionPrecondition) throw new Error(`Existing track correction precondition failed for song ${correction.song_id}.`);
+      if (correctionPrecondition && !alreadyCorrected) trackCorrections.push({ ...correction, recording_mbid: correction.recording_mbid.toLowerCase() });
+      song.track_position = correction.new_track_position;
+      song.duration_ms = correction.new_duration_ms;
+    }
     const positionOwners = new Map(stored.map(song => [Number(song.track_position), song]));
     const actions = [];
     for (const track of tracks) {
@@ -149,6 +202,7 @@ export function buildPlan(manifest, releases, snapshot) {
       unchanged_tracks: actions.filter(item => item.action === "unchanged").length
     };
     albums.push({ ...expected, cover_art_url: album.cover_art_url, tracks: actions, counts,
+      album_identity_correction: identityCorrection, existing_track_corrections: trackCorrections,
       protected_rating_rows: (snapshot.ratings || []).filter(row => stored.some(song => song.canonical_song_id === row.canonical_song_id)).length,
       historical_baseline: expected.historical_chart_rows.map(id => ({
         id, song_id: chartById.get(id).song_id, canonical_song_id: chartById.get(id).canonical_song_id,
@@ -163,25 +217,43 @@ export function buildPlan(manifest, releases, snapshot) {
 }
 
 function literal(value) { return `'${String(value ?? "").replaceAll("'", "''")}'`; }
+function nullableLowerPredicate(column, value) { return value == null ? `${column} is null` : `lower(${column})=${literal(value)}`; }
 
 export function generateAlbumSql(album) {
   const payload = literal(JSON.stringify(album));
+  const identity = album.album_identity_correction;
+  const releaseGuard = nullableLowerPredicate("a.musicbrainz_release_id", identity ? identity.expected_release_mbid : album.release_mbid);
+  const groupGuard = nullableLowerPredicate("a.musicbrainz_release_group_id", identity ? identity.expected_release_group_mbid : album.release_group_mbid);
+  const trackCorrections = (album.existing_track_corrections || []).map(correction => `
+  update public.songs set track_position=${correction.new_track_position}, duration_ms=${correction.new_duration_ms}
+  where id=${correction.song_id} and album_id=${album.album_id} and not coalesce(is_deleted,false)
+    and external_source='musicbrainz' and lower(external_id)=${literal(correction.recording_mbid)}
+    and canonical_song_id=${literal(correction.canonical_id)}::uuid
+    and ${correction.expected_track_position == null ? "track_position is null" : `track_position=${correction.expected_track_position}`}
+    and ${correction.expected_duration_ms == null ? "duration_ms is null" : `duration_ms=${correction.expected_duration_ms}`};
+  get diagnostics n = row_count;
+  if n<>1 then raise exception 'Existing track correction guard failed for song ${correction.song_id}'; end if;`).join("");
   return `\\set ON_ERROR_STOP on
 begin;
 set local lock_timeout = '10s';
 set local statement_timeout = '60s';
 select pg_advisory_xact_lock(hashtextextended('bom-album-track-completion:${album.album_id}', 0));
 do $completion$
-declare v jsonb := ${payload}::jsonb; t jsonb; v_canonical uuid; n integer; inserted_canonicals integer := 0; inserted_songs integer := 0; ratings_before jsonb; links_before jsonb;
+declare v jsonb := ${payload}::jsonb; t jsonb; v_canonical uuid; n integer; inserted_canonicals integer := 0; inserted_songs integer := 0; ratings_before jsonb; album_ratings_before jsonb; links_before jsonb;
 begin
-  perform 1 from public.albums a where a.id=${album.album_id} and not coalesce(a.is_deleted,false) and lower(a.musicbrainz_release_id)=${literal(album.release_mbid)} and lower(a.musicbrainz_release_group_id)=${literal(album.release_group_mbid)} and a.cover_art_url=${literal(album.cover_art_url)} for update;
+  perform 1 from public.albums a where a.id=${album.album_id} and not coalesce(a.is_deleted,false) and ${releaseGuard} and ${groupGuard} and a.cover_art_url=${literal(album.cover_art_url)} for update;
   if not found then raise exception 'Album identity/artwork guard failed'; end if;
   perform 1 from public.songs s where s.album_id=${album.album_id} for update;
   select coalesce(jsonb_agg(to_jsonb(r) order by r.id),'[]'::jsonb) into ratings_before from public.song_ratings r where r.canonical_song_id in (
     select s.canonical_song_id from public.songs s where s.album_id=${album.album_id}
     union select nullif(value->>'canonical_id','')::uuid from jsonb_array_elements(v->'tracks') where value->>'canonical_id' is not null
   );
+  select coalesce(jsonb_agg(to_jsonb(r) order by r.id),'[]'::jsonb) into album_ratings_before from public.ratings r where r.album_id=${album.album_id};
   select coalesce(jsonb_agg(jsonb_build_object('id',q.id,'song_id',q.song_id,'canonical_song_id',q.canonical_song_id,'mbid',q.musicbrainz_recording_id) order by q.id),'[]'::jsonb) into links_before from public.quick_rate_collection_tracks q where q.id in (${album.historical_chart_rows.join(",")});
+  ${identity ? `update public.albums set musicbrainz_release_id=${literal(album.release_mbid)}, musicbrainz_release_group_id=${literal(album.release_group_mbid)} where id=${album.album_id};
+  get diagnostics n = row_count;
+  if n<>1 then raise exception 'Album identity correction failed'; end if;` : ""}
+  ${trackCorrections}
   for t in select value from jsonb_array_elements(v->'tracks') loop
     if t->>'action' = 'insert_canonical_and_occurrence' then
       if exists(select 1 from public.canonical_recordings c where lower(c.musicbrainz_recording_id)=lower(t->>'recording_mbid')) then raise exception 'Canonical appeared for %',t->>'recording_mbid'; end if;
@@ -202,10 +274,12 @@ begin
   if inserted_canonicals<>${album.counts.canonical_inserts} or inserted_songs<>${album.counts.song_occurrence_inserts} then raise exception 'Exact insert-count assertion failed'; end if;
   select count(*) into n from public.songs s where s.album_id=${album.album_id} and not coalesce(s.is_deleted,false);
   if n<>${album.expected_track_count} then raise exception 'Final track-count assertion failed: %',n; end if;
+  if not exists(select 1 from public.albums a where a.id=${album.album_id} and lower(a.musicbrainz_release_id)=${literal(album.release_mbid)} and lower(a.musicbrainz_release_group_id)=${literal(album.release_group_mbid)} and a.cover_art_url=${literal(album.cover_art_url)}) then raise exception 'Final album identity/artwork assertion failed'; end if;
   if ratings_before is distinct from (select coalesce(jsonb_agg(to_jsonb(r) order by r.id),'[]'::jsonb) from public.song_ratings r where r.canonical_song_id in (
     select s.canonical_song_id from public.songs s where s.album_id=${album.album_id}
     union select nullif(value->>'canonical_id','')::uuid from jsonb_array_elements(v->'tracks') where value->>'canonical_id' is not null
   )) then raise exception 'Rating integrity changed'; end if;
+  if album_ratings_before is distinct from (select coalesce(jsonb_agg(to_jsonb(r) order by r.id),'[]'::jsonb) from public.ratings r where r.album_id=${album.album_id}) then raise exception 'Album rating integrity changed'; end if;
   if links_before is distinct from (select coalesce(jsonb_agg(jsonb_build_object('id',q.id,'song_id',q.song_id,'canonical_song_id',q.canonical_song_id,'mbid',q.musicbrainz_recording_id) order by q.id),'[]'::jsonb) from public.quick_rate_collection_tracks q where q.id in (${album.historical_chart_rows.join(",")})) then raise exception 'Historical links changed'; end if;
 end $completion$;
 commit;
@@ -232,6 +306,8 @@ export async function main() {
   let checkpoint = { schema_version: 1, albums: {} };
   if (checkpointPath) {
     try { checkpoint = JSON.parse(await readFile(resolve(checkpointPath), "utf8")); } catch (error) { if (error.code !== "ENOENT") throw error; }
+    await mkdir(dirname(resolve(checkpointPath)), { recursive: true });
+    await writeFile(resolve(checkpointPath), `${JSON.stringify(checkpoint, null, 2)}\n`);
   }
   const failures = [];
   for (const album of plan.albums) {
