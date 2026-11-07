@@ -21,6 +21,15 @@ test("historical songs distinguish canonical community ratings from personal rat
   assert.doesNotMatch(mapping, /supabaseClient|fetch\(/);
 });
 
+test("historical discovery batches complete canonical rating rows before deriving the personal rating", () => {
+  const loading = app.match(/const \[occurrenceRatingResult, canonicalRatingResult\][\s\S]*?const ratingByCanonicalId[^;]+;/)?.[0] || "";
+  assert.match(loading, /select\("user_id,song_id,canonical_song_id,rating"\)/);
+  assert.match(loading, /historicalCanonicalRatings = mergeRatingRows/);
+  assert.match(loading, /allSongRatings = mergeRatingRows/);
+  assert.match(loading, /rating\.user_id === currentUser\.id/);
+  assert.doesNotMatch(loading, /\.eq\("user_id", currentUser\.id\)/);
+});
+
 test("historical cards render one artwork surface and a separate No. 1 badge", () => {
   assert.match(discover, /const historyArt = .*bom-v1-history-art/);
   assert.match(discover, /bom-v1-history-position/);

@@ -87,11 +87,12 @@ test("community ratings are shared by confirmed recording and count each user on
       { user_id: "alice", song_id: 11, rating: 8 },
       { user_id: "alice", song_id: 22, rating: 8 },
       { user_id: "bob", song_id: 11, rating: 10 },
-      { user_id: "carol", song_id: 33, rating: 2 }
+      { user_id: "carol", song_id: 33, rating: 2 },
+      { user_id: "dave", song_id: 33, rating: 0 }
     ]
   });
   vm.runInContext(extract("function getSongAverage", "function getYourAlbumRating"), context);
   vm.runInContext(extract("function getConfirmedMusicBrainzRecordingId", "function getPreferredSongOccurrence"), context);
   assert.deepEqual(JSON.parse(JSON.stringify(context.getSongAverage(22))), { avg: 9, count: 2 });
-  assert.deepEqual(JSON.parse(JSON.stringify(context.getSongAverage(33))), { avg: 2, count: 1 });
+  assert.deepEqual(JSON.parse(JSON.stringify(context.getSongAverage(33))), { avg: 1, count: 2 });
 });

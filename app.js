@@ -748,18 +748,31 @@ window.BOMPresentationBridge = Object.freeze({
     const resolvedRows = matchingRows.map((row) => ({ row, song: resolveHistoricalSong(row) }));
     const resolvedSongIds = [...new Set(resolvedRows.map(({ song }) => Number(song?.id)).filter((id) => Number.isSafeInteger(id) && id > 0))];
     const resolvedCanonicalIds = [...new Set(resolvedRows.map(({ song, row }) => String(song?.canonical_song_id || row.canonical_song_id || "").trim()).filter(Boolean))];
-    const [occurrenceRatingResult, canonicalRatingResult] = currentUser ? await Promise.all([
+    const [occurrenceRatingResult, canonicalRatingResult] = await Promise.all([
       resolvedSongIds.length
-        ? supabaseClient.from("song_ratings").select("song_id,canonical_song_id,rating").eq("user_id", currentUser.id).in("song_id", resolvedSongIds)
+        ? supabaseClient.from("song_ratings").select("user_id,song_id,canonical_song_id,rating").in("song_id", resolvedSongIds)
         : Promise.resolve({ data: [] }),
       resolvedCanonicalIds.length
-        ? supabaseClient.from("song_ratings").select("song_id,canonical_song_id,rating").eq("user_id", currentUser.id).in("canonical_song_id", resolvedCanonicalIds)
+        ? supabaseClient.from("song_ratings").select("user_id,song_id,canonical_song_id,rating").in("canonical_song_id", resolvedCanonicalIds)
         : Promise.resolve({ data: [] })
-    ]) : [{ data: [] }, { data: [] }];
+    ]);
     const occurrenceRatings = occurrenceRatingResult.error ? [] : occurrenceRatingResult.data || [];
     const canonicalRatings = canonicalRatingResult.error ? [] : canonicalRatingResult.data || [];
-    const ratingBySongId = new Map(occurrenceRatings.map((rating) => [Number(rating.song_id), Number(rating.rating)]));
-    const ratingByCanonicalId = new Map(canonicalRatings.map((rating) => [String(rating.canonical_song_id || "").trim(), Number(rating.rating)]));
+    const historicalCanonicalRatings = mergeRatingRows(
+      [],
+      [...occurrenceRatings, ...canonicalRatings],
+      (rating) => `${rating.user_id}:${rating.canonical_song_id || `song:${rating.song_id}`}`
+    );
+    allSongRatings = mergeRatingRows(
+      allSongRatings,
+      historicalCanonicalRatings,
+      (rating) => `${rating.user_id}:${rating.canonical_song_id || `song:${rating.song_id}`}`
+    );
+    const personalCanonicalRatings = currentUser
+      ? historicalCanonicalRatings.filter((rating) => rating.user_id === currentUser.id)
+      : [];
+    const ratingBySongId = new Map(personalCanonicalRatings.map((rating) => [Number(rating.song_id), Number(rating.rating)]));
+    const ratingByCanonicalId = new Map(personalCanonicalRatings.map((rating) => [String(rating.canonical_song_id || "").trim(), Number(rating.rating)]));
     return {
       albums: allAlbums.filter((album) => !album.is_deleted).map((album) => ({
         id: album.id, title: album.title, artist: album.artist,
