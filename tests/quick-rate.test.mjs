@@ -734,7 +734,7 @@ test('year switching and Phase 1.1 controls rerender from selected state', () =>
   assert.doesNotMatch(quickRate, /Phase 1 sample/);
 });
 
-test('unresolved UK No.1 entries open non-rateable historical details', () => {
+test('unresolved UK No.1 entries open historical details with provisional ratings', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
   assert.match(quickRate, /data-quick-historical-id/);
   assert.match(quickRate, /BOMDiscoverUI\?\.openHistoricalDetail/);

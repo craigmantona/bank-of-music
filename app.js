@@ -520,6 +520,87 @@ function resolveHistoricalSongCandidate(row, sources, artworkForSong = () => "")
     .sort((left, right) => Number(Boolean(artworkForSong(right))) - Number(Boolean(artworkForSong(left))) || Number(left.id) - Number(right.id))[0] || null;
 }
 
+const historicalChartRatingSummaries = new Map();
+let historicalChartRatingViewer = null;
+
+function getHistoricalChartRatingViewer() {
+  return currentUser?.id || "anonymous";
+}
+
+function resetHistoricalChartRatingCacheForViewer() {
+  const viewer = getHistoricalChartRatingViewer();
+  if (viewer !== historicalChartRatingViewer) {
+    historicalChartRatingViewer = viewer;
+    historicalChartRatingSummaries.clear();
+  }
+}
+
+function normaliseHistoricalChartRatingSummary(row, chartEntryId) {
+  const count = Math.max(0, Number(row?.community_rating_count) || 0);
+  const average = count > 0 && Number.isFinite(Number(row?.community_average))
+    ? Number(row.community_average)
+    : null;
+  const personal = row?.personal_rating === null || row?.personal_rating === undefined
+    ? null
+    : Number(row.personal_rating);
+  return {
+    chartEntryId: Number(chartEntryId),
+    communityAverage: average,
+    communityRatingCount: count,
+    personalRating: Number.isInteger(personal) && personal >= 0 && personal <= 10 ? personal : null
+  };
+}
+
+async function loadHistoricalChartRatingSummaries(chartEntryIds, { force = false } = {}) {
+  resetHistoricalChartRatingCacheForViewer();
+  const ids = [...new Set((chartEntryIds || []).map(Number).filter(id => Number.isSafeInteger(id) && id > 0))];
+  const missing = force ? ids : ids.filter(id => !historicalChartRatingSummaries.has(id));
+  for (let offset = 0; offset < missing.length; offset += 250) {
+    const batch = missing.slice(offset, offset + 250);
+    const { data: rows, error } = await supabaseClient.rpc("get_historical_chart_entry_rating_summaries", {
+      p_chart_entry_ids: batch
+    });
+    if (error) throw error;
+    const byId = new Map((rows || []).map(row => [Number(row.chart_entry_id), row]));
+    batch.forEach(id => historicalChartRatingSummaries.set(id, normaliseHistoricalChartRatingSummary(byId.get(id), id)));
+  }
+  return new Map(ids.map(id => [id, historicalChartRatingSummaries.get(id) || normaliseHistoricalChartRatingSummary(null, id)]));
+}
+
+function classifyHistoricalRatingError(error) {
+  const code = String(error?.code || "");
+  const message = String(error?.message || "");
+  if (code === "P0002") return { code: "resolved", message: "This entry has since been matched to a verified recording. Reopen it to use the canonical rating." };
+  if (code === "42501" || error?.status === 401 || error?.status === 403 || /jwt|session|auth/i.test(message)) {
+    return { code: "authentication", message: "Your session has expired. Please sign in again before rating." };
+  }
+  return { code: "failed", message: "Your rating could not be saved. Please try again." };
+}
+
+async function saveHistoricalChartEntryRating(chartEntryId, rating) {
+  const id = Number(chartEntryId);
+  const value = rating === null ? null : Number(rating);
+  if (!Number.isSafeInteger(id) || id <= 0 || (value !== null && (!Number.isInteger(value) || value < 0 || value > 10))) {
+    return { ok: false, code: "invalid", message: "Choose a whole-number rating from 0 to 10." };
+  }
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+  if (sessionError || !sessionData?.session?.user || sessionData.session.user.id !== currentUser?.id) {
+    return { ok: false, code: "authentication", message: "Your session has expired. Please sign in again before rating." };
+  }
+  const { error } = await supabaseClient.rpc("set_historical_chart_entry_rating", {
+    p_chart_entry_id: id,
+    p_rating: value
+  });
+  if (error) return { ok: false, ...classifyHistoricalRatingError(error) };
+  historicalChartRatingSummaries.delete(id);
+  try {
+    const summaries = await loadHistoricalChartRatingSummaries([id], { force: true });
+    return { ok: true, summary: summaries.get(id) };
+  } catch {
+    return { ok: true, summary: null, message: "Rating saved. Community totals will refresh next time this entry opens." };
+  }
+}
+
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
@@ -606,6 +687,8 @@ window.BOMPresentationBridge = Object.freeze({
     if (!song) return;
     await openSongDetail(song, trigger);
   },
+  loadHistoricalChartRatingSummaries,
+  saveHistoricalChartEntryRating,
   loadHistoricalDiscovery: async () => {
     const rows = [];
     for (let offset = 0; ; offset += 1000) {
@@ -624,11 +707,13 @@ window.BOMPresentationBridge = Object.freeze({
     const canonicalIds = [...new Set(matchingRows.map((row) => String(row.canonical_song_id || "").trim()).filter(Boolean))];
     const recordingIds = [...new Set(matchingRows.map((row) => String(row.musicbrainz_recording_id || "").trim()).filter(Boolean))];
     const historicalTitles = [...new Set(matchingRows.map((row) => String(row.title || "").trim()).filter(Boolean))];
-    const [directSongs, canonicalSongs, recordingSongs, titleSongs] = await Promise.all([
+    const unresolvedChartIds = matchingRows.filter(row => row.match_status === "unresolved" && !row.song_id).map(row => Number(row.id));
+    const [directSongs, canonicalSongs, recordingSongs, titleSongs, provisionalSummaries] = await Promise.all([
       fetchRowsInChunks("songs", "id", songIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
       fetchRowsInChunks("songs", "canonical_song_id", canonicalIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
       fetchRowsInChunks("songs", "external_id", recordingIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
-      fetchRowsInChunks("songs", "title", historicalTitles, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted")
+      fetchRowsInChunks("songs", "title", historicalTitles, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
+      loadHistoricalChartRatingSummaries(unresolvedChartIds).catch(() => new Map())
     ]);
     const songs = mergeRowsById(directSongs, [...canonicalSongs, ...recordingSongs, ...titleSongs]).filter((song) => !song.is_deleted);
     allSongs = mergeRowsById(allSongs, songs);
@@ -694,7 +779,8 @@ window.BOMPresentationBridge = Object.freeze({
           artworkUrl: artworkForSong(song),
           communityAverage: community?.avg ?? null,
           communityRatingCount: Number(community?.count || 0),
-          personalRating: ratingByCanonicalId.get(canonicalId) ?? ratingBySongId.get(Number(song?.id)) ?? null
+          personalRating: ratingByCanonicalId.get(canonicalId) ?? ratingBySongId.get(Number(song?.id)) ?? null,
+          provisionalRatingSummary: provisionalSummaries.get(Number(row.id)) || null
         };
       })
     };

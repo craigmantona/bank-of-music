@@ -47,13 +47,35 @@ test("every historical chart card has an accessible destination", () => {
   assert.match(discover, /Recording not yet verified/);
 });
 
-test("unresolved historical details are non-rateable and use cached chart facts", () => {
+test("unresolved historical details use chart-entry ratings and cached chart facts", () => {
   const detail = discover.match(/function historicalDetail[\s\S]*?\n  \}/)?.[0] || "";
   assert.match(detail, /weeks_at_number_one/);
   assert.match(detail, /number_one_runs/);
   assert.match(detail, /first_number_one_date/);
-  assert.match(detail, /community ratings and personal rating controls will appear only after/);
-  assert.doesNotMatch(detail, /Rate this|data-rating|supabaseClient|MusicBrainz/);
+  assert.match(detail, /historicalRatingPanel\(item\)/);
+  assert.match(detail, /Historical-entry ratings are available/);
+  assert.doesNotMatch(detail, /supabaseClient|MusicBrainz/);
+});
+
+test("provisional ratings use bridge RPCs, preserve zero and remain separately labelled", () => {
+  assert.match(app, /rpc\("get_historical_chart_entry_rating_summaries"/);
+  assert.match(app, /rpc\("set_historical_chart_entry_rating"/);
+  assert.match(app, /personal_rating === null \|\| row\?\.personal_rating === undefined/);
+  assert.match(discover, /Array\.from\(\{length:11\}/);
+  assert.match(discover, /data-historical-rating-value="\$\{rating\}"/);
+  assert.match(discover, /Historical community/);
+  assert.match(discover, /kept separate from verified recording ratings/);
+  assert.match(discover, /data-historical-rating-clear/);
+  assert.doesNotMatch(discover, /\.from\("song_ratings"\)|canonical_recordings/);
+});
+
+test("provisional summaries are batched and writes suppress duplicate interaction", () => {
+  assert.match(app, /offset \+= 250/);
+  assert.match(app, /p_chart_entry_ids: batch/);
+  assert.match(discover, /historicalRatingPending/);
+  assert.match(discover, /if\(ratingButton&&historicalDetailItem&&!historicalRatingPending\)/);
+  assert.match(discover, /Saving…/);
+  assert.match(discover, /result\?\.ok/);
 });
 
 test("historical detail navigation resets once and restores the listing on back", () => {
@@ -72,6 +94,6 @@ test("historical detail replaces only the legacy recommendation heading", () => 
   assert.match(heading, /UK No\.1s — Music History/);
   assert.match(heading, /verified chart stories that reached No\.1/);
   assert.match(heading, /Recommended Albums/);
-  assert.match(discover, /setHistoricalDetailHeading\(true\);\s*root\.innerHTML=historicalDetail/);
+  assert.match(discover, /setHistoricalDetailHeading\(true\);[\s\S]*?root\.innerHTML=historicalDetail\(item\)/);
   assert.match(discover, /if\(!root\.querySelector\?\.\("\.bom-v1-historical-detail"\)\)setHistoricalDetailHeading\(false\)/);
 });

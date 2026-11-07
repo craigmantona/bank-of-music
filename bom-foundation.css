@@ -1243,6 +1243,23 @@
 .bom-shell-v1 .bom-v1-historical-hero h1:focus { outline:none; }
 .bom-shell-v1 .bom-v1-historical-hero h2 { margin:12px 0 0; color:var(--bom-v1-muted); font-size:clamp(18px,2.5vw,28px); font-weight:500; }
 .bom-shell-v1 .bom-v1-historical-chart-summary { margin:18px 0 0; color:var(--bom-v1-accent); font-size:12px; }
+.bom-shell-v1 .bom-v1-historical-rating-panel { display:grid; grid-template-columns:minmax(130px,.7fr) minmax(240px,1.3fr); gap:14px 24px; max-width:680px; margin-top:24px; padding:18px; background:#292c27; border:1px solid var(--bom-v1-line); border-radius:7px; }
+.bom-shell-v1 .bom-v1-historical-rating-panel p { margin:0; }
+.bom-shell-v1 .bom-v1-historical-community,.bom-shell-v1 .bom-v1-historical-personal { display:grid; align-content:start; gap:5px; }
+.bom-shell-v1 .bom-v1-historical-community > p,.bom-shell-v1 .bom-v1-historical-personal > p { color:var(--bom-v1-muted); font-size:9px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+.bom-shell-v1 .bom-v1-historical-community > strong { color:var(--bom-v1-accent); font-size:28px; line-height:1; }
+.bom-shell-v1 .bom-v1-historical-community > span { color:var(--bom-v1-muted); font-size:11px; }
+.bom-shell-v1 .bom-v1-historical-personal > strong { color:var(--bom-v1-text); font-size:15px; }
+.bom-shell-v1 .bom-v1-historical-rating-choices { display:grid; grid-template-columns:repeat(6,minmax(32px,1fr)); gap:5px; margin-top:7px; }
+.bom-shell-v1 .bom-v1-historical-rating-choices button { min-width:32px; min-height:34px; padding:4px; color:var(--bom-v1-text); background:#20221e; border:1px solid var(--bom-v1-line); border-radius:4px; box-shadow:none; font-size:11px; }
+.bom-shell-v1 .bom-v1-historical-rating-choices button:hover { border-color:var(--bom-v1-accent); }
+.bom-shell-v1 .bom-v1-historical-rating-choices button:focus-visible,.bom-shell-v1 .bom-v1-historical-rating-clear:focus-visible { outline:2px solid var(--bom-v1-accent); outline-offset:2px; }
+.bom-shell-v1 .bom-v1-historical-rating-choices button[aria-pressed="true"] { color:var(--bom-v1-bg); background:var(--bom-v1-accent); border-color:var(--bom-v1-accent); font-weight:800; }
+.bom-shell-v1 .bom-v1-historical-rating-choices button:disabled,.bom-shell-v1 .bom-v1-historical-rating-clear:disabled { cursor:wait; opacity:.55; }
+.bom-shell-v1 .bom-v1-historical-rating-clear { width:max-content; min-height:30px; margin-top:5px; padding:3px 0; color:var(--bom-v1-muted); background:transparent; border:0; box-shadow:none; font-size:10px; text-decoration:underline; text-underline-offset:3px; }
+.bom-shell-v1 .bom-v1-historical-rating-note { grid-column:1 / -1; color:var(--bom-v1-muted); font-size:10px; line-height:1.5; }
+.bom-shell-v1 .bom-v1-historical-rating-status { grid-column:1 / -1; min-height:16px; color:var(--bom-v1-accent); font-size:10px; }
+.bom-shell-v1 .bom-v1-historical-rating-signin { margin-top:8px !important; color:var(--bom-v1-muted); font-size:11px; }
 .bom-shell-v1 .bom-v1-historical-facts { padding:32px 0; border-bottom:1px solid var(--bom-v1-line); }
 .bom-shell-v1 .bom-v1-historical-facts h2 { margin:0 0 18px; font-size:21px; }
 .bom-shell-v1 .bom-v1-historical-facts dl { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0; }
@@ -1265,6 +1282,9 @@
  .bom-shell-v1 .bom-v1-historical-placeholder { font-size:30px; }
  .bom-shell-v1 .bom-v1-historical-placeholder span { right:6px; bottom:6px; padding:3px 6px; font-size:8px; }
  .bom-shell-v1 .bom-v1-historical-hero h1 { font-size:clamp(28px,9vw,42px); }
+ .bom-shell-v1 .bom-v1-historical-rating-panel { grid-template-columns:1fr; gap:16px; padding:14px; }
+ .bom-shell-v1 .bom-v1-historical-rating-choices { grid-template-columns:repeat(4,minmax(32px,1fr)); }
+ .bom-shell-v1 .bom-v1-historical-rating-note,.bom-shell-v1 .bom-v1-historical-rating-status { grid-column:1; }
  .bom-shell-v1 .bom-v1-historical-facts dl { grid-template-columns:1fr; }
 }
 @media(prefers-reduced-motion:reduce){.bom-shell-v1 .bom-v1-discovery-track,.bom-shell-v1 .bom-v1-history-card[role="link"]{transition:none;}}
