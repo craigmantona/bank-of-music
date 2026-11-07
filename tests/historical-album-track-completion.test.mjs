@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildPlan, generateAlbumSql, indexReleaseCache, validateRelease } from "../scripts/historical-album-track-completion.mjs";
+import { buildPlan, generateAlbumSql, indexReleaseCache, validateManifest, validateRelease } from "../scripts/historical-album-track-completion.mjs";
 
 const uuid = n => `${String(n).padStart(8,"0")}-0000-4000-8000-${String(n).padStart(12,"0")}`;
 const album = { album_id: 10, title: "Album", artist: "Artist", release_mbid: uuid(1), release_group_mbid: uuid(2), expected_track_count: 2, historical_chart_rows: [20] };
@@ -33,6 +33,37 @@ test("rejects incorrect editions and excluded release types", () => {
   assert.throws(()=>validateRelease(album,{...release,id:uuid(99)}),/release MBID/);
   assert.throws(()=>validateRelease(album,{...release,"release-group":{...release["release-group"],"primary-type":"Single"}}),/primary type/);
   assert.throws(()=>validateRelease(album,{...release,media:[...release.media,{position:2,tracks:[]}]}),/single medium/);
+});
+
+test("rejects unknown durations under normal album validation", () => {
+  const missingDuration = structuredClone(release);
+  missingDuration.media[0].tracks[1].length = null;
+  missingDuration.media[0].tracks[1].recording.length = null;
+  assert.throws(() => validateRelease(album, missingDuration), /track duration 2/);
+});
+
+test("permits unknown durations only for the reviewed Eddie Calvert release", () => {
+  const reviewed = {
+    ...album,
+    album_id: 1818,
+    release_mbid: "fa4d5f86-0d3b-4fcc-b51a-bbe8caacbec1",
+    release_group_mbid: "20a3673b-556c-4f34-b6fe-2fe0d24bb1f7",
+    allow_missing_durations: true
+  };
+  const reviewedRelease = structuredClone(release);
+  reviewedRelease.id = reviewed.release_mbid;
+  reviewedRelease["release-group"].id = reviewed.release_group_mbid;
+  reviewedRelease.media[0].tracks[1].length = null;
+  reviewedRelease.media[0].tracks[1].recording.length = null;
+  const tracks = validateRelease(reviewed, reviewedRelease);
+  assert.equal(tracks[0].duration_ms, 200000);
+  assert.equal(tracks[1].duration_ms, null);
+
+  const unrelatedRelease = structuredClone(release);
+  unrelatedRelease.media[0].tracks[1].length = null;
+  unrelatedRelease.media[0].tracks[1].recording.length = null;
+  assert.throws(() => validateRelease({ ...album, allow_missing_durations: true }, unrelatedRelease), /track duration 2/);
+  assert.throws(() => validateManifest({ schema_version: 1, albums: [{ ...album, allow_missing_durations: true }] }), /not permitted/);
 });
 
 test("a completed album is idempotent", () => {

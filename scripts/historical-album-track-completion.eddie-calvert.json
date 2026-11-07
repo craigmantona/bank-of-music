@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "albums": [
+    {
+      "album_id": 1818,
+      "title": "The Man With the Golden Trumpet",
+      "artist": "Eddie Calvert",
+      "release_mbid": "fa4d5f86-0d3b-4fcc-b51a-bbe8caacbec1",
+      "release_group_mbid": "20a3673b-556c-4f34-b6fe-2fe0d24bb1f7",
+      "expected_track_count": 10,
+      "historical_chart_rows": [2276],
+      "allow_missing_durations": true
+    }
+  ]
+}

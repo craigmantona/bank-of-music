@@ -8,6 +8,18 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_MANIFEST = resolve(HERE, "historical-album-track-completion.pilot.json");
 export const DEFAULT_CACHE = resolve(HERE, "../supabase/operations/historical-album-track-audit-pilot-releases.json");
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UNKNOWN_DURATION_EXCEPTION = Object.freeze({
+  album_id: 1818,
+  release_mbid: "fa4d5f86-0d3b-4fcc-b51a-bbe8caacbec1",
+  release_group_mbid: "20a3673b-556c-4f34-b6fe-2fe0d24bb1f7"
+});
+
+function allowsUnknownDurations(album) {
+  return album.allow_missing_durations === true &&
+    album.album_id === UNKNOWN_DURATION_EXCEPTION.album_id &&
+    album.release_mbid === UNKNOWN_DURATION_EXCEPTION.release_mbid &&
+    album.release_group_mbid === UNKNOWN_DURATION_EXCEPTION.release_group_mbid;
+}
 
 function groupBy(rows, key) {
   const groups = new Map();
@@ -48,6 +60,9 @@ export function validateManifest(manifest) {
     }
     if (!Array.isArray(album.historical_chart_rows) || !album.historical_chart_rows.length || album.historical_chart_rows.some(id => !Number.isSafeInteger(id))) {
       throw new Error(`Historical link guards are required for album ${album.album_id}.`);
+    }
+    if (album.allow_missing_durations === true && !allowsUnknownDurations(album)) {
+      throw new Error(`Missing-duration exception is not permitted for album ${album.album_id}.`);
     }
     const identity = album.album_identity_correction;
     if (identity) {
@@ -92,13 +107,15 @@ export function validateRelease(album, release) {
     else mbids.add(track.recording.id.toLowerCase());
     const credited = artistCredit(track["artist-credit"]?.length ? track["artist-credit"] : track.recording?.["artist-credit"]);
     if (!credited) failures.push(`track artist ${index + 1}`);
-    if (!Number.isInteger(track.length || track.recording?.length)) failures.push(`track duration ${index + 1}`);
+    const duration = track.length ?? track.recording?.length ?? null;
+    if (!Number.isInteger(duration) && !allowsUnknownDurations(album)) failures.push(`track duration ${index + 1}`);
   }
   if (failures.length) throw new Error(`${album.artist} — ${album.title}: release validation failed (${[...new Set(failures)].join(", ")}).`);
   return tracks.map(track => ({
     position: Number(track.position), title: track.title || track.recording.title,
     artist: artistCredit(track["artist-credit"]?.length ? track["artist-credit"] : track.recording["artist-credit"]),
-    recording_mbid: track.recording.id.toLowerCase(), duration_ms: Number(track.length || track.recording.length)
+    recording_mbid: track.recording.id.toLowerCase(),
+    duration_ms: Number.isInteger(track.length ?? track.recording?.length) ? Number(track.length ?? track.recording.length) : null
   }));
 }
 
