@@ -14,7 +14,7 @@ const [html, app, album, styles, browserRegression] = await Promise.all([
 test("Stage 2A remains opt-in and loads after the approved foundation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /foundationScript\.addEventListener\("load"/);
-  assert.match(html, /bom-album\.js\?v=3/);
+  assert.match(html, /bom-album\.js\?v=4/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)/);
 });
 
@@ -91,6 +91,13 @@ test("top track emphasis never draws a left-hand rule", () => {
 test("album track rows override legacy card and glow styling only inside the track section", () => {
   assert.match(styles, /\.bom-v1-tracks-section \.track-row-table\.bom-v1-track-row \{[^}]*background-image: none !important;[^}]*border-radius: 0 !important;[^}]*box-shadow: none !important;/);
   assert.match(styles, /@media \(max-width: 900px\)[\s\S]*?\.bom-v1-tracks-section \.track-row-table\.bom-v1-track-row \{[^}]*min-height: 0 !important;/);
+});
+
+test("saved album tracks expose one accessible stretched navigation control", () => {
+  assert.match(album, /class="bom-v1-track-open" data-library-type="song" data-song-id=/);
+  assert.match(album, /aria-label="Open \$\{escapeHtml\(track\.title\)\}"/);
+  assert.match(styles, /\.bom-v1-track-open::after \{[^}]*position: absolute;[^}]*inset: 0;/);
+  assert.match(styles, /\.bom-v1-track-open:focus-visible::after/);
 });
 
 test("browser regression harness exercises the visible rating lifecycle", () => {

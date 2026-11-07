@@ -100,10 +100,17 @@ test("shared song transition resets scroll before paint and suppresses repeated 
   assert.match(transition, /pendingSongNavigationKey === key/);
   assert.ok(transition.indexOf('showOnlySection("detailSection")') < transition.indexOf("await renderSelectedItem()"));
   assert.ok(transition.indexOf("scrollSelectedSongToTop()") < transition.indexOf("await renderSelectedItem()"));
-  assert.match(transition, /requestAnimationFrame\(\(\) => requestAnimationFrame\(scrollSelectedSongToTop\)\)/);
+  assert.match(transition, /scrollSelectedDetailToTop\(\)/);
+  assert.doesNotMatch(transition, /requestAnimationFrame|setTimeout/);
   assert.match(transition, /focus\(\{ preventScroll: true \}\)/);
   assert.match(app, /openSongDetail\(song, songCard\)/);
   assert.match(app, /openSongDetail\(song, trigger\)/);
+});
+
+test("forward detail navigation resets the viewport without overriding browser-back restoration", () => {
+  const reset = app.match(/function scrollSelectedDetailToTop\(\) \{[\s\S]*?\n\}/)?.[0] || "";
+  assert.match(reset, /window\.scrollTo\(\{ top: 0, left: 0, behavior: "auto" \}\)/);
+  assert.doesNotMatch(app, /history\.scrollRestoration\s*=\s*"manual"/);
 });
 
 test("album track rows are clean, responsive and keyboard visible", () => {

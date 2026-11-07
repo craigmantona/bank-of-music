@@ -13,6 +13,8 @@ function extract(start, end) {
 test("recording lookup requires song or album context when provenance is shared", () => {
   const context = vm.createContext({
     normaliseCompare: value => String(value || "").toLowerCase(),
+    normaliseAlbumTitleKey: value => String(value || "").toLowerCase().replace(/\W/g, ""),
+    allAlbums: [{ id: 1, title: "Studio Album" }, { id: 2, title: "Compilation" }],
     allSongs: [
       { id: 101, album_id: 1, external_source: "musicbrainz", external_id: "shared" },
       { id: 202, album_id: 2, external_source: "musicbrainz", external_id: "shared" }
@@ -22,9 +24,18 @@ test("recording lookup requires song or album context when provenance is shared"
   assert.equal(context.getSavedSongByExternalId("shared"), null);
   assert.equal(context.getSavedSongByExternalId("shared", { songId: 202 }).id, 202);
   assert.equal(context.getSavedSongByExternalId("shared", { albumId: 1 }).id, 101);
+  assert.equal(context.getSavedSongByExternalId("shared", { releaseTitle: "Studio Album" }).id, 101);
   context.allSongs.forEach((song) => Object.assign(song, { title: "How Soon Is Now?", artist: "The Smiths" }));
   assert.equal(context.getSavedSongByTitleArtist("How Soon Is Now?", "The Smiths"), null);
   assert.equal(context.getSavedSongByTitleArtist("How Soon Is Now?", "The Smiths", { albumId: 2 }).id, 202);
+});
+
+test("an explicit album occurrence always wins over release and title fallbacks", () => {
+  const context = vm.createContext({ Number, Boolean, normaliseCompare: value => String(value || "").toLowerCase() });
+  vm.runInContext(extract("function normaliseAlbumTitleKey", "function normaliseReleaseDate"), context);
+  const album = { id: 1513, title: "The Black Parade", artist: "My Chemical Romance", musicbrainz_release_id: "studio" };
+  assert.equal(context.albumIdentityMatches(album, { savedAlbumId: 1513, externalId: "different-release", title: "Wrong", artist: "Wrong" }), true);
+  assert.equal(context.albumIdentityMatches(album, { savedAlbumId: 9999, externalId: "studio", title: album.title, artist: album.artist }), false);
 });
 
 test("album track modelling selects the occurrence belonging to that album", () => {

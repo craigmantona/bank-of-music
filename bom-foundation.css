@@ -934,6 +934,12 @@
 .bom-shell-v1 .bom-v1-track-row .track-col-title { min-width: 0; color: var(--bom-v1-text); overflow-wrap: anywhere; }
 .bom-shell-v1 .bom-v1-track-row .track-col-title strong { font-weight: 500; }
 .bom-shell-v1 .bom-v1-track-row .track-col-title small { display: block; margin-top: 3px; color: var(--bom-v1-muted); }
+.bom-shell-v1 .bom-v1-track-open { position: static; display: block; width: 100%; min-height: 44px; padding: 0; color: inherit; text-align: left; background: transparent; border: 0; border-radius: 0; box-shadow: none; cursor: pointer; }
+.bom-shell-v1 .bom-v1-track-open::after { content: ""; position: absolute; inset: 0; }
+.bom-shell-v1 .bom-v1-track-open:focus-visible { outline: 0; }
+.bom-shell-v1 .bom-v1-track-open:focus-visible::after { outline: 2px solid var(--bom-v1-accent); outline-offset: -2px; }
+.bom-shell-v1 .bom-v1-track-row .track-col-your-rating,
+.bom-shell-v1 .bom-v1-track-row .track-col-actions { position: relative !important; z-index: 1; }
 .bom-shell-v1 .bom-v1-track-row .track-col-average strong,
 .bom-shell-v1 .bom-v1-track-row .track-col-your-rating strong { color: var(--bom-v1-text); font-weight: 600; }
 .bom-shell-v1 .bom-v1-track-row .track-col-your-rating { display: block !important; color: var(--bom-v1-text) !important; }
