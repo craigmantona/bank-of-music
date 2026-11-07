@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [app, discover, styles] = await Promise.all([
+const [app, discover, styles, html] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../bom-discover.js", import.meta.url), "utf8"),
-  readFile(new URL("../bom-foundation.css", import.meta.url), "utf8")
+  readFile(new URL("../bom-foundation.css", import.meta.url), "utf8"),
+  readFile(new URL("../index.html", import.meta.url), "utf8")
 ]);
 
 test("historical songs distinguish canonical community ratings from personal ratings", () => {
@@ -62,4 +63,15 @@ test("historical detail navigation resets once and restores the listing on back"
   assert.doesNotMatch(reset, /setTimeout|requestAnimationFrame/);
   assert.match(discover, /bomHistoricalList:true/);
   assert.match(discover, /window\.addEventListener\(\"popstate\"/);
+});
+
+test("historical detail replaces only the legacy recommendation heading", () => {
+  assert.match(html, /<h2>Recommended Albums<\/h2>/);
+  assert.match(html, /Albums you may want to rate next\./);
+  const heading = discover.match(/function setHistoricalDetailHeading[\s\S]*?\n  \}/)?.[0] || "";
+  assert.match(heading, /UK No\.1s — Music History/);
+  assert.match(heading, /verified chart stories that reached No\.1/);
+  assert.match(heading, /Recommended Albums/);
+  assert.match(discover, /setHistoricalDetailHeading\(true\);\s*root\.innerHTML=historicalDetail/);
+  assert.match(discover, /if\(!root\.querySelector\?\.\("\.bom-v1-historical-detail"\)\)setHistoricalDetailHeading\(false\)/);
 });
