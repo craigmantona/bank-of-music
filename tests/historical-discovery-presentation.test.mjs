@@ -68,11 +68,13 @@ test("unresolved historical details use chart-entry ratings and cached chart fac
 });
 
 test("historical-only details use the compact responsive hero and rating layout", () => {
-  assert.match(styles, /\.bom-v1-historical-detail \{ padding:18px 0 64px/);
-  assert.match(styles, /\.bom-v1-historical-rating-panel \{ grid-column:2;[^}]+background:transparent/);
-  assert.match(styles, /@media\(max-width:700px\)[\s\S]+\.bom-v1-historical-hero \{ grid-template-columns:88px minmax\(0,1fr\)/);
-  assert.match(styles, /\.bom-v1-historical-rating-panel \{ grid-column:1 \/ -1;[^}]+padding-top:14px/);
-  assert.match(styles, /\.bom-v1-historical-rating-choices button \{ min-width:38px; min-height:44px/);
+  const detail = discover.match(/function historicalDetail[\s\S]*?\n  \}/)?.[0] || "";
+  assert.match(detail, /bom-v1-album bom-v1-track-detail bom-v1-historical-detail/);
+  assert.match(detail, /bom-v1-album-hero bom-v1-track-detail-hero bom-v1-historical-hero/);
+  assert.match(detail, /bom-v1-album-artwork-missing/);
+  assert.match(discover, /bom-v1-album-ratings bom-v1-historical-rating-panel/);
+  assert.match(styles, /#recommendationsSection:has\(\.bom-v1-historical-detail\)[^{]*\{[^}]+background: transparent/);
+  assert.match(styles, /@media\(max-width:700px\)[\s\S]+\.bom-v1-historical-rating-choices button \{ min-height:44px/);
   assert.doesNotMatch(styles, /\.bom-v1-historical-unverified/);
 });
 
@@ -83,7 +85,7 @@ test("provisional ratings use bridge RPCs, preserve zero and remain separately l
   assert.match(discover, /Array\.from\(\{length:11\}/);
   assert.match(discover, /data-historical-rating-value="\$\{rating\}"/);
   assert.match(discover, /Historical community/);
-  assert.match(discover, /Historical chart rating — recording not yet verified/);
+  assert.match(discover, /Historical chart entry — recording not yet verified/);
   assert.match(discover, /data-historical-rating-clear/);
   assert.doesNotMatch(discover, /\.from\("song_ratings"\)|canonical_recordings/);
 });

@@ -48,8 +48,9 @@ test("historical artwork is cached once, keyed only by chart ID, and never repla
   assert.match(app, /historicalCovers\.get\(Number\(entry\.id\)\)/);
   assert.doesNotMatch(app, /historicalCovers\.get\([^)]*(?:title|artist)/);
   assert.match(discover, /item\.artworkUrl\?`<img[^`]+loading="lazy"[^`]+onerror="this\.style\.display='none'/);
-  assert.match(styles, /\.bom-v1-historical-placeholder img \{[^}]+object-fit:cover/);
+  assert.match(discover, /class="bom-v1-album-artwork"[^>]+loading="lazy"/);
+  assert.match(styles, /\.bom-v1-album-artwork \{[^}]+object-fit: cover/);
   assert.match(html, /app\.js\?v=162/);
-  assert.match(html, /bom-discover\.js\?v=10&history=8/);
-  assert.match(html, /bom-foundation\.css\?v=43/);
+  assert.match(html, /bom-discover\.js\?v=11&history=9/);
+  assert.match(html, /bom-foundation\.css\?v=44/);
 });
