@@ -110,7 +110,7 @@ let historicalCoverAllowlistPromise = null;
 
 function loadHistoricalCoverAllowlist() {
   if (!historicalCoverAllowlistPromise) {
-    historicalCoverAllowlistPromise = fetch("historical-uk-number-ones-cover-art.json?v=1", { cache: "force-cache" })
+    historicalCoverAllowlistPromise = fetch("historical-uk-number-ones-cover-art.json?v=2", { cache: "force-cache" })
       .then(response => {
         if (!response.ok) throw new Error(`Historical artwork allowlist failed (${response.status})`);
         return response.json();
