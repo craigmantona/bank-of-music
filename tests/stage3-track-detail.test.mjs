@@ -98,8 +98,9 @@ test("song navigation paints before targeted album hydration and never blocks on
 test("shared song transition resets scroll before paint and suppresses repeated taps", () => {
   const transition = app.match(/async function openSongDetail\(song, trigger = null\) \{[\s\S]*?\n\}/)?.[0] || "";
   assert.match(transition, /pendingSongNavigationKey === key/);
-  assert.ok(transition.indexOf('showOnlySection("detailSection")') < transition.indexOf("await renderSelectedItem()"));
-  assert.ok(transition.indexOf("scrollSelectedSongToTop()") < transition.indexOf("await renderSelectedItem()"));
+  assert.ok(transition.indexOf('showOnlySection("detailSection")') < transition.indexOf("const renderPromise = renderSelectedItem()"));
+  assert.ok(transition.indexOf("focus({ preventScroll: true })") < transition.indexOf("await renderPromise"));
+  assert.ok(transition.indexOf("scrollSelectedDetailToTop()") < transition.indexOf("await renderPromise"));
   assert.match(transition, /scrollSelectedDetailToTop\(\)/);
   assert.doesNotMatch(transition, /requestAnimationFrame|setTimeout/);
   assert.match(transition, /focus\(\{ preventScroll: true \}\)/);
@@ -107,9 +108,18 @@ test("shared song transition resets scroll before paint and suppresses repeated 
   assert.match(app, /openSongDetail\(song, trigger\)/);
 });
 
+test("secondary song hydration cannot replace an explicit occurrence identity", () => {
+  assert.match(app, /canonicalSongId: song\.canonical_song_id \|\| song\.canonicalSongId/);
+  assert.match(selectedTrackBranch, /songId,\s*albumId: selectedItem\.albumId/);
+  assert.match(selectedTrackBranch, /if \(selectedItem === requestedItem && renderSelectedItem\.generation === renderGeneration\)/);
+});
+
 test("forward detail navigation resets the viewport without overriding browser-back restoration", () => {
   const reset = app.match(/function scrollSelectedDetailToTop\(\) \{[\s\S]*?\n\}/)?.[0] || "";
-  assert.match(reset, /window\.scrollTo\(\{ top: 0, left: 0, behavior: "auto" \}\)/);
+  assert.match(reset, /document\.scrollingElement \|\| document\.documentElement/);
+  assert.match(reset, /pageScroller\.scrollTop = 0/);
+  assert.match(reset, /void pageScroller\.scrollTop/);
+  assert.doesNotMatch(reset, /window\.scrollTo|setTimeout|requestAnimationFrame/);
   assert.doesNotMatch(app, /history\.scrollRestoration\s*=\s*"manual"/);
 });
 

@@ -391,11 +391,14 @@ let lastSongNavigationAt = 0;
 function scrollSelectedDetailToTop() {
   const detail = document.getElementById("detailSection");
   if (detail) detail.scrollTop = 0;
+  const pageScroller = document.scrollingElement || document.documentElement;
   const root = document.documentElement;
-  const previousScrollBehavior = root.style.scrollBehavior;
+  const previousBehavior = root.style.scrollBehavior;
   root.style.scrollBehavior = "auto";
-  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  root.style.scrollBehavior = previousScrollBehavior;
+  pageScroller.scrollTop = 0;
+  pageScroller.scrollLeft = 0;
+  void pageScroller.scrollTop;
+  root.style.scrollBehavior = previousBehavior;
 }
 
 function markSongNavigation(trigger, active) {
@@ -422,14 +425,15 @@ async function openSongDetail(song, trigger = null) {
     releaseTitle: song.releaseTitle || (song.album_id ? getAlbumNameById(song.album_id) : ""),
     savedSongId: songId || "",
     albumId: song.album_id || song.albumId || "",
+    canonicalSongId: song.canonical_song_id || song.canonicalSongId || "",
     coverUrl: song.cover_art_url || song.coverUrl || ""
   };
   showOnlySection("detailSection");
+  const renderPromise = renderSelectedItem();
+  selectedItemDetail.querySelector("h1")?.focus({ preventScroll: true });
   scrollSelectedDetailToTop();
   try {
-    await renderSelectedItem();
-    selectedItemDetail.querySelector("h1")?.focus({ preventScroll: true });
-    scrollSelectedDetailToTop();
+    await renderPromise;
   } finally {
     markSongNavigation(trigger, false);
     if (pendingSongNavigationKey === key) pendingSongNavigationKey = "";
@@ -5149,11 +5153,17 @@ ${item.versionCount > 1 ? `<div class="result-meta">+ ${item.versionCount - 1} o
   }
 
   function renderAvailableResults(groupedResults) {
-    globalSearchResults.dataset.results = JSON.stringify(groupedResults);
     if (isStageOnePresentation() && window.BOMSearchUI) {
-      globalSearchResults.innerHTML = window.BOMSearchUI.render(buildStageOneSearchModel(query, groupedResults));
+      const searchModel = buildStageOneSearchModel(query, groupedResults);
+      globalSearchResults.dataset.results = JSON.stringify({
+        artists: searchModel.artists,
+        albums: searchModel.albums,
+        songs: searchModel.songs
+      });
+      globalSearchResults.innerHTML = window.BOMSearchUI.render(searchModel);
       return;
     }
+    globalSearchResults.dataset.results = JSON.stringify(groupedResults);
     globalSearchResults.innerHTML = `
       <div class="search-tabs">
         <button class="search-tab active-search-tab" data-search-filter="all">All</button>
@@ -5584,11 +5594,19 @@ const songs = sortBySearchScore(
 }
 
 function buildStageOneSearchModel(query, groupedResults) {
-  const findAlbum = (item) => allAlbums.find((album) =>
-    (item.savedAlbumId && Number(album.id) === Number(item.savedAlbumId)) ||
-    (normaliseCompare(album.title) === normaliseCompare(item.title) &&
-      normaliseCompare(album.artist) === normaliseCompare(item.artist))
-  );
+  const findAlbum = (item) => {
+    const explicitId = Number(item.savedAlbumId || item.albumId || item.album_id || 0);
+    if (Number.isSafeInteger(explicitId) && explicitId > 0) {
+      return allAlbums.find((album) => Number(album.id) === explicitId) || null;
+    }
+    const byExternalId = item.externalId ? getSavedAlbumByExternalId(item.externalId) : null;
+    if (byExternalId) return byExternalId;
+    const matches = allAlbums.filter((album) =>
+      normaliseAlbumTitleKey(album.title) === normaliseAlbumTitleKey(item.title) &&
+      normaliseCompare(album.artist) === normaliseCompare(item.artist)
+    );
+    return matches.length === 1 ? matches[0] : null;
+  };
   const artists = groupedResults.artists.map((item, index) => ({ ...item, index, artworkUrl: "" }));
   const albums = groupedResults.albums.map((item, index) => {
     const saved = findAlbum(item);
@@ -5596,20 +5614,34 @@ function buildStageOneSearchModel(query, groupedResults) {
     return {
       ...item,
       index,
+      savedAlbumId: saved?.id || item.savedAlbumId || "",
+      albumId: saved?.id || item.albumId || "",
       artworkUrl: item.coverUrl || (saved ? getAlbumArtworkUrl(saved) : ""),
       year: String(saved?.original_release_date || saved?.release_date || item.releaseDate || "").match(/\b\d{4}\b/)?.[0] || "",
       community: community ? { average: community.average ?? community.avg, count: community.count } : null
     };
   });
   const songs = groupedResults.songs.map((item, index) => {
-    const savedAlbum = findAlbum({ title: item.releaseTitle, artist: item.artist });
-    const saved = getSavedSongByExternalId(item.externalId, { albumId: savedAlbum?.id }) ||
-      getSavedSongByTitleArtist(item.title, item.artist, { albumId: savedAlbum?.id });
-    const album = saved?.album_id ? allAlbums.find((row) => Number(row.id) === Number(saved.album_id)) : findAlbum({ title: item.releaseTitle, artist: item.artist });
+    const explicitSongId = Number(item.savedSongId || item.songId || 0);
+    const hasExplicitSongId = Number.isSafeInteger(explicitSongId) && explicitSongId > 0;
+    const savedAlbum = findAlbum(hasExplicitSongId && item.albumId
+      ? { savedAlbumId: item.albumId }
+      : { title: item.releaseTitle, artist: item.artist });
+    const saved = hasExplicitSongId
+      ? allSongs.find((song) => Number(song.id) === explicitSongId) || null
+      : getSavedSongByExternalId(item.externalId, { albumId: savedAlbum?.id }) ||
+        getSavedSongByTitleArtist(item.title, item.artist, { albumId: savedAlbum?.id });
+    const album = saved?.album_id
+      ? allAlbums.find((row) => Number(row.id) === Number(saved.album_id))
+      : savedAlbum;
     const community = item.community || (saved ? getSongAverage(saved.id) : null);
     return {
       ...item,
       index,
+      savedSongId: item.savedSongId || saved?.id || "",
+      songId: item.songId || saved?.id || "",
+      albumId: item.albumId || album?.id || "",
+      canonicalSongId: item.canonicalSongId || saved?.canonical_song_id || "",
       albumTitle: album?.title || item.releaseTitle || "",
       artworkUrl: item.coverUrl || (album ? getAlbumArtworkUrl(album) : ""),
       year: String(album?.original_release_date || album?.release_date || item.releaseDate || "").match(/\b\d{4}\b/)?.[0] || "",
@@ -12744,6 +12776,8 @@ if (tabButton) {
     const button = event.target.closest(".select-result-btn");
 
     if (!button) return;
+    event.preventDefault();
+    event.stopPropagation();
 
 
 
@@ -12775,10 +12809,10 @@ if (tabButton) {
 
 
     try {
-
-      await renderSelectedItem();
+      const renderPromise = renderSelectedItem();
       selectedItemDetail.querySelector("h1")?.focus({ preventScroll: true });
       scrollSelectedDetailToTop();
+      await renderPromise;
 
     } catch (error) {
 
