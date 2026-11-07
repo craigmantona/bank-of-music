@@ -11168,7 +11168,11 @@ async function openQuickRate(restoredState = null) {
             ? (isNumberOnes ? "Recording identity needs review" : "Catalogue match needs review")
             : (isNumberOnes ? "Recording not yet resolved in BOM" : "Not yet in the BOM catalogue");
           const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
-          return `<article class="bom-v1-quick-row is-unavailable"><span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span><div class="bom-v1-quick-thumb"><span aria-hidden="true">♪</span></div><div class="bom-v1-quick-track"><strong>${escapeHtml(entry.title)}</strong><span>${escapeHtml(entry.artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span><small>${reason}</small></div></article>`;
+          const content = `<strong>${escapeHtml(entry.title)}</strong><span>${escapeHtml(entry.artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span><small>${reason}</small>`;
+          const destination = isNumberOnes
+            ? `<button type="button" class="bom-v1-quick-track" data-quick-historical-id="${escapeHtml(entry.id)}" aria-label="Open historical details for ${escapeHtml(entry.title)} by ${escapeHtml(entry.artist)}">${content}</button>`
+            : `<div class="bom-v1-quick-track">${content}</div>`;
+          return `<article class="bom-v1-quick-row is-unavailable"><span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span><div class="bom-v1-quick-thumb"><span aria-hidden="true">♪</span></div>${destination}</article>`;
         }
         const song = entry.song;
         const recording = entry.canonicalRecording;
@@ -11283,6 +11287,16 @@ async function openQuickRate(restoredState = null) {
   });
 
   card.addEventListener("click", async event => {
+    const historicalButton = event.target.closest("[data-quick-historical-id]");
+    if (historicalButton) {
+      const entry = yearEntries.find(row => String(row.id) === historicalButton.dataset.quickHistoricalId);
+      if (!entry || busy) return;
+      const restoreState = {selectedCollection,selectedYear,selectedFilter,pickerDecade,expandedIdentity,lastNavigatedIdentity,scrollTop:dialog.scrollTop};
+      window.history.replaceState({...(window.history.state||{}),bomQuickRate:restoreState},"",window.location.href);
+      dialog.close();
+      window.BOMDiscoverUI?.openHistoricalDetail?.(entry,{origin:"quick-rate"});
+      return;
+    }
     const expandButton = event.target.closest("[data-quick-expand]");
     if (expandButton) {
       const identity = expandButton.closest("[data-quick-identity]")?.dataset.quickIdentity || "";

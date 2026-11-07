@@ -2,7 +2,7 @@
   "use strict";
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
   const anniversaries = new Set([10,20,25,30,40,50]);
-  let data, loading, dataRefreshComplete = false, index = 0, timer = 0, resumeAt = 0;
+  let data, loading, dataRefreshComplete = false, index = 0, timer = 0, resumeAt = 0, historicalSelectionPending = false;
 
   function londonParts(value = new Date()) {
     const p = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone:"Europe/London", year:"numeric", month:"2-digit", day:"2-digit" }).formatToParts(value).map(x => [x.type,x.value]));
@@ -71,14 +71,41 @@
     const communityCount = Number(item.communityRatingCount||0), communityAverage = Number(item.communityAverage);
     const community = communityCount>0&&Number.isFinite(communityAverage) ? `<span class="bom-v1-history-community"><strong>${communityAverage.toFixed(1)}</strong> / 10 · ${communityCount.toLocaleString()} community rating${communityCount===1?"":"s"}</span>` : `<span class="bom-v1-history-community is-empty">No community ratings yet</span>`;
     const personal = item.personalRating==null ? "Not rated by you" : `Your rating · ${item.personalRating} / 10`;
-    return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" ${destination?'tabindex="0" role="link"':""} data-${albums?"album":"track"}-id="${esc(destination||"")}">${historyArt(item,albums)}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span>${albums?`<small>${albumRating}</small>`:`<div class="bom-v1-history-ratings">${community}<small>${personal}</small></div>`}</div></article>`;
+    const historicalId = albums ? "" : ` data-history-id="${esc(item.id)}"`;
+    const unresolved = !albums&&!destination ? `<small class="bom-v1-history-match-state">Historical entry · recording not yet verified</small>` : "";
+    return `<article class="bom-v1-history-card${destination?"":" is-unlinked"}" tabindex="0" role="link" data-${albums?"album":"track"}-id="${esc(destination||"")}"${historicalId}>${historyArt(item,albums)}<div><p>${meta}</p><h3>${esc(item.title)}</h3><span>${esc(item.artist)}</span>${albums?`<small>${albumRating}</small>`:destination?`<div class="bom-v1-history-ratings">${community}<small>${personal}</small></div>`:unresolved}</div></article>`;
+  }
+  function historicalDetail(item) {
+    const weeks=Math.max(1,Number(item.weeks_at_number_one)||1), runs=Math.max(1,Number(item.number_one_runs)||1);
+    const firstDate=/^\d{4}-\d{2}-\d{2}$/.test(String(item.first_number_one_date||"")) ? new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(`${item.first_number_one_date}T00:00:00Z`)) : "Date unavailable";
+    return `<article class="bom-v1-historical-detail" data-historical-detail-id="${esc(item.id)}"><button class="bom-v1-history-back" data-bom-action="historical-detail-back">← Back to UK No.1s</button><div class="bom-v1-historical-hero"><div class="bom-v1-historical-placeholder" aria-hidden="true">♪<span>No. 1</span></div><div><p class="bom-v1-discover-eyebrow">UK No.1 historical entry</p><h1 tabindex="-1">${esc(item.title)}</h1><h2>${esc(item.artist)}</h2><p class="bom-v1-historical-chart-summary">${esc(item.chart_year)} · ${weeks} week${weeks===1?"":"s"} at No.1</p></div></div><section class="bom-v1-historical-facts" aria-label="Verified chart information"><h2>Chart history</h2><dl><div><dt>First reached No.1</dt><dd>${esc(firstDate)}</dd></div><div><dt>Weeks at No.1</dt><dd>${weeks}</dd></div><div><dt>Number-one runs</dt><dd>${runs}</dd></div></dl></section><aside class="bom-v1-historical-unverified"><strong>Recording not yet verified</strong><p>This chart entry has not yet been matched to a confirmed Bank of Music recording. Artwork, community ratings and personal rating controls will appear only after that identity is safely verified.</p></aside></article>`;
+  }
+  function resetHistoricalDetailScroll(root) {
+    const scroller=document.scrollingElement||document.documentElement;
+    const previous=scroller.style.scrollBehavior;
+    scroller.style.scrollBehavior="auto";
+    scroller.scrollTop=0;
+    void scroller.scrollTop;
+    scroller.style.scrollBehavior=previous;
+    root.querySelector("h1")?.focus({preventScroll:true});
+  }
+  function openHistoricalDetail(item,{origin="history"}={}) {
+    if(!item||historicalSelectionPending)return;
+    historicalSelectionPending=true;
+    const root=document.getElementById("recommendationsList");
+    window.BOMPresentationBridge?.showSection?.("recommendationsSection");
+    if(origin==="history")window.history.replaceState({...window.history.state,bomHistoricalList:true,bomHistoricalType:"number",scrollY:window.scrollY},"",window.location.href);
+    window.history.pushState({bomHistoricalDetail:true,historicalId:item.id},"",window.location.href);
+    root.innerHTML=historicalDetail(item);
+    resetHistoricalDetailScroll(root);
+    historicalSelectionPending=false;
   }
   function load() { if(!loading) loading=Promise.resolve(window.BOMPresentationBridge?.loadHistoricalDiscovery?.()).then(x=>data=x||{albums:[],numberOnes:[]}).catch(()=>data={albums:[],numberOnes:[]}); return loading; }
   function setCarousel(root) { root.querySelector(".bom-v1-discovery-track")?.style.setProperty("--bom-slide",index); root.querySelectorAll(".bom-v1-discovery-slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==index)); root.querySelectorAll("[data-bom-carousel-go]").forEach((x,i)=>x.setAttribute("aria-current",i===index)); }
   function move(root,delta,manual=true){index=(index+delta+3)%3;if(manual)resumeAt=Date.now()+14000;setCarousel(root);activate(root);}
   function activate(scope=document){clearTimeout(timer);const root=scope.querySelector?.("[data-bom-discovery-carousel]");if(!root)return;if(!root.dataset.ready){root.dataset.ready="1";let x=0;root.addEventListener("pointerdown",e=>x=e.clientX);root.addEventListener("pointerup",e=>{if(Math.abs(e.clientX-x)>45)move(root,e.clientX<x?1:-1)});root.addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight"].includes(e.key)){e.preventDefault();move(root,e.key==="ArrowRight"?1:-1)}});root.addEventListener("mouseenter",()=>clearTimeout(timer));root.addEventListener("focusin",()=>clearTimeout(timer));root.addEventListener("mouseleave",()=>activate(root.parentElement));root.addEventListener("focusout",()=>activate(root.parentElement));}if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&Date.now()>=resumeAt)timer=setTimeout(()=>move(root,1,false),7000);}
   function updateRowControls(root=document){root.querySelectorAll?.(".bom-v1-discover-row-shell").forEach(s=>{const r=s.querySelector(".bom-v1-discover-row"),p=s.querySelector(".is-previous"),n=s.querySelector(".is-next"),o=r.scrollWidth>r.clientWidth+2;p.hidden=!o||r.scrollLeft<=2;n.hidden=!o||r.scrollLeft+r.clientWidth>=r.scrollWidth-2;});activate(root);void load().then(()=>{if(!dataRefreshComplete&&root.querySelector?.("[data-bom-discovery-carousel]")){dataRefreshComplete=true;window.BOMPresentationBridge?.refreshDiscover?.();}});}
-  document.addEventListener("click",e=>{const scroll=e.target.closest("[data-bom-discover-scroll]");if(scroll){document.getElementById(scroll.getAttribute("aria-controls"))?.scrollBy({left:+scroll.dataset.bomDiscoverScroll*500,behavior:"smooth"});return;}const car=e.target.closest("[data-bom-discovery-carousel]"),go=e.target.closest("[data-bom-carousel-go]");if(car&&go){index=+go.dataset.bomCarouselGo;resumeAt=Date.now()+14000;setCarousel(car);activate(car.parentElement);return;}if(car&&e.target.closest("[data-bom-carousel-next]")){move(car,1);return;}const action=e.target.closest("[data-bom-action]")?.dataset.bomAction;if(action==="quick-rate")window.BOMPresentationBridge?.showQuickRate();if(action==="discover-search")window.BOMPresentationBridge?.showSearch();if(action==="history-back"||action==="discover-retry")window.BOMPresentationBridge?.refreshDiscover();if(action==="released-week"||action==="number-ones-week")document.getElementById("recommendationsList").innerHTML=history(action==="released-week"?"released":"number");const a=e.target.closest(".bom-v1-history [data-album-id]");if(a)void window.BOMPresentationBridge?.openAlbumById(a.dataset.albumId);const t=e.target.closest(".bom-v1-history [data-track-id]");if(t?.dataset.trackId)void window.BOMPresentationBridge?.openTrackById(t.dataset.trackId,t);});
+  document.addEventListener("click",e=>{const scroll=e.target.closest("[data-bom-discover-scroll]");if(scroll){document.getElementById(scroll.getAttribute("aria-controls"))?.scrollBy({left:+scroll.dataset.bomDiscoverScroll*500,behavior:"smooth"});return;}const car=e.target.closest("[data-bom-discovery-carousel]"),go=e.target.closest("[data-bom-carousel-go]");if(car&&go){index=+go.dataset.bomCarouselGo;resumeAt=Date.now()+14000;setCarousel(car);activate(car.parentElement);return;}if(car&&e.target.closest("[data-bom-carousel-next]")){move(car,1);return;}const action=e.target.closest("[data-bom-action]")?.dataset.bomAction;if(action==="quick-rate")window.BOMPresentationBridge?.showQuickRate();if(action==="discover-search")window.BOMPresentationBridge?.showSearch();if(action==="history-back"||action==="discover-retry")window.BOMPresentationBridge?.refreshDiscover();if(action==="historical-detail-back"){window.history.back();return;}if(action==="released-week"||action==="number-ones-week")document.getElementById("recommendationsList").innerHTML=history(action==="released-week"?"released":"number");const a=e.target.closest(".bom-v1-history [data-album-id]");if(a)void window.BOMPresentationBridge?.openAlbumById(a.dataset.albumId);const t=e.target.closest(".bom-v1-history [data-track-id]");if(t?.dataset.trackId){void window.BOMPresentationBridge?.openTrackById(t.dataset.trackId,t);return;}const historical=e.target.closest(".bom-v1-history [data-history-id]");if(historical){const item=data?.numberOnes?.find(row=>String(row.id)===historical.dataset.historyId);openHistoricalDetail(item);}});
   document.addEventListener("keydown",e=>{const card=e.target.closest(".bom-v1-history-card,.bom-v1-music-card");if(card&&["Enter"," "].includes(e.key)){e.preventDefault();card.click();}});
   document.addEventListener("click", event => {
     const album = event.target.closest(".bom-v1-discover .bom-v1-music-card");
@@ -87,7 +114,8 @@
     window.history.pushState({ bomDiscoverDestination: true }, "", window.location.href);
   }, true);
   document.addEventListener("click",e=>{const a=e.target.closest("[data-bom-discover-artist]");if(a){e.preventDefault();e.stopPropagation();void window.BOMPresentationBridge?.openArtist(a.dataset.bomDiscoverArtist);}},true);
+  window.addEventListener("popstate",event=>{if(!event.state?.bomHistoricalList)return;const root=document.getElementById("recommendationsList");root.innerHTML=history(event.state.bomHistoricalType||"number");window.requestAnimationFrame(()=>window.scrollTo({top:Number(event.state.scrollY||0),behavior:"auto"}));});
   const skeleton=()=>`<article class="bom-v1-discover" aria-busy="true"><header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Finding records for you…</p></div></header></article>`;
   window.BOMDiscoverHelpers=Object.freeze({currentLondonWeek,occurrenceInWeek,chartCoversWeek,releases,numberOnes});
-  window.BOMDiscoverUI=Object.freeze({render,renderLoading:skeleton,renderError:()=>`<article class="bom-v1-discover">${window.BOMUI.SectionState({title:"Discover couldn’t load.",actionLabel:"Try again",action:"discover-retry"})}</article>`,updateRowControls});
+  window.BOMDiscoverUI=Object.freeze({render,renderLoading:skeleton,renderError:()=>`<article class="bom-v1-discover">${window.BOMUI.SectionState({title:"Discover couldn’t load.",actionLabel:"Try again",action:"discover-retry"})}</article>`,updateRowControls,openHistoricalDetail});
 })();
