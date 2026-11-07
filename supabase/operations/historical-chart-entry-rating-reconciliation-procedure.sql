@@ -1,0 +1,20 @@
+-- FUTURE REVIEW ONLY. Do not run during Phase 1.
+-- This is the required decision procedure for an eventual verified link.
+-- It intentionally contains no executable migration or data-changing SQL.
+
+-- 1. Begin one short transaction and lock the quick_rate_collection_tracks row
+--    FOR UPDATE. This is the same lock taken by provisional rating writes.
+-- 2. Revalidate the verified song occurrence and canonical recording identity.
+-- 3. For each provisional rating on the chart entry, inspect the user's existing
+--    song_ratings row for the verified canonical ID:
+--      a. No canonical row: copy the provisional value once, then audit as copied.
+--      b. Same canonical value: do not insert; audit as already_equal.
+--      c. Different canonical value: do not overwrite either value; audit as
+--         conflict_manual_review.
+-- 4. Link the historical entry only after the identity guards pass. The active
+--    summary RPC automatically excludes it because match_status is no longer
+--    unresolved and/or song_id is populated.
+-- 5. Retain provisional rows as rollback evidence. Deletion or archival requires
+--    separate approval after reconciliation audit counts and hashes are checked.
+-- 6. Assert canonical rating counts and hashes before commit; roll back the whole
+--    entry reconciliation on any mismatch.
