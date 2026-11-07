@@ -12,7 +12,9 @@ for file in \
   style.css \
   bom-foundation.css \
   app.js \
+  artist-easter-eggs.js \
   config.js \
+  historical-uk-number-ones-cover-art.json \
   logo.jpeg \
   bom-admin-catalogue.js \
   bom-album.js \
@@ -33,6 +35,8 @@ do
 done
 
 cp "$repo_dir/assets/bom-header-logo.png" "$output_dir/assets/bom-header-logo.png"
+cp "$repo_dir/assets/david-bowie-lightning.png" "$output_dir/assets/david-bowie-lightning.png"
+cp "$repo_dir/assets/rolling-stones-easter-egg.png" "$output_dir/assets/rolling-stones-easter-egg.png"
 cp "$repo_dir/assets/fonts/Manrope-LICENSE.txt" "$output_dir/assets/fonts/Manrope-LICENSE.txt"
 cp "$repo_dir/assets/fonts/manrope-regular.ttf" "$output_dir/assets/fonts/manrope-regular.ttf"
 cp "$repo_dir/assets/fonts/manrope-semibold.ttf" "$output_dir/assets/fonts/manrope-semibold.ttf"

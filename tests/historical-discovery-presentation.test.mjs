@@ -38,7 +38,7 @@ test("historical cards render one artwork surface and a separate No. 1 badge", (
 });
 
 test("failed asynchronous artwork hides the image without revealing a second surface early", () => {
-  assert.match(discover, /this\.hidden=true;this\.nextElementSibling\.hidden=false/);
+  assert.match(discover, /this\.style\.display='none';this\.nextElementSibling\.hidden=false/);
   assert.match(styles, /\.bom-v1-discovery-art-fallback\[hidden\] \{ display:none !important; \}/);
 });
 

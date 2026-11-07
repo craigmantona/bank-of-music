@@ -27,7 +27,11 @@ test("Cloudflare Pages publishes only the allowlisted static website", async () 
   assert(relative.includes("config.js"));
   assert(relative.includes("bom-discover.js"));
   assert(relative.includes("bom-foundation.css"));
+  assert(relative.includes("historical-uk-number-ones-cover-art.json"));
+  assert(relative.includes("artist-easter-eggs.js"));
   assert(relative.includes("assets/bom-header-logo.png"));
+  assert(relative.includes("assets/david-bowie-lightning.png"));
+  assert(relative.includes("assets/rolling-stones-easter-egg.png"));
   assert(relative.includes("assets/fonts/manrope-regular.ttf"));
   for (const file of files) assert((await stat(file)).size < limit, `${path.relative(output, file)} exceeds 25 MiB`);
 });
@@ -38,5 +42,5 @@ test("the generated publication matches the approved source assets", async () =>
     const relative = path.relative(output, published);
     assert.deepEqual(await readFile(published), await readFile(path.join(root, relative)), `${relative} is stale`);
   }
-  assert.match(await readFile(path.join(output, "index.html"), "utf8"), /bom-foundation\.css\?v=39&autocomplete=1/);
+  assert.match(await readFile(path.join(output, "index.html"), "utf8"), /bom-foundation\.css\?v=42&autocomplete=1/);
 });

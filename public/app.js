@@ -106,6 +106,32 @@ const releaseGroupCoverCache = {};
 
 const albumTrackCache = {};
 
+let historicalCoverAllowlistPromise = null;
+
+function loadHistoricalCoverAllowlist() {
+  if (!historicalCoverAllowlistPromise) {
+    historicalCoverAllowlistPromise = fetch("historical-uk-number-ones-cover-art.json?v=1", { cache: "force-cache" })
+      .then(response => {
+        if (!response.ok) throw new Error(`Historical artwork allowlist failed (${response.status})`);
+        return response.json();
+      })
+      .then(payload => {
+        const covers = new Map();
+        Object.entries(payload?.entries || {}).forEach(([chartEntryId, entry]) => {
+          const id = Number(chartEntryId);
+          const releaseGroupMbid = String(entry?.releaseGroupMbid || "").toLowerCase();
+          const coverUrl = String(entry?.coverUrl || "");
+          if (!Number.isSafeInteger(id) || id <= 0 || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(releaseGroupMbid)) return;
+          if (coverUrl !== `https://coverartarchive.org/release-group/${releaseGroupMbid}/front-500`) return;
+          covers.set(id, coverUrl);
+        });
+        return covers;
+      })
+      .catch(() => new Map());
+  }
+  return historicalCoverAllowlistPromise;
+}
+
 let currentUser = null;
 let missingArtistArtworkRows = null;
 let missingArtistArtworkFilter = "all";
@@ -690,6 +716,7 @@ window.BOMPresentationBridge = Object.freeze({
   loadHistoricalChartRatingSummaries,
   saveHistoricalChartEntryRating,
   loadHistoricalDiscovery: async () => {
+    const historicalCoversPromise = loadHistoricalCoverAllowlist();
     const rows = [];
     for (let offset = 0; ; offset += 1000) {
       const result = await supabaseClient.from("quick_rate_collection_tracks")
@@ -708,12 +735,13 @@ window.BOMPresentationBridge = Object.freeze({
     const recordingIds = [...new Set(matchingRows.map((row) => String(row.musicbrainz_recording_id || "").trim()).filter(Boolean))];
     const historicalTitles = [...new Set(matchingRows.map((row) => String(row.title || "").trim()).filter(Boolean))];
     const unresolvedChartIds = matchingRows.filter(row => row.match_status === "unresolved" && !row.song_id).map(row => Number(row.id));
-    const [directSongs, canonicalSongs, recordingSongs, titleSongs, provisionalSummaries] = await Promise.all([
+    const [directSongs, canonicalSongs, recordingSongs, titleSongs, provisionalSummaries, historicalCovers] = await Promise.all([
       fetchRowsInChunks("songs", "id", songIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
       fetchRowsInChunks("songs", "canonical_song_id", canonicalIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
       fetchRowsInChunks("songs", "external_id", recordingIds, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
       fetchRowsInChunks("songs", "title", historicalTitles, "id,title,artist,album_id,external_id,canonical_song_id,is_deleted"),
-      loadHistoricalChartRatingSummaries(unresolvedChartIds).catch(() => new Map())
+      loadHistoricalChartRatingSummaries(unresolvedChartIds).catch(() => new Map()),
+      historicalCoversPromise
     ]);
     const songs = mergeRowsById(directSongs, [...canonicalSongs, ...recordingSongs, ...titleSongs]).filter((song) => !song.is_deleted);
     allSongs = mergeRowsById(allSongs, songs);
@@ -789,7 +817,7 @@ window.BOMPresentationBridge = Object.freeze({
         return {
           ...row,
           resolvedSongId: song?.id || null,
-          artworkUrl: artworkForSong(song),
+          artworkUrl: artworkForSong(song) || historicalCovers.get(Number(row.id)) || "",
           communityAverage: community?.avg ?? null,
           communityRatingCount: Number(community?.count || 0),
           personalRating: ratingByCanonicalId.get(canonicalId) ?? ratingBySongId.get(Number(song?.id)) ?? null,
@@ -11206,7 +11234,7 @@ async function openQuickRate(restoredState = null) {
   let selectedFilter = restoredState?.selectedFilter === "unrated" ? "unrated" : "all";
   let pickerDecade = restoredState?.pickerDecade ?? null;
   let expandedIdentity = restoredState?.expandedIdentity || "";
-  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], busy = false;
+  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], historicalCovers = new Map(), busy = false;
   let lastNavigatedIdentity = restoredState?.lastNavigatedIdentity || null;
   let restorePositionPending = Boolean(restoredState);
   dialog.addEventListener("close", () => dialog.remove());
@@ -11271,7 +11299,8 @@ async function openQuickRate(restoredState = null) {
           const destination = isNumberOnes
             ? `<button type="button" class="bom-v1-quick-track" data-quick-historical-id="${escapeHtml(entry.id)}" aria-label="Open historical details for ${escapeHtml(entry.title)} by ${escapeHtml(entry.artist)}">${content}</button>`
             : `<div class="bom-v1-quick-track">${content}</div>`;
-          return `<article class="bom-v1-quick-row is-unavailable"><span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span><div class="bom-v1-quick-thumb"><span aria-hidden="true">♪</span></div>${destination}</article>`;
+          const historicalArtwork = historicalCovers.get(Number(entry.id)) || "";
+          return `<article class="bom-v1-quick-row is-unavailable"><span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span><div class="bom-v1-quick-thumb">${historicalArtwork ? `<img src="${escapeHtml(historicalArtwork)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">` : ""}<span aria-hidden="true">♪</span></div>${destination}</article>`;
         }
         const song = entry.song;
         const recording = entry.canonicalRecording;
@@ -11481,9 +11510,15 @@ async function openQuickRate(restoredState = null) {
         fetchQuickRateRows("albums", "*"),
         fetchQuickRateRows("canonical_recordings", "*"),
         fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
-        fetchQuickRateRows("quick_rate_collection_tracks", "*")
+        fetchQuickRateRows("quick_rate_collection_tracks", "*"),
+        loadHistoricalCoverAllowlist()
       ]);
     [songs, albums, canonicalRecordings, , importedEntries] = loaded;
+    historicalCovers = cachedRestore ? await loadHistoricalCoverAllowlist() : loaded[5];
+    importedEntries = importedEntries.map(entry => ({
+      ...entry,
+      artworkUrl: entry.artworkUrl || historicalCovers.get(Number(entry.id)) || ""
+    }));
     artistIdentities = cachedRestore?.artistIdentities || [];
     allCanonicalRecordings = canonicalRecordings;
     const ratings = loaded[3];
