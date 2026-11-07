@@ -401,6 +401,16 @@ function scrollSelectedDetailToTop() {
   root.style.scrollBehavior = previousBehavior;
 }
 
+function triggerSelectedArtistEasterEgg(item = selectedItem) {
+  if (!item || (item.type !== "album" && item.type !== "song")) return false;
+  const albumId = Number(item.albumId || item.savedAlbumId || 0);
+  const album = albumId ? allAlbums.find((row) => Number(row.id) === albumId) : null;
+  return window.BOMArtistEasterEggs?.play({
+    artistId: item.artistId || item.musicbrainz_artist_id || album?.musicbrainz_artist_id || album?.artist_id || "",
+    artistName: item.artist || album?.artist || ""
+  }) || false;
+}
+
 function markSongNavigation(trigger, active) {
   if (!trigger) return;
   trigger.classList.toggle("is-song-navigating", active);
@@ -428,6 +438,7 @@ async function openSongDetail(song, trigger = null) {
     canonicalSongId: song.canonical_song_id || song.canonicalSongId || "",
     coverUrl: song.cover_art_url || song.coverUrl || ""
   };
+  triggerSelectedArtistEasterEgg(selectedItem);
   showOnlySection("detailSection");
   const renderPromise = renderSelectedItem();
   selectedItemDetail.querySelector("h1")?.focus({ preventScroll: true });
@@ -553,6 +564,7 @@ window.BOMPresentationBridge = Object.freeze({
   openSearchSuggestion: async (item) => {
     if (item.selection) {
       selectedItem = item.selection;
+      triggerSelectedArtistEasterEgg(selectedItem);
       showOnlySection("detailSection");
       await renderSelectedItem();
       return;
@@ -568,6 +580,7 @@ window.BOMPresentationBridge = Object.freeze({
       releaseDate: (item.kind === "Album" ? row.original_release_date : item.album?.original_release_date) || row.release_date || "", albumId: item.kind === "Album" ? row.id : row.album_id,
       ...(item.kind === "Album" ? { savedAlbumId: row.id } : { savedSongId: row.id })
     };
+    triggerSelectedArtistEasterEgg(selectedItem);
     showOnlySection("detailSection");
     await renderSelectedItem();
   },
@@ -4404,6 +4417,7 @@ async function openStageOneRatingsAlbum(albumId) {
   const album = allAlbums.find((row) => Number(row.id) === Number(albumId));
   if (!album) return;
   selectedItem = { type: "album", title: album.title, artist: album.artist, externalId: album.external_id || "", releaseDate: album.original_release_date || album.release_date || "", coverUrl: getAlbumArtworkUrl(album), savedAlbumId: album.id, albumId: album.id };
+  triggerSelectedArtistEasterEgg(selectedItem);
   showOnlySection("detailSection");
   await renderSelectedItem();
 }
@@ -5532,6 +5546,7 @@ const songs = sortBySearchScore(
     if (forceOpenBest && best && best.score >= 95) {
 
       selectedItem = best.item;
+      triggerSelectedArtistEasterEgg(selectedItem);
 
       setMessage(globalSearchMessage, "");
 
@@ -12388,6 +12403,7 @@ if (albumsList) {
       savedAlbumId: album.id
     };
 
+    triggerSelectedArtistEasterEgg(selectedItem);
     showOnlySection("detailSection");
     await renderSelectedItem();
 
@@ -12792,6 +12808,7 @@ if (tabButton) {
 
 
     selectedItem = groupedResults[group][index];
+    triggerSelectedArtistEasterEgg(selectedItem);
 
 
 
@@ -13439,6 +13456,7 @@ if (
         albumId: album.id
       };
 
+      triggerSelectedArtistEasterEgg(selectedItem);
       showOnlySection("detailSection");
       scrollSelectedDetailToTop();
       await renderSelectedItem();
@@ -13485,6 +13503,7 @@ if (
         albumId: artistAlbum.savedAlbumId || artistAlbum.localAlbumId || ""
       };
 
+      triggerSelectedArtistEasterEgg(selectedItem);
       showOnlySection("detailSection");
       scrollSelectedDetailToTop();
       await renderSelectedItem();
@@ -13546,6 +13565,7 @@ if (openAlbumBtn) {
     albumId: album.id
   };
 
+  triggerSelectedArtistEasterEgg(selectedItem);
   showOnlySection("detailSection");
   scrollSelectedDetailToTop();
   await renderSelectedItem();
@@ -13585,6 +13605,7 @@ if (songAlbumLink) {
     albumId: album.id
   };
 
+  triggerSelectedArtistEasterEgg(selectedItem);
   showOnlySection("detailSection");
   scrollSelectedDetailToTop();
   await renderSelectedItem();
@@ -13703,6 +13724,7 @@ if (profileModal) {
     };
 
     hideUserProfile();
+    triggerSelectedArtistEasterEgg(selectedItem);
     showOnlySection("detailSection");
 
     await renderSelectedItem();
@@ -15863,6 +15885,7 @@ async function swipeToAdjacentAlbum(direction) {
   const safeIndex = currentIndex >= 0 ? currentIndex : 0;
   const nextIndex = (safeIndex + direction + albums.length) % albums.length;
   selectedItem = { ...albums[nextIndex], type: "album" };
+  triggerSelectedArtistEasterEgg(selectedItem);
   await renderSelectedItem();
   showOnlySection("detailSection");
 }
