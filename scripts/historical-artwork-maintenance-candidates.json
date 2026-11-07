@@ -1,0 +1,767 @@
+{
+  "schemaVersion": 1,
+  "sourceAuditDate": "2026-11-07",
+  "entries": {
+    "24": {
+      "chartYear": 1991,
+      "artist": "Hale and Pace and the Stonkers",
+      "title": "The Stonk",
+      "releaseGroupMbid": "059c64d6-6bac-37ef-ad33-6c1692b79594",
+      "approvedReleaseMbids": [
+        "0a0b2955-b35b-454c-894f-23a61a3382a9",
+        "1c96e8b4-43fc-4dc5-b8ca-83aa4afea9e3",
+        "2ce684a9-f440-4260-9478-7b1fd3daacd3",
+        "9e04a89f-23bf-404d-86c5-fed5148826f5"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "48": {
+      "chartYear": 1993,
+      "artist": "Ace of Base",
+      "title": "All That She Wants",
+      "releaseGroupMbid": "f1668a87-e232-3676-b0fe-fd71e84ff793",
+      "approvedReleaseMbids": [
+        "81d71de9-e59b-4e63-8bdf-c8eee806b5c2"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "154": {
+      "chartYear": 1998,
+      "artist": "Melanie B featuring Missy Elliott",
+      "title": "I Want You Back",
+      "releaseGroupMbid": "603773fc-611d-375c-9846-c98266c36b53",
+      "approvedReleaseMbids": [
+        "69866139-9b18-439e-af1f-1dea5a13ac0b"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "181": {
+      "chartYear": 1999,
+      "artist": "Ricky Martin",
+      "title": "Livin' la Vida Loca",
+      "releaseGroupMbid": "f5bff9ae-e0a8-3372-b7b0-2c9cb5528722",
+      "approvedReleaseMbids": [
+        "0809c236-da41-4e77-889f-945deecd1068",
+        "148b663b-810a-46e2-a2a6-16bf153ae636",
+        "19fcc67b-dd0e-45e5-8081-f38e75c412c6",
+        "2d2080a4-eae9-4384-874e-ed36c7c9ed88",
+        "5cb43bc8-dde1-4cd0-a93c-f0a3c609849e",
+        "6aabfdc3-3997-4747-a503-ad9d0b3c7097",
+        "c7937168-38dd-412c-9344-3f327c08bd21",
+        "d90647c3-01a7-4674-8a25-ba78f990e790",
+        "f47a899b-f3f5-4fb5-8c2d-b15bb9337c13"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "187": {
+      "chartYear": 1999,
+      "artist": "Eiffel 65",
+      "title": "Blue (Da Ba Dee)",
+      "releaseGroupMbid": "9eb4d6dd-ac77-3f10-8459-7948471d73e8",
+      "approvedReleaseMbids": [
+        "da748917-a552-4b47-82d6-00b81b9d2762"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "193": {
+      "chartYear": 1999,
+      "artist": "Cliff Richard",
+      "title": "The Millennium Prayer",
+      "releaseGroupMbid": "d88baece-ef7a-3682-b1b1-68705ae3aa58",
+      "approvedReleaseMbids": [
+        "72838b20-29fb-4517-94bf-816dd7957cf0",
+        "ea4d10b6-0023-44a3-b415-0a591632fcc6"
+      ],
+      "priorStatus": "cover_art_inaccessible"
+    },
+    "439": {
+      "chartYear": 1983,
+      "artist": "Men at Work",
+      "title": "Down Under",
+      "releaseGroupMbid": "97f26f0a-5741-4eed-92a7-ae90aa68d0b2",
+      "approvedReleaseMbids": [
+        "45bd8b05-1954-459e-9a69-14779bb3d456"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "442": {
+      "chartYear": 1983,
+      "artist": "Bonnie Tyler",
+      "title": "Total Eclipse of the Heart",
+      "releaseGroupMbid": "80965f73-e448-4966-9ff1-b28a912f61b2",
+      "approvedReleaseMbids": [
+        "76bca47f-6cf2-40ab-a975-d93ee629349d"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "470": {
+      "chartYear": 1985,
+      "artist": "The Crowd",
+      "title": "You'll Never Walk Alone",
+      "releaseGroupMbid": "30aa63d6-be79-44e2-a8f6-79093787467f",
+      "approvedReleaseMbids": [
+        "30925060-c9e4-415c-8af1-a9e4c3832054"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "486": {
+      "chartYear": 1986,
+      "artist": "Madonna",
+      "title": "Papa Don't Preach",
+      "releaseGroupMbid": "da8275a0-c68a-3c9f-b560-f3cafc543d22",
+      "approvedReleaseMbids": [
+        "aa90fd00-e4d0-48a4-a169-813fd112e19c",
+        "b03043fe-52e6-49b9-90da-8e1ea15d78cd",
+        "f4b78427-da70-4788-b0c8-a6f8be6abcc5"
+      ],
+      "priorStatus": "cover_art_inaccessible"
+    },
+    "507": {
+      "chartYear": 1987,
+      "artist": "Michael Jackson and Siedah Garrett",
+      "title": "I Just Can't Stop Loving You",
+      "releaseGroupMbid": "aed968a1-511d-4ae7-9e23-e2784fd301d1",
+      "approvedReleaseMbids": [
+        "422259af-4125-4b83-9672-3cea5b647860"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "543": {
+      "chartYear": 1989,
+      "artist": "Jive Bunny and the Mastermixers",
+      "title": "Let's Party",
+      "releaseGroupMbid": "70f884b7-592e-381c-8c2f-106cdd093663",
+      "approvedReleaseMbids": [
+        "b231ebc9-a2b8-4b83-b570-6a02485ce7d9",
+        "c88dcc2b-2ee9-453d-ae85-49a2759871b9"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "715": {
+      "chartYear": 1970,
+      "artist": "Matthews Southern Comfort",
+      "title": "Woodstock",
+      "releaseGroupMbid": "5111409e-64b6-3ad5-bba4-d80eeb687b60",
+      "approvedReleaseMbids": [
+        "5bd4c616-6ac3-483f-a8b5-4888b0134a75"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "738": {
+      "chartYear": 1972,
+      "artist": "David Cassidy",
+      "title": "How Can I Be Sure",
+      "releaseGroupMbid": "0356e9b5-ea15-44ae-82b7-e62000c26a90",
+      "approvedReleaseMbids": [
+        "45f5db36-f773-4354-bad9-190ba3727a34"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "752": {
+      "chartYear": 1973,
+      "artist": "Gary Glitter",
+      "title": "I'm the Leader of the Gang (I Am)",
+      "releaseGroupMbid": "c152a0de-1594-394b-86e7-dfd4a5c4b4e3",
+      "approvedReleaseMbids": [
+        "f4f36f0e-b705-4eb9-b09b-c18428e5b3af"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "768": {
+      "chartYear": 1974,
+      "artist": "Charles Aznavour",
+      "title": "She",
+      "releaseGroupMbid": "09904db7-481f-4f38-8104-67e72753c693",
+      "approvedReleaseMbids": [
+        "b7c4b2cd-894a-4c95-893b-301a2040c3f8"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "781": {
+      "chartYear": 1975,
+      "artist": "Pilot",
+      "title": "January",
+      "releaseGroupMbid": "660dcb7e-98b4-36c3-bd76-6b59297b8451",
+      "approvedReleaseMbids": [
+        "afd8cbac-92f6-4685-83a1-fe43c8b6507d"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "796": {
+      "chartYear": 1975,
+      "artist": "Billy Connolly",
+      "title": "D.I.V.O.R.C.E.",
+      "releaseGroupMbid": "141411dc-142d-4477-b920-1811882acdc7",
+      "approvedReleaseMbids": [
+        "8ceda182-63f0-4f30-92a5-d6ee301c2c7b"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "828": {
+      "chartYear": 1978,
+      "artist": "Bee Gees",
+      "title": "Night Fever",
+      "releaseGroupMbid": "c8cf8fa2-ebaf-4b24-a12a-2dee7c1e9de9",
+      "approvedReleaseMbids": [
+        "0d1ff137-9a24-425c-838b-5f8e396a54ff",
+        "9228448e-79ba-467b-9b54-fbc3a98f4a1d"
+      ],
+      "priorStatus": "cover_art_inaccessible"
+    },
+    "1009": {
+      "chartYear": 1960,
+      "artist": "Cliff Richard and the Shadows",
+      "title": "Please Don't Tease",
+      "releaseGroupMbid": "07876972-fa34-4291-b541-3bd035667570",
+      "approvedReleaseMbids": [
+        "d83e0d0d-01bc-4d00-bc7d-3d0ef4835a17"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1015": {
+      "chartYear": 1960,
+      "artist": "Cliff Richard and the Shadows",
+      "title": "I Love You",
+      "releaseGroupMbid": "70670dc2-e825-3092-9d19-8e0e62f4cfd2",
+      "approvedReleaseMbids": [
+        "76b85a66-b3a2-419c-bb85-1e61d226355e"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1022": {
+      "chartYear": 1961,
+      "artist": "The Temperance Seven",
+      "title": "You're Driving Me Crazy",
+      "releaseGroupMbid": "ef7d5c2a-6bdf-4aed-86fd-25a8ae91eff9",
+      "approvedReleaseMbids": [
+        "e7ed3c8f-3f2e-4096-908e-970b3df1fc4a"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1026": {
+      "chartYear": 1961,
+      "artist": "Eden Kane",
+      "title": "Well I Ask You",
+      "releaseGroupMbid": "550916f0-94e0-4133-a3f4-040d0d5b1cf7",
+      "approvedReleaseMbids": [
+        "ac3b97f1-e4ca-4cb5-871d-6c7cd00b2b69"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1030": {
+      "chartYear": 1961,
+      "artist": "The Highwaymen",
+      "title": "Michael",
+      "releaseGroupMbid": "dc094c4f-1ae3-4e3f-bf02-3adb0b4d5de9",
+      "approvedReleaseMbids": [
+        "1e8e63fb-85bd-4084-8a7d-e617da98b6ec"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1033": {
+      "chartYear": 1961,
+      "artist": "Danny Williams",
+      "title": "Moon River",
+      "releaseGroupMbid": "0c608f07-1cf0-49b4-8189-d23733e930aa",
+      "approvedReleaseMbids": [
+        "67231039-f5a1-4c62-b296-4ce3e174ab9e"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1035": {
+      "chartYear": 1962,
+      "artist": "B. Bumble and the Stingers",
+      "title": "Nut Rocker",
+      "releaseGroupMbid": "5d10b695-ba67-4d44-9b0b-2e0902c26280",
+      "approvedReleaseMbids": [
+        "faf4e719-8ae2-4abd-96b6-32f24d53ea32"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1042": {
+      "chartYear": 1962,
+      "artist": "Frank Ifield",
+      "title": "Lovesick Blues",
+      "releaseGroupMbid": "f75e72b9-6c47-3f8f-800d-e6fde110736e",
+      "approvedReleaseMbids": [
+        "8346cfcd-eb5c-40df-b7c0-2a863867cad1"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1045": {
+      "chartYear": 1963,
+      "artist": "Jet Harris and Tony Meehan",
+      "title": "Diamonds",
+      "releaseGroupMbid": "d4fa34a4-9ea4-43f1-a823-8390e2b1369d",
+      "approvedReleaseMbids": [
+        "d841216d-43a8-482c-a5dc-0b6e44afd771"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1066": {
+      "chartYear": 1964,
+      "artist": "Peter and Gordon",
+      "title": "A World Without Love",
+      "releaseGroupMbid": "e920932e-b1d8-39d6-be60-7c0edc112386",
+      "approvedReleaseMbids": [
+        "adf88434-a9f4-4a4b-b7f5-6758c1b9beee"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1085": {
+      "chartYear": 1965,
+      "artist": "The Seekers",
+      "title": "I'll Never Find Another You",
+      "releaseGroupMbid": "39e32d3f-6ce9-325f-ab81-59a35c28b6b0",
+      "approvedReleaseMbids": [
+        "42b36187-299d-4d9a-9e7f-dae05759d4c8"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1089": {
+      "chartYear": 1965,
+      "artist": "Cliff Richard",
+      "title": "The Minute You're Gone",
+      "releaseGroupMbid": "ff8b9a09-f22a-4da5-87dc-fa1218749545",
+      "approvedReleaseMbids": [
+        "7204c7cc-e7de-4b50-ad09-4e57460ab70a"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1101": {
+      "chartYear": 1966,
+      "artist": "The Overlanders",
+      "title": "Michelle",
+      "releaseGroupMbid": "f7985d94-caa7-414e-9a23-91569458d803",
+      "approvedReleaseMbids": [
+        "f925602e-3bcc-46e6-9f17-20eff5553f3a"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1145": {
+      "chartYear": 1968,
+      "artist": "Bee Gees",
+      "title": "I've Gotta Get a Message to You",
+      "releaseGroupMbid": "8e16747f-90fe-4f66-9f33-a4a10e6055e9",
+      "approvedReleaseMbids": [
+        "e2c34a13-834a-4089-830f-c0354ade4b9f"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1159": {
+      "chartYear": 1969,
+      "artist": "Tommy Roe",
+      "title": "Dizzy",
+      "releaseGroupMbid": "8dfa9da3-7dc6-382b-82ca-c4df53913f41",
+      "approvedReleaseMbids": [
+        "0b7f350b-e0c5-4700-aa5e-332efbc19aa1"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1165": {
+      "chartYear": 1969,
+      "artist": "Bobbie Gentry",
+      "title": "I'll Never Fall in Love Again",
+      "releaseGroupMbid": "8cd2e735-0114-450a-9174-518216964c9e",
+      "approvedReleaseMbids": [
+        "37cf1c08-bceb-444a-b2cf-c9681ba5de70"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1344": {
+      "chartYear": 2000,
+      "artist": "Craig David",
+      "title": "Fill Me In",
+      "releaseGroupMbid": "28f5319f-ed04-3b1b-a88c-2f827abff7a3",
+      "approvedReleaseMbids": [
+        "f31b9c2b-9325-4b72-8032-62ac4456f52e"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1356": {
+      "chartYear": 2000,
+      "artist": "Craig David",
+      "title": "7 Days",
+      "releaseGroupMbid": "81375e0a-0433-3a73-b54a-2a4e351bc125",
+      "approvedReleaseMbids": [
+        "df292c66-8e59-47c7-b67c-3535b835caca"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1365": {
+      "chartYear": 2000,
+      "artist": "Steps",
+      "title": "Stomp",
+      "releaseGroupMbid": "e6f888e0-36b5-4b77-a4b3-ed15edd40318",
+      "approvedReleaseMbids": [
+        "9b3455eb-81da-45f4-b981-70347f758047",
+        "c1b03728-650e-4eb7-a6d1-f60c6da50699"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1366": {
+      "chartYear": 2000,
+      "artist": "Westlife",
+      "title": "My Love",
+      "releaseGroupMbid": "bf91c579-ec8d-4bd0-b16d-04ce597acbc7",
+      "approvedReleaseMbids": [
+        "d518c71d-e5c4-411c-b2c0-43f68b6d271e"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1381": {
+      "chartYear": 2001,
+      "artist": "DJ Pied Piper and the Masters of Ceremonies",
+      "title": "Do You Really Like It?",
+      "releaseGroupMbid": "59c9046e-5b52-3170-a88a-b3b9e0a61bdd",
+      "approvedReleaseMbids": [
+        "666aff27-7fee-421d-af9d-cf0052f38e02"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1403": {
+      "chartYear": 2002,
+      "artist": "Westlife",
+      "title": "World of Our Own",
+      "releaseGroupMbid": "65c1cb92-9e01-375b-907b-e21a033f124d",
+      "approvedReleaseMbids": [
+        "b5bb0971-6b5d-403a-a347-2bde274886f5"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1414": {
+      "chartYear": 2002,
+      "artist": "Blazin' Squad",
+      "title": "Crossroads",
+      "releaseGroupMbid": "9e382413-e8c0-4b4a-bfa9-984ff5d2351f",
+      "approvedReleaseMbids": [
+        "cc6075ac-e73b-4998-a044-0101b3fe8d2a"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1450": {
+      "chartYear": 2004,
+      "artist": "Sam & Mark",
+      "title": "With a Little Help from My Friends",
+      "releaseGroupMbid": "c46ee585-b96a-355a-aaff-cc64f1dd5c4f",
+      "approvedReleaseMbids": [
+        "544f43f2-0a96-49ff-8758-72c813bd5c3a"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1451": {
+      "chartYear": 2004,
+      "artist": "Busted",
+      "title": "Who's David?",
+      "releaseGroupMbid": "b8933fec-78be-3df5-8047-e98207692524",
+      "approvedReleaseMbids": [
+        "9628c67d-9fe1-4e37-afbb-dac3e2dd4418"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1466": {
+      "chartYear": 2004,
+      "artist": "Brian McFadden",
+      "title": "Real to Me",
+      "releaseGroupMbid": "2dc8959c-9d74-3630-95dd-95b813a6d11b",
+      "approvedReleaseMbids": [
+        "fb6ad451-c9a5-480e-b248-8fde03c4790e"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1822": {
+      "chartYear": 2010,
+      "artist": "B.o.B featuring Hayley Williams",
+      "title": "Airplanes",
+      "releaseGroupMbid": "ff9d36bb-bad5-4221-82d6-dd7326b2e651",
+      "approvedReleaseMbids": [
+        "ff9322b2-d131-428f-b046-4b617897ea40"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "1857": {
+      "chartYear": 2011,
+      "artist": "Dappy",
+      "title": "No Regrets",
+      "releaseGroupMbid": "12acbe62-f2ca-46c1-b603-720195edba21",
+      "approvedReleaseMbids": [
+        "45eecb49-0dd3-4618-b745-c84c59a630e3"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1867": {
+      "chartYear": 2012,
+      "artist": "Cover Drive",
+      "title": "Twilight",
+      "releaseGroupMbid": "17b4ea02-9a3f-4cf0-860d-a40273ec9345",
+      "approvedReleaseMbids": [
+        "d0d34065-c80f-4c2f-97b8-90c08c35d15c"
+      ],
+      "priorStatus": "cover_art_inaccessible"
+    },
+    "1883": {
+      "chartYear": 2012,
+      "artist": "Wiley featuring Ms D",
+      "title": "Heatwave",
+      "releaseGroupMbid": "028d4435-d443-408e-975a-d6f2fcbc5f05",
+      "approvedReleaseMbids": [
+        "da80e247-43a1-4186-8a2f-aa79cd0848a5"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "1965": {
+      "chartYear": 2015,
+      "artist": "Years & Years",
+      "title": "King",
+      "releaseGroupMbid": "707168ee-a1c3-4040-9029-55e6ea792014",
+      "approvedReleaseMbids": [
+        "e8760c17-7636-4147-a2a1-b613ea9ee773"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2263": {
+      "chartYear": 1953,
+      "artist": "Kay Starr",
+      "title": "Comes A-Long A-Love",
+      "releaseGroupMbid": "37f45e7f-3445-4b7c-9b87-1761c46489ec",
+      "approvedReleaseMbids": [
+        "b67a3a67-201f-4eab-a06d-8f5a49186325"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2266": {
+      "chartYear": 1953,
+      "artist": "Guy Mitchell",
+      "title": "She Wears Red Feathers",
+      "releaseGroupMbid": "b6633bee-370c-450b-9d6f-a8601684abb7",
+      "approvedReleaseMbids": [
+        "c9718b6e-a710-432b-ba43-17c2103e44f4"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2267": {
+      "chartYear": 1953,
+      "artist": "The Stargazers",
+      "title": "Broken Wings",
+      "releaseGroupMbid": "ebbfa9cc-03c2-4596-b2c3-7ad7ab957db9",
+      "approvedReleaseMbids": [
+        "0839c33b-7cfc-464b-ae84-c4d5249e2f3f"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2268": {
+      "chartYear": 1953,
+      "artist": "Lita Roza",
+      "title": "(How Much Is) That Doggie in the Window?",
+      "releaseGroupMbid": "d56ee6e5-f6d9-4160-8422-776faebfc581",
+      "approvedReleaseMbids": [
+        "0dc5b546-d931-42da-88fb-a778487c147e",
+        "4630fea4-9bbf-4315-9c48-99a7a8a93348"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2272": {
+      "chartYear": 1953,
+      "artist": "Guy Mitchell",
+      "title": "Look at That Girl",
+      "releaseGroupMbid": "9b17142c-db69-4942-9ed0-7fee9f878ac1",
+      "approvedReleaseMbids": [
+        "a46b4dd2-6623-476c-96fb-7563d7b2fa89"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2274": {
+      "chartYear": 1953,
+      "artist": "David Whitfield",
+      "title": "Answer Me",
+      "releaseGroupMbid": "62a6dba6-fcef-4aae-8e5f-e0fcd06ad79b",
+      "approvedReleaseMbids": [
+        "b1a1ed06-e3b5-489f-9f71-c2e26dbdab12"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2279": {
+      "chartYear": 1954,
+      "artist": "Johnnie Ray",
+      "title": "Such a Night",
+      "releaseGroupMbid": "111e065c-09ad-4654-83cc-9002256a03bc",
+      "approvedReleaseMbids": [
+        "2b1f5bfa-3311-4525-a4b7-3edc4723625f"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2283": {
+      "chartYear": 1954,
+      "artist": "Don Cornell",
+      "title": "Hold My Hand",
+      "releaseGroupMbid": "626af3f4-fbc8-44ca-acb1-8289bfcd8847",
+      "approvedReleaseMbids": [
+        "e90bdcb3-ece1-4bad-8999-5b09aa402688"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2288": {
+      "chartYear": 1955,
+      "artist": "Ruby Murray",
+      "title": "Softly, Softly",
+      "releaseGroupMbid": "f0fd3339-3820-4f4d-8fff-2067c8dacd19",
+      "approvedReleaseMbids": [
+        "b46a86ae-588f-42c4-b2f9-43708a2478b2"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2293": {
+      "chartYear": 1955,
+      "artist": "Jimmy Young",
+      "title": "Unchained Melody",
+      "releaseGroupMbid": "a7c05553-dfcf-4e96-bc11-ded369160595",
+      "approvedReleaseMbids": [
+        "ad72ea86-58aa-4e04-a703-dcfde0ef9706"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2294": {
+      "chartYear": 1955,
+      "artist": "Alma Cogan",
+      "title": "Dreamboat",
+      "releaseGroupMbid": "9d3dcabe-1bc8-45a3-a824-e23f8f1b6de1",
+      "approvedReleaseMbids": [
+        "ba0d5c5b-2d53-49ff-9d90-e28c2e605e83"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2295": {
+      "chartYear": 1955,
+      "artist": "Slim Whitman",
+      "title": "Rose Marie",
+      "releaseGroupMbid": "9a252881-77d9-4699-9a81-9fe102a42b46",
+      "approvedReleaseMbids": [
+        "66fa9791-679c-4fcd-afed-bfe5aa85484f"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2296": {
+      "chartYear": 1955,
+      "artist": "Jimmy Young",
+      "title": "The Man from Laramie",
+      "releaseGroupMbid": "b548dbac-7e19-4c49-b553-7cd445eab887",
+      "approvedReleaseMbids": [
+        "b2568835-3717-4c75-8ff2-255ba9bb1d88"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2297": {
+      "chartYear": 1955,
+      "artist": "The Johnston Brothers",
+      "title": "Hernando's Hideaway",
+      "releaseGroupMbid": "a70549c9-0ac6-4aeb-bb4d-68e6c5a1bd77",
+      "approvedReleaseMbids": [
+        "fba8fa3a-ee5f-4944-ad77-b7df809688e2"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2303": {
+      "chartYear": 1956,
+      "artist": "The Dream Weavers",
+      "title": "It's Almost Tomorrow",
+      "releaseGroupMbid": "6c26f9a1-2ca4-4cc9-8867-dfe89bffe417",
+      "approvedReleaseMbids": [
+        "ab6817c3-1d51-4102-b9b6-d827d0e12631"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2305": {
+      "chartYear": 1956,
+      "artist": "Winifred Atwell",
+      "title": "The Poor People of Paris",
+      "releaseGroupMbid": "a217f9a6-d774-4da2-9856-0f4e076f54ee",
+      "approvedReleaseMbids": [
+        "9ac6481c-8632-4d93-9849-e350c5081df5"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2306": {
+      "chartYear": 1956,
+      "artist": "Ronnie Hilton",
+      "title": "No Other Love",
+      "releaseGroupMbid": "510a52da-efc1-4320-9a5e-91353923e1d3",
+      "approvedReleaseMbids": [
+        "daed6844-599e-4525-9d4b-cf453de751f4"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2313": {
+      "chartYear": 1957,
+      "artist": "Guy Mitchell",
+      "title": "Singing the Blues",
+      "releaseGroupMbid": "217779fb-2af4-4403-a2f2-0609c7d1f43a",
+      "approvedReleaseMbids": [
+        "2adf99d5-b38a-4eb7-b13b-c904e3972992"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2315": {
+      "chartYear": 1957,
+      "artist": "Frankie Vaughan",
+      "title": "The Garden of Eden",
+      "releaseGroupMbid": "8f414006-bc86-449c-8ee1-16b852611387",
+      "approvedReleaseMbids": [
+        "70c535d4-cc25-4441-8841-4f40a48c8f52"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2316": {
+      "chartYear": 1957,
+      "artist": "Tab Hunter",
+      "title": "Young Love",
+      "releaseGroupMbid": "5f23811d-fb2a-49ae-8f12-7db3eeab750e",
+      "approvedReleaseMbids": [
+        "975a36bf-6d04-4e80-b6c1-a9e12ff7e17a"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2318": {
+      "chartYear": 1957,
+      "artist": "Guy Mitchell",
+      "title": "Rock-a-Billy",
+      "releaseGroupMbid": "0417bd44-0f7c-4e17-8c71-2073fdea4c51",
+      "approvedReleaseMbids": [
+        "a87ebbc1-96d9-4cde-9463-94c477fd9b6a"
+      ],
+      "priorStatus": "no_front_cover_on_verified_release"
+    },
+    "2345": {
+      "chartYear": 1959,
+      "artist": "Jerry Keller",
+      "title": "Here Comes Summer",
+      "releaseGroupMbid": "4beaad92-9854-4bd5-bb47-053aa0ad70f0",
+      "approvedReleaseMbids": [
+        "2a0d79fe-ef01-3fe4-88db-684968d796ba",
+        "a79870e4-fc5f-4e05-ab26-37098b366890"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2347": {
+      "chartYear": 1959,
+      "artist": "Cliff Richard and the Shadows",
+      "title": "Travellin' Light",
+      "releaseGroupMbid": "bb623a15-f288-4d4f-b8ff-646e55bbfd9f",
+      "approvedReleaseMbids": [
+        "67850e51-dc86-4b40-9c9c-89d1142d1132"
+      ],
+      "priorStatus": "cover_art_missing"
+    },
+    "2447": {
+      "chartYear": 2020,
+      "artist": "DaBaby featuring Roddy Ricch",
+      "title": "Rockstar",
+      "releaseGroupMbid": "cb8e4abb-774d-4df3-aa40-d1d9770188b4",
+      "approvedReleaseMbids": [
+        "72c84d21-eb61-4b38-b65f-f82843c2f95b"
+      ],
+      "priorStatus": "cover_art_missing"
+    }
+  },
+  "chartEntryCount": 1298,
+  "verifiedBomArtworkCount": 413
+}

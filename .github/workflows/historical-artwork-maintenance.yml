@@ -1,0 +1,85 @@
+name: Historical artwork maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_refresh:
+        description: Ignore cooldowns for this manual test
+        required: false
+        type: boolean
+        default: false
+      limit:
+        description: Maximum chart entries to check (1-25)
+        required: false
+        default: "25"
+  # Enable only after the manual run is reviewed:
+  # schedule:
+  #   - cron: "17 4 * * 0"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: historical-artwork-maintenance
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Restore cooldown state
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/historical-artwork-maintenance-state.json
+          key: historical-artwork-state-v1-${{ github.run_id }}
+          restore-keys: historical-artwork-state-v1-
+      - name: Run focused checks
+        run: node --test tests/historical-artwork-maintenance.test.mjs tests/historical-cover-allowlist.test.mjs
+      - name: Check approved releases
+        env:
+          FORCE_REFRESH: ${{ inputs.force_refresh }}
+          CHECK_LIMIT: ${{ inputs.limit || '25' }}
+        run: |
+          args=(--limit="$CHECK_LIMIT" --report-json="$RUNNER_TEMP/report.json" --report-markdown="$RUNNER_TEMP/report.md")
+          if [[ "$FORCE_REFRESH" == "true" ]]; then args+=(--force); fi
+          node scripts/historical-artwork-maintenance.mjs "${args[@]}"
+      - name: Save cooldown state
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/historical-artwork-maintenance-state.json
+          key: historical-artwork-state-v1-${{ github.run_id }}
+      - name: Upload review report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: historical-artwork-report-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/report.json
+            ${{ runner.temp }}/report.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Create review pull request when covers are found
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- historical-uk-number-ones-cover-art.json public/historical-uk-number-ones-cover-art.json; then
+            echo "No newly verified covers; no pull request required."
+            exit 0
+          fi
+          branch="automation/historical-artwork-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add historical-uk-number-ones-cover-art.json public/historical-uk-number-ones-cover-art.json
+          git commit -m "Add newly verified historical covers"
+          git push origin "$branch"
+          gh pr create --base "$GITHUB_REF_NAME" --head "$branch" --title "Review newly verified historical covers" --body-file "$RUNNER_TEMP/report.md"
