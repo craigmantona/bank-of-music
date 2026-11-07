@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
   "entries": {
+    "4": {
+      "releaseGroupMbid": "a8b13a52-18e8-3fba-90c1-3d09107b4930",
+      "coverUrl": "https://coverartarchive.org/release/3667b601-9780-43c2-9c6c-d4529db3b8d1/31860152924-500.jpg"
+    },
     "8": {
       "releaseGroupMbid": "ed6b0925-86c0-32eb-b5df-fd3a8939eeb9",
       "coverUrl": "https://coverartarchive.org/release-group/ed6b0925-86c0-32eb-b5df-fd3a8939eeb9/front-500"
@@ -8,6 +12,10 @@
     "11": {
       "releaseGroupMbid": "761d6585-8a75-3796-b078-32f0799bcf0f",
       "coverUrl": "https://coverartarchive.org/release-group/761d6585-8a75-3796-b078-32f0799bcf0f/front-500"
+    },
+    "12": {
+      "releaseGroupMbid": "b06833cf-2cf6-43dc-8e1d-66c2717ad71e",
+      "coverUrl": "https://coverartarchive.org/release/646a7234-5762-447a-bff5-9881d4caf5bb/39144729355-500.jpg"
     },
     "14": {
       "releaseGroupMbid": "13258461-dc9c-334d-9d73-61b455c0c85f",
@@ -85,6 +93,14 @@
       "releaseGroupMbid": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
       "coverUrl": "https://coverartarchive.org/release-group/33d83c7d-280e-3ca6-98ff-4e473b4252e8/front-500"
     },
+    "131": {
+      "releaseGroupMbid": "4c02f732-2337-32f3-a4ba-d407ea3cdd7f",
+      "coverUrl": "https://coverartarchive.org/release/7b9611b0-0fd8-4412-a181-3ac67c99006c/29641023094-500.jpg"
+    },
+    "141": {
+      "releaseGroupMbid": "f8976545-e5b9-35ed-a871-4b7b0c2e57ec",
+      "coverUrl": "https://coverartarchive.org/release/82a45319-beee-4da8-81ec-25c0e7c49f67/18944583313-500.jpg"
+    },
     "148": {
       "releaseGroupMbid": "ac01fccc-f28e-3de8-9294-724c41b11f7d",
       "coverUrl": "https://coverartarchive.org/release-group/ac01fccc-f28e-3de8-9294-724c41b11f7d/front-500"
@@ -101,6 +117,10 @@
       "releaseGroupMbid": "29dec5f5-b993-39d5-bfd4-e595b695a6ac",
       "coverUrl": "https://coverartarchive.org/release-group/29dec5f5-b993-39d5-bfd4-e595b695a6ac/front-500"
     },
+    "166": {
+      "releaseGroupMbid": "eee7e620-c062-3084-b79d-63cf7ace19ed",
+      "coverUrl": "https://coverartarchive.org/release/0fee3083-39be-4682-9e71-dcabc00ba3fb/26618578343-500.jpg"
+    },
     "167": {
       "releaseGroupMbid": "943197d1-0619-3800-92eb-952ffe65e964",
       "coverUrl": "https://coverartarchive.org/release-group/943197d1-0619-3800-92eb-952ffe65e964/front-500"
@@ -109,9 +129,17 @@
       "releaseGroupMbid": "048f19ab-2c90-441a-bd43-59d8819312c5",
       "coverUrl": "https://coverartarchive.org/release-group/048f19ab-2c90-441a-bd43-59d8819312c5/front-500"
     },
+    "170": {
+      "releaseGroupMbid": "72507aae-a5e8-329b-a990-5203fe660699",
+      "coverUrl": "https://coverartarchive.org/release/d9706171-1da7-4c1f-a1d0-77334a369a26/4239540407-500.jpg"
+    },
     "171": {
       "releaseGroupMbid": "e31749af-ca16-37ef-acff-fa67ff998db5",
       "coverUrl": "https://coverartarchive.org/release-group/e31749af-ca16-37ef-acff-fa67ff998db5/front-500"
+    },
+    "172": {
+      "releaseGroupMbid": "6a46645b-ad4e-4c82-93ef-41475dd06fd9",
+      "coverUrl": "https://coverartarchive.org/release/4e60ce43-6fe7-4d8c-a16b-55fea7da3ddb/11632625631-500.jpg"
     },
     "178": {
       "releaseGroupMbid": "3c132463-de72-44a5-a4c3-1e6a64f4e3a2",
@@ -125,9 +153,17 @@
       "releaseGroupMbid": "565c70ad-825e-3212-8680-5a6de68cb16e",
       "coverUrl": "https://coverartarchive.org/release/842395d1-1499-4313-b62a-08d0f7ee17b5/front-500"
     },
+    "184": {
+      "releaseGroupMbid": "97e720b4-4b9e-3a21-a140-91b8f403efa5",
+      "coverUrl": "https://coverartarchive.org/release/3165de98-7d5e-4dc9-a4eb-45d184fcbaab/32810815054-500.jpg"
+    },
     "188": {
       "releaseGroupMbid": "d01a59a3-d4a7-33d9-b811-8dff4f9ce119",
       "coverUrl": "https://coverartarchive.org/release-group/d01a59a3-d4a7-33d9-b811-8dff4f9ce119/front-500"
+    },
+    "191": {
+      "releaseGroupMbid": "b13189e8-1968-307c-a428-ececa1f60710",
+      "coverUrl": "https://coverartarchive.org/release/0fabdad0-e25e-4e28-a2bc-c9cad9c7776a/42089566056-500.jpg"
     },
     "192": {
       "releaseGroupMbid": "a87720fa-5aab-3a62-813c-a92c232307cc",
@@ -217,6 +253,10 @@
       "releaseGroupMbid": "aca6281e-5c64-382b-baca-aaa110516dac",
       "coverUrl": "https://coverartarchive.org/release-group/aca6281e-5c64-382b-baca-aaa110516dac/front-500"
     },
+    "475": {
+      "releaseGroupMbid": "7e0cac40-1a6a-4a3b-8512-400d580cb9ec",
+      "coverUrl": "https://coverartarchive.org/release/25c90930-0ab7-4aa1-8790-14053c3d9e84/14730409094-500.jpg"
+    },
     "477": {
       "releaseGroupMbid": "6379008e-e2de-3ae1-8017-b853be8bf003",
       "coverUrl": "https://coverartarchive.org/release-group/6379008e-e2de-3ae1-8017-b853be8bf003/front-500"
@@ -236,6 +276,10 @@
     "491": {
       "releaseGroupMbid": "b77dc366-0623-48b6-8411-8c7e7423091c",
       "coverUrl": "https://coverartarchive.org/release-group/b77dc366-0623-48b6-8411-8c7e7423091c/front-500"
+    },
+    "492": {
+      "releaseGroupMbid": "73eae75b-cd2f-4e2c-be82-a095a1586d8c",
+      "coverUrl": "https://coverartarchive.org/release/754a9639-5714-48cd-95c3-b7a9a588710c/8254614936-500.jpg"
     },
     "500": {
       "releaseGroupMbid": "96bf8e89-7b6c-4339-aa55-1e1bcbffdb50",
@@ -272,6 +316,10 @@
     "523": {
       "releaseGroupMbid": "68929b44-1eec-4956-b16d-e1b97ef49dec",
       "coverUrl": "https://coverartarchive.org/release-group/68929b44-1eec-4956-b16d-e1b97ef49dec/front-500"
+    },
+    "526": {
+      "releaseGroupMbid": "414a0538-64e4-44b2-b1da-b0f9cce2aa51",
+      "coverUrl": "https://coverartarchive.org/release/fb5c6413-f6ab-4f17-a3f0-ccaf258002a0/1805887807-500.jpg"
     },
     "527": {
       "releaseGroupMbid": "598d33ec-20d6-3c4f-9eab-94d88f981a59",
@@ -461,6 +509,10 @@
       "releaseGroupMbid": "167b038c-d27f-3500-a05f-ad259faa93f9",
       "coverUrl": "https://coverartarchive.org/release-group/167b038c-d27f-3500-a05f-ad259faa93f9/front-500"
     },
+    "1127": {
+      "releaseGroupMbid": "0204ea25-d5da-42b7-81e4-0b673da62b2d",
+      "coverUrl": "https://coverartarchive.org/release/f83dd11d-6266-441f-babd-81d3bf70001d/37626234846-500.jpg"
+    },
     "1146": {
       "releaseGroupMbid": "4d507176-894b-34eb-b3c5-1079550831fc",
       "coverUrl": "https://coverartarchive.org/release-group/4d507176-894b-34eb-b3c5-1079550831fc/front-500"
@@ -485,6 +537,10 @@
       "releaseGroupMbid": "d3acfaa6-d0b1-3676-ad74-5e5c0f338d5b",
       "coverUrl": "https://coverartarchive.org/release-group/d3acfaa6-d0b1-3676-ad74-5e5c0f338d5b/front-500"
     },
+    "1342": {
+      "releaseGroupMbid": "d495a598-9adc-379a-8d68-951dc4d5a95f",
+      "coverUrl": "https://coverartarchive.org/release/bfa73818-315a-46f6-8a87-15a0824bff40/33166765740-500.jpg"
+    },
     "1348": {
       "releaseGroupMbid": "3c30649e-1415-324b-8a11-abe49dced427",
       "coverUrl": "https://coverartarchive.org/release-group/3c30649e-1415-324b-8a11-abe49dced427/front-500"
@@ -504,6 +560,10 @@
     "1361": {
       "releaseGroupMbid": "6900dced-a11e-3075-9852-bdfffebd8427",
       "coverUrl": "https://coverartarchive.org/release-group/6900dced-a11e-3075-9852-bdfffebd8427/front-500"
+    },
+    "1369": {
+      "releaseGroupMbid": "4d28633c-bb2c-4a7e-ac25-04025a4d37e8",
+      "coverUrl": "https://coverartarchive.org/release/531655a3-b8a5-4823-93cf-9396160c2311/36337702931-500.jpg"
     },
     "1376": {
       "releaseGroupMbid": "b5ddb8bf-236d-3aa5-bccc-60cbe1c48914",
@@ -528,6 +588,10 @@
     "1386": {
       "releaseGroupMbid": "b3640246-c271-34d4-915b-947ddd453c18",
       "coverUrl": "https://coverartarchive.org/release-group/b3640246-c271-34d4-915b-947ddd453c18/front-500"
+    },
+    "1388": {
+      "releaseGroupMbid": "26d2de41-4a59-4305-ae3a-b3b4913ee49d",
+      "coverUrl": "https://coverartarchive.org/release/cb76423f-2a9f-4527-8ba6-d22e613c13b8/40682818097-500.jpg"
     },
     "1389": {
       "releaseGroupMbid": "2f793c43-65d7-4a7a-8b9b-b3f33ca4fa06",
@@ -621,6 +685,10 @@
       "releaseGroupMbid": "1f30fe81-cd4c-3bc1-bcef-128995db8225",
       "coverUrl": "https://coverartarchive.org/release-group/1f30fe81-cd4c-3bc1-bcef-128995db8225/front-500"
     },
+    "1455": {
+      "releaseGroupMbid": "5f9288b9-4d5d-335c-90ee-c7359db7c5f0",
+      "coverUrl": "https://coverartarchive.org/release/4d32e8be-3569-4189-acd9-fbd5a7c82c9c/13916138803-500.jpg"
+    },
     "1459": {
       "releaseGroupMbid": "5b617da7-0bc3-37b2-bd44-2f35fe084e9c",
       "coverUrl": "https://coverartarchive.org/release-group/5b617da7-0bc3-37b2-bd44-2f35fe084e9c/front-500"
@@ -685,6 +753,14 @@
       "releaseGroupMbid": "5734d5a4-95f2-36b1-8b72-787b6cf7a007",
       "coverUrl": "https://coverartarchive.org/release-group/5734d5a4-95f2-36b1-8b72-787b6cf7a007/front-500"
     },
+    "1510": {
+      "releaseGroupMbid": "f43bc659-fb9b-35df-9f00-80719ad8bdc8",
+      "coverUrl": "https://coverartarchive.org/release/8e68efd8-27c0-43f0-9819-ee1134235222/21751385745-500.jpg"
+    },
+    "1511": {
+      "releaseGroupMbid": "0e1927da-dcd9-306f-8653-00297724993a",
+      "coverUrl": "https://coverartarchive.org/release/89c828f7-8372-4130-aef1-599e9400b2a6/10361522392-500.jpg"
+    },
     "1513": {
       "releaseGroupMbid": "20a20294-0a7d-3f66-977f-27949c4fb64c",
       "coverUrl": "https://coverartarchive.org/release-group/20a20294-0a7d-3f66-977f-27949c4fb64c/front-500"
@@ -740,6 +816,10 @@
     "1539": {
       "releaseGroupMbid": "0959d0fb-f56d-3649-85cd-bfd00deeb3cc",
       "coverUrl": "https://coverartarchive.org/release-group/0959d0fb-f56d-3649-85cd-bfd00deeb3cc/front-500"
+    },
+    "1540": {
+      "releaseGroupMbid": "5935eb7a-d753-44ba-be50-095fbe88bc51",
+      "coverUrl": "https://coverartarchive.org/release/ff3f5145-47fb-4a27-8973-7f94bf7588c2/42697412977-500.jpg"
     },
     "1542": {
       "releaseGroupMbid": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
@@ -908,6 +988,10 @@
     "1898": {
       "releaseGroupMbid": "7a82779e-f14c-4eab-a3d9-07801e95e9c0",
       "coverUrl": "https://coverartarchive.org/release-group/7a82779e-f14c-4eab-a3d9-07801e95e9c0/front-500"
+    },
+    "1899": {
+      "releaseGroupMbid": "bf1bd494-8b29-4ca6-b791-48ba47e836c2",
+      "coverUrl": "https://coverartarchive.org/release/abf00bba-5a85-42af-b0f5-16c442af6729/2940362418-500.jpg"
     },
     "1900": {
       "releaseGroupMbid": "9e20a231-1c60-4237-aa43-241ca1b61666",
@@ -1334,5 +1418,5 @@
       "coverUrl": "https://coverartarchive.org/release-group/d4eb5a78-4f5e-4899-9576-57e27087c07f/front-500"
     }
   },
-  "generatedAt": "2026-11-07T21:36:18.259Z"
+  "generatedAt": "2026-11-07T21:57:29.621Z"
 }
