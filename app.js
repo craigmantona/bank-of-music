@@ -4152,6 +4152,7 @@ function buildShareUrl(item = selectedItem) {
   const url = new URL(window.location.href);
   url.searchParams.set("share", item.type || "item");
   if (item.externalId) url.searchParams.set("id", item.externalId);
+  if (item.releaseGroupId) url.searchParams.set("releaseGroup", item.releaseGroupId);
   if (item.savedAlbumId) url.searchParams.set("albumId", item.savedAlbumId);
   if (item.savedSongId) url.searchParams.set("songId", item.savedSongId);
   url.searchParams.set("title", item.title || item.name || "");
@@ -4208,6 +4209,7 @@ async function handleIncomingShareLink() {
       title,
       artist,
       externalId,
+      releaseGroupId: params.get("releaseGroup") || "",
       releaseDate: params.get("date") || "",
       coverUrl: params.get("cover") || "",
       savedAlbumId: params.get("albumId") || ""
@@ -6026,15 +6028,26 @@ async function resolveArtistIdByName(artistName) {
 
 
 
+const canonicalReleaseByGroupCache = new Map();
+
 async function fetchCanonicalReleaseForReleaseGroup(releaseGroupId) {
 
   if (!releaseGroupId) return "";
 
+  const cacheKey = String(releaseGroupId).toLowerCase();
+  if (canonicalReleaseByGroupCache.has(cacheKey)) return canonicalReleaseByGroupCache.get(cacheKey);
+
+  const request = (async () => {
   try {
 
     const url = `https://musicbrainz.org/ws/2/release-group/${encodeURIComponent(releaseGroupId)}?inc=releases&fmt=json`;
 
-    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    let response = await fetchMusicBrainz(url);
+
+    if (response.status === 429 || response.status === 503) {
+      await new Promise((resolve) => window.setTimeout(resolve, 1100));
+      response = await fetchMusicBrainz(url);
+    }
 
     if (!response.ok) return "";
 
@@ -6073,6 +6086,13 @@ async function fetchCanonicalReleaseForReleaseGroup(releaseGroupId) {
     return "";
 
   }
+
+  })();
+
+  canonicalReleaseByGroupCache.set(cacheKey, request);
+  const releaseId = await request;
+  if (!releaseId) canonicalReleaseByGroupCache.delete(cacheKey);
+  return releaseId;
 
 }
 
@@ -7381,6 +7401,23 @@ function mergeArtistDiscographyAlbums({ remoteAlbums, savedAlbums, artistName, a
   });
 
   return displayAlbums;
+}
+
+function buildArtistAlbumSelection(artistAlbum, fallbackArtist = "") {
+  const catalogueAlbumId = Number(artistAlbum?.savedAlbumId || artistAlbum?.localAlbumId || 0);
+  const savedAlbumId = Number.isSafeInteger(catalogueAlbumId) && catalogueAlbumId > 0 ? catalogueAlbumId : "";
+  return {
+    type: "album",
+    title: artistAlbum?.title || "",
+    artist: artistAlbum?.artist || fallbackArtist,
+    externalId: artistAlbum?.externalId || "",
+    releaseGroupId: artistAlbum?.releaseGroupId || artistAlbum?.id || "",
+    artistId: artistAlbum?.artistId || "",
+    releaseDate: artistAlbum?.releaseDate || artistAlbum?.date || "",
+    coverUrl: artistAlbum?.coverUrl || "",
+    savedAlbumId,
+    albumId: savedAlbumId
+  };
 }
 
 async function renderArtistDetail(artistItem, artistData = null) {
@@ -13723,18 +13760,7 @@ if (
 
       if (!artistAlbum) return;
 
-      selectedItem = {
-        type: "album",
-        title: artistAlbum.title || "",
-        artist: artistAlbum.artist || selectedItem?.artist || "",
-        externalId: artistAlbum.externalId || "",
-        releaseGroupId: artistAlbum.releaseGroupId || artistAlbum.id || "",
-        artistId: artistAlbum.artistId || "",
-        releaseDate: artistAlbum.releaseDate || artistAlbum.date || "",
-        coverUrl: artistAlbum.coverUrl || "",
-        savedAlbumId: artistAlbum.savedAlbumId || artistAlbum.localAlbumId || "",
-        albumId: artistAlbum.savedAlbumId || artistAlbum.localAlbumId || ""
-      };
+      selectedItem = buildArtistAlbumSelection(artistAlbum, selectedItem?.artist || selectedItem?.name || "");
 
       triggerSelectedArtistEasterEgg(selectedItem);
       showOnlySection("detailSection");
@@ -16043,6 +16069,7 @@ function getItemDeepLinkUrl(item = selectedItem) {
   const url = new URL(window.location.href);
   url.searchParams.set("share", item.type);
   if (item.externalId) url.searchParams.set("id", item.externalId);
+  if (item.releaseGroupId) url.searchParams.set("releaseGroup", item.releaseGroupId);
   if (item.savedAlbumId) url.searchParams.set("albumId", item.savedAlbumId);
   if (item.savedSongId) url.searchParams.set("songId", item.savedSongId);
   if (item.title || item.name) url.searchParams.set("title", item.title || item.name || "");
@@ -16062,7 +16089,7 @@ function updateRealShareLinkState(item = selectedItem) {
 
 function clearRealShareLinkState() {
   const url = new URL(window.location.href);
-  ["share", "id", "albumId", "songId", "title", "artist", "date", "cover", "release"].forEach((key) => url.searchParams.delete(key));
+  ["share", "id", "releaseGroup", "albumId", "songId", "title", "artist", "date", "cover", "release"].forEach((key) => url.searchParams.delete(key));
   window.history.replaceState({ bomHome: true }, "", url.toString());
 }
 

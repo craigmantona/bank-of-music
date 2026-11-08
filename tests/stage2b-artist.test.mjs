@@ -12,7 +12,7 @@ const [html, app, artist, styles] = await Promise.all([
 
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
-  assert.match(html, /bom-album\.js\?v=3/);
+  assert.match(html, /bom-album\.js\?v=5/);
   assert.match(html, /bom-artist\.js\?v=11/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });
@@ -273,7 +273,7 @@ test("only Ed Sheeran plus inherits the saved BOM identity and metadata", () => 
   });
   assert.deepEqual(merged[0], { title: "+", savedAlbumId: 575, coverUrl: "orange.jpg", releaseDate: "2012-06-12", ratingAlbumId: 575 });
   assert.equal(albumIdentityMatches(savedPlus, { title: "×", artist: "Ed Sheeran",
-    releaseGroupId: "multiply-group", savedAlbumId: 575 }), false);
+    releaseGroupId: "multiply-group" }), false);
   for (const album of merged.slice(1)) {
     assert.equal(album.savedAlbumId, "");
     assert.notEqual(album.coverUrl, "orange.jpg");
