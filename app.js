@@ -11341,10 +11341,49 @@ function enrichQuickRateArtistIdentities(dialog, userId, onReady, artistNames = 
 }
 
 let quickRateHistoryRestore = null;
+let quickRateCoreCache = null;
+let quickRateCorePromise = null;
+let quickRateAlbumsCache = null;
+let quickRateAlbumsPromise = null;
+
+async function loadQuickRateCore(userId) {
+  if (quickRateCoreCache?.userId === userId) {
+    return { ...quickRateCoreCache, ratings: allSongRatings.filter(row => row.user_id === userId) };
+  }
+  if (quickRateCorePromise?.userId === userId) return quickRateCorePromise.promise;
+  const promise = Promise.all([
+    fetchQuickRateRows("songs", "id,title,artist,album_id,external_source,external_id,canonical_song_id,is_deleted,spotify_track_id"),
+    fetchQuickRateRows("canonical_recordings", "id,title,artist,preferred_spotify_track_id"),
+    fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
+    fetchQuickRateRows("quick_rate_collection_tracks", "*")
+  ]).then(([songs, canonicalRecordings, ratings, importedEntries]) => {
+    quickRateCoreCache = { userId, songs, canonicalRecordings, ratings, importedEntries };
+    return quickRateCoreCache;
+  });
+  quickRateCorePromise = { userId, promise };
+  try {
+    return await promise;
+  } finally {
+    if (quickRateCorePromise?.promise === promise) quickRateCorePromise = null;
+  }
+}
+
+async function loadQuickRateAlbums() {
+  if (quickRateAlbumsCache) return quickRateAlbumsCache;
+  if (quickRateAlbumsPromise) return quickRateAlbumsPromise;
+  quickRateAlbumsPromise = fetchQuickRateRows("albums", "*").then(albums => {
+    quickRateAlbumsCache = albums;
+    return albums;
+  });
+  try {
+    return await quickRateAlbumsPromise;
+  } finally {
+    quickRateAlbumsPromise = null;
+  }
+}
 
 async function openQuickRate(restoredState = null) {
   if (!currentUser || document.getElementById("bomQuickRate")) return;
-  await ensureFullCatalogue();
   const userId = currentUser.id;
   const dialog = document.createElement("dialog");
   dialog.id = "bomQuickRate";
@@ -11648,26 +11687,24 @@ async function openQuickRate(restoredState = null) {
     const cachedRestore = restoredState?.restoreToken && quickRateHistoryRestore?.token === restoredState.restoreToken
       ? quickRateHistoryRestore.data
       : null;
-    const loaded = cachedRestore
-      ? [cachedRestore.songs, cachedRestore.albums, cachedRestore.canonicalRecordings,
-        allSongRatings.filter(row => row.user_id === userId), cachedRestore.importedEntries, cachedRestore.artistIdentities]
-      : await Promise.all([
-        fetchQuickRateRows("songs", "*"),
-        fetchQuickRateRows("albums", "*"),
-        fetchQuickRateRows("canonical_recordings", "*"),
-        fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId),
-        fetchQuickRateRows("quick_rate_collection_tracks", "*"),
-        loadHistoricalCoverAllowlist()
-      ]);
-    [songs, albums, canonicalRecordings, , importedEntries] = loaded;
-    historicalCovers = cachedRestore ? await loadHistoricalCoverAllowlist() : loaded[5];
+    const core = cachedRestore ? {
+      userId,
+      songs: cachedRestore.songs,
+      canonicalRecordings: cachedRestore.canonicalRecordings,
+      ratings: allSongRatings.filter(row => row.user_id === userId),
+      importedEntries: cachedRestore.importedEntries
+    } : await loadQuickRateCore(userId);
+    songs = core.songs;
+    canonicalRecordings = core.canonicalRecordings;
+    importedEntries = core.importedEntries;
+    albums = cachedRestore?.albums || quickRateAlbumsCache || [];
     importedEntries = importedEntries.map(entry => ({
       ...entry,
       artworkUrl: entry.artworkUrl || historicalCovers.get(Number(entry.id)) || ""
     }));
     artistIdentities = cachedRestore?.artistIdentities || [];
     allCanonicalRecordings = canonicalRecordings;
-    const ratings = loaded[3];
+    const ratings = core.ratings;
     if (!dialog.open || currentUser?.id !== userId) return;
     songs.forEach(song => {
       if (!allSongs.some(row => Number(row.id) === Number(song.id))) allSongs.push(song);
@@ -11678,6 +11715,23 @@ async function openQuickRate(restoredState = null) {
     const otherUsersRows = allSongRatings.filter(row => row.user_id !== userId);
     allSongRatings = [...otherUsersRows, ...ratings];
     render();
+    if (!albums.length) {
+      void loadQuickRateAlbums().then(loadedAlbums => {
+        if (!dialog.open || currentUser?.id !== userId) return;
+        albums = loadedAlbums;
+        allAlbums = mergeRowsById(allAlbums, loadedAlbums);
+        const scrollTop = dialog.scrollTop;
+        render();
+        dialog.scrollTop = scrollTop;
+      }).catch(() => {});
+    }
+    void loadHistoricalCoverAllowlist().then(covers => {
+      if (!dialog.open || currentUser?.id !== userId) return;
+      historicalCovers = covers;
+      const scrollTop = dialog.scrollTop;
+      render();
+      dialog.scrollTop = scrollTop;
+    }).catch(() => {});
     if (!cachedRestore) {
       const artistLookupNames = getArtistCreditLookupNames(yearEntries.map(entry => entry.song?.artist || entry.canonicalRecording?.artist || entry.artist));
       enrichQuickRateArtistIdentities(dialog, userId, identities => {

@@ -438,11 +438,12 @@ test('Quick Rate reuses catalogue identities and existing BOM artist heroes in o
   };
   const context = vm.createContext({
     Promise,
+    normaliseText:value=>String(value||'').trim().replace(/\s+/g,' '),
     getArtistHeroPublicUrl: path => `https://images.example/${path}`,
-    supabaseClient:{from(table){requests.push(table);return {select(){return this},not(){return Promise.resolve({data:rows[table],error:null})}}}}
+    supabaseClient:{from(table){requests.push(table);return {select(){return this},in(column,names){assert.equal(column,'artist_name');assert.deepEqual(Array.from(names),['Oasis','U2']);return this},not(){return Promise.resolve({data:rows[table],error:null})}}}}
   });
   vm.runInContext(extract('async function fetchQuickRateArtistIdentities', 'let quickRateHistoryRestore'), context);
-  const identities = await context.fetchQuickRateArtistIdentities();
+  const identities = await context.fetchQuickRateArtistIdentities(['Oasis','U2']);
   assert.deepEqual(Array.from(identities, row => row.artist_name), ['Oasis','U2']);
   assert.equal(identities[1].imageUrl, 'https://images.example/u2/photo.jpg');
   assert.deepEqual(requests, ['artist_catalog','artist_hero_overrides']);
@@ -459,10 +460,15 @@ test('Quick Rate attribution appears only in an expanded drawer using the artist
 
 test('Quick Rate renders essential data before optional artist enrichment settles', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  const essentialLoad = quickRate.slice(quickRate.indexOf(': await Promise.all(['), quickRate.indexOf(']);', quickRate.indexOf(': await Promise.all([')) + 3);
-  assert.doesNotMatch(essentialLoad, /fetchQuickRateArtistIdentities/);
+  const loaders = extract('async function loadQuickRateCore', 'async function openQuickRate');
+  assert.doesNotMatch(loaders, /fetchQuickRateArtistIdentities/);
   assert.ok(quickRate.indexOf('render();') < quickRate.indexOf('enrichQuickRateArtistIdentities('));
-  assert.match(quickRate, /fetchQuickRateRows\("quick_rate_collection_tracks", "\*"\)/);
+  assert.match(loaders, /fetchQuickRateRows\("quick_rate_collection_tracks", "\*"\)/);
+  assert.doesNotMatch(quickRate.slice(0, quickRate.indexOf('dialog.showModal();')), /await /);
+  assert.ok(quickRate.indexOf('render();') < quickRate.indexOf('loadQuickRateAlbums()'));
+  assert.match(loaders, /quickRateCorePromise/);
+  assert.match(loaders, /quickRateAlbumsPromise/);
+  assert.doesNotMatch(loaders, /fetchQuickRateRows\("ratings"|followed_artists|catalogue_release_group_exclusions/);
 });
 
 test('delayed, rejected, empty, and stale artist enrichment cannot block Quick Rate', async () => {
@@ -522,7 +528,7 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.doesNotMatch(quickRate, /await resolveArtistIdByName/);
   assert.doesNotMatch(quickRate, /await resolveQuickRateSpotifyTrack/);
   assert.match(quickRate, /enrichQuickRateArtistIdentities\(dialog, userId/);
-  assert.match(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /fetchQuickRateArtistIdentities\(\)/);
+  assert.match(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /fetchQuickRateArtistIdentities\(artistNames\)/);
   assert.match(quickRate, /artwork \|\| artistDestination\?\.imageUrl/);
   assert.match(quickRate, /loading="lazy" decoding="async"/);
   assert.match(quickRate, /renderArtistCreditLinks\(artist,artistIdentities,\{quickRate:true\}\)/);
