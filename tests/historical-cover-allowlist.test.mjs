@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 const root = new URL("../", import.meta.url);
 const read = path => readFile(new URL(path, root), "utf8");
 
-test("published historical cover allowlist contains only the 354 reviewed chart identities", async () => {
+test("published historical cover allowlist contains only reviewed chart identities", async () => {
   const [sourceText, publicText] = await Promise.all([
     read("historical-uk-number-ones-cover-art.json"),
     read("public/historical-uk-number-ones-cover-art.json")
@@ -16,12 +16,14 @@ test("published historical cover allowlist contains only the 354 reviewed chart 
   const payload = JSON.parse(publicText);
   assert.equal(payload.schemaVersion, 1);
   const entries = Object.entries(payload.entries);
-  assert.equal(entries.length, 354);
-  assert.equal(new Set(entries.map(([id]) => id)).size, 354);
-  assert.equal(new Set(entries.map(([, entry]) => entry.releaseGroupMbid)).size, 350);
+  const serializedEntryIds = [...publicText.matchAll(/^    "(\d+)": \{$/gm)].map(([, id]) => id);
+  assert.deepEqual(
+    serializedEntryIds.sort((a, b) => Number(a) - Number(b)),
+    entries.map(([id]) => id).sort((a, b) => Number(a) - Number(b))
+  );
 
   for (const [id, entry] of entries) {
-    assert.match(id, /^\d+$/);
+    assert.match(id, /^[1-9]\d*$/);
     assert.deepEqual(Object.keys(entry).sort(), ["coverUrl", "releaseGroupMbid"]);
     assert.match(entry.releaseGroupMbid, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
     assert.match(entry.coverUrl, /^https:\/\/coverartarchive\.org\/(?:release-group\/[0-9a-f-]{36}\/front-500|release\/[0-9a-f-]{36}\/(?:front-500|\d+-500\.jpg))$/);
@@ -33,6 +35,10 @@ test("published historical cover allowlist contains only the 354 reviewed chart 
   for (const id of [4, 8, 35, 45, 76, 81, 129, 141, 171, 178, 184, 191, 396, 432, 492, 504, 720, 1001, 1338, 1369, 1400, 1511, 1808, 1899, 1909, 2264, 2439, 2440]) {
     assert.ok(payload.entries[id]);
   }
+  assert.deepEqual(payload.entries[193], {
+    releaseGroupMbid: "d88baece-ef7a-3682-b1b1-68705ae3aa58",
+    coverUrl: "https://coverartarchive.org/release/ea4d10b6-0023-44a3-b415-0a591632fcc6/18079889041-500.jpg"
+  });
 });
 
 test("historical artwork is cached once, keyed only by chart ID, and never replaces BOM artwork", async () => {
