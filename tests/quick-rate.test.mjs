@@ -525,7 +525,7 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.match(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /fetchQuickRateArtistIdentities\(\)/);
   assert.match(quickRate, /artwork \|\| artistDestination\?\.imageUrl/);
   assert.match(quickRate, /loading="lazy" decoding="async"/);
-  assert.match(quickRate, /This artist credit is not linked to a BOM artist page yet/);
+  assert.match(quickRate, /renderArtistCreditLinks\(artist,artistIdentities,\{quickRate:true\}\)/);
   assert.doesNotMatch(quickRate, /Artist exploration is not available/);
   assert.match(styles, /bom-v1-quick-discovery/);
   assert.match(styles, /bom-v1-quick-track:focus-visible/);

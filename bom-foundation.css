@@ -830,6 +830,14 @@
 .bom-shell-v1 .bom-v1-album h1 { max-width: 18ch; margin: 0; color: var(--bom-v1-text); font-size: clamp(44px, 5.5vw, 84px); font-weight: 600; letter-spacing: -.055em; line-height: .98; overflow-wrap: anywhere; }
 .bom-shell-v1 .bom-v1-album-artist { margin-top: 18px; font-size: clamp(20px, 2vw, 28px); }
 .bom-shell-v1 .bom-v1-album-artist button { padding: 0; color: var(--bom-v1-text); background: transparent !important; background-image: none !important; border: 0; border-radius: 0; box-shadow: none !important; text-shadow: none; cursor: pointer; }
+.bom-shell-v1 .bom-artist-credit { display:inline; }
+.bom-shell-v1 .bom-artist-credit-link { min-height:32px; padding:2px 1px; color:inherit; background:transparent; border:0; border-bottom:1px solid transparent; border-radius:0; box-shadow:none; font:inherit; cursor:pointer; text-align:left; }
+.bom-shell-v1 .bom-artist-credit-link:hover { color:var(--bom-v1-accent); border-bottom-color:currentColor; transform:none; }
+.bom-shell-v1 .bom-artist-credit-link:focus-visible { outline:2px solid var(--bom-v1-focus); outline-offset:2px; }
+.bom-shell-v1 .bom-artist-credit-unavailable { color:inherit; }
+.bom-shell-v1 .bom-v1-track-artists { display:block; margin-top:3px; color:var(--bom-v1-muted); font-size:10px; font-weight:400; }
+.bom-shell-v1 .bom-v1-quick-artist-credit { color:var(--bom-v1-text); }
+@media(max-width:700px){.bom-shell-v1 .bom-artist-credit-link { min-height:44px; padding-block:8px; }}
 .bom-shell-v1 .bom-v1-album-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; color: var(--bom-v1-muted); font-size: 14px; }
 .bom-shell-v1 .bom-v1-album-meta span + span::before { content: "·"; margin-right: 22px; color: #656960; }
 

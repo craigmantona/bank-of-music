@@ -149,6 +149,7 @@ let allAlbumRatings = [];
 let allSongRatings = [];
 
 let allCanonicalRecordings = [];
+let loadedArtistIdentities = [];
 
 let followedArtists = [];
 
@@ -247,17 +248,56 @@ function renderClickableProfileHandle(
   `;
 }
 
-function renderClickableArtistName(artistName) {
-  if (!artistName) return "";
+function getLoadedArtistIdentities(extraIdentities = []) {
+  const albumIdentities = (allAlbums || []).map(album => ({
+    artist_name: album.artist,
+    musicbrainz_artist_id: album.musicbrainz_artist_id || album.artist_id || ""
+  }));
+  const selectedArtistId = selectedItem?.artistId || selectedItem?.musicbrainz_artist_id || (selectedItem?.type === "artist" ? selectedItem.externalId : "");
+  const selectedIdentity = selectedArtistId
+    ? [{artist_name:selectedItem.artist || selectedItem.name || selectedItem.title,musicbrainz_artist_id:selectedArtistId}]
+    : [];
+  return [...extraIdentities,...loadedArtistIdentities,...albumIdentities,...selectedIdentity].filter(identity => identity?.artist_name && identity?.musicbrainz_artist_id);
+}
 
-  return `
-  <button
-    class="artist-link-btn"
-    onclick="openArtistPage('${escapeHtml(artistName)}'); return false;"
-  >
-    ${escapeHtml(artistName)}
-  </button>
-`;
+function resolveLoadedArtistIdentity(artistName, extraIdentities = []) {
+  const cleanName = normaliseText(artistName);
+  const artistKey = value => normaliseText(value).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/&amp;/g,"&").replace(/[^a-z0-9]+/g,"");
+  const key = artistKey(cleanName);
+  if (!key) return null;
+  const matches = getLoadedArtistIdentities(extraIdentities).filter(identity => artistKey(identity.artist_name) === key);
+  const ids = new Set(matches.map(identity => String(identity.musicbrainz_artist_id || "")).filter(Boolean));
+  if (ids.size !== 1) return null;
+  return {artist:cleanName,artistId:[...ids][0]};
+}
+
+function splitArtistCredit(artistCredit, extraIdentities = []) {
+  const credit = normaliseText(artistCredit);
+  if (!credit) return [];
+  const exact = resolveLoadedArtistIdentity(credit,extraIdentities);
+  if (exact) return [{text:credit,separator:false,destination:exact}];
+  return credit.split(/(\s+(?:&|and|with|feat\.?|ft\.?|featuring|x)\s+|,\s*)/i).filter(Boolean).map((text,index) => ({
+    text,
+    separator:index%2===1,
+    destination:index%2===0?resolveLoadedArtistIdentity(text,extraIdentities):null
+  }));
+}
+
+function renderArtistCreditLinks(artistCredit, extraIdentities = [], {quickRate=false} = {}) {
+  const parts = splitArtistCredit(artistCredit,extraIdentities);
+  if (!parts.length) return "";
+  return `<span class="bom-artist-credit">${parts.map(part => {
+    if (part.separator) return `<span class="bom-artist-credit-separator">${escapeHtml(part.text)}</span>`;
+    if (!part.destination) return `<span class="bom-artist-credit-unavailable" title="Artist page not available">${escapeHtml(part.text)}</span>`;
+    const attributes=quickRate
+      ? `data-quick-artist="${escapeHtml(part.destination.artistId)}" data-quick-artist-name="${escapeHtml(part.destination.artist)}"`
+      : `data-artist-id="${escapeHtml(part.destination.artistId)}" data-artist-name="${escapeHtml(part.destination.artist)}"`;
+    return `<button type="button" class="artist-link-btn bom-artist-credit-link" ${attributes}>${escapeHtml(part.text)}</button>`;
+  }).join("")}</span>`;
+}
+
+function renderClickableArtistName(artistName, extraIdentities = []) {
+  return renderArtistCreditLinks(artistName,extraIdentities);
 }
 
 window.openArtistPage = async function (artistName, knownArtistId = "", openHeroEditor = false) {
@@ -7857,8 +7897,10 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
     const personal = savedSong ? getYourSongRating(savedSong.id) : null;
     if (savedSong?.id) seenSongIds.add(Number(savedSong.id));
     if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
+    const structuredTrackArtist = track?.recording?.["artist-credit"]?.map(credit => `${credit.name || ""}${credit.joinphrase || ""}`).join("");
+    const trackArtist = normaliseText(savedSong?.artist || structuredTrackArtist || artist);
     rows.push({
-      index: Math.max(0, number - 1), number, title, artist, album: albumTitle,
+      index: Math.max(0, number - 1), number, title, artist:trackArtist, artistControlHtml:renderArtistCreditLinks(trackArtist), album: albumTitle,
       durationMs: Number(savedSong?.duration_ms) > 0 ? Number(savedSong.duration_ms) : null,
       songId: savedSong?.id || null, externalId, community, personal, isManual,
       mediumPosition, mediumTrackPosition,
@@ -9463,9 +9505,7 @@ const yourRating = song.id ? getYourSongRating(song.id) : null;
         <div class="bom-v1-album-identity">
           <div class="bom-v1-album-kind">Track</div>
           <h1 tabindex="-1">${escapeHtml(trackTitle)}</h1>
-          <div class="bom-v1-album-artist">
-            <button class="song-artist-link" data-artist-name="${escapeHtml(trackArtist)}">${escapeHtml(trackArtist)}</button>
-          </div>
+          <div class="bom-v1-album-artist">${renderArtistCreditLinks(trackArtist)}</div>
           <div class="bom-v1-track-detail-album">
             <span>From</span>
             ${linkedAlbum
@@ -10226,9 +10266,7 @@ ${albumId
 
             <div class="media-title">${escapeHtml(song.title || selectedItem.title || "Unknown song")}</div>
 
-<button class="song-artist-link" data-artist-name="${escapeHtml(song.artist || selectedItem.artist || "")}">
-  ${escapeHtml(song.artist || selectedItem.artist || "Unknown artist")}
-</button>
+${renderArtistCreditLinks(song.artist || selectedItem.artist || "Unknown artist")}
 
             ${renderFollowControls(selectedItem.artist)}
 
@@ -11327,6 +11365,8 @@ async function openQuickRate(restoredState = null) {
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
         const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
         const artistDestination = getQuickRateArtistDestination(song, album, artist, artistIdentities);
+        const artistCreditHtml = renderArtistCreditLinks(artist,artistIdentities,{quickRate:true});
+        const hasArtistDestination = artistCreditHtml.includes("data-quick-artist=");
         const trackDestination = song?.id ? { songId: song.id, title: song.title || title } : null;
         const usesArtistHero = !artwork && Boolean(artistDestination?.imageUrl);
         const expanded = expandedIdentity === identity;
@@ -11339,8 +11379,8 @@ async function openQuickRate(restoredState = null) {
           ? listen.replace('class="bom-v1-quick-listen"', 'class="bom-v1-quick-discovery-listen"').replace(/<span class="bom-v1-quick-listen-label">Listen<\/span>/, '<span>Listen on Spotify</span>')
           : "";
         const discovery = expanded ? `<div class="bom-v1-quick-discovery" data-quick-discovery>
-          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button>${usesArtistHero ? window.BOMUI.ImageCredit(artistDestination.imageAttribution) : ""}</div>` : `<div><span>${escapeHtml(artist)}</span><small>This artist credit is not linked to a BOM artist page yet.</small></div>`}
-          ${trackDestination ? `<div><span>Track</span><button type="button" data-quick-track="${escapeHtml(trackDestination.songId)}">Open ${escapeHtml(trackDestination.title)} on BOM <span aria-hidden="true">→</span></button></div>` : !artistDestination ? `<div><span>Catalogue</span><small>No BOM artist or track page is available for this historical entry yet.</small></div>` : ""}
+          <div><span>Artists</span><div class="bom-v1-quick-artist-credit">${artistCreditHtml}</div>${usesArtistHero ? window.BOMUI.ImageCredit(artistDestination.imageAttribution) : ""}</div>
+          ${trackDestination ? `<div><span>Track</span><button type="button" data-quick-track="${escapeHtml(trackDestination.songId)}">Open ${escapeHtml(trackDestination.title)} on BOM <span aria-hidden="true">→</span></button></div>` : !hasArtistDestination ? `<div><span>Catalogue</span><small>No BOM artist or track page is available for this historical entry yet.</small></div>` : ""}
           ${discoveryListen}
           <div class="bom-quick-spotify hidden" data-quick-player></div>
         </div>` : "";
@@ -11562,6 +11602,7 @@ async function openQuickRate(restoredState = null) {
       enrichQuickRateArtistIdentities(dialog, userId, identities => {
         const scrollTop = dialog.scrollTop;
         artistIdentities = identities;
+        loadedArtistIdentities = identities;
         render();
         dialog.scrollTop = scrollTop;
       });
@@ -13811,6 +13852,15 @@ if (songAlbumLink) {
       return;
     }
 	
+	const artistCreditLink = event.target.closest(".bom-artist-credit-link:not([data-quick-artist])");
+
+if (artistCreditLink) {
+  event.preventDefault();
+  event.stopPropagation();
+  await window.openArtistPage(artistCreditLink.dataset.artistName || "", artistCreditLink.dataset.artistId || "");
+  return;
+}
+
 	const songArtistLink = event.target.closest(".song-artist-link");
 
 if (songArtistLink) {
