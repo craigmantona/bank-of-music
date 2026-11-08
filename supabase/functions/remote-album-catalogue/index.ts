@@ -195,6 +195,7 @@ Deno.serve(async (request) => {
     const groupId = String(exactRelease?.["release-group"]?.id || "").toLowerCase();
     const artist = artistFromRelease(exactRelease);
     const title = String(exactRelease?.title || "").trim();
+    const releaseGroupTitle = String(exactRelease?.["release-group"]?.title || title).trim();
     if (exactRelease?.id !== releaseId || !uuid(groupId) || !artist || !title ||
         (expectedGroupId && expectedGroupId !== groupId)) {
       return json(request, { ok: true, status: "needs_correction", reason: "release_identity_validation_failed" });
@@ -205,7 +206,9 @@ Deno.serve(async (request) => {
 
     const preview = await resolveRequestedAlbum({
       artist,
-      request: { title, release_group_id: groupId, release_id: releaseId },
+      // Edition qualifiers such as "(Deluxe)" belong to the release. Group
+      // eligibility must compare the canonical release-group title instead.
+      request: { title: releaseGroupTitle, release_group_id: groupId, release_id: releaseId },
       musicBrainzGet,
       findExisting,
       artworkAvailable

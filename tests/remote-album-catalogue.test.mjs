@@ -32,8 +32,21 @@ test("server derives artist, title, group and complete tracks from MusicBrainz",
   assert.match(edge, /\/release\/\$\{encodeURIComponent\(releaseId\)\}\?inc=recordings\+artist-credits\+release-groups/);
   assert.match(edge, /artistFromRelease\(exactRelease\)/);
   assert.match(edge, /expectedGroupId && expectedGroupId !== groupId/);
-  assert.match(edge, /request: \{ title, release_group_id: groupId, release_id: releaseId \}/);
+  assert.match(edge, /releaseGroupTitle = String\(exactRelease\?\.\["release-group"\]\?\.title \|\| title\)/);
+  assert.match(edge, /request: \{ title: releaseGroupTitle, release_group_id: groupId, release_id: releaseId \}/);
   assert.match(edge, /preview\.status !== "ready"/);
+});
+
+test("deluxe release titles use the canonical release-group title for eligibility", () => {
+  const exactRelease = {
+    title: "People Watching (Deluxe)",
+    "release-group": { title: "People Watching" }
+  };
+  const releaseTitle = String(exactRelease.title || "").trim();
+  const releaseGroupTitle = String(exactRelease["release-group"]?.title || releaseTitle).trim();
+  assert.equal(releaseTitle, "People Watching (Deluxe)");
+  assert.equal(releaseGroupTitle, "People Watching");
+  assert.notEqual(releaseTitle, releaseGroupTitle);
 });
 
 test("excluded release groups are rejected before catalogue resolution while unrelated releases retain the normal path", () => {
