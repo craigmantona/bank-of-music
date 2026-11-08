@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { candidateFingerprint, createCoverRequester, eligibleCandidates, inspectCandidate, mergeMappings,
-  networkErrorDetail, processQueue, reportMarkdown } from "../scripts/historical-artwork-maintenance.mjs";
+  networkErrorDetail, normalizeCoverUrl, processQueue, reportMarkdown } from "../scripts/historical-artwork-maintenance.mjs";
 
 const candidate = { releaseGroupMbid: "11111111-1111-4111-8111-111111111111",
   approvedReleaseMbids: ["22222222-2222-4222-8222-222222222222"], artist: "Artist", title: "Song" };
@@ -12,7 +12,7 @@ const response = (status, body = { images: [] }) => ({ status, ok: status >= 200
 
 test("maintenance candidates are exact reviewed release identities and exclude published entries", async () => {
   const payload = JSON.parse(await readFile(new URL("../scripts/historical-artwork-maintenance-candidates.json", import.meta.url)));
-  assert.equal(Object.keys(payload.entries).length, 74);
+  assert.equal(Object.keys(payload.entries).length, 73);
   const published = JSON.parse(await readFile(new URL("../historical-uk-number-ones-cover-art.json", import.meta.url)));
   for (const [id, entry] of Object.entries(payload.entries)) {
     assert.equal(published.entries[id], undefined);
@@ -96,6 +96,17 @@ test("a successful response following a transient failure is accepted", async ()
   assert.equal(calls, 2);
   assert.equal(result.category, "SAFE");
   assert.equal(result.mapping.coverUrl, "https://example.test/front.jpg");
+});
+
+test("Cover Art Archive URLs are normalized to HTTPS and other insecure URLs are rejected", async () => {
+  assert.equal(normalizeCoverUrl("http://coverartarchive.org/release/example/front.jpg"),
+    "https://coverartarchive.org/release/example/front.jpg");
+  assert.throws(() => normalizeCoverUrl("http://example.test/front.jpg"), /Refusing non-HTTPS artwork URL/);
+  const request = createCoverRequester({ fetchImpl: async () => response(200, { images: [{ id: 123, front: true,
+    approved: true, thumbnails: { "500": "http://coverartarchive.org/release/example/front.jpg" } }] }),
+    sleepImpl: noWait, now: clock(), timeout: () => undefined });
+  const result = await inspectCandidate("1", candidate, request);
+  assert.equal(result.mapping.coverUrl, "https://coverartarchive.org/release/example/front.jpg");
 });
 
 test("multiple failed entries checkpoint state and still produce a valid report", async () => {
