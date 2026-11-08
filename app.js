@@ -10859,7 +10859,11 @@ function buildQuickRateYearModel(entries, songs) {
 
 function buildImportedQuickRateYearModel(rows, songs, canonicalRecordings, year = null) {
   return (rows || []).filter(row => year === null || Number(row.chart_year) === Number(year)).map(row => {
-    const song = row.song_id ? songs.find(candidate => Number(candidate.id) === Number(row.song_id) && !candidate.is_deleted) : null;
+    const directSong = row.song_id ? songs.find(candidate => Number(candidate.id) === Number(row.song_id) && !candidate.is_deleted) : null;
+    const canonicalSongs = !directSong && row.canonical_song_id
+      ? songs.filter(candidate => !candidate.is_deleted && getCanonicalSongId(candidate) === row.canonical_song_id)
+      : [];
+    const song = directSong || getPreferredSongOccurrence(canonicalSongs);
     const canonicalRecording = row.canonical_song_id
       ? canonicalRecordings.find(candidate => candidate.id === row.canonical_song_id)
       : null;
@@ -10975,14 +10979,20 @@ function getNextUnratedQuickRateEntry(entries, currentIdentity = "") {
 function getQuickRateArtistDestination(song, album, fallbackArtist = "", artistIdentities = []) {
   const artist = normaliseText(song?.artist || album?.artist || fallbackArtist);
   if (!artist) return null;
-  const artistKey = normaliseCompare(artist);
-  const matches = (artistIdentities || [])
-    .filter(candidate => candidate?.musicbrainz_artist_id && normaliseCompare(candidate.artist_name) === artistKey);
-  const identities = new Set(matches.map(candidate => String(candidate.musicbrainz_artist_id)));
-  const hero = matches.find(candidate => candidate.imageUrl) || null;
-  return identities.size === 1
-    ? { artist, artistId: [...identities][0], imageUrl: hero?.imageUrl || "", imageAttribution: hero }
-    : null;
+  const resolveArtist = name => {
+    const artistKey = normaliseCompare(name);
+    const matches = (artistIdentities || [])
+      .filter(candidate => candidate?.musicbrainz_artist_id && normaliseCompare(candidate.artist_name) === artistKey);
+    const identities = new Set(matches.map(candidate => String(candidate.musicbrainz_artist_id)));
+    if (identities.size !== 1) return null;
+    const hero = matches.find(candidate => candidate.imageUrl) || null;
+    return { artist: normaliseText(matches[0]?.artist_name || name), artistId: [...identities][0], imageUrl: hero?.imageUrl || "", imageAttribution: hero };
+  };
+  const exact = resolveArtist(artist);
+  if (exact) return exact;
+  const collaborators = artist.split(/\s+(?:&|and|with|feat\.?|featuring|x)\s+|,\s*/i).map(normaliseText).filter(Boolean);
+  if (collaborators.length < 2) return null;
+  return collaborators.map(resolveArtist).find(Boolean) || null;
 }
 
 // The original random queue remains available for existing callers and tests.
@@ -11317,6 +11327,7 @@ async function openQuickRate(restoredState = null) {
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
         const chartDate = formatQuickRateChartDate(entry.first_number_one_date);
         const artistDestination = getQuickRateArtistDestination(song, album, artist, artistIdentities);
+        const trackDestination = song?.id ? { songId: song.id, title: song.title || title } : null;
         const usesArtistHero = !artwork && Boolean(artistDestination?.imageUrl);
         const expanded = expandedIdentity === identity;
         const listen = song
@@ -11328,7 +11339,8 @@ async function openQuickRate(restoredState = null) {
           ? listen.replace('class="bom-v1-quick-listen"', 'class="bom-v1-quick-discovery-listen"').replace(/<span class="bom-v1-quick-listen-label">Listen<\/span>/, '<span>Listen on Spotify</span>')
           : "";
         const discovery = expanded ? `<div class="bom-v1-quick-discovery" data-quick-discovery>
-          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button>${usesArtistHero ? window.BOMUI.ImageCredit(artistDestination.imageAttribution) : ""}</div>` : `<div><span>${escapeHtml(artist)}</span><small>Artist page unavailable</small></div>`}
+          ${artistDestination ? `<div><span>Artist</span><button type="button" data-quick-artist="${escapeHtml(artistDestination.artistId)}" data-quick-artist-name="${escapeHtml(artistDestination.artist)}">Explore ${escapeHtml(artistDestination.artist)} on BOM <span aria-hidden="true">→</span></button>${usesArtistHero ? window.BOMUI.ImageCredit(artistDestination.imageAttribution) : ""}</div>` : `<div><span>${escapeHtml(artist)}</span><small>This artist credit is not linked to a BOM artist page yet.</small></div>`}
+          ${trackDestination ? `<div><span>Track</span><button type="button" data-quick-track="${escapeHtml(trackDestination.songId)}">Open ${escapeHtml(trackDestination.title)} on BOM <span aria-hidden="true">→</span></button></div>` : !artistDestination ? `<div><span>Catalogue</span><small>No BOM artist or track page is available for this historical entry yet.</small></div>` : ""}
           ${discoveryListen}
           <div class="bom-quick-spotify hidden" data-quick-player></div>
         </div>` : "";
@@ -11431,6 +11443,20 @@ async function openQuickRate(restoredState = null) {
       expandedIdentity = identity && expandedIdentity !== identity ? identity : "";
       render();
       card.querySelector(`[data-quick-identity="${CSS.escape(identity)}"] [data-quick-expand]`)?.focus();
+      return;
+    }
+    const trackButton = event.target.closest("[data-quick-track]");
+    if (trackButton) {
+      const songId = Number(trackButton.dataset.quickTrack);
+      if (!Number.isSafeInteger(songId) || songId <= 0) return;
+      const originRow = trackButton.closest("[data-quick-identity]");
+      const restoreState = {selectedCollection,selectedYear,selectedFilter,pickerDecade,expandedIdentity,lastNavigatedIdentity,scrollTop:dialog.scrollTop,originIdentity:originRow?.dataset.quickIdentity || expandedIdentity};
+      const restoreToken = `quick-rate-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      quickRateHistoryRestore = {token:restoreToken,data:{songs,albums,artistIdentities,canonicalRecordings,importedEntries}};
+      window.history.replaceState({...(window.history.state||{}),bomQuickRate:{...restoreState,restoreToken}},"",window.location.href);
+      window.history.pushState({bomQuickRateTrack:true},"",window.location.href);
+      dialog.close();
+      await window.BOMPresentationBridge?.openTrackById(songId,trackButton);
       return;
     }
     const artistButton = event.target.closest("[data-quick-artist]");

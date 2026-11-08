@@ -408,6 +408,26 @@ test('Quick Rate resolves artist discovery only from one existing BOM artist ide
   assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, null, '', []), null);
   assert.equal(context.getQuickRateArtistDestination({artist:'The Sweet'}, album, '', [identity,{artist_name:'The Sweet',musicbrainz_artist_id:'artist-2'}]), null);
   assert.equal(context.getQuickRateArtistDestination(null, null, 'Sweet', [identity]), null);
+  const sam = {artist_name:'Sam Fender',musicbrainz_artist_id:'sam-id'};
+  const olivia = {artist_name:'Olivia Dean',musicbrainz_artist_id:'olivia-id'};
+  assert.deepEqual({...context.getQuickRateArtistDestination(null,null,'Sam Fender and Olivia Dean',[sam,olivia])}, {artist:'Sam Fender',artistId:'sam-id',imageUrl:'',imageAttribution:null});
+  assert.deepEqual({...context.getQuickRateArtistDestination(null,null,'Sam Fender & Olivia Dean',[sam,olivia])}, {artist:'Sam Fender',artistId:'sam-id',imageUrl:'',imageAttribution:null});
+  assert.equal(context.getQuickRateArtistDestination(null,null,'Unknown One and Unknown Two',[sam,olivia]), null);
+});
+
+test('Quick Rate resolves an imported chart entry through its canonical catalogue occurrence', () => {
+  const context = vm.createContext({
+    getCanonicalSongId: song => song.canonical_song_id || '',
+    getPreferredSongOccurrence: songs => songs[0] || null
+  });
+  vm.runInContext(extract('function buildImportedQuickRateYearModel', 'function getQuickRateEntryIdentity'), context);
+  const rows = [{id:2026,chart_year:2026,title:'Rein Me In',artist:'Sam Fender and Olivia Dean',canonical_song_id:'canonical-2026',match_status:'matched'}];
+  const songs = [{id:44,title:'Rein Me In',artist:'Sam Fender and Olivia Dean',canonical_song_id:'canonical-2026',album_id:7}];
+  const recordings = [{id:'canonical-2026',title:'Rein Me In',artist:'Sam Fender and Olivia Dean'}];
+  const [entry] = context.buildImportedQuickRateYearModel(rows,songs,recordings,2026);
+  assert.equal(entry.status,'matched');
+  assert.equal(entry.song.id,44);
+  assert.equal(entry.canonicalRecording.id,'canonical-2026');
 });
 
 test('Quick Rate reuses catalogue identities and existing BOM artist heroes in one load', async () => {
@@ -493,6 +513,9 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.match(quickRate, /expandedIdentity === identity/);
   assert.match(quickRate, /data-quick-expand aria-expanded/);
   assert.match(quickRate, /data-quick-artist=/);
+  assert.match(quickRate, /data-quick-track=/);
+  assert.match(quickRate, /BOMPresentationBridge\?\.openTrackById\(songId,trackButton\)/);
+  assert.match(quickRate, /No BOM artist or track page is available for this historical entry yet/);
   assert.match(quickRate, /window\.openArtistPage\(artistName, artistId\)/);
   assert.match(quickRate, /selectedFilter = filterButton[\s\S]*?expandedIdentity = ""/);
   assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;\s*expandedIdentity = ""/);
@@ -502,7 +525,7 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.match(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /fetchQuickRateArtistIdentities\(\)/);
   assert.match(quickRate, /artwork \|\| artistDestination\?\.imageUrl/);
   assert.match(quickRate, /loading="lazy" decoding="async"/);
-  assert.match(quickRate, /Artist page unavailable/);
+  assert.match(quickRate, /This artist credit is not linked to a BOM artist page yet/);
   assert.doesNotMatch(quickRate, /Artist exploration is not available/);
   assert.match(styles, /bom-v1-quick-discovery/);
   assert.match(styles, /bom-v1-quick-track:focus-visible/);
