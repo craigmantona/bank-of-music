@@ -12,9 +12,8 @@ on:
         description: Maximum chart entries to check (1-25)
         required: false
         default: "25"
-  # Enable only after the manual run is reviewed:
-  # schedule:
-  #   - cron: "17 4 * * 0"
+  schedule:
+    - cron: "17 4 * * 0"
 
 permissions:
   contents: write

@@ -135,11 +135,10 @@ test("published mappings can only be appended, never overwritten", () => {
   assert.equal(Object.keys(mergeMappings(published, { "2": { releaseGroupMbid: "new", coverUrl: "new" } }).entries).length, 2);
 });
 
-test("workflow is manual-only until explicitly activated and uses no repository secrets", async () => {
+test("workflow supports manual and weekly runs and uses no repository secrets", async () => {
   const workflow = await readFile(new URL("../.github/workflows/historical-artwork-maintenance.yml", import.meta.url), "utf8");
   assert.match(workflow, /workflow_dispatch:/);
-  assert.match(workflow, /# schedule:/);
-  assert.doesNotMatch(workflow, /^\s+schedule:/m);
+  assert.match(workflow, /^  schedule:\n    - cron: "17 4 \* \* 0"$/m);
   assert.doesNotMatch(workflow, /secrets\./);
   assert.match(workflow, /contents: write/);
   assert.match(workflow, /pull-requests: write/);
