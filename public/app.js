@@ -105,6 +105,7 @@ const LASTFM_API_KEY = window.LASTFM_API_KEY || null;
 const releaseGroupCoverCache = {};
 
 const albumTrackCache = {};
+const albumTrackDetailPromises = new Map();
 
 let historicalCoverAllowlistPromise = null;
 
@@ -6999,34 +7000,35 @@ async function fetchAlbumDetail(externalId) {
     return storedDetail;
   }
 
-  const url =
-    `https://musicbrainz.org/ws/2/release/${encodeURIComponent(externalId)}` +
-    `?inc=recordings+artist-credits+release-groups&fmt=json`;
+  if (albumTrackDetailPromises.has(externalId)) return albumTrackDetailPromises.get(externalId);
 
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/json"
+  const request = (async () => {
+    const url =
+      `https://musicbrainz.org/ws/2/release/${encodeURIComponent(externalId)}` +
+      `?inc=recordings+artist-credits+release-groups&fmt=json`;
+
+    let response = await fetchMusicBrainz(url);
+    if (response.status === 429 || response.status === 503) {
+      await new Promise((resolve) => window.setTimeout(resolve, 1100));
+      response = await fetchMusicBrainz(url);
     }
-  });
 
-  if (!response.ok) {
-    throw new Error(
-      `Album detail request failed: ${response.status}`
-    );
+    if (!response.ok) throw new Error(`Album detail request failed: ${response.status}`);
+
+    const detail = await response.json();
+
+    albumTrackCache[externalId] = detail;
+    storeAlbumDetail(externalId, detail);
+    return detail;
+  })();
+
+  albumTrackDetailPromises.set(externalId, request);
+
+  try {
+    return await request;
+  } finally {
+    if (albumTrackDetailPromises.get(externalId) === request) albumTrackDetailPromises.delete(externalId);
   }
-
-  const detail =
-    await response.json();
-
-  albumTrackCache[externalId] =
-    detail;
-
-  storeAlbumDetail(
-    externalId,
-    detail
-  );
-
-  return detail;
 }
 
 async function fetchReleaseGroupCover(releaseGroupId) {
@@ -10248,6 +10250,30 @@ ${albumId
       if (selectedItem !== albumSelection) return;
 
       console.warn("Album detail unavailable", err?.message || err);
+
+      if (isStageOnePresentation() && window.BOMUI && window.BOMAlbumUI) {
+        const candidateAlbumId = Number(albumSelection.savedAlbumId || albumSelection.albumId || 0);
+        const fallbackAlbumId = Number.isSafeInteger(candidateAlbumId) && candidateAlbumId > 0 ? candidateAlbumId : null;
+        const fallbackDetail = {
+          title: albumSelection.title || "Unknown album",
+          date: albumSelection.releaseDate || "",
+          "artist-credit": [{ name: albumSelection.artist || "Unknown artist" }],
+          media: []
+        };
+        await renderStageOneAlbum(buildStageOneAlbumModel({
+          album: albumSelection,
+          detail: fallbackDetail,
+          albumId: fallbackAlbumId,
+          artworkUrl: albumSelection.coverUrl || "",
+          artist: albumSelection.artist || "Unknown artist",
+          community: fallbackAlbumId ? getAlbumAverage(fallbackAlbumId) : null,
+          personal: fallbackAlbumId ? getYourAlbumRating(fallbackAlbumId) : null,
+          releaseDate: albumSelection.releaseDate || "",
+          releaseDateSource: "external"
+        }), { isCurrent: isCurrentAlbumRender });
+        selectedItemDetail.insertAdjacentHTML("afterbegin", `<div class="bom-v1-album-error">${window.BOMUI.SectionState({ title: "Track list temporarily unavailable", message: "The album identity is preserved. Try loading its MusicBrainz tracks again.", actionLabel: "Retry", action: "retry-album" })}</div>`);
+        return;
+      }
 
       selectedItemDetail.innerHTML = isStageOnePresentation() && window.BOMUI
         ? `<div class="bom-v1-album bom-v1-album-error">${window.BOMUI.SectionState({ title: "Album details unavailable", message: "We could not load this album right now.", actionLabel: "Retry", action: "retry-album" })}</div>`

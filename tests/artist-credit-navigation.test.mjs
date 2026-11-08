@@ -80,7 +80,7 @@ test('Quick Rate, album tracks and track details reuse accessible artist-credit 
 
 test('production entry points cache-bust the corrected Quick Rate renderer and artist styles', async () => {
   const index = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(index,/app\.js\?v=167&autocomplete=2&search-autosave=1/);
+  assert.match(index,/app\.js\?v=168&autocomplete=2&search-autosave=1/);
   assert.match(index,/bom-foundation\.css\?v=45&autocomplete=1/);
   assert.match(index,/bom-album\.js\?v=5/);
 });

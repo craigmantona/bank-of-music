@@ -57,6 +57,56 @@ test("release-group navigation retries a transient failure and caches the concre
   assert.equal(calls.length, 2);
 });
 
+test("album detail retrieval retries transient release failures and coalesces concurrent renders", async () => {
+  const detail = { id: "release-id", title: "People Watching (Deluxe)", media: [{ tracks: Array(19).fill({}) }] };
+  const responses = [
+    { status: 503, ok: false },
+    { status: 200, ok: true, async json() { return detail; } }
+  ];
+  const calls = [];
+  const context = {
+    Map,
+    albumTrackCache: {},
+    albumTrackDetailPromises: new Map(),
+    getStoredAlbumDetail: () => null,
+    storeAlbumDetail: () => {},
+    fetchMusicBrainz: async url => { calls.push(url); return responses.shift(); },
+    window: { setTimeout(callback) { callback(); } }
+  };
+  vm.runInNewContext(extract("async function fetchAlbumDetail", "async function fetchReleaseGroupCover"), context);
+  const [first, second] = await Promise.all([
+    context.fetchAlbumDetail("release-id"),
+    context.fetchAlbumDetail("release-id")
+  ]);
+  assert.equal(first.media[0].tracks.length, 19);
+  assert.equal(second, first);
+  assert.equal(calls.length, 2, "one initial request and one bounded transient retry");
+});
+
+test("a permanent album detail failure keeps Retry available with the original identity", async () => {
+  const detail = { id: "release-id", title: "People Watching (Deluxe)", media: [] };
+  const responses = [
+    { status: 500, ok: false },
+    { status: 200, ok: true, async json() { return detail; } }
+  ];
+  const context = {
+    Map,
+    albumTrackCache: {},
+    albumTrackDetailPromises: new Map(),
+    getStoredAlbumDetail: () => null,
+    storeAlbumDetail: () => {},
+    fetchMusicBrainz: async () => responses.shift(),
+    window: { setTimeout(callback) { callback(); } }
+  };
+  vm.runInNewContext(extract("async function fetchAlbumDetail", "async function fetchReleaseGroupCover"), context);
+  await assert.rejects(context.fetchAlbumDetail("release-id"), /Album detail request failed: 500/);
+  assert.equal(context.albumTrackDetailPromises.size, 0);
+  assert.equal((await context.fetchAlbumDetail("release-id")).id, "release-id");
+  assert.match(app, /title: "Track list temporarily unavailable"/);
+  assert.match(app, /action: "retry-album"/);
+  assert.match(app, /album: albumSelection/);
+});
+
 test("artist albums use the full renderer and preserve artist-page browser history", () => {
   const clickPath = extract('const artistAlbumCard = event.target.closest("[data-artist-album-index]")', "const similarArtistCard");
   assert.match(clickPath, /buildArtistAlbumSelection/);
@@ -83,5 +133,5 @@ test("internal and shared album URLs retain release-group identity", () => {
 
 test("album navigation retains the null-ID track guard and deploys under a fresh asset URL", () => {
   assert.match(app, /Number\.isSafeInteger\(catalogueAlbumId\) && catalogueAlbumId > 0/);
-  assert.match(index, /app\.js\?v=167&autocomplete=2&search-autosave=1/);
+  assert.match(index, /app\.js\?v=168&autocomplete=2&search-autosave=1/);
 });
