@@ -460,14 +460,13 @@ test('Quick Rate attribution appears only in an expanded drawer using the artist
 
 test('Quick Rate renders essential data before optional artist enrichment settles', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  const loaders = extract('async function loadQuickRateCore', 'async function openQuickRate');
+  const loaders = extract('function mapQuickRateYearProjection', 'async function loadQuickRateCore');
   assert.doesNotMatch(loaders, /fetchQuickRateArtistIdentities/);
   assert.ok(quickRate.indexOf('render();') < quickRate.indexOf('enrichQuickRateArtistIdentities('));
-  assert.match(loaders, /fetchQuickRateRows\("quick_rate_collection_tracks", "\*"\)/);
+  assert.match(loaders, /rpc\("get_quick_rate_year"/);
   assert.doesNotMatch(quickRate.slice(0, quickRate.indexOf('dialog.showModal();')), /await /);
-  assert.ok(quickRate.indexOf('render();') < quickRate.indexOf('loadQuickRateAlbums()'));
-  assert.match(loaders, /quickRateCorePromise/);
-  assert.match(loaders, /quickRateAlbumsPromise/);
+  assert.match(loaders, /quickRateYearCache/);
+  assert.match(loaders, /quickRateYearPromises/);
   assert.doesNotMatch(loaders, /fetchQuickRateRows\("ratings"|followed_artists|catalogue_release_group_exclusions/);
 });
 
@@ -547,7 +546,8 @@ test('Quick Rate artist navigation restores transient collection context through
   assert.match(quickRate, /originIdentity: originRow\?\.dataset\.quickIdentity \|\| expandedIdentity/);
   assert.match(quickRate, /window\.history\.replaceState\([\s\S]*?bomQuickRate:/);
   assert.match(quickRate, /window\.history\.pushState\(\{ bomQuickRateArtist: true \}/);
-  assert.match(quickRate, /cachedRestore[\s\S]*?quickRateHistoryRestore\?\.token === restoredState\.restoreToken/);
+  assert.match(quickRate, /loadSelectedQuickRateYear\(selectedYear\)/);
+  assert.match(extract('function mapQuickRateYearProjection', 'async function loadQuickRateCore'), /quickRateYearCache\.has\(key\)/);
   assert.match(quickRate, /dialog\.scrollTop = restoredState\.scrollTop/);
   assert.doesNotMatch(quickRate, /ratingChooser|ratingControlOpen/);
   assert.doesNotMatch(quickRate, /resolveQuickRateSpotifyTrack|resolveArtistIdByName/);
@@ -751,7 +751,7 @@ test('97 rated canonical tracks out of 97 rateable tracks is complete with unres
 
 test('year switching and Phase 1.1 controls rerender from selected state', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;[\s\S]*?render\(true\)/);
+  assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;[\s\S]*?loadSelectedQuickRateYear\(year, true\)/);
   assert.match(quickRate, /selectedFilter = filterButton\.dataset\.quickFilter/);
   assert.match(quickRate, /data-quick-next/);
   assert.match(quickRate, /data-quick-picker-decade/);

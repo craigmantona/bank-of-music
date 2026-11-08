@@ -11345,6 +11345,98 @@ let quickRateCoreCache = null;
 let quickRateCorePromise = null;
 let quickRateAlbumsCache = null;
 let quickRateAlbumsPromise = null;
+const quickRateYearCache = new Map();
+const quickRateYearPromises = new Map();
+
+function mapQuickRateYearProjection(payload, userId) {
+  const rows = Array.isArray(payload?.entries) ? payload.entries : [];
+  const songs = rows.filter(row => row.resolved_song_id).map(row => ({
+    id: row.resolved_song_id,
+    title: row.song_title,
+    artist: row.song_artist,
+    album_id: row.album_id,
+    external_source: row.song_external_source,
+    external_id: row.song_external_id,
+    canonical_song_id: row.canonical_song_id,
+    spotify_track_id: row.spotify_track_id,
+    is_deleted: false
+  }));
+  const canonicalRecordings = rows.filter(row => row.canonical_song_id).map(row => ({
+    id: row.canonical_song_id,
+    title: row.canonical_title || row.title,
+    artist: row.canonical_artist || row.artist,
+    preferred_spotify_track_id: row.preferred_spotify_track_id || ""
+  }));
+  const albums = rows.filter(row => row.album_id).map(row => ({
+    id: row.album_id,
+    title: row.album_title,
+    artist: row.album_artist,
+    custom_cover: row.custom_cover,
+    cover_art_url: row.cover_art_url,
+    is_deleted: false
+  }));
+  const ratings = rows.filter(row => row.personal_rating !== null && row.personal_rating !== undefined).map(row => ({
+    user_id: userId,
+    song_id: row.resolved_song_id || row.song_id,
+    canonical_song_id: row.canonical_song_id,
+    rating: row.personal_rating
+  }));
+  const total = Number(payload?.overall_total || 0);
+  const rated = Number(payload?.overall_rated || 0);
+  return {
+    years: (payload?.years || []).map(Number).filter(Number.isInteger),
+    selectedYear: Number(payload?.selected_year),
+    importedEntries: rows,
+    songs: mergeRowsById([], songs),
+    canonicalRecordings: mergeRowsById([], canonicalRecordings),
+    albums: mergeRowsById([], albums),
+    ratings,
+    overallProgress: { total, rated, pending: 0, percentage: total ? Math.round((rated / total) * 100) : 0 }
+  };
+}
+
+async function loadQuickRateYearData(collection, year, userId) {
+  const requestedYear = Number(year) || 0;
+  const key = `${userId}:${collection}:${requestedYear || "latest"}`;
+  if (quickRateYearCache.has(key)) {
+    return { ...quickRateYearCache.get(key), ratings: allSongRatings.filter(row => row.user_id === userId) };
+  }
+  if (quickRateYearPromises.has(key)) return quickRateYearPromises.get(key);
+  const promise = (async () => {
+    if (collection === "uk-number-ones") {
+      const { data, error } = await supabaseClient.rpc("get_quick_rate_year", {
+        p_collection_key: collection,
+        p_chart_year: requestedYear || null
+      });
+      if (error) throw error;
+      return mapQuickRateYearProjection(data, userId);
+    }
+    const selectedYear = getValidQuickRateYear(Object.keys(QUICK_RATE_UK_SINGLES).map(Number), requestedYear);
+    const entries = QUICK_RATE_UK_SINGLES[selectedYear] || [];
+    const [songs, ratings] = await Promise.all([
+      fetchRowsInChunks("songs", "title", entries.map(entry => entry.title), "id,title,artist,album_id,external_source,external_id,canonical_song_id,is_deleted,spotify_track_id"),
+      fetchQuickRateRows("song_ratings", "id,user_id,song_id,canonical_song_id,rating", userId)
+    ]);
+    const visibleSongs = songs.filter(song => !song.is_deleted);
+    const [albums, canonicalRecordings] = await Promise.all([
+      fetchRowsInChunks("albums", "id", visibleSongs.map(song => song.album_id), "*"),
+      fetchRowsInChunks("canonical_recordings", "id", visibleSongs.map(song => song.canonical_song_id), "id,title,artist,preferred_spotify_track_id")
+    ]);
+    return {
+      years: Object.keys(QUICK_RATE_UK_SINGLES).map(Number).sort((a, b) => b - a),
+      selectedYear,
+      importedEntries: [], songs: visibleSongs, albums, canonicalRecordings, ratings, overallProgress: null
+    };
+  })();
+  quickRateYearPromises.set(key, promise);
+  try {
+    const result = await promise;
+    quickRateYearCache.set(key, result);
+    return result;
+  } finally {
+    if (quickRateYearPromises.get(key) === promise) quickRateYearPromises.delete(key);
+  }
+}
 
 async function loadQuickRateCore(userId) {
   if (quickRateCoreCache?.userId === userId) {
@@ -11401,9 +11493,10 @@ async function openQuickRate(restoredState = null) {
   let selectedFilter = restoredState?.selectedFilter === "unrated" ? "unrated" : "all";
   let pickerDecade = restoredState?.pickerDecade ?? null;
   let expandedIdentity = restoredState?.expandedIdentity || "";
-  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], historicalCovers = new Map(), busy = false;
+  let songs = [], albums = [], artistIdentities = [], canonicalRecordings = [], importedEntries = [], yearEntries = [], availableYears = [], overallProgressOverride = null, historicalCovers = new Map(), busy = false;
   let lastNavigatedIdentity = restoredState?.lastNavigatedIdentity || null;
   let restorePositionPending = Boolean(restoredState);
+  let loadSequence = 0;
   dialog.addEventListener("close", () => dialog.remove());
   dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
   dialog.showModal();
@@ -11412,7 +11505,9 @@ async function openQuickRate(restoredState = null) {
     if (!dialog.open) return;
     if (currentUser?.id !== userId) { dialog.close(); return; }
     const isNumberOnes = selectedCollection === "uk-number-ones";
-    const selection = getQuickRateCollectionYearState(selectedCollection, importedEntries, selectedYear);
+    const selection = availableYears.length
+      ? { years: availableYears, selectedYear: getValidQuickRateYear(availableYears, selectedYear), pickerDecade }
+      : getQuickRateCollectionYearState(selectedCollection, importedEntries, selectedYear);
     years = selection.years;
     if (selection.selectedYear !== selectedYear) {
       selectedYear = selection.selectedYear;
@@ -11440,7 +11535,7 @@ async function openQuickRate(restoredState = null) {
     if (!decades.includes(pickerDecade)) pickerDecade = Math.floor(selectedYear / 10) * 10;
     const pickerYears = getQuickRateYearsInDecade(years, pickerDecade);
     const overallProgress = isNumberOnes
-      ? getQuickRateProgress(buildImportedQuickRateYearModel(importedEntries.filter(row => row.collection_key === "uk-number-ones"), songs, canonicalRecordings), userId)
+      ? overallProgressOverride || getQuickRateProgress(buildImportedQuickRateYearModel(importedEntries.filter(row => row.collection_key === "uk-number-ones"), songs, canonicalRecordings), userId)
       : null;
     const newestYear = years.length ? Math.max(...years) : null;
     const latestChartDate = isNumberOnes && selectedYear === newestYear
@@ -11537,6 +11632,9 @@ async function openQuickRate(restoredState = null) {
     const songId = target.startsWith("track-rating-") ? Number(target.replace("track-rating-", "")) : 0;
     if (busy || currentUser?.id !== userId || (!songId && !canonicalSongId)) return;
     busy = true;
+    const previousRating = canonicalSongId
+      ? getYourCanonicalRecordingRating(canonicalSongId)
+      : getYourSongRating(songId);
     button.closest(".bom-v1-quick-row")?.querySelectorAll("button").forEach(item => item.disabled = true);
     status.textContent = "Saving…";
     try {
@@ -11545,6 +11643,12 @@ async function openQuickRate(restoredState = null) {
         : await saveTrackRating(songId, Number(button.dataset.rating));
       if (!dialog.open || currentUser?.id !== userId) return;
       if (!saved) throw new Error("Rating not saved");
+      if (previousRating === null && overallProgressOverride) {
+        overallProgressOverride.rated = Math.min(overallProgressOverride.total, overallProgressOverride.rated + 1);
+        overallProgressOverride.percentage = overallProgressOverride.total
+          ? Math.round((overallProgressOverride.rated / overallProgressOverride.total) * 100)
+          : 0;
+      }
       status.textContent = `Saved ${button.dataset.rating} / 10`;
       render();
     } catch (error) {
@@ -11564,7 +11668,10 @@ async function openQuickRate(restoredState = null) {
     selectedFilter = "all";
     expandedIdentity = "";
     lastNavigatedIdentity = null;
+    availableYears = [];
+    importedEntries = [];
     render(true);
+    void loadSelectedQuickRateYear(null, true);
   });
 
   dialog.querySelector("[data-quick-years]").addEventListener("click", event => {
@@ -11582,7 +11689,8 @@ async function openQuickRate(restoredState = null) {
     expandedIdentity = "";
     lastNavigatedIdentity = null;
     status.textContent = `Showing UK singles for ${year}.`;
-    render(true);
+    card.innerHTML = '<p class="bom-v1-quick-empty">Loading this year…</p>';
+    void loadSelectedQuickRateYear(year, true);
   });
 
   card.addEventListener("click", async event => {
@@ -11673,66 +11781,47 @@ async function openQuickRate(restoredState = null) {
     event.stopImmediatePropagation();
     busy = true;
     status.textContent = "Removing rating…";
+    const hadRating = clearCanonicalButton
+      ? getYourCanonicalRecordingRating(clearCanonicalButton.dataset.clearCanonicalRating) !== null
+      : getYourSongRating(clearButton.dataset.clearTrackRating) !== null;
     const removed = clearCanonicalButton
       ? await deleteCanonicalRecordingRating(clearCanonicalButton.dataset.clearCanonicalRating)
       : await deleteTrackRating(clearButton.dataset.clearTrackRating);
     busy = false;
     if (dialog.open) {
+      if (removed && hadRating && overallProgressOverride) {
+        overallProgressOverride.rated = Math.max(0, overallProgressOverride.rated - 1);
+        overallProgressOverride.percentage = overallProgressOverride.total
+          ? Math.round((overallProgressOverride.rated / overallProgressOverride.total) * 100)
+          : 0;
+      }
       render();
       status.textContent = removed ? "Rating removed." : "Couldn’t remove your rating. Please try again.";
     }
   });
 
-  try {
-    const cachedRestore = restoredState?.restoreToken && quickRateHistoryRestore?.token === restoredState.restoreToken
-      ? quickRateHistoryRestore.data
-      : null;
-    const core = cachedRestore ? {
-      userId,
-      songs: cachedRestore.songs,
-      canonicalRecordings: cachedRestore.canonicalRecordings,
-      ratings: allSongRatings.filter(row => row.user_id === userId),
-      importedEntries: cachedRestore.importedEntries
-    } : await loadQuickRateCore(userId);
-    songs = core.songs;
-    canonicalRecordings = core.canonicalRecordings;
-    importedEntries = core.importedEntries;
-    albums = cachedRestore?.albums || quickRateAlbumsCache || [];
-    importedEntries = importedEntries.map(entry => ({
-      ...entry,
-      artworkUrl: entry.artworkUrl || historicalCovers.get(Number(entry.id)) || ""
-    }));
-    artistIdentities = cachedRestore?.artistIdentities || [];
-    allCanonicalRecordings = canonicalRecordings;
-    const ratings = core.ratings;
-    if (!dialog.open || currentUser?.id !== userId) return;
-    songs.forEach(song => {
-      if (!allSongs.some(row => Number(row.id) === Number(song.id))) allSongs.push(song);
-    });
-    albums.forEach(album => {
-      if (!allAlbums.some(row => Number(row.id) === Number(album.id))) allAlbums.push(album);
-    });
-    const otherUsersRows = allSongRatings.filter(row => row.user_id !== userId);
-    allSongRatings = [...otherUsersRows, ...ratings];
-    render();
-    if (!albums.length) {
-      void loadQuickRateAlbums().then(loadedAlbums => {
-        if (!dialog.open || currentUser?.id !== userId) return;
-        albums = loadedAlbums;
-        allAlbums = mergeRowsById(allAlbums, loadedAlbums);
-        const scrollTop = dialog.scrollTop;
-        render();
-        dialog.scrollTop = scrollTop;
-      }).catch(() => {});
-    }
-    void loadHistoricalCoverAllowlist().then(covers => {
-      if (!dialog.open || currentUser?.id !== userId) return;
-      historicalCovers = covers;
-      const scrollTop = dialog.scrollTop;
-      render();
-      dialog.scrollTop = scrollTop;
-    }).catch(() => {});
-    if (!cachedRestore) {
+  async function loadSelectedQuickRateYear(requestedYear = null, focus = false) {
+    const sequence = ++loadSequence;
+    status.textContent = "Loading tracks…";
+    try {
+      const loaded = await loadQuickRateYearData(selectedCollection, requestedYear, userId);
+      if (sequence !== loadSequence || !dialog.open || currentUser?.id !== userId) return;
+      selectedYear = loaded.selectedYear;
+      availableYears = loaded.years;
+      songs = loaded.songs;
+      albums = loaded.albums;
+      canonicalRecordings = loaded.canonicalRecordings;
+      importedEntries = loaded.importedEntries.map(entry => ({
+        ...entry,
+        artworkUrl: entry.artworkUrl || historicalCovers.get(Number(entry.id)) || ""
+      }));
+      overallProgressOverride = loaded.overallProgress;
+      allSongs = mergeRowsById(allSongs, songs);
+      allAlbums = mergeRowsById(allAlbums, albums);
+      allCanonicalRecordings = mergeRowsById(allCanonicalRecordings, canonicalRecordings);
+      const otherUsersRows = allSongRatings.filter(row => row.user_id !== userId);
+      allSongRatings = [...otherUsersRows, ...loaded.ratings];
+      render(focus);
       const artistLookupNames = getArtistCreditLookupNames(yearEntries.map(entry => entry.song?.artist || entry.canonicalRecording?.artist || entry.artist));
       enrichQuickRateArtistIdentities(dialog, userId, identities => {
         const scrollTop = dialog.scrollTop;
@@ -11740,11 +11829,20 @@ async function openQuickRate(restoredState = null) {
         loadedArtistIdentities = identities;
         render();
         dialog.scrollTop = scrollTop;
-      },artistLookupNames);
+      }, artistLookupNames);
+    } catch (error) {
+      if (sequence === loadSequence) status.textContent = "Couldn’t load tracks. Choose the year again to retry.";
     }
-  } catch (error) {
-    status.textContent = "Couldn’t load tracks. Exit Quick Rate and try again.";
   }
+
+  void loadHistoricalCoverAllowlist().then(covers => {
+    if (!dialog.open || currentUser?.id !== userId) return;
+    historicalCovers = covers;
+    const scrollTop = dialog.scrollTop;
+    render();
+    dialog.scrollTop = scrollTop;
+  }).catch(() => {});
+  await loadSelectedQuickRateYear(selectedYear);
 }
 
 window.handleQuickRateClick = function (event, button) {
