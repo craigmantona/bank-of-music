@@ -169,6 +169,10 @@
       "releaseGroupMbid": "a87720fa-5aab-3a62-813c-a92c232307cc",
       "coverUrl": "https://coverartarchive.org/release-group/a87720fa-5aab-3a62-813c-a92c232307cc/front-500"
     },
+    "193": {
+      "releaseGroupMbid": "d88baece-ef7a-3682-b1b1-68705ae3aa58",
+      "coverUrl": "http://coverartarchive.org/release/ea4d10b6-0023-44a3-b415-0a591632fcc6/18079889041-500.jpg"
+    },
     "396": {
       "releaseGroupMbid": "c25ad862-5eed-4024-a887-4860884b69ee",
       "coverUrl": "https://coverartarchive.org/release-group/c25ad862-5eed-4024-a887-4860884b69ee/front-500"
@@ -1417,6 +1421,5 @@
       "releaseGroupMbid": "d4eb5a78-4f5e-4899-9576-57e27087c07f",
       "coverUrl": "https://coverartarchive.org/release-group/d4eb5a78-4f5e-4899-9576-57e27087c07f/front-500"
     }
-  },
-  "generatedAt": "2026-11-07T21:57:29.621Z"
+  }
 }
