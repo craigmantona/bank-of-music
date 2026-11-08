@@ -251,13 +251,15 @@ function renderClickableProfileHandle(
 function getLoadedArtistIdentities(extraIdentities = []) {
   const albumIdentities = (allAlbums || []).map(album => ({
     artist_name: album.artist,
-    musicbrainz_artist_id: album.musicbrainz_artist_id || album.artist_id || ""
+    musicbrainz_artist_id: album.musicbrainz_artist_id || album.artist_id || "",
+    catalogue_artist: true
   }));
+  const songIdentities = (allSongs || []).map(song => ({artist_name:song.artist,musicbrainz_artist_id:"",catalogue_artist:true}));
   const selectedArtistId = selectedItem?.artistId || selectedItem?.musicbrainz_artist_id || (selectedItem?.type === "artist" ? selectedItem.externalId : "");
   const selectedIdentity = selectedArtistId
     ? [{artist_name:selectedItem.artist || selectedItem.name || selectedItem.title,musicbrainz_artist_id:selectedArtistId}]
     : [];
-  return [...extraIdentities,...loadedArtistIdentities,...albumIdentities,...selectedIdentity].filter(identity => identity?.artist_name && identity?.musicbrainz_artist_id);
+  return [...extraIdentities,...loadedArtistIdentities,...albumIdentities,...songIdentities,...selectedIdentity].filter(identity => identity?.artist_name);
 }
 
 function resolveLoadedArtistIdentity(artistName, extraIdentities = []) {
@@ -267,8 +269,9 @@ function resolveLoadedArtistIdentity(artistName, extraIdentities = []) {
   if (!key) return null;
   const matches = getLoadedArtistIdentities(extraIdentities).filter(identity => artistKey(identity.artist_name) === key);
   const ids = new Set(matches.map(identity => String(identity.musicbrainz_artist_id || "")).filter(Boolean));
-  if (ids.size !== 1) return null;
-  return {artist:cleanName,artistId:[...ids][0]};
+  if (ids.size > 1) return null;
+  if (ids.size === 1) return {artist:cleanName,artistId:[...ids][0]};
+  return matches.some(identity => identity.catalogue_artist) ? {artist:cleanName,artistId:""} : null;
 }
 
 function splitArtistCredit(artistCredit, extraIdentities = []) {
@@ -281,6 +284,15 @@ function splitArtistCredit(artistCredit, extraIdentities = []) {
     separator:index%2===1,
     destination:index%2===0?resolveLoadedArtistIdentity(text,extraIdentities):null
   }));
+}
+
+function getArtistCreditLookupNames(artistCredits = []) {
+  return [...new Set(artistCredits.flatMap(credit => {
+    const clean = normaliseText(credit);
+    if (!clean) return [];
+    const parts = clean.split(/(\s+(?:&|and|with|feat\.?|ft\.?|featuring|x)\s+|,\s*)/i).filter(Boolean);
+    return [clean,...parts.filter((_,index) => index%2===0).map(normaliseText)];
+  }).filter(Boolean))];
 }
 
 function renderArtistCreditLinks(artistCredit, extraIdentities = [], {quickRate=false} = {}) {
@@ -7881,7 +7893,10 @@ function renderRemoteAlbumCatalogueStatus(item = selectedItem) {
 function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
   const albumTitle = detail?.title || selectedItem?.title || "";
   const artist = detail?.["artist-credit"]?.map((credit) => credit.name).filter(Boolean).join(", ") || selectedItem?.artist || "";
-  const albumSongs = (allSongs || []).filter((song) => Number(song.is_deleted || 0) === 0 && Number(song.album_id) === Number(savedAlbumId));
+  const catalogueAlbumId = Number(savedAlbumId);
+  const albumSongs = Number.isSafeInteger(catalogueAlbumId) && catalogueAlbumId > 0
+    ? (allSongs || []).filter((song) => Number(song.is_deleted || 0) === 0 && Number(song.album_id) === catalogueAlbumId)
+    : [];
   const rows = [];
   const seenSongIds = new Set();
   const seenExternalIds = new Set();
@@ -11240,10 +11255,12 @@ async function fetchQuickRateRows(table, columns, userId) {
   }
 }
 
-async function fetchQuickRateArtistIdentities() {
+async function fetchQuickRateArtistIdentities(artistNames = []) {
+  const names = [...new Set((artistNames || []).map(normaliseText).filter(Boolean))];
+  if (!names.length) return [];
   const [catalogue, heroes] = await Promise.all([
-    supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").not("musicbrainz_artist_id", "is", null),
-    supabaseClient.from("artist_hero_overrides").select("artist_name,musicbrainz_artist_id,storage_path,updated_at,image_credit,image_source_url,image_license_name,image_license_url,image_modification_note").not("musicbrainz_artist_id", "is", null)
+    supabaseClient.from("artist_catalog").select("artist_name,musicbrainz_artist_id").in("artist_name", names).not("musicbrainz_artist_id", "is", null),
+    supabaseClient.from("artist_hero_overrides").select("artist_name,musicbrainz_artist_id,storage_path,updated_at,image_credit,image_source_url,image_license_name,image_license_url,image_modification_note").in("artist_name", names).not("musicbrainz_artist_id", "is", null)
   ]);
   if (catalogue.error) throw catalogue.error;
   if (heroes.error) throw heroes.error;
@@ -11253,8 +11270,8 @@ async function fetchQuickRateArtistIdentities() {
   }))];
 }
 
-function enrichQuickRateArtistIdentities(dialog, userId, onReady) {
-  return fetchQuickRateArtistIdentities().then(identities => {
+function enrichQuickRateArtistIdentities(dialog, userId, onReady, artistNames = []) {
+  return fetchQuickRateArtistIdentities(artistNames).then(identities => {
     if (!dialog.open || currentUser?.id !== userId) return;
     onReady(identities || []);
   }).catch(() => {});
@@ -11503,7 +11520,7 @@ async function openQuickRate(restoredState = null) {
     if (artistButton) {
       const artistName = artistButton.dataset.quickArtistName || "";
       const artistId = artistButton.dataset.quickArtist || "";
-      if (!artistName || !artistId) return;
+      if (!artistName) return;
       const originRow = artistButton.closest("[data-quick-identity]");
       const restoreState = {
         selectedCollection,
@@ -11599,13 +11616,14 @@ async function openQuickRate(restoredState = null) {
     allSongRatings = [...otherUsersRows, ...ratings];
     render();
     if (!cachedRestore) {
+      const artistLookupNames = getArtistCreditLookupNames(yearEntries.map(entry => entry.song?.artist || entry.canonicalRecording?.artist || entry.artist));
       enrichQuickRateArtistIdentities(dialog, userId, identities => {
         const scrollTop = dialog.scrollTop;
         artistIdentities = identities;
         loadedArtistIdentities = identities;
         render();
         dialog.scrollTop = scrollTop;
-      });
+      },artistLookupNames);
     }
   } catch (error) {
     status.textContent = "Couldn’t load tracks. Exit Quick Rate and try again.";

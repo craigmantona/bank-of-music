@@ -12,12 +12,13 @@ const renderEnd = app.indexOf("function getSavedAlbumByTitleArtist", renderStart
 const render = app.slice(renderStart, renderEnd);
 
 test("album detail uses a bounded loader instead of the full catalogue", () => {
-  assert.match(render, /selectedItem\.type === "album"[\s\S]*await loadAlbumDetailData\(selectedItem\)[\s\S]*else \{[\s\S]*await ensureFullCatalogue\(\)/);
+  assert.match(render, /selectedItem\.type === "album"[\s\S]*await loadAlbumDetailData\(selectedItem\)/);
+  assert.doesNotMatch(render.match(/if \(selectedItem\.type === "album"\)[\s\S]*?updateStickyPlayer\(selectedItem\)/)?.[0] || "", /ensureFullCatalogue\(\)/);
   assert.doesNotMatch(loader, /fetchAllRows|loadLibrary|canonical_recordings/);
 });
 
 test("album detail fetches only the selected album and related rows", () => {
-  assert.match(loader, /from\("albums"\)\.select\("\*"\)\.limit\(1\)/);
+  assert.match(loader, /from\("albums"\)\.select\("\*"\)\.eq\("id", albumId\)\.maybeSingle\(\)/);
   assert.match(loader, /from\("songs"\)\.select\("\*"\)\.eq\("album_id", Number\(album\.id\)\)/);
   assert.match(loader, /from\("ratings"\)\.select\("user_id,album_id,rating"\)\.eq\("album_id", Number\(album\.id\)\)/);
   assert.match(loader, /fetchRowsInChunks\("song_ratings", "song_id", relatedSongIds/);
@@ -38,7 +39,7 @@ test("lightweight album data never marks the full catalogue ready", () => {
 
 test("direct saved album links can resolve by id without catalogue state", () => {
   assert.match(loader, /selection\?\.savedAlbumId \|\| selection\?\.albumId/);
-  assert.match(loader, /query = query\.eq\("id", albumId\)/);
+  assert.match(loader, /from\("albums"\)\.select\("\*"\)\.eq\("id", albumId\)\.maybeSingle\(\)/);
 });
 
 test("album detail requests remain single-flight per album", () => {
