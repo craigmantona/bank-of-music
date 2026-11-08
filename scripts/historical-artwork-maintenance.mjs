@@ -15,6 +15,13 @@ const writeJson = (file, value) => {
 const isoAfter = (now, days) => new Date(now.getTime() + days * 86400000).toISOString();
 const mbidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
+export function normalizeCoverUrl(value) {
+  const url = new URL(value);
+  if (url.hostname === "coverartarchive.org") url.protocol = "https:";
+  if (url.protocol !== "https:") throw new Error(`Refusing non-HTTPS artwork URL: ${value}`);
+  return url.toString();
+}
+
 export function candidateFingerprint(candidate) {
   return `${candidate.releaseGroupMbid}:${[...candidate.approvedReleaseMbids].sort().join(",")}`;
 }
@@ -100,7 +107,8 @@ export function createCoverRequester({ fetchImpl = fetch, sleepImpl = sleep, now
         successfulRequests += 1; consecutiveUnavailable = 0;
         return { status: "AVAILABLE", fronts: (payload.images || [])
           .filter(image => image.approved !== false && (image.front === true || (image.types || []).includes("Front")))
-          .map(image => ({ imageId: String(image.id || ""), coverUrl: image.thumbnails?.["500"] || image.image })) };
+          .map(image => ({ imageId: String(image.id || ""),
+            coverUrl: normalizeCoverUrl(image.thumbnails?.["500"] || image.image) })) };
       } catch (error) {
         lastRequestAt = now();
         failures.push(networkErrorDetail(error));

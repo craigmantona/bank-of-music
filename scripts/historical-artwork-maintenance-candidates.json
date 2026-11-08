@@ -63,17 +63,6 @@
       ],
       "priorStatus": "no_front_cover_on_verified_release"
     },
-    "193": {
-      "chartYear": 1999,
-      "artist": "Cliff Richard",
-      "title": "The Millennium Prayer",
-      "releaseGroupMbid": "d88baece-ef7a-3682-b1b1-68705ae3aa58",
-      "approvedReleaseMbids": [
-        "72838b20-29fb-4517-94bf-816dd7957cf0",
-        "ea4d10b6-0023-44a3-b415-0a591632fcc6"
-      ],
-      "priorStatus": "cover_art_inaccessible"
-    },
     "439": {
       "chartYear": 1983,
       "artist": "Men at Work",
