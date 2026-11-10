@@ -41,10 +41,13 @@ test('proposal is guarded, transactional, dry-run capable and preserves protecte
   assert.match(sql, /begin;/i);
   assert.match(sql, /rollback;/i);
   assert.match(sql, /pg_advisory_xact_lock/);
+  assert.match(sql, /set local role service_role/i);
+  assert.match(sql, /reset role/i);
   assert.match(sql, /Rating count changed unexpectedly/);
   assert.match(sql, /Protected canonical or Spotify data changed unexpectedly/);
   assert.doesNotMatch(sql, /update\s+public\.song_ratings/i);
   assert.doesNotMatch(sql, /delete\s+from\s+public\.song_ratings/i);
+  assert.match(sql, /expected albums \+1, songs \+26, canonicals \+23/i);
 });
 
 test('proposal resolves generated identities from rows instead of predicting IDs', () => {

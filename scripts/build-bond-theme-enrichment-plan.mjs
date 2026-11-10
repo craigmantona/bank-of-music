@@ -189,13 +189,17 @@ select
   (select count(*) from public.song_ratings) as rating_count,
   (select count(*) from public.canonical_recordings) as canonical_count,
   (select count(*) from public.songs) as song_count,
+  (select count(*) from public.albums) as album_count,
   (select jsonb_agg(jsonb_build_object('song_id', s.id, 'canonical_song_id', s.canonical_song_id, 'spotify_track_id', s.spotify_track_id) order by s.id)
    from public.songs s where s.id in (15562, 19649, 19784)) as protected_rows;
 
+set local role service_role;
+create temp table bond_import_result as
 select public.admin_add_catalogue_album(
   $bond_album$${JSON.stringify(albumPayload)}$bond_album$::jsonb,
   $bond_tracks$${JSON.stringify(trackPayload)}$bond_tracks$::jsonb
 ) as import_result;
+reset role;
 
 do $postcheck$
 declare
@@ -214,7 +218,27 @@ begin
   if (select count(*) from public.canonical_recordings c join bond_expected e on lower(e.musicbrainz_recording_id) = lower(c.musicbrainz_recording_id)) <> 26 then
     raise exception 'Post-import canonical identity count is not 26';
   end if;
+  if (select import_result->>'status' from bond_import_result) <> 'added'
+     or (select (import_result->>'track_count')::integer from bond_import_result) <> 26 then
+    raise exception 'Fresh dry-run did not add exactly one complete 26-track album';
+  end if;
+  if (select count(*) from public.albums) <> v_before.album_count + 1
+     or (select count(*) from public.songs) <> v_before.song_count + 26
+     or (select count(*) from public.canonical_recordings) <> v_before.canonical_count + 23 then
+    raise exception 'Unexpected dry-run deltas: expected albums +1, songs +26, canonicals +23';
+  end if;
 end $postcheck$;
+
+select jsonb_build_object(
+  'existing_canonical_reused', 3,
+  'new_canonical_required', (select count(*) from public.canonical_recordings) - b.canonical_count,
+  'albums_inserted', (select count(*) from public.albums) - b.album_count,
+  'release_occurrences_inserted', (select count(*) from public.songs) - b.song_count,
+  'ratings_changed', (select count(*) from public.song_ratings) - b.rating_count,
+  'import_result', (select import_result from bond_import_result),
+  'protected_rows_unchanged', true
+) as dry_run_summary
+from bond_before b;
 
 select e.position, e.title, e.artist, e.musicbrainz_recording_id,
        c.id as resolved_canonical_recording_id,

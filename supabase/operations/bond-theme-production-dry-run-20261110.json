@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "executedAt": "2026-11-10T12:21:57Z",
+  "projectRef": "xevxjggauscyrvvtmftx",
+  "mode": {
+    "BOND_IMPORT_APPROVED": true,
+    "BOND_IMPORT_COMMIT": false
+  },
+  "result": "success_rolled_back",
+  "approvedMappingEntries": 26,
+  "preflight": {
+    "albums": 1704,
+    "songs": 15877,
+    "canonicalRecordings": 16725,
+    "songRatings": 1641,
+    "existingBondCanonicalRecordings": 3,
+    "missingBondCanonicalRecordings": 23,
+    "matchingAuthoritativeAlbums": 0,
+    "duplicateBondCanonicalMbids": 0
+  },
+  "validatedTransactionalDelta": {
+    "canonicalRecordingsReused": 3,
+    "canonicalRecordingsInserted": 23,
+    "albumsInserted": 1,
+    "releaseOccurrencesInserted": 26,
+    "songRatingsChanged": 0
+  },
+  "protectedExistingRows": [
+    {
+      "songId": 15562,
+      "canonicalRecordingId": "cb675a5b-924e-4edb-840f-a7983ed3af3f",
+      "spotifyTrackId": null,
+      "spotifyMatchedAt": null
+    },
+    {
+      "songId": 19649,
+      "canonicalRecordingId": "b90ddab4-9971-4bc4-8547-74c9a54bcae9",
+      "spotifyTrackId": null,
+      "spotifyMatchedAt": null
+    },
+    {
+      "songId": 19784,
+      "canonicalRecordingId": "d1740f5c-0472-4c0a-a228-ce1f1cebc4c6",
+      "spotifyTrackId": null,
+      "spotifyMatchedAt": null
+    }
+  ],
+  "postRollback": {
+    "albums": 1704,
+    "songs": 15877,
+    "canonicalRecordings": 16725,
+    "songRatings": 1641,
+    "existingBondCanonicalRecordings": 3,
+    "matchingAuthoritativeAlbums": 0,
+    "protectedRowsUnchanged": true,
+    "productionUnchanged": true
+  },
+  "safetyReview": {
+    "outerTransaction": true,
+    "explicitRollback": true,
+    "outerAdvisoryTransactionLock": "bond-theme-enrichment-20261110-v1",
+    "catalogueWorkflowAdvisoryLock": "bom-admin-catalogue:<release-group-id>",
+    "schemaCompatible": true,
+    "externalSideEffects": false,
+    "unexpectedWrites": false,
+    "actualGeneratedIdsUsed": true
+  },
+  "warnings": [
+    "The live SQL operator is postgres while admin_add_catalogue_album accepts service_role or an authenticated admin. The proposal was corrected to use SET LOCAL ROLE service_role only around the existing RPC, followed by RESET ROLE. This role change is transaction-scoped."
+  ],
+  "errors": [],
+  "safeToCommitAssessment": "Yes, technically safe based on this dry run, subject to a separate explicit production-commit approval. All preflight, exact-delta and preservation assertions passed, and rollback verification matched the baseline."
+}
