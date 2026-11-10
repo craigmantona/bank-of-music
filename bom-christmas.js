@@ -112,9 +112,7 @@
   }
 
   async function open() {
-    if (window.BOM_CHRISTMAS_FEATURE?.enabled !== true || document.getElementById("bomChristmasSpecial")) return false;
-    const timeZone = window.BOM_CHRISTMAS_FEATURE.timeZone || "Europe/London";
-    if (new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone }).format(new Date()) !== "12") return false;
+    if (window.BOM_CHRISTMAS_FEATURE?.isEligible?.(new Date()) !== true || document.getElementById("bomChristmasSpecial")) return false;
     const dialog = document.createElement("dialog");
     dialog.id = "bomChristmasSpecial";
     dialog.className = "bom-xmas-dialog";

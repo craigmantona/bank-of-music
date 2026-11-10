@@ -17,8 +17,9 @@ test("private preview is loopback-only and blocks production writes", () => {
 test("preview transforms are response-only and retain the public date gate", () => {
   assert.match(preview, /function transform\(relativePath, source\)/);
   assert.match(preview, /__BOM_CHRISTMAS_PRIVATE_PREVIEW__/);
-  assert.match(preview, /christmasEnabled = \(\) => window\.BOM_CHRISTMAS_FEATURE\?\.enabled === true/);
-  assert.match(config, /BOM_CHRISTMAS_FEATURE[\s\S]*?enabled: false/);
+  assert.match(preview, /isEligible\(\) \{ return true; \}/);
+  assert.match(config, /BOM_CHRISTMAS_FEATURE[\s\S]*?emergencyDisabled: false/);
+  assert.match(config, /isEligible\(now = new Date\(\)\)/);
   assert.match(config, /timeZone: "Europe\/London"/);
   assert.doesNotMatch(config, /PRIVATE_PREVIEW|preview/i);
 });

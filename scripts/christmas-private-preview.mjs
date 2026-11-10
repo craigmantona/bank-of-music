@@ -131,33 +131,10 @@ function transform(relativePath, source) {
   if (relativePath === "config.js") {
     return replaceOnce(
       source,
-      'window.BOM_CHRISTMAS_FEATURE = Object.freeze({\n  enabled: false,',
-      'window.BOM_CHRISTMAS_FEATURE = Object.freeze({\n  enabled: true,',
+      '  isEligible(now = new Date()) {\n    if (window.BOM_CHRISTMAS_FEATURE?.emergencyDisabled === true) return false;\n    return new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone: "Europe/London" }).format(now) === "12";\n  }',
+      '  isEligible() { return true; }',
       relativePath
     );
-  }
-  if (relativePath === "bom-discover.js") {
-    return replaceOnce(
-      source,
-      'const christmasEnabled = () => window.BOM_CHRISTMAS_FEATURE?.enabled === true && new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone: window.BOM_CHRISTMAS_FEATURE.timeZone || "Europe/London" }).format(new Date()) === "12";',
-      'const christmasEnabled = () => window.BOM_CHRISTMAS_FEATURE?.enabled === true;',
-      relativePath
-    );
-  }
-  if (relativePath === "bom-christmas.js") {
-    let result = replaceOnce(
-      source,
-      'if (new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone }).format(new Date()) !== "12") return false;',
-      'if (!window.__BOM_CHRISTMAS_PRIVATE_PREVIEW__?.localOnly && new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone }).format(new Date()) !== "12") return false;',
-      relativePath
-    );
-    result = replaceOnce(
-      result,
-      'if (window.BOM_CHRISTMAS_FEATURE?.enabled !== true || document.getElementById("bomChristmasSpecial")) return false;',
-      'if ((window.BOM_CHRISTMAS_FEATURE?.enabled !== true && !window.__BOM_CHRISTMAS_PRIVATE_PREVIEW__?.localOnly) || document.getElementById("bomChristmasSpecial")) return false;',
-      relativePath
-    );
-    return result;
   }
   if (relativePath === "app.js") {
     let result = replaceOnce(
