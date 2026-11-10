@@ -38,10 +38,11 @@ test("special cases and the OHMSS bonus are modelled without theme substitution"
 });
 
 test("catalogue matches are canonical, unique and do not invent Spotify IDs", () => {
-  const matched = manifest.films.filter(row => row.catalogueTrackId !== null);
-  assert.deepEqual(matched.map(row => row.catalogueTrackId), [15562, 19649, 19784]);
+  const matched = [...manifest.films, ...manifest.bonusTracks];
+  assert.equal(matched.length, 26);
   assert.equal(new Set(matched.map(row => row.catalogueTrackId)).size, matched.length);
   assert.equal(new Set(matched.map(row => row.canonicalRecordingId)).size, matched.length);
+  assert(matched.every(row => Number.isInteger(row.catalogueTrackId) && row.catalogueTrackId > 0));
   assert(matched.every(row => /^[0-9a-f-]{36}$/.test(row.canonicalRecordingId)));
   assert([...manifest.films, ...manifest.bonusTracks].every(row => row.spotifyId === ""));
 });
