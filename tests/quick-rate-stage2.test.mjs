@@ -34,11 +34,10 @@ test('year loads are cached, deduplicated, retryable and rating-cache safe', () 
   assert.match(open, /removed && hadRating && overallProgressOverride/);
 });
 
-test('UK Singles years use targeted title, album and canonical lookups', () => {
+test('BOM Tracks years use the same narrow per-year projection', () => {
   const loader = app.slice(app.indexOf('async function loadQuickRateYearData'), app.indexOf('async function loadQuickRateCore'));
-  assert.match(loader, /fetchRowsInChunks\("songs", "title", entries\.map/);
-  assert.match(loader, /fetchRowsInChunks\("albums", "id", visibleSongs\.map/);
-  assert.match(loader, /fetchRowsInChunks\("canonical_recordings", "id", visibleSongs\.map/);
+  assert.match(loader, /collection === "uk-number-ones" \|\| collection === "bom-tracks"/);
+  assert.doesNotMatch(loader, /fetchQuickRateRows\("songs"/);
 });
 
 test('immediate shell and stale-request protection remain in place', () => {

@@ -393,11 +393,11 @@ test("migration is additive, read-only to clients, RLS protected and service-wri
   assert.doesNotMatch(sql, /grant (?:insert|update|delete|all)[^;]*to (?:anon|authenticated)/i);
 });
 
-test("Quick Rate exposes UK No.1s separately without replacing the existing sample", async () => {
+test("Quick Rate preserves UK No.1s alongside BOM Tracks by Year", async () => {
   const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
   const discover = await readFile(new URL("../bom-discover.js", import.meta.url), "utf8");
   assert.match(app, /const QUICK_RATE_UK_SINGLES/);
-  assert.match(app, /data-quick-collection="uk-singles"/);
+  assert.match(app, /data-quick-collection="bom-tracks"/);
   assert.match(app, /data-quick-collection="uk-number-ones"/);
   assert.match(app, /Source: Wikimedia \/ Wikidata/);
   assert.match(app, /fetchQuickRateRows\("quick_rate_collection_tracks"/);
@@ -408,5 +408,5 @@ test("Quick Rate exposes UK No.1s separately without replacing the existing samp
   assert.match(app, /data-quick-listen/);
   assert.match(app, /window\.handleQuickRateListen/);
   assert.doesNotMatch(app.slice(app.indexOf("async function openQuickRate"), app.indexOf("window.handleQuickRateClick")), /resolveQuickRateSpotifyTrack|listenToQuickRateTrack/);
-  assert.match(discover, /UK singles by year/);
+  assert.match(discover, /BOM catalogue tracks by year/);
 });

@@ -355,7 +355,7 @@ test('failed Spotify resolution leaves Quick Rate usable with its search fallbac
   assert.equal(button.textContent, 'Listen on Spotify');
 });
 
-test('UK Singles Quick Rate does not trigger Spotify resolution while rating or switching year', () => {
+test('BOM Tracks Quick Rate does not trigger Spotify resolution while rating or switching year', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
   assert.match(quickRate, /data-quick-year/);
   assert.match(quickRate, /dialog\.saveRating/);
@@ -367,7 +367,7 @@ test('Quick Rate year page keeps chart metadata, progress, and responsive rating
   assert.match(quickRate, /song\.title/);
   assert.match(quickRate, /song\.artist/);
   assert.match(quickRate, /album\.title/);
-  assert.match(quickRate, /UK Singles/);
+  assert.match(quickRate, /BOM Tracks by Year/);
   assert.match(quickRate, /data-quick-progress-count/);
   assert.match(quickRate, /Not yet in the BOM catalogue/);
   assert.match(quickRate, /bom-v1-quick-overall/);
@@ -378,7 +378,7 @@ test('Quick Rate year page keeps chart metadata, progress, and responsive rating
   assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-track-rating-popover \{ width: min\(290px/);
   assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-rate h1 \{ font-size: 21px !important/);
   assert.match(styles, /bom-v1-quick-rate \.bom-v1-track-rating-trigger \{ display: inline-flex/);
-  assert.match(discover, /UK singles by year/);
+  assert.match(discover, /BOM catalogue tracks by year/);
 });
 
 test('Quick Rate reuses the closed Rate + and score interaction from main track ratings', () => {
@@ -539,7 +539,7 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
 test('Quick Rate artist navigation restores transient collection context through browser history', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
   assert.match(quickRate, /async function openQuickRate\(restoredState = null\)/);
-  assert.match(quickRate, /selectedCollection = restoredState\?\.selectedCollection \|\| "uk-number-ones"/);
+  assert.match(quickRate, /restoredState\?\.selectedCollection === "uk-singles"[\s\S]*?restoredState\?\.selectedCollection \|\| "uk-number-ones"/);
   assert.match(quickRate, /selectedYear = restoredState\?\.selectedYear \?\? null/);
   assert.match(quickRate, /selectedFilter = restoredState\?\.selectedFilter === "unrated" \? "unrated" : "all"/);
   assert.match(quickRate, /scrollTop: dialog\.scrollTop/);
@@ -572,14 +572,14 @@ test('Quick Rate derives year and decade navigation from available collection ye
   assert.equal(context.getQuickRateDecadeYear([1991, 1999, 2000], 1990), 1999);
   assert.equal(context.getQuickRateDecadeYear([1991, 1999, 2000], 1980), null);
   assert.deepEqual(Array.from(context.getQuickRateYearsInDecade([1972,1970,1980,1973], 1970)), [1970,1972,1973]);
-  const imported = [{collection_key:'uk-number-ones',chart_year:2026},{collection_key:'uk-number-ones',chart_year:1952}];
+  const imported = [{collection_key:'uk-number-ones',chart_year:2026},{collection_key:'uk-number-ones',chart_year:1952},{collection_key:'bom-tracks',chart_year:2024},{collection_key:'bom-tracks',chart_year:1998}];
   assert.deepEqual(Array.from(context.getQuickRateAvailableYears('uk-number-ones', imported)), [2026,1952]);
   assert.equal(context.getValidQuickRateYear([2026,1952], undefined), 2026);
   assert.equal(context.getValidQuickRateYear([2026,1952], 1952), 1952);
   assert.equal(context.getValidQuickRateYear([], undefined), null);
   assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('uk-number-ones', []), undefined), null);
   assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('uk-number-ones', imported), null), 2026);
-  assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('uk-singles', imported), 2026), 2024);
+  assert.equal(context.getValidQuickRateYear(context.getQuickRateAvailableYears('bom-tracks', imported), 2026), 2024);
   const loading = context.getQuickRateCollectionYearState('uk-number-ones', [], null);
   assert.deepEqual(Array.from(loading.years), []);
   assert.equal(loading.selectedYear, null);
@@ -595,19 +595,19 @@ test('Quick Rate derives year and decade navigation from available collection ye
     {collection_key:'uk-number-ones',chart_year:1979},
     {collection_key:'uk-number-ones',chart_year:1980}
   ], 1980).pickerDecade, 1980);
-  const singles1998 = context.getQuickRateCollectionYearState('uk-singles', imported, 1998);
+  const singles1998 = context.getQuickRateCollectionYearState('bom-tracks', imported, 1998);
   assert.equal(singles1998.pickerDecade, 1990);
   const numberOnesAfterSwitch = context.getQuickRateCollectionYearState('uk-number-ones', imported, null);
   assert.equal(numberOnesAfterSwitch.selectedYear, 2026);
   assert.equal(numberOnesAfterSwitch.pickerDecade, 2020);
-  const singlesAfterSwitchBack = context.getQuickRateCollectionYearState('uk-singles', imported, null);
+  const singlesAfterSwitchBack = context.getQuickRateCollectionYearState('bom-tracks', imported, null);
   assert.equal(singlesAfterSwitchBack.selectedYear, 2024);
   assert.equal(singlesAfterSwitchBack.pickerDecade, 2020);
 });
 
 test('Quick Rate cannot render an undefined selected year while collection data loads', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  assert.match(quickRate, /let selectedCollection = restoredState\?\.selectedCollection \|\| "uk-number-ones"/);
+  assert.match(quickRate, /let selectedCollection = restoredState\?\.selectedCollection === "uk-singles"/);
   assert.match(quickRate, /let years = \[\], selectedYear = restoredState\?\.selectedYear \?\? null/);
   assert.match(quickRate, /getQuickRateCollectionYearState\(selectedCollection, importedEntries, selectedYear\)/);
   assert.match(quickRate, /if \(selectedYear === null\)/);
@@ -619,7 +619,7 @@ test('Quick Rate defaults to UK No.1s and synchronises picker decade with collec
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
   assert.match(quickRate, /<h1 id="bomQuickRateTitle">UK No\.1s<\/h1>/);
   assert.match(quickRate, /data-quick-collection="uk-number-ones" aria-pressed="true"/);
-  assert.match(quickRate, /data-quick-collection="uk-singles" aria-pressed="false"/);
+  assert.match(quickRate, /data-quick-collection="bom-tracks" aria-pressed="false"/);
   assert.match(quickRate, /selectedCollection = collection;\s*selectedYear = null;\s*pickerDecade = null;/);
   assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;/);
   assert.doesNotMatch(quickRate, /selectedCollection = "uk-singles"/);

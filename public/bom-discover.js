@@ -55,7 +55,7 @@
     const weeklyAlbums=releases(data?.albums), weeklyNumberOnes=numberOnes(data?.numberOnes), album=weeklyAlbums[0], one=weeklyNumberOnes[0];
     const catalogueArtwork=(data?.albums||[]).filter(item=>item.artworkUrl).slice(0,3);
     const slides=[
-      ["Quick rate","Rate the songs that shaped the charts","Move through UK singles by year and build your collection faster.","quick-rate","Start Quick Rate",artworkStack(catalogueArtwork,"LP","olive"),["UK Singles by Year","UK No. 1s by Decade","Build Your Ratings"]],
+      ["Quick rate","Rate the songs that shaped the charts","Move through BOM catalogue tracks by year and build your collection faster.","quick-rate","Start Quick Rate",artworkStack(catalogueArtwork,"LP","olive"),["BOM Tracks by Year","UK No. 1s by Decade","Build Your Ratings"]],
       album ? [album.significant?`${album.age} years · Released this week`:"Released this week",album.title,`${album.artist} · ${album.year}. Albums first released during this week in music history.`,"released-week","Explore releases",artworkStack(weeklyAlbums,"LP","amber")] : ["Released this week","Albums from this week in music history","No verified original release in BOM matches this week yet.","released-week","Explore releases",artworkStack([],"LP","amber")],
       one ? ["UK No.1s this week",one.title,`${one.artist} · ${one.chart_year}. Revisit the singles that topped the UK chart this week.`,"number-ones-week","Explore No.1s",artworkStack(weeklyNumberOnes,"01","chart")] : ["UK No.1s this week","The songs that topped the UK chart","Explore verified historical chart runs held in BOM.","number-ones-week","Explore No.1s",artworkStack([],"01","chart")]
     ];

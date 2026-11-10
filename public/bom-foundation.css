@@ -1371,6 +1371,8 @@
 .bom-v1-quick-tools > button:disabled { color: var(--bom-v1-muted); }
 .bom-v1-quick-empty { padding: 32px 0; color: var(--bom-v1-muted); text-align: center; }
 .bom-v1-quick-list { display: grid; }
+.bom-v1-quick-section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 18px 0 7px; margin: 0; color: var(--bom-v1-text); border-bottom: 1px solid var(--bom-v1-line); font-size: 13px; letter-spacing: .01em; }
+.bom-v1-quick-section-title span { color: var(--bom-v1-muted); font-size: 10px; font-weight: 400; }
 .bom-v1-quick-row { display: grid; grid-template-columns: 24px 52px minmax(180px, 1fr) auto; align-items: center; gap: 12px; min-height: 72px; padding: 9px 0; border-bottom: 1px solid var(--bom-v1-line); }
 .bom-v1-quick-row.is-unavailable { grid-template-columns: 24px 52px minmax(0, 1fr); opacity: .58; }
 .bom-v1-quick-index { color: var(--bom-v1-muted); font-size: 10px; font-variant-numeric: tabular-nums; text-align: right; }
@@ -1386,6 +1388,7 @@
 .bom-v1-quick-track strong, .bom-v1-quick-track span, .bom-v1-quick-track small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bom-v1-quick-track span, .bom-v1-quick-track small, .bom-v1-quick-rating > span { font-size: 12px; }
 .bom-v1-quick-track small, .bom-v1-quick-rating > span { color: var(--bom-v1-muted); }
+.bom-v1-quick-track .bom-v1-quick-community { color: var(--bom-v1-accent); font-variant-numeric: tabular-nums; }
 .bom-v1-quick-sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
 .bom-shell-v1 .bom-v1-quick-rate .bom-v1-track-rating-popover { margin: 0; }
 .bom-quick-art { position: relative; display: grid; place-items: center; width: min(100%, 340px); aspect-ratio: 1; margin: 0 auto; border-radius: 10px; overflow: hidden; background: var(--bom-v1-bg); box-shadow: 0 12px 35px #0005; }
@@ -1444,6 +1447,7 @@
   .bom-v1-quick-filter button { flex: 0 0 auto; padding-inline: 10px; }
   .bom-v1-quick-tools > button { padding-inline: 8px; white-space: nowrap; border-color: transparent; }
   .bom-v1-quick-row { grid-template-columns: 16px 40px minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 0; padding: 7px 0; }
+  .bom-v1-quick-section-title { padding-top: 14px; font-size: 12px; }
   .bom-v1-quick-thumb { width: 40px; border: 0; }
   .bom-v1-quick-track strong, .bom-v1-quick-track span, .bom-v1-quick-track small { white-space: normal; overflow-wrap: anywhere; }
   .bom-v1-quick-track strong { display: -webkit-box; overflow: hidden; font-size: 13px; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
