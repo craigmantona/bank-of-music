@@ -680,6 +680,79 @@ async function saveHistoricalChartEntryRating(chartEntryId, rating) {
   }
 }
 
+let bondFeatureAssetPromise = null;
+
+function isBondFeatureEnabled() {
+  return window.BOM_BOND_FEATURE?.enabled === true;
+}
+
+async function openBondSpecial() {
+  if (!isBondFeatureEnabled() || !currentUser) return false;
+  if (window.BOMBondUI?.open) return window.BOMBondUI.open();
+  if (!bondFeatureAssetPromise) {
+    bondFeatureAssetPromise = new Promise((resolve, reject) => {
+      if (!document.querySelector('link[data-bom-bond-style]')) {
+        const style = document.createElement("link");
+        style.rel = "stylesheet";
+        style.href = "bom-bond.css?v=1";
+        style.dataset.bomBondStyle = "1";
+        document.head.append(style);
+      }
+      const script = document.createElement("script");
+      script.src = "bom-bond.js?v=1";
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error("The 007 experience could not load."));
+      document.body.append(script);
+    }).catch(error => {
+      bondFeatureAssetPromise = null;
+      throw error;
+    });
+  }
+  await bondFeatureAssetPromise;
+  return window.BOMBondUI?.open?.() || false;
+}
+
+async function loadBondMusicData(manifest) {
+  if (!isBondFeatureEnabled() || !currentUser) throw new Error("The 007 feature is unavailable.");
+  const entries = [...(manifest?.films || []), ...(manifest?.bonusTracks || [])];
+  const trackIds = [...new Set(entries.map(entry => Number(entry.catalogueTrackId)).filter(Number.isSafeInteger))];
+  if (!trackIds.length) return { tracks: [], launch: window.BOM_BOND_FEATURE };
+  const canonicalIds = [...new Set(entries.map(entry => String(entry.canonicalRecordingId || "")).filter(Boolean))];
+  const [songsResult, personalByCanonical, personalBySong, communityResult] = await Promise.all([
+    supabaseClient.from("songs").select("id,title,artist,album_id,canonical_song_id,spotify_track_id,is_deleted").in("id", trackIds).eq("is_deleted", false),
+    canonicalIds.length ? supabaseClient.from("song_ratings").select("song_id,canonical_song_id,rating").eq("user_id", currentUser.id).in("canonical_song_id", canonicalIds) : Promise.resolve({ data: [], error: null }),
+    supabaseClient.from("song_ratings").select("song_id,canonical_song_id,rating").eq("user_id", currentUser.id).in("song_id", trackIds),
+    supabaseClient.from("song_rating_charts").select("item_id,average_rating,rating_count").in("item_id", trackIds)
+  ]);
+  for (const result of [songsResult, personalByCanonical, personalBySong]) if (result.error) throw result.error;
+  const songs = songsResult.data || [];
+  allSongs = mergeRowsById(allSongs, songs);
+  const personal = [...(personalByCanonical.data || []), ...(personalBySong.data || [])];
+  allSongRatings = mergeRatingRows(allSongRatings, personal.map(row => ({ ...row, user_id: currentUser.id })), row => `${row.user_id}:${row.canonical_song_id || `song:${row.song_id}`}`);
+  const community = communityResult.error ? [] : (communityResult.data || []);
+  return {
+    tracks: trackIds.map(id => {
+      const song = songs.find(row => Number(row.id) === id);
+      const canonicalId = getCanonicalSongId(song);
+      const mine = personal.find(row => canonicalId ? row.canonical_song_id === canonicalId : Number(row.song_id) === id);
+      const aggregate = community.find(row => Number(row.item_id) === id);
+      return { catalogueTrackId: id, available: Boolean(song), personalRating: mine?.rating ?? null, communityAverage: aggregate?.average_rating ?? null, communityRatingCount: Number(aggregate?.rating_count || 0) };
+    }),
+    launch: window.BOM_BOND_FEATURE
+  };
+}
+
+async function saveBondTrackRating(catalogueTrackId, rating) {
+  if (!isBondFeatureEnabled() || !currentUser) return { ok: false, message: "Sign in to rate this track." };
+  const id = Number(catalogueTrackId), value = Number(rating);
+  if (!Number.isSafeInteger(id) || !Number.isInteger(value) || value < 0 || value > 10) return { ok: false, message: "Choose a whole-number rating from 0 to 10." };
+  await saveTrackRating(id, value);
+  const song = allSongs.find(row => Number(row.id) === id);
+  const saved = getCanonicalSongId(song) ? getYourCanonicalRecordingRating(getCanonicalSongId(song)) : getYourSongRating(id);
+  return { ok: Number(saved) === value, rating: saved, message: Number(saved) === value ? `Saved ${value} / 10.` : "Your rating could not be saved." };
+}
+
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
@@ -694,6 +767,9 @@ window.BOMPresentationBridge = Object.freeze({
     renderRecommendations();
   },
   showQuickRate: () => openQuickRate(),
+  showBondSpecial: () => openBondSpecial(),
+  loadBondMusicData: manifest => loadBondMusicData(manifest),
+  saveBondTrackRating: (catalogueTrackId, rating) => saveBondTrackRating(catalogueTrackId, rating),
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
   showRatings: async () => {

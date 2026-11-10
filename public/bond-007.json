@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "scope": "Official Eon Productions films only",
+  "verifiedOn": "2026-11-10",
+  "sources": [
+    { "label": "007 official film archive", "url": "https://www.007.com/the-films/" },
+    { "label": "Official Charts — Bond themes", "url": "https://www.officialcharts.com/chart-news/every-james-bond-theme-ever-and-where-they-charted__10670/" }
+  ],
+  "films": [
+    { "filmTitle": "Dr. No", "year": 1962, "bondActor": "Sean Connery", "themeTitle": "James Bond Theme", "originalPerformer": "John Barry and Orchestra", "instrumental": true, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "From Russia with Love", "year": 1963, "bondActor": "Sean Connery", "themeTitle": "From Russia with Love", "originalPerformer": "Matt Monro", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null, "note": "Matt Monro's vocal song, heard in the film and end credits; not the instrumental opening-title music." },
+    { "filmTitle": "Goldfinger", "year": 1964, "bondActor": "Sean Connery", "themeTitle": "Goldfinger", "originalPerformer": "Shirley Bassey", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Thunderball", "year": 1965, "bondActor": "Sean Connery", "themeTitle": "Thunderball", "originalPerformer": "Tom Jones", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "You Only Live Twice", "year": 1967, "bondActor": "Sean Connery", "themeTitle": "You Only Live Twice", "originalPerformer": "Nancy Sinatra", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "On Her Majesty's Secret Service", "year": 1969, "bondActor": "George Lazenby", "themeTitle": "On Her Majesty's Secret Service", "originalPerformer": "John Barry Orchestra", "instrumental": true, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Diamonds Are Forever", "year": 1971, "bondActor": "Sean Connery", "themeTitle": "Diamonds Are Forever", "originalPerformer": "Shirley Bassey", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Live and Let Die", "year": 1973, "bondActor": "Roger Moore", "themeTitle": "Live and Let Die", "originalPerformer": "Paul McCartney and Wings", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "The Man with the Golden Gun", "year": 1974, "bondActor": "Roger Moore", "themeTitle": "The Man with the Golden Gun", "originalPerformer": "Lulu", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "The Spy Who Loved Me", "year": 1977, "bondActor": "Roger Moore", "themeTitle": "Nobody Does It Better", "originalPerformer": "Carly Simon", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Moonraker", "year": 1979, "bondActor": "Roger Moore", "themeTitle": "Moonraker", "originalPerformer": "Shirley Bassey", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "For Your Eyes Only", "year": 1981, "bondActor": "Roger Moore", "themeTitle": "For Your Eyes Only", "originalPerformer": "Sheena Easton", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Octopussy", "year": 1983, "bondActor": "Roger Moore", "themeTitle": "All Time High", "originalPerformer": "Rita Coolidge", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "A View to a Kill", "year": 1985, "bondActor": "Roger Moore", "themeTitle": "A View to a Kill", "originalPerformer": "Duran Duran", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "The Living Daylights", "year": 1987, "bondActor": "Timothy Dalton", "themeTitle": "The Living Daylights", "originalPerformer": "a-ha", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Licence to Kill", "year": 1989, "bondActor": "Timothy Dalton", "themeTitle": "Licence to Kill", "originalPerformer": "Gladys Knight", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "GoldenEye", "year": 1995, "bondActor": "Pierce Brosnan", "themeTitle": "GoldenEye", "originalPerformer": "Tina Turner", "instrumental": false, "catalogueTrackId": 15562, "canonicalRecordingId": "cb675a5b-924e-4edb-840f-a7983ed3af3f", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Tomorrow Never Dies", "year": 1997, "bondActor": "Pierce Brosnan", "themeTitle": "Tomorrow Never Dies", "originalPerformer": "Sheryl Crow", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "The World Is Not Enough", "year": 1999, "bondActor": "Pierce Brosnan", "themeTitle": "The World Is Not Enough", "originalPerformer": "Garbage", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Die Another Day", "year": 2002, "bondActor": "Pierce Brosnan", "themeTitle": "Die Another Day", "originalPerformer": "Madonna", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Casino Royale", "year": 2006, "bondActor": "Daniel Craig", "themeTitle": "You Know My Name", "originalPerformer": "Chris Cornell", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Quantum of Solace", "year": 2008, "bondActor": "Daniel Craig", "themeTitle": "Another Way to Die", "originalPerformer": "Alicia Keys and Jack White", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Skyfall", "year": 2012, "bondActor": "Daniel Craig", "themeTitle": "Skyfall", "originalPerformer": "Adele", "instrumental": false, "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "Spectre", "year": 2015, "bondActor": "Daniel Craig", "themeTitle": "Writing's on the Wall", "originalPerformer": "Sam Smith", "instrumental": false, "catalogueTrackId": 19649, "canonicalRecordingId": "b90ddab4-9971-4bc4-8547-74c9a54bcae9", "spotifyId": "", "imageReference": null },
+    { "filmTitle": "No Time to Die", "year": 2021, "bondActor": "Daniel Craig", "themeTitle": "No Time to Die", "originalPerformer": "Billie Eilish", "instrumental": false, "catalogueTrackId": 19784, "canonicalRecordingId": "d1740f5c-0472-4c0a-a228-ce1f1cebc4c6", "spotifyId": "", "imageReference": null }
+  ],
+  "bonusTracks": [
+    { "filmTitle": "On Her Majesty's Secret Service", "year": 1969, "bondActor": "George Lazenby", "themeTitle": "We Have All the Time in the World", "originalPerformer": "Louis Armstrong", "instrumental": false, "bonus": true, "bonusLabel": "Featured song — bonus track (not the main title theme)", "catalogueTrackId": null, "canonicalRecordingId": "", "spotifyId": "", "imageReference": null }
+  ]
+}

@@ -29,7 +29,10 @@ for file in \
   bom-ratings.js \
   bom-search.js \
   bom-spotify-playlist.js \
-  bom-turnstile.js
+  bom-turnstile.js \
+  bom-bond.js \
+  bom-bond.css \
+  bond-007.json
 do
   cp "$repo_dir/$file" "$output_dir/$file"
 done
