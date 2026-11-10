@@ -1,0 +1,1255 @@
+{
+  "schemaVersion": 1,
+  "generatedOn": "2026-11-10",
+  "mode": "review-only-no-production-writes",
+  "authoritativeSource": {
+    "provider": "MusicBrainz",
+    "release_id": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+    "title": "The Best of Bond… James Bond",
+    "date": "2021-10-08",
+    "country": "US",
+    "status": "Official",
+    "barcode": "602508731099",
+    "release_group_id": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+    "release_group_title": "Best of Bond… James Bond",
+    "release_group_types": [
+      "Compilation",
+      "Soundtrack"
+    ]
+  },
+  "summary": {
+    "entries": 26,
+    "officialFilmThemes": 25,
+    "bonusRecordings": 1,
+    "existingCatalogueIdentities": 3,
+    "plannedImports": 23,
+    "manualSignoffRecommended": 13
+  },
+  "entries": [
+    {
+      "film": "Dr. No",
+      "year": 1962,
+      "bondActor": "Sean Connery",
+      "track": "James Bond Theme",
+      "originalPerformer": "John Barry and Orchestra",
+      "bonus": false,
+      "musicbrainzRecordingId": "9afed0a7-66be-43a4-bbe3-862e71b9fa21",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 1,
+          "creditedTitle": "The James Bond Theme",
+          "creditedArtist": "The John Barry Orchestra",
+          "durationMs": 107160,
+          "isrcs": [
+            "USMG26200001"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "From Russia with Love",
+      "year": 1963,
+      "bondActor": "Sean Connery",
+      "track": "From Russia with Love",
+      "originalPerformer": "Matt Monro",
+      "bonus": false,
+      "musicbrainzRecordingId": "8f0332a0-1513-4261-8974-1c7733bc5b5f",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 2,
+          "creditedTitle": "From Russia With Love",
+          "creditedArtist": "Matt Monro",
+          "durationMs": 152400,
+          "isrcs": [
+            "GBAYE6300049",
+            "GBAYE9500642",
+            "USMG26300001"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "Goldfinger",
+      "year": 1964,
+      "bondActor": "Sean Connery",
+      "track": "Goldfinger",
+      "originalPerformer": "Shirley Bassey",
+      "bonus": false,
+      "musicbrainzRecordingId": "9cff2598-a24f-444a-bf28-9d4c9ac21481",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 3,
+          "creditedTitle": "Goldfinger",
+          "creditedArtist": "Shirley Bassey",
+          "durationMs": 167773,
+          "isrcs": [
+            "ES58A1702122",
+            "GBAYE0001387",
+            "GBAYE0300111",
+            "GBAYE6400302",
+            "GBAYE6400512"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "d6177bfd-f9e6-4e11-9f55-eae321d685f2",
+          "creditedTitle": "Goldfinger",
+          "creditedArtist": "Shirley Bassey",
+          "firstReleaseDate": "1968-08-01",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "c3ba21c6-824d-4a15-bc6b-b4d0037f5985",
+          "creditedTitle": "Goldfinger",
+          "creditedArtist": "Shirley Bassey",
+          "firstReleaseDate": "1987",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "62bd5471-6513-47d6-a049-0267f04d0e55",
+          "creditedTitle": "Goldfinger",
+          "creditedArtist": "Shirley Bassey",
+          "firstReleaseDate": "1990",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "Thunderball",
+      "year": 1965,
+      "bondActor": "Sean Connery",
+      "track": "Thunderball",
+      "originalPerformer": "Tom Jones",
+      "bonus": false,
+      "musicbrainzRecordingId": "00b1b8cd-5977-4f3f-92e8-9a817b77aed7",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 4,
+          "creditedTitle": "Thunderball",
+          "creditedArtist": "Tom Jones",
+          "durationMs": 181800,
+          "isrcs": [
+            "GBF076520920",
+            "GBUM71306236",
+            "USMG20200064"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "f9782719-992e-4f3f-b519-13ebc50e14d9",
+          "creditedTitle": "Thunderball",
+          "creditedArtist": "Tom Jones",
+          "firstReleaseDate": "1965",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "fcf86769-76cb-4221-ad2f-373b6726b4ca",
+          "creditedTitle": "Thunderball",
+          "creditedArtist": "Tom Jones",
+          "firstReleaseDate": "1967",
+          "disambiguation": "live, 1967: Talk of the Town, London, England",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "00903885-3fc2-44e7-9654-04dba5811269",
+          "creditedTitle": "Thunderball",
+          "creditedArtist": "Tom Jones",
+          "firstReleaseDate": "1975",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "You Only Live Twice",
+      "year": 1967,
+      "bondActor": "Sean Connery",
+      "track": "You Only Live Twice",
+      "originalPerformer": "Nancy Sinatra",
+      "bonus": false,
+      "musicbrainzRecordingId": "79f67c46-6aa0-4a9b-ae81-676884400c59",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 5,
+          "creditedTitle": "You Only Live Twice",
+          "creditedArtist": "Nancy Sinatra",
+          "durationMs": 164786,
+          "isrcs": [
+            "USMG20200082",
+            "USMG26700002"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "8bfadc15-42a5-4a93-9abf-b4c09d9ecccf",
+          "creditedTitle": "You Only Live Twice",
+          "creditedArtist": "Nancy Sinatra",
+          "firstReleaseDate": "1967",
+          "disambiguation": "single version, mostly used in Nancy Sinatra compilations",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "17a5c02e-45bb-48c3-9ce2-e038717d7162",
+          "creditedTitle": "You Only Live Twice",
+          "creditedArtist": "Nancy Sinatra",
+          "firstReleaseDate": "1999",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "7a9bfedd-e6dc-4649-a6fb-848c0e52ff69",
+          "creditedTitle": "You Only Live Twice",
+          "creditedArtist": "Nancy Sinatra",
+          "firstReleaseDate": "2009",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "On Her Majesty's Secret Service",
+      "year": 1969,
+      "bondActor": "George Lazenby",
+      "track": "On Her Majesty's Secret Service",
+      "originalPerformer": "John Barry Orchestra",
+      "bonus": false,
+      "musicbrainzRecordingId": "c1a6563e-2a02-4573-a2cf-d8dd1da99b9d",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 6,
+          "creditedTitle": "On Her Majesty’s Secret Service",
+          "creditedArtist": "The John Barry Orchestra",
+          "durationMs": 154480,
+          "isrcs": [
+            "USEM39100216",
+            "USMG20200046",
+            "USMG21500006",
+            "USMG26900003"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "Diamonds Are Forever",
+      "year": 1971,
+      "bondActor": "Sean Connery",
+      "track": "Diamonds Are Forever",
+      "originalPerformer": "Shirley Bassey",
+      "bonus": false,
+      "musicbrainzRecordingId": "5b85db52-5955-4f46-9114-b34caac195f9",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 8,
+          "creditedTitle": "Diamonds Are Forever",
+          "creditedArtist": "Shirley Bassey",
+          "durationMs": 160493,
+          "isrcs": [
+            "USEM38400049",
+            "USMG21500012",
+            "USMG27100001"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "Live and Let Die",
+      "year": 1973,
+      "bondActor": "Roger Moore",
+      "track": "Live and Let Die",
+      "originalPerformer": "Paul McCartney and Wings",
+      "bonus": false,
+      "musicbrainzRecordingId": "ad23e670-2655-4ac6-8e56-8f09a3e0e80c",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 9,
+          "creditedTitle": "Live and Let Die",
+          "creditedArtist": "Paul McCartney & Wings",
+          "durationMs": 192146,
+          "isrcs": [
+            "GBCCS0100674",
+            "GBCCS0700290",
+            "GBCCS1500158",
+            "GBCCS1500160",
+            "GBCCS1800097",
+            "GBCCS1800132",
+            "GBCCS7300674"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "The Man with the Golden Gun",
+      "year": 1974,
+      "bondActor": "Roger Moore",
+      "track": "The Man with the Golden Gun",
+      "originalPerformer": "Lulu",
+      "bonus": false,
+      "musicbrainzRecordingId": "e49ae934-67b3-4a66-b88e-8d715191d567",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 10,
+          "creditedTitle": "The Man With the Golden Gun",
+          "creditedArtist": "Lulu",
+          "durationMs": 153666,
+          "isrcs": [
+            "USCE39100001",
+            "USMG27400001"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "104efe98-c1e5-4b9d-bc10-71a1e27519b5",
+          "creditedTitle": "The Man With the Golden Gun",
+          "creditedArtist": "Lulu",
+          "firstReleaseDate": "1974",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "4bcf5777-1665-4c05-809d-c2ccd3fca01c",
+          "creditedTitle": "The Man With the Golden Gun",
+          "creditedArtist": "Lulu",
+          "firstReleaseDate": "2000",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "33e63e54-168a-4670-b166-4720a12aa264",
+          "creditedTitle": "The Man With the Golden Gun",
+          "creditedArtist": "Lulu",
+          "firstReleaseDate": "2004",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "The Spy Who Loved Me",
+      "year": 1977,
+      "bondActor": "Roger Moore",
+      "track": "Nobody Does It Better",
+      "originalPerformer": "Carly Simon",
+      "bonus": false,
+      "musicbrainzRecordingId": "b076d9a2-976d-476e-8f0c-c77137d7d732",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 11,
+          "creditedTitle": "Nobody Does It Better",
+          "creditedArtist": "Carly Simon",
+          "durationMs": 208440,
+          "isrcs": [
+            "USEM39100214",
+            "USMG27700012",
+            "USMG29200001"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "Moonraker",
+      "year": 1979,
+      "bondActor": "Roger Moore",
+      "track": "Moonraker",
+      "originalPerformer": "Shirley Bassey",
+      "bonus": false,
+      "musicbrainzRecordingId": "82fd14b3-c549-4ff2-aaa5-14116e748efc",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 12,
+          "creditedTitle": "Moonraker",
+          "creditedArtist": "Shirley Bassey",
+          "durationMs": 187746,
+          "isrcs": [
+            "USMG27900001"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "20a9cdc0-8d9a-4b7f-a75c-7bfb2893094e",
+          "creditedTitle": "Moonraker",
+          "creditedArtist": "Shirley Bassey",
+          "firstReleaseDate": "1992",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "e8a3e5d9-be78-4c44-9b3e-009b2ecd0782",
+          "creditedTitle": "Moonraker",
+          "creditedArtist": "Shirley Bassey",
+          "firstReleaseDate": "1993",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "99a8bc08-d8bc-448a-8d43-dbed07d40c75",
+          "creditedTitle": "Moonraker",
+          "creditedArtist": "Shirley Bassey",
+          "firstReleaseDate": "1994",
+          "disambiguation": "2000 remaster",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "For Your Eyes Only",
+      "year": 1981,
+      "bondActor": "Roger Moore",
+      "track": "For Your Eyes Only",
+      "originalPerformer": "Sheena Easton",
+      "bonus": false,
+      "musicbrainzRecordingId": "4f183f4a-10c4-458d-80b3-fd1fe84554c4",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 13,
+          "creditedTitle": "For Your Eyes Only",
+          "creditedArtist": "Sheena Easton",
+          "durationMs": 183626,
+          "isrcs": [
+            "QZF392100006",
+            "USMG28100001",
+            "USMG29300001"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "b24a6cd8-b56c-4487-8f39-fb312ee72d48",
+          "creditedTitle": "For Your Eyes Only",
+          "creditedArtist": "Sheena Easton",
+          "firstReleaseDate": "1981",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "4096e5ef-b66e-4ef0-b593-3b342e8b2d28",
+          "creditedTitle": "For Your Eyes Only",
+          "creditedArtist": "Sheena Easton",
+          "firstReleaseDate": "1981",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "49daf0ba-d94f-49c1-9f37-8f9e89ab3dfa",
+          "creditedTitle": "For Your Eyes Only",
+          "creditedArtist": "Sheena Easton",
+          "firstReleaseDate": "1983",
+          "disambiguation": "from “Act One” TV special",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "Octopussy",
+      "year": 1983,
+      "bondActor": "Roger Moore",
+      "track": "All Time High",
+      "originalPerformer": "Rita Coolidge",
+      "bonus": false,
+      "musicbrainzRecordingId": "42711b74-918c-4cc4-962c-34ac956d3c92",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 14,
+          "creditedTitle": "All Time High",
+          "creditedArtist": "Rita Coolidge",
+          "durationMs": 182080,
+          "isrcs": [
+            "USMG28300001",
+            "USMG28300011"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "A View to a Kill",
+      "year": 1985,
+      "bondActor": "Roger Moore",
+      "track": "A View to a Kill",
+      "originalPerformer": "Duran Duran",
+      "bonus": false,
+      "musicbrainzRecordingId": "00ab36eb-5a93-41c4-a8b2-914809ac5c56",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 1,
+          "creditedTitle": "A View to a Kill",
+          "creditedArtist": "Duran Duran",
+          "durationMs": 214840,
+          "isrcs": [
+            "GBAYE1336203",
+            "USMG28500001"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "8a346469-b4c5-4802-8f22-c1482788dd53",
+          "creditedTitle": "A View to a Kill",
+          "creditedArtist": "Duran Duran",
+          "firstReleaseDate": "1985",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "dd947ce6-86be-41b3-afc3-63f81a4967b9",
+          "creditedTitle": "A View to a Kill",
+          "creditedArtist": "Duran Duran",
+          "firstReleaseDate": "1986",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "2654e64d-387d-4063-b300-ae53adb801a7",
+          "creditedTitle": "A View To A Kill",
+          "creditedArtist": "Duran Duran",
+          "firstReleaseDate": "1993",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "The Living Daylights",
+      "year": 1987,
+      "bondActor": "Timothy Dalton",
+      "track": "The Living Daylights",
+      "originalPerformer": "a-ha",
+      "bonus": false,
+      "musicbrainzRecordingId": "ff77d291-677a-4b78-a2ed-0af78d3cf6a9",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 2,
+          "creditedTitle": "The Living Daylights",
+          "creditedArtist": "a‐ha",
+          "durationMs": 253573,
+          "isrcs": [
+            "USMG28700001",
+            "USMG29800569",
+            "USRH11600702",
+            "USWB10200493",
+            "USWB10403938",
+            "USWB11001338"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "8c3180f2-410c-41c8-be3b-0e8b79f66d7f",
+          "creditedTitle": "The Living Daylights",
+          "creditedArtist": "a‐ha",
+          "firstReleaseDate": "1987-06-22",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "c7b24ad9-9dad-4c5d-9e5f-892d6f41f54b",
+          "creditedTitle": "The Living Daylights",
+          "creditedArtist": "a‐ha",
+          "firstReleaseDate": "1988-04-28",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "fa9f39eb-ffb3-46c7-84ed-25fa55909b35",
+          "creditedTitle": "The Living Daylights",
+          "creditedArtist": "a‐ha",
+          "firstReleaseDate": "1988",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "Licence to Kill",
+      "year": 1989,
+      "bondActor": "Timothy Dalton",
+      "track": "Licence to Kill",
+      "originalPerformer": "Gladys Knight",
+      "bonus": false,
+      "musicbrainzRecordingId": "a5771849-e5a6-4760-89ec-499de5079d2f",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 3,
+          "creditedTitle": "Licence to Kill",
+          "creditedArtist": "Gladys Knight",
+          "durationMs": 250146,
+          "isrcs": [
+            "USMC18828829",
+            "USUM70602970"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "GoldenEye",
+      "year": 1995,
+      "bondActor": "Pierce Brosnan",
+      "track": "GoldenEye",
+      "originalPerformer": "Tina Turner",
+      "bonus": false,
+      "musicbrainzRecordingId": "d2f5e50f-3f78-4850-a86d-7f4c42860f1e",
+      "confidence": "high",
+      "catalogue": {
+        "status": "existing",
+        "catalogueTrackId": 15562,
+        "canonicalRecordingId": "cb675a5b-924e-4edb-840f-a7983ed3af3f"
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 4,
+          "creditedTitle": "GoldenEye",
+          "creditedArtist": "Tina Turner",
+          "durationMs": 208426,
+          "isrcs": [
+            "GBAYE0301569",
+            "GBAYE9500152",
+            "GBAYE9500242",
+            "GBAYE9500713"
+          ]
+        }
+      ],
+      "reason": "Exact MusicBrainz recording identity already resolves to the existing canonical BoM recording; reuse it and preserve all ratings and metadata.",
+      "alternatives": []
+    },
+    {
+      "film": "Tomorrow Never Dies",
+      "year": 1997,
+      "bondActor": "Pierce Brosnan",
+      "track": "Tomorrow Never Dies",
+      "originalPerformer": "Sheryl Crow",
+      "bonus": false,
+      "musicbrainzRecordingId": "73cfbc93-8ab1-4f1b-9257-deb59477dfa8",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 5,
+          "creditedTitle": "Tomorrow Never Dies",
+          "creditedArtist": "Sheryl Crow",
+          "durationMs": 291920,
+          "isrcs": [
+            "USAM19774851"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "3a48a0f2-3f7c-4bab-889e-1238f05bbffd",
+          "creditedTitle": "Tomorrow Never Dies",
+          "creditedArtist": "Sheryl Crow",
+          "firstReleaseDate": "1997",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "ea940f7f-e2d6-4b74-887a-e2006977b8e6",
+          "creditedTitle": "Tomorrow Never Dies",
+          "creditedArtist": "Sheryl Crow",
+          "firstReleaseDate": "1998",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "992fdd95-88cd-4946-bd01-285f4cb94e98",
+          "creditedTitle": "Tomorrow Never Dies",
+          "creditedArtist": "Sheryl Crow",
+          "firstReleaseDate": "1998-04-06",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "The World Is Not Enough",
+      "year": 1999,
+      "bondActor": "Pierce Brosnan",
+      "track": "The World Is Not Enough",
+      "originalPerformer": "Garbage",
+      "bonus": false,
+      "musicbrainzRecordingId": "2e6ec1ef-bd10-4c3f-a9c3-4380492353ba",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 6,
+          "creditedTitle": "The World Is Not Enough",
+          "creditedArtist": "Garbage",
+          "durationMs": 236960,
+          "isrcs": [
+            "USMC19959615",
+            "USMC19959616"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "Die Another Day",
+      "year": 2002,
+      "bondActor": "Pierce Brosnan",
+      "track": "Die Another Day",
+      "originalPerformer": "Madonna",
+      "bonus": false,
+      "musicbrainzRecordingId": "d230da6f-104d-4299-94b2-ced5b38dbad6",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 7,
+          "creditedTitle": "Die Another Day",
+          "creditedArtist": "Madonna",
+          "durationMs": 276573,
+          "isrcs": [
+            "USWB10202888",
+            "USWB10903630"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "f9b36222-0a64-411e-a69b-0eea1a79c4e4",
+          "creditedTitle": "Die Another Day",
+          "creditedArtist": "Madonna",
+          "firstReleaseDate": "2002-11-12",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "ab0bd75e-c735-4145-a9c8-2a894f7c470e",
+          "creditedTitle": "Die Another Day",
+          "creditedArtist": "Madonna",
+          "firstReleaseDate": "2002",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "55336f9c-4544-48c1-98ef-2ca0498e0d96",
+          "creditedTitle": "Die Another Day",
+          "creditedArtist": "Madonna",
+          "firstReleaseDate": "2002",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "Casino Royale",
+      "year": 2006,
+      "bondActor": "Daniel Craig",
+      "track": "You Know My Name",
+      "originalPerformer": "Chris Cornell",
+      "bonus": false,
+      "musicbrainzRecordingId": "609737d4-a062-4752-a38d-20576924fa56",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 8,
+          "creditedTitle": "You Know My Name",
+          "creditedArtist": "Chris Cornell",
+          "durationMs": 240706,
+          "isrcs": [
+            "USUM70613448",
+            "USUM70619182"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "bd6a8603-f2dc-4f4f-aa06-1170f1cdea08",
+          "creditedTitle": "You Know My Name",
+          "creditedArtist": "Chris Cornell",
+          "firstReleaseDate": "2006-11-13",
+          "disambiguation": "single version",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "4994fb71-e638-4e81-9e12-eb463310069c",
+          "creditedTitle": "You Know My Name",
+          "creditedArtist": "Chris Cornell",
+          "firstReleaseDate": "2007-05-20",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "5bf530a3-a832-4b4f-8579-0503112be2b3",
+          "creditedTitle": "You Know My Name",
+          "creditedArtist": "Chris Cornell",
+          "firstReleaseDate": "2007-03",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "Quantum of Solace",
+      "year": 2008,
+      "bondActor": "Daniel Craig",
+      "track": "Another Way to Die",
+      "originalPerformer": "Alicia Keys and Jack White",
+      "bonus": false,
+      "musicbrainzRecordingId": "80366c3d-8edd-4a97-95cf-6bc591d1465f",
+      "confidence": "high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 9,
+          "creditedTitle": "Another Way to Die",
+          "creditedArtist": "Jack White & Alicia Keys",
+          "durationMs": 263693,
+          "isrcs": [
+            "USJAY0800153"
+          ]
+        }
+      ],
+      "reason": "Exact title and original artist credit on the official MusicBrainz-listed Bond soundtrack compilation; no existing canonical BoM identity was found for this recording ID.",
+      "alternatives": []
+    },
+    {
+      "film": "Skyfall",
+      "year": 2012,
+      "bondActor": "Daniel Craig",
+      "track": "Skyfall",
+      "originalPerformer": "Adele",
+      "bonus": false,
+      "musicbrainzRecordingId": "d74ce039-fb99-44fb-aa54-43bf707acf46",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 10,
+          "creditedTitle": "Skyfall",
+          "creditedArtist": "Adele",
+          "durationMs": 286253,
+          "isrcs": [
+            "GBBKS1200164"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "c33b3ef0-cab3-46dc-b118-9ff2b91129c0",
+          "creditedTitle": "Skyfall",
+          "creditedArtist": "Adele",
+          "firstReleaseDate": "2012-11-23",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "cc5c5d19-4363-44bf-85da-3dcbc50318ce",
+          "creditedTitle": "Skyfall",
+          "creditedArtist": "Adele",
+          "firstReleaseDate": "2012-12-28",
+          "disambiguation": "Boy Bruynzeel video yearmix 2012",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "4534bd94-244d-41b0-b3f0-89e59d3e6bab",
+          "creditedTitle": "Skyfall",
+          "creditedArtist": "Adele",
+          "firstReleaseDate": "2015-11-20",
+          "disambiguation": "live, 2015-11-02: The London Studios, London, UK",
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    },
+    {
+      "film": "Spectre",
+      "year": 2015,
+      "bondActor": "Daniel Craig",
+      "track": "Writing's on the Wall",
+      "originalPerformer": "Sam Smith",
+      "bonus": false,
+      "musicbrainzRecordingId": "73d74b29-3b96-438a-a5b4-22e7c3c2f60f",
+      "confidence": "high",
+      "catalogue": {
+        "status": "existing",
+        "catalogueTrackId": 19649,
+        "canonicalRecordingId": "b90ddab4-9971-4bc4-8547-74c9a54bcae9"
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 11,
+          "creditedTitle": "Writing’s on the Wall",
+          "creditedArtist": "Sam Smith",
+          "durationMs": 279360,
+          "isrcs": [
+            "GBUM71505354",
+            "GBUM71506385"
+          ]
+        }
+      ],
+      "reason": "Exact MusicBrainz recording identity already resolves to the existing canonical BoM recording; reuse it and preserve all ratings and metadata.",
+      "alternatives": []
+    },
+    {
+      "film": "No Time to Die",
+      "year": 2021,
+      "bondActor": "Daniel Craig",
+      "track": "No Time to Die",
+      "originalPerformer": "Billie Eilish",
+      "bonus": false,
+      "musicbrainzRecordingId": "14848e6d-61fa-49f2-9e22-883e285a3a76",
+      "confidence": "high",
+      "catalogue": {
+        "status": "existing",
+        "catalogueTrackId": 19784,
+        "canonicalRecordingId": "d1740f5c-0472-4c0a-a228-ce1f1cebc4c6"
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 2,
+          "position": 12,
+          "creditedTitle": "No Time to Die",
+          "creditedArtist": "Billie Eilish",
+          "durationMs": 242546,
+          "isrcs": [
+            "USUM72002771"
+          ]
+        }
+      ],
+      "reason": "Exact MusicBrainz recording identity already resolves to the existing canonical BoM recording; reuse it and preserve all ratings and metadata.",
+      "alternatives": []
+    },
+    {
+      "film": "On Her Majesty's Secret Service",
+      "year": 1969,
+      "bondActor": "George Lazenby",
+      "track": "We Have All the Time in the World",
+      "originalPerformer": "Louis Armstrong",
+      "bonus": true,
+      "musicbrainzRecordingId": "56442481-6d86-40fb-aad8-a4e56ce73730",
+      "confidence": "medium-high",
+      "catalogue": {
+        "status": "planned-import",
+        "catalogueTrackId": null,
+        "canonicalRecordingId": null
+      },
+      "evidence": [
+        {
+          "type": "official-compilation-track",
+          "releaseId": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+          "releaseGroupId": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+          "releaseStatus": "Official",
+          "disc": 1,
+          "position": 7,
+          "creditedTitle": "We Have All the Time in the World",
+          "creditedArtist": "Louis Armstrong",
+          "durationMs": 192866,
+          "isrcs": [
+            "USEM39100215",
+            "USMG21500001",
+            "USMG26900002"
+          ]
+        }
+      ],
+      "reason": "Recommended because the official MusicBrainz-listed Bond soundtrack compilation uses this exact recording identity and artist credit; competing identities remain recorded for final sign-off.",
+      "alternatives": [
+        {
+          "id": "6a3a56db-f112-4418-b047-ee895728da94",
+          "creditedTitle": "We Have All the Time in the World",
+          "creditedArtist": "Louis Armstrong",
+          "firstReleaseDate": "2000",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "95856db8-2014-489b-b3e7-878ddb9a3ed7",
+          "creditedTitle": "We Have All The Time In The World",
+          "creditedArtist": "Louis ArmstrongDuke Ellington",
+          "firstReleaseDate": "2003",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        },
+        {
+          "id": "92d40663-15e4-444b-bb3d-0ffe9d4ae746",
+          "creditedTitle": "We Have All the Time in the World",
+          "creditedArtist": "Louis Armstrong",
+          "firstReleaseDate": "2004",
+          "disambiguation": null,
+          "reasonNotSelected": "Not the recording identity used on the verified official 2021 Bond soundtrack compilation."
+        }
+      ]
+    }
+  ]
+}

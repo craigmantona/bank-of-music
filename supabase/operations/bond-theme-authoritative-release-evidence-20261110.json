@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-10",
+  "source": {
+    "provider": "MusicBrainz",
+    "release_id": "fd1723bc-2a32-442e-b56d-c30fe7411ce7",
+    "title": "The Best of Bond… James Bond",
+    "date": "2021-10-08",
+    "country": "US",
+    "status": "Official",
+    "barcode": "602508731099",
+    "release_group_id": "d06b41a6-9d62-4ede-9f22-4bf1398ca13d",
+    "release_group_title": "Best of Bond… James Bond",
+    "release_group_types": [
+      "Compilation",
+      "Soundtrack"
+    ]
+  },
+  "tracks": [
+    {
+      "disc": 1,
+      "position": 1,
+      "title": "The James Bond Theme",
+      "artist_credit": "The John Barry Orchestra",
+      "musicbrainz_recording_id": "9afed0a7-66be-43a4-bbe3-862e71b9fa21",
+      "duration_ms": 107160,
+      "isrcs": [
+        "USMG26200001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 2,
+      "title": "From Russia With Love",
+      "artist_credit": "Matt Monro",
+      "musicbrainz_recording_id": "8f0332a0-1513-4261-8974-1c7733bc5b5f",
+      "duration_ms": 152400,
+      "isrcs": [
+        "GBAYE6300049",
+        "GBAYE9500642",
+        "USMG26300001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 3,
+      "title": "Goldfinger",
+      "artist_credit": "Shirley Bassey",
+      "musicbrainz_recording_id": "9cff2598-a24f-444a-bf28-9d4c9ac21481",
+      "duration_ms": 167773,
+      "isrcs": [
+        "ES58A1702122",
+        "GBAYE0001387",
+        "GBAYE0300111",
+        "GBAYE6400302",
+        "GBAYE6400512"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 4,
+      "title": "Thunderball",
+      "artist_credit": "Tom Jones",
+      "musicbrainz_recording_id": "00b1b8cd-5977-4f3f-92e8-9a817b77aed7",
+      "duration_ms": 181800,
+      "isrcs": [
+        "GBF076520920",
+        "GBUM71306236",
+        "USMG20200064"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 5,
+      "title": "You Only Live Twice",
+      "artist_credit": "Nancy Sinatra",
+      "musicbrainz_recording_id": "79f67c46-6aa0-4a9b-ae81-676884400c59",
+      "duration_ms": 164786,
+      "isrcs": [
+        "USMG20200082",
+        "USMG26700002"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 6,
+      "title": "On Her Majesty’s Secret Service",
+      "artist_credit": "The John Barry Orchestra",
+      "musicbrainz_recording_id": "c1a6563e-2a02-4573-a2cf-d8dd1da99b9d",
+      "duration_ms": 154480,
+      "isrcs": [
+        "USEM39100216",
+        "USMG20200046",
+        "USMG21500006",
+        "USMG26900003"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 7,
+      "title": "We Have All the Time in the World",
+      "artist_credit": "Louis Armstrong",
+      "musicbrainz_recording_id": "56442481-6d86-40fb-aad8-a4e56ce73730",
+      "duration_ms": 192866,
+      "isrcs": [
+        "USEM39100215",
+        "USMG21500001",
+        "USMG26900002"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 8,
+      "title": "Diamonds Are Forever",
+      "artist_credit": "Shirley Bassey",
+      "musicbrainz_recording_id": "5b85db52-5955-4f46-9114-b34caac195f9",
+      "duration_ms": 160493,
+      "isrcs": [
+        "USEM38400049",
+        "USMG21500012",
+        "USMG27100001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 9,
+      "title": "Live and Let Die",
+      "artist_credit": "Paul McCartney & Wings",
+      "musicbrainz_recording_id": "ad23e670-2655-4ac6-8e56-8f09a3e0e80c",
+      "duration_ms": 192146,
+      "isrcs": [
+        "GBCCS0100674",
+        "GBCCS0700290",
+        "GBCCS1500158",
+        "GBCCS1500160",
+        "GBCCS1800097",
+        "GBCCS1800132",
+        "GBCCS7300674"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 10,
+      "title": "The Man With the Golden Gun",
+      "artist_credit": "Lulu",
+      "musicbrainz_recording_id": "e49ae934-67b3-4a66-b88e-8d715191d567",
+      "duration_ms": 153666,
+      "isrcs": [
+        "USCE39100001",
+        "USMG27400001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 11,
+      "title": "Nobody Does It Better",
+      "artist_credit": "Carly Simon",
+      "musicbrainz_recording_id": "b076d9a2-976d-476e-8f0c-c77137d7d732",
+      "duration_ms": 208440,
+      "isrcs": [
+        "USEM39100214",
+        "USMG27700012",
+        "USMG29200001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 12,
+      "title": "Moonraker",
+      "artist_credit": "Shirley Bassey",
+      "musicbrainz_recording_id": "82fd14b3-c549-4ff2-aaa5-14116e748efc",
+      "duration_ms": 187746,
+      "isrcs": [
+        "USMG27900001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 13,
+      "title": "For Your Eyes Only",
+      "artist_credit": "Sheena Easton",
+      "musicbrainz_recording_id": "4f183f4a-10c4-458d-80b3-fd1fe84554c4",
+      "duration_ms": 183626,
+      "isrcs": [
+        "QZF392100006",
+        "USMG28100001",
+        "USMG29300001"
+      ]
+    },
+    {
+      "disc": 1,
+      "position": 14,
+      "title": "All Time High",
+      "artist_credit": "Rita Coolidge",
+      "musicbrainz_recording_id": "42711b74-918c-4cc4-962c-34ac956d3c92",
+      "duration_ms": 182080,
+      "isrcs": [
+        "USMG28300001",
+        "USMG28300011"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 1,
+      "title": "A View to a Kill",
+      "artist_credit": "Duran Duran",
+      "musicbrainz_recording_id": "00ab36eb-5a93-41c4-a8b2-914809ac5c56",
+      "duration_ms": 214840,
+      "isrcs": [
+        "GBAYE1336203",
+        "USMG28500001"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 2,
+      "title": "The Living Daylights",
+      "artist_credit": "a‐ha",
+      "musicbrainz_recording_id": "ff77d291-677a-4b78-a2ed-0af78d3cf6a9",
+      "duration_ms": 253573,
+      "isrcs": [
+        "USMG28700001",
+        "USMG29800569",
+        "USRH11600702",
+        "USWB10200493",
+        "USWB10403938",
+        "USWB11001338"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 3,
+      "title": "Licence to Kill",
+      "artist_credit": "Gladys Knight",
+      "musicbrainz_recording_id": "a5771849-e5a6-4760-89ec-499de5079d2f",
+      "duration_ms": 250146,
+      "isrcs": [
+        "USMC18828829",
+        "USUM70602970"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 4,
+      "title": "GoldenEye",
+      "artist_credit": "Tina Turner",
+      "musicbrainz_recording_id": "d2f5e50f-3f78-4850-a86d-7f4c42860f1e",
+      "duration_ms": 208426,
+      "isrcs": [
+        "GBAYE0301569",
+        "GBAYE9500152",
+        "GBAYE9500242",
+        "GBAYE9500713"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 5,
+      "title": "Tomorrow Never Dies",
+      "artist_credit": "Sheryl Crow",
+      "musicbrainz_recording_id": "73cfbc93-8ab1-4f1b-9257-deb59477dfa8",
+      "duration_ms": 291920,
+      "isrcs": [
+        "USAM19774851"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 6,
+      "title": "The World Is Not Enough",
+      "artist_credit": "Garbage",
+      "musicbrainz_recording_id": "2e6ec1ef-bd10-4c3f-a9c3-4380492353ba",
+      "duration_ms": 236960,
+      "isrcs": [
+        "USMC19959615",
+        "USMC19959616"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 7,
+      "title": "Die Another Day",
+      "artist_credit": "Madonna",
+      "musicbrainz_recording_id": "d230da6f-104d-4299-94b2-ced5b38dbad6",
+      "duration_ms": 276573,
+      "isrcs": [
+        "USWB10202888",
+        "USWB10903630"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 8,
+      "title": "You Know My Name",
+      "artist_credit": "Chris Cornell",
+      "musicbrainz_recording_id": "609737d4-a062-4752-a38d-20576924fa56",
+      "duration_ms": 240706,
+      "isrcs": [
+        "USUM70613448",
+        "USUM70619182"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 9,
+      "title": "Another Way to Die",
+      "artist_credit": "Jack White & Alicia Keys",
+      "musicbrainz_recording_id": "80366c3d-8edd-4a97-95cf-6bc591d1465f",
+      "duration_ms": 263693,
+      "isrcs": [
+        "USJAY0800153"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 10,
+      "title": "Skyfall",
+      "artist_credit": "Adele",
+      "musicbrainz_recording_id": "d74ce039-fb99-44fb-aa54-43bf707acf46",
+      "duration_ms": 286253,
+      "isrcs": [
+        "GBBKS1200164"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 11,
+      "title": "Writing’s on the Wall",
+      "artist_credit": "Sam Smith",
+      "musicbrainz_recording_id": "73d74b29-3b96-438a-a5b4-22e7c3c2f60f",
+      "duration_ms": 279360,
+      "isrcs": [
+        "GBUM71505354",
+        "GBUM71506385"
+      ]
+    },
+    {
+      "disc": 2,
+      "position": 12,
+      "title": "No Time to Die",
+      "artist_credit": "Billie Eilish",
+      "musicbrainz_recording_id": "14848e6d-61fa-49f2-9e22-883e285a3a76",
+      "duration_ms": 242546,
+      "isrcs": [
+        "USUM72002771"
+      ]
+    }
+  ]
+}
