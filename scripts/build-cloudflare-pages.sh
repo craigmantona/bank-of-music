@@ -32,7 +32,10 @@ for file in \
   bom-turnstile.js \
   bom-bond.js \
   bom-bond.css \
-  bond-007.json
+  bond-007.json \
+  bom-christmas.js \
+  bom-christmas.css \
+  christmas-100.json
 do
   cp "$repo_dir/$file" "$output_dir/$file"
 done

@@ -1487,3 +1487,11 @@
 @keyframes bomBondSpotlight { to { transform:translateX(260px) rotate(18deg); } }
 @media (max-width:700px) { .bom-007-banner { grid-template-columns:64px 1fr; gap:15px; padding:18px; } .bom-007-banner-motif { width:60px; } .bom-007-banner-motif span { width:36px; } .bom-007-banner button { grid-column:1/-1; width:100%; } }
 @media (prefers-reduced-motion:reduce) { .bom-007-banner::after { animation:none; } }
+.bom-christmas-banner { display:grid; grid-template-columns:76px minmax(0,1fr) auto; align-items:center; gap:22px; margin:28px 0 18px; padding:22px 26px; color:#fffaf0; background:linear-gradient(115deg,#123e2d,#0c2b20 58%,#761b25); border:2px solid #d4ad62; border-radius:10px; box-shadow:0 18px 45px rgba(10,39,27,.2); }
+.bom-christmas-banner>div:first-child { width:64px; aspect-ratio:1; display:grid; place-items:center; color:#d4ad62; border:1px solid #d4ad62; border-radius:50%; font:42px/1 Georgia,serif; }
+.bom-christmas-banner p { margin:0 0 4px; color:#d4ad62; font-size:10px; font-weight:900; letter-spacing:.2em; }
+.bom-christmas-banner h2 { margin:0; font:clamp(23px,3vw,39px)/1 Georgia,serif; }
+.bom-christmas-banner span { display:block; margin-top:6px; color:#eee4d3; font-size:13px; }
+.bom-christmas-banner button { min-height:44px; padding:0 18px; color:#173728; background:#d4ad62; border:1px solid #f0d79f; border-radius:6px; font-size:11px; font-weight:900; letter-spacing:.09em; }
+.bom-christmas-banner button:hover,.bom-christmas-banner button:focus-visible { background:#fff1c8; outline:2px solid #fff1c8; outline-offset:3px; }
+@media (max-width:700px) { .bom-christmas-banner { grid-template-columns:54px 1fr; gap:14px; padding:18px; } .bom-christmas-banner>div:first-child { width:52px; } .bom-christmas-banner button { grid-column:1/-1; width:100%; } }
