@@ -98,9 +98,12 @@ test("rating flow reuses canonical user-scoped persistence and safe community vi
 });
 
 test("experience provides progress, ranking, unrated and film-year controls", () => {
-  for (const pattern of [/of \$\{films\.length\} official themes rated/, /data-bond-filter="unrated"/, /value="ranking">My ranking/, /data-bond-year/, /Community ranking unavailable/]) assert.match(bond, pattern);
+  for (const pattern of [/of \$\{films\.length\} official themes rated/, /data-bond-filter="unrated"/, /value="ranking">My ranking/, /value="community">Community ranking/, /data-bond-year/, /Community ranking unavailable/]) assert.match(bond, pattern);
   assert.match(bond, /Official Eon films only/);
   assert.match(bond, /bonus tracks are labelled/i);
+  assert.match(bond, /function updateProgress\(\)/);
+  assert.match(bond, /updateProgress\(\);/);
+  assert.match(bond, /data-bonus="\$\{Boolean\(entry\.bonus\)\}"/);
 });
 
 test("launch panel requires confirmed actor and announcement date and never creates a theme", () => {
@@ -117,6 +120,9 @@ test("mobile, keyboard, focus and reduced-motion contracts are present", () => {
   assert.match(bond, /<button type="button" data-bond-rate/);
   assert.match(bond, /<label>Order<select/);
   assert.match(bond, /aria-labelledby/);
+  assert.match(bond, /tabindex="-1"/);
+  assert.match(bond, /\[data-bond-close\]"\)\.focus/);
+  assert.match(css, /\.bom-007-controls select \{ width:100%; min-width:0; \}/);
 });
 
 test("publication build includes every lazy Bond asset", () => {

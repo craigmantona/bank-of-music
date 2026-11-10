@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <base href="/">
+  <title>Bond special local visual harness</title>
+  <link rel="stylesheet" href="/bom-foundation.css?v=46">
+  <link rel="stylesheet" href="/bom-bond.css?v=1&review=3">
+  <style>
+    body { margin: 0; background: #f2f0e9; color: #17201c; font-family: Manrope, system-ui, sans-serif; }
+    .harness-shell { width: min(1180px, calc(100% - 32px)); margin: 28px auto 80px; }
+    .harness-note { margin: 0 0 18px; color: #59645f; font-size: 12px; }
+  </style>
+</head>
+<body class="bom-shell-v1">
+  <main class="harness-shell">
+    <p class="harness-note">Local-only visual review harness · production feature flag remains disabled</p>
+    <div id="discover"></div>
+  </main>
+  <script>
+    window.BOM_BOND_FEATURE = Object.freeze({
+      enabled: true,
+      nextBondActor: "",
+      officialAnnouncementDate: "",
+      officialAnnouncementSource: "",
+      announcementHeadline: "",
+      launchDayMessageEnabled: false,
+      launchDayMessage: "A new 007 has been announced. Now rate the music that made Bond legendary.",
+      bond26: Object.freeze({ filmTitle: "", releaseYear: null, themeTitle: "", originalPerformer: "", catalogueTrackId: null, canonicalRecordingId: "", spotifyId: "", verifiedSource: "" })
+    });
+    window.BOMUI = {
+      AlbumCard: item => `<article>${item.title || "Album"}</article>`,
+      SectionState: ({ title, message }) => `<section><h2>${title}</h2><p>${message}</p></section>`
+    };
+    const localRatings = new Map();
+    window.BOMPresentationBridge = {
+      async loadBondMusicData(manifest) {
+        const entries = [...manifest.films, ...manifest.bonusTracks];
+        return {
+          launch: window.BOM_BOND_FEATURE,
+          tracks: entries.map((entry, index) => ({
+            catalogueTrackId: entry.catalogueTrackId,
+            canonicalRecordingId: entry.canonicalRecordingId,
+            personalRating: localRatings.has(entry.catalogueTrackId) ? localRatings.get(entry.catalogueTrackId) : index % 4 === 0 ? 8 : null,
+            communityAverage: 6.8 + (index % 5) * 0.4,
+            communityRatingCount: 12 + index * 3
+          }))
+        };
+      },
+      async saveBondTrackRating(id, rating) {
+        await new Promise(resolve => setTimeout(resolve, 120));
+        localRatings.set(id, rating);
+        return { ok: true, rating, message: "Rating saved" };
+      }
+    };
+  </script>
+  <script src="/bom-discover.js"></script>
+  <script src="/bom-bond.js?review=3"></script>
+  <script>
+    const root = document.getElementById("discover");
+    root.innerHTML = window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+    root.addEventListener("click", event => {
+      if (event.target.closest('[data-bom-action="bond-special"]')) window.BOMBondUI.open();
+    });
+  </script>
+</body>
+</html>
