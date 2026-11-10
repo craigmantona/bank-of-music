@@ -49,7 +49,9 @@ test("album track modelling selects the occurrence belonging to that album", () 
     getYourSongRating: id => id === 202 ? 9 : 3,
     buildCompactTrackRatingControl: id => `rating-${id}`,
     escapeHtml: value => String(value),
-    normaliseCompare: value => String(value || "").toLowerCase()
+    normaliseText: value => String(value || "").trim().replace(/\s+/g, " "),
+    normaliseCompare: value => String(value || "").toLowerCase(),
+    renderArtistCreditLinks: value => String(value || "")
   });
   vm.runInContext(extract("function buildStageOneAlbumTrackModels", "function buildStageOneAlbumModel"), context);
   const rows = context.buildStageOneAlbumTrackModels({
