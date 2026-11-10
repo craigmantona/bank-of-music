@@ -2,7 +2,7 @@
 .bom-xmas-dialog { width:100vw; max-width:none; height:100dvh; max-height:none; margin:0; padding:0; color:var(--xmas-ink); background:var(--xmas-cream); border:0; overflow:auto; font-family:Manrope,system-ui,sans-serif; }
 .bom-xmas-dialog::backdrop { background:#0b1b13; }
 .bom-xmas-snow { position:fixed; z-index:3; inset:0; overflow:hidden; pointer-events:none; contain:strict; }
-.bom-xmas-snow i { position:absolute; top:-12px; left:var(--snow-left); width:var(--snow-size); height:var(--snow-size); border-radius:50%; background:rgba(225,238,244,.72); box-shadow:0 0 5px rgba(255,255,255,.65); opacity:.66; animation:xmasFlake var(--snow-duration) linear var(--snow-delay) infinite; will-change:transform; }
+.bom-xmas-snow i { position:absolute; top:-12px; left:var(--snow-left); width:var(--snow-size); height:var(--snow-size); border-radius:50%; background:rgba(248,252,255,.94); box-shadow:0 0 0 .65px rgba(76,104,119,.3),0 1px 2px rgba(76,104,119,.22); opacity:var(--snow-opacity); animation:xmasFlake var(--snow-duration) linear var(--snow-delay) infinite; will-change:transform; }
 .bom-xmas-hero { position:relative; min-height:330px; display:grid; grid-template-columns:minmax(140px,22vw) minmax(0,760px); justify-content:center; align-items:center; gap:clamp(28px,7vw,100px); padding:68px clamp(24px,7vw,100px); color:#fffaf0; overflow:hidden; background:radial-gradient(circle at 18% 32%,rgba(212,173,98,.22),transparent 25%),linear-gradient(118deg,#123e2d,#0c2b20 60%,#6f1720); border-bottom:5px solid var(--xmas-gold); }
 .bom-xmas-hero::after { content:""; position:absolute; inset:0; opacity:.13; background-image:radial-gradient(circle,#fff 1px,transparent 1.5px); background-size:35px 35px; animation:xmasSnow 14s linear infinite; pointer-events:none; }
 .bom-xmas-close { position:absolute; z-index:2; top:22px; right:clamp(20px,5vw,68px); min-height:44px; padding:9px 16px; color:#fff; background:transparent; border:1px solid rgba(255,255,255,.55); border-radius:99px; font-weight:800; letter-spacing:.15em; }
@@ -29,7 +29,7 @@
 .bom-xmas-copy h2 { margin:0; font:clamp(22px,2.8vw,32px)/1.1 Georgia,serif; }
 .bom-xmas-copy h3 { margin:6px 0; color:#584f44; font-size:13px; }
 .bom-xmas-copy span { color:var(--xmas-muted); font-size:12px; }
-.bom-xmas-copy .bom-xmas-spotify { display:block; width:max-content; margin-top:8px; color:var(--xmas-green); font-size:11px; font-weight:800; text-underline-offset:3px; }
+.bom-xmas-copy .bom-xmas-spotify { display:block; width:max-content; max-width:100%; margin-top:8px; color:var(--xmas-green); font-size:11px; font-weight:800; text-underline-offset:3px; }
 .bom-xmas-rating { margin:0; padding:0; border:0; }
 .bom-xmas-rating legend { margin-bottom:8px; color:#5e554a; font-size:12px; }
 .bom-xmas-rating>div { display:grid; grid-template-columns:repeat(11,1fr); gap:3px; }
@@ -44,5 +44,5 @@
 @keyframes xmasSnow { to { background-position:0 140px; } }
 @keyframes xmasFlake { from { transform:translate3d(0,-2vh,0) rotate(0deg); } to { transform:translate3d(var(--snow-drift),105vh,0) rotate(240deg); } }
 @keyframes xmasReveal { from { opacity:0; transform:translateY(8px); } }
-@media (max-width:800px) { .bom-xmas-hero { min-height:420px; grid-template-columns:1fr; gap:24px; padding:72px 22px 38px; text-align:center; } .bom-xmas-mark { width:145px; margin:auto; } .bom-xmas-progress { grid-template-columns:1fr; gap:10px; } .bom-xmas-controls { align-items:stretch; flex-wrap:wrap; } .bom-xmas-controls>button { width:100%; margin:0; } .bom-xmas-controls label { flex:1 1 140px; min-width:0; } .bom-xmas-controls select { width:100%; min-width:0; } .bom-xmas-track { grid-template-columns:36px 1fr; gap:11px; padding:22px 0; } .bom-xmas-rating,.bom-xmas-discovery,.bom-xmas-status { grid-column:1/-1; } .bom-xmas-rating>div { grid-template-columns:repeat(6,1fr); gap:5px; } .bom-xmas-rating button { min-height:44px; } }
+@media (max-width:800px) { .bom-xmas-hero { min-height:420px; grid-template-columns:1fr; gap:24px; padding:72px 22px 38px; text-align:center; } .bom-xmas-mark { width:145px; margin:auto; } .bom-xmas-progress { grid-template-columns:1fr; gap:10px; } .bom-xmas-controls { align-items:stretch; flex-wrap:wrap; } .bom-xmas-controls>button { width:100%; margin:0; } .bom-xmas-controls label { flex:1 1 140px; min-width:0; } .bom-xmas-controls select { width:100%; min-width:0; } .bom-xmas-track { grid-template-columns:36px minmax(0,1fr); gap:11px; padding:22px 0; } .bom-xmas-copy,.bom-xmas-rating,.bom-xmas-discovery,.bom-xmas-status { min-width:0; } .bom-xmas-rating,.bom-xmas-discovery,.bom-xmas-status { grid-column:1/-1; } .bom-xmas-rating>div { grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; } .bom-xmas-rating button { min-width:0; min-height:44px; } }
 @media (prefers-reduced-motion:reduce) { .bom-xmas-snow { display:none; } .bom-xmas-hero::after,.bom-xmas-track { animation:none; } .bom-xmas-progress [role=progressbar] span { transition:none; } }

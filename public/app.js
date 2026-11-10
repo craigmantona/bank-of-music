@@ -756,9 +756,7 @@ async function saveBondTrackRating(catalogueTrackId, rating) {
 let christmasFeatureAssetPromise = null;
 
 function isChristmasFeatureEnabled(now = new Date()) {
-  if (window.BOM_CHRISTMAS_FEATURE?.enabled !== true) return false;
-  const timeZone = window.BOM_CHRISTMAS_FEATURE.timeZone || "Europe/London";
-  return new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone }).format(now) === "12";
+  return window.BOM_CHRISTMAS_FEATURE?.isEligible?.(now) === true;
 }
 
 async function openChristmasSpecial() {
@@ -769,12 +767,12 @@ async function openChristmasSpecial() {
       if (!document.querySelector('link[data-bom-christmas-style]')) {
         const style = document.createElement("link");
         style.rel = "stylesheet";
-        style.href = "bom-christmas.css?v=2";
+        style.href = "bom-christmas.css?v=4";
         style.dataset.bomChristmasStyle = "1";
         document.head.append(style);
       }
       const script = document.createElement("script");
-      script.src = "bom-christmas.js?v=2";
+      script.src = "bom-christmas.js?v=4";
       script.async = true;
       script.onload = resolve;
       script.onerror = () => reject(new Error("The Christmas Special could not load."));

@@ -26,10 +26,14 @@ window.BOM_BOND_FEATURE = Object.freeze({
   })
 });
 
-/* Disabled until an explicitly approved December launch. */
+/* Annual December eligibility with an explicit emergency off switch. */
 window.BOM_CHRISTMAS_FEATURE = Object.freeze({
-  enabled: false,
-  timeZone: "Europe/London"
+  emergencyDisabled: false,
+  timeZone: "Europe/London",
+  isEligible(now = new Date()) {
+    if (window.BOM_CHRISTMAS_FEATURE?.emergencyDisabled === true) return false;
+    return new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone: "Europe/London" }).format(now) === "12";
+  }
 });
 
 window.SPOTIFY_REDIRECT_URI =

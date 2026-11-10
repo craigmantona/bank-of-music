@@ -41,42 +41,69 @@ test("all 100 recording identities are explicit and unique while existing catalo
   assert.match(manifest.catalogueMatchPolicy, /verified MusicBrainz recording identity/i);
 });
 
-test("feature remains disabled and requires December in Europe/London", () => {
+test("feature automatically follows December in Europe/London with an emergency off switch", () => {
   assert.match(config, /BOM_CHRISTMAS_FEATURE = Object\.freeze/);
-  assert.match(config, /enabled: false/);
+  assert.match(config, /emergencyDisabled: false/);
+  assert.match(config, /timeZone: "Europe\/London"/);
+  assert.match(config, /isEligible\(now = new Date\(\)\)/);
   assert.match(config, /timeZone: "Europe\/London"/);
   assert.match(app, /function isChristmasFeatureEnabled\(now = new Date\(\)\)/);
-  assert.match(app, /Intl\.DateTimeFormat\("en-GB", \{ month: "2-digit", timeZone \}\)/);
-  assert.match(app, /=== "12"/);
-  assert.match(christmas, /format\(new Date\(\)\) !== "12"/);
+  assert.match(app, /BOM_CHRISTMAS_FEATURE\?\.isEligible\?\.\(now\) === true/);
+  assert.match(christmas, /BOM_CHRISTMAS_FEATURE\?\.isEligible\?\.\(new Date\(\)\) !== true/);
 });
 
-function renderDiscover({ enabled, date }) {
+function christmasFeature({ emergencyDisabled = false } = {}) {
+  const window = {};
+  vm.runInNewContext(config.replace("emergencyDisabled: false", `emergencyDisabled: ${emergencyDisabled}`), { window, Date, Intl, Object });
+  return window.BOM_CHRISTMAS_FEATURE;
+}
+
+function renderDiscover({ emergencyDisabled = false, date }) {
   const RealDate = Date;
   class FixedDate extends RealDate { constructor(...args) { super(...(args.length ? args : [date])); } }
   const listeners = {};
-  const document = { addEventListener(type, handler) { listeners[type] = handler; }, querySelectorAll() { return []; }, getElementById() { return null; } };
+  const document = { hidden: false, addEventListener(type, handler) { listeners[type] = handler; }, querySelector() { return null; }, querySelectorAll() { return []; }, getElementById() { return null; } };
   const window = {
-    BOM_CHRISTMAS_FEATURE: { enabled, timeZone: "Europe/London" }, BOM_BOND_FEATURE: { enabled: false },
+    BOM_CHRISTMAS_FEATURE: christmasFeature({ emergencyDisabled }), BOM_BOND_FEATURE: { enabled: false },
     BOMUI: { AlbumCard: () => "", SectionState: ({ title }) => title }, BOMPresentationBridge: {},
-    addEventListener() {}, requestAnimationFrame() {}, scrollTo() {}, scrollY: 0,
+    addEventListener() {}, clearTimeout() {}, setTimeout() {}, requestAnimationFrame() {}, scrollTo() {}, scrollY: 0,
     history: { state: null, replaceState() {}, pushState() {} }, location: { href: "https://example.test" }
   };
   vm.runInNewContext(discover, { window, document, URL, Math, Date: FixedDate, Intl, Set, Map, matchMedia: () => ({ matches: true }), clearTimeout() {}, setTimeout() {} });
-  return window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+  return { html: window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] }), helpers: window.BOMDiscoverHelpers };
 }
 
-test("Discover card requires both the explicit flag and the London December gate", () => {
-  assert.doesNotMatch(renderDiscover({ enabled: false, date: "2026-12-12T12:00:00Z" }), /data-bom-christmas-banner/);
-  assert.doesNotMatch(renderDiscover({ enabled: true, date: "2026-11-30T12:00:00Z" }), /data-bom-christmas-banner/);
-  assert.match(renderDiscover({ enabled: true, date: "2026-12-12T12:00:00Z" }), /THE CHRISTMAS TOP 100/);
+test("Discover follows London month boundaries, year rollover and the emergency switch", () => {
+  assert.doesNotMatch(renderDiscover({ date: "2026-11-30T23:59:59Z" }).html, /data-bom-christmas-banner/);
+  assert.match(renderDiscover({ date: "2026-12-01T00:00:00Z" }).html, /THE CHRISTMAS TOP 100/);
+  assert.match(renderDiscover({ date: "2026-12-31T23:59:59Z" }).html, /THE CHRISTMAS TOP 100/);
+  assert.doesNotMatch(renderDiscover({ date: "2027-01-01T00:00:00Z" }).html, /data-bom-christmas-banner/);
+  assert.match(renderDiscover({ date: "2027-12-01T00:00:00Z" }).html, /THE CHRISTMAS TOP 100/);
+  assert.doesNotMatch(renderDiscover({ emergencyDisabled: true, date: "2026-12-12T12:00:00Z" }).html, /data-bom-christmas-banner/);
+});
+
+test("London eligibility is independent of the device timezone", () => {
+  assert.doesNotMatch(renderDiscover({ date: "2026-12-01T09:00:00+14:00" }).html, /data-bom-christmas-banner/);
+  assert.match(renderDiscover({ date: "2026-11-30T20:00:00-08:00" }).html, /THE CHRISTMAS TOP 100/);
+});
+
+test("an open Discover page resynchronises at both annual boundaries", () => {
+  const { helpers } = renderDiscover({ date: "2026-11-30T23:59:59Z" });
+  assert.equal(helpers.nextChristmasBoundary(new Date("2026-11-30T23:59:59Z")).toISOString(), "2026-12-01T00:00:00.000Z");
+  assert.equal(helpers.christmasBoundaryDelay(new Date("2026-11-30T23:59:59Z")), 1000);
+  assert.equal(helpers.nextChristmasBoundary(new Date("2026-12-31T23:59:59Z")).toISOString(), "2027-01-01T00:00:00.000Z");
+  assert.equal(helpers.christmasBoundaryDelay(new Date("2026-12-31T23:59:59Z")), 1000);
+  assert.match(discover, /setTimeout\?\.\(syncChristmasSeason, christmasBoundaryDelay\(value\)\)/);
+  assert.match(discover, /addEventListener\("visibilitychange"/);
+  assert.match(discover, /addEventListener\("focus",syncChristmasSeason\)/);
+  assert.match(discover, /addEventListener\("pageshow",syncChristmasSeason\)/);
 });
 
 test("disabled startup lazy-loads no Christmas asset or data", () => {
   assert.doesNotMatch(discover, /fetch\("christmas-100\.json/);
   assert.match(app, /if \(!isChristmasFeatureEnabled\(\) \|\| !currentUser\) return false/);
-  assert.match(app, /style\.href = "bom-christmas\.css\?v=2"/);
-  assert.match(app, /script\.src = "bom-christmas\.js\?v=2"/);
+  assert.match(app, /style\.href = "bom-christmas\.css\?v=4"/);
+  assert.match(app, /script\.src = "bom-christmas\.js\?v=4"/);
   assert.equal(/<script[^>]+bom-christmas\.js/.test(html), false);
   assert.equal(/<link[^>]+bom-christmas\.css/.test(html), false);
 });
@@ -107,7 +134,10 @@ test("responsive, keyboard, focus and reduced-motion contracts are present", () 
   assert.match(christmas, /\[data-christmas-close\]"\)\.focus/);
   assert.match(christmas, /prefers-reduced-motion: reduce/);
   assert.match(christmas, /class="bom-xmas-snow" aria-hidden="true"/);
+  assert.match(christmas, /Array\.from\(\{ length: 20 \}/);
+  assert.match(christmas, /--snow-opacity:/);
   assert.match(css, /\.bom-xmas-snow[^}]*pointer-events:none/);
+  assert.match(css, /box-shadow:0 0 0 \.65px rgba\(76,104,119,\.3\),0 1px 2px rgba\(76,104,119,\.22\)/);
   assert.match(css, /@keyframes xmasFlake/);
   assert.match(css, /@media \(prefers-reduced-motion:reduce\)[\s\S]*?\.bom-xmas-snow \{ display:none; \}/);
 });
