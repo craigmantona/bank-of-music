@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "executedAt": "2026-11-10T19:42:00Z",
+  "projectRef": "xevxjggauscyrvvtmftx",
+  "mode": {
+    "CHRISTMAS_IMPORT_APPROVED": true,
+    "CHRISTMAS_IMPORT_COMMIT": true
+  },
+  "result": "success_committed",
+  "counts": {
+    "before": {
+      "canonicalRecordings": 16748,
+      "songRatings": 1647,
+      "christmasCanonicalRecordings": 10
+    },
+    "after": {
+      "canonicalRecordings": 16838,
+      "songRatings": 1647,
+      "christmasCanonicalRecordings": 100
+    }
+  },
+  "verifiedDelta": {
+    "canonicalRecordingsInserted": 90,
+    "canonicalRecordingsReused": 10,
+    "songRatingsChanged": 0
+  },
+  "verification": {
+    "resolvedChristmasRecordings": 100,
+    "distinctChristmasCanonicalIds": 100,
+    "unresolvedChristmasRecordings": 0,
+    "duplicateProductionMusicBrainzIds": 0,
+    "originKeyMismatches": 0,
+    "newRowsWithChristmasImportMetadata": 90,
+    "storedSpotifyIdsOnNewRows": 18,
+    "verifiedSpotifyIdsAvailableToChristmasExperience": 20,
+    "ambiguousSpotifyMatchesLeftUnresolved": 14,
+    "existingCanonicalRowsUpdated": 0,
+    "ratingsUnchanged": true,
+    "featureEnabled": false,
+    "timeZone": "Europe/London",
+    "decemberOnly": true
+  },
+  "notes": [
+    "The verified IDs for Shakin' Stevens — Merry Christmas Everyone and Leona Lewis — One More Sleep remain in the reviewed Christmas manifest. Their ten reused canonical rows were deliberately left unchanged, including null preferred Spotify fields."
+  ],
+  "issues": []
+}

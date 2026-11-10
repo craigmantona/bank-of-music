@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "executedAt": "2026-11-10T19:41:00Z",
+  "projectRef": "xevxjggauscyrvvtmftx",
+  "mode": {
+    "CHRISTMAS_IMPORT_APPROVED": true,
+    "CHRISTMAS_IMPORT_COMMIT": false
+  },
+  "result": "success_rolled_back",
+  "preflight": {
+    "canonicalRecordings": 16748,
+    "songRatings": 1647,
+    "expectedChristmasRecordings": 100,
+    "uniqueExpectedMusicBrainzIds": 100,
+    "existingChristmasCanonicalRecordings": 10,
+    "missingChristmasCanonicalRecordings": 90,
+    "duplicateProductionMusicBrainzIds": 0,
+    "expectedOriginKeyConflicts": 0
+  },
+  "validatedTransactionalDelta": {
+    "canonicalRecordingsReused": 10,
+    "canonicalRecordingsInserted": 90,
+    "songRatingsChanged": 0,
+    "resolvedChristmasRecordings": 100,
+    "verifiedSpotifyIdsInReviewedPayload": 20
+  },
+  "postRollback": {
+    "canonicalRecordings": 16748,
+    "songRatings": 1647,
+    "existingChristmasCanonicalRecordings": 10,
+    "productionUnchanged": true
+  },
+  "safetyReview": {
+    "transactional": true,
+    "explicitRollback": true,
+    "advisoryTransactionLock": "christmas-canonical-enrichment-20261110-v1",
+    "existingIdentityConflictAction": "do_nothing",
+    "ratingsProtected": true,
+    "usersProtected": true,
+    "catalogueHistoryProtected": true,
+    "unexpectedWrites": false
+  },
+  "issues": []
+}

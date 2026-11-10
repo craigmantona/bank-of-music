@@ -26,5 +26,11 @@ window.BOM_BOND_FEATURE = Object.freeze({
   })
 });
 
+/* Disabled until an explicitly approved December launch. */
+window.BOM_CHRISTMAS_FEATURE = Object.freeze({
+  enabled: false,
+  timeZone: "Europe/London"
+});
+
 window.SPOTIFY_REDIRECT_URI =
   "https://thebankofmusic.com/";

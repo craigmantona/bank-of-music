@@ -753,6 +753,87 @@ async function saveBondTrackRating(catalogueTrackId, rating) {
   return { ok: Number(saved) === value, rating: saved, message: Number(saved) === value ? `Saved ${value} / 10.` : "Your rating could not be saved." };
 }
 
+let christmasFeatureAssetPromise = null;
+
+function isChristmasFeatureEnabled(now = new Date()) {
+  if (window.BOM_CHRISTMAS_FEATURE?.enabled !== true) return false;
+  const timeZone = window.BOM_CHRISTMAS_FEATURE.timeZone || "Europe/London";
+  return new Intl.DateTimeFormat("en-GB", { month: "2-digit", timeZone }).format(now) === "12";
+}
+
+async function openChristmasSpecial() {
+  if (!isChristmasFeatureEnabled() || !currentUser) return false;
+  if (window.BOMChristmasUI?.open) return window.BOMChristmasUI.open();
+  if (!christmasFeatureAssetPromise) {
+    christmasFeatureAssetPromise = new Promise((resolve, reject) => {
+      if (!document.querySelector('link[data-bom-christmas-style]')) {
+        const style = document.createElement("link");
+        style.rel = "stylesheet";
+        style.href = "bom-christmas.css?v=2";
+        style.dataset.bomChristmasStyle = "1";
+        document.head.append(style);
+      }
+      const script = document.createElement("script");
+      script.src = "bom-christmas.js?v=2";
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error("The Christmas Special could not load."));
+      document.body.append(script);
+    }).catch(error => {
+      christmasFeatureAssetPromise = null;
+      throw error;
+    });
+  }
+  await christmasFeatureAssetPromise;
+  return window.BOMChristmasUI?.open?.() || false;
+}
+
+async function loadChristmasMusicData(manifest) {
+  if (!isChristmasFeatureEnabled() || !currentUser) throw new Error("The Christmas Special is unavailable.");
+  const entries = manifest?.tracks || [];
+  const recordingIds = [...new Set(entries.map(entry => String(entry.musicbrainzRecordingId || "").toLowerCase()).filter(Boolean))];
+  if (!recordingIds.length) return { tracks: [] };
+  const canonicalResult = await supabaseClient.from("canonical_recordings")
+    .select("id,title,artist,musicbrainz_recording_id,preferred_spotify_track_id")
+    .in("musicbrainz_recording_id", recordingIds);
+  if (canonicalResult.error) throw canonicalResult.error;
+  const canonicals = canonicalResult.data || [];
+  const canonicalIds = canonicals.map(row => row.id);
+  const ratingsResult = canonicalIds.length
+    ? await supabaseClient.from("song_ratings").select("user_id,canonical_song_id,rating").in("canonical_song_id", canonicalIds)
+    : { data: [], error: null };
+  if (ratingsResult.error) throw ratingsResult.error;
+  const ratings = ratingsResult.data || [];
+  const personal = ratings.filter(row => row.user_id === currentUser.id);
+  allSongRatings = mergeRatingRows(allSongRatings, ratings, row => `${row.user_id}:${row.canonical_song_id}`);
+  const canonicalByRecording = new Map(canonicals.map(row => [String(row.musicbrainz_recording_id || "").toLowerCase(), row]));
+  return { tracks: entries.map(entry => {
+    const recordingId = String(entry.musicbrainzRecordingId || "").toLowerCase();
+    const canonical = canonicalByRecording.get(recordingId);
+    const canonicalRatings = canonical ? ratings.filter(row => row.canonical_song_id === canonical.id) : [];
+    const mine = canonical ? personal.find(row => row.canonical_song_id === canonical.id) : null;
+    const total = canonicalRatings.reduce((sum, row) => sum + Number(row.rating || 0), 0);
+    return {
+      musicbrainzRecordingId: recordingId,
+      canonicalRecordingId: canonical?.id || "",
+      available: Boolean(canonical),
+      spotifyId: canonical?.preferred_spotify_track_id || entry.spotifyId || "",
+      personalRating: mine?.rating ?? null,
+      communityAverage: canonicalRatings.length ? total / canonicalRatings.length : null,
+      communityRatingCount: canonicalRatings.length
+    };
+  }) };
+}
+
+async function saveChristmasTrackRating(canonicalRecordingId, rating) {
+  if (!isChristmasFeatureEnabled() || !currentUser) return { ok: false, message: "Sign in to rate this track." };
+  const id = String(canonicalRecordingId || "").toLowerCase(), value = Number(rating);
+  if (!/^[0-9a-f-]{36}$/.test(id) || !Number.isInteger(value) || value < 0 || value > 10) return { ok: false, message: "Choose a whole-number rating from 0 to 10." };
+  await saveCanonicalRecordingRating(id, value);
+  const saved = getYourCanonicalRecordingRating(id);
+  return { ok: Number(saved) === value, rating: saved, message: Number(saved) === value ? `Saved ${value} / 10.` : "Your rating could not be saved." };
+}
+
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
@@ -768,8 +849,11 @@ window.BOMPresentationBridge = Object.freeze({
   },
   showQuickRate: () => openQuickRate(),
   showBondSpecial: () => openBondSpecial(),
+  showChristmasSpecial: () => openChristmasSpecial(),
   loadBondMusicData: manifest => loadBondMusicData(manifest),
   saveBondTrackRating: (catalogueTrackId, rating) => saveBondTrackRating(catalogueTrackId, rating),
+  loadChristmasMusicData: manifest => loadChristmasMusicData(manifest),
+  saveChristmasTrackRating: (catalogueTrackId, rating) => saveChristmasTrackRating(catalogueTrackId, rating),
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
   showRatings: async () => {

@@ -1,0 +1,711 @@
+{
+  "generatedAt": "2026-11-10T19:44:57.966Z",
+  "mode": "read-only-production-verification",
+  "productionWrites": 0,
+  "totalChristmasTracks": 100,
+  "existingCanonicalRecords": 100,
+  "plannedCanonicalRecords": 0,
+  "existingSpotifyIds": 18,
+  "existing": [
+    {
+      "title": "White Christmas",
+      "artist": "Bing Crosby",
+      "musicbrainzRecordingId": "91efd2a7-af4f-4553-866f-805582a59611",
+      "canonicalRecordingId": "582339ab-e145-4297-9c60-532fd36dd849",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "The Christmas Song (Merry Christmas to You)",
+      "artist": "Nat King Cole",
+      "musicbrainzRecordingId": "8c008731-9e4b-4d6b-8de3-991c88aaebca",
+      "canonicalRecordingId": "33ed191a-5b40-4880-80c8-a6b0bdefab11",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Have Yourself a Merry Little Christmas",
+      "artist": "Judy Garland",
+      "musicbrainzRecordingId": "a15b248d-6237-40fd-931a-c2bfde16f491",
+      "canonicalRecordingId": "3d21eebf-75cd-4d30-9656-462e7d3ef542",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "I'll Be Home for Christmas",
+      "artist": "Bing Crosby",
+      "musicbrainzRecordingId": "c2df9e6f-93e3-4756-a4c0-de7493ca5cea",
+      "canonicalRecordingId": "abc76175-1a06-4e89-80c5-dbb6ff335bc4",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Blue Christmas",
+      "artist": "Elvis Presley",
+      "musicbrainzRecordingId": "f70d1f66-4693-4cca-9f44-62c7253ae6ab",
+      "canonicalRecordingId": "81b40a45-b67a-4319-8fd6-d62445b6a265",
+      "preferredSpotifyTrackId": "03G0RbZwpmFXvP77y5Mbne"
+    },
+    {
+      "title": "Rockin' Around the Christmas Tree",
+      "artist": "Brenda Lee",
+      "musicbrainzRecordingId": "8651cca6-578a-4e47-85c0-5d8d2a2566be",
+      "canonicalRecordingId": "51868b06-9eed-4c42-9534-d2220c4eb209",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Jingle Bell Rock",
+      "artist": "Bobby Helms",
+      "musicbrainzRecordingId": "b1a0a2c1-e144-4151-bf09-47079738095e",
+      "canonicalRecordingId": "a6f7bbfb-bd2a-431b-b796-06c418a61a4c",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Let It Snow! Let It Snow! Let It Snow!",
+      "artist": "Dean Martin",
+      "musicbrainzRecordingId": "03692904-d5e2-4f9c-85e6-78fb8d19c34f",
+      "canonicalRecordingId": "ed222b01-4210-4a48-ae0f-e9ed855bc3c2",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Santa Claus Is Comin' to Town",
+      "artist": "The Jackson 5",
+      "musicbrainzRecordingId": "46799bbc-0cdb-4a47-b359-533003eb05c3",
+      "canonicalRecordingId": "58e1b927-9f49-46c6-a136-3bf9a353148b",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "It's Beginning to Look a Lot Like Christmas",
+      "artist": "Perry Como",
+      "musicbrainzRecordingId": "ae9cd453-b841-4eae-bd92-418facb972ab",
+      "canonicalRecordingId": "259934e9-d84a-438c-9972-fab686a6e9e9",
+      "preferredSpotifyTrackId": "3PIz5C6Dop7ZSi37WL0cOl"
+    },
+    {
+      "title": "Winter Wonderland",
+      "artist": "Darlene Love",
+      "musicbrainzRecordingId": "8be7ef09-2951-489e-8645-0eeee6ad16df",
+      "canonicalRecordingId": "cb6068a1-9c05-44d8-9696-4842bb63b3d5",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Peace on Earth / Little Drummer Boy",
+      "artist": "Bing Crosby & David Bowie",
+      "musicbrainzRecordingId": "1490f55b-878f-4564-9f60-e709f414755d",
+      "canonicalRecordingId": "32347472-4cd2-433b-998f-867e63f8a3c0",
+      "preferredSpotifyTrackId": "7HBcGJfrEQGGdAmFrLmq6L"
+    },
+    {
+      "title": "Sleigh Ride",
+      "artist": "The Ronettes",
+      "musicbrainzRecordingId": "9abaaa73-fa68-4e03-9edc-d1992d9825d4",
+      "canonicalRecordingId": "f600d1c4-500b-40f1-a153-5dab5476f578",
+      "preferredSpotifyTrackId": "5AirdEcjTfLZc7sTvD92B1"
+    },
+    {
+      "title": "Happy Xmas (War Is Over)",
+      "artist": "John Lennon & Yoko Ono",
+      "musicbrainzRecordingId": "dc517f67-3e5c-4ca8-98f5-befe8deb1199",
+      "canonicalRecordingId": "4a7c706d-833f-4cf4-b9b4-1e66fc0079ee",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Feliz Navidad",
+      "artist": "José Feliciano",
+      "musicbrainzRecordingId": "0fd07598-5881-47ba-9eca-5a7378357c2b",
+      "canonicalRecordingId": "db54d875-1e29-4cd7-ba1c-692e9aef544e",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Wonderful Christmastime",
+      "artist": "Paul McCartney",
+      "musicbrainzRecordingId": "05b4fc6f-d333-4bcd-b919-101871ff5686",
+      "canonicalRecordingId": "02ae77c4-d0e5-497a-af51-5135d30896fd",
+      "preferredSpotifyTrackId": "3j3w7stQzYr3cw4ccBTd6p"
+    },
+    {
+      "title": "Step Into Christmas",
+      "artist": "Elton John",
+      "musicbrainzRecordingId": "4a9fd0d0-ecdb-4116-9e38-5dfc77f5e02d",
+      "canonicalRecordingId": "5ac54b77-6104-478c-b587-5681f210bdd2",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "This Christmas",
+      "artist": "Donny Hathaway",
+      "musicbrainzRecordingId": "8dd19231-ff63-4cb1-8b76-1e1354c420f5",
+      "canonicalRecordingId": "f2e9265c-b450-4e5f-ba89-08af74acaf3d",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas (Baby Please Come Home)",
+      "artist": "Darlene Love",
+      "musicbrainzRecordingId": "5abe7e5b-2aef-4b12-8a33-f6a02d2dc06f",
+      "canonicalRecordingId": "41fb3bb0-7f4f-473e-b24f-f2f69fe3076a",
+      "preferredSpotifyTrackId": "4mg7mNQ4nCtozrgR9jb6Km"
+    },
+    {
+      "title": "Silent Night",
+      "artist": "The Temptations",
+      "musicbrainzRecordingId": "f4434431-0a16-472b-b3b1-b7a5fd601658",
+      "canonicalRecordingId": "b3ee4b53-85c9-4943-b5c5-0760b1edc492",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Fairytale of New York",
+      "artist": "The Pogues feat. Kirsty MacColl",
+      "musicbrainzRecordingId": "db90cac2-811d-473f-800e-b2e625f3cd05",
+      "canonicalRecordingId": "7750530d-77a9-453a-a5b3-2c59e13e79ac",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Merry Xmas Everybody",
+      "artist": "Slade",
+      "musicbrainzRecordingId": "a7387795-2ca2-499d-a96e-05e7d8dc28f7",
+      "canonicalRecordingId": "cba7d879-5762-4e7c-8d81-3ca352eaab99",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "I Wish It Could Be Christmas Everyday",
+      "artist": "Wizzard",
+      "musicbrainzRecordingId": "51d64124-b42f-46eb-9885-fcd856fdbadd",
+      "canonicalRecordingId": "7ae717be-75b3-4b43-9ccb-f67ed70f4c9c",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Merry Christmas Everyone",
+      "artist": "Shakin' Stevens",
+      "musicbrainzRecordingId": "e5a31a61-c284-4fa9-85ac-ceb613162005",
+      "canonicalRecordingId": "b93ff029-f277-40cf-b5e6-886b4f5c0723",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Last Christmas",
+      "artist": "Wham!",
+      "musicbrainzRecordingId": "5b42bccf-325a-4700-b113-7ee6da3010b8",
+      "canonicalRecordingId": "2cbd8424-a2d9-4f8c-88ef-efc738887d78",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Stay Another Day",
+      "artist": "East 17",
+      "musicbrainzRecordingId": "b34766f5-ba95-43a4-8a38-c21a5f160997",
+      "canonicalRecordingId": "1ac05108-8f3f-446f-89ca-df2705a0028d",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Stop the Cavalry",
+      "artist": "Jona Lewie",
+      "musicbrainzRecordingId": "cd186ea2-6a09-41ae-8299-5ee775696c90",
+      "canonicalRecordingId": "32aed1fc-5fa9-45b2-9a80-c486002bc22c",
+      "preferredSpotifyTrackId": "1WEqhJTEObjlYobaRMXi8s"
+    },
+    {
+      "title": "Christmas Wrapping",
+      "artist": "The Waitresses",
+      "musicbrainzRecordingId": "7a80e1c1-1f5c-4f2e-b7cc-751cb9db6c96",
+      "canonicalRecordingId": "7f88e499-a6e9-445c-a25e-8b33299db349",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "The Power of Love",
+      "artist": "Frankie Goes to Hollywood",
+      "musicbrainzRecordingId": "deb50a81-1a38-40d9-aafa-649acec4c0d6",
+      "canonicalRecordingId": "e24c3bef-26ce-4b5d-bcd5-8eb03b71f439",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "2000 Miles",
+      "artist": "The Pretenders",
+      "musicbrainzRecordingId": "4a58bb75-ddea-44f4-a905-4d4e1367ccda",
+      "canonicalRecordingId": "d80b6bca-8d18-41d0-b3fa-cec78ee83941",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "A Spaceman Came Travelling",
+      "artist": "Chris de Burgh",
+      "musicbrainzRecordingId": "26da7ece-d23c-422f-a33c-6cb350555620",
+      "canonicalRecordingId": "d560717b-a367-4c65-b1a6-425d0825122a",
+      "preferredSpotifyTrackId": "42A9JEptErWVygDIMfwZAh"
+    },
+    {
+      "title": "Driving Home for Christmas",
+      "artist": "Chris Rea",
+      "musicbrainzRecordingId": "03530241-9656-4597-9ec4-9fe50208ca05",
+      "canonicalRecordingId": "d9e2e780-17c7-406e-8d59-9b4641ccc4be",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Lonely This Christmas",
+      "artist": "Mud",
+      "musicbrainzRecordingId": "238fe0f9-5eb5-4742-bcb2-a75dc4a32d84",
+      "canonicalRecordingId": "05598242-dff8-4ff5-a60f-cd2869c5181d",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Do They Know It's Christmas?",
+      "artist": "Band Aid",
+      "musicbrainzRecordingId": "792babf5-f36b-416e-b47a-7291937c7f8b",
+      "canonicalRecordingId": "ab8e7ea5-e58f-48b9-b573-ca12b96682f1",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Pipes of Peace",
+      "artist": "Paul McCartney",
+      "musicbrainzRecordingId": "5642afa2-f5a6-49b1-99cc-09fa48a00321",
+      "canonicalRecordingId": "2cdf76bd-1543-48f8-b6a1-05066b026911",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Saviour's Day",
+      "artist": "Cliff Richard",
+      "musicbrainzRecordingId": "415ddeb0-b152-43e0-b354-dd3b94541c2a",
+      "canonicalRecordingId": "6916c902-5b09-49d0-9273-2b386144818a",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "One More Sleep",
+      "artist": "Leona Lewis",
+      "musicbrainzRecordingId": "3878be92-b782-45e0-870d-9bba23728073",
+      "canonicalRecordingId": "61d897f0-fe9f-46e4-ac2e-d329d6ac70e3",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Mistletoe and Wine",
+      "artist": "Cliff Richard",
+      "musicbrainzRecordingId": "c4923f44-b628-4b2f-a8d4-ae80a8ad17d6",
+      "canonicalRecordingId": "54f37a66-3014-450a-8e4e-619e1497a8ec",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "A Winter's Tale",
+      "artist": "David Essex",
+      "musicbrainzRecordingId": "a915963c-6cdf-437e-bced-b7fbe26312b0",
+      "canonicalRecordingId": "6439256e-853b-4982-9796-5e7c830e5df8",
+      "preferredSpotifyTrackId": "0viqEYmYr97lQrMdhHTlTu"
+    },
+    {
+      "title": "December Song (I Dreamed of Christmas)",
+      "artist": "George Michael",
+      "musicbrainzRecordingId": "d5807afb-00e0-4606-a067-485daeac321f",
+      "canonicalRecordingId": "a0c811e9-c5b3-41cf-a8f3-ffcc8c15b3c2",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "All I Want for Christmas Is You",
+      "artist": "Mariah Carey",
+      "musicbrainzRecordingId": "a6fab057-cf3a-4456-950e-d3edaf219326",
+      "canonicalRecordingId": "d6ccdb5e-008f-4e10-824d-15833013d21e",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Time",
+      "artist": "Bryan Adams",
+      "musicbrainzRecordingId": "22d183e1-1b3f-4553-957a-8826502da650",
+      "canonicalRecordingId": "2038e8fe-80f6-47bb-952b-3a19526f06ce",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Through Your Eyes",
+      "artist": "Gloria Estefan",
+      "musicbrainzRecordingId": "ba289f24-aa03-4621-b7a1-0d8bf966e3fb",
+      "canonicalRecordingId": "9e3da5c4-8c76-4b60-b14a-e896e1c41410",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "8 Days of Christmas",
+      "artist": "Destiny's Child",
+      "musicbrainzRecordingId": "802d8d00-dd01-4a9c-9e60-65c5ce5ea2dd",
+      "canonicalRecordingId": "edc7afce-0a4a-4cdf-bef9-febcefb87a23",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "My Only Wish (This Year)",
+      "artist": "Britney Spears",
+      "musicbrainzRecordingId": "70acd7e3-c115-43bd-b0fb-b1c5986014bf",
+      "canonicalRecordingId": "00b80a9d-5eda-4597-90dc-6024a36d3b8f",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Where Are You Christmas?",
+      "artist": "Faith Hill",
+      "musicbrainzRecordingId": "116ec018-fae5-4a8f-9bc5-cf1644b24499",
+      "canonicalRecordingId": "3db7b96b-19f7-4570-a3d1-899a6df03eb0",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Grown-Up Christmas List",
+      "artist": "Amy Grant",
+      "musicbrainzRecordingId": "34e9b2e4-ddb8-455b-8cc7-8bfdced66dfc",
+      "canonicalRecordingId": "33751ce3-f512-4f3c-9995-0944ba698457",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "All Alone on Christmas",
+      "artist": "Darlene Love",
+      "musicbrainzRecordingId": "73152790-10f0-4c90-a15e-ebd9e62736d0",
+      "canonicalRecordingId": "6cc0621f-84ee-454b-926c-e071fc6e1f95",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Please Come Home for Christmas",
+      "artist": "Jon Bon Jovi",
+      "musicbrainzRecordingId": "c10d906c-247e-45bf-8329-74634554bd40",
+      "canonicalRecordingId": "4b32449b-e993-47ee-ade5-5f28a2502b5e",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Day",
+      "artist": "Dido",
+      "musicbrainzRecordingId": "feae667c-651a-4d71-9a24-227a950b538a",
+      "canonicalRecordingId": "3f089090-98f6-453e-a731-0c623d74b43a",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Merry Christmas, Happy Holidays",
+      "artist": "*NSYNC",
+      "musicbrainzRecordingId": "c02ab9b4-9ac7-4af0-805f-cf7c669e06b7",
+      "canonicalRecordingId": "ed680648-e591-4216-9135-fee3044fbadc",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Eve",
+      "artist": "Céline Dion",
+      "musicbrainzRecordingId": "bb49c908-f804-43d8-9c2d-38f5bf20eee2",
+      "canonicalRecordingId": "720bfbb1-595c-418f-8212-ad04ccdfb19b",
+      "preferredSpotifyTrackId": "4u3p9G8NEyF37rfQ0OHS4T"
+    },
+    {
+      "title": "Do You Hear What I Hear?",
+      "artist": "Whitney Houston",
+      "musicbrainzRecordingId": "8dfaf79f-f6c2-4577-9bf0-da1e387fb830",
+      "canonicalRecordingId": "9d7aa158-7137-42e2-9b9e-4ebac7048cb7",
+      "preferredSpotifyTrackId": "4qmvAcCjoPabbq23UTi49Q"
+    },
+    {
+      "title": "When Christmas Comes to Town",
+      "artist": "Matthew Hall & Meagan Moore",
+      "musicbrainzRecordingId": "c3ddc5ba-02e1-4783-8f69-09530f7af89a",
+      "canonicalRecordingId": "82ceafa7-95de-4e83-8275-20893793b2af",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Thank God It's Christmas",
+      "artist": "Queen",
+      "musicbrainzRecordingId": "1861d5ea-6b32-4532-bdb3-96d9389b284f",
+      "canonicalRecordingId": "7d75915c-ffb3-46f8-8559-aa3ee4c77861",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Is All Around",
+      "artist": "Billy Mack",
+      "musicbrainzRecordingId": "44589f40-0eb2-4877-a65a-7923034f9f57",
+      "canonicalRecordingId": "56e893d3-5d15-4a23-91ee-a0071d568ad5",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "It Doesn't Often Snow at Christmas",
+      "artist": "Pet Shop Boys",
+      "musicbrainzRecordingId": "a30a0eac-76dd-473a-bd36-6322945fae8c",
+      "canonicalRecordingId": "3cc9fa6c-61f2-4de8-b95f-c4b1c22fd17b",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "What Christmas Means to Me",
+      "artist": "Hanson",
+      "musicbrainzRecordingId": "c0c09705-59ad-432c-a72d-d65c2b904099",
+      "canonicalRecordingId": "e8795a76-bd51-46d3-8a2f-b734bf372b37",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "The Magic of Christmas Day (God Bless Us Everyone)",
+      "artist": "Céline Dion",
+      "musicbrainzRecordingId": "0aacf835-51c9-4e2b-931f-000f9b21e38a",
+      "canonicalRecordingId": "67cf0fc1-04dc-465f-a302-8de285bab5f6",
+      "preferredSpotifyTrackId": "4TRfKrvYpRydtCvbcJGMK3"
+    },
+    {
+      "title": "Shake Up Christmas",
+      "artist": "Train",
+      "musicbrainzRecordingId": "0ee18053-abf6-4e29-98e9-8b5df91c39bd",
+      "canonicalRecordingId": "de1ffffe-30e7-43c0-9c33-bfafbffc6197",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Underneath the Tree",
+      "artist": "Kelly Clarkson",
+      "musicbrainzRecordingId": "1e62185e-2731-4da4-930a-a5817962ff19",
+      "canonicalRecordingId": "d5d13c0a-0087-4c91-8ecf-edeb720663ce",
+      "preferredSpotifyTrackId": "0XsFRrvTUGFVqVmr1F42mD"
+    },
+    {
+      "title": "Santa Tell Me",
+      "artist": "Ariana Grande",
+      "musicbrainzRecordingId": "23b8b7c9-79fd-48c9-85d0-ea82e2b0718b",
+      "canonicalRecordingId": "1ff32e8c-daae-4793-9e95-d0148cdd2bd8",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Snowman",
+      "artist": "Sia",
+      "musicbrainzRecordingId": "b3d8e887-89dc-40ce-8c85-83b079b5de09",
+      "canonicalRecordingId": "9653a125-68c1-485d-a3ca-3a8ab7689491",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Lights",
+      "artist": "Coldplay",
+      "musicbrainzRecordingId": "019b7032-d50f-43e9-9144-ae9c20320433",
+      "canonicalRecordingId": "d895a197-36ba-484f-9506-3e0e2b55d7b1",
+      "preferredSpotifyTrackId": "4fzyvSu73BhGvi96p2zwjL"
+    },
+    {
+      "title": "Cozy Little Christmas",
+      "artist": "Katy Perry",
+      "musicbrainzRecordingId": "27746a80-6914-439f-9774-1fc2e55b3110",
+      "canonicalRecordingId": "f250e7af-cf1f-4c3a-a0eb-d435100b79c4",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "You Make It Feel Like Christmas",
+      "artist": "Gwen Stefani feat. Blake Shelton",
+      "musicbrainzRecordingId": "90b8459b-d74f-484c-865e-c7f116d42f6a",
+      "canonicalRecordingId": "861bb037-cafa-466c-b840-5cc7b210e278",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Mistletoe",
+      "artist": "Justin Bieber",
+      "musicbrainzRecordingId": "35c4a2ff-bc1b-4c4b-af1a-e61a417b8ac4",
+      "canonicalRecordingId": "1042d435-de97-4604-9ac0-fb2a9cb1c4e1",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Like It's Christmas",
+      "artist": "Jonas Brothers",
+      "musicbrainzRecordingId": "cb09ddfe-e030-4c91-82f4-612c16d7efc3",
+      "canonicalRecordingId": "5d9a6abb-c89c-4fcc-8213-6693f48b3cce",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Tree Farm",
+      "artist": "Taylor Swift",
+      "musicbrainzRecordingId": "f1b8e59d-a5be-4b7c-a9b2-7cc70d23f61d",
+      "canonicalRecordingId": "96991ede-62d3-4021-9221-0d9e43527b48",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Every Day's Like Christmas",
+      "artist": "Kylie Minogue",
+      "musicbrainzRecordingId": "3b24367a-33b3-412a-83a2-0935b2923fc0",
+      "canonicalRecordingId": "3499c97e-0f5e-4c8c-bb5f-3ca68007708e",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Merry Christmas",
+      "artist": "Ed Sheeran & Elton John",
+      "musicbrainzRecordingId": "d49e32d1-d224-4efe-b2b9-a94c7cfdcbc6",
+      "canonicalRecordingId": "8cc94afe-cb16-45f9-9cbd-27b2eda4155e",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "DJ Play a Christmas Song",
+      "artist": "Cher",
+      "musicbrainzRecordingId": "7a66727a-06ec-4e28-9ab2-dae48ce5cb1a",
+      "canonicalRecordingId": "a5d43b81-0eb5-4c81-97f6-85eb548b4627",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Isn't Christmas",
+      "artist": "Dan + Shay",
+      "musicbrainzRecordingId": "2fd96485-475b-4c8f-9512-3b221726ebed",
+      "canonicalRecordingId": "25256d82-f5d3-4e30-ab9c-c6efe7492bd6",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Wrap Me Up",
+      "artist": "Jimmy Fallon & Meghan Trainor",
+      "musicbrainzRecordingId": "be4bea7c-e9d2-4154-b3dc-e7a4d1daef3c",
+      "canonicalRecordingId": "0774cdd7-89af-4829-8be1-b56442d96e59",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "A Nonsense Christmas",
+      "artist": "Sabrina Carpenter",
+      "musicbrainzRecordingId": "7a015c10-bc44-4d6c-ad6d-b08fcba2c8a2",
+      "canonicalRecordingId": "3c5e121a-a4ba-48d7-aa95-4990f8e87db4",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Merry Christmas (I Don't Want to Fight Tonight)",
+      "artist": "Ramones",
+      "musicbrainzRecordingId": "23f9b940-c7fb-4db7-b650-9c09e253bbd4",
+      "canonicalRecordingId": "a64d9c9a-e2eb-421b-be93-fb9acef011b8",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Song",
+      "artist": "Phoebe Bridgers",
+      "musicbrainzRecordingId": "975bc7bb-5c60-4744-aa72-b1824345648a",
+      "canonicalRecordingId": "e91ea99b-d483-4b8e-9a3a-e3d01d9f3523",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Don't Shoot Me Santa",
+      "artist": "The Killers",
+      "musicbrainzRecordingId": "b517aaad-1655-4337-886d-eea1a04565ba",
+      "canonicalRecordingId": "7dfe415e-d553-4cb1-ae21-da1bd591d40a",
+      "preferredSpotifyTrackId": "0VnM98fVPYamafDoW7yza7"
+    },
+    {
+      "title": "Christmas All Over Again",
+      "artist": "Tom Petty and the Heartbreakers",
+      "musicbrainzRecordingId": "894ebdbe-a2da-4fc8-9c21-39d074264642",
+      "canonicalRecordingId": "6e10b91a-74d7-4a9e-8751-177a3f460455",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Father Christmas",
+      "artist": "The Kinks",
+      "musicbrainzRecordingId": "3cf3dd99-e33b-462a-9e00-8c4b3bb94fed",
+      "canonicalRecordingId": "9def01fc-eb07-4fb5-9472-53e1959e799f",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas at the Zoo",
+      "artist": "The Flaming Lips",
+      "musicbrainzRecordingId": "4d70b993-b001-41d8-9406-60bde4807198",
+      "canonicalRecordingId": "f3eddcc6-2150-4a1f-a833-c1ec20c9bfb4",
+      "preferredSpotifyTrackId": "1OHkTDw2UJafmvInXkzAPu"
+    },
+    {
+      "title": "Xmas Curtain",
+      "artist": "My Morning Jacket",
+      "musicbrainzRecordingId": "adaea8b7-4a74-4efc-9135-e065e97d7868",
+      "canonicalRecordingId": "d54e7761-f891-4705-8ad1-7e84d7923c69",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Just Like Christmas",
+      "artist": "Low",
+      "musicbrainzRecordingId": "174c8cc6-129d-41f5-807e-0f963cb07429",
+      "canonicalRecordingId": "02a447e2-eba4-4784-8369-9304fd92976a",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "River",
+      "artist": "Joni Mitchell",
+      "musicbrainzRecordingId": "760828c4-c062-4667-94c6-0d358c1c768c",
+      "canonicalRecordingId": "2cd956e6-cb57-4267-83f9-610d1f9bf894",
+      "preferredSpotifyTrackId": "0DAmSYQW9kq9gQNDI002KP"
+    },
+    {
+      "title": "Christmas Card from a Hooker in Minneapolis",
+      "artist": "Tom Waits",
+      "musicbrainzRecordingId": "8f829372-5629-4b8c-a808-1a93d0b3f5c7",
+      "canonicalRecordingId": "d5e7a2ea-5826-4f3c-8df3-60ef6e30f157",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "I Won't Be Home for Christmas",
+      "artist": "blink-182",
+      "musicbrainzRecordingId": "71575f06-486d-4b00-ab64-c2e9da632649",
+      "canonicalRecordingId": "fb01b461-822c-4f67-9393-e45dda7886a5",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Yule Shoot Your Eye Out",
+      "artist": "Fall Out Boy",
+      "musicbrainzRecordingId": "f579d6d6-18dd-4607-a6f9-344baf5a27b3",
+      "canonicalRecordingId": "52f0e679-79e1-4f9b-94f4-b7d3e5f44347",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Thank God It's Not Christmas",
+      "artist": "Sparks",
+      "musicbrainzRecordingId": "7ca0596c-476c-4e56-9084-d2d63c116009",
+      "canonicalRecordingId": "e6453845-a3be-47f7-9c6c-2c79993e9e5e",
+      "preferredSpotifyTrackId": "4KKzMlyzOJsiXcwiAY6M2c"
+    },
+    {
+      "title": "Alan Parsons in a Winter Wonderland",
+      "artist": "Grandaddy",
+      "musicbrainzRecordingId": "bea217cb-ee96-42d1-b472-af2aeb1363db",
+      "canonicalRecordingId": "91e7c46e-25ed-427e-ab64-8c6dcf794a50",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Maybe This Christmas",
+      "artist": "Ron Sexsmith",
+      "musicbrainzRecordingId": "5ad30288-e94b-4e05-bd11-7e7dad6bf797",
+      "canonicalRecordingId": "21be09a1-8bd9-4fd1-a2ea-a33f927604d1",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Grandma Got Run Over by a Reindeer",
+      "artist": "Elmo & Patsy",
+      "musicbrainzRecordingId": "dc4f9052-fe8a-4d07-bb98-e80257a07de5",
+      "canonicalRecordingId": "13a39d09-e074-40c1-8ae6-ecb20b0f85e0",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "I Want a Hippopotamus for Christmas",
+      "artist": "Gayla Peevey",
+      "musicbrainzRecordingId": "1ae9102b-b168-41e9-a795-be172266cfd0",
+      "canonicalRecordingId": "53a8a021-c3bd-4943-991e-df12b45f66ea",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Dominick the Donkey",
+      "artist": "Lou Monte",
+      "musicbrainzRecordingId": "342aaba5-07ec-4871-aa5e-d2601a2df0cf",
+      "canonicalRecordingId": "45852ffa-cb3b-4219-bf6e-9f4bbe2e34a7",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "The Chipmunk Song (Christmas Don't Be Late)",
+      "artist": "The Chipmunks with David Seville",
+      "musicbrainzRecordingId": "46eb8866-8d92-4fcc-ab75-233fa9f8f96f",
+      "canonicalRecordingId": "8f25fe9e-db65-40fa-bdb8-e28fd3398923",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Mr. Hankey, the Christmas Poo",
+      "artist": "Mr. Hankey",
+      "musicbrainzRecordingId": "f8628e5e-ee7f-4fe2-a023-09e084e0f967",
+      "canonicalRecordingId": "567cfa4c-9508-4457-8280-13d8ef015e47",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Proper Crimbo",
+      "artist": "Bo' Selecta!",
+      "musicbrainzRecordingId": "64a29486-36f0-4edf-be9f-f39c69e8b9ea",
+      "canonicalRecordingId": "0b0efbe9-a9dd-4515-9506-b803242f1b98",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "Christmas Drillings",
+      "artist": "Sidemen",
+      "musicbrainzRecordingId": "cc956fae-db27-48cd-8da2-bfa98256f525",
+      "canonicalRecordingId": "47e9fbfc-eb0a-4211-b071-1bc491284562",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "I'm Gonna Spend My Christmas With a Dalek",
+      "artist": "The Go-Go's",
+      "musicbrainzRecordingId": "cbde2d2c-07a8-4f73-b38b-db4ee03fb897",
+      "canonicalRecordingId": "6a71421c-ae8a-4ed5-8a7b-5e708229af89",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "I Farted on Santa's Lap (Now Christmas Is Gonna Stink for Me)",
+      "artist": "The Little Stinkers",
+      "musicbrainzRecordingId": "76565dd9-c8e4-4411-8493-372c6911ed57",
+      "canonicalRecordingId": "069eb8e4-eb3b-4d6a-8009-54d2336c310e",
+      "preferredSpotifyTrackId": null
+    },
+    {
+      "title": "R2-D2 We Wish You a Merry Christmas",
+      "artist": "Meco",
+      "musicbrainzRecordingId": "0306bbaf-24f8-4a74-bd66-d67c9526dcc9",
+      "canonicalRecordingId": "3edd59bd-a551-4e8e-b5cf-b4fc028f1f3d",
+      "preferredSpotifyTrackId": null
+    }
+  ]
+}
