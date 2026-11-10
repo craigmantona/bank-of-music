@@ -107,7 +107,10 @@ test("responsive, keyboard, focus and reduced-motion contracts are present", () 
   assert.match(christmas, /\[data-christmas-close\]"\)\.focus/);
   assert.match(christmas, /prefers-reduced-motion: reduce/);
   assert.match(christmas, /class="bom-xmas-snow" aria-hidden="true"/);
+  assert.match(christmas, /Array\.from\(\{ length: 20 \}/);
+  assert.match(christmas, /--snow-opacity:/);
   assert.match(css, /\.bom-xmas-snow[^}]*pointer-events:none/);
+  assert.match(css, /box-shadow:0 0 0 \.65px rgba\(76,104,119,\.3\),0 1px 2px rgba\(76,104,119,\.22\)/);
   assert.match(css, /@keyframes xmasFlake/);
   assert.match(css, /@media \(prefers-reduced-motion:reduce\)[\s\S]*?\.bom-xmas-snow \{ display:none; \}/);
 });

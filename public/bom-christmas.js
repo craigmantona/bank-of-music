@@ -32,7 +32,8 @@
       const duration = (11 + (index * 7) % 9).toFixed(1);
       const drift = -32 + (index * 29) % 65;
       const size = 3 + (index * 5) % 6;
-      return `<i style="--snow-left:${left}%;--snow-delay:${delay}s;--snow-duration:${duration}s;--snow-drift:${drift}px;--snow-size:${size}px"></i>`;
+      const opacity = (0.68 + ((index * 11) % 5) * 0.055).toFixed(2);
+      return `<i style="--snow-left:${left}%;--snow-delay:${delay}s;--snow-duration:${duration}s;--snow-drift:${drift}px;--snow-size:${size}px;--snow-opacity:${opacity}"></i>`;
     }).join("");
     return `<div class="bom-xmas-snow" aria-hidden="true">${flakes}</div>`;
   }
