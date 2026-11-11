@@ -8953,8 +8953,87 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
 
 /* ============================================================
    PLAY WITH YOUR MUSIC PROVIDER
-   Opens the selected BoM song or album in Spotify.
+   Opens the selected BoM song or album in Spotify or Apple Music.
+   Apple Music matching only runs after a listening action, so it
+   adds no work or network requests during application startup.
    ============================================================ */
+
+const MUSIC_PROVIDER_PREFERENCE_KEY = "bom_preferred_listening_service";
+const MUSIC_PROVIDER_PREFERENCES = new Set(["spotify", "apple", "both"]);
+
+function getPreferredListeningService() {
+  try {
+    const stored = localStorage.getItem(MUSIC_PROVIDER_PREFERENCE_KEY);
+    return MUSIC_PROVIDER_PREFERENCES.has(stored) ? stored : "spotify";
+  } catch {
+    return "spotify";
+  }
+}
+
+function setPreferredListeningService(value) {
+  const preference = MUSIC_PROVIDER_PREFERENCES.has(value) ? value : "spotify";
+  try {
+    localStorage.setItem(MUSIC_PROVIDER_PREFERENCE_KEY, preference);
+  } catch {
+    // Listening links remain usable when storage is disabled.
+  }
+  return preference;
+}
+
+function getAppleMusicSearchFallbackUrl({ type, title, artist, album = "" }) {
+  const terms = [title, artist, type === "song" ? album : ""].filter(Boolean).join(" ");
+  return `https://music.apple.com/gb/search?term=${encodeURIComponent(terms)}`;
+}
+
+function safeAppleMusicUrl(value, fallbackUrl) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && /(^|\.)music\.apple\.com$/i.test(url.hostname)
+      ? url.toString()
+      : fallbackUrl;
+  } catch {
+    return fallbackUrl;
+  }
+}
+
+function scoreAppleMusicResult(result, { type, title, artist, album = "" }) {
+  const expectedTitle = normaliseSpotifyMatchText(title);
+  const expectedArtist = normaliseSpotifyMatchText(artist);
+  const expectedAlbum = normaliseSpotifyMatchText(album);
+  const resultTitle = normaliseSpotifyMatchText(type === "album" ? result?.collectionName : result?.trackName);
+  const resultArtist = normaliseSpotifyMatchText(result?.artistName);
+  const resultAlbum = normaliseSpotifyMatchText(result?.collectionName);
+  if (!expectedTitle || !expectedArtist || resultTitle !== expectedTitle || resultArtist !== expectedArtist) return -1;
+  if (type === "song" && expectedAlbum && resultAlbum !== expectedAlbum) return 2;
+  return 3;
+}
+
+async function resolveAppleMusicUrl({ type, title, artist, album = "" }) {
+  const fallbackUrl = getAppleMusicSearchFallbackUrl({ type, title, artist, album });
+  const params = new URLSearchParams({
+    term: [title, artist, type === "song" ? album : ""].filter(Boolean).join(" "),
+    country: "GB",
+    media: "music",
+    entity: type === "album" ? "album" : "song",
+    limit: "25"
+  });
+  try {
+    const response = await fetch(`https://itunes.apple.com/search?${params}`, {
+      method: "GET",
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) return fallbackUrl;
+    const payload = await response.json();
+    const match = (payload?.results || [])
+      .map(result => ({ result, score: scoreAppleMusicResult(result, { type, title, artist, album }) }))
+      .filter(candidate => candidate.score === 3)
+      .sort((a, b) => b.score - a.score)[0]?.result;
+    const exactUrl = type === "album" ? match?.collectionViewUrl : match?.trackViewUrl;
+    return safeAppleMusicUrl(exactUrl, fallbackUrl);
+  } catch {
+    return fallbackUrl;
+  }
+}
 
 const SPOTIFY_ALBUM_MATCH_CACHE_PREFIX =
   "bom_spotify_album_match_";
@@ -9155,6 +9234,8 @@ function buildMusicProviderPanel({
 }) {
   if (!title || !artist) return "";
 
+  const preference = getPreferredListeningService();
+
   const playerId =
     "spotify-embed-" +
     Math.random().toString(36).slice(2);
@@ -9166,15 +9247,24 @@ function buildMusicProviderPanel({
           <div class="music-provider-kicker">Listen now</div>
           <strong>Play with your music provider</strong>
           <span>
-            Play this ${type === "album" ? "album" : "track"}
-            inside Bank of Music.
+            Use Spotify here or open this ${type === "album" ? "album" : "track"}
+            in Apple Music.
           </span>
         </div>
 
         <div class="music-provider-actions">
+          <label class="music-provider-preference">
+            <span>Service</span>
+            <select data-listening-service aria-label="Preferred listening service">
+              <option value="spotify"${preference === "spotify" ? " selected" : ""}>Spotify</option>
+              <option value="apple"${preference === "apple" ? " selected" : ""}>Apple Music</option>
+              <option value="both"${preference === "both" ? " selected" : ""}>Both</option>
+            </select>
+          </label>
           <button
             type="button"
-            class="music-provider-play-btn"
+            class="music-provider-play-btn music-provider-spotify-btn${preference === "apple" ? " hidden" : ""}"
+            data-music-service="spotify"
             data-provider-type="${escapeHtml(type)}"
             data-provider-title="${escapeHtml(title)}"
             data-provider-artist="${escapeHtml(artist)}"
@@ -9183,6 +9273,18 @@ function buildMusicProviderPanel({
           >
             <span class="music-provider-icon" aria-hidden="true">♪</span>
             <span>Play here</span>
+          </button>
+          <button
+            type="button"
+            class="music-provider-play-btn music-provider-apple-btn${preference === "spotify" ? " hidden" : ""}"
+            data-music-service="apple"
+            data-provider-type="${escapeHtml(type)}"
+            data-provider-title="${escapeHtml(title)}"
+            data-provider-artist="${escapeHtml(artist)}"
+            data-provider-album="${escapeHtml(album)}"
+          >
+            <span class="music-provider-icon" aria-hidden="true">♪</span>
+            <span>Open Apple Music</span>
           </button>
         </div>
       </div>
@@ -9195,6 +9297,44 @@ function buildMusicProviderPanel({
     </div>
   `;
 }
+
+function syncListeningServiceControls(preference) {
+  document.querySelectorAll("[data-listening-service]").forEach(select => {
+    select.value = preference;
+  });
+  document.querySelectorAll("[data-music-service]").forEach(button => {
+    button.classList.toggle("hidden", preference !== "both" && button.dataset.musicService !== preference);
+  });
+}
+
+async function openWithAppleMusic({ type, title, artist, album = "", button = null }) {
+  const fallbackUrl = getAppleMusicSearchFallbackUrl({ type, title, artist, album });
+  const appleWindow = window.open(fallbackUrl, "_blank");
+  if (appleWindow) appleWindow.opener = null;
+  const originalText = button?.innerHTML || "";
+  if (button) {
+    button.disabled = true;
+    button.innerHTML = "<span>Finding in Apple Music…</span>";
+  }
+  try {
+    void recordMusicProviderClick({ provider: "apple_music", type, title, artist, album });
+    const resolvedUrl = await resolveAppleMusicUrl({ type, title, artist, album });
+    if (appleWindow) appleWindow.location.replace(resolvedUrl);
+    else window.location.assign(resolvedUrl);
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = originalText;
+    }
+  }
+}
+
+document.addEventListener("change", event => {
+  const select = event.target.closest?.("[data-listening-service]");
+  if (!select) return;
+  event.stopPropagation();
+  syncListeningServiceControls(setPreferredListeningService(select.value));
+});
 
 function getSpotifySearchFallbackUrl({
   title,
@@ -13993,7 +14133,11 @@ if (
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      await openWithMusicProvider({
+      const providerAction = musicProviderButton.dataset.musicService === "apple"
+        ? openWithAppleMusic
+        : openWithMusicProvider;
+
+      await providerAction({
         type:
           musicProviderButton.dataset
             .providerType || "song",

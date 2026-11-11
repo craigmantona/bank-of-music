@@ -6053,8 +6053,36 @@ button.song-album-link {
 .music-provider-actions {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   flex: 0 0 auto;
+}
+
+.music-provider-preference {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.music-provider-preference select {
+  min-height: 44px;
+  padding: 8px 34px 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: #101724;
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  text-transform: none;
+}
+
+.music-provider-apple-btn {
+  border-color: rgba(255, 255, 255, 0.48) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
 }
 
 .spotify-embed-container {
@@ -6127,6 +6155,13 @@ button.song-album-link {
   }
 
   .music-provider-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .music-provider-preference,
+  .music-provider-preference select,
+  .music-provider-play-btn {
     width: 100%;
   }
 
