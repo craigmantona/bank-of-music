@@ -6,6 +6,16 @@ await import(`../bom-spotify-playlist.js?test=${Date.now()}`);
 const sync = globalThis.BOMSpotifyPlaylistSync;
 const id = (number) => String(number).padStart(22, "0");
 
+test("canonical ratings without a song_id resolve to a catalogue occurrence", () => {
+  const canonicalId = "11111111-1111-4111-8111-111111111111";
+  const songs = [
+    { id: 17, canonical_song_id: canonicalId, title: "Canonical track" },
+    { id: 18, canonical_song_id: "other", title: "Other track" }
+  ];
+  assert.equal(sync.findSongForRating({ song_id: null, canonical_song_id: canonicalId }, songs), songs[0]);
+  assert.equal(sync.findSongForRating({ song_id: 18, canonical_song_id: canonicalId }, songs), songs[1]);
+});
+
 test("428 desired tracks reuse 420 persisted IDs and match only the unresolved 8", async () => {
   const tracks = Array.from({ length: 428 }, (_, index) => ({
     title: `Track ${index}`,
@@ -227,6 +237,8 @@ test("playlist integration uses the trusted resolver and preserves playlist defi
     readFile(new URL("../supabase/functions/rapid-processor/spotify-token.ts", import.meta.url), "utf8")
   ]);
   assert.match(app, /resolveQuickRateSpotifyTrack\(track\.song\)/);
+  assert.match(app, /await refreshCurrentUserSpotifyRatings\(\)/);
+  assert.match(app, /findSongForRating\(\s*ratingRow,\s*allSongs,\s*getCanonicalSongId/);
   assert.match(resolver, /persistSpotifyTrackId\(admin, song\.id, match\.id\)/);
   for (const threshold of [7, 8, 9, 10]) {
     assert.match(html, new RegExp(`data-minimum-rating="${threshold}"`));

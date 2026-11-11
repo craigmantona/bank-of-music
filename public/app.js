@@ -15066,8 +15066,10 @@ function getCurrentUserRatedTracksForSpotify(minimumRating) {
       Number(ratingRow.rating) >= minimumRating
     ))
     .forEach((ratingRow) => {
-      const song = allSongs.find(
-        (item) => Number(item.id) === Number(ratingRow.song_id)
+      const song = window.BOMSpotifyPlaylistSync?.findSongForRating(
+        ratingRow,
+        allSongs,
+        getCanonicalSongId
       );
 
       const track = buildSpotifyTrack(song, {
@@ -15090,6 +15092,20 @@ function getCurrentUserRatedTracksForSpotify(minimumRating) {
     const artistComparison = a.artist.localeCompare(b.artist);
     return artistComparison || a.title.localeCompare(b.title);
   });
+}
+
+async function refreshCurrentUserSpotifyRatings() {
+  if (!currentUser) return;
+  await ensureFullCatalogue();
+  const ratings = await fetchQuickRateRows(
+    "song_ratings",
+    "id,user_id,song_id,canonical_song_id,rating",
+    currentUser.id
+  );
+  allSongRatings = [
+    ...allSongRatings.filter((row) => row.user_id !== currentUser.id),
+    ...ratings
+  ];
 }
 
 function getGlobalTop100TracksForSpotify() {
@@ -15386,15 +15402,6 @@ async function synchroniseSpotifyPlaylist({
     return;
   }
 
-  const isTop100 = playlistType === "global-top-100";
-  const tracks = isTop100
-    ? getGlobalTop100TracksForSpotify()
-    : getCurrentUserRatedTracksForSpotify(minimumRating);
-
-  const sourceLabel = isTop100
-    ? "the BoM Global Top 100"
-    : `your ${minimumRating}+ ratings`;
-
   resetSpotifyExportDisplay();
   setSpotifySyncButtonsDisabled(true, button);
 
@@ -15402,6 +15409,15 @@ async function synchroniseSpotifyPlaylist({
     if (!window.BOMSpotifyPlaylistSync) {
       throw new Error("Spotify playlist synchronisation is unavailable.");
     }
+
+    const isTop100 = playlistType === "global-top-100";
+    await refreshCurrentUserSpotifyRatings();
+    const tracks = isTop100
+      ? getGlobalTop100TracksForSpotify()
+      : getCurrentUserRatedTracksForSpotify(minimumRating);
+    const sourceLabel = isTop100
+      ? "the BoM Global Top 100"
+      : `your ${minimumRating}+ ratings`;
 
     setSpotifyMessage(`Reading "${playlistName}"…`);
     const existingPlaylist = await findSpotifyPlaylistByName(playlistName);

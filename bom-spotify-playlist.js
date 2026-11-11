@@ -13,6 +13,18 @@
     return `spotify:track:${id}`;
   }
 
+  function findSongForRating(ratingRow, songs, getCanonicalId = (song) => song?.canonical_song_id) {
+    const songId = Number(ratingRow?.song_id);
+    if (Number.isSafeInteger(songId)) {
+      const direct = songs.find((song) => Number(song?.id) === songId);
+      if (direct) return direct;
+    }
+
+    const canonicalId = String(ratingRow?.canonical_song_id || "").trim();
+    if (!canonicalId) return null;
+    return songs.find((song) => String(getCanonicalId(song) || "").trim() === canonicalId) || null;
+  }
+
   function readRetryAfterSeconds(error) {
     const seconds = Number(error?.retryAfter);
     return Number.isFinite(seconds) && seconds >= 0 ? seconds : 1;
@@ -203,6 +215,7 @@
     MAX_RATE_LIMIT_RETRIES,
     MAX_RETRY_AFTER_SECONDS,
     isValidSpotifyTrackId,
+    findSongForRating,
     readRetryAfterSeconds,
     resolveDesiredTracks,
     fetchSpotifyPlaylistTrackIds,
