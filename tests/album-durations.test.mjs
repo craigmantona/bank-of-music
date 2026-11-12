@@ -55,16 +55,19 @@ test("album total is calculated only from complete stored song durations", () =>
       { id: 11, album_id: 7, title: "One", artist: "Artist", track_position: 1, duration_ms: 60000, is_deleted: false },
       { id: 12, album_id: 7, title: "Two", artist: "Artist", track_position: 2, duration_ms: 125000, is_deleted: false }
     ],
+    normaliseText: value => String(value || "").trim(),
     normaliseCompare: value => String(value).toLowerCase(),
     getSongAverage: () => null,
     getYourSongRating: () => null,
     buildCompactTrackRatingControl: () => "",
     buildSelectedBackButton: () => "",
+    renderArtistCreditLinks: value => value,
     renderClickableArtistName: value => value,
     buildCompactAlbumRatingControl: () => "",
     buildMusicProviderPanel: () => "",
     buildSelectedSharePanel: () => "",
     renderSelectedAdminControls: () => "",
+    renderRemoteAlbumCatalogueStatus: () => "",
     isAdmin: false
   };
   vm.createContext(context);
