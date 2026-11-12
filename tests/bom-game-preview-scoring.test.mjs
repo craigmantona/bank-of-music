@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
 import { readFile, stat } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
-const [app, foundation, preview, daily, extras, scoring, previewSql, futureGrants, build] = await Promise.all([
+const [app, foundation, preview, daily, results, extras, scoring, previewSql, futureGrants, build] = await Promise.all([
   read("app.js"), read("bom-foundation.js"), read("bom-game-preview.js"), read("bom-daily-challenge.js"),
+  read("bom-daily-results.js"),
   read("bom-game-preview.css"), read("supabase/migrations/20261112145414_bom_daily_challenge.sql"),
   read("supabase/migrations/20261112145422_bom_admin_game_preview.sql"),
   read("supabase/operations/future-public-launch/20261112150000_bom_games_public_permissions.sql"),
@@ -26,6 +28,7 @@ test("v2 scoring keeps accuracy dominant with bounded percentage", () => {
   assert.equal(score(10, 300).bonus, 0);
   assert.equal(score(10, 999).percentage, 90);
   assert.equal(875 / 10, 87.5);
+  assert.deepEqual(score(9, 72), { accuracy:810, bonus:76, total:886, percentage:88.6 });
   assert.match(scoring, /v_accuracy := v_correct \* 90/);
   assert.match(scoring, /100 - floor\(v_elapsed \/ 3\.0\)/);
   assert.match(scoring, /least\(1000, v_accuracy \+ v_bonus\)/);
@@ -42,6 +45,7 @@ test("official elapsed time and idempotency are entirely server authoritative", 
   assert.match(scoring, /return query select false/);
   assert.doesNotMatch(scoring, /p_elapsed|p_score|p_bonus/);
   assert.match(app, /p_challenge_date: challengeDate/);
+  assert.match(daily, /state\.startedAt=Date\.now\(\);render\(\)/);
 });
 
 test("private preview is authorized by the server and simulations never write", () => {
@@ -78,15 +82,60 @@ test("preview offers every game, both modes, reset and unlimited local replays",
   assert.doesNotMatch(preview, /submitDailyChallenge|startDailyChallenge/);
 });
 
+test("preview Daily results reuse the official score and sharing component", () => {
+  assert.match(app, /loadBOMGameAsset\("bom-daily-results"\)/);
+  assert.match(preview, /BOMDailyChallengeResults\.render\(dailyResult\(\)\)/);
+  assert.match(daily, /BOMDailyChallengeResults\.render\(state\.result\)/);
+  assert.match(preview, /if\(state\.game==='daily'\)state\.startedAt=Date\.now\(\)/);
+  assert.match(preview, /state\.game==='daily'&&state\.index===9\)state\.completedAt=Date\.now\(\)/);
+  assert.match(preview, /preview:true/);
+  assert.doesNotMatch(preview, /submitDailyChallenge|startDailyChallenge/);
+});
+
+test("shared Daily results render the complete unofficial breakdown and fallbacks", () => {
+  for (const label of ["correct", "completion time", "accuracy points", "speed bonus", "1,000 points", "Share Result", "WhatsApp", "Copy Result", "Instagram Stories image"]) assert.match(results, new RegExp(label));
+  assert.match(results, /UNOFFICIAL PREVIEW/);
+  assert.match(results, /No official attempt or leaderboard result was created/);
+  assert.match(results, /Math\.max\(0,100-Math\.floor\(elapsed\/3\)\)/);
+  assert.match(results, /Math\.min\(1000,accuracy\+bonus\)/);
+  assert.match(results, /percentage:Math\.min\(100,points\/10\)/);
+  assert.match(results, /navigator\.share/);
+  assert.match(results, /navigator\.canShare/);
+  assert.match(results, /navigator\.clipboard/);
+  assert.match(results, /https:\/\/wa\.me/);
+  assert.match(results, /daily-bom-story\.png/);
+  assert.match(results, /view=daily-challenge/);
+  assert.doesNotMatch(results, /left_average_rating|right_average_rating|user_id|email/);
+});
+
+test("shared Daily calculator enforces formula boundaries and the 9-in-72 example", () => {
+  const context={window:{},Intl,Date,Math,Number,String,Object,Array,encodeURIComponent,setTimeout};
+  vm.runInNewContext(results,context);
+  const component=context.window.BOMDailyChallengeResults;
+  const example=component.calculate(9,72);
+  assert.equal(example.accuracyPoints,810);
+  assert.equal(example.speedBonus,76);
+  assert.equal(example.totalPoints,886);
+  assert.equal(example.percentage,88.6);
+  assert.equal(component.calculate(10,0).percentage,100);
+  assert.equal(component.calculate(10,300).speedBonus,0);
+  assert.equal(component.calculate(10,86401).percentage,90);
+  assert.equal(component.calculate(11,-1).percentage,100);
+  const shared=component.model({mode:"songs",challengeDate:"2026-11-12",correctAnswers:9,elapsedSeconds:72,preview:true});
+  assert.match(shared.text,/88\.6%/);
+  assert.match(shared.text,/9\/10 correct · 1:12 · 2026-11-12/);
+  assert.match(shared.text,/UNOFFICIAL PREVIEW/);
+  assert.doesNotMatch(shared.text,/answer|email|user/i);
+});
+
 test("results expose percentage breakdown, tie rules and sharing fallbacks", () => {
-  assert.match(daily, /Math\.min\(100,Math\.max\(0,Number\(points\|\|0\)\/10\)\)/);
-  assert.match(daily, /90 points per correct answer/);
-  assert.match(daily, /Accuracy breaks ties first, then verified shorter time/);
-  assert.match(daily, /navigator\.canShare/);
-  assert.match(daily, /new File/);
-  assert.match(daily, /https:\/\/wa\.me/);
-  assert.match(daily, /clipboard\?\.writeText/);
-  assert.match(daily, /daily-bom-story\.png/);
+  assert.match(results, /90 points per correct answer/);
+  assert.match(results, /Accuracy breaks ties first, then verified shorter time/);
+  assert.match(results, /navigator\.canShare/);
+  assert.match(results, /new File/);
+  assert.match(results, /https:\/\/wa\.me/);
+  assert.match(results, /clipboard/);
+  assert.match(results, /daily-bom-story\.png/);
   assert.match(daily, /challenge_date/);
 });
 
@@ -96,5 +145,6 @@ test("share artwork and mobile preview assets are publishable", async () => {
     assert.match(build, new RegExp(path.split("/").at(-1).replace(".", "\\.")));
   }
   assert.match(extras, /@media\(max-width:700px\)/);
+  assert.match(extras, /bom-game-score-breakdown\{grid-template-columns:1fr\}/);
   assert.match(foundation, /game-preview/);
 });

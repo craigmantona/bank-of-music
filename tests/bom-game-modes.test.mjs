@@ -3,9 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
-const [config, app, foundation, quickfire, daily, css, migration, build, html] = await Promise.all([
+const [config, app, foundation, quickfire, daily, results, css, migration, build, html] = await Promise.all([
   read("config.js"), read("app.js"), read("bom-foundation.js"), read("bom-quickfire.js"),
-  read("bom-daily-challenge.js"), read("bom-games.css"),
+  read("bom-daily-challenge.js"), read("bom-daily-results.js"), read("bom-games.css"),
   read("supabase/migrations/20261112145414_bom_daily_challenge.sql"),
   read("scripts/build-cloudflare-pages.sh"), read("index.html")
 ]);
@@ -79,19 +79,19 @@ test("daily guests get practice behaviour and sharing is spoiler-free", () => {
   assert.match(daily, /Guest practice/);
   assert.match(daily, /if\(state\.authenticated\)/);
   assert.match(daily, /submitDailyChallenge/);
-  assert.match(daily, /data-daily-share/);
-  assert.match(daily, /No spoilers/);
-  assert.doesNotMatch(daily, /left_average_rating.*writeText|right_average_rating.*writeText/);
+  assert.match(results, /data-daily-share/);
+  assert.match(results, /No spoilers/);
+  assert.doesNotMatch(results, /left_average_rating.*writeText|right_average_rating.*writeText/);
   assert.match(daily, /state\.questions\.length!==10/);
-  assert.match(daily, /navigator\.share/);
-  assert.match(daily, /wa\.me/);
-  assert.match(daily, /data-daily-copy/);
+  assert.match(results, /navigator\.share/);
+  assert.match(results, /wa\.me/);
+  assert.match(results, /data-daily-copy/);
 });
 
 test("readiness and publication include both games without eager loading", () => {
   assert.match(migration, /get_bom_game_readiness/);
   assert.match(migration, /eligible_items bigint, eligible_pairs bigint/);
-  for (const asset of ["bom-quickfire.js", "bom-daily-challenge.js", "bom-games.css"]) assert.match(build, new RegExp(asset.replace(".", "\\.")));
+  for (const asset of ["bom-quickfire.js", "bom-daily-results.js", "bom-daily-challenge.js", "bom-games.css"]) assert.match(build, new RegExp(asset.replace(".", "\\.")));
   assert.match(css, /@media\(max-width:700px\)/);
   assert.match(css, /prefers-reduced-motion:reduce/);
 });

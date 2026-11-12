@@ -36,6 +36,7 @@ for file in \
   bom-higher-lower.js \
   bom-higher-lower.css \
   bom-quickfire.js \
+  bom-daily-results.js \
   bom-daily-challenge.js \
   bom-games.css \
   bom-game-preview.js \

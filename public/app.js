@@ -741,6 +741,9 @@ async function openHigherLowerItem(mode, itemId) {
 const gameAssetPromises = new Map();
 
 async function loadBOMGameAsset(name) {
+  if ((name === "bom-daily-challenge" || name === "bom-game-preview") && !window.BOMDailyChallengeResults) {
+    await loadBOMGameAsset("bom-daily-results");
+  }
   if (!document.querySelector('link[data-bom-higher-lower-style]')) {
     const style = document.createElement("link");
     style.rel = "stylesheet";
@@ -765,7 +768,8 @@ async function loadBOMGameAsset(name) {
   if (!gameAssetPromises.has(name)) {
     const load = new Promise((resolve, reject) => {
       const script = document.createElement("script");
-      script.src = `${name}.js?v=1`;
+      const version = ["bom-daily-results", "bom-daily-challenge", "bom-game-preview"].includes(name) ? 2 : 1;
+      script.src = `${name}.js?v=${version}`;
       script.async = true;
       script.onload = resolve;
       script.onerror = () => reject(new Error("The game could not load."));
