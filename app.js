@@ -8205,6 +8205,123 @@ function buildStageOneAlbumModel({ album, detail, albumId, artworkUrl, artist, c
 }
 
 const albumDurationEnrichmentAttempted = new Set();
+const albumRecommendationLoads = new Map();
+
+function albumRecommendationTerms(album) {
+  const raw = [album?.genre, album?.genres, album?.tags, album?.style, album?.styles]
+    .flatMap((value) => Array.isArray(value) ? value : String(value || "").split(/[;,|]/))
+    .map((value) => normaliseCompare(typeof value === "object" ? value.name : value))
+    .filter(Boolean);
+  return new Set(raw);
+}
+
+function albumRecommendationYear(album) {
+  return Number(String(album?.original_release_date || album?.release_date || "").match(/\b\d{4}\b/)?.[0] || 0);
+}
+
+function stableAlbumRecommendationJitter(seed, albumId) {
+  const value = `${seed}:${albumId}`;
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) hash = Math.imul(hash ^ value.charCodeAt(index), 16777619);
+  return (hash >>> 0) / 4294967295;
+}
+
+function rankSimilarAlbums(currentAlbum, albums, ratedAlbumIds, limit = 12) {
+  const currentId = Number(currentAlbum?.id);
+  const currentArtist = normaliseCompare(currentAlbum?.artist);
+  const currentGenres = albumRecommendationTerms(currentAlbum);
+  const currentYear = albumRecommendationYear(currentAlbum);
+  const scored = (albums || [])
+    .filter((album) => !album?.is_deleted && Number(album.id) !== currentId && !ratedAlbumIds.has(Number(album.id)))
+    .map((album) => {
+      const artistMatch = currentArtist && normaliseCompare(album.artist) === currentArtist;
+      const genres = albumRecommendationTerms(album);
+      const genreMatches = [...currentGenres].filter((genre) => genres.has(genre)).length;
+      const year = albumRecommendationYear(album);
+      const yearGap = currentYear && year ? Math.abs(currentYear - year) : 100;
+      const eraScore = yearGap <= 5 ? 4 : yearGap <= 10 ? 3 : yearGap <= 20 ? 2 : yearGap <= 30 ? 1 : 0;
+      const metadataScore = (artistMatch ? 7 : 0) + Math.min(genreMatches, 3) * 4 + eraScore;
+      return { album, score: metadataScore + stableAlbumRecommendationJitter(currentId, album.id) };
+    })
+    .sort((left, right) => right.score - left.score || Number(left.album.id) - Number(right.album.id));
+
+  const chosen = [];
+  const artistCounts = new Map();
+  for (const item of scored) {
+    const artist = normaliseCompare(item.album.artist);
+    if ((artistCounts.get(artist) || 0) >= 2) continue;
+    chosen.push(item.album);
+    artistCounts.set(artist, (artistCounts.get(artist) || 0) + 1);
+    if (chosen.length >= limit) break;
+  }
+  for (const item of scored) {
+    if (chosen.includes(item.album)) continue;
+    chosen.push(item.album);
+    if (chosen.length >= limit) break;
+  }
+  return chosen;
+}
+
+async function fetchAlbumRecommendationCandidates() {
+  if (fullCatalogueReady) return allAlbums.filter((album) => !album.is_deleted);
+  const rows = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabaseClient.from("albums").select("*").eq("is_deleted", false).order("id", { ascending: true }).range(from, from + 999);
+    if (error) throw error;
+    rows.push(...(data || []));
+    if (!data || data.length < 1000) break;
+  }
+  return rows;
+}
+
+async function loadAlbumRecommendations(albumId) {
+  const id = Number(albumId);
+  if (!currentUser || !Number.isSafeInteger(id) || id <= 0) return { authenticated: Boolean(currentUser), albums: [] };
+  if (albumRecommendationLoads.has(id)) return albumRecommendationLoads.get(id);
+  const load = (async () => {
+    const currentAlbum = allAlbums.find((album) => Number(album.id) === id) || (await fetchSelectedAlbumRow({ albumId: id }));
+    if (!currentAlbum) return { authenticated: true, heading: "Discover something similar", albums: [] };
+    const [candidates, ratingResult] = await Promise.all([
+      fetchAlbumRecommendationCandidates(),
+      supabaseClient.from("ratings").select("album_id,rating").eq("user_id", currentUser.id)
+    ]);
+    if (ratingResult.error) throw ratingResult.error;
+    const userRatings = ratingResult.data || [];
+    const ratedAlbumIds = new Set(userRatings.map((row) => Number(row.album_id)));
+    const currentRating = userRatings.find((row) => Number(row.album_id) === id)?.rating;
+    return {
+      authenticated: true,
+      heading: Number(currentRating) >= 7 ? "Because you liked this album" : "Discover something similar",
+      albums: rankSimilarAlbums(currentAlbum, candidates, ratedAlbumIds, 12).map((album) => ({
+        id: album.id, title: album.title || "Untitled album", artist: album.artist || "Unknown artist",
+        artworkUrl: getAlbumArtworkUrl(album), year: String(albumRecommendationYear(album) || "")
+      }))
+    };
+  })();
+  albumRecommendationLoads.set(id, load);
+  try { return await load; } finally { albumRecommendationLoads.delete(id); }
+}
+
+function hydrateStageOneAlbumRecommendations(albumId) {
+  const target = document.getElementById("bomV1AlbumRecommendations");
+  if (!target || !window.BOMAlbumUI) return;
+  const hydrate = async () => {
+    try {
+      const model = await loadAlbumRecommendations(albumId);
+      if (document.querySelector("[data-bom-album-id]")?.dataset.bomAlbumId === String(albumId)) window.BOMAlbumUI.renderRecommendations(model);
+    } catch (error) {
+      console.warn("Album recommendations unavailable", error?.message || error);
+      if (document.querySelector("[data-bom-album-id]")?.dataset.bomAlbumId === String(albumId)) window.BOMAlbumUI.renderRecommendations({ authenticated: true, heading: "Discover something similar", albums: [] });
+    }
+  };
+  if (!("IntersectionObserver" in window)) { void hydrate(); return; }
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    void hydrate();
+  }, { rootMargin: "500px 0px" });
+  observer.observe(target);
+}
 
 function validStoredMusicBrainzReleaseId(album) {
   const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -8256,6 +8373,7 @@ async function renderStageOneAlbum(model, { isCurrent = () => true } = {}) {
   performance.mark?.("bom-album-useful-content");
   updateStickyPlayer(selectedItem);
   void hydrateStageOneAlbumReviews(model.albumId);
+  hydrateStageOneAlbumRecommendations(model.albumId);
   void maybeEnrichAlbumDurations(model.albumId);
   return true;
 }

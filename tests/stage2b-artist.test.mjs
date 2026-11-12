@@ -12,7 +12,7 @@ const [html, app, artist, styles] = await Promise.all([
 
 test("Stage 2B loads only with the opt-in Stage 1 presentation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
-  assert.match(html, /bom-album\.js\?v=5/);
+  assert.match(html, /bom-album\.js\?v=6/);
   assert.match(html, /bom-artist\.js\?v=11/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)[\s\S]*renderStageOneArtist/);
 });

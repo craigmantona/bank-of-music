@@ -996,6 +996,19 @@
 .bom-shell-v1 .bom-v1-reviews-wrap .posted-review-card,
 .bom-shell-v1 .bom-v1-reviews-wrap .review-card { background: transparent; border: 0; border-top: 1px solid var(--bom-v1-line); border-radius: 0; box-shadow: none; }
 
+.bom-shell-v1 .bom-v1-album-recommendations .bom-v1-album-section-header > div > span { display: block; margin-top: 7px; color: var(--bom-v1-muted); font-size: 12px; }
+.bom-shell-v1 .bom-v1-recommendation-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(150px, 18vw, 220px); gap: 18px; overflow-x: auto; padding: 4px 2px 20px; scroll-snap-type: x mandatory; scrollbar-width: thin; overscroll-behavior-inline: contain; }
+.bom-shell-v1 .bom-v1-recommendation-card { display: grid; grid-template-rows: auto 1fr; gap: 12px; min-width: 0; padding: 0 0 14px; color: var(--bom-v1-text); text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--bom-v1-line); border-radius: 0; box-shadow: none; scroll-snap-align: start; cursor: pointer; }
+.bom-shell-v1 .bom-v1-recommendation-card:hover { color: var(--bom-v1-accent); transform: none; box-shadow: none; }
+.bom-shell-v1 .bom-v1-recommendation-card img,
+.bom-shell-v1 .bom-v1-recommendation-art-missing { display: grid; place-items: center; width: 100%; aspect-ratio: 1; object-fit: cover; color: var(--bom-v1-accent); background: var(--bom-v1-surface); font-size: 28px; font-weight: 800; letter-spacing: -.06em; }
+.bom-shell-v1 .bom-v1-recommendation-card strong,
+.bom-shell-v1 .bom-v1-recommendation-card small,
+.bom-shell-v1 .bom-v1-recommendation-card em { display: block; overflow-wrap: anywhere; }
+.bom-shell-v1 .bom-v1-recommendation-card strong { font-size: 15px; line-height: 1.3; }
+.bom-shell-v1 .bom-v1-recommendation-card small { margin-top: 5px; color: var(--bom-v1-muted); font-size: 12px; }
+.bom-shell-v1 .bom-v1-recommendation-card em { margin-top: 8px; color: var(--bom-v1-muted); font-size: 11px; font-style: normal; }
+
 @media (max-width: 1050px) {
   .bom-shell-v1 .bom-v1-album-hero { grid-template-columns: minmax(280px, 42%) 1fr; gap: 44px; align-items: center; }
   .bom-shell-v1 .bom-v1-track-header,
@@ -1027,6 +1040,7 @@
   .bom-shell-v1 .bom-v1-track-rating-popover { right: 0; width: 244px; }
   .bom-shell-v1 .bom-v1-album .bom-v1-track-rating-choice { min-width: 40px; min-height: 40px; }
   .bom-shell-v1 .bom-v1-track-row .track-col-actions { grid-area: actions !important; justify-self: end !important; }
+  .bom-shell-v1 .bom-v1-recommendation-carousel { grid-auto-columns: minmax(142px, 44vw); gap: 14px; }
 }
 
 @media (max-width: 600px) {

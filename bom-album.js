@@ -64,6 +64,14 @@
     </section>`;
   }
 
+  function recommendationsPlaceholder(model) {
+    if (!model.albumId) return "";
+    return `<section class="bom-v1-album-section bom-v1-album-recommendations" id="bomV1AlbumRecommendations" data-bom-recommendations-album-id="${escapeHtml(model.albumId)}" aria-live="polite">
+      <header class="bom-v1-album-section-header"><h2>${model.personal >= 7 ? "Because you liked this album" : "Discover something similar"}</h2></header>
+      ${window.BOMUI.Skeleton({ label: "Loading similar albums", lines: 2 })}
+    </section>`;
+  }
+
   function render(model) {
     const meta = [
       model.releaseDate ? `<span>${escapeHtml(formatReleaseDate(model.releaseDate, model.releaseDatePrecision))}</span>` : "",
@@ -93,12 +101,25 @@
         <header class="bom-v1-album-section-header"><h2>Reviews</h2></header>
         ${window.BOMUI.Skeleton({ label: "Loading reviews", lines: 3 })}
       </section>
+      ${recommendationsPlaceholder(model)}
     </article>`;
   }
 
   function renderReviews(html) {
     const target = document.getElementById("bomV1AlbumReviews");
     if (target) target.innerHTML = html;
+  }
+
+  function renderRecommendations(model) {
+    const target = document.getElementById("bomV1AlbumRecommendations");
+    if (!target) return;
+    if (!model?.authenticated) {
+      target.innerHTML = `<header class="bom-v1-album-section-header"><h2>Discover something similar</h2></header>${window.BOMUI.SectionState({ title: "Sign in for personal recommendations", message: "Rated albums are excluded from your suggestions." })}`;
+      return;
+    }
+    const albums = model.albums || [];
+    target.innerHTML = `<header class="bom-v1-album-section-header"><div><h2>${model.heading}</h2><span>${albums.length ? "Based on artist, genre and release era" : ""}</span></div><span>${albums.length ? `${albums.length} albums` : ""}</span></header>
+      ${albums.length ? `<div class="bom-v1-recommendation-carousel" role="list" aria-label="${escapeHtml(model.heading)}">${albums.map((album) => `<button type="button" class="bom-v1-recommendation-card" role="listitem" data-library-type="album" data-album-id="${escapeHtml(album.id)}" aria-label="Open ${escapeHtml(album.title)} by ${escapeHtml(album.artist)}">${album.artworkUrl ? `<img src="${escapeHtml(album.artworkUrl)}" alt="" loading="lazy" decoding="async">` : '<span class="bom-v1-recommendation-art-missing" aria-hidden="true">bom</span>'}<span><strong>${escapeHtml(album.title)}</strong><small>${escapeHtml(album.artist)}</small>${album.year ? `<em>${escapeHtml(album.year)}</em>` : ""}</span></button>`).join("")}</div>` : window.BOMUI.SectionState({ title: "No unrated matches yet", message: "Rate more albums to refine your recommendations." })}`;
   }
 
   document.addEventListener("click", (event) => {
@@ -109,5 +130,5 @@
     });
   });
 
-  window.BOMAlbumUI = Object.freeze({ render, renderReviews, formatReleaseDate, formatDuration: duration });
+  window.BOMAlbumUI = Object.freeze({ render, renderReviews, renderRecommendations, formatReleaseDate, formatDuration: duration });
 })();

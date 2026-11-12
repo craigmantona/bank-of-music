@@ -53,7 +53,7 @@ function albumDetail(trackCount) {
 test("Stage 2A remains opt-in and loads after the approved foundation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /foundationScript\.addEventListener\("load"/);
-  assert.match(html, /bom-album\.js\?v=5/);
+  assert.match(html, /bom-album\.js\?v=6/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)/);
 });
 
