@@ -8255,9 +8255,9 @@ function rankSimilarAlbums(currentAlbum, albums, ratedAlbumIds, limit = 12) {
     if (chosen.length >= limit) break;
   }
   for (const item of scored) {
+    if (chosen.length >= limit) break;
     if (chosen.includes(item.album)) continue;
     chosen.push(item.album);
-    if (chosen.length >= limit) break;
   }
   return chosen;
 }

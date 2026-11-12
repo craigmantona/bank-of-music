@@ -43,6 +43,17 @@ test("ranking prioritises shared artist, genre and release era while varying art
   assert.equal(new Set(result.slice(0, 3).map(item => item.artist)).size, 3);
 });
 
+test("diversity backfill never exceeds the 12-album carousel limit", () => {
+  const current = { id: 100, artist: "Source", release_date: "2000", genre: "rock" };
+  const candidates = Array.from({ length: 30 }, (_, index) => ({
+    id: index + 101,
+    artist: index < 10 ? "Source" : `Artist ${index}`,
+    release_date: `${1990 + index}`,
+    genre: "rock"
+  }));
+  assert.equal(rank(current, candidates).length, 12);
+});
+
 test("album page lazy-hydrates a responsive, navigable carousel", () => {
   assert.match(album, /id="bomV1AlbumRecommendations"/);
   assert.match(album, /loading="lazy"/);
