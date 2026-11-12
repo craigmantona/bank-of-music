@@ -82,4 +82,3 @@
   });
   window.BOMHigherLowerUI = Object.freeze({ open(container) { root = container; return start(); } });
 })();
-
