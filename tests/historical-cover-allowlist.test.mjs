@@ -58,5 +58,5 @@ test("historical artwork is cached once, keyed only by chart ID, and never repla
   assert.match(styles, /\.bom-v1-album-artwork \{[^}]+object-fit: cover/);
   assert.match(html, /app\.js\?v=171/);
   assert.match(html, /bom-discover\.js\?v=12&history=9&bond=1/);
-  assert.match(html, /bom-foundation\.css\?v=46&autocomplete=1/);
+  assert.match(html, /bom-foundation\.css\?v=47&autocomplete=1/);
 });

@@ -4335,20 +4335,43 @@ async function shareSelectedItem() {
   const shareTitle = `Rate ${title} on Bank of Music`;
   const shareText = `I think you should rate ${title} by ${artist} on Bank of Music.`;
 
-  try {
-    if (navigator.share) {
-      await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
-    } else if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-      setMessage(globalSearchMessage, "Share link copied.");
-    } else {
-      prompt("Copy this link to send to a friend:", shareUrl);
+  const showShareFeedback = (message, isError = false) => {
+    const status = document.querySelector("[data-share-status]");
+    if (status) {
+      status.textContent = message;
+      status.classList.toggle("is-error", isError);
     }
-  } catch (error) {
-    if (error?.name !== "AbortError") {
-      setMessage(globalSearchMessage, "Could not share this item.");
+    setMessage(globalSearchMessage, message);
+  };
+
+  const copyShareLink = async () => {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        showShareFeedback("Share link copied.");
+        return true;
+      } catch (error) {
+        // Clipboard access can be denied even when the API exists. Fall through
+        // to the manual copy dialog so sharing never becomes a dead end.
+      }
+    }
+    prompt("Copy this link to send to a friend:", shareUrl);
+    showShareFeedback("Copy the share link from the dialog.");
+    return false;
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+      await copyShareLink();
+      return;
     }
   }
+
+  await copyShareLink();
 
 }
 
@@ -14539,7 +14562,8 @@ document.addEventListener("click", async (event) => {
     return;
   }
 
-  if (event.target.closest("#stickyPlayerShareBtn")) {
+  if (event.target.closest("#shareSelectedItemBtn")) {
+    event.preventDefault();
     await shareSelectedItem();
     return;
   }
@@ -16480,7 +16504,8 @@ function buildSelectedSharePanel(item) {
         <div class="selected-share-title">Send this ${escapeHtml(item.type)} to a friend</div>
         <div class="selected-share-subtitle">Creates a shareable Bank of Music link they can open and rate.</div>
       </div>
-      <button id="shareSelectedItemBtn" class="secondary-btn send-to-friend-btn" type="button">Send</button>
+      <button id="shareSelectedItemBtn" class="send-to-friend-btn" type="button" aria-describedby="shareSelectedItemStatus">Send</button>
+      <span id="shareSelectedItemStatus" class="selected-share-status" data-share-status role="status" aria-live="polite"></span>
     </div>
   `;
 }
