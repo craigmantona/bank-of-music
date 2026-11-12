@@ -680,6 +680,157 @@ async function saveHistoricalChartEntryRating(chartEntryId, rating) {
   }
 }
 
+let higherLowerAssetPromise = null;
+
+function isHigherLowerFeatureEnabled() {
+  return window.BOM_HIGHER_LOWER_FEATURE?.enabled === true;
+}
+
+async function loadHigherLowerPool(mode) {
+  const quickfireEnabled = window.BOM_QUICKFIRE_FEATURE?.enabled === true;
+  if (!isHigherLowerFeatureEnabled() && !quickfireEnabled) throw new Error("Higher or Lower is unavailable.");
+  const settings = isHigherLowerFeatureEnabled() ? window.BOM_HIGHER_LOWER_FEATURE : window.BOM_QUICKFIRE_FEATURE || {};
+  const minimumRaters = Math.max(3, Math.min(1000, Number(settings.minimumRaters) || 3));
+  const poolSize = Math.max(2, Math.min(100, Number(settings.poolSize) || 60));
+  const seed = globalThis.crypto?.randomUUID?.() || `${Date.now()}:${Math.random()}`;
+  const { data, error } = await supabaseClient.rpc("get_bom_higher_lower_pool", {
+    p_mode: mode,
+    p_min_raters: minimumRaters,
+    p_limit: poolSize,
+    p_seed: seed
+  });
+  if (error) throw error;
+  return Object.freeze((data || []).map(row => Object.freeze({ ...row })));
+}
+
+async function openHigherLower() {
+  if (!isHigherLowerFeatureEnabled()) return false;
+  showOnlySection("recommendationsSection");
+  const root = document.getElementById("recommendationsList");
+  if (!root) return false;
+  if (!higherLowerAssetPromise) {
+    higherLowerAssetPromise = new Promise((resolve, reject) => {
+      if (!document.querySelector('link[data-bom-higher-lower-style]')) {
+        const style = document.createElement("link");
+        style.rel = "stylesheet";
+        style.href = "bom-higher-lower.css?v=1";
+        style.dataset.bomHigherLowerStyle = "1";
+        document.head.append(style);
+      }
+      const script = document.createElement("script");
+      script.src = "bom-higher-lower.js?v=1";
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error("Higher or Lower could not load."));
+      document.body.append(script);
+    }).catch(error => { higherLowerAssetPromise = null; throw error; });
+  }
+  await higherLowerAssetPromise;
+  return window.BOMHigherLowerUI?.open?.(root) || false;
+}
+
+async function openHigherLowerItem(mode, itemId) {
+  if (!isHigherLowerFeatureEnabled()) return false;
+  await ensureFullCatalogue();
+  if (mode === "albums") return openStageOneRatingsAlbum(itemId);
+  const song = allSongs.find(item => Number(item.id) === Number(itemId));
+  if (!song) return false;
+  return openSongDetail(song);
+}
+
+const gameAssetPromises = new Map();
+
+async function loadBOMGameAsset(name) {
+  if (!document.querySelector('link[data-bom-higher-lower-style]')) {
+    const style = document.createElement("link");
+    style.rel = "stylesheet";
+    style.href = "bom-higher-lower.css?v=2";
+    style.dataset.bomHigherLowerStyle = "1";
+    document.head.append(style);
+  }
+  if (!document.querySelector('link[data-bom-games-style]')) {
+    const gameStyle = document.createElement("link");
+    gameStyle.rel = "stylesheet";
+    gameStyle.href = "bom-games.css?v=1";
+    gameStyle.dataset.bomGamesStyle = "1";
+    document.head.append(gameStyle);
+  }
+  if (!document.querySelector('link[data-bom-preview-style]')) {
+    const previewStyle = document.createElement("link");
+    previewStyle.rel = "stylesheet";
+    previewStyle.href = "bom-game-preview.css?v=1";
+    previewStyle.dataset.bomPreviewStyle = "1";
+    document.head.append(previewStyle);
+  }
+  if (!gameAssetPromises.has(name)) {
+    const load = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = `${name}.js?v=1`;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error("The game could not load."));
+      document.body.append(script);
+    }).catch(error => { gameAssetPromises.delete(name); throw error; });
+    gameAssetPromises.set(name, load);
+  }
+  return gameAssetPromises.get(name);
+}
+
+async function openBOMGame(name, uiName, enabled) {
+  if (!enabled) return false;
+  showOnlySection("recommendationsSection");
+  const root = document.getElementById("recommendationsList");
+  if (!root) return false;
+  await loadBOMGameAsset(name);
+  return window[uiName]?.open?.(root) || false;
+}
+
+async function loadDailyChallenge(mode) {
+  if (window.BOM_DAILY_CHALLENGE_FEATURE?.enabled !== true) throw new Error("Daily BOM is unavailable.");
+  const challenge = await supabaseClient.rpc("get_bom_daily_challenge", { p_mode: mode });
+  if (challenge.error) throw challenge.error;
+  let attempt = null;
+  if (currentUser) {
+    const result = await supabaseClient.rpc("get_my_bom_daily_attempt", { p_mode: mode });
+    if (result.error) throw result.error;
+    attempt = result.data?.[0] || null;
+    const challengeDate = challenge.data?.[0]?.challenge_date;
+    if (!attempt && challengeDate) attempt = await startDailyChallenge(mode, challengeDate);
+  }
+  return { questions: challenge.data || [], attempt, authenticated: Boolean(currentUser) };
+}
+
+async function submitDailyChallenge(mode, answers) {
+  if (!currentUser || window.BOM_DAILY_CHALLENGE_FEATURE?.enabled !== true) throw new Error("Sign in to record a Daily BOM score.");
+  const challengeDate = String(answers?.[0]?.challengeDate || "");
+  const payload = (answers || []).map(({ position, guess }) => ({ position, guess }));
+  const { data, error } = await supabaseClient.rpc("submit_bom_daily_attempt", { p_mode: mode, p_challenge_date: challengeDate, p_answers: payload });
+  if (error) throw error;
+  return data?.[0] || null;
+}
+
+async function startDailyChallenge(mode, challengeDate) {
+  if (!currentUser) return null;
+  const { data, error } = await supabaseClient.rpc("start_bom_daily_attempt", { p_mode: mode, p_challenge_date: challengeDate });
+  if (error) throw error;
+  return data?.[0] || null;
+}
+
+async function loadGamePreviewPool(mode, seed) {
+  if (!currentUser) throw new Error("Sign in with an administrator account.");
+  const { data, error } = await supabaseClient.rpc("get_bom_admin_game_preview_pool", { p_mode: mode, p_seed: seed });
+  if (error) throw error;
+  return data || [];
+}
+
+async function openGamePreview() {
+  showOnlySection("recommendationsSection");
+  const root = document.getElementById("recommendationsList");
+  if (!root) return false;
+  await loadBOMGameAsset("bom-game-preview");
+  return window.BOMGamePreviewUI?.open?.(root) || false;
+}
+
 let bondFeatureAssetPromise = null;
 
 function isBondFeatureEnabled() {
@@ -846,6 +997,17 @@ window.BOMPresentationBridge = Object.freeze({
     renderRecommendations();
   },
   showQuickRate: () => openQuickRate(),
+  showHigherLower: () => openHigherLower(),
+  loadHigherLowerPool: mode => loadHigherLowerPool(mode),
+  openHigherLowerItem: (mode, itemId) => openHigherLowerItem(mode, itemId),
+  showQuickfire: () => openBOMGame("bom-quickfire", "BOMQuickfireUI", window.BOM_QUICKFIRE_FEATURE?.enabled === true),
+  showDailyChallenge: () => openBOMGame("bom-daily-challenge", "BOMDailyChallengeUI", window.BOM_DAILY_CHALLENGE_FEATURE?.enabled === true),
+  loadQuickfirePool: mode => loadHigherLowerPool(mode),
+  loadDailyChallenge: mode => loadDailyChallenge(mode),
+  submitDailyChallenge: (mode, answers) => submitDailyChallenge(mode, answers),
+  startDailyChallenge: (mode, challengeDate) => startDailyChallenge(mode, challengeDate),
+  showGamePreview: () => openGamePreview(),
+  loadGamePreviewPool: (mode, seed) => loadGamePreviewPool(mode, seed),
   showBondSpecial: () => openBondSpecial(),
   showChristmasSpecial: () => openChristmasSpecial(),
   loadBondMusicData: manifest => loadBondMusicData(manifest),

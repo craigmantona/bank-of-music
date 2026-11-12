@@ -103,6 +103,9 @@
         <button type="button" data-bom-route="discover" aria-current="page">Discover</button>
         <button type="button" data-bom-route="charts">Charts</button>
         <button type="button" data-bom-route="ratings">Your Ratings</button>
+        ${window.BOM_HIGHER_LOWER_FEATURE?.enabled === true ? '<button type="button" data-bom-route="higher-lower">Higher or Lower</button>' : ""}
+        ${window.BOM_QUICKFIRE_FEATURE?.enabled === true ? '<button type="button" data-bom-route="quickfire">Quickfire</button>' : ""}
+        ${window.BOM_DAILY_CHALLENGE_FEATURE?.enabled === true ? '<button type="button" data-bom-route="daily-challenge">Daily BOM</button>' : ""}
       </nav>
       <form class="bom-v1-search" role="search">
         <label class="visually-hidden" for="bomV1Search">Search artists, albums and tracks</label>
@@ -175,6 +178,7 @@
       ${state.authenticated ? '<button type="button" data-bom-account="profile">Profile</button>' : '<button type="button" data-bom-account="signin">Sign in</button>'}
       <button type="button" data-bom-account="spotify">Spotify Sync</button>
       ${state.isAdmin ? '<button type="button" data-bom-account="admin">Admin</button>' : ""}
+      ${state.isAdmin ? '<button type="button" data-bom-account="game-preview">Private game preview</button>' : ""}
       ${state.authenticated ? '<button type="button" data-bom-account="logout">Log out</button>' : ""}`;
   }
 
@@ -194,6 +198,9 @@
     if (action === "discover") app.showDiscover();
     if (action === "charts") await app.showCharts();
     if (action === "ratings") app.showRatings();
+    if (action === "higher-lower") await app.showHigherLower();
+    if (action === "quickfire") await app.showQuickfire();
+    if (action === "daily-challenge") await app.showDailyChallenge();
     rememberRoute(action);
   }));
 
@@ -237,6 +244,7 @@
       bridge().showSection("searchSection");
     }
     if (action === "admin") bridge().showSection("adminSection");
+    if (action === "game-preview") await bridge().showGamePreview();
     activate();
   });
 

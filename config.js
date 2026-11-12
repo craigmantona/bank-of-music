@@ -5,6 +5,30 @@ window.TURNSTILE_SITE_KEY = "0x4AAAAAAFEfDlTfnkFhNW80";
 window.LASTFM_API_KEY = "c88cf73114dbd066e2a1fd7af3f8296d";
 window.SPOTIFY_CLIENT_ID = "a7cb70fbe6a0427f8a2153414a9528d3";
 
+/* Private preview: enable only after the rating pool has been approved. */
+window.BOM_HIGHER_LOWER_FEATURE = Object.freeze({
+  enabled: false,
+  minimumRaters: 3,
+  minimumRatingGap: 0.2,
+  poolSize: 60
+});
+
+window.BOM_QUICKFIRE_FEATURE = Object.freeze({
+  enabled: false,
+  minimumRaters: 3,
+  minimumRatingGap: 0.2,
+  poolSize: 60,
+  durationSeconds: 60
+});
+
+window.BOM_DAILY_CHALLENGE_FEATURE = Object.freeze({
+  enabled: false,
+  minimumRaters: 3,
+  minimumRatingGap: 0.2,
+  comparisonCount: 10,
+  timeZone: "Europe/London"
+});
+
 /* Disabled until an approved 007 launch. Never populate these from rumour. */
 window.BOM_BOND_FEATURE = Object.freeze({
   enabled: false,
