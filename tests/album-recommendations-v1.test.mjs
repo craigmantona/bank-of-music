@@ -66,6 +66,38 @@ test("album page lazy-hydrates a responsive, navigable carousel", () => {
   assert.match(styles, /@media \(max-width: 900px\)[\s\S]*\.bom-v1-recommendation-carousel/);
 });
 
+test("dragging the recommendation scrollbar does not trigger album swipe navigation", async () => {
+  const bindStart = app.indexOf("function bindSelectedAlbumSwipe");
+  const bindEnd = app.indexOf("const originalShowOnlySectionV32", bindStart);
+  const listeners = new Map();
+  let navigations = 0;
+  const selectedItemDetail = {
+    dataset: {},
+    addEventListener(type, listener) { listeners.set(type, listener); },
+    classList: { add() {}, remove() {} }
+  };
+  const context = {
+    selectedItemDetail,
+    selectedItem: { type: "album" },
+    lastMusicProviderInteractionAt: 0,
+    swipeToAdjacentAlbum: async () => { navigations += 1; },
+    setTimeout
+  };
+  vm.runInNewContext(app.slice(bindStart, bindEnd), context);
+  context.bindSelectedAlbumSwipe();
+
+  const carouselTarget = {
+    closest(selector) {
+      return selector.includes(".bom-v1-recommendation-carousel") ? this : null;
+    }
+  };
+  listeners.get("pointerdown")({ target: carouselTarget, clientX: 300, clientY: 20 });
+  await listeners.get("pointerup")({ target: carouselTarget, clientX: 100, clientY: 20 });
+
+  assert.equal(navigations, 0);
+  assert.match(app.slice(bindStart, bindEnd), /\.bom-v1-recommendation-carousel/);
+});
+
 test("recommendations use existing metadata without AI or schema changes", () => {
   const feature = app.slice(app.indexOf("const albumRecommendationLoads"), app.indexOf("function validStoredMusicBrainzReleaseId"));
   assert.match(feature, /album\?\.genre/);

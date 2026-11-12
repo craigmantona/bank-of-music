@@ -16843,7 +16843,7 @@ function bindSelectedAlbumSwipe() {
   let started = false;
   selectedItemDetail.addEventListener("pointerdown", (event) => {
     if (!selectedItem || selectedItem.type !== "album") return;
-    if (event.target.closest("button, input, textarea, select, .star-option, .bom-carousel, a")) return;
+    if (event.target.closest("button, input, textarea, select, .star-option, .bom-carousel, .bom-v1-recommendation-carousel, a")) return;
     started = true;
     startX = event.clientX;
     startY = event.clientY;
