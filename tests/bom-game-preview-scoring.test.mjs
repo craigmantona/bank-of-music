@@ -89,6 +89,10 @@ test("preview Daily results reuse the official score and sharing component", () 
   assert.match(preview, /if\(state\.game==='daily'\)state\.startedAt=Date\.now\(\)/);
   assert.match(preview, /state\.game==='daily'&&state\.index===9\)state\.completedAt=Date\.now\(\)/);
   assert.match(preview, /preview:true/);
+  assert.match(preview, /outcomes:state\.outcomes\.slice\(\)/);
+  assert.match(preview, /state\.outcomes\.push\(correct\)/);
+  assert.match(daily, /state\.outcomes\.push\(correct\)/);
+  assert.match(daily, /state\.outcomes\.filter\(Boolean\)\.length===correct/);
   assert.doesNotMatch(preview, /submitDailyChallenge|startDailyChallenge/);
 });
 
@@ -121,11 +125,32 @@ test("shared Daily calculator enforces formula boundaries and the 9-in-72 exampl
   assert.equal(component.calculate(10,300).speedBonus,0);
   assert.equal(component.calculate(10,86401).percentage,90);
   assert.equal(component.calculate(11,-1).percentage,100);
-  const shared=component.model({mode:"songs",challengeDate:"2026-11-12",correctAnswers:9,elapsedSeconds:72,preview:true});
+  const ordered=[true,false,true,true,true,true,true,true,true,true];
+  const shared=component.model({mode:"songs",challengeDate:"2026-11-12",correctAnswers:9,elapsedSeconds:72,outcomes:ordered,preview:true});
   assert.match(shared.text,/88\.6%/);
-  assert.match(shared.text,/9\/10 correct · 1:12 · 2026-11-12/);
+  assert.match(shared.text,/DAILY BOM CHALLENGE\n12 Nov 2026 · Songs/);
+  assert.match(shared.text,/🟩⬛🟩🟩🟩🟩🟩🟩🟩🟩/);
+  assert.match(shared.text,/9\/10 correct · 1:12/);
+  assert.match(shared.text,/Can you beat my score\?/);
   assert.match(shared.text,/UNOFFICIAL PREVIEW/);
-  assert.doesNotMatch(shared.text,/answer|email|user/i);
+  assert.doesNotMatch(shared.text,/email|user|rating|title|artist/i);
+  assert.equal(decodeURIComponent(shared.whatsapp.split("text=")[1]),shared.text);
+  const noFabrication=component.model({correctAnswers:9,elapsedSeconds:72,outcomes:[true]});
+  assert.equal(noFabrication.blocks,"");
+  assert.doesNotMatch(noFabrication.text,/🟩|⬛/);
+  const escaped=component.render({challengeDate:'<img src=x onerror=alert(1)>',correctAnswers:1,elapsedSeconds:3,outcomes:ordered});
+  assert.doesNotMatch(escaped,/<img|onerror/);
+});
+
+test("share grid uses all ten actual outcomes in answer order", () => {
+  const context={window:{},Intl,Date,Math,Number,String,Object,Array,encodeURIComponent,setTimeout};
+  vm.runInNewContext(results,context);
+  const component=context.window.BOMDailyChallengeResults;
+  const first=[false,true,false,true,true,false,false,true,false,true];
+  const second=[true,false,true,false,false,true,true,false,true,false];
+  assert.equal(component.model({outcomes:first}).blocks,"⬛🟩⬛🟩🟩⬛⬛🟩⬛🟩");
+  assert.equal(component.model({outcomes:second}).blocks,"🟩⬛🟩⬛⬛🟩🟩⬛🟩⬛");
+  assert.notEqual(component.model({outcomes:first}).blocks,component.model({outcomes:second}).blocks);
 });
 
 test("results expose percentage breakdown, tie rules and sharing fallbacks", () => {

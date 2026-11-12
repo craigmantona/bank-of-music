@@ -80,7 +80,8 @@ test("daily guests get practice behaviour and sharing is spoiler-free", () => {
   assert.match(daily, /if\(state\.authenticated\)/);
   assert.match(daily, /submitDailyChallenge/);
   assert.match(results, /data-daily-share/);
-  assert.match(results, /No spoilers/);
+  assert.match(results, /Can you beat my score\?/);
+  assert.match(results, /outcomes\(input\.outcomes\)/);
   assert.doesNotMatch(results, /left_average_rating.*writeText|right_average_rating.*writeText/);
   assert.match(daily, /state\.questions\.length!==10/);
   assert.match(results, /navigator\.share/);

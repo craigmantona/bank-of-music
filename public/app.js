@@ -768,7 +768,7 @@ async function loadBOMGameAsset(name) {
   if (!gameAssetPromises.has(name)) {
     const load = new Promise((resolve, reject) => {
       const script = document.createElement("script");
-      const version = ["bom-daily-results", "bom-daily-challenge", "bom-game-preview"].includes(name) ? 2 : 1;
+      const version = ["bom-daily-results", "bom-daily-challenge", "bom-game-preview"].includes(name) ? 3 : 1;
       script.src = `${name}.js?v=${version}`;
       script.async = true;
       script.onload = resolve;
