@@ -31,11 +31,11 @@ function createContext({ stored = null, fetchImpl = async () => ({ ok: false }) 
 
 test("listening preference defaults safely and persists all supported choices", () => {
   const { context, values } = createContext();
-  assert.equal(context.getPreferredListeningService(), "spotify");
+  assert.equal(context.getPreferredListeningService(), "both");
   assert.equal(context.setPreferredListeningService("apple"), "apple");
   assert.equal(values.get("bom_preferred_listening_service"), "apple");
   assert.equal(context.setPreferredListeningService("both"), "both");
-  assert.equal(context.setPreferredListeningService("unknown"), "spotify");
+  assert.equal(context.setPreferredListeningService("unknown"), "both");
 });
 
 test("Apple Music fallback is HTTPS and safely encodes track, artist and album", () => {
@@ -89,10 +89,24 @@ test("track resolution falls back when the album identity does not agree", async
   assert.equal(url, "https://music.apple.com/gb/search?term=Song%20Artist%20Right%20Album");
 });
 
-test("provider UI offers Spotify, Apple Music and both with responsive controls", () => {
-  assert.match(app, /value="spotify"/);
-  assert.match(app, /value="apple"/);
-  assert.match(app, /value="both"/);
+test("provider UI is a branded accessible radio group with both services visible by default", () => {
+  assert.doesNotMatch(app, /<select data-listening-service/);
+  assert.match(app, /role="radiogroup" aria-label="Preferred listening service"/);
+  assert.match(app, /role="radio" aria-checked=/);
+  assert.match(app, /data-listening-service="spotify"/);
+  assert.match(app, /data-listening-service="apple"/);
+  assert.match(app, /data-listening-service="both"/);
   assert.match(app, /data-music-service="apple"/);
-  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?\.music-provider-preference[\s\S]*?width: 100%/);
+  assert.match(app, /Listen on Spotify/);
+  assert.match(app, /Listen on Apple Music/);
+  assert.match(app, /music-service-logo/);
+  assert.match(app, /\["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"\]/);
+});
+
+test("selected state and mobile layout remain visible, touch-sized and responsive", () => {
+  assert.match(styles, /\.music-provider-preference button\[aria-checked="true"\]/);
+  assert.match(styles, /\.music-provider-preference button:focus-visible/);
+  assert.match(styles, /\.music-provider-play-btn \{[\s\S]*?min-height: 50px/);
+  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?\.music-provider-preference button[\s\S]*?min-height: 48px/);
+  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?\.music-provider-buttons[\s\S]*?grid-template-columns: 1fr/);
 });

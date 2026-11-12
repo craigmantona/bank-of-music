@@ -8964,14 +8964,14 @@ const MUSIC_PROVIDER_PREFERENCES = new Set(["spotify", "apple", "both"]);
 function getPreferredListeningService() {
   try {
     const stored = localStorage.getItem(MUSIC_PROVIDER_PREFERENCE_KEY);
-    return MUSIC_PROVIDER_PREFERENCES.has(stored) ? stored : "spotify";
+    return MUSIC_PROVIDER_PREFERENCES.has(stored) ? stored : "both";
   } catch {
-    return "spotify";
+    return "both";
   }
 }
 
 function setPreferredListeningService(value) {
-  const preference = MUSIC_PROVIDER_PREFERENCES.has(value) ? value : "spotify";
+  const preference = MUSIC_PROVIDER_PREFERENCES.has(value) ? value : "both";
   try {
     localStorage.setItem(MUSIC_PROVIDER_PREFERENCE_KEY, preference);
   } catch {
@@ -9240,6 +9240,9 @@ function buildMusicProviderPanel({
     "spotify-embed-" +
     Math.random().toString(36).slice(2);
 
+  const spotifyLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#1ed760"/><path d="M6.1 8.1c3.9-1.1 8.1-.8 11.6.9" fill="none" stroke="#08130d" stroke-width="1.8" stroke-linecap="round"/><path d="M6.8 11.5c3.3-.9 7-.6 10 .8" fill="none" stroke="#08130d" stroke-width="1.6" stroke-linecap="round"/><path d="M7.4 14.7c2.8-.7 5.8-.5 8.4.7" fill="none" stroke="#08130d" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  const appleMusicLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><defs><linearGradient id="apple-music-gradient-${escapeHtml(playerId)}" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#fa57c1"/><stop offset=".5" stop-color="#f83f74"/><stop offset="1" stop-color="#fa233b"/></linearGradient></defs><rect width="24" height="24" rx="5.5" fill="url(#apple-music-gradient-${escapeHtml(playerId)})"/><path d="M16.9 6.1v8.3c0 1.5-1.2 2.7-2.8 2.7-1.2 0-2.2-.7-2.2-1.7 0-1.1 1-1.9 2.4-1.9.4 0 .8.1 1.1.2V8.8l-5.5 1.1v5.6c0 1.5-1.2 2.7-2.8 2.7-1.2 0-2.2-.7-2.2-1.7 0-1.1 1-1.9 2.4-1.9.4 0 .8.1 1.1.2V7.7l8.5-1.6Z" fill="#fff"/></svg>`;
+
   return `
     <div class="music-provider-panel" data-music-provider-panel="true">
       <div class="music-provider-header">
@@ -9253,39 +9256,38 @@ function buildMusicProviderPanel({
         </div>
 
         <div class="music-provider-actions">
-          <label class="music-provider-preference">
-            <span>Service</span>
-            <select data-listening-service aria-label="Preferred listening service">
-              <option value="spotify"${preference === "spotify" ? " selected" : ""}>Spotify</option>
-              <option value="apple"${preference === "apple" ? " selected" : ""}>Apple Music</option>
-              <option value="both"${preference === "both" ? " selected" : ""}>Both</option>
-            </select>
-          </label>
-          <button
-            type="button"
-            class="music-provider-play-btn music-provider-spotify-btn${preference === "apple" ? " hidden" : ""}"
-            data-music-service="spotify"
-            data-provider-type="${escapeHtml(type)}"
-            data-provider-title="${escapeHtml(title)}"
-            data-provider-artist="${escapeHtml(artist)}"
-            data-provider-album="${escapeHtml(album)}"
-            data-player-target="${escapeHtml(playerId)}"
-          >
-            <span class="music-provider-icon" aria-hidden="true">♪</span>
-            <span>Play here</span>
-          </button>
-          <button
-            type="button"
-            class="music-provider-play-btn music-provider-apple-btn${preference === "spotify" ? " hidden" : ""}"
-            data-music-service="apple"
-            data-provider-type="${escapeHtml(type)}"
-            data-provider-title="${escapeHtml(title)}"
-            data-provider-artist="${escapeHtml(artist)}"
-            data-provider-album="${escapeHtml(album)}"
-          >
-            <span class="music-provider-icon" aria-hidden="true">♪</span>
-            <span>Open Apple Music</span>
-          </button>
+          <div class="music-provider-preference" role="radiogroup" aria-label="Preferred listening service">
+            <button type="button" role="radio" aria-checked="${preference === "spotify"}" tabindex="${preference === "spotify" ? "0" : "-1"}" data-listening-service="spotify">${spotifyLogo}<span>Spotify</span></button>
+            <button type="button" role="radio" aria-checked="${preference === "apple"}" tabindex="${preference === "apple" ? "0" : "-1"}" data-listening-service="apple">${appleMusicLogo}<span>Apple Music</span></button>
+            <button type="button" role="radio" aria-checked="${preference === "both"}" tabindex="${preference === "both" ? "0" : "-1"}" data-listening-service="both"><span class="music-service-both-icon" aria-hidden="true">${spotifyLogo}${appleMusicLogo}</span><span>Both</span></button>
+          </div>
+          <div class="music-provider-buttons">
+            <button
+              type="button"
+              class="music-provider-play-btn music-provider-spotify-btn${preference === "apple" ? " hidden" : ""}"
+              data-music-service="spotify"
+              data-provider-type="${escapeHtml(type)}"
+              data-provider-title="${escapeHtml(title)}"
+              data-provider-artist="${escapeHtml(artist)}"
+              data-provider-album="${escapeHtml(album)}"
+              data-player-target="${escapeHtml(playerId)}"
+            >
+              ${spotifyLogo}
+              <span>Listen on Spotify</span>
+            </button>
+            <button
+              type="button"
+              class="music-provider-play-btn music-provider-apple-btn${preference === "spotify" ? " hidden" : ""}"
+              data-music-service="apple"
+              data-provider-type="${escapeHtml(type)}"
+              data-provider-title="${escapeHtml(title)}"
+              data-provider-artist="${escapeHtml(artist)}"
+              data-provider-album="${escapeHtml(album)}"
+            >
+              ${appleMusicLogo}
+              <span>Listen on Apple Music</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -9299,8 +9301,10 @@ function buildMusicProviderPanel({
 }
 
 function syncListeningServiceControls(preference) {
-  document.querySelectorAll("[data-listening-service]").forEach(select => {
-    select.value = preference;
+  document.querySelectorAll("[data-listening-service]").forEach(option => {
+    const selected = option.dataset.listeningService === preference;
+    option.setAttribute("aria-checked", String(selected));
+    option.tabIndex = selected ? 0 : -1;
   });
   document.querySelectorAll("[data-music-service]").forEach(button => {
     button.classList.toggle("hidden", preference !== "both" && button.dataset.musicService !== preference);
@@ -9329,12 +9333,25 @@ async function openWithAppleMusic({ type, title, artist, album = "", button = nu
   }
 }
 
-document.addEventListener("change", event => {
-  const select = event.target.closest?.("[data-listening-service]");
-  if (!select) return;
+document.addEventListener("click", event => {
+  const option = event.target.closest?.("[data-listening-service]");
+  if (!option) return;
+  event.preventDefault();
   event.stopPropagation();
-  syncListeningServiceControls(setPreferredListeningService(select.value));
-});
+  syncListeningServiceControls(setPreferredListeningService(option.dataset.listeningService));
+}, true);
+
+document.addEventListener("keydown", event => {
+  const option = event.target.closest?.("[data-listening-service]");
+  if (!option || !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+  const choices = [...option.closest("[role='radiogroup']").querySelectorAll("[data-listening-service]")];
+  const current = choices.indexOf(option);
+  const next = event.key === "Home" ? 0 : event.key === "End" ? choices.length - 1 :
+    (current + (["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1) + choices.length) % choices.length;
+  event.preventDefault();
+  choices[next].click();
+  choices[next].focus();
+}, true);
 
 function getSpotifySearchFallbackUrl({
   title,

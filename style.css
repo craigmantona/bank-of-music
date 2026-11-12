@@ -6051,38 +6051,118 @@ button.song-album-link {
 }
 
 .music-provider-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  flex: 0 0 auto;
+  display: grid;
+  gap: 12px;
+  width: min(100%, 470px);
+  flex: 0 1 470px;
 }
 
 .music-provider-preference {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(3, 8, 15, 0.58);
 }
 
-.music-provider-preference select {
+.music-provider-preference button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 0;
   min-height: 44px;
-  padding: 8px 34px 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  background: #101724;
-  color: #fff;
-  font: inherit;
-  font-size: 0.85rem;
-  text-transform: none;
+  padding: 8px 10px;
+  border: 1px solid transparent !important;
+  border-radius: 12px;
+  background: transparent !important;
+  background-image: none !important;
+  color: #aeb9c8 !important;
+  box-shadow: none !important;
+  font-size: 0.79rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.music-provider-preference button:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+  transform: none;
+}
+
+.music-provider-preference button[aria-checked="true"] {
+  border-color: rgba(34, 245, 167, 0.58) !important;
+  background: rgba(34, 245, 167, 0.11) !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 1px rgba(34, 245, 167, 0.08), 0 8px 22px rgba(0, 0, 0, 0.18) !important;
+}
+
+.music-provider-preference button:focus-visible {
+  outline: 3px solid rgba(34, 245, 167, 0.45);
+  outline-offset: 2px;
+}
+
+.music-service-logo {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.music-service-both-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.music-service-both-icon .music-service-logo {
+  width: 18px;
+  height: 18px;
+  flex-basis: 18px;
+}
+
+.music-service-both-icon .music-service-logo + .music-service-logo {
+  margin-left: -4px;
+}
+
+.music-provider-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.music-provider-spotify-btn {
+  background: #1ed760 !important;
+  border-color: #1ed760 !important;
+  color: #07140c !important;
+}
+
+.music-provider-spotify-btn .music-service-logo circle {
+  fill: #07140c;
+}
+
+.music-provider-spotify-btn .music-service-logo path {
+  stroke: #1ed760;
 }
 
 .music-provider-apple-btn {
-  border-color: rgba(255, 255, 255, 0.48) !important;
-  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.82) !important;
+  background: #ffffff !important;
+  color: #111116 !important;
+}
+
+.music-provider-play-btn {
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 11px 18px;
+}
+
+.music-provider-play-btn .music-service-logo {
+  width: 25px;
+  height: 25px;
+  flex-basis: 25px;
 }
 
 .spotify-embed-container {
@@ -6156,13 +6236,18 @@ button.song-album-link {
 
   .music-provider-actions {
     width: 100%;
-    align-items: stretch;
+    flex-basis: auto;
   }
 
-  .music-provider-preference,
-  .music-provider-preference select,
-  .music-provider-play-btn {
-    width: 100%;
+  .music-provider-preference button {
+    gap: 5px;
+    min-height: 48px;
+    padding: 7px 5px;
+    font-size: 0.72rem;
+  }
+
+  .music-provider-buttons {
+    grid-template-columns: 1fr;
   }
 
   .spotify-open-externally-btn {
