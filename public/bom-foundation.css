@@ -875,11 +875,22 @@
 .bom-shell-v1 .bom-v1-album-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
 .bom-shell-v1 .bom-v1-album-actions .music-provider-panel { margin: 0; padding: 0; background: transparent; border: 0; }
 .bom-shell-v1 .bom-v1-album-actions .music-provider-copy { display: none; }
-.bom-shell-v1 .bom-v1-album-actions .music-provider-play-btn,
-.bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn { min-height: 44px; padding: 10px 16px; color: var(--bom-v1-text); background: transparent; border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius); cursor: pointer; }
+.bom-shell-v1 .bom-v1-album-actions .music-provider-play-btn { min-height: 44px; padding: 10px 16px; color: var(--bom-v1-text); background: transparent; border: 1px solid var(--bom-v1-line); border-radius: var(--bom-v1-radius); cursor: pointer; }
 .bom-shell-v1 .bom-v1-album-actions .selected-share-panel > div { display: none; }
 .bom-shell-v1 .bom-v1-album-actions .selected-share-panel { margin: 0; padding: 0; background: transparent !important; border: 0; box-shadow: none; }
-.bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn { margin: 0; box-shadow: none; transform: none; }
+.bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; margin: 0; padding: 12px 20px; color: var(--bom-v1-bg); background: var(--bom-v1-accent); border: 1px solid var(--bom-v1-accent); border-radius: var(--bom-v1-radius); box-shadow: none; font-weight: 700; cursor: pointer; transform: none; }
+.bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn::before { content: "\2197"; margin-right: 9px; font-size: 17px; line-height: 1; }
+.bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn:hover { background: var(--bom-v1-focus); border-color: var(--bom-v1-focus); }
+.bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn:focus-visible { outline: 2px solid var(--bom-v1-focus); outline-offset: 3px; }
+.bom-shell-v1 .bom-v1-album-actions .selected-share-status { align-self: center; min-height: 18px; color: var(--bom-v1-accent); font-size: 11px; }
+.bom-shell-v1 .bom-v1-album-actions .selected-share-status:empty { display: none; }
+.bom-shell-v1 .bom-v1-album-actions .selected-share-status.is-error { color: #f0a6a6; }
+@media (max-width: 700px) {
+  .bom-shell-v1 .bom-v1-album-actions,
+  .bom-shell-v1 .bom-v1-album-actions .selected-share-panel { width: 100%; }
+  .bom-shell-v1 .bom-v1-album-actions #shareSelectedItemBtn { width: 100%; min-height: 52px; }
+  .bom-shell-v1 .bom-v1-album-actions .selected-share-status { width: 100%; text-align: center; }
+}
 .bom-shell-v1 .bom-v1-album .selected-admin-controls { margin-top: 24px !important; padding: 18px 0 0 !important; background: transparent !important; border: 0 !important; border-top: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow: none !important; }
 .bom-shell-v1 .bom-v1-album .selected-admin-title { margin-bottom: 10px !important; color: var(--bom-v1-muted) !important; font-size: 11px !important; font-weight: 600 !important; letter-spacing: .08em !important; }
 .bom-shell-v1 .bom-v1-album .selected-admin-buttons button { min-height: 40px !important; padding: 8px 10px !important; color: var(--bom-v1-muted) !important; background: transparent !important; background-image: none !important; border: 1px solid var(--bom-v1-line) !important; border-radius: var(--bom-v1-radius) !important; box-shadow: none !important; transform: none !important; }
