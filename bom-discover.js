@@ -3,6 +3,17 @@
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
   const bondEnabled = () => window.BOM_BOND_FEATURE?.enabled === true;
   const bondBanner = () => bondEnabled() ? `<section class="bom-007-banner" data-bom-bond-banner aria-labelledby="bomBondBannerTitle"><div class="bom-007-banner-motif" aria-hidden="true"><span></span></div><div class="bom-007-banner-copy"><p>THE BANK OF MUSIC PRESENTS</p><h2 id="bomBondBannerTitle">007 — THE MUSIC OF BOND</h2><span>Six decades. Legendary voices. One licence to rate.</span></div><button type="button" data-bom-action="bond-special">ACCEPT YOUR MISSION <span aria-hidden="true">→</span></button></section>` : "";
+  const comingSoonGames = () => [
+    { name:"Higher or Lower", description:"Trust your ears. Pick the community favourite.", enabled:window.BOM_HIGHER_LOWER_FEATURE?.enabled === true, mark:"↕" },
+    { name:"60-Second Quickfire", description:"Race the clock. Keep the streak alive.", enabled:window.BOM_QUICKFIRE_FEATURE?.enabled === true, mark:"60" },
+    { name:"Daily BOM Challenge", description:"Ten questions. One shared daily challenge.", enabled:window.BOM_DAILY_CHALLENGE_FEATURE?.enabled === true, mark:"10" }
+  ].filter(game => !game.enabled);
+  function gamesTeaser() {
+    const games=comingSoonGames();
+    if(!games.length)return "";
+    const partial=games.length<3;
+    return `<section class="bom-games-teaser" data-bom-games-teaser aria-labelledby="bomGamesTeaserTitle"><div class="bom-games-teaser-copy"><p>BOM GAMES · COMING SOON</p><h2 id="bomGamesTeaserTitle">Think you know your music?</h2><span>Your ratings. Your knowledge. Your bragging rights.</span></div><div class="bom-games-teaser-list" aria-label="${partial?"More upcoming BOM games":"Upcoming BOM games"}">${games.map(game=>`<article><b aria-hidden="true">${game.mark}</b><div><h3>${game.name}</h3><p>${game.description}</p></div><span>COMING SOON</span></article>`).join("")}</div><footer><strong>Rate more music. Help unlock the games.</strong><button type="button" data-bom-action="quick-rate">Open Quick Rate <span aria-hidden="true">→</span></button></footer></section>`;
+  }
   const christmasEnabled = (now = new Date()) => window.BOM_CHRISTMAS_FEATURE?.isEligible?.(now) === true;
   const christmasBanner = () => christmasEnabled() ? `<section class="bom-christmas-banner" data-bom-christmas-banner aria-labelledby="bomChristmasBannerTitle"><div aria-hidden="true">✦</div><div><p>THE BANK OF MUSIC PRESENTS</p><h2 id="bomChristmasBannerTitle">THE CHRISTMAS TOP 100</h2><span>Festive favourites, ranked by the BOM community.</span></div><button type="button" data-bom-action="christmas-special">OPEN THE CHRISTMAS SPECIAL <span aria-hidden="true">→</span></button></section>` : "";
   const anniversaries = new Set([10,20,25,30,40,50]);
@@ -92,7 +103,7 @@
     lastDiscoverModel = model;
     scheduleChristmasSeasonCheck();
     const groups=model.groups||[], general=model.general||[], has=groups.some(g=>g.albums.length)||general.length;
-    return `<article class="bom-v1-discover" data-bom-discover><header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>${model.authenticated?`${christmasBanner()}${bondBanner()}${carousel()}`:""}${has?`${general.length?`<section class="bom-v1-discover-section"><header class="bom-v1-discover-section-heading"><div><h2>Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general,"Albums to rate next")}</section>`:""}${groups.map(g=>`<section class="bom-v1-discover-group"><header class="bom-v1-discover-group-heading"><p>Because you rated <strong>${esc(g.reason.title)}</strong> ${esc(g.reason.rating)} / 10</p></header>${albumRow(g.albums,`Recommendations because you rated ${g.reason.title}`)}</section>`).join("")}`:window.BOMUI.SectionState({title:model.authenticated?"Your next record is waiting.":"Sign in to make Discover yours.",message:"Search or rate music to start building recommendations.",actionLabel:"Search the collection",action:"discover-search"})}</article>`;
+    return `<article class="bom-v1-discover" data-bom-discover><header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>${model.authenticated?`${christmasBanner()}${bondBanner()}${gamesTeaser()}${carousel()}`:""}${has?`${general.length?`<section class="bom-v1-discover-section"><header class="bom-v1-discover-section-heading"><div><h2>Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general,"Albums to rate next")}</section>`:""}${groups.map(g=>`<section class="bom-v1-discover-group"><header class="bom-v1-discover-group-heading"><p>Because you rated <strong>${esc(g.reason.title)}</strong> ${esc(g.reason.rating)} / 10</p></header>${albumRow(g.albums,`Recommendations because you rated ${g.reason.title}`)}</section>`).join("")}`:window.BOMUI.SectionState({title:model.authenticated?"Your next record is waiting.":"Sign in to make Discover yours.",message:"Search or rate music to start building recommendations.",actionLabel:"Search the collection",action:"discover-search"})}</article>`;
   }
   function history(type) {
     const albums=type==="released", rows=albums?releases(data?.albums):numberOnes(data?.numberOnes), groups=new Map();
@@ -192,6 +203,6 @@
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)syncChristmasSeason();});
   window.addEventListener("focus",syncChristmasSeason);
   window.addEventListener("pageshow",syncChristmasSeason);
-  window.BOMDiscoverHelpers=Object.freeze({currentLondonWeek,occurrenceInWeek,chartCoversWeek,releases,numberOnes,historicalRatingPanel,christmasEnabled,nextChristmasBoundary,christmasBoundaryDelay,syncChristmasSeason});
+  window.BOMDiscoverHelpers=Object.freeze({currentLondonWeek,occurrenceInWeek,chartCoversWeek,releases,numberOnes,historicalRatingPanel,christmasEnabled,nextChristmasBoundary,christmasBoundaryDelay,syncChristmasSeason,comingSoonGames,gamesTeaser});
   window.BOMDiscoverUI=Object.freeze({render,renderLoading:skeleton,renderError:()=>`<article class="bom-v1-discover">${window.BOMUI.SectionState({title:"Discover couldn’t load.",actionLabel:"Try again",action:"discover-retry"})}</article>`,updateRowControls,openHistoricalDetail});
 })();

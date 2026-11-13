@@ -58,6 +58,6 @@ test("album detail exposes a prominent responsive Share album action", () => {
   assert.match(app, /shareControlHtml: buildSelectedSharePanel\(selectedItem\)\.replace\(">Send<", ">Share album<"\)/);
   assert.match(css, /#shareSelectedItemBtn \{[^}]*background: var\(--bom-v1-accent\)/);
   assert.match(css, /@media \(max-width: 700px\)[\s\S]*#shareSelectedItemBtn \{ width: 100%/);
-  assert.match(html, /bom-foundation\.css\?v=48/);
+  assert.match(html, /bom-foundation\.css\?v=49/);
   assert.match(html, /app\.js\?v=181/);
 });
