@@ -29,8 +29,15 @@ test("Discover shows a lightweight three-game Coming Soon teaser above Quick Rat
     "60-Second Quickfire", "Daily BOM Challenge", "Rate more music. Help unlock the games."
   ]) assert.match(teaser,new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")));
   assert.match(teaser,/data-bom-action="quick-rate"/);
-  assert.match(discover,/\$\{gamesTeaser\(\)\}\$\{carousel\(\)\}/);
+  assert.match(discover,/\$\{gamesTeaser\(model\.authenticated\)\}\$\{model\.authenticated\?carousel\(\):""\}/);
   assert.doesNotMatch(teaser,/game-preview|daily-challenge|higher-lower|simulation|rpc|supabase/i);
+});
+
+test("the public teaser renders for guests without offering a protected Quick Rate action", () => {
+  const guest=helpers().gamesTeaser(false);
+  assert.match(guest,/Think you know your music\?/);
+  assert.doesNotMatch(guest,/data-bom-action="quick-rate"/);
+  assert.match(discover,/gamesTeaser\(model\.authenticated\)/);
 });
 
 test("enabled games leave the teaser automatically and all-enabled hides it", () => {
