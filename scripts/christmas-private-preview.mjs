@@ -123,8 +123,8 @@ function transform(relativePath, source) {
   if (relativePath === "index.html") {
     return replaceOnce(
       source,
-      '<script src="config.js?v=3"></script>',
-      '<script src="config.js?v=3"></script>\n <script src="/__christmas-preview.js?v=4"></script>',
+      '<script src="config.js?v=4"></script>',
+      '<script src="config.js?v=4"></script>\n <script src="/__christmas-preview.js?v=4"></script>',
       relativePath
     );
   }
