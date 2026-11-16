@@ -11,10 +11,10 @@ const [html, app, shell, styles] = await Promise.all([
 
 test("the approved shell is default and legacy remains an explicit rollback", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
-  assert.match(html, /style\.css\?v=83/);
-  assert.match(html, /bom-foundation\.css\?v=31/);
-  assert.match(html, /config\.js\?v=3/);
-  assert.match(html, /app\.js\?v=142/);
+  assert.match(html, /style\.css\?v=\d+[^\"]*/);
+  assert.match(html, /bom-foundation\.css\?v=\d+&autocomplete=1/);
+  assert.match(html, /config\.js\?v=\d+/);
+  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=2/);
   assert.match(shell, /params\.get\("ui"\) === "legacy"/);
 });
 
@@ -34,7 +34,7 @@ test("the bridge delegates to existing functions", () => {
   assert.match(app, /showCharts: \(\) => window\.goCharts\(\)/);
   assert.match(app, /showSpotify: \(\) =>/);
   assert.match(app, /connectSpotify: \(\) =>/);
-  assert.match(app, /showProfile: \(\) => showUserProfile\(\)/);
+  assert.match(app, /showProfile: async \(\) => \{[\s\S]*?await ensureFullCatalogue\(\);[\s\S]*?return showUserProfile\(\);[\s\S]*?\}/);
   assert.match(app, /logout: \(\) => logOut\(\)/);
   assert.match(app, /return runGlobalSearch\(\)/);
 });

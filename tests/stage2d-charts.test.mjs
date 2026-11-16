@@ -31,7 +31,7 @@ function loadChartsUI() {
 test("Stage 2D loads in the approved default chain", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-charts\.js\?v=3/);
-  assert.match(html, /app\.js\?v=142/);
+  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=2/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMChartsUI/);
 });
 
@@ -77,7 +77,7 @@ test("Charts include loading, empty and retryable error states", () => {
   assert.match(ui.render({ albums: [], tracks: [] }, "tracks"), /No rated tracks yet/);
   assert.match(ui.renderError(), /The charts couldn’t load/);
   assert.match(ui.renderError(), /Try again/);
-  assert.match(app, /refreshCharts: \(\) => loadCharts\(\)/);
+  assert.match(app, /refreshCharts: async \(\) => \{[\s\S]*?await ensureFullCatalogue\(\);[\s\S]*?return loadCharts\(\);[\s\S]*?\}/);
 });
 
 test("Charts preserve existing item navigation and legacy rollback", () => {
