@@ -117,6 +117,11 @@
   placeholder="Choose a handle (3-20 characters)"
 >
 
+<label class="marketing-consent-option" for="marketingEmailConsent">
+  <input id="marketingEmailConsent" type="checkbox">
+  <span>Yes, email me occasional Bank of Music news, feature announcements and special releases. I can unsubscribe or change this at any time.</span>
+</label>
+
 <div id="turnstileContainer" class="turnstile-container hidden">
   <div id="turnstileWidget"></div>
   <p id="turnstileMessage" role="status" aria-live="polite"></p>
@@ -397,6 +402,7 @@
      </div>
  
      <p id="adminMessage" class="small"></p>
+     <div id="emailAnnouncementsAdmin"></div>
      <div id="earlyAccessAdmin"></div>
      <div id="adminDashboard"></div>
    </section>
@@ -452,7 +458,8 @@
   <script src="bom-early-access.js?v=4"></script>
   <script src="bom-spotify-playlist.js?v=4"></script>
   <script src="artist-easter-eggs.js?v=1"></script>
-  <script src="app.js?v=182&autocomplete=2&search-autosave=1&listening-ui=2"></script>
+  <script src="bom-email-announcements.js?v=1"></script>
+  <script src="app.js?v=182&autocomplete=2&search-autosave=1&listening-ui=2&email-announcements=1"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {

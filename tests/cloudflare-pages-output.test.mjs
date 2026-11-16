@@ -29,6 +29,7 @@ test("Cloudflare Pages publishes only the allowlisted static website", async () 
   assert(relative.includes("bom-foundation.css"));
   assert(relative.includes("historical-uk-number-ones-cover-art.json"));
   assert(relative.includes("artist-easter-eggs.js"));
+  assert(relative.includes("bom-email-announcements.js"));
   assert(relative.includes("assets/bom-header-logo.png"));
   assert(relative.includes("assets/david-bowie-lightning.png"));
   assert(relative.includes("assets/rolling-stones-easter-egg.png"));
