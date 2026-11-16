@@ -16,6 +16,7 @@ for file in \
   config.js \
   historical-uk-number-ones-cover-art.json \
   logo.jpeg \
+  bom-email-announcements.js \
   bom-admin-catalogue.js \
   bom-album.js \
   bom-artist-hero.js \
