@@ -420,6 +420,11 @@ verify_jwt = true
 [functions.send-test-email]
 verify_jwt = true
 
+[functions.email-announcements]
+# Public signed unsubscribe links reach this function without a user session.
+# Every other action performs source-level user/admin authorization.
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
