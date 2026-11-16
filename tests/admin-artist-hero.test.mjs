@@ -123,5 +123,7 @@ test("NULL attribution renders nothing and uploader supports attributed or clear
 });
 
 test("the policy module loads before the application", () => {
-  assert.ok(html.indexOf("bom-artist-hero.js?v=1") < html.indexOf("app.js?v=142"));
+  const policy = html.search(/<script src="bom-artist-hero\.js\?v=\d+[^\"]*"><\/script>/);
+  const application = html.search(/<script src="app\.js\?v=\d+[^\"]*"><\/script>/);
+  assert.ok(policy >= 0 && application >= 0 && policy < application);
 });

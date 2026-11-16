@@ -16,8 +16,10 @@ function renderTracks(media) {
   const context = {
     selectedItem: { title: "Album", artist: "Artist" },
     allSongs: [],
+    normaliseText: value => String(value).trim().replace(/\s+/g, " "),
     normaliseCompare: value => String(value).toLowerCase(),
     escapeHtml: value => String(value),
+    renderArtistCreditLinks: value => String(value),
     getSongAverage: () => null,
     getYourSongRating: () => null,
     buildCompactTrackRatingControl: () => ""

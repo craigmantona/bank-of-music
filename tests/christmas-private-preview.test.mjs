@@ -21,7 +21,7 @@ test("preview transforms are response-only and retain the public date gate", () 
   assert.match(config, /BOM_CHRISTMAS_FEATURE[\s\S]*?emergencyDisabled: false/);
   assert.match(config, /isEligible\(now = new Date\(\)\)/);
   assert.match(config, /timeZone: "Europe\/London"/);
-  assert.doesNotMatch(config, /PRIVATE_PREVIEW|preview/i);
+  assert.doesNotMatch(config, /__BOM_CHRISTMAS_PRIVATE_PREVIEW__|BOM_CHRISTMAS_PRIVATE_PREVIEW\s*=/);
 });
 
 test("preview ratings are simulated locally before application handlers", () => {

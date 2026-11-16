@@ -8,13 +8,13 @@ const [app, cacheSource, edge, migration] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/_shared/artist-enrichment-cache.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/artist-enrichment/index.ts", import.meta.url), "utf8"),
-  readFile(new URL("../supabase/migrations/20260928082227_musicbrainz_artist_cache.sql", import.meta.url), "utf8")
+  readFile(new URL("../supabase/migrations/20260928085523_musicbrainz_artist_cache.sql", import.meta.url), "utf8")
 ]);
 
 function loadCache() {
   const context = { Date, Promise };
   vm.runInNewContext(
-    stripTypeScriptTypes(cacheSource.replace(/^export /gm, ""), { mode: "transform" }) +
+    stripTypeScriptTypes(cacheSource.replace(/^export /gm, ""), { mode: "strip" }) +
       "\nObject.assign(globalThis, { ARTIST_ENRICHMENT_TTL_MS, resolveArtistEnrichment });",
     context
   );

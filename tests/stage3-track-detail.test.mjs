@@ -19,7 +19,7 @@ test("selected tracks use the modern detail hierarchy without the legacy card", 
 test("track detail retains navigation, linked entities, ratings and provider actions", () => {
   for (const contract of [
     /buildSelectedBackButton\(\)/,
-    /song-artist-link/,
+    /renderArtistCreditLinks\(trackArtist\)/,
     /song-album-link/,
     /data-open-song-album-id/,
     /buildCompactTrackRatingControl/,

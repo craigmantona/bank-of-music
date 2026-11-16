@@ -16,7 +16,9 @@ const [app, catalogue, html, styles, edge, migration, deleteMigration, exclusion
 ]);
 
 test("Admin Catalogue is loaded after the application and is admin-rendered", () => {
-  assert.ok(html.indexOf("app.js?v=142") < html.indexOf("bom-admin-catalogue.js?v=10"));
+  const application = html.search(/<script src="app\.js\?v=\d+[^\"]*"><\/script>/);
+  const catalogueScript = html.search(/<script src="bom-admin-catalogue\.js\?v=\d+[^\"]*"><\/script>/);
+  assert.ok(application >= 0 && catalogueScript >= 0 && application < catalogueScript);
   assert.match(catalogue, /if \(!adminDashboard \|\| !host\.canRender\(\)\) return/);
   assert.match(catalogue, /Add Artist &amp; Albums/);
   assert.match(catalogue, /state\.rows\.length < 10/);
@@ -357,7 +359,7 @@ test("remote artist-card exclusion reuses the admin action without catalogue cre
   assert.match(bridgeSource, /loadExclusions/);
   assert.match(bridgeSource, /await renderSelectedItem\(\)/);
   assert.doesNotMatch(bridgeSource, /remote-album-catalogue|\.from\(["'](?:albums|songs)["']\)/);
-  assert.match(app, /completeDiscography\.albums[\s\S]*excludedReleaseGroupIds\.has/);
+  assert.match(app, /const remoteAlbums =[\s\S]*completeDiscography\.albums[\s\S]*excludedReleaseGroupIds[\s\S]*\.has/);
   assert.match(catalogue, /Object\.freeze\(\{ render, state, editAlbumTitle, editAlbumDate, loadExclusions \}\)/);
 });
 
@@ -426,8 +428,9 @@ test("Edge Function authorizes before parsing or resolving catalogue requests", 
   const body = edge.indexOf("const body = await request.json()");
   const resolve = edge.indexOf("const previews = await resolveAll");
   assert.ok(auth >= 0 && auth < body && body < resolve);
-  assert.match(edge, /body\?\.action === "preview"/);
-  assert.ok(edge.indexOf('body?.action === "preview"') < edge.indexOf('userClient.rpc("admin_add_catalogue_album"'));
+  const preview = edge.indexOf('body?.action === "preview"');
+  const commit = edge.indexOf('userClient.rpc("admin_add_catalogue_album"', preview);
+  assert.ok(preview > resolve && commit > preview);
 });
 
 test("new path does not invoke old importer, queue, discovery or qualification", () => {

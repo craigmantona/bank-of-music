@@ -187,7 +187,7 @@ function earlyAccessEndpoint({ resendResponse, existingInvitation = null, reques
       return resendResponse ? resendResponse(options) : Response.json({ id: "resend-message-1" });
     }
   };
-  const runnable = stripTypeScriptTypes(edge.replace(/^import .*;\r?\n/gm, ""), { mode: "transform" });
+  const runnable = stripTypeScriptTypes(edge.replace(/^import .*;\r?\n/gm, ""), { mode: "strip" });
   vm.runInNewContext(runnable, context);
   const approve = async () => {
     const response = await handler(new Request("https://project.invalid/functions/v1/early-access", {
