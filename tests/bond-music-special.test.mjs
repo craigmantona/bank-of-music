@@ -86,7 +86,7 @@ test("disabled Discover startup does not load Bond assets or make Bond data call
   assert.doesNotMatch(discover, /fetch\("bond-007\.json/);
   assert.match(app, /if \(!isBondFeatureEnabled\(\) \|\| !currentUser\) return false/);
   assert.match(app, /style\.href = "bom-bond\.css\?v=1"/);
-  assert.match(app, /script\.src = "bom-bond\.js\?v=1"/);
+  assert.match(app, /script\.src = "bom-bond\.js\?v=2"/);
   assert.equal(/<script[^>]+bom-bond\.js/.test(html), false);
   assert.equal(/<link[^>]+bom-bond\.css/.test(html), false);
 });
@@ -99,6 +99,8 @@ test("rating flow reuses canonical user-scoped persistence and safe community vi
   assert.match(bond, /data-bond-rate/);
   assert.match(bond, /Saving…/);
   assert.match(bond, /aria-live="polite"/);
+  assert.match(bond, /personalRating !== null && personalRating !== undefined && Number\(personalRating\) === rating/);
+  assert.doesNotMatch(bond, /aria-pressed="\$\{Number\(personalRating\) === rating\}"/);
 });
 
 test("experience provides progress, ranking, unrated and film-year controls", () => {
