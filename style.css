@@ -7292,3 +7292,19 @@ video {
     text-align: center;
   }
 }
+.email-announcement-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.email-announcement-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,1fr);gap:24px}.email-announcement-editor{display:grid;gap:9px}.email-announcement-editor textarea{resize:vertical;min-height:340px}.email-announcement-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.email-announcements-panel iframe{width:100%;min-height:620px;border:1px solid var(--border,#263148);background:#070b15}.email-announcement-history{display:grid;gap:8px}.is-error{color:#ff8e8e!important}@media(max-width:850px){.email-announcement-grid{grid-template-columns:1fr}.email-announcement-heading{display:block}.email-announcements-panel iframe{min-height:520px}}
+.marketing-consent-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 12px 0;
+  color: var(--text-muted, #aab3c5);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.marketing-consent-option input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
