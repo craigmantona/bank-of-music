@@ -854,7 +854,7 @@ async function openBondSpecial() {
         document.head.append(style);
       }
       const script = document.createElement("script");
-      script.src = "bom-bond.js?v=1";
+      script.src = "bom-bond.js?v=2";
       script.async = true;
       script.onload = resolve;
       script.onerror = () => reject(new Error("The 007 experience could not load."));

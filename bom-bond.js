@@ -21,7 +21,7 @@
 
   function ratingControl(entry, personalRating) {
     if (!entry.catalogueTrackId) return `<p class="bom-007-unmatched">Catalogue match pending review</p>`;
-    return `<fieldset class="bom-007-rating" data-bond-rating-group="${entry.catalogueTrackId}"><legend>Your rating${personalRating === null ? "" : ` · ${personalRating} / 10`}</legend><div>${Array.from({ length: 11 }, (_, rating) => `<button type="button" data-bond-rate="${rating}" aria-label="Rate ${escapeHtml(entry.themeTitle)} ${rating} out of 10" aria-pressed="${Number(personalRating) === rating}">${rating}</button>`).join("")}</div></fieldset>`;
+    return `<fieldset class="bom-007-rating" data-bond-rating-group="${entry.catalogueTrackId}"><legend>Your rating${personalRating === null ? "" : ` · ${personalRating} / 10`}</legend><div>${Array.from({ length: 11 }, (_, rating) => `<button type="button" data-bond-rate="${rating}" aria-label="Rate ${escapeHtml(entry.themeTitle)} ${rating} out of 10" aria-pressed="${personalRating !== null && personalRating !== undefined && Number(personalRating) === rating}">${rating}</button>`).join("")}</div></fieldset>`;
   }
 
   function entryCard(entry, track, index) {
