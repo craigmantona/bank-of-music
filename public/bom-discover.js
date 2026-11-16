@@ -2,7 +2,7 @@
   "use strict";
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
   const bondEnabled = () => window.BOM_BOND_FEATURE?.enabled === true;
-  const bondBanner = () => bondEnabled() ? `<section class="bom-007-banner" data-bom-bond-banner aria-labelledby="bomBondBannerTitle"><div class="bom-007-banner-motif" aria-hidden="true"><span></span></div><div class="bom-007-banner-copy"><p>THE BANK OF MUSIC PRESENTS</p><h2 id="bomBondBannerTitle">007 — THE MUSIC OF BOND</h2><span>Six decades. Legendary voices. One licence to rate.</span></div><button type="button" data-bom-action="bond-special">ACCEPT YOUR MISSION <span aria-hidden="true">→</span></button></section>` : "";
+  const bondBanner = () => bondEnabled() ? `<section class="bom-007-banner" data-bom-bond-banner aria-labelledby="bomBondBannerTitle"><div class="bom-007-banner-motif" aria-hidden="true"><span></span></div><div class="bom-007-banner-copy"><p>THE BANK OF MUSIC PRESENTS</p><h2 id="bomBondBannerTitle">A NEW BOND.<br>THE LEGENDARY MUSIC.</h2><span>Robert Pattinson is the new 007. Rate the iconic themes that made Bond legendary.</span></div><button type="button" data-bom-action="bond-special">RATE THE BOND THEMES <span aria-hidden="true">→</span></button></section>` : "";
   const comingSoonGames = () => [
     { name:"Higher or Lower", description:"Trust your ears. Pick the community favourite.", enabled:window.BOM_HIGHER_LOWER_FEATURE?.enabled === true, mark:"↕" },
     { name:"60-Second Quickfire", description:"Race the clock. Keep the streak alive.", enabled:window.BOM_QUICKFIRE_FEATURE?.enabled === true, mark:"60" },

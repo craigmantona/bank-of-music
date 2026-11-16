@@ -47,11 +47,13 @@ test("catalogue matches are canonical, unique and do not invent Spotify IDs", ()
   assert([...manifest.films, ...manifest.bonusTracks].every(row => row.spotifyId === ""));
 });
 
-test("feature and launch configuration are disabled and unset by default", () => {
+test("feature and verified launch announcement are enabled without inventing Bond 26 metadata", () => {
   assert.match(config, /BOM_BOND_FEATURE = Object\.freeze/);
-  assert.match(config, /enabled: false/);
-  assert.match(config, /nextBondActor: ""/);
-  assert.match(config, /officialAnnouncementDate: ""/);
+  assert.match(config, /enabled: true/);
+  assert.match(config, /nextBondActor: "Robert Pattinson"/);
+  assert.match(config, /officialAnnouncementDate: "2026-11-16"/);
+  assert.match(config, /officialAnnouncementSource: "https:\/\/www\.007\.com\/robert-pattinson-is-the-new-james-bond\/"/);
+  assert.match(config, /launchDayMessageEnabled: true/);
   assert.match(config, /filmTitle: ""/);
   assert.match(config, /themeTitle: ""/);
   assert.match(config, /A new 007 has been announced\. Now rate the music that made Bond legendary\./);
@@ -73,7 +75,9 @@ function renderDiscover(enabled) {
 test("disabled flag produces no card, while activation inserts it above Quick Rate", () => {
   assert.doesNotMatch(renderDiscover(false), /data-bom-bond-banner/);
   const enabled = renderDiscover(true);
-  assert.match(enabled, /007 — THE MUSIC OF BOND/);
+  assert.match(enabled, /A NEW BOND\.<br>THE LEGENDARY MUSIC\./);
+  assert.match(enabled, /Robert Pattinson is the new 007\. Rate the iconic themes that made Bond legendary\./);
+  assert.match(enabled, /RATE THE BOND THEMES/);
   assert(enabled.indexOf("data-bom-bond-banner") < enabled.indexOf("data-bom-discovery-carousel"));
   assert(enabled.indexOf("data-bom-bond-banner") < enabled.indexOf("Quick rate"));
 });

@@ -29,14 +29,14 @@ window.BOM_DAILY_CHALLENGE_FEATURE = Object.freeze({
   timeZone: "Europe/London"
 });
 
-/* Disabled until an approved 007 launch. Never populate these from rumour. */
+/* Official 007 launch configuration. Never populate future-film fields from rumour. */
 window.BOM_BOND_FEATURE = Object.freeze({
-  enabled: false,
-  nextBondActor: "",
-  officialAnnouncementDate: "",
-  officialAnnouncementSource: "",
-  announcementHeadline: "",
-  launchDayMessageEnabled: false,
+  enabled: true,
+  nextBondActor: "Robert Pattinson",
+  officialAnnouncementDate: "2026-11-16",
+  officialAnnouncementSource: "https://www.007.com/robert-pattinson-is-the-new-james-bond/",
+  announcementHeadline: "Robert Pattinson is the new 007",
+  launchDayMessageEnabled: true,
   launchDayMessage: "A new 007 has been announced. Now rate the music that made Bond legendary.",
   bond26: Object.freeze({
     filmTitle: "",
