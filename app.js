@@ -37,6 +37,8 @@ const birthYearInput = document.getElementById("birthYear");
 
 const handleInput = document.getElementById("handleInput");
 
+const marketingEmailConsentInput = document.getElementById("marketingEmailConsent");
+
 const signupBtn = document.getElementById("signupBtn");
 
 const loginBtn = document.getElementById("loginBtn");
@@ -854,7 +856,7 @@ async function openBondSpecial() {
         document.head.append(style);
       }
       const script = document.createElement("script");
-      script.src = "bom-bond.js?v=2";
+      script.src = "bom-bond.js?v=1";
       script.async = true;
       script.onload = resolve;
       script.onerror = () => reject(new Error("The 007 experience could not load."));
@@ -2317,6 +2319,7 @@ function updateSessionUI() {
   }
 
   updateAdminAccessUI();
+  if (currentUser && isAdmin) window.BOMEmailAnnouncements?.loadAdmin(supabaseClient);
 }
 
 function updateAdminAccessUI() {
@@ -3221,6 +3224,7 @@ async function signUp() {
         data: {
           handle,
           birth_year: birthYear,
+          marketing_email_consent: marketingEmailConsentInput?.checked === true,
           ...(window.BOMEarlyAccess?.state.invitationToken
             ? { invitation_token: window.BOMEarlyAccess.state.invitationToken }
             : {})
@@ -17705,6 +17709,8 @@ window.BOMAdminCatalogueHost = Object.freeze({
   }
 });
 document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
+
+window.BOMEmailAnnouncements?.initialise(supabaseClient);
 
 const earlyAccessAdmin = document.getElementById("earlyAccessAdmin");
 earlyAccessAdmin?.addEventListener("click", async event => {
