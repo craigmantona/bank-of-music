@@ -19,9 +19,15 @@ function valid(entry: ArtistEnrichment | null) {
     Number.isFinite(Date.parse(entry.fetched_at)));
 }
 
+function reusable(entry: ArtistEnrichment | null) {
+  // Empty rows may have been written by the former failure path. Refresh them
+  // before declaring that an artist genuinely has no album release groups.
+  return valid(entry) && entry!.release_groups.length > 0;
+}
+
 export async function resolveArtistEnrichment(artistId: string, dependencies: Dependencies) {
   const cached = await dependencies.read(artistId);
-  if (valid(cached)) {
+  if (reusable(cached)) {
     const age = (dependencies.now?.() ?? Date.now()) - Date.parse(cached!.fetched_at);
     if (age <= ARTIST_ENRICHMENT_TTL_MS) {
       return { ok: true, cache_status: "fresh", enrichment: cached };

@@ -97,6 +97,8 @@
     const albums = sortedAlbums();
     target.innerHTML = albums.length
       ? albums.map(albumCard).join("")
+      : currentModel?.catalogueStatus === "failed"
+        ? window.BOMUI.SectionState({ title: "Catalogue temporarily unavailable", message: "We couldn’t load this artist’s records. Please try again." })
       : window.BOMUI.SectionState({ title: "No albums available", message: "This artist’s catalogue has not reached the collection yet." });
   }
 
