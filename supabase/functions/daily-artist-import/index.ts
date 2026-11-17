@@ -57,10 +57,12 @@ Deno.serve(async (request) => {
   if (!authorization.ok) return withCors(authorization.response);
 
   let action = "run";
+  let automationRunId: string | null = null;
 
   try {
     const body = await request.json();
     if (typeof body?.action === "string") action = body.action;
+    if (typeof body?.automation_run_id === "string") automationRunId = body.automation_run_id;
   } catch {
     // An empty request body is the normal scheduled run.
   }
@@ -102,7 +104,7 @@ Deno.serve(async (request) => {
       await supabase.functions.invoke(
         "artist-catalog-importer",
         {
-          body: {},
+          body: automationRunId ? { automation_run_id: automationRunId } : {},
           // Make the service principal explicit for server-to-server calls.
           // This avoids depending on FunctionsClient header defaults.
           headers: {

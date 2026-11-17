@@ -1,0 +1,53 @@
+name: Daily album discovery
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Validated MusicBrainz albums to target for the UTC day
+        required: true
+        default: "50"
+      dry_run:
+        description: Check storage and report progress without importing
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-album-discovery
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Produce review-only MusicBrainz discovery candidates
+        env:
+          MUSICBRAINZ_CONTACT_EMAIL: ${{ secrets.MUSICBRAINZ_CONTACT_EMAIL }}
+          ALBUM_DISCOVERY_KILL_SWITCH: ${{ vars.ALBUM_DISCOVERY_KILL_SWITCH || 'true' }}
+        run: node scripts/discover-musicbrainz-candidates.mjs
+      - name: Upload discovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: musicbrainz-discovery-${{ github.run_id }}
+          path: outputs/musicbrainz-discovery/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Discover and import albums
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BOM_CRON_SECRET: ${{ secrets.BOM_CRON_SECRET }}
+          ALBUM_IMPORT_TARGET: ${{ inputs.target || '50' }}
+          ALBUM_IMPORT_DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        run: node scripts/automated-album-import.mjs
