@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { automaticPromotionDesign, buildDiscoveryWindows, csvForCandidates, discoverCandidates,
-  discoverHistoricalCandidates, qualifyDiscoveryCandidate } from "../scripts/lib/musicbrainz-discovery.mjs";
+  createMusicBrainzGet, discoverHistoricalCandidates, MusicBrainzRetryExhausted,
+  qualifyDiscoveryCandidate } from "../scripts/lib/musicbrainz-discovery.mjs";
 
 const group={id:"g1",title:"Album","primary-type":"Album","secondary-types":[],
   "first-release-date":"2026-10-01",score:100,"artist-credit":[{artist:{id:"a1",name:"Artist"}}]};
@@ -69,4 +70,35 @@ test("historical resume state prevents duplicate release groups and artists",asy
   const result=await discoverHistoricalCandidates({get,windows,state,maxWindows:2});
   assert.equal(result.accepted.length,0);
   assert.ok(result.rejected.every(row=>row.reason==="excluded_release_group"));
+});
+
+test("MusicBrainz discovery retries transient responses with bounded exponential backoff",async()=>{
+  let clock=0;
+  const waits=[];
+  const statuses=[503,500,200];
+  const get=createMusicBrainzGet({identity:"BOM test",now:()=>clock,
+    sleep:async ms=>{waits.push(ms);clock+=ms;},maxAttempts:4,baseBackoffMs:1100,maxBackoffMs:4400,
+    fetchImpl:async()=>{const status=statuses.shift();return {ok:status===200,status,
+      headers:{get:()=>null},json:async()=>({ok:true})};}});
+  assert.deepEqual(await get("/release-group?test"),{ok:true});
+  assert.deepEqual(waits,[1100,2200]);
+});
+
+test("retry exhaustion returns resumable partial historical discovery",async()=>{
+  const windows=buildDiscoveryWindows({startYear:1950,endYear:1959,
+    now:new Date("2026-11-17T00:00:00Z")});
+  let releases=0;
+  const second={...group,id:"g2","artist-credit":[{artist:{id:"a2",name:"Artist 2"}}]};
+  const get=async path=>{
+    if(path.startsWith("/release-group")) return {"release-groups":[group,second]};
+    releases+=1;
+    if(releases===1) return {releases:[...globalThis.Array.from([{id:"r1",status:"Official",date:"2026-10-01",country:"GB"}])]};
+    throw new MusicBrainzRetryExhausted("budget exhausted",{status:503,path,attempts:4});
+  };
+  const result=await discoverHistoricalCandidates({get,windows,maxWindows:1,pageSize:25});
+  assert.equal(result.accepted.length,1);
+  assert.equal(result.interrupted.status,503);
+  assert.equal(result.resume_state.next_window_id,"recent");
+  assert.equal(result.resume_state.offsets.recent,0);
+  assert.ok(result.resume_state.seen_release_group_ids.includes("g1"));
 });

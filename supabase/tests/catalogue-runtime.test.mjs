@@ -7,7 +7,7 @@ let db;
 before(async () => { db = await database(); });
 after(async () => { await db.close(); });
 beforeEach(async () => {
-  await db.exec(`truncate artist_catalogue_discovery,artist_import_queue,albums,artist_catalog,catalogue_worker_state restart identity cascade;
+  await db.exec(`truncate automated_album_import_runs,artist_catalogue_discovery,artist_import_queue,albums,artist_catalog,catalogue_worker_state restart identity cascade;
     delete from artist_catalogue_overrides where release_group_id like 'g%';
     insert into catalogue_worker_state(singleton) values(true);
     insert into artist_import_queue(id,artist_name,musicbrainz_artist_id) values(1,'Artist','artist');`);
@@ -22,11 +22,39 @@ function importer(get, client = adapter(db), env = {}) {
     createClient: () => client, requireServiceOrAdmin: async () => ({ ok:true })
   });
   ctx.CatalogueWorker.prototype.musicBrainzGet = get;
-  return { ctx, run: async () => {
-    const response = await handler(new Request("https://example.invalid",{method:"POST"}));
+  return { ctx, run: async (body = null) => {
+    const response = await handler(new Request("https://example.invalid",{method:"POST",
+      headers: body ? { "content-type":"application/json" } : {},
+      body: body ? JSON.stringify(body) : undefined}));
     return { status:response.status, body: await response.json() };
   }};
 }
+
+test("pilot imports only approved release groups from a multi-album artist", async () => {
+  const runId="33333333-3333-4333-8333-333333333333";
+  const ids=["aaaaaaaa-1111-4111-8111-111111111111","bbbbbbbb-2222-4222-8222-222222222222",
+    "cccccccc-3333-4333-8333-333333333333","dddddddd-4444-4444-8444-444444444444",
+    "eeeeeeee-5555-4555-8555-555555555555"];
+  await db.query(`insert into automated_album_import_runs
+    (id,status,target_albums,approved_release_group_ids) values($1,'running',5,$2::uuid[])`,[runId,ids]);
+  const catalogue=[0,1,2].map(index=>({id:index===1?ids[0]:`ffffffff-6666-4666-8666-66666666666${index}`,
+    title:`Pilot ${index}`,"primary-type":"Album","secondary-types":[],
+    "first-release-date":`197${index}-01-01`,"artist-credit":[{artist:{id:"artist"}}]}));
+  const releaseCalls=[];
+  const app=importer(async path=>{
+    if(path.startsWith('/artist/')) return {id:'artist',country:'GB',"life-span":{}};
+    if(path.startsWith('/release-group?')) return {"release-groups":catalogue,"release-group-count":3};
+    releaseCalls.push(path);
+    return {releases:[{id:"release-approved",title:"Approved",date:"1971-01-01",country:"GB",
+      "artist-credit":[{artist:{id:"artist",name:"Artist"},name:"Artist"}]}]};
+  });
+  const result=await app.run({automation_run_id:runId,approved_release_group_ids:ids});
+  assert.equal(result.status,200,JSON.stringify(result.body));
+  assert.equal(releaseCalls.length,1);
+  assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n,1);
+  assert.equal((await db.query("select musicbrainz_release_group_id from albums")).rows[0].musicbrainz_release_group_id,ids[0]);
+  assert.equal((await db.query("select albums_imported from automated_album_import_runs where id=$1",[runId])).rows[0].albums_imported,1);
+});
 function response(path, groups) {
   if(path.startsWith('/artist/')) return { id:'artist',country:'GB',"life-span":{} };
   if(path.startsWith('/release-group?')) return { "release-groups":groups, "release-group-count":groups.length };

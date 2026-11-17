@@ -2,7 +2,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { automaticPromotionDesign, buildDiscoveryWindows, csvForCandidates,
-  discoverHistoricalCandidates } from "./lib/musicbrainz-discovery.mjs";
+  createMusicBrainzGet, discoverHistoricalCandidates } from "./lib/musicbrainz-discovery.mjs";
 
 if (/^(1|true)$/i.test(process.env.ALBUM_DISCOVERY_KILL_SWITCH || "")) {
   console.warn("::warning title=Album discovery disabled::Kill switch is active.");
@@ -23,17 +23,7 @@ const state = statePath ? JSON.parse(await readFile(resolve(statePath), "utf8"))
 const identity = process.env.MUSICBRAINZ_CONTACT_EMAIL
   ? `BankOfMusic/1.0 (${process.env.MUSICBRAINZ_CONTACT_EMAIL})`
   : "BankOfMusic/1.0 (https://bank-of-music.pages.dev/)";
-let nextRequestAt = 0;
-async function get(path) {
-  const wait = Math.max(0, nextRequestAt - Date.now());
-  if (wait) await new Promise(resolveWait => setTimeout(resolveWait, wait));
-  nextRequestAt = Date.now() + 1100;
-  const response = await fetch(`https://musicbrainz.org/ws/2${path}`, {
-    headers: { Accept: "application/json", "User-Agent": identity }, signal: AbortSignal.timeout(10000)
-  });
-  if (!response.ok) throw new Error(`MusicBrainz discovery failed with ${response.status}`);
-  return response.json();
-}
+const get = createMusicBrainzGet({ identity });
 
 const windows = buildDiscoveryWindows({ startYear });
 const result = await discoverHistoricalCandidates({ get, windows, state, maxWindows, pageSize, exclusions });
@@ -46,4 +36,5 @@ await writeFile(`${outputBase}.csv`, csvForCandidates(result.accepted));
 await writeFile(`${outputBase}.state.json`, JSON.stringify(result.resume_state, null, 2) + "\n");
 console.log(JSON.stringify({ event: "musicbrainz_discovery_complete", accepted: result.accepted.length,
   rejected: result.rejected.length, json: `${outputBase}.json`, csv: `${outputBase}.csv`,
-  state: `${outputBase}.state.json` }));
+  state: `${outputBase}.state.json`, interrupted: result.interrupted || null }));
+if (result.interrupted) process.exitCode = 2;

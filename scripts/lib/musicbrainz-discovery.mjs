@@ -3,6 +3,49 @@ const EXCLUDED_SECONDARY = new Set([
   "Mixtape/Street", "Remix", "Soundtrack", "Spokenword"
 ]);
 
+export class MusicBrainzRetryExhausted extends Error {
+  constructor(message, details = {}) {
+    super(message);
+    this.name = "MusicBrainzRetryExhausted";
+    Object.assign(this, details);
+  }
+}
+
+export function createMusicBrainzGet({
+  fetchImpl = fetch, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)),
+  now = () => Date.now(), identity, minimumIntervalMs = 1100, maxAttempts = 4,
+  baseBackoffMs = 1100, maxBackoffMs = 8800
+}) {
+  let nextRequestAt = 0;
+  return async function get(path) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const rateWait = Math.max(0, nextRequestAt - now());
+      if (rateWait) await sleep(rateWait);
+      nextRequestAt = now() + minimumIntervalMs;
+      const response = await fetchImpl(`https://musicbrainz.org/ws/2${path}`, {
+        headers: { Accept: "application/json", "User-Agent": identity },
+        signal: AbortSignal.timeout(10000)
+      });
+      if (response.ok) return response.json();
+      const transient = response.status === 429 || response.status === 503 ||
+        (response.status >= 500 && response.status <= 599);
+      if (!transient) throw new Error(`MusicBrainz discovery failed with ${response.status}`);
+      if (attempt === maxAttempts) {
+        throw new MusicBrainzRetryExhausted(
+          `MusicBrainz retry budget exhausted after ${attempt} attempts (${response.status})`,
+          { status: response.status, path, attempts: attempt }
+        );
+      }
+      const retryAfterHeader = response.headers?.get?.("retry-after");
+      const retryAfter = retryAfterHeader === null || retryAfterHeader === undefined || retryAfterHeader === ""
+        ? Number.NaN : Number(retryAfterHeader);
+      const exponential = Math.min(maxBackoffMs, baseBackoffMs * 2 ** (attempt - 1));
+      await sleep(Number.isFinite(retryAfter) && retryAfter >= 0
+        ? Math.min(maxBackoffMs, retryAfter * 1000) : exponential);
+    }
+  };
+}
+
 export function originalPeriod(releaseDate, groupDate, maxDays = 366) {
   const release = Date.parse(String(releaseDate || ""));
   const group = Date.parse(String(groupDate || ""));
@@ -40,8 +83,15 @@ export async function discoverCandidates({
   let pagesScanned = 0;
   let exhausted = false;
   for (let page = 0; page < maxPages && accepted.length < maxCandidates; page += 1) {
-    const result = await get(`/release-group?query=${encodeURIComponent(query)}` +
-      `&fmt=json&limit=${pageSize}&offset=${offset + page * pageSize}`);
+    let result;
+    try {
+      result = await get(`/release-group?query=${encodeURIComponent(query)}` +
+        `&fmt=json&limit=${pageSize}&offset=${offset + page * pageSize}`);
+    } catch (error) {
+      if (error instanceof MusicBrainzRetryExhausted) error.partial = { accepted, rejected,
+        scanned_release_groups: seenGroups.size, next_offset: offset + page * pageSize, exhausted: false };
+      throw error;
+    }
     pagesScanned += 1;
     const groups = result["release-groups"] || [];
     if (!groups.length) {
@@ -51,8 +101,15 @@ export async function discoverCandidates({
     for (const group of groups) {
       if (!group?.id || seenGroups.has(group.id)) continue;
       seenGroups.add(group.id);
-      const releaseResult = await get(`/release?release-group=${encodeURIComponent(group.id)}` +
-        `&status=official&type=album&limit=100&fmt=json`);
+      let releaseResult;
+      try {
+        releaseResult = await get(`/release?release-group=${encodeURIComponent(group.id)}` +
+          `&status=official&type=album&limit=100&fmt=json`);
+      } catch (error) {
+        if (error instanceof MusicBrainzRetryExhausted) error.partial = { accepted, rejected,
+          scanned_release_groups: seenGroups.size - 1, next_offset: offset + page * pageSize, exhausted: false };
+        throw error;
+      }
       const decision = qualifyDiscoveryCandidate(group, releaseResult.releases || [], exclusions);
       if (!decision.accepted) {
         rejected.push({ release_group_id: group.id, title: group.title, reason: decision.reason });
@@ -119,10 +176,35 @@ export async function discoverHistoricalCandidates({
 
   for (let index = 0; index < windowLimit && accepted.length < maxCandidates; index += 1) {
     const window = windows[(start + index) % windows.length];
-    const result = await discoverCandidates({ get, query: window.query, maxPages: 1, pageSize,
-      maxCandidates: maxCandidates - accepted.length, offset: Number(offsets[window.id] || 0),
-      exclusions: { ...exclusions, release_group_ids: [...rememberedGroups],
-        artist_ids: [...rememberedArtists] } });
+    let result;
+    try {
+      result = await discoverCandidates({ get, query: window.query, maxPages: 1, pageSize,
+        maxCandidates: maxCandidates - accepted.length, offset: Number(offsets[window.id] || 0),
+        exclusions: { ...exclusions, release_group_ids: [...rememberedGroups],
+          artist_ids: [...rememberedArtists] } });
+    } catch (error) {
+      if (!(error instanceof MusicBrainzRetryExhausted)) throw error;
+      result = error.partial || { accepted: [], rejected: [], scanned_release_groups: 0,
+        next_offset: Number(offsets[window.id] || 0), exhausted: false };
+      for (const row of result.accepted) {
+        rememberedGroups.add(row.evidence_release_group_id);
+        rememberedArtists.add(row.musicbrainz_artist_id);
+        accepted.push({ ...row, discovery_window_id: window.id, discovery_window_label: window.label });
+      }
+      for (const row of result.rejected) {
+        rememberedGroups.add(row.release_group_id);
+        rejected.push({ ...row, discovery_window_id: window.id });
+      }
+      offsets[window.id] = result.next_offset;
+      scannedWindows.push({ id: window.id, label: window.label, offset: result.next_offset,
+        exhausted: false, scanned_release_groups: result.scanned_release_groups, interrupted: true });
+      return { accepted, rejected, scanned_windows: scannedWindows,
+        interrupted: { status: error.status, path: error.path, attempts: error.attempts,
+          message: error.message },
+        resume_state: { version: 1, next_window_id: window.id, offsets,
+          seen_release_group_ids: [...rememberedGroups].slice(-maxRememberedIds),
+          seen_artist_ids: [...rememberedArtists].slice(-maxRememberedIds) } };
+    }
     offsets[window.id] = result.next_offset;
     processedWindows += 1;
     scannedWindows.push({ id: window.id, label: window.label,

@@ -46,6 +46,8 @@ export async function database() {
   await db.exec(automationMigration);
   const transactionMigration = readFileSync(new URL("../migrations/20261117143000_automated_album_transaction.sql", import.meta.url), "utf8");
   await db.exec(transactionMigration);
+  const pilotMigration = readFileSync(new URL("../migrations/20261117150000_automated_album_pilot_safety.sql", import.meta.url), "utf8");
+  await db.exec(pilotMigration);
   return db;
 }
 
@@ -67,6 +69,13 @@ export async function automatedAlbumRpc(db, token, jobId, data) {
 export function adapter(db) {
   return {
     async rpc(name, args) {
+      if (name === "automated_album_pilot_guard") {
+        try {
+          const result = await db.query("select automated_album_pilot_guard($1::uuid,$2::uuid) result",
+            [args.p_run_id,args.p_release_group_id]);
+          return { data: result.rows[0].result, error: null };
+        } catch (error) { return { data: null, error: { message: error.message } }; }
+      }
       if (name === "automated_catalogue_album") {
         try {
           const result = await db.query(`select automated_catalogue_album(
