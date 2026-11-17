@@ -14,7 +14,7 @@ const selection = () => ({ type: 'album', title: 'Resolved Album', artist: 'An A
 const saved = () => ({ id: 10, title: 'Resolved Album', artist: 'An Artist', external_source: 'musicbrainz', external_id: 'release-1', musicbrainz_release_group_id: 'group-1', cover_art_url: 'saved-cover.jpg' });
 function harness({ albums = [], songs = [], cached = true, detail = release(), failResolution = false, beforeAlbumWrite,
   autoAddResult = { status: 'needs_correction', reason: 'catalogue_confirmation_required' }, autoAddedAlbum = null, autoAddedSongs = [],
-  deferRemoteCommit = false } = {}) {
+  deferRemoteCommit = false, autoAddError = null } = {}) {
   const db = { albums: structuredClone(albums), songs: structuredClone(songs) }, writes = [], fetches = [], invocations = [], renderedModels = [], reviewAlbumIds = [];
   let releaseRemoteCommit;
   const remoteCommit = deferRemoteCommit ? new Promise(resolve => { releaseRemoteCommit = resolve; }) : null;
@@ -59,7 +59,7 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
         db.albums.push(structuredClone(autoAddedAlbum));
         db.songs.push(...structuredClone(autoAddedSongs));
       }
-      return { data: structuredClone(autoAddResult), error: null };
+      return { data: structuredClone(autoAddResult), error: autoAddError };
     } }, from(table) {
       let operation = 'select', payload, filters = [], options;
       const query = {
@@ -216,6 +216,18 @@ test('ambiguous safe resolution leaves the remote album usable and unbound', asy
   assert.equal(await h.context.autoSaveSelectedAlbum(), null);
   assert.equal(h.context.selectedItem.savedAlbumId, undefined);
   assert.equal(h.context.selectedItem.catalogueAutoAddStatus, 'needs_correction');
+  assert.equal(h.db.albums.length, 0);
+  assert.equal(h.db.songs.length, 0);
+});
+
+test('server rate limits produce a retryable state without any client catalogue write', async () => {
+  const payload = { status: 'rate_limited', retry_after_seconds: 321 };
+  const error = { context: { clone: () => ({ json: async () => payload }) } };
+  const h = harness({ autoAddError: error });
+  assert.equal(await h.context.autoSaveSelectedAlbum(), null);
+  assert.equal(h.context.selectedItem.catalogueAutoAddStatus, 'rate_limited');
+  assert.equal(h.context.selectedItem.catalogueAutoAddRetryAfter, 321);
+  assert.equal(h.writes.length, 0);
   assert.equal(h.db.albums.length, 0);
   assert.equal(h.db.songs.length, 0);
 });
