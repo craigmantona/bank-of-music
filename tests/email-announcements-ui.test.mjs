@@ -9,12 +9,13 @@ const publicHtml = readFileSync(new URL("../public/index.html", import.meta.url)
 const appSource = readFileSync(new URL("../app.js", import.meta.url), "utf8");
 const functionSource = readFileSync(new URL("../supabase/functions/email-announcements/index.ts", import.meta.url), "utf8");
 const sharedSource = readFileSync(new URL("../supabase/functions/_shared/email-announcement.ts", import.meta.url), "utf8");
+const invitationMigration = readFileSync(new URL("../supabase/migrations/20261117101749_email_updates_invitation.sql", import.meta.url), "utf8");
 const previewHtml = readFileSync(new URL("../outputs/bond-email-preview.html", import.meta.url), "utf8");
 
 test("email announcement assets stay in the Cloudflare public output", () => {
   assert.equal(publicScript, rootScript);
   assert.match(rootHtml, /id="emailAnnouncementsAdmin"/);
-  assert.match(rootHtml, /bom-email-announcements\.js\?v=1[\s\S]*app\.js/);
+  assert.match(rootHtml, /bom-email-announcements\.js\?v=2[\s\S]*app\.js/);
 });
 
 test("browser code receives counts and history but no email addresses or secrets", () => {
@@ -51,4 +52,22 @@ test("signup marketing consent is separate, optional and unticked", () => {
     assert.doesNotMatch(html, /id="marketingEmailConsent"[^>]*checked/);
   }
   assert.match(appSource, /marketing_email_consent: marketingEmailConsentInput\?\.checked === true/);
+});
+
+test("existing users receive one explicit, dismissible invitation without implicit consent", () => {
+  assert.match(invitationMigration, /email_updates_invitations/);
+  assert.match(invitationMigration, /not exists[\s\S]*marketing_email_preferences/i);
+  assert.doesNotMatch(invitationMigration, /insert into public\.marketing_email_preferences/i);
+  assert.match(rootScript, /id="emailUpdatesConsent" type="checkbox"/);
+  assert.doesNotMatch(rootScript, /id="emailUpdatesConsent"[^>]*checked/);
+  assert.match(rootScript, />Not now</);
+  assert.match(rootScript, /action: "dismiss_invitation"/);
+  assert.match(functionSource, /invitationPending: !data && !!invitation && !invitation\.responded_at/);
+});
+
+test("invitation is an accessible responsive dialog", () => {
+  assert.match(rootScript, /role="dialog" aria-modal="true"/);
+  assert.match(rootScript, /aria-labelledby="emailUpdatesTitle"/);
+  assert.match(rootScript, /role="status" aria-live="polite"/);
+  assert.match(rootScript, /dismiss\.focus\(\)/);
 });

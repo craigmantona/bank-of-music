@@ -55,16 +55,23 @@ Deno.serve(async request => {
     return error ? reply({ ok: false, error: "Your preference could not be saved." }, 500) : reply({ ok: true, message: "You have been unsubscribed from Bank of Music announcements." });
   }
 
-  if (action === "get_preferences" || action === "update_preferences") {
+  if (action === "get_preferences" || action === "update_preferences" || action === "dismiss_invitation") {
     const auth = await requireAuthenticatedUser(request);
     if (!auth.ok || !auth.userId) return auth.ok ? reply({ ok: false, error: "User identity unavailable." }, 500) : new Response(auth.response.body, { status: auth.response.status, headers: { ...cors, "Content-Type": "application/json" } });
     if (action === "get_preferences") {
       const { data } = await client.from("marketing_email_preferences").select("status").eq("user_id", auth.userId).maybeSingle();
-      return reply({ ok: true, subscribed: data?.status === "OPTED_IN" });
+      const { data: invitation } = await client.from("email_updates_invitations").select("dismissed_at, responded_at").eq("user_id", auth.userId).maybeSingle();
+      return reply({ ok: true, subscribed: data?.status === "OPTED_IN", invitationPending: !data && !!invitation && !invitation.responded_at });
+    }
+    if (action === "dismiss_invitation") {
+      const now = new Date().toISOString();
+      const { error } = await client.from("email_updates_invitations").update({ dismissed_at: now, responded_at: now }).eq("user_id", auth.userId).is("responded_at", null);
+      return error ? reply({ ok: false, error: "Your choice could not be saved." }, 500) : reply({ ok: true });
     }
     const subscribed = body.subscribed === true, now = new Date().toISOString();
     const preference = subscribed ? { user_id: auth.userId, status: "OPTED_IN", consented_at: now, consent_source: "ACCOUNT_PREFERENCES", consent_wording: MARKETING_CONSENT_WORDING, unsubscribed_at: null, updated_at: now } : { user_id: auth.userId, status: "UNSUBSCRIBED", unsubscribed_at: now, updated_at: now };
     const { error } = await client.from("marketing_email_preferences").upsert(preference, { onConflict: "user_id" });
+    if (!error) await client.from("email_updates_invitations").update({ responded_at: now }).eq("user_id", auth.userId).is("responded_at", null);
     return error ? reply({ ok: false, error: "Your email preference could not be saved." }, 500) : reply({ ok: true, subscribed });
   }
 

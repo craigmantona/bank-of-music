@@ -1,8 +1,9 @@
 (function initialiseEmailAnnouncements(global) {
   "use strict";
-  const state = { summary: null, prepared: null };
+  const state = { summary: null, prepared: null, invitationCheckedUserId: null };
   const byId = id => document.getElementById(id);
   const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const invitationCss = `.email-updates-invitation{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px;background:rgba(2,5,11,.72)}.email-updates-card{width:min(100%,520px);max-height:calc(100vh - 40px);overflow:auto;padding:28px;border:1px solid var(--border,#39445a);border-radius:18px;background:var(--panel,#101725);box-shadow:0 20px 70px rgba(0,0,0,.55)}.email-updates-card h2{margin:4px 0 12px}.email-updates-card p{line-height:1.55}.email-updates-kicker{margin:0;color:var(--accent,#ef476f);font-size:.75rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.email-updates-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.email-updates-actions button{min-height:44px}@media(max-width:560px){.email-updates-invitation{align-items:end;padding:0}.email-updates-card{width:100%;max-height:90vh;padding:22px 18px;border-radius:18px 18px 0 0}.email-updates-actions{flex-direction:column-reverse}.email-updates-actions button{width:100%}}`;
 
   async function invoke(client, body) {
     const { data, error } = await client.functions.invoke("email-announcements", { body });
@@ -105,12 +106,75 @@
     });
   }
 
+  function removeInvitation() {
+    byId("emailUpdatesInvitation")?.remove();
+  }
+
+  function renderInvitation(client) {
+    if (byId("emailUpdatesInvitation")) return;
+    const overlay = document.createElement("div");
+    overlay.id = "emailUpdatesInvitation";
+    overlay.className = "email-updates-invitation";
+    overlay.innerHTML = `<section class="email-updates-card" role="dialog" aria-modal="true" aria-labelledby="emailUpdatesTitle" aria-describedby="emailUpdatesDescription">
+      <p class="email-updates-kicker">Optional</p>
+      <h2 id="emailUpdatesTitle">Stay in tune with Bank of Music?</h2>
+      <p id="emailUpdatesDescription">Get occasional news, feature announcements and special releases by email. This is entirely optional and you can unsubscribe at any time.</p>
+      <label class="marketing-consent-option" for="emailUpdatesConsent"><input id="emailUpdatesConsent" type="checkbox"><span>Yes, I would like to receive email updates.</span></label>
+      <p id="emailUpdatesInvitationStatus" class="small" role="status" aria-live="polite"></p>
+      <div class="email-updates-actions"><button type="button" class="secondary-btn" data-invitation-action="dismiss">Not now</button><button type="button" data-invitation-action="subscribe" disabled>Turn on email updates</button></div>
+    </section>`;
+    document.body.appendChild(overlay);
+    const checkbox = byId("emailUpdatesConsent");
+    const subscribe = overlay.querySelector('[data-invitation-action="subscribe"]');
+    const dismiss = overlay.querySelector('[data-invitation-action="dismiss"]');
+    checkbox.addEventListener("change", () => { subscribe.disabled = !checkbox.checked; });
+    overlay.addEventListener("keydown", event => { if (event.key === "Escape") dismiss.click(); });
+    overlay.addEventListener("click", async event => {
+      const button = event.target.closest("[data-invitation-action]");
+      if (!button) return;
+      subscribe.disabled = true; dismiss.disabled = true;
+      try {
+        if (button.dataset.invitationAction === "subscribe") {
+          if (!checkbox.checked) return;
+          await invoke(client, { action: "update_preferences", subscribed: true });
+          global.alert("Email updates are now on. You can unsubscribe at any time.");
+        } else {
+          await invoke(client, { action: "dismiss_invitation" });
+        }
+        removeInvitation();
+      } catch (error) {
+        const status = byId("emailUpdatesInvitationStatus");
+        if (status) { status.textContent = error.message; status.classList.add("is-error"); }
+        subscribe.disabled = !checkbox.checked; dismiss.disabled = false;
+      }
+    });
+    dismiss.focus();
+  }
+
+  async function maybeShowInvitation(client, session) {
+    const userId = session?.user?.id;
+    if (!userId || state.invitationCheckedUserId === userId) return;
+    state.invitationCheckedUserId = userId;
+    try {
+      const preferences = await invoke(client, { action: "get_preferences" });
+      if (preferences.invitationPending) renderInvitation(client);
+    } catch (error) { console.warn("Email updates invitation could not be loaded.", error); }
+  }
+
   function initialise(client) {
+    if (!byId("emailUpdatesInvitationStyles")) {
+      const styles = document.createElement("style"); styles.id = "emailUpdatesInvitationStyles"; styles.textContent = invitationCss; document.head.appendChild(styles);
+    }
     const observer = new MutationObserver(() => { const menu = byId("accountDropdown"); if (menu) addPreferenceControl(client, menu); });
     observer.observe(document.body, { childList: true });
     byId("emailAnnouncementsAdmin")?.addEventListener("click", event => { const target = event.target.closest("[data-email-action]"); if (target) handleAdmin(client, target); });
     const token = new URLSearchParams(location.search).get("unsubscribe");
     if (token) invoke(client, { action: "unsubscribe", token }).then(data => { global.alert(data.message); const url = new URL(location.href); url.searchParams.delete("unsubscribe"); history.replaceState({}, "", url); }).catch(error => global.alert(error.message));
+    client.auth.getSession().then(({ data }) => maybeShowInvitation(client, data.session));
+    client.auth.onAuthStateChange((event, session) => {
+      if (!session) { state.invitationCheckedUserId = null; removeInvitation(); return; }
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") maybeShowInvitation(client, session);
+    });
   }
 
   global.BOMEmailAnnouncements = Object.freeze({ initialise, loadAdmin, handleAdmin, invoke });

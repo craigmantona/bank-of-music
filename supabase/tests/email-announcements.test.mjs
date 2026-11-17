@@ -7,6 +7,7 @@ import { authUserCanReceive, confirmationToken, parseUnsubscribeToken, unsubscri
 const require = createRequire(process.env.CATALOGUE_TEST_PACKAGE || import.meta.url);
 const { PGlite } = require("@electric-sql/pglite");
 const migration = readFileSync(new URL("../migrations/20261116155937_email_announcements.sql", import.meta.url), "utf8");
+const invitationMigration = readFileSync(new URL("../migrations/20261117101749_email_updates_invitation.sql", import.meta.url), "utf8");
 const functionSource = readFileSync(new URL("../functions/email-announcements/index.ts", import.meta.url), "utf8");
 let db;
 const userId = "11111111-1111-4111-8111-111111111111";
@@ -18,6 +19,7 @@ before(async () => {
     create schema auth; create table auth.users(id uuid primary key, raw_user_meta_data jsonb not null default '{}'::jsonb);
     insert into auth.users(id) values ('${userId}'),('${adminId}');`);
   await db.exec(migration);
+  await db.exec(invitationMigration);
 });
 after(async () => db.close());
 
@@ -26,6 +28,13 @@ test("existing registered users are not silently treated as marketing subscriber
   assert.equal(authUserCanReceive({ email: "member@example.com", email_confirmed_at: new Date().toISOString() }), true);
   assert.equal(authUserCanReceive({ email: "member@example.com", email_confirmed_at: null }), false);
   assert.equal(authUserCanReceive({ email: "member@example.com", email_confirmed_at: new Date().toISOString(), is_anonymous: true }), false);
+  assert.equal((await db.query("select count(*)::int count from email_updates_invitations")).rows[0].count, 2);
+});
+
+test("dismissing an invitation is durable but never creates consent", async () => {
+  await db.query("update email_updates_invitations set dismissed_at=now(), responded_at=now() where user_id=$1", [userId]);
+  assert.equal((await db.query("select dismissed_at is not null dismissed from email_updates_invitations where user_id=$1", [userId])).rows[0].dismissed, true);
+  assert.equal((await db.query("select count(*)::int count from marketing_email_preferences where user_id=$1", [userId])).rows[0].count, 0);
 });
 
 test("signup consent is opt-in only and records server evidence", async () => {
@@ -51,8 +60,9 @@ test("announcement records and recipient data are inaccessible to browser roles"
     has_table_privilege('anon','marketing_email_preferences','select') anon_preferences,
     has_table_privilege('authenticated','email_announcements','select') member_history,
     has_table_privilege('authenticated','email_announcement_deliveries','select') member_deliveries,
+    has_table_privilege('authenticated','email_updates_invitations','select') member_invitations,
     has_table_privilege('service_role','email_announcements','insert') service_insert`);
-  assert.deepEqual(privileges.rows[0], { anon_preferences: false, member_history: false, member_deliveries: false, service_insert: true });
+  assert.deepEqual(privileges.rows[0], { anon_preferences: false, member_history: false, member_deliveries: false, member_invitations: false, service_insert: true });
   assert.match(functionSource, /requireAdminUser\(request\)/);
 });
 
