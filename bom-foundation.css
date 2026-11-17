@@ -126,20 +126,39 @@
 }
 
 .bom-shell-v1 .bom-v1-nav button {
+  position: relative;
   min-height: 44px;
-  padding: 10px 0;
+  padding: 14px 0 8px;
   color: var(--bom-v1-muted);
-  border-bottom: 2px solid transparent;
   cursor: pointer;
   white-space: nowrap;
   background: transparent !important;
   border: 0 !important;
-  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  transition: color 160ms ease;
+}
+
+.bom-shell-v1 .bom-v1-nav button::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 24px;
+  height: 2px;
+  background: var(--bom-v1-accent);
+  opacity: 0;
+  transform: translateX(-50%) scaleX(.35);
+  transform-origin: center;
+  transition: opacity 160ms ease, transform 160ms ease;
 }
 
 .bom-shell-v1 .bom-v1-nav button[aria-current="page"] {
   color: var(--bom-v1-text);
-  border-bottom-color: var(--bom-v1-accent) !important;
+}
+
+.bom-shell-v1 .bom-v1-nav button[aria-current="page"]::before {
+  opacity: 1;
+  transform: translateX(-50%) scaleX(1);
 }
 
 .bom-shell-v1 .bom-v1-spotify-control {
@@ -346,6 +365,7 @@
 }
 
 @media (max-width: 600px) {
+  .bom-shell-v1 .bom-v1-shell { border-bottom-color: rgba(52, 55, 48, .58); }
   .bom-shell-v1 .bom-v1-header {
     min-height: 172px;
     padding: 16px 20px 0;
@@ -363,7 +383,7 @@
     justify-content: space-between;
     gap: 10px;
   }
-  .bom-shell-v1 .bom-v1-nav button { font-size: 12px; }
+  .bom-shell-v1 .bom-v1-nav button { flex: 1 1 0; min-width: 0; min-height: 48px; font-size: 12px; }
   .bom-shell-v1 .bom-v1-account { gap: 6px; }
   .bom-shell-v1 .bom-v1-spotify-control { min-height: 40px; padding-inline: 7px; gap: 5px; font-size: 10px; }
   .bom-shell-v1 .bom-v1-spotify-control.is-connected { min-height: 40px; padding-inline: 7px; gap: 5px; justify-content: center; }
@@ -372,6 +392,11 @@
   .bom-shell-v1 .bom-v1-spotify-compact { display: inline; }
   .bom-shell-v1 .bom-v1-menu { right: 0; }
   .bom-shell-v1 > .container { padding-inline: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bom-shell-v1 .bom-v1-nav button,
+  .bom-shell-v1 .bom-v1-nav button::before { transition: none; }
 }
 
 /* Stage 2D Charts. */
