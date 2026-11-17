@@ -66,7 +66,7 @@ test("teaser styling is responsive, accessible and cache-busted", () => {
   assert.match(css,/--bom-games-lime:#b9ff4b/);
   assert.match(css,/@media \(max-width: 900px\)[\s\S]*\.bom-games-teaser-list \{ grid-template-columns:1fr/);
   assert.match(css,/@media \(max-width: 600px\)[\s\S]*\.bom-games-teaser footer button \{ width:100%/);
-  assert.match(html,/bom-foundation\.css\?v=51/);
+  assert.match(html,/bom-foundation\.css\?v=52/);
   assert.match(html,/bom-discover\.js\?v=15/);
   assert.match(helpers().gamesTeaser(),/aria-labelledby="bomGamesTeaserTitle"/);
 });
