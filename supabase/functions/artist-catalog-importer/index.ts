@@ -810,6 +810,7 @@ Deno.serve(async (request) => {
   const authorization = await requireServiceOrAdmin(request);
   if (!authorization.ok) return authorization.response;
   let automationRunId: string | null = null;
+  let approvedReleaseGroupIds = new Set<string>();
   if (request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
     try {
       const body = await request.clone().json();
@@ -818,6 +819,15 @@ Deno.serve(async (request) => {
         return Response.json({ ok: false, error: "Invalid automation run ID." }, { status: 400 });
       }
       automationRunId = value || null;
+      const approved = body?.approved_release_group_ids;
+      if (automationRunId && (!Array.isArray(approved) || approved.length !== 5 ||
+          approved.some((id: unknown) => !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(id))))) {
+        return Response.json({ ok: false, error: "Pilot requires exactly five valid approved release-group IDs." }, { status: 400 });
+      }
+      approvedReleaseGroupIds = new Set((approved || []).map((id: unknown) => String(id).toLowerCase()));
+      if (automationRunId && approvedReleaseGroupIds.size !== 5) {
+        return Response.json({ ok: false, error: "Approved release-group IDs must be unique." }, { status: 400 });
+      }
     } catch {
       return Response.json({ ok: false, error: "Invalid JSON body." }, { status: 400 });
     }
@@ -848,6 +858,26 @@ Deno.serve(async (request) => {
       while (scannedThisRun < ALBUMS_PER_RUN && queue.next_album_index < snapshot.groups.length) {
         worker.ensureBudget();
         const group = snapshot.groups[queue.next_album_index];
+        if (automationRunId) {
+          const locallyApproved = approvedReleaseGroupIds.has(String(group.id).toLowerCase());
+          const pilot = await worker.automatedAlbumPilotGuard(automationRunId, group.id);
+          if (pilot.cap_reached) {
+            deferred = new CatalogueDeferral("pilot_cap_reached", 0);
+            break;
+          }
+          if (!locallyApproved || !pilot.allowed) {
+            worker.ensureBudget(3500);
+            queue = await worker.commitAutomatedAlbum({
+              index: queue.next_album_index, group_id: group.id, group_title: group.title,
+              album: null, automation_run_id: automationRunId
+            });
+            scannedThisRun++;
+            skipped.push(group.title);
+            skippedDetails.push({ title: group.title, release_group_id: group.id,
+              reason: "not_approved_for_pilot" });
+            continue;
+          }
+        }
         const legacySelection = await chooseOfficialRelease(group.id,
           snapshot.artist_details.country, group["first-release-date"], path => worker.musicBrainzGet(path));
         const { release, considered_releases: consideredReleases = [], ...diagnostic } = legacySelection;

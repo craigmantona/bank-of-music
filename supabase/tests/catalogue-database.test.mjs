@@ -4,7 +4,11 @@ import { automatedAlbumRpc, database, rpc } from "./database.mjs";
 let db;
 const a = "11111111-1111-4111-8111-111111111111";
 const b = "22222222-2222-4222-8222-222222222222";
-const groups = [{ id: "g1", title: "Album", "first-release-date": "1970-11-04" }, { id: "g2", title: "Later", "first-release-date": "1971-12-17" }];
+const g1 = "aaaaaaaa-1111-4111-8111-111111111111";
+const g2 = "bbbbbbbb-2222-4222-8222-222222222222";
+const approved = [g1, g2, "cccccccc-3333-4333-8333-333333333333",
+  "dddddddd-4444-4444-8444-444444444444", "eeeeeeee-5555-4555-8555-555555555555"];
+const groups = [{ id: g1, title: "Album", "first-release-date": "1970-11-04" }, { id: g2, title: "Later", "first-release-date": "1971-12-17" }];
 const state = { artist_id: "artist", artist_details: { country: "GB" }, offset: 2, ready: true, groups };
 before(async () => { db = await database(); });
 after(async () => { await db.close(); });
@@ -15,11 +19,11 @@ beforeEach(async () => {
 });
 const claim = (token = a) => rpc(db, token, "acquire");
 const freeze = () => rpc(db, a, "discovery", 1, { revision: 0, state });
-const album = (token = a, index = 0, groupId = "g1") => rpc(db, token, "album", 1, {
+const album = (token = a, index = 0, groupId = g1) => rpc(db, token, "album", 1, {
   index, group_id: groupId,
   album: { existing_id: null, payload: { title: "Album", external_source: "musicbrainz", external_id: "release", release_date: "1970-11-04" } }
 });
-const automatedAlbum = (releaseId = "release", groupId = "g1", title = "Album", runId = null) =>
+const automatedAlbum = (releaseId = "release", groupId = g1, title = "Album", runId = null) =>
   automatedAlbumRpc(db, a, 1, { index: 0, group_id: groupId, automation_run_id: runId,
     album: { existing_id: null, payload: { title, external_source: "musicbrainz",
       external_id: releaseId, musicbrainz_release_id: releaseId,
@@ -27,27 +31,56 @@ const automatedAlbum = (releaseId = "release", groupId = "g1", title = "Album", 
 
 test("automated checkpoint persists release provenance and attributes only automation inserts", async () => {
   const runId = "33333333-3333-4333-8333-333333333333";
-  await db.query("insert into automated_album_import_runs(id,status,target_albums) values($1,'running',50)",[runId]);
-  await claim(); await freeze(); await automatedAlbum("release-a", "g1", "Album", runId);
+  await db.query("insert into automated_album_import_runs(id,status,target_albums,approved_release_group_ids) values($1,'running',5,$2::uuid[])",[runId,approved]);
+  await claim(); await freeze(); await automatedAlbum("release-a", g1, "Album", runId);
   const row=(await db.query("select * from albums")).rows[0];
   assert.equal(row.musicbrainz_release_id,"release-a");
-  assert.equal(row.musicbrainz_release_group_id,"g1");
+  assert.equal(row.musicbrainz_release_group_id,g1);
   assert.equal(row.automated_import_run_id,runId);
   const status=(await db.query("select automated_album_import_status($1) result",[runId])).rows[0].result;
   assert.equal(Number(status.albums_imported_today),1);
   assert.equal(Number(status.albums_imported_this_run),1);
 });
 
+test("pilot allowlist and cap are enforced transactionally", async () => {
+  const runId = "33333333-3333-4333-8333-333333333333";
+  await db.query(`insert into automated_album_import_runs
+    (id,status,target_albums,pilot_album_limit,approved_release_group_ids)
+    values($1,'running',2,2,$2::uuid[])`, [runId, approved]);
+  const insert = (id, n) => db.query(`insert into albums
+    (title,artist,musicbrainz_release_id,musicbrainz_release_group_id,automated_import_run_id)
+    values($1,'Artist',$2,$3,$4)`, [`Pilot ${n}`, `release-${n}`, id, runId]);
+  await insert(approved[0], 1);
+  await assert.rejects(insert("ffffffff-6666-4666-8666-666666666666", 2), /not approved/);
+  await insert(approved[1], 2);
+  await assert.rejects(insert(approved[2], 3), /cap reached/);
+  assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n, 2);
+  assert.equal((await db.query("select albums_imported from automated_album_import_runs where id=$1",[runId])).rows[0].albums_imported, 2);
+});
+
+test("concurrent pilot writes cannot exceed five newly created albums", async () => {
+  const runId = "44444444-4444-4444-8444-444444444444";
+  await db.query(`insert into automated_album_import_runs
+    (id,status,target_albums,pilot_album_limit,approved_release_group_ids)
+    values($1,'running',5,5,$2::uuid[])`, [runId, approved]);
+  const attempts = await Promise.allSettled([...approved, ...approved].map((id, index) => db.query(`insert into albums
+    (title,artist,musicbrainz_release_id,musicbrainz_release_group_id,automated_import_run_id)
+    values($1,'Concurrent Artist',$2,$3,$4)`, [`Concurrent ${index}`, `concurrent-${index}`, id, runId])));
+  assert.equal(attempts.filter(result => result.status === "fulfilled").length, 5);
+  assert.equal((await db.query("select count(*)::int n from albums where automated_import_run_id=$1",[runId])).rows[0].n, 5);
+  assert.equal((await db.query("select albums_imported from automated_album_import_runs where id=$1",[runId])).rows[0].albums_imported, 5);
+});
+
 test("alternate editions of one release group reuse the album and preserve ratings", async () => {
   await db.exec(`insert into albums(title,artist,external_source,external_id,musicbrainz_release_id,musicbrainz_release_group_id)
-    values('Album','Artist','musicbrainz','release-a','release-a','g1');
+    values('Album','Artist','musicbrainz','release-a','release-a','${g1}');
     insert into ratings(user_id,album_id,rating) values('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',1,9);`);
-  await claim(); await freeze(); await automatedAlbum("release-b", "g1", "Album deluxe");
+  await claim(); await freeze(); await automatedAlbum("release-b", g1, "Album deluxe");
   assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n,1);
   assert.equal((await db.query("select rating::text,album_id from ratings")).rows[0].rating,"9");
   assert.equal((await db.query("select rating::text,album_id from ratings")).rows[0].album_id,1);
   const row=(await db.query("select * from albums where id=1")).rows[0];
-  assert.equal(row.musicbrainz_release_group_id,"g1");
+  assert.equal(row.musicbrainz_release_group_id,g1);
   assert.equal(row.musicbrainz_release_id,"release-a");
 });
 
@@ -55,7 +88,7 @@ test("conflicting normalized title cannot overwrite another release group", asyn
   await db.exec(`insert into albums(title,artist,musicbrainz_release_id,musicbrainz_release_group_id)
     values('Album','Artist','release-x','other-group')`);
   await claim(); await freeze();
-  await assert.rejects(automatedAlbum("release-a","g1","Album"),/different release group/);
+  await assert.rejects(automatedAlbum("release-a",g1,"Album"),/different release group/);
   assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n,1);
   assert.equal((await db.query("select next_album_index from artist_import_queue where id=1")).rows[0].next_album_index,0);
 });
@@ -175,7 +208,7 @@ test("album write and counter checkpoint are atomic and replay is rejected", asy
   const q=await album(); assert.equal(q.next_album_index,1); assert.equal(q.studio_albums_imported,1);
   await assert.rejects(album(), /stale/);
   assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n,1);
-  await rpc(db,a,"album",1,{index:1,group_id:"g2",album:null});
+  await rpc(db,a,"album",1,{index:1,group_id:g2,album:null});
   const finished=await rpc(db,a,"finish",1);
   assert.equal(finished.status,"complete");
   assert.equal((await db.query("select studio_album_count from artist_catalog")).rows[0].studio_album_count,1);

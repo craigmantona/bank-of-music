@@ -183,6 +183,14 @@ export class CatalogueWorker {
         `Catalogue album commit failed: ${String((error as Error).message || error)}`, error);
     }
   }
+  async automatedAlbumPilotGuard(runId: string, releaseGroupId: string) {
+    this.ensureBudget(3500);
+    const { data, error } = await this.db.rpc("automated_album_pilot_guard", {
+      p_run_id: runId, p_release_group_id: releaseGroupId
+    });
+    if (error) throw error;
+    return data;
+  }
   async musicBrainzGet(path: string) {
     let lastFailure: unknown;
     for (let attempt = 1; attempt <= 5; attempt++) {

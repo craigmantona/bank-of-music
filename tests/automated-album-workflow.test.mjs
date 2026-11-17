@@ -22,6 +22,13 @@ test("manual production imports require explicit confirmation", async () => {
     /if: \$\{\{ github\.event_name == 'schedule' \|\| inputs\.dry_run == true \|\| inputs\.confirm_production_import == true \}\}/);
 });
 
+test("pilot workflow is capped at five and requires an explicit release-group allowlist", async () => {
+  const workflow = await readFile(workflowUrl, "utf8");
+  assert.match(workflow, /default: "5"/);
+  assert.match(workflow, /ALBUM_IMPORT_TARGET: \$\{\{ inputs\.target \|\| '5' \}\}/);
+  assert.match(workflow, /ALBUM_IMPORT_APPROVED_RELEASE_GROUP_IDS: \$\{\{ vars\.ALBUM_IMPORT_APPROVED_RELEASE_GROUP_IDS \}\}/);
+});
+
 test("import entry point exits before credentials or network when automation is disabled", () => {
   const script = fileURLToPath(new URL("../scripts/automated-album-import.mjs", import.meta.url));
   const result = spawnSync(process.execPath, [script], {

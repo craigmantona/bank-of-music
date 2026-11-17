@@ -58,11 +58,15 @@ Deno.serve(async (request) => {
 
   let action = "run";
   let automationRunId: string | null = null;
+  let approvedReleaseGroupIds: string[] = [];
 
   try {
     const body = await request.json();
     if (typeof body?.action === "string") action = body.action;
     if (typeof body?.automation_run_id === "string") automationRunId = body.automation_run_id;
+    if (Array.isArray(body?.approved_release_group_ids)) {
+      approvedReleaseGroupIds = body.approved_release_group_ids.map(String);
+    }
   } catch {
     // An empty request body is the normal scheduled run.
   }
@@ -104,7 +108,8 @@ Deno.serve(async (request) => {
       await supabase.functions.invoke(
         "artist-catalog-importer",
         {
-          body: automationRunId ? { automation_run_id: automationRunId } : {},
+          body: automationRunId ? { automation_run_id: automationRunId,
+            approved_release_group_ids: approvedReleaseGroupIds } : {},
           // Make the service principal explicit for server-to-server calls.
           // This avoids depending on FunctionsClient header defaults.
           headers: {

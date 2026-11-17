@@ -8,7 +8,7 @@ on:
       target:
         description: Validated MusicBrainz albums to target for the UTC day
         required: true
-        default: "50"
+        default: "5"
       dry_run:
         description: Check storage and report progress without importing
         type: boolean
@@ -57,6 +57,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           BOM_CRON_SECRET: ${{ secrets.BOM_CRON_SECRET }}
           AUTOMATED_ALBUM_IMPORT_ENABLED: ${{ vars.AUTOMATED_ALBUM_IMPORT_ENABLED }}
-          ALBUM_IMPORT_TARGET: ${{ inputs.target || '50' }}
+          ALBUM_IMPORT_TARGET: ${{ inputs.target || '5' }}
+          ALBUM_IMPORT_APPROVED_RELEASE_GROUP_IDS: ${{ vars.ALBUM_IMPORT_APPROVED_RELEASE_GROUP_IDS }}
           ALBUM_IMPORT_DRY_RUN: ${{ inputs.dry_run || 'false' }}
         run: node scripts/automated-album-import.mjs
