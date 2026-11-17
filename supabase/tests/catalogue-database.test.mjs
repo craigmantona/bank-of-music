@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test, before, after, beforeEach } from "node:test";
-import { database, rpc } from "./database.mjs";
+import { automatedAlbumRpc, database, rpc } from "./database.mjs";
 let db;
 const a = "11111111-1111-4111-8111-111111111111";
 const b = "22222222-2222-4222-8222-222222222222";
@@ -9,7 +9,7 @@ const state = { artist_id: "artist", artist_details: { country: "GB" }, offset: 
 before(async () => { db = await database(); });
 after(async () => { await db.close(); });
 beforeEach(async () => {
-  await db.exec(`truncate artist_catalogue_discovery,artist_import_queue,albums,artist_catalog,artist_release_group_debug,catalogue_worker_state restart identity cascade;
+  await db.exec(`truncate automated_album_import_runs,artist_catalogue_discovery,artist_import_queue,albums,artist_catalog,artist_release_group_debug,catalogue_worker_state restart identity cascade;
     insert into catalogue_worker_state(singleton) values(true);
     insert into artist_import_queue(id,artist_name,priority) values(1,'Artist',10),(2,'Second',20);`);
 });
@@ -18,6 +18,46 @@ const freeze = () => rpc(db, a, "discovery", 1, { revision: 0, state });
 const album = (token = a, index = 0, groupId = "g1") => rpc(db, token, "album", 1, {
   index, group_id: groupId,
   album: { existing_id: null, payload: { title: "Album", external_source: "musicbrainz", external_id: "release", release_date: "1970-11-04" } }
+});
+const automatedAlbum = (releaseId = "release", groupId = "g1", title = "Album", runId = null) =>
+  automatedAlbumRpc(db, a, 1, { index: 0, group_id: groupId, automation_run_id: runId,
+    album: { existing_id: null, payload: { title, external_source: "musicbrainz",
+      external_id: releaseId, musicbrainz_release_id: releaseId,
+      musicbrainz_release_group_id: groupId, release_date: "1970-11-04" } } });
+
+test("automated checkpoint persists release provenance and attributes only automation inserts", async () => {
+  const runId = "33333333-3333-4333-8333-333333333333";
+  await db.query("insert into automated_album_import_runs(id,status,target_albums) values($1,'running',50)",[runId]);
+  await claim(); await freeze(); await automatedAlbum("release-a", "g1", "Album", runId);
+  const row=(await db.query("select * from albums")).rows[0];
+  assert.equal(row.musicbrainz_release_id,"release-a");
+  assert.equal(row.musicbrainz_release_group_id,"g1");
+  assert.equal(row.automated_import_run_id,runId);
+  const status=(await db.query("select automated_album_import_status($1) result",[runId])).rows[0].result;
+  assert.equal(Number(status.albums_imported_today),1);
+  assert.equal(Number(status.albums_imported_this_run),1);
+});
+
+test("alternate editions of one release group reuse the album and preserve ratings", async () => {
+  await db.exec(`insert into albums(title,artist,external_source,external_id,musicbrainz_release_id,musicbrainz_release_group_id)
+    values('Album','Artist','musicbrainz','release-a','release-a','g1');
+    insert into ratings(user_id,album_id,rating) values('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',1,9);`);
+  await claim(); await freeze(); await automatedAlbum("release-b", "g1", "Album deluxe");
+  assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n,1);
+  assert.equal((await db.query("select rating::text,album_id from ratings")).rows[0].rating,"9");
+  assert.equal((await db.query("select rating::text,album_id from ratings")).rows[0].album_id,1);
+  const row=(await db.query("select * from albums where id=1")).rows[0];
+  assert.equal(row.musicbrainz_release_group_id,"g1");
+  assert.equal(row.musicbrainz_release_id,"release-a");
+});
+
+test("conflicting normalized title cannot overwrite another release group", async () => {
+  await db.exec(`insert into albums(title,artist,musicbrainz_release_id,musicbrainz_release_group_id)
+    values('Album','Artist','release-x','other-group')`);
+  await claim(); await freeze();
+  await assert.rejects(automatedAlbum("release-a","g1","Album"),/different release group/);
+  assert.equal((await db.query("select count(*)::int n from albums")).rows[0].n,1);
+  assert.equal((await db.query("select next_album_index from artist_import_queue where id=1")).rows[0].next_album_index,0);
 });
 
 test("migration adds no data resets; role grants close old and new bypasses", async () => {

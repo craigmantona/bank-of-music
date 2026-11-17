@@ -4,11 +4,11 @@ import test from "node:test";
 import { PGlite } from "@electric-sql/pglite";
 
 const adminCatalogueMigration = await readFile(
-  new URL("../migrations/20260926120000_admin_catalogue_v1.sql", import.meta.url),
+  new URL("../migrations/20260926215806_admin_catalogue_v1.sql", import.meta.url),
   "utf8"
 );
 const occurrenceIdentityMigration = await readFile(
-  new URL("../migrations/20260927120000_album_track_occurrence_identity.sql", import.meta.url),
+  new URL("../migrations/20260927105147_album_track_occurrence_identity.sql", import.meta.url),
   "utf8"
 );
 const reconciliationMigration = await readFile(

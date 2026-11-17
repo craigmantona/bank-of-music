@@ -809,6 +809,19 @@ Deno.serve(async (request) => {
   const worker = new CatalogueWorker(supabase, 23000, musicBrainzIdentity(contactEmail));
   const authorization = await requireServiceOrAdmin(request);
   if (!authorization.ok) return authorization.response;
+  let automationRunId: string | null = null;
+  if (request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    try {
+      const body = await request.clone().json();
+      const value = String(body?.automation_run_id || "").trim();
+      if (value && !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
+        return Response.json({ ok: false, error: "Invalid automation run ID." }, { status: 400 });
+      }
+      automationRunId = value || null;
+    } catch {
+      return Response.json({ ok: false, error: "Invalid JSON body." }, { status: 400 });
+    }
+  }
   let queue: any;
   const skipped: string[] = [];
   const skippedDetails: Record<string, unknown>[] = [];
@@ -874,8 +887,9 @@ Deno.serve(async (request) => {
           album = await prepareAlbum(payload, worker); // Reads only; mutations are fenced in the RPC.
         }
         worker.ensureBudget(3500);
-        queue = await worker.rpc("album", {
-          index: queue.next_album_index, group_id: group.id, group_title: group.title, album
+        queue = await worker.commitAutomatedAlbum({
+          index: queue.next_album_index, group_id: group.id, group_title: group.title, album,
+          automation_run_id: automationRunId
         });
         scannedThisRun++;
         if (release?.id && !protectedExclude) importedThisRun++;

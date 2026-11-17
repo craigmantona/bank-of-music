@@ -164,6 +164,25 @@ export class CatalogueWorker {
     this.owned = false;
     return result;
   }
+  async commitAutomatedAlbum(data: any) {
+    if (!this.owned || this.jobId === null) {
+      throw new CatalogueDatabaseError("Catalogue album commit requires an owned job");
+    }
+    this.ensureBudget(3500);
+    try {
+      let query = this.db.rpc("automated_catalogue_album", {
+        p_token: this.token, p_job_id: this.jobId, p_data: data
+      });
+      if (query.abortSignal) query = query.abortSignal(AbortSignal.timeout(
+        Math.max(1, Math.min(6000, this.remaining() - 3000))));
+      const { data: result, error } = await query;
+      if (error) throw error;
+      return result;
+    } catch (error) {
+      throw new CatalogueDatabaseError(
+        `Catalogue album commit failed: ${String((error as Error).message || error)}`, error);
+    }
+  }
   async musicBrainzGet(path: string) {
     let lastFailure: unknown;
     for (let attempt = 1; attempt <= 5; attempt++) {

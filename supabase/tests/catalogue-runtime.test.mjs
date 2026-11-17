@@ -278,7 +278,8 @@ test("shadow discovery sends a structured outside-era anomaly to review without 
 });
 test("queue commit error returns failure, never a successful response", async () => {
   const client=adapter(db), call=client.rpc;
-  client.rpc=async(name,args)=>args.p_action==='album' ? {error:{message:'injected checkpoint failure'}} : call(name,args);
+  client.rpc=async(name,args)=>name==='automated_catalogue_album'
+    ? {error:{message:'injected checkpoint failure'}} : call(name,args);
   const app=importer(async path => response(path,[group(1)]),client);
   const result=await app.run(); assert.equal(result.status,500); assert.match(result.body.error,/checkpoint failure/);
   const row=(await db.query('select * from artist_import_queue')).rows[0];
