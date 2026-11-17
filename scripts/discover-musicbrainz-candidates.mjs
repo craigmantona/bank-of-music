@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { automaticPromotionDesign, csvForCandidates, discoverCandidates } from "./lib/musicbrainz-discovery.mjs";
+import { automaticPromotionDesign, buildDiscoveryWindows, csvForCandidates,
+  discoverHistoricalCandidates } from "./lib/musicbrainz-discovery.mjs";
 
 if (/^(1|true)$/i.test(process.env.ALBUM_DISCOVERY_KILL_SWITCH || "")) {
   console.warn("::warning title=Album discovery disabled::Kill switch is active.");
@@ -11,15 +12,14 @@ if (process.argv.includes("--promote") || /^(1|true)$/i.test(process.env.AUTOMAT
   throw new Error("Automatic queue promotion is intentionally disabled pending review.");
 }
 
-const today = new Date();
-const from = new Date(today.getTime() - 30 * 86400000).toISOString().slice(0, 10);
-const to = today.toISOString().slice(0, 10);
-const query = process.env.MUSICBRAINZ_DISCOVERY_QUERY ||
-  `primarytype:album AND firstreleasedate:[${from} TO ${to}]`;
-const maxPages = Math.min(5, Math.max(1, Number(process.env.MUSICBRAINZ_DISCOVERY_MAX_PAGES || 2)));
+const startYear = Math.max(1900, Number(process.env.MUSICBRAINZ_DISCOVERY_START_YEAR || 1950));
+const maxWindows = Math.min(12, Math.max(1, Number(process.env.MUSICBRAINZ_DISCOVERY_MAX_WINDOWS || 4)));
+const pageSize = Math.min(100, Math.max(1, Number(process.env.MUSICBRAINZ_DISCOVERY_PAGE_SIZE || 25)));
 const outputBase = resolve(process.env.MUSICBRAINZ_DISCOVERY_OUTPUT || "outputs/musicbrainz-discovery/candidates");
 const exclusionsPath = process.env.MUSICBRAINZ_DISCOVERY_EXCLUSIONS;
 const exclusions = exclusionsPath ? JSON.parse(await readFile(resolve(exclusionsPath), "utf8")) : {};
+const statePath = process.env.MUSICBRAINZ_DISCOVERY_STATE;
+const state = statePath ? JSON.parse(await readFile(resolve(statePath), "utf8")) : {};
 const identity = process.env.MUSICBRAINZ_CONTACT_EMAIL
   ? `BankOfMusic/1.0 (${process.env.MUSICBRAINZ_CONTACT_EMAIL})`
   : "BankOfMusic/1.0 (https://bank-of-music.pages.dev/)";
@@ -35,11 +35,15 @@ async function get(path) {
   return response.json();
 }
 
-const result = await discoverCandidates({ get, query, maxPages, exclusions });
-const report = { generated_at: new Date().toISOString(), query, max_pages: maxPages,
+const windows = buildDiscoveryWindows({ startYear });
+const result = await discoverHistoricalCandidates({ get, windows, state, maxWindows, pageSize, exclusions });
+const report = { generated_at: new Date().toISOString(), strategy: "balanced_historical_round_robin",
+  start_year: startYear, max_windows: maxWindows, page_size: pageSize,
   mode: "review_only", ...result, automatic_promotion: automaticPromotionDesign(result.accepted) };
 await mkdir(dirname(outputBase), { recursive: true });
 await writeFile(`${outputBase}.json`, JSON.stringify(report, null, 2) + "\n");
 await writeFile(`${outputBase}.csv`, csvForCandidates(result.accepted));
+await writeFile(`${outputBase}.state.json`, JSON.stringify(result.resume_state, null, 2) + "\n");
 console.log(JSON.stringify({ event: "musicbrainz_discovery_complete", accepted: result.accepted.length,
-  rejected: result.rejected.length, json: `${outputBase}.json`, csv: `${outputBase}.csv` }));
+  rejected: result.rejected.length, json: `${outputBase}.json`, csv: `${outputBase}.csv`,
+  state: `${outputBase}.state.json` }));

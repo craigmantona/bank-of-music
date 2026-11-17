@@ -13,6 +13,10 @@ on:
         description: Check storage and report progress without importing
         type: boolean
         default: false
+      confirm_production_import:
+        description: Explicitly confirm a non-dry-run production import
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -23,6 +27,9 @@ concurrency:
 
 jobs:
   import:
+    # A merged workflow is inert until this independent repository variable is
+    # explicitly set to true. The MusicBrainz kill switch is a separate guard.
+    if: ${{ vars.AUTOMATED_ALBUM_IMPORT_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 55
     steps:
@@ -44,10 +51,12 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
       - name: Discover and import albums
+        if: ${{ github.event_name == 'schedule' || inputs.dry_run == true || inputs.confirm_production_import == true }}
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           BOM_CRON_SECRET: ${{ secrets.BOM_CRON_SECRET }}
+          AUTOMATED_ALBUM_IMPORT_ENABLED: ${{ vars.AUTOMATED_ALBUM_IMPORT_ENABLED }}
           ALBUM_IMPORT_TARGET: ${{ inputs.target || '50' }}
           ALBUM_IMPORT_DRY_RUN: ${{ inputs.dry_run || 'false' }}
         run: node scripts/automated-album-import.mjs

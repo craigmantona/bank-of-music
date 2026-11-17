@@ -33,15 +33,21 @@ export function qualifyDiscoveryCandidate(group, releases, exclusions = {}) {
 }
 
 export async function discoverCandidates({
-  get, query, maxPages = 2, pageSize = 25, maxCandidates = 50, exclusions = {}
+  get, query, maxPages = 2, pageSize = 25, maxCandidates = 50, exclusions = {}, offset = 0
 }) {
   const accepted = [], rejected = [];
   const seenGroups = new Set(), seenArtists = new Set();
+  let pagesScanned = 0;
+  let exhausted = false;
   for (let page = 0; page < maxPages && accepted.length < maxCandidates; page += 1) {
     const result = await get(`/release-group?query=${encodeURIComponent(query)}` +
-      `&fmt=json&limit=${pageSize}&offset=${page * pageSize}`);
+      `&fmt=json&limit=${pageSize}&offset=${offset + page * pageSize}`);
+    pagesScanned += 1;
     const groups = result["release-groups"] || [];
-    if (!groups.length) break;
+    if (!groups.length) {
+      exhausted = true;
+      break;
+    }
     for (const group of groups) {
       if (!group?.id || seenGroups.has(group.id)) continue;
       seenGroups.add(group.id);
@@ -70,13 +76,88 @@ export async function discoverCandidates({
       if (accepted.length >= maxCandidates) break;
     }
   }
-  return { accepted, rejected, scanned_release_groups: seenGroups.size };
+  return { accepted, rejected, scanned_release_groups: seenGroups.size,
+    next_offset: exhausted ? 0 : offset + pagesScanned * pageSize, exhausted };
+}
+
+export function buildDiscoveryWindows({
+  startYear = 1950, endYear = new Date().getUTCFullYear(), recentDays = 30,
+  now = new Date()
+} = {}) {
+  const firstDecade = Math.floor(startYear / 10) * 10;
+  const lastDecade = Math.floor(endYear / 10) * 10;
+  if (!Number.isInteger(firstDecade) || !Number.isInteger(lastDecade) || firstDecade > lastDecade) {
+    throw new Error("Invalid historical discovery year range");
+  }
+  const to = now.toISOString().slice(0, 10);
+  const from = new Date(now.getTime() - recentDays * 86400000).toISOString().slice(0, 10);
+  const windows = [{ id: "recent", label: `Recent ${from} to ${to}`,
+    query: `primarytype:album AND firstreleasedate:[${from} TO ${to}]` }];
+  for (let decade = firstDecade; decade <= lastDecade; decade += 10) {
+    const upper = Math.min(decade + 9, endYear);
+    windows.push({ id: `decade-${decade}`, label: `${decade}-${upper}`,
+      query: `primarytype:album AND firstreleasedate:[${decade}-01-01 TO ${upper}-12-31]` });
+  }
+  return windows;
+}
+
+export async function discoverHistoricalCandidates({
+  get, windows, state = {}, maxWindows = 4, pageSize = 25, maxCandidates = 50,
+  exclusions = {}, maxRememberedIds = 5000
+}) {
+  if (!Array.isArray(windows) || windows.length === 0) throw new Error("Discovery windows are required");
+  const requestedWindowLimit = Number(maxWindows);
+  const windowLimit = Math.min(windows.length,
+    Number.isFinite(requestedWindowLimit) ? Math.max(1, Math.floor(requestedWindowLimit)) : 1);
+  const start = Math.max(0, windows.findIndex(window => window.id === state.next_window_id));
+  const offsets = { ...(state.offsets || {}) };
+  const rememberedGroups = new Set([...(state.seen_release_group_ids || []),
+    ...(exclusions.release_group_ids || [])]);
+  const rememberedArtists = new Set([...(state.seen_artist_ids || []), ...(exclusions.artist_ids || [])]);
+  const accepted = [], rejected = [], scannedWindows = [];
+  let processedWindows = 0;
+
+  for (let index = 0; index < windowLimit && accepted.length < maxCandidates; index += 1) {
+    const window = windows[(start + index) % windows.length];
+    const result = await discoverCandidates({ get, query: window.query, maxPages: 1, pageSize,
+      maxCandidates: maxCandidates - accepted.length, offset: Number(offsets[window.id] || 0),
+      exclusions: { ...exclusions, release_group_ids: [...rememberedGroups],
+        artist_ids: [...rememberedArtists] } });
+    offsets[window.id] = result.next_offset;
+    processedWindows += 1;
+    scannedWindows.push({ id: window.id, label: window.label,
+      offset: Number(offsets[window.id] || 0), exhausted: result.exhausted,
+      scanned_release_groups: result.scanned_release_groups });
+    for (const row of result.accepted) {
+      if (rememberedGroups.has(row.evidence_release_group_id) || rememberedArtists.has(row.musicbrainz_artist_id)) continue;
+      rememberedGroups.add(row.evidence_release_group_id);
+      rememberedArtists.add(row.musicbrainz_artist_id);
+      accepted.push({ ...row, discovery_window_id: window.id, discovery_window_label: window.label });
+    }
+    for (const row of result.rejected) {
+      rememberedGroups.add(row.release_group_id);
+      rejected.push({ ...row, discovery_window_id: window.id });
+    }
+  }
+
+  const nextWindow = windows[(start + processedWindows) % windows.length];
+  return {
+    accepted, rejected, scanned_windows: scannedWindows,
+    resume_state: {
+      version: 1,
+      next_window_id: nextWindow.id,
+      offsets,
+      seen_release_group_ids: [...rememberedGroups].slice(-maxRememberedIds),
+      seen_artist_ids: [...rememberedArtists].slice(-maxRememberedIds)
+    }
+  };
 }
 
 export function csvForCandidates(rows) {
   const columns = ["musicbrainz_artist_id","artist_name","evidence_release_group_id",
     "evidence_release_group_title","evidence_release_id","first_release_date",
-    "evidence_release_date","evidence_release_country","search_score","proposed_priority","proposed_action"];
+    "evidence_release_date","evidence_release_country","discovery_window_id",
+    "discovery_window_label","search_score","proposed_priority","proposed_action"];
   const escape = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
   return [columns.join(","), ...rows.map(row => columns.map(column => escape(row[column])).join(","))].join("\n") + "\n";
 }

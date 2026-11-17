@@ -2,6 +2,11 @@
 import { randomUUID } from "node:crypto";
 import { runDailyImport } from "./lib/automated-album-import.mjs";
 
+if (!/^(1|true)$/i.test(process.env.AUTOMATED_ALBUM_IMPORT_ENABLED || "")) {
+  console.warn("::warning title=Album import automation disabled::Set AUTOMATED_ALBUM_IMPORT_ENABLED=true to activate.");
+  process.exit(0);
+}
+
 const url = String(process.env.SUPABASE_URL || "").replace(/\/$/, "");
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const cronSecret = process.env.BOM_CRON_SECRET || "";
