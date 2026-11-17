@@ -114,8 +114,8 @@ Deno.serve(async (request) => {
       refresh: refreshCache,
       schedule: task => EdgeRuntime.waitUntil(task)
     });
-    return json(request, result);
+    return json(request, result, result.ok ? 200 : 503);
   } catch {
-    return json(request, { ok: false, cache_status: "unavailable", enrichment: null });
+    return json(request, { ok: false, cache_status: "unavailable", enrichment: null }, 503);
   }
 });

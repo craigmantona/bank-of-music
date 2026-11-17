@@ -6577,7 +6577,8 @@ async function fetchMostCompleteArtistDiscography({
 
   return {
     artistId: bestArtistId,
-    albums: bestAlbums
+    albums: bestAlbums,
+    catalogueLoadFailed: !bestAlbums.length && artistDiscographyLoadFailures.has(bestArtistId || preferredArtistId)
   };
 }
 
@@ -6592,10 +6593,19 @@ async function fetchSharedArtistEnrichment(artistId) {
   const request = supabaseClient.functions.invoke("artist-enrichment", {
     body: { artist_id: artistId }
   }).then(({ data, error }) => {
-    if (error) return null;
+    const enrichment = data?.enrichment;
+    const valid = !error && data?.ok === true && enrichment?.artist_detail &&
+      Array.isArray(enrichment.release_groups);
+    if (!valid) {
+      sharedArtistEnrichmentCache.delete(artistId);
+      return null;
+    }
     sharedArtistEnrichmentResolvedIds.add(artistId);
-    return data?.enrichment || { artist_detail: null, release_groups: [] };
-  }).catch(() => null);
+    return enrichment;
+  }).catch(() => {
+    sharedArtistEnrichmentCache.delete(artistId);
+    return null;
+  });
   sharedArtistEnrichmentCache.set(artistId, request);
   return request;
 }
@@ -6617,6 +6627,7 @@ function mapArtistReleaseGroups(releaseGroups, artistId, artistName) {
 }
 
 const artistDiscographyCache = new Map();
+const artistDiscographyLoadFailures = new Set();
 
 async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
@@ -6632,30 +6643,43 @@ async function fetchStudioAlbumsForArtist(artistId, artistName = "") {
 
   const shared = await fetchSharedArtistEnrichment(resolvedArtistId);
   if (shared) {
+    artistDiscographyLoadFailures.delete(resolvedArtistId);
     return mapArtistReleaseGroups(shared.release_groups, resolvedArtistId, artistName);
   }
 
-  try {
-
-    const url = `https://musicbrainz.org/ws/2/release-group?artist=${encodeURIComponent(resolvedArtistId)}&type=album&fmt=json&limit=100`;
-
-    const response = await fetchMusicBrainz(url);
-
-    if (!response.ok) return [];
-
-    const data = await response.json();
-
-    return mapArtistReleaseGroups(data["release-groups"] || [], resolvedArtistId, artistName);
-
-  } catch {
-
-    return [];
-
+  const url = `https://musicbrainz.org/ws/2/release-group?artist=${encodeURIComponent(resolvedArtistId)}&type=album&fmt=json&limit=100`;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await fetchMusicBrainz(url);
+      if (response.ok) {
+        const data = await response.json();
+        if (!Array.isArray(data["release-groups"])) throw new Error("Invalid MusicBrainz discography response");
+        artistDiscographyLoadFailures.delete(resolvedArtistId);
+        return mapArtistReleaseGroups(data["release-groups"], resolvedArtistId, artistName);
+      }
+      if (attempt < 2 && (response.status === 429 || response.status === 503)) {
+        await new Promise((resolve) => window.setTimeout(resolve, 1200));
+        continue;
+      }
+    } catch {
+      if (attempt < 2) {
+        await new Promise((resolve) => window.setTimeout(resolve, 1200));
+        continue;
+      }
+    }
+    break;
   }
+  artistDiscographyLoadFailures.add(resolvedArtistId);
+  return [];
 
   })();
 
   artistDiscographyCache.set(resolvedArtistId, request);
+  request.finally(() => {
+    if (artistDiscographyLoadFailures.has(resolvedArtistId) && artistDiscographyCache.get(resolvedArtistId) === request) {
+      artistDiscographyCache.delete(resolvedArtistId);
+    }
+  });
   return request;
 
 }
@@ -7632,7 +7656,7 @@ function buildArtistRankedTracks(savedSongs, artistData = null) {
   return rankedTracks;
 }
 
-function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, imageMeta = null, albums, savedSongs, artistData = null }) {
+function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageUrl, imageMeta = null, albums, savedSongs, artistData = null, catalogueLoadFailed = false }) {
   const albumRatings = artistData?.albumRatings || (typeof allAlbumRatings === "undefined" ? [] : allAlbumRatings);
   const getArtistAlbumAverage = (albumId) => {
     if (!artistData) return getAlbumAverage(albumId);
@@ -7688,6 +7712,7 @@ function buildStageOneArtistModel({ artistName, artistDetail, artistItem, imageU
     metadata,
     description: artistDetail?.disambiguation || artistItem.disambiguation || "",
     albums: normalizedAlbums,
+    catalogueStatus: catalogueLoadFailed && !normalizedAlbums.length ? "failed" : "ready",
     topTracks: rankedTracks,
     highestAlbum: rankedAlbums[0] || null,
     highestTrack: rankedTracks[0] || null,
@@ -7964,7 +7989,8 @@ async function renderArtistDetail(artistItem, artistData = null) {
       imageMeta: artistImageResult,
       albums: displayAlbums,
       savedSongs,
-      artistData
+      artistData,
+      catalogueLoadFailed: completeDiscography.catalogueLoadFailed
     }), displayAlbums);
     return;
   }
