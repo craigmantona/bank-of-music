@@ -89,3 +89,14 @@ test("responsive, focus and reduced-motion foundations exist", () => {
   assert.match(styles, /@media \(max-width: 600px\)/);
   assert.match(styles, /prefers-reduced-motion: reduce/);
 });
+
+
+test("primary navigation uses the editorial active indicator", () => {
+  assert.match(styles, /\.bom-v1-nav button::before[\s\S]*width: 24px;[\s\S]*height: 2px;[\s\S]*background: var\(--bom-v1-accent\)/);
+  assert.match(styles, /\.bom-v1-nav button\[aria-current="page"\]::before[\s\S]*opacity: 1;[\s\S]*scaleX\(1\)/);
+  assert.doesNotMatch(styles, /\.bom-v1-nav button\[aria-current="page"\][^{]*\{[^}]*border-bottom-color/);
+  assert.match(styles, /\.bom-v1-nav button \{[\s\S]*min-height: 44px;[\s\S]*color: var\(--bom-v1-muted\)/);
+  assert.match(styles, /\.bom-v1-nav button\[aria-current="page"\] \{[\s\S]*color: var\(--bom-v1-text\)/);
+  assert.match(styles, /\.bom-v1-nav button \{ flex: 1 1 0; min-width: 0; min-height: 48px;/);
+  assert.match(styles, /prefers-reduced-motion: reduce[\s\S]*\.bom-v1-nav button::before \{ transition: none; \}/);
+});
