@@ -75,6 +75,19 @@ test("identical local queries are cached and in-flight RPC requests receive Abor
   assert.equal(signal(), controller.signal);
 });
 
+test("successful catalogue imports invalidate both client-side search caches", () => {
+  const invalidation = app.slice(
+    app.indexOf("function invalidatePredictiveCatalogue"),
+    app.indexOf("function getPredictiveCatalogue")
+  );
+  assert.match(invalidation, /localCatalogueSearchCache\.clear\(\)/);
+  assert.match(invalidation, /predictiveCataloguePromise = null/);
+  assert.ok(app.indexOf(
+    "invalidatePredictiveCatalogue();",
+    app.indexOf("async function autoSaveSelectedAlbum")
+  ) > 0);
+});
+
 test("autocomplete keeps its interaction contract while using cancellable bounded search", () => {
   assert.match(autocomplete, /normalise\(query\)\.length < 2/);
   assert.match(autocomplete, /}, 180\)/);

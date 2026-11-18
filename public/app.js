@@ -5451,6 +5451,7 @@ let predictiveCataloguePromise = null;
 let predictiveCatalogueAlbums = null;
 let predictiveCatalogueSongs = null;
 function invalidatePredictiveCatalogue() {
+  localCatalogueSearchCache.clear();
   predictiveCataloguePromise = null;
   predictiveCatalogueAlbums = null;
   predictiveCatalogueSongs = null;
