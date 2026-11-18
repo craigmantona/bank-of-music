@@ -28,7 +28,7 @@ test("Soundiiz proxy accepts a same-origin Apple Music import and constrains the
     title: "BoM • Rated 9+",
     sourceName: "Untrusted source",
     sourceLogo: "https://evil.example/logo.png",
-    destination: "spotify",
+    destination: "applemusicapp",
     description: "Prepared from your 9+ ratings.",
     tracklist: [
       { title: "Song", artists: ["Artist"], album: "Album", isrc: "INVENTED" }
@@ -57,6 +57,37 @@ test("Soundiiz proxy accepts a same-origin Apple Music import and constrains the
   ]);
   assert.equal(data.shareUrl, "https://soundiiz.com/go/import-playlist/temporary-token");
   assert.equal(data.expiresAt, 1782220923);
+});
+
+test("Soundiiz proxy permits Amazon Music and rejects every unsupported destination", async () => {
+  let amazonPayload;
+  const amazonResponse = await handleSoundiizImport(makeRequest({
+    title: "BoM • Rated 7+",
+    destination: "amazonmusic",
+    tracklist: [{ title: "Song", artists: ["Artist"] }]
+  }), async (_url, options) => {
+    amazonPayload = JSON.parse(options.body);
+    return Response.json({
+      status: "success",
+      nbTracks: 1,
+      shareUrl: "https://soundiiz.com/go/import-playlist/amazon-token"
+    });
+  });
+  assert.equal(amazonResponse.status, 200);
+  assert.equal(amazonPayload.destination, "amazonmusic");
+
+  let calls = 0;
+  const unsupported = await handleSoundiizImport(makeRequest({
+    title: "BoM • Rated 7+",
+    destination: "spotify",
+    tracklist: [{ title: "Song", artists: ["Artist"] }]
+  }), async () => {
+    calls += 1;
+    return Response.json({});
+  });
+  assert.equal(unsupported.status, 400);
+  assert.match((await unsupported.json()).message, /Apple Music or Amazon Music/);
+  assert.equal(calls, 0);
 });
 
 test("Soundiiz proxy rejects cross-origin requests and any part above 200 tracks", async () => {
@@ -115,7 +146,7 @@ test("Soundiiz proxy returns useful upstream failures without losing the manual-
     async () => { throw new Error("network unavailable"); }
   );
   assert.equal(unavailable.status, 502);
-  assert.match((await unavailable.json()).message, /search links are still available/);
+  assert.match((await unavailable.json()).message, /existing music links are still available/);
 });
 
 test("Cloudflare Pages publishes the same-origin Soundiiz function alongside the static site", async () => {
@@ -123,4 +154,5 @@ test("Cloudflare Pages publishes the same-origin Soundiiz function alongside the
   assert.match(wrangler, /pages_build_output_dir = "\.\/public"/);
   assert.match(functionSource, /export async function onRequestPost/);
   assert.match(functionSource, /APPLE_MUSIC_DESTINATION = "applemusicapp"/);
+  assert.match(functionSource, /AMAZON_MUSIC_DESTINATION = "amazonmusic"/);
 });

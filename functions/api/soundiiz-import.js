@@ -1,5 +1,10 @@
 const SOUNDIIZ_ENDPOINT = "https://soundiiz.com/go/import-playlist";
 const APPLE_MUSIC_DESTINATION = "applemusicapp";
+const AMAZON_MUSIC_DESTINATION = "amazonmusic";
+const SUPPORTED_DESTINATIONS = new Set([
+  APPLE_MUSIC_DESTINATION,
+  AMAZON_MUSIC_DESTINATION
+]);
 const MAX_TRACKS = 200;
 const MAX_BODY_BYTES = 128 * 1024;
 
@@ -87,6 +92,13 @@ export async function handleSoundiizImport(request, requestSoundiiz = fetch) {
       message: `Each Soundiiz transfer must contain between 1 and ${MAX_TRACKS} tracks.`
     }, 400);
   }
+  const destination = text(body?.destination || APPLE_MUSIC_DESTINATION, 50).toLowerCase();
+  if (!SUPPORTED_DESTINATIONS.has(destination)) {
+    return jsonResponse({
+      status: "error",
+      message: "The Soundiiz destination must be Apple Music or Amazon Music."
+    }, 400);
+  }
   const tracklist = body.tracklist.map(normaliseTrack);
   if (tracklist.some((track) => !track)) {
     return jsonResponse({ status: "error", message: "Every track must have a title." }, 400);
@@ -97,7 +109,7 @@ export async function handleSoundiizImport(request, requestSoundiiz = fetch) {
     sourceName: "Bank of Music",
     sourceLogo: "https://thebankofmusic.com/logo.jpeg",
     description: text(body?.description, 1000),
-    destination: APPLE_MUSIC_DESTINATION,
+    destination,
     tracklist
   };
 
@@ -114,7 +126,7 @@ export async function handleSoundiizImport(request, requestSoundiiz = fetch) {
   } catch {
     return jsonResponse({
       status: "error",
-      message: "Soundiiz could not be reached. Your Apple Music search links are still available."
+      message: "Soundiiz could not be reached. Your existing music links are still available."
     }, 502);
   }
 

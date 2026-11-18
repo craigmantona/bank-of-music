@@ -97,6 +97,29 @@ test("Soundiiz imports split at 200 tracks without dropping or duplicating songs
   assert.match(imports[2].payload.description, /Part 3 of 3; Soundiiz accepts up to 200 tracks/);
 });
 
+test("Soundiiz uses the Amazon Music destination with the same 200-track splitting", () => {
+  const tracks = Array.from({ length: 401 }, (_, index) => ({
+    title: `Song ${index + 1}`,
+    artist: `Artist ${index + 1}`
+  }));
+  const imports = apple.buildSoundiizImportRequests({
+    playlistName: "BoM • Rated 9+",
+    tracks,
+    destination: apple.SOUNDIIZ_AMAZON_MUSIC_DESTINATION
+  });
+  assert.deepEqual(imports.map((item) => item.trackCount), [200, 200, 1]);
+  assert.ok(imports.every((item) => item.payload.destination === "amazonmusic"));
+  assert.equal(imports.flatMap((item) => item.payload.tracklist).length, 401);
+  assert.throws(
+    () => apple.buildSoundiizImportRequests({
+      playlistName: "Unsafe destination",
+      tracks: tracks.slice(0, 1),
+      destination: "spotify"
+    }),
+    /Apple Music or Amazon Music/
+  );
+});
+
 test("Soundiiz link creation posts each part and accepts only temporary Soundiiz URLs", async () => {
   const requests = [];
   const progress = [];
@@ -194,14 +217,14 @@ test("Apple Music settings mirror Spotify playlist choices and publish the link 
   assert.match(app, /Copy all track links/);
   assert.match(app, /Transfer with Soundiiz/);
   assert.match(app, /valid for 24 hours/i);
-  assert.match(app, /separate Apple Music playlist unless you combine them afterwards/i);
+  assert.match(app, /separate \$\{escapeHtml\(serviceName\)\} playlist unless you combine them afterwards/i);
   assert.match(app, /getCurrentUserRatedTracksForSpotify\(minimumRating\)/);
   assert.match(app, /getGlobalTop100TracksForSpotify\(\)/);
   assert.match(app, /navigator\.share/);
   assert.doesNotMatch(app, /api\.music\.apple\.com\/v1\/me\/library\/playlists/);
   assert.match(styles, /\.apple-settings-panel/);
   assert.match(build, /bom-apple-music-playlist\.js/);
-  assert.match(html, /<script src="bom-apple-music-playlist\.js\?v=2"><\/script>/);
+  assert.match(html, /<script src="bom-apple-music-playlist\.js\?v=3"><\/script>/);
 });
 
 test("settings reuse the existing Spotify, Apple and Both listening preference", async () => {
@@ -213,6 +236,8 @@ test("settings reuse the existing Spotify, Apple and Both listening preference",
   assert.match(html, /data-listening-service="spotify"/);
   assert.match(html, /data-listening-service="apple"/);
   assert.match(html, /data-listening-service="both"/);
+  assert.match(html, /data-listening-service="amazon"/);
+  assert.match(html, /data-listening-service="all"/);
   assert.match(app, /syncListeningServiceControls\(getPreferredListeningService\(\)\)/);
   assert.match(app, /bom_preferred_listening_service/);
 });

@@ -9,7 +9,7 @@
  
  <title>Bank of Music</title>
  
- <link rel="stylesheet" href="style.css?v=86&listening-ui=2&apple-playlists=2&soundiiz=1" />
+ <link rel="stylesheet" href="style.css?v=87&listening-ui=3&apple-playlists=2&amazon-music=1&soundiiz=2" />
  <script>
   /* Stage 1 assets are development-only and add no requests to the legacy UI. */
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
@@ -215,7 +215,7 @@
     <h2>Playlists and listening</h2>
 
     <p class="small">
-      Take your Bank of Music ratings to Spotify or Apple Music,
+      Take your Bank of Music ratings to Spotify, Apple Music or Amazon Music,
       and choose which service appears when you listen.
     </p>
   </div>
@@ -224,8 +224,9 @@
   <div class="settings-panel listening-preference-settings">
     <h3>Listening preference</h3>
     <p class="small">
-      This is the same Spotify, Apple Music or Both preference shown on album
-      and track pages. Changing it here updates those listening controls too.
+      This is the same listening preference shown on album and track pages.
+      Existing “Both” choices continue to mean Spotify + Apple Music; choose
+      Amazon Music or All three to add Amazon.
     </p>
     <div class="music-provider-preference" role="radiogroup" aria-label="Preferred listening service">
       <button type="button" role="radio" aria-checked="false" tabindex="-1" data-listening-service="spotify">
@@ -236,9 +237,17 @@
         <span class="settings-provider-mark settings-provider-apple" aria-hidden="true">♪</span>
         <span>Apple Music</span>
       </button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-listening-service="amazon">
+        <span class="settings-provider-mark settings-provider-amazon" aria-hidden="true">a</span>
+        <span>Amazon Music</span>
+      </button>
       <button type="button" role="radio" aria-checked="true" tabindex="0" data-listening-service="both">
         <span class="settings-provider-mark settings-provider-both" aria-hidden="true">S♪</span>
-        <span>Both</span>
+        <span>Spotify + Apple</span>
+      </button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-listening-service="all">
+        <span class="settings-provider-mark settings-provider-all" aria-hidden="true">S♪a</span>
+        <span>All three</span>
       </button>
     </div>
   </div>
@@ -466,6 +475,71 @@
 
     <p id="appleMusicMessage" class="small" role="status" aria-live="polite"></p>
   </div>
+
+  <div class="settings-panel amazon-settings-panel">
+    <div class="settings-service-header">
+      <div class="amazon-service-icon" aria-hidden="true">a</div>
+
+      <div>
+        <h3>Amazon Music</h3>
+        <p class="small">
+          Transfer the same five personal and community BoM playlists with Soundiiz.
+        </p>
+      </div>
+    </div>
+
+    <div class="amazon-music-setup-note" role="note">
+      <strong>Temporary Amazon Music transfers, with no API key required.</strong>
+      <span>
+        Soundiiz links expire after 24 hours. You review the tracks, connect Amazon Music
+        and complete the transfer on Soundiiz. Its 200-track maximum is handled by
+        splitting longer BoM lists into separate parts.
+      </span>
+    </div>
+
+    <div id="amazonMusicExportPanel" class="amazon-music-export-panel">
+      <div class="spotify-export-heading">
+        <div>
+          <h3>Prepare an Amazon Music playlist</h3>
+          <p class="small">
+            Choose one of the five playlists, then create its temporary Soundiiz transfer.
+          </p>
+        </div>
+      </div>
+
+      <div class="apple-playlist-buttons amazon-playlist-buttons">
+        <button type="button" class="amazon-playlist-link-btn" data-minimum-rating="7" data-playlist-name="BoM • Rated 7+">
+          <span class="amazon-playlist-rating">7+</span>
+          <span class="amazon-playlist-button-text"><strong>BoM Rated 7+</strong><small>Prepare Amazon Music transfer</small></span>
+        </button>
+        <button type="button" class="amazon-playlist-link-btn" data-minimum-rating="8" data-playlist-name="BoM • Rated 8+">
+          <span class="amazon-playlist-rating">8+</span>
+          <span class="amazon-playlist-button-text"><strong>BoM Rated 8+</strong><small>Prepare Amazon Music transfer</small></span>
+        </button>
+        <button type="button" class="amazon-playlist-link-btn" data-minimum-rating="9" data-playlist-name="BoM • Rated 9+">
+          <span class="amazon-playlist-rating">9+</span>
+          <span class="amazon-playlist-button-text"><strong>BoM Rated 9+</strong><small>Prepare Amazon Music transfer</small></span>
+        </button>
+        <button type="button" class="amazon-playlist-link-btn" data-minimum-rating="10" data-playlist-name="BoM • Perfect 10s">
+          <span class="amazon-playlist-rating">10</span>
+          <span class="amazon-playlist-button-text"><strong>BoM Perfect 10s</strong><small>Prepare Amazon Music transfer</small></span>
+        </button>
+        <button type="button" class="amazon-playlist-link-btn amazon-top-100-btn" data-playlist-type="global-top-100" data-playlist-name="BoM • Global Top 100">
+          <span class="amazon-playlist-rating">🏆</span>
+          <span class="amazon-playlist-button-text"><strong>BoM Global Top 100</strong><small>Highest-rated songs with at least 3 ratings</small></span>
+        </button>
+      </div>
+
+      <div id="amazonMusicExportProgress" class="spotify-export-progress amazon-export-progress hidden">
+        <div class="spotify-progress-track"><div id="amazonMusicProgressBar" class="spotify-progress-fill"></div></div>
+        <p id="amazonMusicProgressText" class="spotify-progress-text"></p>
+      </div>
+
+      <div id="amazonMusicExportResult" class="amazon-music-export-result hidden"></div>
+    </div>
+
+    <p id="amazonMusicMessage" class="small" role="status" aria-live="polite"></p>
+  </div>
 </section>
  
    <section class="card hidden" id="adminSection">
@@ -534,10 +608,10 @@
   <script src="bom-password-recovery.js?v=1"></script>
   <script src="bom-early-access.js?v=4"></script>
   <script src="bom-spotify-playlist.js?v=4"></script>
-  <script src="bom-apple-music-playlist.js?v=2"></script>
+  <script src="bom-apple-music-playlist.js?v=3"></script>
   <script src="artist-easter-eggs.js?v=1"></script>
   <script src="bom-email-announcements.js?v=2"></script>
-  <script src="app.js?v=184&autocomplete=2&search-autosave=1&listening-ui=2&email-announcements=2&apple-playlists=2&soundiiz=1"></script>
+  <script src="app.js?v=185&autocomplete=2&search-autosave=1&listening-ui=3&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {

@@ -14,7 +14,7 @@ test("the approved shell is default and legacy remains an explicit rollback", ()
   assert.match(html, /style\.css\?v=\d+[^\"]*/);
   assert.match(html, /bom-foundation\.css\?v=\d+&autocomplete=1/);
   assert.match(html, /config\.js\?v=\d+/);
-  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=2/);
+  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=3/);
   assert.match(shell, /params\.get\("ui"\) === "legacy"/);
 });
 

@@ -35,7 +35,34 @@ test("listening preference defaults safely and persists all supported choices", 
   assert.equal(context.setPreferredListeningService("apple"), "apple");
   assert.equal(values.get("bom_preferred_listening_service"), "apple");
   assert.equal(context.setPreferredListeningService("both"), "both");
+  assert.equal(context.setPreferredListeningService("amazon"), "amazon");
+  assert.equal(context.setPreferredListeningService("all"), "all");
   assert.equal(context.setPreferredListeningService("unknown"), "both");
+});
+
+test("legacy Both stays Spotify plus Apple while All three includes Amazon", () => {
+  const { context } = createContext({ stored: "both" });
+  assert.deepEqual(
+    [...context.getListeningServicesForPreference(context.getPreferredListeningService())],
+    ["spotify", "apple"]
+  );
+  assert.deepEqual(
+    [...context.getListeningServicesForPreference("all")],
+    ["spotify", "apple", "amazon"]
+  );
+});
+
+test("Amazon Music search links use the official HTTPS UK search route and encode metadata", () => {
+  const { context } = createContext();
+  assert.equal(
+    context.getAmazonMusicSearchUrl({
+      type: "song",
+      title: "Rock & Roll",
+      artist: "Artist/Guest",
+      album: "Hits?"
+    }),
+    "https://music.amazon.co.uk/search/Rock%20%26%20Roll%20Artist%2FGuest%20Hits%3F"
+  );
 });
 
 test("Apple Music fallback is HTTPS and safely encodes track, artist and album", () => {
@@ -96,9 +123,13 @@ test("provider UI is a branded accessible radio group with both services visible
   assert.match(app, /data-listening-service="spotify"/);
   assert.match(app, /data-listening-service="apple"/);
   assert.match(app, /data-listening-service="both"/);
+  assert.match(app, /data-listening-service="amazon"/);
+  assert.match(app, /data-listening-service="all"/);
   assert.match(app, /data-music-service="apple"/);
+  assert.match(app, /data-music-service="amazon"/);
   assert.match(app, /Listen on Spotify/);
   assert.match(app, /Listen on Apple Music/);
+  assert.match(app, /Listen on Amazon Music/);
   assert.match(app, /music-service-logo/);
   assert.match(app, /\["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"\]/);
 });

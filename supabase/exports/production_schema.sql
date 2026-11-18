@@ -138,7 +138,7 @@ CREATE OR REPLACE FUNCTION "public"."record_music_provider_click"("p_provider" "
 declare
   updated_total bigint;
 begin
-  if p_provider not in ('spotify', 'apple_music') then
+  if p_provider not in ('spotify', 'apple_music', 'amazon_music') then
     raise exception 'Unsupported music provider';
   end if;
 
@@ -369,7 +369,7 @@ CREATE TABLE IF NOT EXISTS "public"."music_provider_click_counts" (
     CONSTRAINT "music_provider_click_counts_artist_length" CHECK ((("char_length"("artist") >= 1) AND ("char_length"("artist") <= 300))),
     CONSTRAINT "music_provider_click_counts_item_key_length" CHECK ((("char_length"("item_key") >= 1) AND ("char_length"("item_key") <= 500))),
     CONSTRAINT "music_provider_click_counts_item_type_check" CHECK (("item_type" = ANY (ARRAY['song'::"text", 'album'::"text"]))),
-    CONSTRAINT "music_provider_click_counts_provider_check" CHECK (("provider" = ANY (ARRAY['spotify'::"text", 'apple_music'::"text"]))),
+    CONSTRAINT "music_provider_click_counts_provider_check" CHECK (("provider" = ANY (ARRAY['spotify'::"text", 'apple_music'::"text", 'amazon_music'::"text"]))),
     CONSTRAINT "music_provider_click_counts_title_length" CHECK ((("char_length"("title") >= 1) AND ("char_length"("title") <= 300)))
 );
 

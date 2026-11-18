@@ -59,5 +59,5 @@ test("album detail exposes a prominent responsive Share album action", () => {
   assert.match(css, /#shareSelectedItemBtn \{[^}]*background: var\(--bom-v1-accent\)/);
   assert.match(css, /@media \(max-width: 700px\)[\s\S]*#shareSelectedItemBtn \{ width: 100%/);
   assert.match(html, /bom-foundation\.css\?v=\d+&autocomplete=1/);
-  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=2/);
+  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=3/);
 });
