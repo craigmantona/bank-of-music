@@ -5969,9 +5969,21 @@ button.song-album-link {
   background: linear-gradient(135deg, #fa57c1, #fa233b);
 }
 
+.settings-provider-amazon {
+  color: #fff;
+  background: #131921;
+  box-shadow: inset 0 -3px 0 #ff9900;
+}
+
 .settings-provider-both {
   width: 32px;
   background: linear-gradient(135deg, #1ed760 0 48%, #fa3d77 52% 100%);
+}
+
+.settings-provider-all {
+  width: 38px;
+  background: linear-gradient(135deg, #1ed760 0 32%, #fa3d77 34% 65%, #131921 67% 100%);
+  box-shadow: inset 0 -2px 0 #ff9900;
 }
 
 .apple-settings-panel {
@@ -6009,7 +6021,8 @@ button.song-album-link {
   margin-top: 20px;
 }
 
-.apple-playlist-link-btn {
+.apple-playlist-link-btn,
+.amazon-playlist-link-btn {
   width: 100%;
   min-height: 82px;
   display: flex;
@@ -6031,7 +6044,8 @@ button.song-album-link {
   transform: translateY(-2px);
 }
 
-.apple-playlist-link-btn:disabled {
+.apple-playlist-link-btn:disabled,
+.amazon-playlist-link-btn:disabled {
   opacity: 0.55;
   cursor: wait;
   transform: none;
@@ -6050,17 +6064,20 @@ button.song-album-link {
   font-weight: 800;
 }
 
-.apple-playlist-button-text {
+.apple-playlist-button-text,
+.amazon-playlist-button-text {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.apple-playlist-button-text strong {
+.apple-playlist-button-text strong,
+.amazon-playlist-button-text strong {
   font-size: 16px;
 }
 
-.apple-playlist-button-text small {
+.apple-playlist-button-text small,
+.amazon-playlist-button-text small {
   color: rgba(255, 255, 255, 0.62);
   font-size: 13px;
 }
@@ -6258,6 +6275,107 @@ button.song-album-link {
   margin-bottom: 0;
 }
 
+.amazon-settings-panel {
+  border-color: rgba(0, 168, 225, 0.42);
+  background:
+    radial-gradient(circle at top left, rgba(0, 168, 225, 0.16), transparent 35%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.amazon-service-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  border-bottom: 4px solid #ff9900;
+  background: #131921;
+  color: #fff;
+  font-size: 1.55rem;
+  font-weight: 950;
+}
+
+.amazon-music-setup-note {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0 0 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(0, 168, 225, 0.32);
+  border-radius: 18px;
+  background: rgba(0, 168, 225, 0.08);
+  line-height: 1.5;
+}
+
+.amazon-music-setup-note span {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.9rem;
+}
+
+.amazon-playlist-link-btn {
+  border-color: rgba(0, 168, 225, 0.48);
+  background: rgba(0, 168, 225, 0.09);
+}
+
+.amazon-playlist-link-btn:hover {
+  border-color: #00a8e1;
+  background: rgba(0, 168, 225, 0.18);
+  transform: translateY(-2px);
+}
+
+.amazon-playlist-rating {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #131921, #00a8e1);
+  box-shadow: inset 0 -3px 0 #ff9900;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.amazon-top-100-btn {
+  grid-column: 1 / -1;
+  border-color: rgba(255, 153, 0, 0.62);
+  background: rgba(255, 153, 0, 0.1);
+}
+
+.amazon-top-100-btn:hover {
+  border-color: #ff9900;
+  background: rgba(255, 153, 0, 0.18);
+}
+
+.amazon-top-100-btn .amazon-playlist-rating {
+  color: #111;
+  background: #ff9900;
+  box-shadow: none;
+}
+
+.amazon-export-progress .spotify-progress-fill {
+  background: linear-gradient(90deg, #00a8e1, #ff9900);
+}
+
+.amazon-export-success {
+  border-color: rgba(0, 168, 225, 0.68);
+  background:
+    radial-gradient(circle at top left, rgba(0, 168, 225, 0.23), transparent 38%),
+    linear-gradient(180deg, rgba(9, 27, 38, 0.98), rgba(8, 18, 27, 0.98));
+}
+
+.amazon-export-success-icon {
+  border-bottom: 4px solid #ff9900;
+  background: #131921;
+}
+
+#amazonMusicMessage {
+  min-height: 20px;
+  margin-bottom: 0;
+}
+
 @media (max-width: 700px) {
   .apple-playlist-buttons {
     grid-template-columns: 1fr;
@@ -6392,13 +6510,13 @@ button.song-album-link {
 .music-provider-actions {
   display: grid;
   gap: 12px;
-  width: min(100%, 470px);
-  flex: 0 1 470px;
+  width: min(100%, 720px);
+  flex: 0 1 720px;
 }
 
 .music-provider-preference {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
   padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -6464,6 +6582,12 @@ button.song-album-link {
   margin-left: -4px;
 }
 
+.music-service-all-icon .music-service-logo {
+  width: 16px;
+  height: 16px;
+  flex-basis: 16px;
+}
+
 .music-provider-buttons {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -6489,6 +6613,13 @@ button.song-album-link {
   border-color: rgba(255, 255, 255, 0.82) !important;
   background: #ffffff !important;
   color: #111116 !important;
+}
+
+.music-provider-amazon-btn {
+  border-color: #00a8e1 !important;
+  background: #131921 !important;
+  color: #fff !important;
+  box-shadow: inset 0 -3px 0 #ff9900 !important;
 }
 
 .music-provider-play-btn {
@@ -6576,6 +6707,10 @@ button.song-album-link {
   .music-provider-actions {
     width: 100%;
     flex-basis: auto;
+  }
+
+  .music-provider-preference {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .music-provider-preference button {

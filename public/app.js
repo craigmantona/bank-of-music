@@ -9331,13 +9331,13 @@ function renderAlbumReviewsSection(albumId, reviews = []) {
 
 /* ============================================================
    PLAY WITH YOUR MUSIC PROVIDER
-   Opens the selected BoM song or album in Spotify or Apple Music.
+   Opens the selected BoM song or album in Spotify, Apple Music or Amazon Music.
    Apple Music matching only runs after a listening action, so it
    adds no work or network requests during application startup.
    ============================================================ */
 
 const MUSIC_PROVIDER_PREFERENCE_KEY = "bom_preferred_listening_service";
-const MUSIC_PROVIDER_PREFERENCES = new Set(["spotify", "apple", "both"]);
+const MUSIC_PROVIDER_PREFERENCES = new Set(["spotify", "apple", "amazon", "both", "all"]);
 
 function getPreferredListeningService() {
   try {
@@ -9358,9 +9358,20 @@ function setPreferredListeningService(value) {
   return preference;
 }
 
+function getListeningServicesForPreference(preference) {
+  if (preference === "all") return new Set(["spotify", "apple", "amazon"]);
+  if (preference === "both") return new Set(["spotify", "apple"]);
+  return new Set([preference]);
+}
+
 function getAppleMusicSearchFallbackUrl({ type, title, artist, album = "" }) {
   const terms = [title, artist, type === "song" ? album : ""].filter(Boolean).join(" ");
   return `https://music.apple.com/gb/search?term=${encodeURIComponent(terms)}`;
+}
+
+function getAmazonMusicSearchUrl({ type, title, artist, album = "" }) {
+  const terms = [title, artist, type === "song" ? album : ""].filter(Boolean).join(" ");
+  return `https://music.amazon.co.uk/search/${encodeURIComponent(terms)}`;
 }
 
 function safeAppleMusicUrl(value, fallbackUrl) {
@@ -9613,6 +9624,7 @@ function buildMusicProviderPanel({
   if (!title || !artist) return "";
 
   const preference = getPreferredListeningService();
+  const visibleServices = getListeningServicesForPreference(preference);
 
   const playerId =
     "spotify-embed-" +
@@ -9620,6 +9632,7 @@ function buildMusicProviderPanel({
 
   const spotifyLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#1ed760"/><path d="M6.1 8.1c3.9-1.1 8.1-.8 11.6.9" fill="none" stroke="#08130d" stroke-width="1.8" stroke-linecap="round"/><path d="M6.8 11.5c3.3-.9 7-.6 10 .8" fill="none" stroke="#08130d" stroke-width="1.6" stroke-linecap="round"/><path d="M7.4 14.7c2.8-.7 5.8-.5 8.4.7" fill="none" stroke="#08130d" stroke-width="1.5" stroke-linecap="round"/></svg>`;
   const appleMusicLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><defs><linearGradient id="apple-music-gradient-${escapeHtml(playerId)}" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#fa57c1"/><stop offset=".5" stop-color="#f83f74"/><stop offset="1" stop-color="#fa233b"/></linearGradient></defs><rect width="24" height="24" rx="5.5" fill="url(#apple-music-gradient-${escapeHtml(playerId)})"/><path d="M16.9 6.1v8.3c0 1.5-1.2 2.7-2.8 2.7-1.2 0-2.2-.7-2.2-1.7 0-1.1 1-1.9 2.4-1.9.4 0 .8.1 1.1.2V8.8l-5.5 1.1v5.6c0 1.5-1.2 2.7-2.8 2.7-1.2 0-2.2-.7-2.2-1.7 0-1.1 1-1.9 2.4-1.9.4 0 .8.1 1.1.2V7.7l8.5-1.6Z" fill="#fff"/></svg>`;
+  const amazonMusicLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="24" height="24" rx="5.5" fill="#131921"/><path d="M15.7 14.2c-.5.4-1.2.6-1.8.6-1 0-1.6-.6-1.6-1.5 0-1.1.8-1.8 2.2-1.8.4 0 .8 0 1.2.1v-.4c0-.9-.4-1.3-1.4-1.3-.6 0-1.3.2-2 .5l-.5-1.3c.9-.4 1.9-.7 2.9-.7 1.9 0 2.8.9 2.8 2.6v3.7h-1.7l-.1-.5Zm0-1.5c-.3-.1-.6-.1-.9-.1-.6 0-.9.2-.9.6s.3.6.8.6c.4 0 .8-.1 1.1-.4v-.7Z" fill="#fff"/><path d="M6 16.4c3.4 1.8 7.8 2 11.4.2" fill="none" stroke="#ff9900" stroke-width="1.6" stroke-linecap="round"/><path d="m16.6 15.7 1.5.1-.5 1.4" fill="none" stroke="#ff9900" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   return `
     <div class="music-provider-panel" data-music-provider-panel="true">
@@ -9629,7 +9642,7 @@ function buildMusicProviderPanel({
           <strong>Play with your music provider</strong>
           <span>
             Use Spotify here or open this ${type === "album" ? "album" : "track"}
-            in Apple Music.
+            in Apple Music or Amazon Music.
           </span>
         </div>
 
@@ -9637,12 +9650,14 @@ function buildMusicProviderPanel({
           <div class="music-provider-preference" role="radiogroup" aria-label="Preferred listening service">
             <button type="button" role="radio" aria-checked="${preference === "spotify"}" tabindex="${preference === "spotify" ? "0" : "-1"}" data-listening-service="spotify">${spotifyLogo}<span>Spotify</span></button>
             <button type="button" role="radio" aria-checked="${preference === "apple"}" tabindex="${preference === "apple" ? "0" : "-1"}" data-listening-service="apple">${appleMusicLogo}<span>Apple Music</span></button>
-            <button type="button" role="radio" aria-checked="${preference === "both"}" tabindex="${preference === "both" ? "0" : "-1"}" data-listening-service="both"><span class="music-service-both-icon" aria-hidden="true">${spotifyLogo}${appleMusicLogo}</span><span>Both</span></button>
+            <button type="button" role="radio" aria-checked="${preference === "amazon"}" tabindex="${preference === "amazon" ? "0" : "-1"}" data-listening-service="amazon">${amazonMusicLogo}<span>Amazon</span></button>
+            <button type="button" role="radio" aria-checked="${preference === "both"}" tabindex="${preference === "both" ? "0" : "-1"}" data-listening-service="both"><span class="music-service-both-icon" aria-hidden="true">${spotifyLogo}${appleMusicLogo}</span><span>Spotify + Apple</span></button>
+            <button type="button" role="radio" aria-checked="${preference === "all"}" tabindex="${preference === "all" ? "0" : "-1"}" data-listening-service="all"><span class="music-service-both-icon music-service-all-icon" aria-hidden="true">${spotifyLogo}${appleMusicLogo}${amazonMusicLogo}</span><span>All three</span></button>
           </div>
           <div class="music-provider-buttons">
             <button
               type="button"
-              class="music-provider-play-btn music-provider-spotify-btn${preference === "apple" ? " hidden" : ""}"
+              class="music-provider-play-btn music-provider-spotify-btn${visibleServices.has("spotify") ? "" : " hidden"}"
               data-music-service="spotify"
               data-provider-type="${escapeHtml(type)}"
               data-provider-title="${escapeHtml(title)}"
@@ -9655,7 +9670,7 @@ function buildMusicProviderPanel({
             </button>
             <button
               type="button"
-              class="music-provider-play-btn music-provider-apple-btn${preference === "spotify" ? " hidden" : ""}"
+              class="music-provider-play-btn music-provider-apple-btn${visibleServices.has("apple") ? "" : " hidden"}"
               data-music-service="apple"
               data-provider-type="${escapeHtml(type)}"
               data-provider-title="${escapeHtml(title)}"
@@ -9664,6 +9679,18 @@ function buildMusicProviderPanel({
             >
               ${appleMusicLogo}
               <span>Listen on Apple Music</span>
+            </button>
+            <button
+              type="button"
+              class="music-provider-play-btn music-provider-amazon-btn${visibleServices.has("amazon") ? "" : " hidden"}"
+              data-music-service="amazon"
+              data-provider-type="${escapeHtml(type)}"
+              data-provider-title="${escapeHtml(title)}"
+              data-provider-artist="${escapeHtml(artist)}"
+              data-provider-album="${escapeHtml(album)}"
+            >
+              ${amazonMusicLogo}
+              <span>Listen on Amazon Music</span>
             </button>
           </div>
         </div>
@@ -9679,13 +9706,14 @@ function buildMusicProviderPanel({
 }
 
 function syncListeningServiceControls(preference) {
+  const visibleServices = getListeningServicesForPreference(preference);
   document.querySelectorAll("[data-listening-service]").forEach(option => {
     const selected = option.dataset.listeningService === preference;
     option.setAttribute("aria-checked", String(selected));
     option.tabIndex = selected ? 0 : -1;
   });
   document.querySelectorAll("[data-music-service]").forEach(button => {
-    button.classList.toggle("hidden", preference !== "both" && button.dataset.musicService !== preference);
+    button.classList.toggle("hidden", !visibleServices.has(button.dataset.musicService));
   });
 }
 
@@ -9709,6 +9737,14 @@ async function openWithAppleMusic({ type, title, artist, album = "", button = nu
       button.innerHTML = originalText;
     }
   }
+}
+
+function openWithAmazonMusic({ type, title, artist, album = "" }) {
+  const amazonMusicUrl = getAmazonMusicSearchUrl({ type, title, artist, album });
+  void recordMusicProviderClick({ provider: "amazon_music", type, title, artist, album });
+  const amazonWindow = window.open(amazonMusicUrl, "_blank");
+  if (amazonWindow) amazonWindow.opener = null;
+  else window.location.assign(amazonMusicUrl);
 }
 
 document.addEventListener("click", event => {
@@ -14569,7 +14605,9 @@ if (
 
       const providerAction = musicProviderButton.dataset.musicService === "apple"
         ? openWithAppleMusic
-        : openWithMusicProvider;
+        : musicProviderButton.dataset.musicService === "amazon"
+          ? openWithAmazonMusic
+          : openWithMusicProvider;
 
       await providerAction({
         type:
@@ -16267,8 +16305,13 @@ function formatSoundiizExpiry(expiresAt) {
   return `before ${expiry.toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}`;
 }
 
-function renderSoundiizTransferLinks(links, totalParts = links.length, errorMessage = "") {
-  const result = document.getElementById("appleMusicSoundiizResult");
+function renderSoundiizTransferLinks(
+  links,
+  totalParts = links.length,
+  errorMessage = "",
+  { resultId = "appleMusicSoundiizResult", serviceName = "Apple Music" } = {}
+) {
+  const result = document.getElementById(resultId);
   if (!result) return;
   const validLinks = Array.isArray(links) ? links : [];
   const partCount = Math.max(Number(totalParts) || 0, validLinks.length);
@@ -16283,8 +16326,8 @@ function renderSoundiizTransferLinks(links, totalParts = links.length, errorMess
         <strong>${isSplit ? `${validLinks.length} of ${partCount} Soundiiz parts ready` : "Soundiiz transfer ready"}</strong>
         <p class="small">
           Open ${isSplit ? "each part" : "the link"} ${expiry}, review the matches,
-          connect Apple Music and complete ${isSplit ? "each transfer" : "the transfer"} in Soundiiz.
-          ${isSplit ? "Each part becomes a separate Apple Music playlist unless you combine them afterwards." : ""}
+          connect ${escapeHtml(serviceName)} and complete ${isSplit ? "each transfer" : "the transfer"} in Soundiiz.
+          ${isSplit ? `Each part becomes a separate ${escapeHtml(serviceName)} playlist unless you combine them afterwards.` : ""}
         </p>
         <div class="apple-soundiiz-links">
           ${validLinks.map((link) => `
@@ -16457,6 +16500,233 @@ document.addEventListener("click", (event) => {
   }
   if (event.target.closest?.("#appleMusicShareLinksBtn")) {
     void shareCurrentAppleMusicPlaylist();
+  }
+});
+
+/* ============================================================
+   AMAZON MUSIC PLAYLIST TRANSFERS
+   Reuses the Soundiiz handoff and 200-track splitting used for
+   Apple Music. The listener completes every transfer in Soundiiz.
+   ============================================================ */
+
+let currentAmazonMusicPlaylist = null;
+
+function getAmazonMusicExportElements() {
+  return {
+    buttons: Array.from(document.querySelectorAll(".amazon-playlist-link-btn")),
+    progress: document.getElementById("amazonMusicExportProgress"),
+    progressBar: document.getElementById("amazonMusicProgressBar"),
+    progressText: document.getElementById("amazonMusicProgressText"),
+    result: document.getElementById("amazonMusicExportResult")
+  };
+}
+
+function setAmazonMusicMessage(message) {
+  const element = document.getElementById("amazonMusicMessage");
+  if (element) element.textContent = message || "";
+}
+
+function resetAmazonMusicExportDisplay() {
+  const elements = getAmazonMusicExportElements();
+  currentAmazonMusicPlaylist = null;
+  elements.result?.classList.add("hidden");
+  if (elements.result) elements.result.innerHTML = "";
+  if (elements.progressBar) elements.progressBar.style.width = "0%";
+  elements.progress?.classList.add("hidden");
+}
+
+function updateAmazonMusicExportProgress(completed, total, message) {
+  const elements = getAmazonMusicExportElements();
+  const percentage = total ? Math.round((completed / total) * 100) : 0;
+  elements.progress?.classList.remove("hidden");
+  if (elements.progressBar) {
+    elements.progressBar.style.width = `${Math.min(100, percentage)}%`;
+  }
+  if (elements.progressText) {
+    elements.progressText.textContent = message || `${completed} of ${total}`;
+  }
+}
+
+function setAmazonMusicPlaylistButtonsDisabled(disabled, activeButton = null) {
+  getAmazonMusicExportElements().buttons.forEach((button) => {
+    button.disabled = disabled;
+    const statusText = button.querySelector(".amazon-playlist-button-text small");
+    if (!statusText) return;
+    if (disabled && button === activeButton) {
+      statusText.textContent = "Preparing transfer…";
+      return;
+    }
+    statusText.textContent = button.dataset.playlistType === "global-top-100"
+      ? "Highest-rated songs with at least 3 ratings"
+      : "Prepare Amazon Music transfer";
+  });
+}
+
+function renderAmazonMusicPlaylistTransfer({ prepared, sourceLabel }) {
+  const elements = getAmazonMusicExportElements();
+  if (!elements.result) return;
+  currentAmazonMusicPlaylist = { ...prepared, sourceLabel };
+  const count = prepared.tracks.length;
+
+  elements.result.classList.remove("hidden");
+  elements.result.innerHTML = `
+    <div class="apple-export-success amazon-export-success">
+      <div class="apple-export-success-icon amazon-export-success-icon">a</div>
+      <div>
+        <h3>Amazon Music transfer ready to prepare</h3>
+        <p>
+          <strong>${escapeHtml(prepared.playlistName)}</strong> has
+          <strong>${count}</strong> track${count === 1 ? "" : "s"}
+          from ${escapeHtml(sourceLabel)}.
+        </p>
+        <p class="small">
+          Bank of Music will ask Soundiiz for a temporary handoff link. You will
+          review the matches, connect Amazon Music and complete the transfer there.
+        </p>
+        <div class="apple-playlist-actions">
+          <button id="amazonMusicSoundiizBtn" type="button">Transfer with Soundiiz</button>
+        </div>
+        <div id="amazonMusicSoundiizResult" class="apple-soundiiz-result">
+          <p class="small">
+            The link is valid for 24 hours. Lists over 200 tracks are split into
+            separate, clearly labelled parts with no tracks dropped.
+          </p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function createCurrentAmazonMusicSoundiizTransfer() {
+  if (!currentAmazonMusicPlaylist || !window.BOMAppleMusicPlaylist) return;
+  const renderOptions = {
+    resultId: "amazonMusicSoundiizResult",
+    serviceName: "Amazon Music"
+  };
+  if (currentAmazonMusicPlaylist.soundiizLinks?.length) {
+    renderSoundiizTransferLinks(
+      currentAmazonMusicPlaylist.soundiizLinks,
+      currentAmazonMusicPlaylist.soundiizLinks.length,
+      "",
+      renderOptions
+    );
+    setAmazonMusicMessage("Your temporary Soundiiz transfer link is already ready on this page.");
+    return;
+  }
+  const button = document.getElementById("amazonMusicSoundiizBtn");
+  if (!button || button.disabled) return;
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Creating temporary link…";
+  setAmazonMusicMessage("Asking Soundiiz to prepare the Amazon Music transfer…");
+
+  try {
+    const links = await window.BOMAppleMusicPlaylist.createSoundiizImportLinks({
+      ...currentAmazonMusicPlaylist,
+      destination: window.BOMAppleMusicPlaylist.SOUNDIIZ_AMAZON_MUSIC_DESTINATION,
+      onProgress: ({ completed, total }) => {
+        updateAmazonMusicExportProgress(
+          completed,
+          total,
+          `Created ${completed} of ${total} temporary Soundiiz link${total === 1 ? "" : "s"}.`
+        );
+      }
+    });
+    currentAmazonMusicPlaylist.soundiizLinks = links;
+    renderSoundiizTransferLinks(links, links.length, "", renderOptions);
+    setAmazonMusicMessage(
+      links.length === 1
+        ? "Soundiiz transfer link ready. Open it within 24 hours to complete the Amazon Music transfer."
+        : `${links.length} Soundiiz transfer parts ready. Open each within 24 hours to complete the Amazon Music transfers.`
+    );
+  } catch (error) {
+    const partialLinks = error?.soundiizLinks || [];
+    const totalParts = error?.soundiizTotalParts || partialLinks.length;
+    const errorMessage = error?.message || "Soundiiz could not prepare the transfer link.";
+    renderSoundiizTransferLinks(partialLinks, totalParts, errorMessage, renderOptions);
+    setAmazonMusicMessage(
+      partialLinks.length
+        ? `${partialLinks.length} Soundiiz part${partialLinks.length === 1 ? " is" : "s are"} ready, but the remaining link${totalParts - partialLinks.length === 1 ? "" : "s"} could not be prepared. ${errorMessage}`
+        : `${errorMessage} Please try the Amazon Music transfer again.`
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+}
+
+async function prepareAmazonMusicPlaylist({
+  button,
+  playlistName,
+  playlistType,
+  minimumRating
+}) {
+  if (!currentUser) {
+    setAmazonMusicMessage("Please log into Bank of Music first.");
+    return;
+  }
+  if (!window.BOMAppleMusicPlaylist) {
+    setAmazonMusicMessage("Amazon Music playlist transfers are unavailable.");
+    return;
+  }
+
+  resetAmazonMusicExportDisplay();
+  setAmazonMusicPlaylistButtonsDisabled(true, button);
+
+  try {
+    const isTop100 = playlistType === "global-top-100";
+    setAmazonMusicMessage(`Preparing "${playlistName}"…`);
+    await refreshCurrentUserSpotifyRatings();
+    const tracks = isTop100
+      ? getGlobalTop100TracksForSpotify()
+      : getCurrentUserRatedTracksForSpotify(minimumRating);
+    const sourceLabel = isTop100
+      ? "the BoM Global Top 100"
+      : `your ${minimumRating}+ ratings`;
+
+    if (!tracks.length) {
+      updateAmazonMusicExportProgress(0, 0, "No qualifying tracks yet.");
+      setAmazonMusicMessage(`No tracks currently qualify for "${playlistName}".`);
+      return;
+    }
+
+    const prepared = window.BOMAppleMusicPlaylist.preparePlaylist({
+      playlistName,
+      tracks
+    });
+    updateAmazonMusicExportProgress(
+      prepared.tracks.length,
+      tracks.length,
+      `Prepared ${prepared.tracks.length} track${prepared.tracks.length === 1 ? "" : "s"} for Soundiiz.`
+    );
+    renderAmazonMusicPlaylistTransfer({ prepared, sourceLabel });
+    setAmazonMusicMessage(
+      `Prepared ${prepared.tracks.length} track${prepared.tracks.length === 1 ? "" : "s"} for "${playlistName}".`
+    );
+  } catch (error) {
+    console.error("Amazon Music playlist preparation failed:", error);
+    const errorMessage = error?.message || "The Amazon Music transfer could not be prepared.";
+    setAmazonMusicMessage(errorMessage);
+    alert("Amazon Music transfer could not be prepared: " + errorMessage);
+  } finally {
+    setAmazonMusicPlaylistButtonsDisabled(false);
+  }
+}
+
+document.querySelectorAll(".amazon-playlist-link-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    prepareAmazonMusicPlaylist({
+      button,
+      playlistName: String(button.dataset.playlistName || "BoM Playlist"),
+      playlistType: button.dataset.playlistType || "personal",
+      minimumRating: Number(button.dataset.minimumRating || 0)
+    });
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.closest?.("#amazonMusicSoundiizBtn")) {
+    void createCurrentAmazonMusicSoundiizTransfer();
   }
 });
 

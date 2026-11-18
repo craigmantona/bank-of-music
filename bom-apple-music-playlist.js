@@ -2,6 +2,11 @@
   const DEFAULT_STOREFRONT = "gb";
   const SOUNDIIZ_IMPORT_ENDPOINT = "/api/soundiiz-import";
   const SOUNDIIZ_APPLE_MUSIC_DESTINATION = "applemusicapp";
+  const SOUNDIIZ_AMAZON_MUSIC_DESTINATION = "amazonmusic";
+  const SOUNDIIZ_DESTINATIONS = new Set([
+    SOUNDIIZ_APPLE_MUSIC_DESTINATION,
+    SOUNDIIZ_AMAZON_MUSIC_DESTINATION
+  ]);
   const SOUNDIIZ_MAX_TRACKS = 200;
 
   function normaliseText(value) {
@@ -96,8 +101,22 @@
     return chunks;
   }
 
-  function buildSoundiizImportRequests({ playlistName, tracks, sourceLabel = "Bank of Music" }) {
+  function normaliseSoundiizDestination(value) {
+    const destination = String(value || SOUNDIIZ_APPLE_MUSIC_DESTINATION).trim().toLowerCase();
+    if (!SOUNDIIZ_DESTINATIONS.has(destination)) {
+      throw new Error("Soundiiz destination must be Apple Music or Amazon Music.");
+    }
+    return destination;
+  }
+
+  function buildSoundiizImportRequests({
+    playlistName,
+    tracks,
+    sourceLabel = "Bank of Music",
+    destination = SOUNDIIZ_APPLE_MUSIC_DESTINATION
+  }) {
     const safeName = String(playlistName || "BoM Playlist").trim() || "BoM Playlist";
+    const safeDestination = normaliseSoundiizDestination(destination);
     const trackChunks = chunkTracks(tracks);
     if (!trackChunks.length) {
       throw new Error("At least one track is required to create a Soundiiz transfer link.");
@@ -119,7 +138,7 @@
           sourceName: "Bank of Music",
           sourceLogo: "https://thebankofmusic.com/logo.jpeg",
           description: `Prepared from ${String(sourceLabel || "Bank of Music").trim() || "Bank of Music"}.${splitExplanation}`,
-          destination: SOUNDIIZ_APPLE_MUSIC_DESTINATION,
+          destination: safeDestination,
           tracklist: chunk.map((track) => {
             const soundiizTrack = {
               title: String(track?.title || "").trim(),
@@ -157,13 +176,19 @@
     playlistName,
     tracks,
     sourceLabel,
+    destination = SOUNDIIZ_APPLE_MUSIC_DESTINATION,
     request = root.fetch?.bind(root),
     onProgress = () => {}
   }) {
     if (typeof request !== "function") {
       throw new Error("Soundiiz transfer links are unavailable in this browser.");
     }
-    const imports = buildSoundiizImportRequests({ playlistName, tracks, sourceLabel });
+    const imports = buildSoundiizImportRequests({
+      playlistName,
+      tracks,
+      sourceLabel,
+      destination
+    });
     const links = [];
 
     for (let index = 0; index < imports.length; index += 1) {
@@ -209,12 +234,14 @@
     DEFAULT_STOREFRONT,
     SOUNDIIZ_IMPORT_ENDPOINT,
     SOUNDIIZ_APPLE_MUSIC_DESTINATION,
+    SOUNDIIZ_AMAZON_MUSIC_DESTINATION,
     SOUNDIIZ_MAX_TRACKS,
     buildAppleMusicSearchUrl,
     preparePlaylist,
     buildShareText,
     sharePlaylist,
     chunkTracks,
+    normaliseSoundiizDestination,
     buildSoundiizImportRequests,
     isSafeSoundiizShareUrl,
     createSoundiizImportLinks
