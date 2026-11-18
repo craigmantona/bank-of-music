@@ -28,5 +28,14 @@ jobs:
         run: |
           ./scripts/build-cloudflare-pages.sh
           git diff --exit-code -- public
-      - name: Run the complete test suite
+      - name: Run the application test suite
         run: node --test tests/*.test.mjs
+      - name: Install database test dependencies
+        working-directory: supabase/tests
+        run: npm ci
+      - name: Run the database test suite
+        working-directory: supabase/tests
+        run: npm test
+      - name: Type-check Edge Functions
+        working-directory: supabase/tests
+        run: npm run typecheck
