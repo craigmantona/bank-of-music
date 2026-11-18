@@ -8301,7 +8301,20 @@ function renderRemoteAlbumCatalogueStatus(item = selectedItem) {
     return '<span class="small">This album needs catalogue confirmation before ratings can be saved.</span>';
   }
   if (item?.catalogueAutoAddStatus === "failed") {
-    return '<span class="small">This album could not be added right now. You can still browse it.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Retry import</button>';
+    const reason = String(item?.catalogueAutoAddReason || "");
+    const messages = {
+      duplicate_musicbrainz_track_identity: "MusicBrainz returned the same release-track identity more than once. Nothing was imported.",
+      musicbrainz_track_identity_required: "MusicBrainz did not provide reliable release-track identities. Nothing was imported.",
+      invalid_track_occurrence_list: "MusicBrainz returned an invalid track sequence. Nothing was imported.",
+      complete_track_listing_unavailable: "MusicBrainz did not provide a complete track list. Nothing was imported.",
+      catalogue_identity_conflict: "The catalogue changed while this album was being added. Retry to reuse the saved album safely.",
+      musicbrainz_temporarily_unavailable: "MusicBrainz is temporarily unavailable. The album was not imported."
+    };
+    const message = messages[reason] || "This album could not be added right now. Nothing was imported.";
+    const retry = item?.catalogueAutoAddRetryable === false
+      ? ""
+      : ' <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Retry import</button>';
+    return `<span class="small">${escapeHtml(message)}</span>${retry}`;
   }
   if (item?.catalogueAutoAddStatus === "rate_limited") {
     const retryAfter = Math.max(1, Number(item?.catalogueAutoAddRetryAfter || 60));
@@ -8352,8 +8365,10 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
       albumPosition += 1;
       const trackTitle = track.title || track.recording?.title || "Untitled track";
       const externalId = track.recording?.id || "";
-      const savedSong = albumSongs.find((song) => externalId && String(song.external_id || "") === String(externalId)) ||
-        albumSongs.find((song) => normaliseCompare(song.title || "") === normaliseCompare(trackTitle)) || null;
+      const unusedSongs = albumSongs.filter((song) => !seenSongIds.has(Number(song.id)));
+      const savedSong = unusedSongs.find((song) => Number(song.track_position) === albumPosition) ||
+        unusedSongs.find((song) => externalId && String(song.external_id || "") === String(externalId)) ||
+        unusedSongs.find((song) => normaliseCompare(song.title || "") === normaliseCompare(trackTitle)) || null;
       addTrack({
         track,
         savedSong,
@@ -8367,7 +8382,6 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
 
   albumSongs
     .filter((song) => !seenSongIds.has(Number(song.id)))
-    .filter((song) => !song.external_id || !seenExternalIds.has(String(song.external_id)))
     .forEach((song) => addTrack({ savedSong: song, isManual: song.external_source === "manual" || !song.external_source }));
 
   rows.sort((a, b) => a.number - b.number || a.title.localeCompare(b.title));
@@ -8720,10 +8734,16 @@ function buildTrackListHtml(detail, savedAlbumId) {
 
 const savedSong =
   albumSongPool.find(song =>
+    !seenSongIds.has(Number(song.id)) &&
+    Number(song.track_position) === trackNumber
+  ) ||
+  albumSongPool.find(song =>
+    !seenSongIds.has(Number(song.id)) &&
     externalId &&
     String(song.external_id || "") === String(externalId)
   ) ||
   albumSongPool.find(song =>
+    !seenSongIds.has(Number(song.id)) &&
     normaliseCompare(song.title || "") === normaliseCompare(trackTitle || "")
   ) ||
   null;
@@ -8758,8 +8778,7 @@ console.log("SAVED SONG FOUND?", {
   if (savedAlbumId) {
     const manualOrExtraTracks = allSongs
       .filter((song) => Number(song.album_id) === Number(savedAlbumId))
-      .filter((song) => !seenSongIds.has(Number(song.id)))
-      .filter((song) => !song.external_id || !seenExternalIds.has(String(song.external_id)));
+      .filter((song) => !seenSongIds.has(Number(song.id)));
 
     manualOrExtraTracks.forEach((song, index) => {
       const sortPosition = getTrackSortPosition(song, trackNumber + index);
@@ -10695,6 +10714,8 @@ if (releaseGroupId) {
           console.warn("Album auto-add during render skipped", error?.message || error);
           if (selectedItem !== albumSelection) return;
           albumSelection.catalogueAutoAddStatus = "failed";
+          albumSelection.catalogueAutoAddReason = "catalogue_request_failed";
+          albumSelection.catalogueAutoAddRetryable = true;
           window.setTimeout(() => { void renderSelectedItem(); }, 0);
         });
       }
@@ -11134,7 +11155,7 @@ async function autoSaveSelectedSong() {
 
         .from("songs")
 
-        .upsert([payload], { onConflict: "album_id,external_source,external_id" })
+        .upsert([payload], { onConflict: "album_id,track_position" })
 
         .select();
 
@@ -11294,15 +11315,21 @@ async function autoSaveSelectedAlbum() {
           item.catalogueAutoAddRetryAfter = Math.max(1, Number(errorPayload.retry_after_seconds || 60));
           return null;
         }
-        throw error;
+        item.catalogueAutoAddStatus = "failed";
+        item.catalogueAutoAddReason = errorPayload?.reason || "catalogue_request_failed";
+        item.catalogueAutoAddRetryable = errorPayload?.retryable !== false;
+        return null;
       }
       if (data?.status === "needs_correction") {
         item.catalogueAutoAddStatus = "needs_correction";
         item.catalogueAutoAddReason = data.reason || "catalogue_confirmation_required";
+        item.catalogueAutoAddRetryable = false;
         return null;
       }
       if (data?.status !== "added" && data?.status !== "already_exists") {
         item.catalogueAutoAddStatus = "failed";
+        item.catalogueAutoAddReason = data?.reason || "catalogue_creation_failed";
+        item.catalogueAutoAddRetryable = data?.retryable !== false;
         return null;
       }
 
@@ -11311,6 +11338,8 @@ async function autoSaveSelectedAlbum() {
         allAlbums.find((candidate) => albumIdentityMatches(candidate, item)) || null;
       if (!album || album.is_deleted) {
         item.catalogueAutoAddStatus = "failed";
+        item.catalogueAutoAddReason = "catalogue_read_after_write_failed";
+        item.catalogueAutoAddRetryable = true;
         return null;
       }
       invalidatePredictiveCatalogue();
@@ -17147,6 +17176,7 @@ window.addEventListener("click", (event) => {
     delete selectedItem.catalogueAutoAddStatus;
     delete selectedItem.catalogueAutoAddReason;
     delete selectedItem.catalogueAutoAddRetryAfter;
+    delete selectedItem.catalogueAutoAddRetryable;
     void renderSelectedItem();
     return;
   }
@@ -17416,7 +17446,7 @@ if (albumError) {
           await supabaseClient
             .from("songs")
             .upsert([songPayload], {
-              onConflict: "album_id,external_source,external_id"
+              onConflict: "album_id,track_position"
             });
         } else {
           await supabaseClient

@@ -6,7 +6,8 @@ import {
   resolveRequestedAlbum,
   resolveSelectedRelease,
   searchArtistCandidates,
-  searchReleaseCandidates
+  searchReleaseCandidates,
+  validateTrackOccurrences
 } from "../functions/_shared/admin-catalogue.ts";
 
 test("multi-medium flattening assigns album-wide positions and retains disc metadata", () => {
@@ -20,6 +21,89 @@ test("multi-medium flattening assigns album-wide positions and retains disc meta
   assert.deepEqual(tracks.map(track => track.position), Array.from({ length: 30 }, (_, index) => index + 1));
   assert.equal(tracks[17].medium_position, 2);
   assert.equal(tracks[17].medium_track_position, 1);
+});
+
+const DOG_GROUP_ID = "a7ab4fca-4089-3d3e-a95e-b57eacf4f0d4";
+const DOG_UK_RELEASE_ID = "05c38c5c-669a-473f-8386-0c5ae64e0b5c";
+const DOG_DE_RELEASE_ID = "329abee4-cebe-46c9-bc84-558ee56ac640";
+const DOG_RECORDING_IDS = [
+  "9983a562-8c44-441d-affc-ffeb6ecf8aec",
+  "4caa885e-ca5a-417a-80c2-ccb239d23c80",
+  "7e6f5bd5-eb33-4f38-a24a-5cf5f78c0630",
+  "fb579f44-84cf-4180-9148-564be449790c",
+  "539f7ad5-01b3-4747-9db0-b88db0b1aef4",
+  "f03787d1-9872-48d1-987c-b0617bb562c8",
+  "f8ffe383-36f7-42c2-99c8-013194be9bc9",
+  "5c38eab8-433c-441b-bbd6-3834c9150247",
+  "04121dab-ff4d-4e65-9292-0a9f12139338"
+];
+const DOG_TITLES = [
+  "Umleitung", "Nanana (extraction)", "Something Going on in My Head",
+  "Mean Girl", "Nanana (extraction)", "Gerdundula", "Railroad",
+  "Someone’s Learning", "Nanana"
+];
+
+function dogReleaseDetail(releaseId = DOG_UK_RELEASE_ID, country = "GB", date = "1971") {
+  return {
+    id: releaseId,
+    title: "Dog of Two Head",
+    date,
+    country,
+    status: "Official",
+    "artist-credit": [{ name: "Status Quo", artist: { id: "1884ed9c-6fe1-468d-a7f8-8d19c9c4e441", name: "Status Quo" } }],
+    "release-group": {
+      id: DOG_GROUP_ID, title: "Dog of Two Head", "primary-type": "Album",
+      "secondary-types": [], "first-release-date": "1971"
+    },
+    media: [{
+      position: 1,
+      "track-count": 9,
+      tracks: DOG_TITLES.map((title, index) => ({
+        id: `70000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+        position: index + 1,
+        title,
+        recording: { id: DOG_RECORDING_IDS[index], title }
+      }))
+    }]
+  };
+}
+
+test("Dog of Two Head keeps its original UK release identity and all nine repeated-title occurrences", () => {
+  const tracks = flattenTracks(dogReleaseDetail(), "Status Quo");
+  assert.equal(tracks.length, 9);
+  assert.equal(tracks.filter(track => track.title === "Nanana (extraction)").length, 2);
+  assert.equal(new Set(tracks.map(track => track.musicbrainz_recording_id)).size, 9);
+  assert.deepEqual(validateTrackOccurrences(tracks, { requireTrackIds: true }), { valid: true, reason: null });
+});
+
+test("the official German nine-track edition is compatible without changing release groups", () => {
+  const detail = dogReleaseDetail(DOG_DE_RELEASE_ID, "DE", "1987");
+  const tracks = flattenTracks(detail, "Status Quo");
+  assert.equal(detail["release-group"].id, DOG_GROUP_ID);
+  assert.equal(detail.id, DOG_DE_RELEASE_ID);
+  assert.equal(tracks.length, 9);
+  assert.deepEqual(validateTrackOccurrences(tracks, { requireTrackIds: true }), { valid: true, reason: null });
+});
+
+test("repeated recordings remain separate occurrences when MusicBrainz track IDs differ", () => {
+  const detail = dogReleaseDetail();
+  detail.media[0].tracks[4].recording.id = detail.media[0].tracks[1].recording.id;
+  const tracks = flattenTracks(detail, "Status Quo");
+  assert.equal(tracks[1].musicbrainz_recording_id, tracks[4].musicbrainz_recording_id);
+  assert.notEqual(tracks[1].musicbrainz_track_id, tracks[4].musicbrainz_track_id);
+  assert.deepEqual(validateTrackOccurrences(tracks, { requireTrackIds: true }), { valid: true, reason: null });
+});
+
+test("duplicated MusicBrainz track identities and invalid sequences are rejected", () => {
+  const duplicateTrack = flattenTracks(dogReleaseDetail(), "Status Quo");
+  duplicateTrack[4].musicbrainz_track_id = duplicateTrack[1].musicbrainz_track_id;
+  assert.equal(validateTrackOccurrences(duplicateTrack, { requireTrackIds: true }).reason,
+    "duplicate_musicbrainz_track_identity");
+
+  const invalidSequence = flattenTracks(dogReleaseDetail(), "Status Quo");
+  invalidSequence[4].position = 4;
+  assert.equal(validateTrackOccurrences(invalidSequence, { requireTrackIds: true }).reason,
+    "invalid_track_occurrence_list");
 });
 
 test("existing album repair resolves only its stored exact release identity", async () => {

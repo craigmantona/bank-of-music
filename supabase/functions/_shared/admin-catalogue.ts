@@ -163,12 +163,47 @@ export function flattenTracks(release: any, fallbackArtist: string) {
         medium_track_position: Number(track.position || tracks.length + 1),
         title,
         artist: trackArtist,
+        musicbrainz_track_id: String(track?.id || "").trim().toLowerCase() || null,
         musicbrainz_recording_id: recordingId,
         duration_ms: durationMs
       });
     }
   }
   return tracks;
+}
+
+export function validateTrackOccurrences(
+  tracks: any[],
+  { requireTrackIds = false }: { requireTrackIds?: boolean } = {}
+) {
+  if (!Array.isArray(tracks) || !tracks.length || tracks.length > 500) {
+    return { valid: false, reason: "complete_track_listing_unavailable" };
+  }
+  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const positions = new Set<number>();
+  const trackIds = new Set<string>();
+  for (const [index, track] of tracks.entries()) {
+    const position = Number(track?.position);
+    const recordingId = String(track?.musicbrainz_recording_id || "").trim().toLowerCase();
+    const trackId = String(track?.musicbrainz_track_id || "").trim().toLowerCase();
+    if (position !== index + 1 || positions.has(position) ||
+        !String(track?.title || "").trim() || !String(track?.artist || "").trim() ||
+        !uuidPattern.test(recordingId)) {
+      return { valid: false, reason: "invalid_track_occurrence_list" };
+    }
+    if ((requireTrackIds || trackId) && !uuidPattern.test(trackId)) {
+      return { valid: false, reason: "musicbrainz_track_identity_required" };
+    }
+    if (trackId && trackIds.has(trackId)) {
+      return { valid: false, reason: "duplicate_musicbrainz_track_identity" };
+    }
+    positions.add(position);
+    if (trackId) trackIds.add(trackId);
+  }
+  // Titles and recording IDs intentionally are not unique keys. A release can
+  // contain reprises, extracts, or the same recording more than once. Each
+  // MusicBrainz track ID and album-wide position remains a separate occurrence.
+  return { valid: true, reason: null };
 }
 
 export async function resolveSelectedRelease({
@@ -206,10 +241,11 @@ export async function resolveSelectedRelease({
   }
 
   const tracks = flattenTracks(detail, artist);
-  if (!tracks.length) {
+  const trackValidation = validateTrackOccurrences(tracks);
+  if (!trackValidation.valid) {
     return {
       status: "failed",
-      reason: "complete_track_listing_unavailable",
+      reason: trackValidation.reason,
       selected_release: releaseSummary(detail)
     };
   }
@@ -283,7 +319,8 @@ export async function resolveExistingAlbumRelease({
   }
 
   const tracks = flattenTracks(detail, resolvedArtist);
-  if (!tracks.length) return { status: "failed", reason: "complete_track_listing_unavailable" };
+  const trackValidation = validateTrackOccurrences(tracks);
+  if (!trackValidation.valid) return { status: "failed", reason: trackValidation.reason };
   return {
     status: "ready",
     album: {
@@ -413,8 +450,9 @@ export async function resolveRequestedAlbum({
     return { ...base, status: "failed", reason: "release_identity_validation_failed" };
   }
   const tracks = flattenTracks(detail, artist.name);
-  if (!tracks.length) {
-    return { ...base, status: "failed", reason: "complete_track_listing_unavailable" };
+  const trackValidation = validateTrackOccurrences(tracks);
+  if (!trackValidation.valid) {
+    return { ...base, status: "failed", reason: trackValidation.reason };
   }
 
   const resolvedTitle = String(detail.title || group.title || "").trim();

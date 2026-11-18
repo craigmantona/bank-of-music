@@ -2,11 +2,14 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [app, edge, migration, rateLimitMigration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests, scheduledWorkflow] = await Promise.all([
+const [app, publicApp, edge, catalogueCore, migration, rateLimitMigration, repeatedOccurrenceMigration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests, scheduledWorkflow] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
+  readFile(new URL("../public/app.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/remote-album-catalogue/index.ts", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/functions/_shared/admin-catalogue.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260928121724_authenticated_remote_album_creation.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20261117160000_remote_album_import_rate_limit.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20261118150843_allow_repeated_album_track_occurrences.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260929092636_catalogue_release_group_exclusions.sql", import.meta.url), "utf8"),
@@ -38,6 +41,27 @@ test("server derives artist, title, group and complete tracks from MusicBrainz",
   assert.match(edge, /releaseGroupTitle = String\(exactRelease\?\.\["release-group"\]\?\.title \|\| title\)/);
   assert.match(edge, /request: \{ title: releaseGroupTitle, release_group_id: groupId, release_id: releaseId \}/);
   assert.match(edge, /preview\.status !== "ready"/);
+  assert.match(edge, /validateTrackOccurrences\(preview\.tracks, \{ requireTrackIds: true \}\)/);
+});
+
+test("release occurrences allow repeated titles and recordings but retain strict occurrence identities", () => {
+  assert.match(repeatedOccurrenceMigration, /drop index if exists public\.songs_unique_track/);
+  assert.match(repeatedOccurrenceMigration, /drop index if exists public\.songs_title_artist_album_unique/);
+  assert.match(repeatedOccurrenceMigration, /drop index if exists public\.songs_album_external_source_external_id_unique/);
+  assert.match(repeatedOccurrenceMigration, /songs_album_track_position_unique|contiguous positions/);
+  assert.match(repeatedOccurrenceMigration, /unique MusicBrainz track IDs/);
+  assert.doesNotMatch(repeatedOccurrenceMigration, /group by lower\(btrim\(track\.title\)\) having count\(\*\) > 1/);
+  assert.doesNotMatch(repeatedOccurrenceMigration, /group by lower\(track\.musicbrainz_recording_id\) having count\(\*\) > 1/);
+});
+
+test("import failures expose safe reasons and a deliberate retry without leaking database errors", () => {
+  assert.match(edge, /musicbrainz_temporarily_unavailable/);
+  assert.match(catalogueCore, /duplicate_musicbrainz_track_identity/);
+  assert.match(edge, /console\.warn\("Remote album catalogue write rejected", String\(error\.code/);
+  assert.doesNotMatch(edge, /return json\(request, \{[^}]*error\.message/);
+  assert.match(app, /data-bom-action="retry-album-import"/);
+  assert.match(app, /Nothing was imported/);
+  assert.equal(app, publicApp);
 });
 
 test("deluxe release titles use the canonical release-group title for eligibility", () => {
@@ -105,7 +129,7 @@ test("on-demand imports have an atomic per-user server-side rate limit", () => {
 });
 
 test("loading failures and rate limits stay failures and can be retried", () => {
-  assert.match(edge, /\{ ok: false, status: "failed", reason: "catalogue_creation_failed" \}, 503/);
+  assert.match(edge, /\{ ok: false, status: "failed", \.\.\.failure \}, 503/);
   assert.match(app, /catalogueAutoAddStatus === "rate_limited"/);
   assert.match(app, /data-bom-action="retry-album-import"/);
   const retry = app.slice(app.indexOf("window.addEventListener(\"click\""), app.indexOf("v33: profile average rating"));
