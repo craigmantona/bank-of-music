@@ -53,11 +53,12 @@ test("failed native share falls back to copy and denied clipboard falls back to 
   assert.equal(context.promptCall[1], "https://bankofmusic.app/?share=album&albumId=42");
 });
 
-test("album detail exposes a prominent responsive Share album action", () => {
+test("album detail exposes a quiet accessible Share album action without redundant borders", () => {
   assert.match(app, /#shareSelectedItemBtn[\s\S]*await shareSelectedItem\(\)/);
   assert.match(app, /shareControlHtml: buildSelectedSharePanel\(selectedItem\)\.replace\(">Send<", ">Share album<"\)/);
-  assert.match(css, /#shareSelectedItemBtn \{[^}]*background: var\(--bom-v1-accent\)/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*#shareSelectedItemBtn \{ width: 100%/);
+  assert.match(css, /\.bom-v1-album-actions \.selected-share-panel \{[^}]*border: 0 !important/);
+  assert.match(css, /#shareSelectedItemBtn \{[^}]*background: transparent !important[^}]*border: 0 !important/);
+  assert.match(css, /#shareSelectedItemBtn:focus-visible \{[^}]*outline:/);
   assert.match(html, /bom-foundation\.css\?v=\d+&autocomplete=1/);
-  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=3/);
+  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=4/);
 });
