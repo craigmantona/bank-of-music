@@ -3,7 +3,8 @@ import { getAdminKey, requireAuthenticatedUser } from "../_shared/authorization.
 import { catalogueFetch, musicBrainzIdentity } from "../_shared/catalogue-worker.ts";
 import {
   normaliseCatalogueText,
-  resolveRequestedAlbum
+  resolveRequestedAlbum,
+  validateTrackOccurrences
 } from "../_shared/admin-catalogue.ts";
 import {
   runDurationBackfillBatch,
@@ -39,6 +40,24 @@ function json(request: Request, body: Record<string, unknown>, status = 200, ext
 function uuid(value: unknown) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     .test(String(value || ""));
+}
+
+function catalogueFailureReason(error: any) {
+  const code = String(error?.code || "");
+  const message = String(error?.message || error || "").toLowerCase();
+  if (code === "23505" && message.includes("track occurrences")) {
+    return { reason: "invalid_track_occurrence_list", retryable: false };
+  }
+  if (code === "22023") {
+    return { reason: "invalid_track_occurrence_list", retryable: false };
+  }
+  if (code === "23505") {
+    return { reason: "catalogue_identity_conflict", retryable: true };
+  }
+  if (message.includes("musicbrainz") || message.includes("coordination failed")) {
+    return { reason: "musicbrainz_temporarily_unavailable", retryable: true };
+  }
+  return { reason: "catalogue_creation_failed", retryable: true };
 }
 
 async function reserveMusicBrainzSlot() {
@@ -157,8 +176,8 @@ async function enrichAlbumDurations(albumId: number) {
     return result.data || [];
   };
   const songs = await fetchSongs();
-  if (songs.length && songs.every(song => Number.isSafeInteger(Number(song.duration_ms)) && Number(song.duration_ms) > 0)) {
-    return { status: "already_complete", songs_populated: 0, durations: songs.map(song => ({ id: song.id, duration_ms: song.duration_ms })) };
+  if (songs.length && songs.every((song: any) => Number.isSafeInteger(Number(song.duration_ms)) && Number(song.duration_ms) > 0)) {
+    return { status: "already_complete", songs_populated: 0, durations: songs.map((song: any) => ({ id: song.id, duration_ms: song.duration_ms })) };
   }
   const report = await runDurationBackfillBatch({
     albums: [album],
@@ -181,7 +200,7 @@ async function enrichAlbumDurations(albumId: number) {
   return {
     status: report.failures.length ? "failed" : report.albums_skipped ? "skipped" : "processed",
     ...report,
-    durations: refreshed.map(song => ({ id: song.id, duration_ms: song.duration_ms }))
+    durations: refreshed.map((song: any) => ({ id: song.id, duration_ms: song.duration_ms }))
   };
 }
 
@@ -253,7 +272,7 @@ Deno.serve(async (request) => {
       return json(request, { ok: true, status: "needs_correction", reason: "release_group_excluded_by_administrator" });
     }
 
-    const preview = await resolveRequestedAlbum({
+    const preview: any = await resolveRequestedAlbum({
       artist,
       // Edition qualifiers such as "(Deluxe)" belong to the release. Group
       // eligibility must compare the canonical release-group title instead.
@@ -266,21 +285,40 @@ Deno.serve(async (request) => {
       return json(request, { ok: true, status: "already_exists", album_id: preview.existing_album_id });
     }
     if (preview.status !== "ready") {
+      const reason = preview.reason || "catalogue_confirmation_required";
+      const failed = preview.status === "failed";
       return json(request, {
-        ok: true,
-        status: preview.status === "failed" ? "failed" : "needs_correction",
-        reason: preview.reason || "catalogue_confirmation_required"
-      });
+        ok: !failed,
+        status: failed ? "failed" : "needs_correction",
+        reason,
+        retryable: reason === "complete_track_listing_unavailable"
+      }, failed ? 422 : 200);
+    }
+
+    const occurrenceValidation = validateTrackOccurrences(preview.tracks, { requireTrackIds: true });
+    if (!occurrenceValidation.valid) {
+      return json(request, {
+        ok: false,
+        status: "failed",
+        reason: occurrenceValidation.reason,
+        retryable: false
+      }, 422);
     }
 
     const { data, error } = await service.rpc("admin_add_catalogue_album", {
       p_album: preview.album,
       p_tracks: preview.tracks
     });
-    if (error) throw new Error("Atomic catalogue creation failed");
+    if (error) {
+      const failure = catalogueFailureReason(error);
+      console.warn("Remote album catalogue write rejected", String(error.code || "unknown"));
+      return json(request, { ok: false, status: "failed", ...failure },
+        failure.retryable ? 409 : 422);
+    }
     return json(request, { ok: true, ...data });
   } catch (error) {
-    console.warn("Remote album catalogue request failed", String((error as Error)?.message || error));
-    return json(request, { ok: false, status: "failed", reason: "catalogue_creation_failed" }, 503);
+    const failure = catalogueFailureReason(error);
+    console.warn("Remote album catalogue request failed", failure.reason);
+    return json(request, { ok: false, status: "failed", ...failure }, 503);
   }
 });
