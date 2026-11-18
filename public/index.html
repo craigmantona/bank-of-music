@@ -9,7 +9,7 @@
  
  <title>Bank of Music</title>
  
- <link rel="stylesheet" href="style.css?v=85&listening-ui=2&apple-playlists=1" />
+ <link rel="stylesheet" href="style.css?v=86&listening-ui=2&apple-playlists=2&soundiiz=1" />
  <script>
   /* Stage 1 assets are development-only and add no requests to the legacy UI. */
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
@@ -406,27 +406,29 @@
       <div>
         <h3>Apple Music</h3>
         <p class="small">
-          Prepare Apple Music links for the same personal and community BoM playlists.
+          Transfer the same five personal and community BoM playlists with Soundiiz,
+          or use individual Apple Music search links.
         </p>
       </div>
     </div>
 
     <div class="apple-music-setup-note" role="note">
-      <strong>No Apple Music connection is required for links.</strong>
+      <strong>Temporary Apple Music transfers, with no API key required.</strong>
       <span>
-        Bank of Music does not automatically create or edit an Apple Music playlist.
-        That requires a configured MusicKit developer token and each listener's Apple
-        Music authorisation. <a href="https://developer.apple.com/documentation/applemusicapi/user-authentication-for-musickit" target="_blank" rel="noopener noreferrer">MusicKit setup details</a>.
+        Soundiiz links expire after 24 hours. You review the tracks, connect Apple Music
+        and complete the transfer on Soundiiz. Its 200-track maximum is handled by
+        splitting longer BoM lists into separate parts. Bank of Music still does not
+        directly create or edit your Apple Music library through MusicKit.
       </span>
     </div>
 
     <div id="appleMusicExportPanel" class="apple-music-export-panel">
       <div class="spotify-export-heading">
         <div>
-          <h3>Prepare Apple Music playlist links</h3>
+          <h3>Prepare an Apple Music playlist</h3>
           <p class="small">
-            Choose a playlist to get one Apple Music search link per qualifying track,
-            ready to open, copy or share.
+            Choose one of the five playlists, then use its temporary Soundiiz transfer
+            or open, copy and share the individual Apple Music links.
           </p>
         </div>
       </div>
@@ -532,10 +534,10 @@
   <script src="bom-password-recovery.js?v=1"></script>
   <script src="bom-early-access.js?v=4"></script>
   <script src="bom-spotify-playlist.js?v=4"></script>
-  <script src="bom-apple-music-playlist.js?v=1"></script>
+  <script src="bom-apple-music-playlist.js?v=2"></script>
   <script src="artist-easter-eggs.js?v=1"></script>
   <script src="bom-email-announcements.js?v=2"></script>
-  <script src="app.js?v=183&autocomplete=2&search-autosave=1&listening-ui=2&email-announcements=2&apple-playlists=1"></script>
+  <script src="app.js?v=184&autocomplete=2&search-autosave=1&listening-ui=2&email-announcements=2&apple-playlists=2&soundiiz=1"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
