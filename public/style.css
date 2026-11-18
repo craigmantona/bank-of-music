@@ -6142,6 +6142,62 @@ button.song-album-link {
   background: linear-gradient(135deg, #fa57c1, #fa233b);
 }
 
+.apple-soundiiz-result {
+  margin-top: 14px;
+}
+
+.apple-soundiiz-result > .small {
+  margin-bottom: 0;
+}
+
+.apple-soundiiz-ready {
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.065);
+}
+
+.apple-soundiiz-ready > strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.apple-soundiiz-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.apple-soundiiz-links a {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border: 1px solid rgba(122, 220, 255, 0.52);
+  border-radius: 10px;
+  color: #fff;
+  background: rgba(25, 155, 205, 0.2);
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.apple-soundiiz-links a:hover {
+  border-color: #7adcff;
+  background: rgba(25, 155, 205, 0.34);
+}
+
+.apple-soundiiz-links small {
+  color: rgba(255, 255, 255, 0.68);
+  font-weight: 650;
+}
+
+.apple-soundiiz-error {
+  margin: 10px 0 0;
+  color: #ffd1dc;
+  font-weight: 750;
+}
+
 .apple-playlist-links {
   margin-top: 16px;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -6212,7 +6268,9 @@ button.song-album-link {
   }
 
   .apple-playlist-actions,
-  .apple-playlist-actions button {
+  .apple-playlist-actions button,
+  .apple-soundiiz-links,
+  .apple-soundiiz-links a {
     width: 100%;
   }
 

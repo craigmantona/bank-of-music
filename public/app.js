@@ -16152,9 +16152,9 @@ document
 
 /* ============================================================
    APPLE MUSIC PLAYLIST LINKS
-   MusicKit authentication is not configured, so Bank of Music
-   prepares usable Apple Music links without claiming to create
-   or modify a listener's Apple Music library.
+   Bank of Music keeps direct Apple Music search links as a
+   fallback and can create temporary Soundiiz handoff links.
+   The listener reviews and completes every transfer in Soundiiz.
    ============================================================ */
 
 let currentAppleMusicPlaylist = null;
@@ -16213,7 +16213,7 @@ function setAppleMusicPlaylistButtonsDisabled(disabled, activeButton = null) {
 function renderAppleMusicPlaylistLinks({ prepared, sourceLabel }) {
   const elements = getAppleMusicExportElements();
   if (!elements.result) return;
-  currentAppleMusicPlaylist = prepared;
+  currentAppleMusicPlaylist = { ...prepared, sourceLabel };
   const count = prepared.tracks.length;
 
   elements.result.classList.remove("hidden");
@@ -16232,8 +16232,16 @@ function renderAppleMusicPlaylistLinks({ prepared, sourceLabel }) {
           or changed a playlist in your Apple Music library.
         </p>
         <div class="apple-playlist-actions">
+          <button id="appleMusicSoundiizBtn" type="button">Transfer with Soundiiz</button>
           <button id="appleMusicCopyLinksBtn" type="button">Copy all track links</button>
           <button id="appleMusicShareLinksBtn" type="button" class="secondary-btn">Share track links</button>
+        </div>
+        <div id="appleMusicSoundiizResult" class="apple-soundiiz-result">
+          <p class="small">
+            Soundiiz will create a temporary link valid for 24 hours. You review
+            the matches and complete the Apple Music transfer there. Lists over
+            200 tracks are split into separate, clearly labelled parts.
+          </p>
         </div>
       </div>
     </div>
@@ -16249,6 +16257,95 @@ function renderAppleMusicPlaylistLinks({ prepared, sourceLabel }) {
       </ol>
     </details>
   `;
+}
+
+function formatSoundiizExpiry(expiresAt) {
+  const expiry = new Date(Number(expiresAt) * 1000);
+  if (!Number.isFinite(Number(expiresAt)) || Number.isNaN(expiry.getTime())) {
+    return "within 24 hours";
+  }
+  return `before ${expiry.toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}`;
+}
+
+function renderSoundiizTransferLinks(links, totalParts = links.length, errorMessage = "") {
+  const result = document.getElementById("appleMusicSoundiizResult");
+  if (!result) return;
+  const validLinks = Array.isArray(links) ? links : [];
+  const partCount = Math.max(Number(totalParts) || 0, validLinks.length);
+  const isSplit = partCount > 1;
+  const expiry = validLinks.length
+    ? formatSoundiizExpiry(Math.min(...validLinks.map((link) => Number(link.expiresAt) || Infinity)))
+    : "within 24 hours";
+
+  result.innerHTML = `
+    ${validLinks.length ? `
+      <div class="apple-soundiiz-ready">
+        <strong>${isSplit ? `${validLinks.length} of ${partCount} Soundiiz parts ready` : "Soundiiz transfer ready"}</strong>
+        <p class="small">
+          Open ${isSplit ? "each part" : "the link"} ${expiry}, review the matches,
+          connect Apple Music and complete ${isSplit ? "each transfer" : "the transfer"} in Soundiiz.
+          ${isSplit ? "Each part becomes a separate Apple Music playlist unless you combine them afterwards." : ""}
+        </p>
+        <div class="apple-soundiiz-links">
+          ${validLinks.map((link) => `
+            <a href="${escapeHtml(link.shareUrl)}" target="_blank" rel="noopener noreferrer">
+              ${isSplit ? `Open part ${link.partNumber} of ${partCount}` : "Open in Soundiiz"}
+              <small>${link.trackCount} track${link.trackCount === 1 ? "" : "s"}</small>
+            </a>
+          `).join("")}
+        </div>
+      </div>
+    ` : ""}
+    ${errorMessage ? `<p class="apple-soundiiz-error" role="alert">${escapeHtml(errorMessage)}</p>` : ""}
+  `;
+}
+
+async function createCurrentAppleMusicSoundiizTransfer() {
+  if (!currentAppleMusicPlaylist || !window.BOMAppleMusicPlaylist) return;
+  if (currentAppleMusicPlaylist.soundiizLinks?.length) {
+    renderSoundiizTransferLinks(currentAppleMusicPlaylist.soundiizLinks);
+    setAppleMusicMessage("Your temporary Soundiiz transfer link is already ready on this page.");
+    return;
+  }
+  const button = document.getElementById("appleMusicSoundiizBtn");
+  if (!button || button.disabled) return;
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Creating temporary link…";
+  setAppleMusicMessage("Asking Soundiiz to prepare the Apple Music transfer…");
+
+  try {
+    const links = await window.BOMAppleMusicPlaylist.createSoundiizImportLinks({
+      ...currentAppleMusicPlaylist,
+      onProgress: ({ completed, total }) => {
+        updateAppleMusicExportProgress(
+          completed,
+          total,
+          `Created ${completed} of ${total} temporary Soundiiz link${total === 1 ? "" : "s"}.`
+        );
+      }
+    });
+    currentAppleMusicPlaylist.soundiizLinks = links;
+    renderSoundiizTransferLinks(links);
+    setAppleMusicMessage(
+      links.length === 1
+        ? "Soundiiz transfer link ready. Open it within 24 hours to complete the Apple Music transfer."
+        : `${links.length} Soundiiz transfer parts ready. Open each within 24 hours to complete the Apple Music transfers.`
+    );
+  } catch (error) {
+    const partialLinks = error?.soundiizLinks || [];
+    const totalParts = error?.soundiizTotalParts || partialLinks.length;
+    const errorMessage = error?.message || "Soundiiz could not prepare the transfer link.";
+    renderSoundiizTransferLinks(partialLinks, totalParts, errorMessage);
+    setAppleMusicMessage(
+      partialLinks.length
+        ? `${partialLinks.length} Soundiiz part${partialLinks.length === 1 ? " is" : "s are"} ready, but the remaining link${totalParts - partialLinks.length === 1 ? "" : "s"} could not be prepared. ${errorMessage}`
+        : `${errorMessage} The individual Apple Music search links are still available.`
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
 }
 
 async function copyAppleMusicPlaylistText(text) {
@@ -16349,6 +16446,9 @@ document.querySelectorAll(".apple-playlist-link-btn").forEach((button) => {
 });
 
 document.addEventListener("click", (event) => {
+  if (event.target.closest?.("#appleMusicSoundiizBtn")) {
+    void createCurrentAppleMusicSoundiizTransfer();
+  }
   if (event.target.closest?.("#appleMusicCopyLinksBtn")) {
     if (!currentAppleMusicPlaylist || !window.BOMAppleMusicPlaylist) return;
     void copyAppleMusicPlaylistText(

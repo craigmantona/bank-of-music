@@ -68,6 +68,110 @@ test("Apple Music playlist sharing uses native share and falls back to copying",
   assert.match(copied, /Song — Artist/);
 });
 
+test("Soundiiz imports split at 200 tracks without dropping or duplicating songs", () => {
+  const tracks = Array.from({ length: 401 }, (_, index) => ({
+    title: `Song ${index + 1}`,
+    artist: `Artist ${index + 1}`,
+    album: `Album ${index + 1}`
+  }));
+  assert.deepEqual(apple.chunkTracks(tracks).map((chunk) => chunk.length), [200, 200, 1]);
+  assert.deepEqual(apple.chunkTracks(tracks.slice(0, 200)).map((chunk) => chunk.length), [200]);
+
+  const imports = apple.buildSoundiizImportRequests({
+    playlistName: "BoM • Rated 7+",
+    sourceLabel: "your 7+ ratings",
+    tracks
+  });
+  assert.deepEqual(imports.map((item) => item.payload.title), [
+    "BoM • Rated 7+ • Part 1 of 3",
+    "BoM • Rated 7+ • Part 2 of 3",
+    "BoM • Rated 7+ • Part 3 of 3"
+  ]);
+  assert.ok(imports.every((item) => item.payload.destination === "applemusicapp"));
+  assert.deepEqual(imports[0].payload.tracklist[0], {
+    title: "Song 1",
+    artists: ["Artist 1"],
+    album: "Album 1"
+  });
+  assert.equal(imports.flatMap((item) => item.payload.tracklist).length, 401);
+  assert.match(imports[2].payload.description, /Part 3 of 3; Soundiiz accepts up to 200 tracks/);
+});
+
+test("Soundiiz link creation posts each part and accepts only temporary Soundiiz URLs", async () => {
+  const requests = [];
+  const progress = [];
+  const tracks = Array.from({ length: 201 }, (_, index) => ({
+    title: `Song ${index + 1}`,
+    artist: "Artist"
+  }));
+  const links = await apple.createSoundiizImportLinks({
+    playlistName: "BoM • Rated 8+",
+    tracks,
+    sourceLabel: "your 8+ ratings",
+    request: async (url, options) => {
+      requests.push({ url, options, payload: JSON.parse(options.body) });
+      const part = requests.length;
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          status: "success",
+          nbTracks: part === 1 ? 200 : 1,
+          shareUrl: `https://soundiiz.com/go/import-playlist/safe-token-${part}`,
+          expiresAt: 1782220923 + part
+        })
+      };
+    },
+    onProgress: (value) => progress.push(value)
+  });
+
+  assert.equal(requests.length, 2);
+  assert.equal(requests[0].url, "/api/soundiiz-import");
+  assert.equal(requests[0].options.method, "POST");
+  assert.equal(requests[0].payload.tracklist.length, 200);
+  assert.equal(requests[1].payload.tracklist.length, 1);
+  assert.deepEqual(links.map((link) => link.trackCount), [200, 1]);
+  assert.deepEqual(progress.map(({ completed, total }) => [completed, total]), [[1, 2], [2, 2]]);
+  assert.equal(apple.isSafeSoundiizShareUrl("https://soundiiz.com/go/import-playlist/token"), true);
+  assert.equal(apple.isSafeSoundiizShareUrl("https://evil.example/go/import-playlist/token"), false);
+  assert.equal(apple.isSafeSoundiizShareUrl("javascript:alert(1)"), false);
+});
+
+test("Soundiiz failures preserve already-created parts for a useful retry message", async () => {
+  let requestCount = 0;
+  await assert.rejects(
+    apple.createSoundiizImportLinks({
+      playlistName: "Large list",
+      tracks: Array.from({ length: 201 }, (_, index) => ({ title: `Song ${index}`, artist: "Artist" })),
+      request: async () => {
+        requestCount += 1;
+        if (requestCount === 1) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({
+              shareUrl: "https://soundiiz.com/go/import-playlist/first-part",
+              nbTracks: 200,
+              expiresAt: 1782220923
+            })
+          };
+        }
+        return {
+          ok: false,
+          status: 429,
+          json: async () => ({ message: "Please wait before creating another link." })
+        };
+      }
+    }),
+    (error) => {
+      assert.match(error.message, /Please wait/);
+      assert.equal(error.soundiizLinks.length, 1);
+      assert.equal(error.soundiizTotalParts, 2);
+      return true;
+    }
+  );
+});
+
 test("Apple Music settings mirror Spotify playlist choices and publish the link helper", async () => {
   const [app, html, styles, build] = await Promise.all([
     readFile(new URL("../app.js", import.meta.url), "utf8"),
@@ -84,16 +188,20 @@ test("Apple Music settings mirror Spotify playlist choices and publish the link 
     assert.match(applePanel, new RegExp(`data-minimum-rating="${threshold}"`));
   }
   assert.match(applePanel, /data-playlist-type="global-top-100"/);
-  assert.match(applePanel, /does not automatically create or edit an Apple Music playlist/i);
-  assert.match(applePanel, /MusicKit developer token/);
+  assert.match(applePanel, /complete the transfer on Soundiiz/i);
+  assert.match(applePanel, /200-track maximum/i);
+  assert.match(applePanel, /does not\s+directly create or edit your Apple Music library through MusicKit/i);
   assert.match(app, /Copy all track links/);
+  assert.match(app, /Transfer with Soundiiz/);
+  assert.match(app, /valid for 24 hours/i);
+  assert.match(app, /separate Apple Music playlist unless you combine them afterwards/i);
   assert.match(app, /getCurrentUserRatedTracksForSpotify\(minimumRating\)/);
   assert.match(app, /getGlobalTop100TracksForSpotify\(\)/);
   assert.match(app, /navigator\.share/);
   assert.doesNotMatch(app, /api\.music\.apple\.com\/v1\/me\/library\/playlists/);
   assert.match(styles, /\.apple-settings-panel/);
   assert.match(build, /bom-apple-music-playlist\.js/);
-  assert.match(html, /<script src="bom-apple-music-playlist\.js\?v=1"><\/script>/);
+  assert.match(html, /<script src="bom-apple-music-playlist\.js\?v=2"><\/script>/);
 });
 
 test("settings reuse the existing Spotify, Apple and Both listening preference", async () => {
