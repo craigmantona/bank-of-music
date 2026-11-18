@@ -2,15 +2,17 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [app, edge, migration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests] = await Promise.all([
+const [app, edge, migration, rateLimitMigration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests, scheduledWorkflow] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/remote-album-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260928121724_authenticated_remote_album_creation.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20261117160000_remote_album_import_rate_limit.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260929092636_catalogue_release_group_exclusions.sql", import.meta.url), "utf8"),
   readFile(new URL("./song-occurrence-identity.test.mjs", import.meta.url), "utf8"),
-  readFile(new URL("./quick-rate.test.mjs", import.meta.url), "utf8")
+  readFile(new URL("./quick-rate.test.mjs", import.meta.url), "utf8"),
+  readFile(new URL("../.github/workflows/daily-album-discovery.yml", import.meta.url), "utf8")
 ]);
 
 const saveSource = app.slice(app.indexOf("const albumAutoSaveInFlight"), app.indexOf("async function importSelectedAlbum"));
@@ -19,6 +21,7 @@ const albumRender = app.slice(app.indexOf("async function renderSelectedItem"), 
 test("ordinary users receive only an exact-release server-side catalogue operation", () => {
   assert.match(edge, /requireAuthenticatedUser\(request\)/);
   assert.ok(edge.indexOf("requireAuthenticatedUser(request)") < edge.indexOf("await request.json()"));
+  assert.match(edge, /Valid JSON is required\./);
   assert.match(edge, /release_id/);
   assert.match(edge, /release_group_id/);
   assert.doesNotMatch(edge, /requireAdminUser|delete_album|search_artist/);
@@ -84,6 +87,37 @@ test("client performs no direct catalogue writes and coalesces concurrent releas
   assert.match(activeSource, /albumAutoSaveInFlight\.has\(requestKey\)/);
   assert.match(activeSource, /functions\.invoke\("remote-album-catalogue"/);
   assert.doesNotMatch(activeSource, /\.from\(["'](?:albums|songs)["']\)/);
+});
+
+test("on-demand imports have an atomic per-user server-side rate limit", () => {
+  assert.match(edge, /reserve_remote_album_import_slot/);
+  assert.match(edge, /authorization\.userId/);
+  assert.match(edge, /status: "rate_limited"/);
+  assert.match(edge, /}, 429, \{ "Retry-After": String\(retryAfter\) \}\)/);
+  assert.ok(edge.indexOf("findExistingByRequestedIdentity") < edge.indexOf("reserveUserImportSlot(authorization.userId!"));
+  assert.ok(edge.indexOf("reserveUserImportSlot(authorization.userId!") < edge.indexOf("const exactRelease = await musicBrainzGet"));
+  assert.match(rateLimitMigration, /pg_advisory_xact_lock\(hashtextextended\('bom-remote-album-rate:' \|\| p_user_id::text/);
+  assert.match(rateLimitMigration, /v_short_count >= 5/);
+  assert.match(rateLimitMigration, /v_daily_count >= 20/);
+  assert.match(rateLimitMigration, /enable row level security/);
+  assert.match(rateLimitMigration, /revoke all on function public\.reserve_remote_album_import_slot\(uuid\) from public, anon, authenticated/);
+  assert.match(rateLimitMigration, /grant execute on function public\.reserve_remote_album_import_slot\(uuid\) to service_role/);
+});
+
+test("loading failures and rate limits stay failures and can be retried", () => {
+  assert.match(edge, /\{ ok: false, status: "failed", reason: "catalogue_creation_failed" \}, 503/);
+  assert.match(app, /catalogueAutoAddStatus === "rate_limited"/);
+  assert.match(app, /data-bom-action="retry-album-import"/);
+  const retry = app.slice(app.indexOf("window.addEventListener(\"click\""), app.indexOf("v33: profile average rating"));
+  assert.match(retry, /delete selectedItem\.catalogueAutoAddStarted/);
+  assert.match(retry, /delete selectedItem\.catalogueAutoAddStatus/);
+  assert.match(retry, /void renderSelectedItem\(\)/);
+});
+
+test("the scheduled five-album workflow remains independent", () => {
+  assert.match(scheduledWorkflow, /ALBUM_IMPORT_TARGET/);
+  assert.doesNotMatch(scheduledWorkflow, /remote-album-catalogue|reserve_remote_album_import_slot/);
+  assert.doesNotMatch(rateLimitMigration, /catalogue_worker_state|automated_album/);
 });
 
 test("atomic writer remains idempotent and occurrence-safe for shared recordings", () => {

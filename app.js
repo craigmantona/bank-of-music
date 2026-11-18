@@ -8301,7 +8301,12 @@ function renderRemoteAlbumCatalogueStatus(item = selectedItem) {
     return '<span class="small">This album needs catalogue confirmation before ratings can be saved.</span>';
   }
   if (item?.catalogueAutoAddStatus === "failed") {
-    return '<span class="small">This album could not be added right now. You can still browse it.</span>';
+    return '<span class="small">This album could not be added right now. You can still browse it.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Retry import</button>';
+  }
+  if (item?.catalogueAutoAddStatus === "rate_limited") {
+    const retryAfter = Math.max(1, Number(item?.catalogueAutoAddRetryAfter || 60));
+    const minutes = Math.max(1, Math.ceil(retryAfter / 60));
+    return `<span class="small">Album importing is temporarily rate limited. Try again in about ${minutes} minute${minutes === 1 ? "" : "s"}.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Retry import</button>`;
   }
   return '<span class="small">Preparing ratings…</span>';
 }
@@ -11219,6 +11224,16 @@ async function autoSaveSelectedSong() {
 // Coalesce repeated selections without introducing another catalogue write path.
 const albumAutoSaveInFlight = new Map();
 
+async function readFunctionErrorPayload(error) {
+  const response = error?.context;
+  if (!response || typeof response.clone !== "function") return null;
+  try {
+    return await response.clone().json();
+  } catch {
+    return null;
+  }
+}
+
 async function autoSaveSelectedAlbum() {
   if (!currentUser) return null;
   if (!selectedItem || selectedItem.type !== "album") return null;
@@ -11272,7 +11287,15 @@ async function autoSaveSelectedAlbum() {
         }
       });
       if (currentUser?.id !== userId) return null;
-      if (error) throw error;
+      if (error) {
+        const errorPayload = await readFunctionErrorPayload(error);
+        if (errorPayload?.status === "rate_limited") {
+          item.catalogueAutoAddStatus = "rate_limited";
+          item.catalogueAutoAddRetryAfter = Math.max(1, Number(errorPayload.retry_after_seconds || 60));
+          return null;
+        }
+        throw error;
+      }
       if (data?.status === "needs_correction") {
         item.catalogueAutoAddStatus = "needs_correction";
         item.catalogueAutoAddReason = data.reason || "catalogue_confirmation_required";
@@ -17118,6 +17141,15 @@ window.addEventListener("popstate", async (event) => {
 });
 
 window.addEventListener("click", (event) => {
+  if (event.target.closest('[data-bom-action="retry-album-import"]')) {
+    if (selectedItem?.type !== "album") return;
+    delete selectedItem.catalogueAutoAddStarted;
+    delete selectedItem.catalogueAutoAddStatus;
+    delete selectedItem.catalogueAutoAddReason;
+    delete selectedItem.catalogueAutoAddRetryAfter;
+    void renderSelectedItem();
+    return;
+  }
   if (event.target.closest('[data-bom-action="retry-album"]')) void renderSelectedItem();
 });
 

@@ -32,8 +32,8 @@ function corsHeaders(request: Request) {
   };
 }
 
-function json(request: Request, body: Record<string, unknown>, status = 200) {
-  return Response.json(body, { status, headers: corsHeaders(request) });
+function json(request: Request, body: Record<string, unknown>, status = 200, extraHeaders: Record<string, string> = {}) {
+  return Response.json(body, { status, headers: { ...corsHeaders(request), ...extraHeaders } });
 }
 
 function uuid(value: unknown) {
@@ -107,6 +107,31 @@ async function findExisting(identity: any) {
   return null;
 }
 
+async function findExistingByRequestedIdentity(releaseId: string, releaseGroupId: string) {
+  const select = "id,title,artist,is_deleted";
+  const lookups = [
+    service.from("albums").select(select).eq("musicbrainz_release_id", releaseId).limit(1).maybeSingle(),
+    service.from("albums").select(select).eq("external_source", "musicbrainz").eq("external_id", releaseId).limit(1).maybeSingle(),
+    ...(releaseGroupId
+      ? [service.from("albums").select(select).eq("musicbrainz_release_group_id", releaseGroupId).limit(1).maybeSingle()]
+      : [])
+  ];
+  for (const lookup of lookups) {
+    const { data, error } = await lookup;
+    if (error) throw new Error("Duplicate lookup failed");
+    if (data) return data;
+  }
+  return null;
+}
+
+async function reserveUserImportSlot(userId: string) {
+  const { data, error } = await service.rpc("reserve_remote_album_import_slot", { p_user_id: userId });
+  if (error || !data || typeof data.allowed !== "boolean") {
+    throw new Error("Album import rate limit unavailable");
+  }
+  return data as { allowed: boolean; retry_after_seconds?: number };
+}
+
 function artistFromRelease(detail: any) {
   const credits = Array.isArray(detail?.["artist-credit"]) ? detail["artist-credit"] : [];
   const ids = [...new Set(credits.map((credit: any) => String(credit?.artist?.id || "").toLowerCase()).filter(Boolean))];
@@ -171,8 +196,14 @@ Deno.serve(async (request) => {
     return json(request, await denied.clone().json(), denied.status);
   }
 
+  let body: Record<string, unknown>;
   try {
-    const body = await request.json();
+    body = await request.json();
+  } catch {
+    return json(request, { ok: false, error: "Valid JSON is required." }, 400);
+  }
+
+  try {
     if (body?.action === "enrich_album_durations") {
       const albumId = Number(body.album_id);
       if (!Number.isSafeInteger(albumId) || albumId <= 0) {
@@ -187,6 +218,24 @@ Deno.serve(async (request) => {
     }
     if (expectedGroupId && await isReleaseGroupExcluded(expectedGroupId)) {
       return json(request, { ok: true, status: "needs_correction", reason: "release_group_excluded_by_administrator" });
+    }
+
+    const existingRequestedAlbum = await findExistingByRequestedIdentity(releaseId, expectedGroupId);
+    if (existingRequestedAlbum) {
+      return existingRequestedAlbum.is_deleted
+        ? json(request, { ok: true, status: "needs_correction", reason: "matching_album_is_deleted", album_id: existingRequestedAlbum.id })
+        : json(request, { ok: true, status: "already_exists", album_id: existingRequestedAlbum.id });
+    }
+
+    const importSlot = await reserveUserImportSlot(authorization.userId!);
+    if (!importSlot.allowed) {
+      const retryAfter = Math.max(1, Math.ceil(Number(importSlot.retry_after_seconds || 60)));
+      return json(request, {
+        ok: false,
+        status: "rate_limited",
+        reason: "album_import_rate_limit_reached",
+        retry_after_seconds: retryAfter
+      }, 429, { "Retry-After": String(retryAfter) });
     }
 
     const exactRelease = await musicBrainzGet(
@@ -232,6 +281,6 @@ Deno.serve(async (request) => {
     return json(request, { ok: true, ...data });
   } catch (error) {
     console.warn("Remote album catalogue request failed", String((error as Error)?.message || error));
-    return json(request, { ok: true, status: "failed", reason: "catalogue_creation_failed" });
+    return json(request, { ok: false, status: "failed", reason: "catalogue_creation_failed" }, 503);
   }
 });
