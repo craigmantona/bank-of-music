@@ -80,6 +80,12 @@ before(async () => {
     values (
       '1884ed9c-6fe1-468d-a7f8-8d19c9c4e441',
       '{"name":"Status Quo"}'::jsonb
+    ), (
+      '22222222-2222-4222-8222-222222222222',
+      '{"name":"The Rat Pack"}'::jsonb
+    ), (
+      '33333333-3333-4333-8333-333333333333',
+      '{"name":"The Rat Pack"}'::jsonb
     );
     insert into public.albums(
       id, title, artist, external_source, external_id,
@@ -107,6 +113,12 @@ before(async () => {
     from generate_series(5002, 19999) id;
     insert into public.ratings(user_id, album_id, rating)
     values ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 1881, 9);
+    insert into public.albums(
+      id, title, artist, external_source, external_id
+    ) values (
+      1879, 'Live at the Sands', 'The Rat Pack',
+      'musicbrainz', 'release-rat-pack'
+    );
   `);
   await db.exec(migration);
 });
@@ -132,6 +144,14 @@ test("backfill makes Status Quo searchable with its cached artist identity", asy
   assert.equal(exact[0].title, "Status Quo");
   assert.equal(exact[0].match_score, 500);
   assert.ok(exact.some(row => row.result_type === "album" && row.local_id === 1881));
+});
+
+test("ambiguous normalized artist identities never choose an arbitrary ID", async () => {
+  const rows = await search("The Rat Pack");
+  assert.equal(rows[0].result_type, "artist");
+  assert.equal(rows[0].title, "The Rat Pack");
+  assert.equal(rows[0].external_source, null);
+  assert.equal(rows[0].external_id, null);
 });
 
 test("migration preserves catalogue IDs, MusicBrainz links and ratings", async () => {

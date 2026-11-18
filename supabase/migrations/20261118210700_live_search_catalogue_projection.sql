@@ -67,6 +67,45 @@ as $$
   ));
 $$;
 
+create or replace function private.search_catalogue_artist_external_id(
+  p_normalised_name text
+)
+returns text
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with catalog_identities as (
+    select
+      count(distinct artist_catalog.musicbrainz_artist_id) as identity_count,
+      min(artist_catalog.musicbrainz_artist_id) as identity
+    from public.artist_catalog
+    where artist_catalog.musicbrainz_artist_id is not null
+      and private.search_catalogue_normalise(artist_catalog.artist_name) =
+        p_normalised_name
+  ), cache_identities as (
+    select
+      count(distinct musicbrainz_artist_cache.artist_id) as identity_count,
+      min(musicbrainz_artist_cache.artist_id::text) as identity
+    from public.musicbrainz_artist_cache
+    where private.search_catalogue_normalise(
+      musicbrainz_artist_cache.artist_detail->>'name'
+    ) = p_normalised_name
+  )
+  select case
+    when catalog_identities.identity_count = 1
+      then catalog_identities.identity
+    when catalog_identities.identity_count > 1
+      then null
+    when cache_identities.identity_count = 1
+      then cache_identities.identity
+    else null
+  end
+  from catalog_identities
+  cross join cache_identities;
+$$;
+
 create or replace function private.sync_search_catalogue_artist(p_artist_name text)
 returns void
 language plpgsql
@@ -105,22 +144,8 @@ begin
     return;
   end if;
 
-  select identities.musicbrainz_artist_id
-  into v_musicbrainz_artist_id
-  from (
-    select 0 as priority, artist_catalog.musicbrainz_artist_id
-    from public.artist_catalog
-    where artist_catalog.musicbrainz_artist_id is not null
-      and private.search_catalogue_normalise(artist_catalog.artist_name) = v_key
-    union all
-    select 1, musicbrainz_artist_cache.artist_id::text
-    from public.musicbrainz_artist_cache
-    where private.search_catalogue_normalise(
-      musicbrainz_artist_cache.artist_detail->>'name'
-    ) = v_key
-  ) identities
-  order by identities.priority
-  limit 1;
+  v_musicbrainz_artist_id :=
+    private.search_catalogue_artist_external_id(v_key);
 
   insert into public.search_catalogue_projection (
     search_key, result_type, local_id, title, artist, album_id, album_title,
@@ -408,6 +433,8 @@ end;
 $$;
 
 revoke all on function private.search_catalogue_normalise(text) from public;
+revoke all on function private.search_catalogue_artist_external_id(text)
+  from public;
 revoke all on function private.sync_search_catalogue_artist(text) from public;
 revoke all on function private.sync_search_catalogue_song(bigint) from public;
 revoke all on function private.sync_search_catalogue_album(bigint) from public;
@@ -528,23 +555,8 @@ with artist_names as (
     length(normalised_names.name), normalised_names.name
 ), identities as (
   select canonical_names.normalised_name,
-    coalesce(
-      (
-        select artist_catalog.musicbrainz_artist_id
-        from public.artist_catalog
-        where artist_catalog.musicbrainz_artist_id is not null
-          and private.search_catalogue_normalise(artist_catalog.artist_name) =
-            canonical_names.normalised_name
-        limit 1
-      ),
-      (
-        select musicbrainz_artist_cache.artist_id::text
-        from public.musicbrainz_artist_cache
-        where private.search_catalogue_normalise(
-          musicbrainz_artist_cache.artist_detail->>'name'
-        ) = canonical_names.normalised_name
-        limit 1
-      )
+    private.search_catalogue_artist_external_id(
+      canonical_names.normalised_name
     ) as musicbrainz_artist_id
   from canonical_names
 )

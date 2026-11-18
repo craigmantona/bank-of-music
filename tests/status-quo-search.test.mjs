@@ -15,6 +15,8 @@ test("search projection is maintained from catalogue and artist identity writes"
   assert.match(migration, /search_catalogue_artist_catalog_change/);
   assert.match(migration, /search_catalogue_artist_cache_change/);
   assert.match(migration, /musicbrainz_artist_cache\.artist_detail->>'name'/);
+  assert.match(migration, /count\(distinct musicbrainz_artist_cache\.artist_id\)/);
+  assert.match(migration, /when cache_identities\.identity_count = 1/);
 });
 
 test("artist exact and prefix matches receive explicit ranking priority", () => {
