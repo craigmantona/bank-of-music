@@ -3,9 +3,11 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
-const [app, styles] = await Promise.all([
+const [app, styles, foundationStyles, html] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
-  readFile(new URL("../style.css", import.meta.url), "utf8")
+  readFile(new URL("../style.css", import.meta.url), "utf8"),
+  readFile(new URL("../bom-foundation.css", import.meta.url), "utf8"),
+  readFile(new URL("../index.html", import.meta.url), "utf8")
 ]);
 
 const start = app.indexOf("const MUSIC_PROVIDER_PREFERENCE_KEY");
@@ -49,6 +51,25 @@ test("legacy Both stays Spotify plus Apple while All three includes Amazon", () 
   assert.deepEqual(
     [...context.getListeningServicesForPreference("all")],
     ["spotify", "apple", "amazon"]
+  );
+});
+
+test("single and multi-service preferences assign prominence without dropping destinations", () => {
+  const { context } = createContext();
+  assert.equal(context.getListeningServicePriority("spotify", "spotify"), "primary");
+  assert.equal(context.getListeningServicePriority("apple", "spotify"), "secondary");
+  assert.equal(context.getListeningServicePriority("amazon", "spotify"), "secondary");
+
+  assert.equal(context.getListeningServicePriority("spotify", "both"), "selected");
+  assert.equal(context.getListeningServicePriority("apple", "both"), "selected");
+  assert.equal(context.getListeningServicePriority("amazon", "both"), "secondary");
+
+  for (const service of ["spotify", "apple", "amazon"]) {
+    assert.equal(context.getListeningServicePriority(service, "all"), "selected");
+  }
+  assert.equal(
+    context.getListeningPreferenceSummary("both"),
+    "Your preferred services are Spotify and Apple Music."
   );
 });
 
@@ -116,28 +137,39 @@ test("track resolution falls back when the album identity does not agree", async
   assert.equal(url, "https://music.apple.com/gb/search?term=Song%20Artist%20Right%20Album");
 });
 
-test("provider UI is a branded accessible radio group with both services visible by default", () => {
-  assert.doesNotMatch(app, /<select data-listening-service/);
-  assert.match(app, /role="radiogroup" aria-label="Preferred listening service"/);
-  assert.match(app, /role="radio" aria-checked=/);
-  assert.match(app, /data-listening-service="spotify"/);
-  assert.match(app, /data-listening-service="apple"/);
-  assert.match(app, /data-listening-service="both"/);
-  assert.match(app, /data-listening-service="amazon"/);
-  assert.match(app, /data-listening-service="all"/);
-  assert.match(app, /data-music-service="apple"/);
-  assert.match(app, /data-music-service="amazon"/);
-  assert.match(app, /Listen on Spotify/);
-  assert.match(app, /Listen on Apple Music/);
-  assert.match(app, /Listen on Amazon Music/);
-  assert.match(app, /music-service-logo/);
+test("album and track provider UI keeps every service in one accessible compact action group", () => {
+  const panelStart = app.indexOf("function buildMusicProviderPanel");
+  const panelEnd = app.indexOf("function syncListeningServiceControls", panelStart);
+  const panel = app.slice(panelStart, panelEnd);
+  assert.doesNotMatch(panel, /data-listening-service=/);
+  assert.doesNotMatch(panel, /role="radiogroup"/);
+  assert.match(panel, /role="group" aria-label="Listen to this/);
+  assert.match(panel, /data-music-provider-summary="true"/);
+  assert.match(panel, /data-music-service="spotify"/);
+  assert.match(panel, /data-music-service="apple"/);
+  assert.match(panel, /data-music-service="amazon"/);
+  assert.equal((panel.match(/aria-label="Listen on /g) || []).length, 3);
+  assert.equal((panel.match(/data-service-priority=/g) || []).length, 3);
+  assert.match(panel, /music-service-logo/);
+});
+
+test("the five-option preference selector exists only in Settings and keeps keyboard radio behaviour", () => {
+  assert.equal((html.match(/role="radiogroup" aria-label="Preferred listening service"/g) || []).length, 1);
+  for (const preference of ["spotify", "apple", "amazon", "both", "all"]) {
+    assert.match(html, new RegExp(`data-listening-service="${preference}"`));
+  }
+  assert.match(html, /This preference can only be changed here/);
   assert.match(app, /\["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"\]/);
 });
 
-test("selected state and mobile layout remain visible, touch-sized and responsive", () => {
+test("single and multi-service layouts remain visible, touch-sized and responsive", () => {
   assert.match(styles, /\.music-provider-preference button\[aria-checked="true"\]/);
   assert.match(styles, /\.music-provider-preference button:focus-visible/);
-  assert.match(styles, /\.music-provider-play-btn \{[\s\S]*?min-height: 50px/);
+  assert.match(styles, /\.music-provider-play-btn \{[\s\S]*?min-height: 44px/);
+  assert.match(styles, /data-service-priority="primary"[\s\S]*?min-height: 50px/);
+  assert.match(styles, /data-service-priority="selected"[\s\S]*?flex: 1 1 160px/);
+  assert.match(styles, /data-service-priority="secondary"[\s\S]*?border-color: transparent/);
   assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?\.music-provider-preference button[\s\S]*?min-height: 48px/);
-  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?\.music-provider-buttons[\s\S]*?grid-template-columns: 1fr/);
+  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?data-service-priority="primary"[\s\S]*?width: 100%/);
+  assert.match(foundationStyles, /data-service-priority="secondary"[\s\S]*?border-color: transparent !important/);
 });
