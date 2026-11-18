@@ -143,12 +143,34 @@ async function findExistingByRequestedIdentity(releaseId: string, releaseGroupId
   return null;
 }
 
-async function reserveUserImportSlot(userId: string) {
-  const { data, error } = await service.rpc("reserve_remote_album_import_slot", { p_user_id: userId });
+type ImportSlot = {
+  allowed: boolean;
+  lease_token?: string;
+  reason?: string;
+  retry_after_seconds?: number;
+  coalesced?: boolean;
+};
+
+async function reserveUserImportSlot(userId: string, releaseId: string, releaseGroupId: string) {
+  const { data, error } = await service.rpc("reserve_remote_album_import_slot", {
+    p_user_id: userId,
+    p_release_id: releaseId,
+    p_release_group_id: releaseGroupId || null
+  });
   if (error || !data || typeof data.allowed !== "boolean") {
     throw new Error("Album import rate limit unavailable");
   }
-  return data as { allowed: boolean; retry_after_seconds?: number };
+  return data as ImportSlot;
+}
+
+async function completeUserImportSlot(userId: string, slot: ImportSlot, outcome: string) {
+  if (!slot.lease_token) return;
+  const { error } = await service.rpc("complete_remote_album_import_slot", {
+    p_user_id: userId,
+    p_lease_token: slot.lease_token,
+    p_outcome: outcome
+  });
+  if (error) console.warn("Remote album import accounting completion failed");
 }
 
 function artistFromRelease(detail: any) {
@@ -222,6 +244,14 @@ Deno.serve(async (request) => {
     return json(request, { ok: false, error: "Valid JSON is required." }, 400);
   }
 
+  let activeImportSlot: ImportSlot | null = null;
+  let importSlotCompleted = false;
+  const completeImport = async (outcome: "succeeded" | "already_exists" | "transient_failure" | "invalid_failure") => {
+    if (!activeImportSlot || importSlotCompleted) return;
+    importSlotCompleted = true;
+    await completeUserImportSlot(authorization.userId!, activeImportSlot, outcome);
+  };
+
   try {
     if (body?.action === "enrich_album_durations") {
       const albumId = Number(body.album_id);
@@ -246,16 +276,36 @@ Deno.serve(async (request) => {
         : json(request, { ok: true, status: "already_exists", album_id: existingRequestedAlbum.id });
     }
 
-    const importSlot = await reserveUserImportSlot(authorization.userId!);
+    const importSlot = await reserveUserImportSlot(
+      authorization.userId!, releaseId, expectedGroupId
+    );
     if (!importSlot.allowed) {
-      const retryAfter = Math.max(1, Math.ceil(Number(importSlot.retry_after_seconds || 60)));
+      const retryAfter = Math.max(1, Math.ceil(Number(importSlot.retry_after_seconds || 5)));
+      const reason = String(importSlot.reason || "import_capacity_unavailable");
+      if (reason === "release_in_progress") {
+        return json(request, {
+          ok: false,
+          status: "import_in_progress",
+          reason,
+          retry_after_seconds: retryAfter
+        }, 409, { "Retry-After": String(retryAfter) });
+      }
+      if (reason === "user_import_in_progress" || reason === "global_capacity") {
+        return json(request, {
+          ok: false,
+          status: "temporarily_busy",
+          reason,
+          retry_after_seconds: retryAfter
+        }, 503, { "Retry-After": String(retryAfter) });
+      }
       return json(request, {
         ok: false,
         status: "rate_limited",
-        reason: "album_import_rate_limit_reached",
+        reason,
         retry_after_seconds: retryAfter
       }, 429, { "Retry-After": String(retryAfter) });
     }
+    activeImportSlot = importSlot;
 
     const exactRelease = await musicBrainzGet(
       `/release/${encodeURIComponent(releaseId)}?inc=recordings+artist-credits+release-groups&fmt=json`
@@ -266,9 +316,11 @@ Deno.serve(async (request) => {
     const releaseGroupTitle = String(exactRelease?.["release-group"]?.title || title).trim();
     if (exactRelease?.id !== releaseId || !uuid(groupId) || !artist || !title ||
         (expectedGroupId && expectedGroupId !== groupId)) {
+      await completeImport("invalid_failure");
       return json(request, { ok: true, status: "needs_correction", reason: "release_identity_validation_failed" });
     }
     if (await isReleaseGroupExcluded(groupId)) {
+      await completeImport("invalid_failure");
       return json(request, { ok: true, status: "needs_correction", reason: "release_group_excluded_by_administrator" });
     }
 
@@ -282,11 +334,13 @@ Deno.serve(async (request) => {
       artworkAvailable
     });
     if (preview.status === "already_exists") {
+      await completeImport("already_exists");
       return json(request, { ok: true, status: "already_exists", album_id: preview.existing_album_id });
     }
     if (preview.status !== "ready") {
       const reason = preview.reason || "catalogue_confirmation_required";
       const failed = preview.status === "failed";
+      await completeImport("invalid_failure");
       return json(request, {
         ok: !failed,
         status: failed ? "failed" : "needs_correction",
@@ -297,6 +351,7 @@ Deno.serve(async (request) => {
 
     const occurrenceValidation = validateTrackOccurrences(preview.tracks, { requireTrackIds: true });
     if (!occurrenceValidation.valid) {
+      await completeImport("invalid_failure");
       return json(request, {
         ok: false,
         status: "failed",
@@ -311,13 +366,16 @@ Deno.serve(async (request) => {
     });
     if (error) {
       const failure = catalogueFailureReason(error);
+      await completeImport(failure.retryable ? "transient_failure" : "invalid_failure");
       console.warn("Remote album catalogue write rejected", String(error.code || "unknown"));
       return json(request, { ok: false, status: "failed", ...failure },
         failure.retryable ? 409 : 422);
     }
+    await completeImport(data?.status === "added" ? "succeeded" : "already_exists");
     return json(request, { ok: true, ...data });
   } catch (error) {
     const failure = catalogueFailureReason(error);
+    await completeImport("transient_failure");
     console.warn("Remote album catalogue request failed", failure.reason);
     return json(request, { ok: false, status: "failed", ...failure }, 503);
   }

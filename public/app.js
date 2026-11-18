@@ -8319,7 +8319,23 @@ function renderRemoteAlbumCatalogueStatus(item = selectedItem) {
   if (item?.catalogueAutoAddStatus === "rate_limited") {
     const retryAfter = Math.max(1, Number(item?.catalogueAutoAddRetryAfter || 60));
     const minutes = Math.max(1, Math.ceil(retryAfter / 60));
-    return `<span class="small">Album importing is temporarily rate limited. Try again in about ${minutes} minute${minutes === 1 ? "" : "s"}.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Retry import</button>`;
+    const reason = String(item?.catalogueAutoAddReason || "");
+    const message = reason === "success_budget"
+      ? "You have added a lot of new music today. Existing albums and ratings are still unlimited."
+      : reason === "global_success_budget"
+        ? "Today's shared new-album capacity has been reached. Existing albums and ratings are still available."
+        : reason === "failure_budget"
+          ? "MusicBrainz has failed repeatedly, so imports are paused briefly to prevent a retry storm."
+          : reason === "invalid_budget"
+            ? "Several releases returned invalid catalogue data, so new attempts are paused briefly."
+            : "Too many new album imports were started in a short period.";
+    return `<span class="small">${escapeHtml(message)} Try again in about ${minutes} minute${minutes === 1 ? "" : "s"}.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Retry import</button>`;
+  }
+  if (item?.catalogueAutoAddStatus === "import_in_progress") {
+    return '<span class="small">This release is already being added. Try again in a few seconds.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Check again</button>';
+  }
+  if (item?.catalogueAutoAddStatus === "temporarily_busy") {
+    return '<span class="small">Album importing is busy right now. Your ratings and catalogue are safe.</span> <button type="button" class="secondary-btn" data-bom-action="retry-album-import">Try again</button>';
   }
   return '<span class="small">Preparing ratings…</span>';
 }
@@ -11313,6 +11329,15 @@ async function autoSaveSelectedAlbum() {
         if (errorPayload?.status === "rate_limited") {
           item.catalogueAutoAddStatus = "rate_limited";
           item.catalogueAutoAddRetryAfter = Math.max(1, Number(errorPayload.retry_after_seconds || 60));
+          item.catalogueAutoAddReason = errorPayload.reason || "start_budget";
+          item.catalogueAutoAddRetryable = true;
+          return null;
+        }
+        if (errorPayload?.status === "import_in_progress" || errorPayload?.status === "temporarily_busy") {
+          item.catalogueAutoAddStatus = errorPayload.status;
+          item.catalogueAutoAddRetryAfter = Math.max(1, Number(errorPayload.retry_after_seconds || 5));
+          item.catalogueAutoAddReason = errorPayload.reason || "import_capacity_unavailable";
+          item.catalogueAutoAddRetryable = true;
           return null;
         }
         item.catalogueAutoAddStatus = "failed";

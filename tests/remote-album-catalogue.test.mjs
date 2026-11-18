@@ -2,13 +2,14 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [app, publicApp, edge, catalogueCore, migration, rateLimitMigration, repeatedOccurrenceMigration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests, scheduledWorkflow] = await Promise.all([
+const [app, publicApp, edge, catalogueCore, migration, rateLimitMigration, outcomeLimitMigration, repeatedOccurrenceMigration, adminEdge, deleteMigration, exclusionMigration, occurrenceTests, quickRateTests, scheduledWorkflow] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
   readFile(new URL("../public/app.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/remote-album-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/_shared/admin-catalogue.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260928121724_authenticated_remote_album_creation.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20261117160000_remote_album_import_rate_limit.sql", import.meta.url), "utf8"),
+  readFile(new URL("../supabase/migrations/20261118210000_outcome_aware_remote_album_import_limits.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20261118150843_allow_repeated_album_track_occurrences.sql", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-catalogue/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/migrations/20260927160832_admin_catalogue_delete_album.sql", import.meta.url), "utf8"),
@@ -113,24 +114,40 @@ test("client performs no direct catalogue writes and coalesces concurrent releas
   assert.doesNotMatch(activeSource, /\.from\(["'](?:albums|songs)["']\)/);
 });
 
-test("on-demand imports have an atomic per-user server-side rate limit", () => {
+test("existing albums remain free while new imports use outcome-aware server-side limits", () => {
   assert.match(edge, /reserve_remote_album_import_slot/);
+  assert.match(edge, /complete_remote_album_import_slot/);
   assert.match(edge, /authorization\.userId/);
   assert.match(edge, /status: "rate_limited"/);
   assert.match(edge, /}, 429, \{ "Retry-After": String\(retryAfter\) \}\)/);
-  assert.ok(edge.indexOf("findExistingByRequestedIdentity") < edge.indexOf("reserveUserImportSlot(authorization.userId!"));
-  assert.ok(edge.indexOf("reserveUserImportSlot(authorization.userId!") < edge.indexOf("const exactRelease = await musicBrainzGet"));
-  assert.match(rateLimitMigration, /pg_advisory_xact_lock\(hashtextextended\('bom-remote-album-rate:' \|\| p_user_id::text/);
-  assert.match(rateLimitMigration, /v_short_count >= 5/);
-  assert.match(rateLimitMigration, /v_daily_count >= 20/);
+  const existingLookup = edge.indexOf("const existingRequestedAlbum = await findExistingByRequestedIdentity");
+  const reservation = edge.indexOf("const importSlot = await reserveUserImportSlot", existingLookup);
+  const upstreamLookup = edge.indexOf("const exactRelease = await musicBrainzGet", reservation);
+  assert.ok(existingLookup >= 0 && reservation > existingLookup);
+  assert.ok(upstreamLookup > reservation);
+  assert.match(outcomeLimitMigration, /outcome = 'succeeded'[\s\S]*v_count >= 50/);
+  assert.match(outcomeLimitMigration, /v_count >= 100/);
+  assert.match(outcomeLimitMigration, /v_count >= 20/);
+  assert.match(outcomeLimitMigration, /outcome = 'transient_failure'[\s\S]*v_count >= 8/);
+  assert.match(outcomeLimitMigration, /outcome = 'invalid_failure'[\s\S]*v_count >= 10/);
+  assert.match(outcomeLimitMigration, /remote_album_import_leases/);
+  assert.match(outcomeLimitMigration, /'reason', 'release_in_progress'/);
+  assert.match(outcomeLimitMigration, /'reason', 'global_capacity'/);
+  assert.match(outcomeLimitMigration, /pg_advisory_xact_lock\(hashtextextended\('bom-remote-album-global-capacity'/);
+  assert.match(outcomeLimitMigration, /enable row level security/);
+  assert.match(outcomeLimitMigration, /revoke all on function public\.reserve_remote_album_import_slot\(uuid, uuid, uuid\) from public, anon, authenticated/);
+  assert.match(outcomeLimitMigration, /grant execute on function public\.complete_remote_album_import_slot\(uuid, uuid, text\) to service_role/);
   assert.match(rateLimitMigration, /enable row level security/);
-  assert.match(rateLimitMigration, /revoke all on function public\.reserve_remote_album_import_slot\(uuid\) from public, anon, authenticated/);
-  assert.match(rateLimitMigration, /grant execute on function public\.reserve_remote_album_import_slot\(uuid\) to service_role/);
+  assert.doesNotMatch(outcomeLimitMigration, /(?:update|delete from|insert into) public\.(?:albums|songs|ratings|song_ratings|profiles)/i);
 });
 
-test("loading failures and rate limits stay failures and can be retried", () => {
+test("loading failures, coalescing, capacity and rate limits stay retryable states", () => {
   assert.match(edge, /\{ ok: false, status: "failed", \.\.\.failure \}, 503/);
+  assert.match(edge, /status: "import_in_progress"/);
+  assert.match(edge, /status: "temporarily_busy"/);
   assert.match(app, /catalogueAutoAddStatus === "rate_limited"/);
+  assert.match(app, /catalogueAutoAddStatus === "import_in_progress"/);
+  assert.match(app, /catalogueAutoAddStatus === "temporarily_busy"/);
   assert.match(app, /data-bom-action="retry-album-import"/);
   const retry = app.slice(app.indexOf("window.addEventListener(\"click\""), app.indexOf("v33: profile average rating"));
   assert.match(retry, /delete selectedItem\.catalogueAutoAddStarted/);
@@ -142,6 +159,7 @@ test("the scheduled five-album workflow remains independent", () => {
   assert.match(scheduledWorkflow, /ALBUM_IMPORT_TARGET/);
   assert.doesNotMatch(scheduledWorkflow, /remote-album-catalogue|reserve_remote_album_import_slot/);
   assert.doesNotMatch(rateLimitMigration, /catalogue_worker_state|automated_album/);
+  assert.doesNotMatch(outcomeLimitMigration, /catalogue_worker_state|automated_album/);
 });
 
 test("atomic writer remains idempotent and occurrence-safe for shared recordings", () => {
