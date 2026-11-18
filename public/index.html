@@ -9,7 +9,7 @@
  
  <title>Bank of Music</title>
  
- <link rel="stylesheet" href="style.css?v=84&listening-ui=2" />
+ <link rel="stylesheet" href="style.css?v=85&listening-ui=2&apple-playlists=1" />
  <script>
   /* Stage 1 assets are development-only and add no requests to the legacy UI. */
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
@@ -61,7 +61,7 @@
        <button class="top-nav-btn" data-target="detailSection">⭐ Selected</button>
 	   <button class="top-nav-btn" type="button" data-target="chartsSection" onclick="window.goCharts(); return false;">🏆 Charts</button>
        <button class="top-nav-btn" data-target="settingsSection">
-  🎵 Spotify Sync
+  🎵 Music Playlists
 </button>
 	   <button class="top-nav-btn hidden" data-target="adminSection" data-admin-only="true">🛠 Admin</button>
      </div>
@@ -69,7 +69,7 @@
   <option value="">More</option>
   <option value="librarySection">Ratings</option>
   <option value="detailSection">Selected</option>
-<option value="settingsSection">Spotify Sync</option>
+<option value="settingsSection">Music Playlists</option>
 <option value="adminSection">Admin</option>
 </select>
    </nav>
@@ -210,18 +210,38 @@
    <section class="card hidden" id="settingsSection">
   <div class="settings-page-header">
   <div>
-    <div class="settings-kicker">
-      Spotify integration
-    </div>
+    <div class="settings-kicker">Music integrations</div>
 
-    <h2>Spotify Playlist Sync</h2>
+    <h2>Playlists and listening</h2>
 
     <p class="small">
-      Create and keep your Spotify playlists synchronised
-      with your Bank of Music ratings.
+      Take your Bank of Music ratings to Spotify or Apple Music,
+      and choose which service appears when you listen.
     </p>
   </div>
 </div>
+
+  <div class="settings-panel listening-preference-settings">
+    <h3>Listening preference</h3>
+    <p class="small">
+      This is the same Spotify, Apple Music or Both preference shown on album
+      and track pages. Changing it here updates those listening controls too.
+    </p>
+    <div class="music-provider-preference" role="radiogroup" aria-label="Preferred listening service">
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-listening-service="spotify">
+        <span class="settings-provider-mark settings-provider-spotify" aria-hidden="true">S</span>
+        <span>Spotify</span>
+      </button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-listening-service="apple">
+        <span class="settings-provider-mark settings-provider-apple" aria-hidden="true">♪</span>
+        <span>Apple Music</span>
+      </button>
+      <button type="button" role="radio" aria-checked="true" tabindex="0" data-listening-service="both">
+        <span class="settings-provider-mark settings-provider-both" aria-hidden="true">S♪</span>
+        <span>Both</span>
+      </button>
+    </div>
+  </div>
 
   <div class="settings-panel spotify-settings-panel">
     <div class="settings-service-header">
@@ -377,7 +397,7 @@
 <p id="spotifyMessage" class="small"></p>
   </div>
 
-  <div class="settings-panel">
+  <div class="settings-panel apple-settings-panel">
     <div class="settings-service-header">
       <div class="apple-service-icon" aria-hidden="true">
         ♪
@@ -385,9 +405,64 @@
 
       <div>
         <h3>Apple Music</h3>
-        <p class="small">Coming later.</p>
+        <p class="small">
+          Prepare Apple Music links for the same personal and community BoM playlists.
+        </p>
       </div>
     </div>
+
+    <div class="apple-music-setup-note" role="note">
+      <strong>No Apple Music connection is required for links.</strong>
+      <span>
+        Bank of Music does not automatically create or edit an Apple Music playlist.
+        That requires a configured MusicKit developer token and each listener's Apple
+        Music authorisation. <a href="https://developer.apple.com/documentation/applemusicapi/user-authentication-for-musickit" target="_blank" rel="noopener noreferrer">MusicKit setup details</a>.
+      </span>
+    </div>
+
+    <div id="appleMusicExportPanel" class="apple-music-export-panel">
+      <div class="spotify-export-heading">
+        <div>
+          <h3>Prepare Apple Music playlist links</h3>
+          <p class="small">
+            Choose a playlist to get one Apple Music search link per qualifying track,
+            ready to open, copy or share.
+          </p>
+        </div>
+      </div>
+
+      <div class="apple-playlist-buttons">
+        <button type="button" class="apple-playlist-link-btn" data-minimum-rating="7" data-playlist-name="BoM • Rated 7+">
+          <span class="apple-playlist-rating">7+</span>
+          <span class="apple-playlist-button-text"><strong>BoM Rated 7+</strong><small>Prepare Apple Music links</small></span>
+        </button>
+        <button type="button" class="apple-playlist-link-btn" data-minimum-rating="8" data-playlist-name="BoM • Rated 8+">
+          <span class="apple-playlist-rating">8+</span>
+          <span class="apple-playlist-button-text"><strong>BoM Rated 8+</strong><small>Prepare Apple Music links</small></span>
+        </button>
+        <button type="button" class="apple-playlist-link-btn" data-minimum-rating="9" data-playlist-name="BoM • Rated 9+">
+          <span class="apple-playlist-rating">9+</span>
+          <span class="apple-playlist-button-text"><strong>BoM Rated 9+</strong><small>Prepare Apple Music links</small></span>
+        </button>
+        <button type="button" class="apple-playlist-link-btn" data-minimum-rating="10" data-playlist-name="BoM • Perfect 10s">
+          <span class="apple-playlist-rating">10</span>
+          <span class="apple-playlist-button-text"><strong>BoM Perfect 10s</strong><small>Prepare Apple Music links</small></span>
+        </button>
+        <button type="button" class="apple-playlist-link-btn apple-top-100-btn" data-playlist-type="global-top-100" data-playlist-name="BoM • Global Top 100">
+          <span class="apple-playlist-rating">🏆</span>
+          <span class="apple-playlist-button-text"><strong>BoM Global Top 100</strong><small>Highest-rated songs with at least 3 ratings</small></span>
+        </button>
+      </div>
+
+      <div id="appleMusicExportProgress" class="spotify-export-progress apple-export-progress hidden">
+        <div class="spotify-progress-track"><div id="appleMusicProgressBar" class="spotify-progress-fill"></div></div>
+        <p id="appleMusicProgressText" class="spotify-progress-text"></p>
+      </div>
+
+      <div id="appleMusicExportResult" class="apple-music-export-result hidden"></div>
+    </div>
+
+    <p id="appleMusicMessage" class="small" role="status" aria-live="polite"></p>
   </div>
 </section>
  
@@ -457,9 +532,10 @@
   <script src="bom-password-recovery.js?v=1"></script>
   <script src="bom-early-access.js?v=4"></script>
   <script src="bom-spotify-playlist.js?v=4"></script>
+  <script src="bom-apple-music-playlist.js?v=1"></script>
   <script src="artist-easter-eggs.js?v=1"></script>
   <script src="bom-email-announcements.js?v=2"></script>
-  <script src="app.js?v=182&autocomplete=2&search-autosave=1&listening-ui=2&email-announcements=2"></script>
+  <script src="app.js?v=183&autocomplete=2&search-autosave=1&listening-ui=2&email-announcements=2&apple-playlists=1"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {

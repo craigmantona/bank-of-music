@@ -5942,6 +5942,287 @@ button.song-album-link {
 }
 
 /* ============================================================
+   APPLE MUSIC PLAYLIST LINKS
+   ============================================================ */
+
+.listening-preference-settings .music-provider-preference {
+  margin-top: 16px;
+}
+
+.settings-provider-mark {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.settings-provider-spotify {
+  color: #07120b;
+  background: #1ed760;
+}
+
+.settings-provider-apple {
+  background: linear-gradient(135deg, #fa57c1, #fa233b);
+}
+
+.settings-provider-both {
+  width: 32px;
+  background: linear-gradient(135deg, #1ed760 0 48%, #fa3d77 52% 100%);
+}
+
+.apple-settings-panel {
+  border-color: rgba(250, 61, 119, 0.42);
+  background:
+    radial-gradient(circle at top left, rgba(250, 61, 119, 0.17), transparent 35%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.apple-music-setup-note {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0 0 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(250, 61, 119, 0.32);
+  border-radius: 18px;
+  background: rgba(250, 61, 119, 0.08);
+  line-height: 1.5;
+}
+
+.apple-music-setup-note span {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.9rem;
+}
+
+.apple-music-setup-note a {
+  color: #ff9dbc;
+}
+
+.apple-playlist-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.apple-playlist-link-btn {
+  width: 100%;
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(250, 61, 119, 0.48);
+  border-radius: 14px;
+  background: rgba(250, 61, 119, 0.09);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.apple-playlist-link-btn:hover {
+  border-color: #fa3d77;
+  background: rgba(250, 61, 119, 0.18);
+  transform: translateY(-2px);
+}
+
+.apple-playlist-link-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none;
+}
+
+.apple-playlist-rating {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #fa57c1, #fa233b);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.apple-playlist-button-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.apple-playlist-button-text strong {
+  font-size: 16px;
+}
+
+.apple-playlist-button-text small {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+}
+
+.apple-top-100-btn {
+  grid-column: 1 / -1;
+  border-color: rgba(255, 193, 7, 0.55);
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.apple-top-100-btn:hover {
+  border-color: #ffc107;
+  background: rgba(255, 193, 7, 0.18);
+}
+
+.apple-top-100-btn .apple-playlist-rating {
+  color: #111;
+  background: #ffc107;
+}
+
+.apple-export-progress .spotify-progress-fill {
+  background: linear-gradient(90deg, #fa57c1, #fa233b);
+}
+
+.apple-export-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid rgba(250, 61, 119, 0.68);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at top left, rgba(250, 61, 119, 0.24), transparent 38%),
+    linear-gradient(180deg, rgba(54, 14, 35, 0.98), rgba(29, 9, 23, 0.98));
+  color: #fff;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+}
+
+.apple-export-success-icon {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fa57c1, #fa233b);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.apple-export-success h3,
+.apple-export-success p {
+  color: #fff;
+}
+
+.apple-export-success h3 {
+  margin: 0 0 8px;
+}
+
+.apple-export-success p {
+  margin: 6px 0;
+}
+
+.apple-export-success .small {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.apple-playlist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.apple-playlist-actions button:first-child {
+  color: #fff;
+  background: linear-gradient(135deg, #fa57c1, #fa233b);
+}
+
+.apple-playlist-links {
+  margin-top: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+}
+
+.apple-playlist-links summary {
+  padding: 13px 16px;
+  background: rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.apple-playlist-links ol {
+  max-height: 420px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style-position: inside;
+}
+
+.apple-playlist-links li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.apple-playlist-links li > span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.apple-playlist-links li strong,
+.apple-playlist-links li small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.apple-playlist-links li small {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.apple-playlist-links li a {
+  color: #ff9dbc;
+  font-weight: 800;
+}
+
+#appleMusicMessage {
+  min-height: 20px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .apple-playlist-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .apple-export-success {
+    flex-direction: column;
+  }
+
+  .apple-playlist-actions,
+  .apple-playlist-actions button {
+    width: 100%;
+  }
+
+  .apple-playlist-links li {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}
+
+/* ============================================================
    PLAY WITH YOUR MUSIC PROVIDER
    ============================================================ */
 

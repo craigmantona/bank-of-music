@@ -29,6 +29,7 @@ for file in \
   bom-password-recovery.js \
   bom-ratings.js \
   bom-search.js \
+  bom-apple-music-playlist.js \
   bom-spotify-playlist.js \
   bom-turnstile.js \
   bom-bond.js \

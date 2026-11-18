@@ -9731,6 +9731,8 @@ document.addEventListener("keydown", event => {
   choices[next].focus();
 }, true);
 
+syncListeningServiceControls(getPreferredListeningService());
+
 function getSpotifySearchFallbackUrl({
   title,
   artist
@@ -16148,6 +16150,216 @@ document
     });
   });
 
+/* ============================================================
+   APPLE MUSIC PLAYLIST LINKS
+   MusicKit authentication is not configured, so Bank of Music
+   prepares usable Apple Music links without claiming to create
+   or modify a listener's Apple Music library.
+   ============================================================ */
+
+let currentAppleMusicPlaylist = null;
+
+function getAppleMusicExportElements() {
+  return {
+    buttons: Array.from(document.querySelectorAll(".apple-playlist-link-btn")),
+    progress: document.getElementById("appleMusicExportProgress"),
+    progressBar: document.getElementById("appleMusicProgressBar"),
+    progressText: document.getElementById("appleMusicProgressText"),
+    result: document.getElementById("appleMusicExportResult")
+  };
+}
+
+function setAppleMusicMessage(message) {
+  const element = document.getElementById("appleMusicMessage");
+  if (element) element.textContent = message || "";
+}
+
+function resetAppleMusicExportDisplay() {
+  const elements = getAppleMusicExportElements();
+  currentAppleMusicPlaylist = null;
+  elements.result?.classList.add("hidden");
+  if (elements.result) elements.result.innerHTML = "";
+  if (elements.progressBar) elements.progressBar.style.width = "0%";
+  elements.progress?.classList.add("hidden");
+}
+
+function updateAppleMusicExportProgress(completed, total, message) {
+  const elements = getAppleMusicExportElements();
+  const percentage = total ? Math.round((completed / total) * 100) : 0;
+  elements.progress?.classList.remove("hidden");
+  if (elements.progressBar) {
+    elements.progressBar.style.width = `${Math.min(100, percentage)}%`;
+  }
+  if (elements.progressText) {
+    elements.progressText.textContent = message || `${completed} of ${total}`;
+  }
+}
+
+function setAppleMusicPlaylistButtonsDisabled(disabled, activeButton = null) {
+  getAppleMusicExportElements().buttons.forEach((button) => {
+    button.disabled = disabled;
+    const statusText = button.querySelector(".apple-playlist-button-text small");
+    if (!statusText) return;
+    if (disabled && button === activeButton) {
+      statusText.textContent = "Preparing links…";
+      return;
+    }
+    statusText.textContent = button.dataset.playlistType === "global-top-100"
+      ? "Highest-rated songs with at least 3 ratings"
+      : "Prepare Apple Music links";
+  });
+}
+
+function renderAppleMusicPlaylistLinks({ prepared, sourceLabel }) {
+  const elements = getAppleMusicExportElements();
+  if (!elements.result) return;
+  currentAppleMusicPlaylist = prepared;
+  const count = prepared.tracks.length;
+
+  elements.result.classList.remove("hidden");
+  elements.result.innerHTML = `
+    <div class="apple-export-success">
+      <div class="apple-export-success-icon">♪</div>
+      <div>
+        <h3>Apple Music links ready</h3>
+        <p>
+          <strong>${escapeHtml(prepared.playlistName)}</strong> has
+          <strong>${count}</strong> track link${count === 1 ? "" : "s"}
+          from ${escapeHtml(sourceLabel)}.
+        </p>
+        <p class="small">
+          These links open Apple Music searches. Bank of Music has not created
+          or changed a playlist in your Apple Music library.
+        </p>
+        <div class="apple-playlist-actions">
+          <button id="appleMusicCopyLinksBtn" type="button">Copy all track links</button>
+          <button id="appleMusicShareLinksBtn" type="button" class="secondary-btn">Share track links</button>
+        </div>
+      </div>
+    </div>
+    <details class="apple-playlist-links" open>
+      <summary>View ${count} Apple Music link${count === 1 ? "" : "s"}</summary>
+      <ol>
+        ${prepared.tracks.map((track) => `
+          <li>
+            <span><strong>${escapeHtml(track.title)}</strong><small>${escapeHtml(track.artist)}</small></span>
+            <a href="${escapeHtml(track.appleMusicUrl)}" target="_blank" rel="noopener noreferrer">Open in Apple Music</a>
+          </li>
+        `).join("")}
+      </ol>
+    </details>
+  `;
+}
+
+async function copyAppleMusicPlaylistText(text) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setAppleMusicMessage("Apple Music track links copied.");
+      return;
+    } catch {
+      // Fall through to a manual copy dialog when clipboard permission is denied.
+    }
+  }
+  prompt("Copy these Apple Music track links:", text);
+  setAppleMusicMessage("Copy the Apple Music track links from the dialog.");
+}
+
+async function shareCurrentAppleMusicPlaylist() {
+  if (!currentAppleMusicPlaylist || !window.BOMAppleMusicPlaylist) return;
+  const outcome = await window.BOMAppleMusicPlaylist.sharePlaylist({
+    ...currentAppleMusicPlaylist,
+    share: navigator.share
+      ? (payload) => navigator.share(payload)
+      : null,
+    copy: copyAppleMusicPlaylistText
+  });
+  if (outcome === "shared") {
+    setAppleMusicMessage("Apple Music track links shared.");
+  }
+}
+
+async function prepareAppleMusicPlaylist({
+  button,
+  playlistName,
+  playlistType,
+  minimumRating
+}) {
+  if (!currentUser) {
+    setAppleMusicMessage("Please log into Bank of Music first.");
+    return;
+  }
+  if (!window.BOMAppleMusicPlaylist) {
+    setAppleMusicMessage("Apple Music playlist links are unavailable.");
+    return;
+  }
+
+  resetAppleMusicExportDisplay();
+  setAppleMusicPlaylistButtonsDisabled(true, button);
+
+  try {
+    const isTop100 = playlistType === "global-top-100";
+    setAppleMusicMessage(`Preparing "${playlistName}"…`);
+    await refreshCurrentUserSpotifyRatings();
+    const tracks = isTop100
+      ? getGlobalTop100TracksForSpotify()
+      : getCurrentUserRatedTracksForSpotify(minimumRating);
+    const sourceLabel = isTop100
+      ? "the BoM Global Top 100"
+      : `your ${minimumRating}+ ratings`;
+
+    if (!tracks.length) {
+      updateAppleMusicExportProgress(0, 0, "No qualifying tracks yet.");
+      setAppleMusicMessage(`No tracks currently qualify for "${playlistName}".`);
+      return;
+    }
+
+    const prepared = window.BOMAppleMusicPlaylist.preparePlaylist({
+      playlistName,
+      tracks
+    });
+    updateAppleMusicExportProgress(
+      prepared.tracks.length,
+      tracks.length,
+      `Prepared ${prepared.tracks.length} Apple Music link${prepared.tracks.length === 1 ? "" : "s"}.`
+    );
+    renderAppleMusicPlaylistLinks({ prepared, sourceLabel });
+    setAppleMusicMessage(
+      `Prepared ${prepared.tracks.length} Apple Music track link${prepared.tracks.length === 1 ? "" : "s"} for "${playlistName}".`
+    );
+  } catch (error) {
+    console.error("Apple Music playlist link preparation failed:", error);
+    const errorMessage = error?.message || "The Apple Music links could not be prepared.";
+    setAppleMusicMessage(errorMessage);
+    alert("Apple Music links could not be prepared: " + errorMessage);
+  } finally {
+    setAppleMusicPlaylistButtonsDisabled(false);
+  }
+}
+
+document.querySelectorAll(".apple-playlist-link-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    prepareAppleMusicPlaylist({
+      button,
+      playlistName: String(button.dataset.playlistName || "BoM Playlist"),
+      playlistType: button.dataset.playlistType || "personal",
+      minimumRating: Number(button.dataset.minimumRating || 0)
+    });
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.closest?.("#appleMusicCopyLinksBtn")) {
+    if (!currentAppleMusicPlaylist || !window.BOMAppleMusicPlaylist) return;
+    void copyAppleMusicPlaylistText(
+      window.BOMAppleMusicPlaylist.buildShareText(currentAppleMusicPlaylist)
+    );
+  }
+  if (event.target.closest?.("#appleMusicShareLinksBtn")) {
+    void shareCurrentAppleMusicPlaylist();
+  }
+});
+
 
 function renderSpotifyDisconnected(message = "") {
   publishSpotifyConnectionState(false);
@@ -16521,6 +16733,7 @@ topNavButtons.forEach((button) => {
   }
 
   button.addEventListener("click", () => {
+    syncListeningServiceControls(getPreferredListeningService());
     refreshSpotifyConnectionUI();
   });
 });
