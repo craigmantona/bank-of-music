@@ -30,7 +30,41 @@ test("the new vote is default-off and has no public navigation or automatic Dece
   assert.match(app, /BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true/);
   assert.match(app, /script\.src = "bom-christmas-number-one\.js\?v=3"/);
   assert.match(app, /style\.href = "bom-christmas-number-one\.css\?v=3"/);
+  assert.match(html, /app\.js\?v=189/);
   assert.equal(/<script[^>]+bom-christmas-number-one\.js/.test(html), false);
+});
+
+test("the default-off integration cannot break Discover startup across lexical scopes", () => {
+  const start = app.indexOf("function renderRecommendations()");
+  const source = app.slice(start, app.indexOf("function renderLibrary()", start));
+  const createContext = enabled => {
+    let syncCalls = 0;
+    const recommendationsList = { innerHTML: "" };
+    const context = vm.createContext({
+      recommendationsList,
+      isStageOnePresentation: () => true,
+      buildStageOneDiscoverModel: () => ({ authenticated: false, groups: [], general: [] }),
+      window: {
+        BOM_CHRISTMAS_NUMBER_ONE_FEATURE: { enabled },
+        BOMDiscoverUI: { render: () => "<p>Discover ready</p>", updateRowControls: () => {} },
+        BOMPresentationBridge: { syncChristmasNumberOnePublicEntry: () => { syncCalls += 1; } },
+        requestAnimationFrame: callback => callback()
+      }
+    });
+    vm.runInContext(source, context);
+    context.renderRecommendations();
+    return { recommendationsList, syncCalls };
+  };
+
+  const disabled = createContext(false);
+  assert.equal(disabled.recommendationsList.innerHTML, "<p>Discover ready</p>");
+  assert.equal(disabled.syncCalls, 0);
+
+  const enabled = createContext(true);
+  assert.equal(enabled.recommendationsList.innerHTML, "<p>Discover ready</p>");
+  assert.equal(enabled.syncCalls, 1);
+  assert.match(app, /syncChristmasNumberOnePublicEntry: \(\) => syncChristmasNumberOnePublicEntry\(\)/);
+  assert.doesNotMatch(source, /\bvoid syncChristmasNumberOnePublicEntry\(\)/);
 });
 
 test("the UK deadline, Christmas Eve reveal and countdown are exact", () => {
