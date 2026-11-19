@@ -60,5 +60,5 @@ test("album detail exposes a quiet accessible Share album action without redunda
   assert.match(css, /#shareSelectedItemBtn \{[^}]*background: transparent !important[^}]*border: 0 !important/);
   assert.match(css, /#shareSelectedItemBtn:focus-visible \{[^}]*outline:/);
   assert.match(html, /bom-foundation\.css\?v=\d+&autocomplete=1/);
-  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=5/);
+  assert.match(html, /app\.js\?v=\d+&autocomplete=2&search-autosave=1&listening-ui=6/);
 });

@@ -9,7 +9,7 @@
  
  <title>Bank of Music</title>
  
- <link rel="stylesheet" href="style.css?v=89&listening-ui=5&apple-playlists=2&amazon-music=1&soundiiz=2" />
+ <link rel="stylesheet" href="style.css?v=90&listening-ui=6&apple-playlists=2&amazon-music=1&soundiiz=2" />
  <script>
   /* Stage 1 assets are development-only and add no requests to the legacy UI. */
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
@@ -208,6 +208,16 @@
    </section>
    
    <section class="card hidden" id="settingsSection">
+  <button
+    id="musicSettingsReturnBtn"
+    type="button"
+    class="settings-context-return hidden"
+    data-return-from-listening-settings="true"
+  >
+    <span class="settings-context-return-arrow" aria-hidden="true">←</span>
+    <span data-settings-return-label="true">Back to selected item</span>
+  </button>
+
   <div class="settings-page-header">
   <div>
     <div class="settings-kicker">Music integrations</div>
@@ -612,7 +622,7 @@
   <script src="bom-apple-music-playlist.js?v=3"></script>
   <script src="artist-easter-eggs.js?v=1"></script>
   <script src="bom-email-announcements.js?v=2"></script>
-  <script src="app.js?v=187&autocomplete=2&search-autosave=1&listening-ui=5&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2"></script>
+  <script src="app.js?v=188&autocomplete=2&search-autosave=1&listening-ui=6&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
