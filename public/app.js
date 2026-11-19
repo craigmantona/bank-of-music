@@ -4576,6 +4576,7 @@ async function handleIncomingShareLink() {
       coverUrl: params.get("cover") || "",
       savedSongId: params.get("songId") || ""
     });
+    showContextualMusicSettingsAfterItemLoad();
     return;
   } else if (shareType === "artist") {
     selectedItem = {
@@ -4590,8 +4591,12 @@ async function handleIncomingShareLink() {
     return;
   }
 
+  const hasContextualMusicSettings = Boolean(getContextualMusicSettingsItem());
   showOnlySection("detailSection");
-  await renderSelectedItem();
+  const renderPromise = renderSelectedItem();
+  if (hasContextualMusicSettings) showContextualMusicSettingsAfterItemLoad();
+  await renderPromise;
+  if (hasContextualMusicSettings) showContextualMusicSettingsAfterItemLoad();
 
 }
 
@@ -9371,6 +9376,163 @@ const MUSIC_PROVIDER_LABELS = Object.freeze({
 });
 
 const MUSIC_PROVIDER_ORDER = Object.freeze(["spotify", "apple", "amazon"]);
+const MUSIC_SETTINGS_CONTEXT_PARAM = "settings";
+const MUSIC_SETTINGS_CONTEXT_VALUE = "listening";
+const MUSIC_SETTINGS_SPOTIFY_RETURN_KEY = "bom_listening_settings_spotify_return";
+
+function getContextualMusicSettingsItem(urlValue = window.location.href) {
+  try {
+    const url = new URL(urlValue, window.location.origin);
+    if (url.searchParams.get(MUSIC_SETTINGS_CONTEXT_PARAM) !== MUSIC_SETTINGS_CONTEXT_VALUE) return null;
+    const type = url.searchParams.get("share") || "";
+    const title = String(url.searchParams.get("title") || "").trim().slice(0, 240);
+    const artist = String(url.searchParams.get("artist") || "").trim().slice(0, 240);
+    if (!["album", "song"].includes(type) || !title || !artist) return null;
+    return { type, title, artist };
+  } catch {
+    return null;
+  }
+}
+
+function getContextualMusicSettingsReturnUrl(urlValue = window.location.href) {
+  const context = getContextualMusicSettingsItem(urlValue);
+  if (!context) return "";
+  const url = new URL(urlValue, window.location.origin);
+  url.searchParams.delete(MUSIC_SETTINGS_CONTEXT_PARAM);
+  return url.toString();
+}
+
+function syncMusicSettingsReturnControl() {
+  const button = document.getElementById("musicSettingsReturnBtn");
+  if (!button) return;
+  const context = getContextualMusicSettingsItem();
+  const label = button.querySelector("[data-settings-return-label]");
+  button.classList.toggle("hidden", !context);
+  if (!context) {
+    if (label) label.textContent = "Back to selected item";
+    button.removeAttribute("aria-label");
+    return;
+  }
+  const text = `Back to ${context.title}`;
+  if (label) label.textContent = text;
+  button.setAttribute("aria-label", text);
+}
+
+function showContextualMusicSettingsAfterItemLoad() {
+  if (!getContextualMusicSettingsItem()) return false;
+  showOnlySection("settingsSection");
+  syncListeningServiceControls(getPreferredListeningService());
+  syncMusicSettingsReturnControl();
+  window.requestAnimationFrame?.(() => window.scrollTo({ top: 0, behavior: "auto" }));
+  return true;
+}
+
+function openContextualMusicSettings(item = selectedItem) {
+  if (!item || !["album", "song"].includes(item.type) || !(item.title || item.name) || !item.artist) {
+    showOnlySection("settingsSection");
+    syncMusicSettingsReturnControl();
+    return false;
+  }
+
+  const returnUrl = new URL(getItemDeepLinkUrl(item), window.location.origin);
+  returnUrl.searchParams.delete(MUSIC_SETTINGS_CONTEXT_PARAM);
+  ["code", "state", "error", "error_description"].forEach(parameter => returnUrl.searchParams.delete(parameter));
+  const returnHref = returnUrl.toString();
+  window.history.replaceState({
+    ...(window.history.state || {}),
+    bomShare: true,
+    itemType: item.type
+  }, "", returnHref);
+
+  const settingsUrl = new URL(returnHref);
+  settingsUrl.searchParams.set(MUSIC_SETTINGS_CONTEXT_PARAM, MUSIC_SETTINGS_CONTEXT_VALUE);
+  window.history.pushState({
+    bomMusicSettings: true,
+    bomMusicSettingsReturnUrl: returnHref
+  }, "", settingsUrl.toString());
+  showOnlySection("settingsSection");
+  syncListeningServiceControls(getPreferredListeningService());
+  syncMusicSettingsReturnControl();
+  window.requestAnimationFrame?.(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    document.getElementById("musicSettingsReturnBtn")?.focus({ preventScroll: true });
+  });
+  return true;
+}
+
+async function returnFromContextualMusicSettings() {
+  const context = getContextualMusicSettingsItem();
+  const returnUrl = getContextualMusicSettingsReturnUrl();
+  if (!context || !returnUrl) {
+    syncMusicSettingsReturnControl();
+    return false;
+  }
+
+  const state = window.history.state || {};
+  if (
+    state.bomMusicSettings === true &&
+    state.bomMusicSettingsRestored !== true &&
+    state.bomMusicSettingsReturnUrl === returnUrl &&
+    window.history.length > 1
+  ) {
+    window.history.back();
+    return true;
+  }
+
+  window.history.replaceState({
+    bomShare: true,
+    itemType: context.type
+  }, "", returnUrl);
+  await handleIncomingShareLink();
+  return true;
+}
+
+function preserveContextualMusicSettingsForSpotify() {
+  const returnUrl = getContextualMusicSettingsReturnUrl();
+  try {
+    if (!returnUrl) {
+      sessionStorage.removeItem(MUSIC_SETTINGS_SPOTIFY_RETURN_KEY);
+      return;
+    }
+    sessionStorage.setItem(MUSIC_SETTINGS_SPOTIFY_RETURN_KEY, JSON.stringify({
+      settingsUrl: window.location.href,
+      returnUrl,
+      savedAt: Date.now()
+    }));
+  } catch {
+    // Spotify remains available when session storage is disabled.
+  }
+}
+
+function restoreContextualMusicSettingsAfterSpotify() {
+  let stored = null;
+  try {
+    stored = JSON.parse(sessionStorage.getItem(MUSIC_SETTINGS_SPOTIFY_RETURN_KEY) || "null");
+    sessionStorage.removeItem(MUSIC_SETTINGS_SPOTIFY_RETURN_KEY);
+  } catch {
+    stored = null;
+  }
+  if (!stored || Date.now() - Number(stored.savedAt || 0) > 60 * 60 * 1000) return false;
+
+  try {
+    const settingsUrl = new URL(stored.settingsUrl, window.location.origin);
+    const returnUrl = new URL(stored.returnUrl, window.location.origin);
+    if (
+      settingsUrl.origin !== window.location.origin ||
+      returnUrl.origin !== window.location.origin ||
+      !getContextualMusicSettingsItem(settingsUrl.toString())
+    ) return false;
+    window.history.replaceState({
+      bomMusicSettings: true,
+      bomMusicSettingsRestored: true,
+      bomMusicSettingsReturnUrl: returnUrl.toString()
+    }, "", settingsUrl.toString());
+    syncMusicSettingsReturnControl();
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function getListeningServicePriority(service, preference) {
   const selectedServices = getListeningServicesForPreference(preference);
@@ -9789,11 +9951,18 @@ function openWithAmazonMusic({ type, title, artist, album = "" }) {
 }
 
 document.addEventListener("click", event => {
+  const returnButton = event.target.closest?.("[data-return-from-listening-settings]");
+  if (returnButton) {
+    event.preventDefault();
+    event.stopPropagation();
+    void returnFromContextualMusicSettings();
+    return;
+  }
   const settingsShortcut = event.target.closest?.("[data-open-listening-settings]");
   if (settingsShortcut) {
     event.preventDefault();
     event.stopPropagation();
-    showOnlySection("settingsSection");
+    openContextualMusicSettings();
     return;
   }
   const option = event.target.closest?.("[data-listening-service]");
@@ -15247,6 +15416,7 @@ async function connectSpotify() {
 
   try {
     setSpotifyMessage("Opening Spotify…");
+    preserveContextualMusicSettingsForSpotify();
 
     const state =
       generateSpotifyRandomString(32);
@@ -17043,7 +17213,9 @@ async function handleSpotifyAuthorizationCallback() {
     return false;
   }
 
+  restoreContextualMusicSettingsAfterSpotify();
   showOnlySection("settingsSection");
+  syncMusicSettingsReturnControl();
 
   if (spotifyError) {
     sessionStorage.removeItem(
@@ -17664,7 +17836,11 @@ function updateRealShareLinkState(item = selectedItem) {
   if (!item || !["album", "song", "artist"].includes(item.type)) return;
   const nextUrl = getItemDeepLinkUrl(item);
   if (nextUrl && nextUrl !== window.location.href) {
-    window.history.replaceState({ bomShare: true, itemType: item.type }, "", nextUrl);
+    window.history.replaceState({
+      ...(window.history.state || {}),
+      bomShare: true,
+      itemType: item.type
+    }, "", nextUrl);
   }
 }
 
@@ -17779,6 +17955,7 @@ showOnlySection = function(targetId) {
   originalShowOnlySectionV32(targetId);
   applySectionTransition(targetId);
   if (targetId === "searchSection") clearRealShareLinkState();
+  if (targetId === "settingsSection") syncMusicSettingsReturnControl();
   setTimeout(() => {
     if (typeof updateSendToFriendVisibility === "function") updateSendToFriendVisibility();
     bindSelectedAlbumSwipe();

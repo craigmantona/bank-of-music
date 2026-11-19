@@ -5445,6 +5445,44 @@ button.song-album-link {
   margin-bottom: 22px;
 }
 
+.settings-context-return {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0 0 18px;
+  padding: 9px 14px;
+  border: 1px solid rgba(196, 211, 172, 0.32);
+  border-radius: 999px;
+  background: rgba(196, 211, 172, 0.08);
+  color: #f5f7f4;
+  box-shadow: none;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.settings-context-return:hover {
+  border-color: rgba(196, 211, 172, 0.56);
+  background: rgba(196, 211, 172, 0.14);
+  transform: none;
+}
+
+.settings-context-return:focus-visible {
+  outline: 3px solid rgba(196, 211, 172, 0.72);
+  outline-offset: 3px;
+}
+
+.settings-context-return-arrow {
+  flex: 0 0 auto;
+  font-size: 1.15em;
+  line-height: 1;
+}
+
 .settings-kicker {
   margin-bottom: 7px;
   color: var(--green);
@@ -5604,6 +5642,11 @@ button.song-album-link {
 }
 
 @media (max-width: 600px) {
+  .settings-context-return {
+    width: 100%;
+    border-radius: 16px;
+  }
+
   .settings-panel {
     padding: 18px;
   }

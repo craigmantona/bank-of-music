@@ -72,6 +72,146 @@ test("legacy Both stays Spotify plus Apple while All three includes Amazon", () 
   );
 });
 
+function installNavigationEnvironment(context, href, { state = {}, length = 2 } = {}) {
+  const classes = new Set(["hidden"]);
+  const label = { textContent: "Back to selected item" };
+  const attributes = new Map();
+  const button = {
+    classList: {
+      toggle(name, enabled) {
+        if (enabled) classes.add(name);
+        else classes.delete(name);
+      },
+      contains: name => classes.has(name)
+    },
+    querySelector: selector => selector === "[data-settings-return-label]" ? label : null,
+    setAttribute: (name, value) => attributes.set(name, value),
+    removeAttribute: name => attributes.delete(name),
+    focus() {}
+  };
+  const location = { href, origin: new URL(href).origin };
+  const historyCalls = { replace: [], push: [], back: 0 };
+  const history = {
+    state,
+    length,
+    replaceState(nextState, _title, nextUrl) {
+      this.state = nextState;
+      location.href = String(nextUrl);
+      historyCalls.replace.push({ state: nextState, url: location.href });
+    },
+    pushState(nextState, _title, nextUrl) {
+      this.state = nextState;
+      location.href = String(nextUrl);
+      historyCalls.push.push({ state: nextState, url: location.href });
+    },
+    back() {
+      historyCalls.back += 1;
+    }
+  };
+  context.window = {
+    location,
+    history,
+    requestAnimationFrame: callback => callback(),
+    scrollTo() {}
+  };
+  context.document = {
+    getElementById: id => id === "musicSettingsReturnBtn" ? button : null
+  };
+  return { attributes, button, history, historyCalls, label, location };
+}
+
+test("contextual Settings URLs accept only album or song return targets", () => {
+  const { context } = createContext();
+  installNavigationEnvironment(context, "https://thebankofmusic.com/");
+  const albumUrl = "https://thebankofmusic.com/?share=album&title=Hounds%20of%20Love&artist=Kate%20Bush&albumId=42&settings=listening";
+  assert.deepEqual(
+    { ...context.getContextualMusicSettingsItem(albumUrl) },
+    { type: "album", title: "Hounds of Love", artist: "Kate Bush" }
+  );
+  assert.equal(
+    context.getContextualMusicSettingsReturnUrl(albumUrl),
+    "https://thebankofmusic.com/?share=album&title=Hounds+of+Love&artist=Kate+Bush&albumId=42"
+  );
+  assert.equal(context.getContextualMusicSettingsItem("https://thebankofmusic.com/?settings=listening"), null);
+  assert.equal(context.getContextualMusicSettingsItem("https://thebankofmusic.com/?share=artist&title=Kate&artist=Kate&settings=listening"), null);
+});
+
+test("the Settings return control is contextual, safely labelled and absent on direct visits", () => {
+  const { context } = createContext();
+  const environment = installNavigationEnvironment(context, "https://thebankofmusic.com/");
+  context.syncMusicSettingsReturnControl();
+  assert.equal(environment.button.classList.contains("hidden"), true);
+  assert.equal(environment.attributes.has("aria-label"), false);
+
+  environment.location.href = "https://thebankofmusic.com/?share=song&title=Running%20Up%20That%20Hill&artist=Kate%20Bush&songId=7&settings=listening";
+  context.syncMusicSettingsReturnControl();
+  assert.equal(environment.button.classList.contains("hidden"), false);
+  assert.equal(environment.label.textContent, "Back to Running Up That Hill");
+  assert.equal(environment.attributes.get("aria-label"), "Back to Running Up That Hill");
+});
+
+test("opening preferences creates one reversible history entry and retains the exact item URL", async () => {
+  const { context } = createContext({ stored: "apple" });
+  const environment = installNavigationEnvironment(context, "https://thebankofmusic.com/?share=album&title=Old&artist=Artist");
+  const sections = [];
+  context.getItemDeepLinkUrl = item => `https://thebankofmusic.com/?share=${item.type}&title=${encodeURIComponent(item.title)}&artist=${encodeURIComponent(item.artist)}&albumId=${item.savedAlbumId}`;
+  context.showOnlySection = section => sections.push(section);
+  context.syncListeningServiceControls = () => {};
+  const opened = context.openContextualMusicSettings({
+    type: "album",
+    title: "Hounds of Love",
+    artist: "Kate Bush",
+    savedAlbumId: 42
+  });
+
+  assert.equal(opened, true);
+  assert.equal(environment.historyCalls.replace.length, 1);
+  assert.match(environment.historyCalls.replace[0].url, /share=album/);
+  assert.doesNotMatch(environment.historyCalls.replace[0].url, /settings=listening/);
+  assert.equal(environment.historyCalls.push.length, 1);
+  assert.match(environment.historyCalls.push[0].url, /settings=listening/);
+  assert.equal(environment.history.state.bomMusicSettings, true);
+  assert.deepEqual(sections, ["settingsSection"]);
+
+  context.handleIncomingShareLink = async () => assert.fail("history-backed return should not rebuild the item");
+  assert.equal(await context.returnFromContextualMusicSettings(), true);
+  assert.equal(environment.historyCalls.back, 1);
+});
+
+test("a refreshed contextual Settings URL rebuilds the exact item without unsafe history assumptions", async () => {
+  const { context } = createContext();
+  const href = "https://thebankofmusic.com/?share=song&title=Cloudbusting&artist=Kate%20Bush&songId=9&settings=listening";
+  const environment = installNavigationEnvironment(context, href, { state: {}, length: 1 });
+  let incomingShareLoads = 0;
+  context.handleIncomingShareLink = async () => { incomingShareLoads += 1; };
+
+  assert.equal(await context.returnFromContextualMusicSettings(), true);
+  assert.equal(environment.historyCalls.back, 0);
+  assert.equal(incomingShareLoads, 1);
+  assert.doesNotMatch(environment.location.href, /settings=listening/);
+  assert.match(environment.location.href, /songId=9/);
+});
+
+test("Spotify round trips restore only a recent same-origin contextual Settings target", () => {
+  const { context } = createContext();
+  const href = "https://thebankofmusic.com/?share=album&title=The%20Dreaming&artist=Kate%20Bush&albumId=12&settings=listening";
+  const environment = installNavigationEnvironment(context, href);
+  const stored = new Map();
+  context.sessionStorage = {
+    getItem: key => stored.get(key) ?? null,
+    setItem: (key, value) => stored.set(key, value),
+    removeItem: key => stored.delete(key)
+  };
+
+  context.preserveContextualMusicSettingsForSpotify();
+  assert.equal(stored.size, 1);
+  environment.location.href = "https://thebankofmusic.com/?code=spotify-code&state=spotify-state";
+  assert.equal(context.restoreContextualMusicSettingsAfterSpotify(), true);
+  assert.match(environment.location.href, /settings=listening/);
+  assert.equal(environment.history.state.bomMusicSettingsRestored, true);
+  assert.equal(stored.size, 0);
+});
+
 test("single and multi-service preferences assign prominence without dropping destinations", () => {
   const { context } = createContext();
   assert.equal(context.getListeningServicePriority("spotify", "spotify"), "primary");
@@ -171,7 +311,7 @@ test("album and track provider UI matches the polished panel hierarchy without v
   assert.match(panel, /aria-label="Listen on \$\{MUSIC_PROVIDER_LABELS\[service\]\}"/);
   assert.match(panel, /data-service-priority="\$\{priority\}"/);
   assert.match(panel, /music-service-logo/);
-  assert.match(app, /data-open-listening-settings[\s\S]*showOnlySection\("settingsSection"\)/);
+  assert.match(app, /data-open-listening-settings[\s\S]*openContextualMusicSettings\(\)/);
 });
 
 test("rendered single, Both and All three panels keep the exact selected and secondary destinations", () => {
@@ -209,6 +349,8 @@ test("the five-option preference selector exists only in Settings and keeps keyb
   }
   assert.match(html, /This preference can only be changed here/);
   assert.match(app, /\["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"\]/);
+  assert.match(html, /id="musicSettingsReturnBtn"[\s\S]*data-return-from-listening-settings="true"/);
+  assert.match(html, /settings-context-return-arrow" aria-hidden="true">←<\/span>/);
 });
 
 test("single and multi-service layouts use the approved card, branded hierarchy and responsive balance", () => {
@@ -224,6 +366,8 @@ test("single and multi-service layouts use the approved card, branded hierarchy 
   assert.match(polishedStyles, /music-provider-amazon-btn:is[\s\S]*?background: #17212b !important/);
   assert.match(polishedStyles, /\.music-provider-secondary-services \.music-provider-play-btn \{[\s\S]*?border-radius: 999px[\s\S]*?background: #292e2b !important/);
   assert.match(polishedStyles, /@media \(max-width: 700px\)[\s\S]*?data-selected-service-count="3"[\s\S]*?grid-template-columns: 1fr/);
+  assert.match(styles, /\.settings-context-return:focus-visible[\s\S]*?outline: 3px solid/);
+  assert.match(styles, /@media \(max-width: 600px\)[\s\S]*?\.settings-context-return \{[\s\S]*?width: 100%/);
   assert.match(foundationStyles, /\.music-provider-panel \{[\s\S]*?padding: 24px[\s\S]*?background: #101512[\s\S]*?border-radius: 24px/);
   assert.match(foundationStyles, /music-provider-secondary-services[\s\S]*?background: #292e2b !important/);
 });
