@@ -31,6 +31,24 @@ function createContext({ stored = null, fetchImpl = async () => ({ ok: false }) 
   return { context, values };
 }
 
+function renderProviderPanel(preference, type = "album") {
+  const { context } = createContext({ stored: preference });
+  context.escapeHtml = value => String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+  const panelStart = app.indexOf("function buildMusicProviderPanel");
+  const panelEnd = app.indexOf("function syncListeningServiceControls", panelStart);
+  vm.runInNewContext(app.slice(panelStart, panelEnd), context);
+  return context.buildMusicProviderPanel({
+    type,
+    title: type === "album" ? "Album" : "Song",
+    artist: "Artist",
+    album: "Album"
+  });
+}
+
 test("listening preference defaults safely and persists all supported choices", () => {
   const { context, values } = createContext();
   assert.equal(context.getPreferredListeningService(), "both");
@@ -67,10 +85,6 @@ test("single and multi-service preferences assign prominence without dropping de
   for (const service of ["spotify", "apple", "amazon"]) {
     assert.equal(context.getListeningServicePriority(service, "all"), "selected");
   }
-  assert.equal(
-    context.getListeningPreferenceSummary("both"),
-    "Your preferred services are Spotify and Apple Music."
-  );
 });
 
 test("Amazon Music search links use the official HTTPS UK search route and encode metadata", () => {
@@ -137,20 +151,55 @@ test("track resolution falls back when the album identity does not agree", async
   assert.equal(url, "https://music.apple.com/gb/search?term=Song%20Artist%20Right%20Album");
 });
 
-test("album and track provider UI keeps every service in one accessible compact action group", () => {
+test("album and track provider UI matches the polished panel hierarchy without verbose preference copy", () => {
   const panelStart = app.indexOf("function buildMusicProviderPanel");
   const panelEnd = app.indexOf("function syncListeningServiceControls", panelStart);
   const panel = app.slice(panelStart, panelEnd);
   assert.doesNotMatch(panel, /data-listening-service=/);
   assert.doesNotMatch(panel, /role="radiogroup"/);
   assert.match(panel, /role="group" aria-label="Listen to this/);
-  assert.match(panel, /data-music-provider-summary="true"/);
-  assert.match(panel, /data-music-service="spotify"/);
-  assert.match(panel, /data-music-service="apple"/);
-  assert.match(panel, /data-music-service="amazon"/);
-  assert.equal((panel.match(/aria-label="Listen on /g) || []).length, 3);
-  assert.equal((panel.match(/data-service-priority=/g) || []).length, 3);
+  assert.match(panel, /<h3 id="\$\{escapeHtml\(headingId\)\}" class="music-provider-title">Listen to this \$\{itemLabel\}/);
+  assert.match(panel, /aria-controls="settingsSection"/);
+  assert.match(panel, /data-open-listening-settings="true"/);
+  assert.match(panel, /Open music preferences in Settings/);
+  assert.match(panel, /data-music-provider-selected-services="true"/);
+  assert.match(panel, /data-music-provider-secondary-services="true"/);
+  assert.match(panel, /Also available on/);
+  assert.doesNotMatch(panel, /preferred service|preferred services|Change this in Settings/);
+  assert.match(app, /MUSIC_PROVIDER_ORDER = Object\.freeze\(\["spotify", "apple", "amazon"\]\)/);
+  assert.match(panel, /data-music-service="\$\{service\}"/);
+  assert.match(panel, /aria-label="Listen on \$\{MUSIC_PROVIDER_LABELS\[service\]\}"/);
+  assert.match(panel, /data-service-priority="\$\{priority\}"/);
   assert.match(panel, /music-service-logo/);
+  assert.match(app, /data-open-listening-settings[\s\S]*showOnlySection\("settingsSection"\)/);
+});
+
+test("rendered single, Both and All three panels keep the exact selected and secondary destinations", () => {
+  const spotify = renderProviderPanel("spotify");
+  assert.match(spotify, /data-selected-service-count="1"/);
+  assert.match(spotify, /data-music-provider-selected-services="true"[\s\S]*data-music-service="spotify"[\s\S]*data-service-priority="primary"/);
+  assert.match(spotify, /data-music-provider-secondary-services="true"[\s\S]*data-music-service="apple"[\s\S]*data-music-service="amazon"/);
+
+  const both = renderProviderPanel("both");
+  const bothSelected = both.slice(
+    both.indexOf('data-music-provider-selected-services="true"'),
+    both.indexOf('data-music-provider-secondary-row="true"')
+  );
+  assert.match(both, /data-selected-service-count="2"/);
+  assert.match(bothSelected, /data-music-service="spotify"[\s\S]*data-service-priority="selected"/);
+  assert.match(bothSelected, /data-music-service="apple"[\s\S]*data-service-priority="selected"/);
+  assert.doesNotMatch(bothSelected, /data-music-service="amazon"/);
+  assert.match(both, /data-music-provider-secondary-services="true"[\s\S]*data-music-service="amazon"/);
+
+  const all = renderProviderPanel("all");
+  assert.match(all, /data-selected-service-count="3"/);
+  assert.match(all, /music-provider-secondary-row hidden/);
+  assert.equal((all.match(/data-service-priority="selected"/g) || []).length, 3);
+  assert.doesNotMatch(all, /preferred service|preferred services|Change this in Settings/);
+
+  const song = renderProviderPanel("amazon", "song");
+  assert.match(song, />Listen to this track</);
+  assert.match(song, /role="group" aria-label="Listen to this track"/);
 });
 
 test("the five-option preference selector exists only in Settings and keeps keyboard radio behaviour", () => {
@@ -162,14 +211,19 @@ test("the five-option preference selector exists only in Settings and keeps keyb
   assert.match(app, /\["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"\]/);
 });
 
-test("single and multi-service layouts remain visible, touch-sized and responsive", () => {
+test("single and multi-service layouts use the approved card, branded hierarchy and responsive balance", () => {
+  const polishedStyles = styles.slice(styles.indexOf("POLISHED LISTENING PANEL"));
   assert.match(styles, /\.music-provider-preference button\[aria-checked="true"\]/);
   assert.match(styles, /\.music-provider-preference button:focus-visible/);
-  assert.match(styles, /\.music-provider-play-btn \{[\s\S]*?min-height: 44px/);
-  assert.match(styles, /data-service-priority="primary"[\s\S]*?min-height: 50px/);
-  assert.match(styles, /data-service-priority="selected"[\s\S]*?flex: 1 1 160px/);
-  assert.match(styles, /data-service-priority="secondary"[\s\S]*?border-color: transparent/);
-  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?\.music-provider-preference button[\s\S]*?min-height: 48px/);
-  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?data-service-priority="primary"[\s\S]*?width: 100%/);
-  assert.match(foundationStyles, /data-service-priority="secondary"[\s\S]*?border-color: transparent !important/);
+  assert.match(polishedStyles, /\.music-provider-panel \{[\s\S]*?padding: clamp\(20px, 2\.4vw, 28px\)[\s\S]*?border-radius: 26px[\s\S]*?background: #111714/);
+  assert.match(polishedStyles, /\.music-provider-selected-services \.music-provider-play-btn \{[\s\S]*?min-height: 62px[\s\S]*?border-radius: 16px/);
+  assert.match(polishedStyles, /data-selected-service-count="2"[\s\S]*?repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(polishedStyles, /data-selected-service-count="3"[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(polishedStyles, /music-provider-spotify-btn:is[\s\S]*?background: #1ed760 !important/);
+  assert.match(polishedStyles, /music-provider-apple-btn:is[\s\S]*?linear-gradient/);
+  assert.match(polishedStyles, /music-provider-amazon-btn:is[\s\S]*?background: #17212b !important/);
+  assert.match(polishedStyles, /\.music-provider-secondary-services \.music-provider-play-btn \{[\s\S]*?border-radius: 999px[\s\S]*?background: #292e2b !important/);
+  assert.match(polishedStyles, /@media \(max-width: 700px\)[\s\S]*?data-selected-service-count="3"[\s\S]*?grid-template-columns: 1fr/);
+  assert.match(foundationStyles, /\.music-provider-panel \{[\s\S]*?padding: 24px[\s\S]*?background: #101512[\s\S]*?border-radius: 24px/);
+  assert.match(foundationStyles, /music-provider-secondary-services[\s\S]*?background: #292e2b !important/);
 });

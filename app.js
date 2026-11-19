@@ -9370,21 +9370,12 @@ const MUSIC_PROVIDER_LABELS = Object.freeze({
   amazon: "Amazon Music"
 });
 
+const MUSIC_PROVIDER_ORDER = Object.freeze(["spotify", "apple", "amazon"]);
+
 function getListeningServicePriority(service, preference) {
   const selectedServices = getListeningServicesForPreference(preference);
   if (!selectedServices.has(service)) return "secondary";
   return selectedServices.size === 1 ? "primary" : "selected";
-}
-
-function getListeningPreferenceSummary(preference) {
-  const selectedLabels = [...getListeningServicesForPreference(preference)]
-    .map(service => MUSIC_PROVIDER_LABELS[service])
-    .filter(Boolean);
-  if (selectedLabels.length === 1) {
-    return `${selectedLabels[0]} is your preferred service. Other services remain available.`;
-  }
-  const lastLabel = selectedLabels.pop();
-  return `Your preferred services are ${selectedLabels.join(", ")} and ${lastLabel}.`;
 }
 
 function getAppleMusicSearchFallbackUrl({ type, title, artist, album = "" }) {
@@ -9658,67 +9649,65 @@ function buildMusicProviderPanel({
   const appleMusicLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><defs><linearGradient id="apple-music-gradient-${escapeHtml(playerId)}" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#fa57c1"/><stop offset=".5" stop-color="#f83f74"/><stop offset="1" stop-color="#fa233b"/></linearGradient></defs><rect width="24" height="24" rx="5.5" fill="url(#apple-music-gradient-${escapeHtml(playerId)})"/><path d="M16.9 6.1v8.3c0 1.5-1.2 2.7-2.8 2.7-1.2 0-2.2-.7-2.2-1.7 0-1.1 1-1.9 2.4-1.9.4 0 .8.1 1.1.2V8.8l-5.5 1.1v5.6c0 1.5-1.2 2.7-2.8 2.7-1.2 0-2.2-.7-2.2-1.7 0-1.1 1-1.9 2.4-1.9.4 0 .8.1 1.1.2V7.7l8.5-1.6Z" fill="#fff"/></svg>`;
   const amazonMusicLogo = `<svg class="music-service-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="24" height="24" rx="5.5" fill="#131921"/><path d="M15.7 14.2c-.5.4-1.2.6-1.8.6-1 0-1.6-.6-1.6-1.5 0-1.1.8-1.8 2.2-1.8.4 0 .8 0 1.2.1v-.4c0-.9-.4-1.3-1.4-1.3-.6 0-1.3.2-2 .5l-.5-1.3c.9-.4 1.9-.7 2.9-.7 1.9 0 2.8.9 2.8 2.6v3.7h-1.7l-.1-.5Zm0-1.5c-.3-.1-.6-.1-.9-.1-.6 0-.9.2-.9.6s.3.6.8.6c.4 0 .8-.1 1.1-.4v-.7Z" fill="#fff"/><path d="M6 16.4c3.4 1.8 7.8 2 11.4.2" fill="none" stroke="#ff9900" stroke-width="1.6" stroke-linecap="round"/><path d="m16.6 15.7 1.5.1-.5 1.4" fill="none" stroke="#ff9900" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-  return `
-    <div class="music-provider-panel" data-music-provider-panel="true">
-      <div class="music-provider-header">
-        <div class="music-provider-copy">
-          <div class="music-provider-kicker">Listen now</div>
-          <strong>Play with your music provider</strong>
-          <span>
-            Use Spotify here or open this ${type === "album" ? "album" : "track"}
-            in Apple Music or Amazon Music.
-          </span>
-        </div>
+  const logos = {
+    spotify: spotifyLogo,
+    apple: appleMusicLogo,
+    amazon: amazonMusicLogo
+  };
+  const buttonMarkup = Object.fromEntries(MUSIC_PROVIDER_ORDER.map(service => {
+    const priority = getListeningServicePriority(service, preference);
+    const serviceClass = service === "apple" ? "apple" : service;
+    const playerTarget = service === "spotify"
+      ? ` data-player-target="${escapeHtml(playerId)}"`
+      : "";
+    return [service, `
+      <button
+        type="button"
+        class="music-provider-play-btn music-provider-${serviceClass}-btn"
+        data-music-service="${service}"
+        data-service-priority="${priority}"
+        data-provider-type="${escapeHtml(type)}"
+        data-provider-title="${escapeHtml(title)}"
+        data-provider-artist="${escapeHtml(artist)}"
+        data-provider-album="${escapeHtml(album)}"${playerTarget}
+        aria-label="Listen on ${MUSIC_PROVIDER_LABELS[service]}"
+      >
+        ${logos[service]}
+        <span data-music-service-label="true">${priority === "secondary" ? MUSIC_PROVIDER_LABELS[service] : `Listen on ${MUSIC_PROVIDER_LABELS[service]}`}</span>
+      </button>
+    `];
+  }));
+  const selectedButtonMarkup = MUSIC_PROVIDER_ORDER
+    .filter(service => selectedServices.has(service))
+    .map(service => buttonMarkup[service])
+    .join("");
+  const secondaryButtonMarkup = MUSIC_PROVIDER_ORDER
+    .filter(service => !selectedServices.has(service))
+    .map(service => buttonMarkup[service])
+    .join("");
+  const headingId = `music-provider-heading-${playerId}`;
+  const itemLabel = type === "album" ? "album" : "track";
 
-        <div class="music-provider-actions">
-          <div class="music-provider-summary" data-music-provider-summary="true">
-            ${escapeHtml(getListeningPreferenceSummary(preference))}
-            <span>Change this in Settings.</span>
+  return `
+    <section class="music-provider-panel" data-music-provider-panel="true" aria-labelledby="${escapeHtml(headingId)}">
+      <div class="music-provider-header">
+        <h3 id="${escapeHtml(headingId)}" class="music-provider-title">Listen to this ${itemLabel}</h3>
+        <button type="button" class="music-provider-settings-btn" data-open-listening-settings="true" aria-controls="settingsSection" aria-label="Open music preferences in Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M8 14v6"/></svg>
+          <span>Music preferences</span>
+        </button>
+      </div>
+
+      <div class="music-provider-actions">
+        <div class="music-provider-buttons is-${layout}-preference" data-selected-service-count="${selectedServices.size}" role="group" aria-label="Listen to this ${itemLabel}">
+          <div class="music-provider-selected-services" data-music-provider-selected-services="true">
+            ${selectedButtonMarkup}
           </div>
-          <div class="music-provider-buttons is-${layout}-preference" role="group" aria-label="Listen to this ${type === "album" ? "album" : "track"}">
-            <button
-              type="button"
-              class="music-provider-play-btn music-provider-spotify-btn"
-              data-music-service="spotify"
-              data-service-priority="${getListeningServicePriority("spotify", preference)}"
-              data-provider-type="${escapeHtml(type)}"
-              data-provider-title="${escapeHtml(title)}"
-              data-provider-artist="${escapeHtml(artist)}"
-              data-provider-album="${escapeHtml(album)}"
-              data-player-target="${escapeHtml(playerId)}"
-              aria-label="Listen on Spotify"
-            >
-              ${spotifyLogo}
-              <span data-music-service-label="true">${getListeningServicePriority("spotify", preference) === "secondary" ? "Spotify" : "Listen on Spotify"}</span>
-            </button>
-            <button
-              type="button"
-              class="music-provider-play-btn music-provider-apple-btn"
-              data-music-service="apple"
-              data-service-priority="${getListeningServicePriority("apple", preference)}"
-              data-provider-type="${escapeHtml(type)}"
-              data-provider-title="${escapeHtml(title)}"
-              data-provider-artist="${escapeHtml(artist)}"
-              data-provider-album="${escapeHtml(album)}"
-              aria-label="Listen on Apple Music"
-            >
-              ${appleMusicLogo}
-              <span data-music-service-label="true">${getListeningServicePriority("apple", preference) === "secondary" ? "Apple Music" : "Listen on Apple Music"}</span>
-            </button>
-            <button
-              type="button"
-              class="music-provider-play-btn music-provider-amazon-btn"
-              data-music-service="amazon"
-              data-service-priority="${getListeningServicePriority("amazon", preference)}"
-              data-provider-type="${escapeHtml(type)}"
-              data-provider-title="${escapeHtml(title)}"
-              data-provider-artist="${escapeHtml(artist)}"
-              data-provider-album="${escapeHtml(album)}"
-              aria-label="Listen on Amazon Music"
-            >
-              ${amazonMusicLogo}
-              <span data-music-service-label="true">${getListeningServicePriority("amazon", preference) === "secondary" ? "Amazon Music" : "Listen on Amazon Music"}</span>
-            </button>
+          <div class="music-provider-secondary-row${secondaryButtonMarkup ? "" : " hidden"}" data-music-provider-secondary-row="true">
+            <span class="music-provider-secondary-label">Also available on</span>
+            <div class="music-provider-secondary-services" data-music-provider-secondary-services="true">
+              ${secondaryButtonMarkup}
+            </div>
           </div>
         </div>
       </div>
@@ -9728,7 +9717,7 @@ function buildMusicProviderPanel({
         class="spotify-embed-container hidden"
         aria-live="polite"
       ></div>
-    </div>
+    </section>
   `;
 }
 
@@ -9739,23 +9728,33 @@ function syncListeningServiceControls(preference) {
     option.setAttribute("aria-checked", String(selected));
     option.tabIndex = selected ? 0 : -1;
   });
-  document.querySelectorAll("[data-music-provider-summary]").forEach(summary => {
-    summary.firstChild.textContent = `${getListeningPreferenceSummary(preference)} `;
-  });
-  document.querySelectorAll(".music-provider-buttons").forEach(group => {
+  document.querySelectorAll("[data-music-provider-panel='true']").forEach(panel => {
+    const group = panel.querySelector(".music-provider-buttons");
+    const selectedRow = panel.querySelector("[data-music-provider-selected-services]");
+    const secondaryRow = panel.querySelector("[data-music-provider-secondary-row]");
+    const secondaryServices = panel.querySelector("[data-music-provider-secondary-services]");
+    if (!group || !selectedRow || !secondaryRow || !secondaryServices) return;
     group.classList.toggle("is-single-preference", selectedServices.size === 1);
     group.classList.toggle("is-multi-preference", selectedServices.size > 1);
-  });
-  document.querySelectorAll("[data-music-service]").forEach(button => {
-    const service = button.dataset.musicService;
-    const priority = getListeningServicePriority(service, preference);
-    button.dataset.servicePriority = priority;
-    const label = button.querySelector("[data-music-service-label]");
-    if (label) {
-      label.textContent = priority === "secondary"
-        ? MUSIC_PROVIDER_LABELS[service]
-        : `Listen on ${MUSIC_PROVIDER_LABELS[service]}`;
-    }
+    group.dataset.selectedServiceCount = String(selectedServices.size);
+    const selectedButtons = [];
+    const secondaryButtons = [];
+    MUSIC_PROVIDER_ORDER.forEach(service => {
+      const button = panel.querySelector(`[data-music-service="${service}"]`);
+      if (!button) return;
+      const priority = getListeningServicePriority(service, preference);
+      button.dataset.servicePriority = priority;
+      const label = button.querySelector("[data-music-service-label]");
+      if (label) {
+        label.textContent = priority === "secondary"
+          ? MUSIC_PROVIDER_LABELS[service]
+          : `Listen on ${MUSIC_PROVIDER_LABELS[service]}`;
+      }
+      (priority === "secondary" ? secondaryButtons : selectedButtons).push(button);
+    });
+    selectedRow.replaceChildren(...selectedButtons);
+    secondaryServices.replaceChildren(...secondaryButtons);
+    secondaryRow.classList.toggle("hidden", secondaryButtons.length === 0);
   });
 }
 
@@ -9790,6 +9789,13 @@ function openWithAmazonMusic({ type, title, artist, album = "" }) {
 }
 
 document.addEventListener("click", event => {
+  const settingsShortcut = event.target.closest?.("[data-open-listening-settings]");
+  if (settingsShortcut) {
+    event.preventDefault();
+    event.stopPropagation();
+    showOnlySection("settingsSection");
+    return;
+  }
   const option = event.target.closest?.("[data-listening-service]");
   if (!option) return;
   event.preventDefault();
