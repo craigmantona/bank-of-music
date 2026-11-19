@@ -97,6 +97,7 @@ const adminRefreshBtn = document.getElementById("adminRefreshBtn");
 const missingArtistArtworkBtn = document.getElementById("missingArtistArtworkBtn");
 
 const adminMessage = document.getElementById("adminMessage");
+const christmasNumberOneAdminPreview = document.getElementById("christmasNumberOneAdminPreview");
 
 const profileModal = document.getElementById("profileModal") || createProfileModal();
 
@@ -989,11 +990,133 @@ async function saveChristmasTrackRating(canonicalRecordingId, rating) {
   return { ok: Number(saved) === value, rating: saved, message: Number(saved) === value ? `Saved ${value} / 10.` : "Your rating could not be saved." };
 }
 
+let christmasNumberOneAssetPromise = null;
+
+function loadChristmasNumberOneAssets() {
+  if (christmasNumberOneAssetPromise) return christmasNumberOneAssetPromise;
+  christmasNumberOneAssetPromise = new Promise((resolve, reject) => {
+    if (!document.querySelector('link[data-bom-christmas-number-one-style]')) {
+      const style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "bom-christmas-number-one.css?v=3";
+      style.dataset.bomChristmasNumberOneStyle = "1";
+      document.head.append(style);
+    }
+    if (window.BOMChristmasNumberOneUI) { resolve(); return; }
+    const script = document.createElement("script");
+    script.src = "bom-christmas-number-one.js?v=3";
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("The Christmas Number 1 preview could not load."));
+    document.body.append(script);
+  }).catch(error => {
+    christmasNumberOneAssetPromise = null;
+    throw error;
+  });
+  return christmasNumberOneAssetPromise;
+}
+
+async function loadChristmasNumberOneAdminPreview(year, scenario = "leader") {
+  if (!currentUser || !isAdmin) throw new Error("Christmas Number 1 preview requires an administrator account.");
+  const previewYear = Number(year) || Number(new Intl.DateTimeFormat("en-GB", { year: "numeric", timeZone: "Europe/London" }).format(new Date()));
+  const previewResults = scenario !== "official";
+  const [{ data: state, error: stateError }, { data: results, error: resultsError }] = await Promise.all([
+    supabaseClient.rpc("get_bom_admin_christmas_number_one_preview", { p_year: previewYear }),
+    supabaseClient.rpc("get_bom_admin_christmas_number_one_results", {
+      p_year: previewYear,
+      p_preview: previewResults,
+      p_scenario: previewResults ? scenario : "leader"
+    })
+  ]);
+  if (stateError) throw stateError;
+  if (resultsError) throw resultsError;
+  return { state, results };
+}
+
+async function saveChristmasNumberOneAdminPreviewVote(year, canonicalRecordingId) {
+  if (!currentUser || !isAdmin) throw new Error("Christmas Number 1 preview requires an administrator account.");
+  const { data, error } = await supabaseClient.rpc("cast_bom_admin_christmas_number_one_preview_vote", {
+    p_year: Number(year), p_canonical_recording_id: canonicalRecordingId
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function resolveChristmasNumberOneAdminPreviewTie(year, canonicalRecordingId, note) {
+  if (!currentUser || !isAdmin) throw new Error("Christmas Number 1 preview requires an administrator account.");
+  const { data, error } = await supabaseClient.rpc("resolve_bom_admin_christmas_number_one_preview_tie", {
+    p_year: Number(year),
+    p_winner_canonical_recording_id: canonicalRecordingId,
+    p_note: String(note || "")
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function loadChristmasNumberOnePublicState(year) {
+  if (window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE?.enabled !== true) throw new Error("Christmas Number 1 is not enabled.");
+  const { data, error } = await supabaseClient.rpc("get_bom_christmas_number_one_state", { p_year: Number(year) || null });
+  if (error) throw error;
+  return data;
+}
+
+async function saveChristmasNumberOneVote(year, canonicalRecordingId) {
+  if (window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE?.enabled !== true || !currentUser) throw new Error("Christmas Number 1 voting is unavailable.");
+  const { data, error } = await supabaseClient.rpc("cast_bom_christmas_number_one_vote", {
+    p_year: Number(year), p_canonical_recording_id: canonicalRecordingId
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function loadChristmasNumberOneArchive() {
+  if (window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE?.enabled !== true) throw new Error("Christmas Number 1 is not enabled.");
+  const { data, error } = await supabaseClient.rpc("get_bom_christmas_number_one_archive");
+  if (error) throw error;
+  return data || [];
+}
+
+globalThis.mountChristmasNumberOneAdminPreview = async () => {
+  if (!christmasNumberOneAdminPreview || !currentUser || !isAdmin) return false;
+  await loadChristmasNumberOneAssets();
+  return window.BOMChristmasNumberOneUI?.mountAdmin?.(christmasNumberOneAdminPreview) || false;
+};
+
+let christmasNumberOnePublicSync = null;
+async function syncChristmasNumberOnePublicEntry() {
+  const existing = document.querySelector("[data-bom-christmas-number-one-entry]");
+  if (window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE?.enabled !== true || !currentUser) {
+    existing?.remove();
+    return false;
+  }
+  if (christmasNumberOnePublicSync) return christmasNumberOnePublicSync;
+  christmasNumberOnePublicSync = (async () => {
+    try {
+      const state = await loadChristmasNumberOnePublicState();
+      if (state?.phase === "disabled" || state?.votingApproved !== true) { existing?.remove(); return false; }
+      await loadChristmasNumberOneAssets();
+      return window.BOMChristmasNumberOneUI?.installPublicEntry?.(state) || false;
+    } catch {
+      existing?.remove();
+      return false;
+    }
+  })();
+  try { return await christmasNumberOnePublicSync; }
+  finally { christmasNumberOnePublicSync = null; }
+}
+
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
-      await ensureFullCatalogue();
-      renderAdminDashboard();
+      showOnlySection(sectionId);
+      try {
+        await ensureFullCatalogue();
+        renderAdminDashboard();
+      } catch (error) {
+        setMessage(adminMessage, "The catalogue tools could not load, but isolated admin previews remain available.");
+        console.warn("Admin catalogue unavailable", error);
+      }
+      return;
     }
     showOnlySection(sectionId);
   },
@@ -1020,6 +1143,12 @@ window.BOMPresentationBridge = Object.freeze({
   saveBondTrackRating: (catalogueTrackId, rating) => saveBondTrackRating(catalogueTrackId, rating),
   loadChristmasMusicData: manifest => loadChristmasMusicData(manifest),
   saveChristmasTrackRating: (catalogueTrackId, rating) => saveChristmasTrackRating(catalogueTrackId, rating),
+  loadChristmasNumberOneAdminPreview: (year, scenario) => loadChristmasNumberOneAdminPreview(year, scenario),
+  saveChristmasNumberOneAdminPreviewVote: (year, canonicalRecordingId) => saveChristmasNumberOneAdminPreviewVote(year, canonicalRecordingId),
+  resolveChristmasNumberOneAdminPreviewTie: (year, canonicalRecordingId, note) => resolveChristmasNumberOneAdminPreviewTie(year, canonicalRecordingId, note),
+  loadChristmasNumberOnePublicState: year => loadChristmasNumberOnePublicState(year),
+  saveChristmasNumberOneVote: (year, canonicalRecordingId) => saveChristmasNumberOneVote(year, canonicalRecordingId),
+  loadChristmasNumberOneArchive: () => loadChristmasNumberOneArchive(),
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
   showRatings: async () => {
@@ -2319,7 +2448,9 @@ function updateSessionUI() {
   }
 
   updateAdminAccessUI();
-  if (currentUser && isAdmin) window.BOMEmailAnnouncements?.loadAdmin(supabaseClient);
+  if (currentUser && isAdmin && window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+    window.BOMEmailAnnouncements?.loadAdmin(supabaseClient);
+  }
 }
 
 function updateAdminAccessUI() {
@@ -2337,6 +2468,10 @@ function updateAdminAccessUI() {
    adminSection.classList.add("hidden");
 
  }
+
+ if (isAdmin) void globalThis.mountChristmasNumberOneAdminPreview?.().catch(error => {
+   if (christmasNumberOneAdminPreview) christmasNumberOneAdminPreview.innerHTML = `<p class="small" role="status">${escapeHtml(error.message || "Christmas Number 1 preview unavailable.")}</p>`;
+ });
 
 }
 
@@ -4775,6 +4910,7 @@ function renderRecommendations() {
   if (isStageOnePresentation() && window.BOMDiscoverUI) {
     recommendationsList.innerHTML = window.BOMDiscoverUI.render(buildStageOneDiscoverModel());
     window.requestAnimationFrame(() => window.BOMDiscoverUI.updateRowControls(recommendationsList));
+    void syncChristmasNumberOnePublicEntry();
     return;
   }
   if (!currentUser) {
@@ -13549,7 +13685,9 @@ function renderAdminDashboard() {
   `;
 
 loadAdminStats();
-window.BOMEarlyAccess?.loadAdmin(supabaseClient);
+if (window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+  window.BOMEarlyAccess?.loadAdmin(supabaseClient);
+}
 }
 
 async function loadAdminStats() {
@@ -18630,9 +18768,13 @@ window.BOMAdminCatalogueHost = Object.freeze({
     };
   }
 });
-document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
+if (window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+  document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
+}
 
-window.BOMEmailAnnouncements?.initialise(supabaseClient);
+if (window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+  window.BOMEmailAnnouncements?.initialise(supabaseClient);
+}
 
 const earlyAccessAdmin = document.getElementById("earlyAccessAdmin");
 earlyAccessAdmin?.addEventListener("click", async event => {

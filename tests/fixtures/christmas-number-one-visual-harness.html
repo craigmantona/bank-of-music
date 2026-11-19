@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="../../"><title>Christmas Number 1 visual harness</title><link rel="stylesheet" href="bom-foundation.css"><link rel="stylesheet" href="bom-christmas-number-one.css?v=2"><style>body{margin:0;padding:24px;background:#07130e}.fixture{max-width:1180px;margin:auto}</style></head>
+<body><main class="fixture"><div id="preview"></div></main><script src="bom-christmas-number-one.js?v=2"></script><script>
+(async()=>{
+  const manifest=await fetch("christmas-100.json").then(response=>response.json());
+  const candidates=manifest.tracks.map((track,index)=>({id:track.musicbrainzRecordingId,title:track.title,artist:track.artist,spotifyId:track.spotifyId||"",sortOrder:index+1}));
+  let selected=candidates[24].id;
+  const ranking=candidates.slice(20,30).map((candidate,index)=>({...candidate,position:index+1,voteRank:index+1,votes:[64,58,54,52,49,47,44,42,40,38][index],isTied:false}));
+  window.BOMPresentationBridge={
+    async loadChristmasNumberOneAdminPreview(year,scenario){
+      const tie=scenario==="tie";
+      const rows=ranking.map(row=>({...row}));
+      if(tie){rows[1].votes=rows[0].votes;rows[0].isTied=true;rows[1].isTied=true;rows[1].voteRank=1;}
+      return {state:{year,selectedCandidateId:selected,candidates,schedule:{opensAt:`${year}-12-01T00:00:00Z`,closesAt:`${year}-12-21T00:00:00Z`,revealsAt:`${year}-12-24T00:00:00Z`}},results:{preview:true,year,turnout:348,ranking:rows,leaderTie:tie?rows.slice(0,2):[],winner:tie?null:rows[0],publicationBlocked:tie,archive:[]}};
+    },
+    async saveChristmasNumberOneAdminPreviewVote(year,id){selected=id;return {ok:true,preview:true,officialVotesAffected:false};}
+  };
+  BOMChristmasNumberOneUI.mountAdmin(document.getElementById("preview"),{year:2026,now:()=>new Date("2026-12-15T16:30:00Z")});
+})();
+</script></body></html>

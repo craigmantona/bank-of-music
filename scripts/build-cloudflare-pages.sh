@@ -45,6 +45,8 @@ for file in \
   bom-game-preview.css \
   bom-christmas.js \
   bom-christmas.css \
+  bom-christmas-number-one.js \
+  bom-christmas-number-one.css \
   christmas-100.json
 do
   cp "$repo_dir/$file" "$output_dir/$file"
