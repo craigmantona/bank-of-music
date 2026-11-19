@@ -60,5 +60,18 @@ window.BOM_CHRISTMAS_FEATURE = Object.freeze({
   }
 });
 
+/*
+ * Christmas Number 1 is a separate, approval-gated annual vote. Keep this
+ * false until the database migration, launch grants and a specific year's
+ * administrator approvals have all been reviewed and explicitly approved.
+ */
+window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE = Object.freeze({
+  enabled: false,
+  timeZone: "Europe/London",
+  votingOpens: "1 December at 00:00 UK time",
+  votingCloses: "20 December at 23:59 UK time",
+  revealDate: "24 December"
+});
+
 window.SPOTIFY_REDIRECT_URI =
   "https://thebankofmusic.com/";
