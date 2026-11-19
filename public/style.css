@@ -6791,6 +6791,290 @@ button.song-album-link {
   }
 }
 
+/* ============================================================
+   POLISHED LISTENING PANEL
+   Mirrors the approved charcoal-card mock-up while preserving
+   equal prominence for multi-service preferences.
+   ============================================================ */
+
+.music-provider-panel {
+  display: block;
+  width: 100%;
+  margin: 24px 0 14px;
+  padding: clamp(20px, 2.4vw, 28px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 26px;
+  background: #111714;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+}
+
+.music-provider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.music-provider-title {
+  min-width: 0;
+  margin: 0;
+  color: #b6bbb7;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.105em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.music-provider-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: -10px -8px -10px 0;
+  padding: 8px;
+  border: 0 !important;
+  border-radius: 999px;
+  background: transparent !important;
+  background-image: none !important;
+  color: #aeb4b0 !important;
+  box-shadow: none !important;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.music-provider-settings-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.music-provider-settings-btn:hover {
+  background: rgba(255, 255, 255, 0.055) !important;
+  color: #ffffff !important;
+  transform: none;
+}
+
+.music-provider-settings-btn:focus-visible,
+.music-provider-play-btn:focus-visible {
+  outline: 3px solid rgba(196, 211, 172, 0.72);
+  outline-offset: 3px;
+}
+
+.music-provider-actions,
+.music-provider-buttons {
+  width: 100%;
+}
+
+.music-provider-selected-services {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.music-provider-buttons[data-selected-service-count="2"] .music-provider-selected-services {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.music-provider-buttons[data-selected-service-count="3"] .music-provider-selected-services {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.music-provider-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  background-image: none !important;
+  box-shadow: none !important;
+  font: inherit;
+  cursor: pointer;
+}
+
+.music-provider-selected-services .music-provider-play-btn {
+  min-height: 62px;
+  padding: 13px 18px;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.music-provider-spotify-btn:is([data-service-priority="primary"], [data-service-priority="selected"]) {
+  border: 1px solid #1ed760 !important;
+  background: #1ed760 !important;
+  color: #07140c !important;
+  box-shadow: 0 12px 28px rgba(30, 215, 96, 0.15) !important;
+}
+
+.music-provider-spotify-btn:is([data-service-priority="primary"], [data-service-priority="selected"]) .music-service-logo circle {
+  fill: #07140c;
+}
+
+.music-provider-spotify-btn:is([data-service-priority="primary"], [data-service-priority="selected"]) .music-service-logo path {
+  stroke: #1ed760;
+}
+
+.music-provider-apple-btn:is([data-service-priority="primary"], [data-service-priority="selected"]) {
+  border: 1px solid #fa416f !important;
+  background: linear-gradient(135deg, #fa57c1 0%, #f83f74 52%, #fa233b 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 28px rgba(248, 63, 116, 0.16) !important;
+}
+
+.music-provider-amazon-btn:is([data-service-priority="primary"], [data-service-priority="selected"]) {
+  border: 1px solid #2fb9e8 !important;
+  background: #17212b !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 -3px 0 #ff9900, 0 12px 28px rgba(0, 168, 225, 0.13) !important;
+}
+
+.music-provider-selected-services .music-provider-play-btn:hover {
+  filter: brightness(1.065);
+  transform: translateY(-1px);
+}
+
+.music-provider-secondary-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin-top: 18px;
+}
+
+.music-provider-secondary-label {
+  color: #aeb4b0;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.music-provider-secondary-services {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-width: 0;
+}
+
+.music-provider-secondary-services .music-provider-play-btn {
+  width: auto;
+  min-height: 46px;
+  padding: 10px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 999px;
+  background: #292e2b !important;
+  color: #f3f2ed !important;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.music-provider-secondary-services .music-provider-play-btn:hover {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  background: #333936 !important;
+  color: #ffffff !important;
+  transform: none;
+}
+
+.music-provider-play-btn:disabled {
+  opacity: 0.68;
+  cursor: wait;
+  filter: none;
+  transform: none;
+}
+
+.music-provider-selected-services .music-service-logo {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+}
+
+.music-provider-secondary-services .music-service-logo {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+@media (max-width: 700px) {
+  .music-provider-panel {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 21px;
+  }
+
+  .music-provider-header {
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .music-provider-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+  }
+
+  .music-provider-settings-btn {
+    gap: 6px;
+    margin-right: -6px;
+    padding-inline: 6px;
+    font-size: 0.76rem;
+  }
+
+  .music-provider-settings-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .music-provider-buttons[data-selected-service-count="2"] .music-provider-selected-services,
+  .music-provider-buttons[data-selected-service-count="3"] .music-provider-selected-services {
+    grid-template-columns: 1fr;
+  }
+
+  .music-provider-selected-services .music-provider-play-btn {
+    min-height: 56px;
+    padding-inline: 14px;
+    border-radius: 15px;
+    font-size: 0.94rem;
+  }
+
+  .music-provider-secondary-row {
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .music-provider-secondary-label {
+    flex: 1 0 100%;
+    text-align: center;
+  }
+
+  .music-provider-secondary-services {
+    width: 100%;
+  }
+
+  .music-provider-secondary-services .music-provider-play-btn {
+    flex: 1 1 135px;
+    max-width: 220px;
+    min-height: 44px;
+    padding-inline: 12px;
+  }
+}
+
 /* Keep sharing available without a second bordered card competing with Listen. */
 .selected-share-panel {
   width: auto !important;

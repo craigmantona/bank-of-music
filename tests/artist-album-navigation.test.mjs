@@ -133,5 +133,5 @@ test("internal and shared album URLs retain release-group identity", () => {
 
 test("album navigation retains the null-ID track guard and deploys under a fresh asset URL", () => {
   assert.match(app, /Number\.isSafeInteger\(catalogueAlbumId\) && catalogueAlbumId > 0/);
-  assert.match(index, /app\.js\?v=186&autocomplete=2&search-autosave=1&listening-ui=4&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2/);
+  assert.match(index, /app\.js\?v=187&autocomplete=2&search-autosave=1&listening-ui=5&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2/);
 });
