@@ -162,6 +162,10 @@ test("Christmas Eve reveal, deterministic tied ranks, archive and year rollover 
   assert.equal(archive.length, 1);
   assert.equal(archive[0].year, 2025);
   await assert.rejects(adminAction(2025, "revoke_reveal"), /archive is permanent/i);
+  await assert.rejects(adminAction(2025, "resolve_tie", candidates[1], "Attempt to replace a published tie resolution is blocked."), /archive is permanent/i);
+  await assert.rejects(adminAction(2025, "approve_reveal"), /archive is permanent/i);
+  const immutable = (await db.query("select result_snapshot from christmas_number_one_years where year=2025")).rows[0].result_snapshot;
+  assert.equal(immutable.winner.id, candidates[0]);
   await clock("2027-01-01T00:00:00Z");
   const rollover = (await asUser(MEMBER, "select public.get_bom_christmas_number_one_state(2027::smallint) result")).rows[0].result;
   assert.equal(rollover.phase, "disabled");

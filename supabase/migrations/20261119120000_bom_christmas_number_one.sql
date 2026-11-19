@@ -450,6 +450,10 @@ begin
     end if;
     update public.christmas_number_one_years set voting_approved_at = null, voting_approved_by = null, updated_at = v_now where year = p_year;
   elsif p_action = 'resolve_tie' then
+    if v_now >= make_timestamptz(p_year, 12, 24, 0, 0, 0, 'Europe/London')
+       and exists (select 1 from public.christmas_number_one_years where year = p_year and reveal_approved_at is not null) then
+      raise exception 'A published Christmas Number 1 archive is permanent' using errcode = '23514';
+    end if;
     if v_now < make_timestamptz(p_year, 12, 21, 0, 0, 0, 'Europe/London') then
       raise exception 'A tie can be resolved only after voting closes on 20 December at 23:59 UK time' using errcode = '22023';
     end if;
@@ -469,6 +473,10 @@ begin
       reveal_approved_at = null, reveal_approved_by = null, result_snapshot = null, updated_at = v_now
     where year = p_year;
   elsif p_action = 'approve_reveal' then
+    if v_now >= make_timestamptz(p_year, 12, 24, 0, 0, 0, 'Europe/London')
+       and exists (select 1 from public.christmas_number_one_years where year = p_year and reveal_approved_at is not null) then
+      raise exception 'A published Christmas Number 1 archive is permanent' using errcode = '23514';
+    end if;
     if v_now < make_timestamptz(p_year, 12, 21, 0, 0, 0, 'Europe/London') then
       raise exception 'Reveal approval is available only after voting closes' using errcode = '22023';
     end if;
