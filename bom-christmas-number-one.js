@@ -9,6 +9,72 @@
     timeZone: "Europe/London", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hour12: false
   }).format(new Date(value));
 
+  // Static editorial discovery order, reviewed 19 November 2026. It is based on
+  // established UK Christmas listening/chart popularity, never BOM vote totals.
+  // Keep the recognised favourites here; every other eligible song follows A–Z.
+  // Evidence: officialcharts.com/chart-news/official-most-streamed-christmas-songs/
+  // and officialcharts.com/chart-news/mariah-carey-s-all-i-want-for-christmas-is-you-tops-1-million-sales-__3637/
+  const POPULAR_FIRST_ORDER = Object.freeze([
+    ["Last Christmas", "Wham!"],
+    ["All I Want for Christmas Is You", "Mariah Carey"],
+    ["Fairytale of New York", "The Pogues feat. Kirsty MacColl"],
+    ["Merry Xmas Everybody", "Slade"],
+    ["I Wish It Could Be Christmas Everyday", "Wizzard"],
+    ["Driving Home for Christmas", "Chris Rea"],
+    ["Merry Christmas Everyone", "Shakin' Stevens"],
+    ["Rockin' Around the Christmas Tree", "Brenda Lee"],
+    ["Do They Know It's Christmas?", "Band Aid"],
+    ["Step Into Christmas", "Elton John"],
+    ["Santa Tell Me", "Ariana Grande"],
+    ["Underneath the Tree", "Kelly Clarkson"],
+    ["Happy Xmas (War Is Over)", "John Lennon & Yoko Ono"],
+    ["Wonderful Christmastime", "Paul McCartney"],
+    ["Jingle Bell Rock", "Bobby Helms"],
+    ["One More Sleep", "Leona Lewis"],
+    ["White Christmas", "Bing Crosby"],
+    ["Stop the Cavalry", "Jona Lewie"],
+    ["Stay Another Day", "East 17"],
+    ["Christmas Wrapping", "The Waitresses"],
+    ["Feliz Navidad", "José Feliciano"],
+    ["Merry Christmas", "Ed Sheeran & Elton John"],
+    ["Christmas (Baby Please Come Home)", "Darlene Love"],
+    ["Let It Snow! Let It Snow! Let It Snow!", "Dean Martin"],
+    ["Sleigh Ride", "The Ronettes"],
+    ["The Christmas Song (Merry Christmas to You)", "Nat King Cole"],
+    ["2000 Miles", "The Pretenders"],
+    ["Mistletoe", "Justin Bieber"],
+    ["Snowman", "Sia"],
+    ["Christmas Lights", "Coldplay"],
+    ["Santa Claus Is Comin' to Town", "The Jackson 5"],
+    ["Lonely This Christmas", "Mud"],
+    ["Blue Christmas", "Elvis Presley"],
+    ["It's Beginning to Look a Lot Like Christmas", "Perry Como"],
+    ["The Power of Love", "Frankie Goes to Hollywood"],
+    ["Thank God It's Christmas", "Queen"],
+    ["Mistletoe and Wine", "Cliff Richard"],
+    ["A Spaceman Came Travelling", "Chris de Burgh"],
+    ["Saviour's Day", "Cliff Richard"],
+    ["Peace on Earth / Little Drummer Boy", "Bing Crosby & David Bowie"]
+  ]);
+  const candidateKey = candidate => `${candidate?.title || ""}\u0000${candidate?.artist || ""}`;
+  const popularRank = new Map(POPULAR_FIRST_ORDER.map((candidate, index) => [candidateKey({ title: candidate[0], artist: candidate[1] }), index]));
+  const alphabeticalCandidateOrder = (a, b) => String(a?.title || "").localeCompare(String(b?.title || ""), "en-GB", { sensitivity: "base" })
+    || String(a?.artist || "").localeCompare(String(b?.artist || ""), "en-GB", { sensitivity: "base" })
+    || String(a?.id || "").localeCompare(String(b?.id || ""), "en-GB");
+
+  function sortCandidates(candidates, mode = "popular") {
+    return [...(candidates || [])].sort((a, b) => {
+      if (mode === "az") return alphabeticalCandidateOrder(a, b);
+      const aRank = popularRank.get(candidateKey(a)) ?? Number.MAX_SAFE_INTEGER;
+      const bRank = popularRank.get(candidateKey(b)) ?? Number.MAX_SAFE_INTEGER;
+      return aRank - bRank || alphabeticalCandidateOrder(a, b);
+    });
+  }
+
+  const sortControl = (mode, dataAttribute) => `<div class="bom-cno-sort" role="group" aria-label="Sort Christmas songs">
+    <span>Sort</span><button type="button" ${dataAttribute}="popular" aria-pressed="${mode === "popular"}">Popular first</button><button type="button" ${dataAttribute}="az" aria-pressed="${mode === "az"}">A–Z</button>
+  </div>`;
+
   function countdownParts(target, now = new Date()) {
     const remaining = Math.max(0, new Date(target).getTime() - new Date(now).getTime());
     return {
@@ -61,9 +127,9 @@
       : `<p class="bom-cno-empty">No annual winner has been published yet. Unapproved years never appear here.</p>`}</section>`;
   }
 
-  function candidateCards(candidates, savedId, pendingId, query, showAll) {
+  function candidateCards(candidates, savedId, pendingId, query, showAll, sortMode = "popular") {
     const normalized = query.trim().toLocaleLowerCase("en-GB");
-    const matches = candidates.filter(candidate => !normalized || `${candidate.title} ${candidate.artist}`.toLocaleLowerCase("en-GB").includes(normalized));
+    const matches = sortCandidates(candidates, sortMode).filter(candidate => !normalized || `${candidate.title} ${candidate.artist}`.toLocaleLowerCase("en-GB").includes(normalized));
     const visible = normalized || showAll ? matches : matches.slice(0, 12);
     return {
       total: matches.length,
@@ -88,14 +154,14 @@
     const schedule = state.schedule, saved = (state.candidates || []).find(candidate => candidate.id === state.selectedCandidateId);
     if (state.phase === "revealed" && state.results) return `${renderReveal(state.results)}${renderArchive(view.archive || [])}`;
     if (["closed", "awaiting_reveal_approval", "reveal"].includes(state.phase)) return `<section class="bom-cno-public-wait"><div class="bom-cno-winner-mark" aria-hidden="true">✦</div><p>VOTING IS CLOSED</p><h2>The Christmas Eve reveal is on its way</h2><span>Voting closed on 20 December at 23:59 UK time. Standings remain secret until the approved 24 December reveal.</span>${saved ? `<aside><small>Your final choice</small><strong>${esc(saved.title)}</strong><span>${esc(saved.artist)}</span></aside>` : ""}</section>`;
-    const cards = candidateCards(state.candidates || [], state.selectedCandidateId, view.pendingId, view.query, view.showAll);
+    const cards = candidateCards(state.candidates || [], state.selectedCandidateId, view.pendingId, view.query, view.showAll, view.sortMode);
     const pending = (state.candidates || []).find(candidate => candidate.id === view.pendingId);
     const open = state.phase === "open";
     return `<section class="bom-cno-public-vote">
       <header><p>${open ? "VOTING IS OPEN" : "VOTING OPENS 1 DECEMBER"}</p><h2>Choose the song that should be Christmas Number 1</h2><span>One choice per BOM member. Change it any time until 20 December at 23:59 UK time; only your latest selection counts.</span></header>
       <div class="bom-cno-countdown" role="timer" data-cno-public-countdown>${esc(countdownLabel(schedule))}<small>Christmas Eve reveal · 24 December</small></div>
       ${saved ? `<aside class="bom-cno-public-saved"><small>Your saved choice</small><strong>${esc(saved.title)}</strong><span>${esc(saved.artist)}</span></aside>` : ""}
-      <label class="bom-cno-search"><span>Search the curated 100</span><input type="search" data-cno-public-search value="${esc(view.query)}" placeholder="Song or artist" autocomplete="off"></label>
+      <div class="bom-cno-catalogue-tools"><label class="bom-cno-search"><span>Search the curated 100</span><input type="search" data-cno-public-search value="${esc(view.query)}" placeholder="Song or artist" autocomplete="off"></label>${sortControl(view.sortMode, "data-cno-public-sort")}</div>
       <div class="bom-cno-choices${open ? "" : " is-locked"}">${cards.html}</div>
       ${!view.query && cards.total > 12 && !view.showAll ? `<button class="bom-cno-show-all" type="button" data-cno-public-show-all>Show all ${cards.total} songs</button>` : ""}
       ${open && pending ? `<div class="bom-cno-confirm"><div><small>${pending.id === state.selectedCandidateId ? "CURRENT SELECTION" : "CONFIRM YOUR VOTE"}</small><strong>${esc(pending.title)}</strong><span>${esc(pending.artist)}</span></div><button type="button" data-cno-public-confirm${view.busy || pending.id === state.selectedCandidateId ? " disabled" : ""}>${view.busy ? "Saving…" : pending.id === state.selectedCandidateId ? "Vote saved" : "Confirm vote"}</button></div>` : ""}
@@ -113,7 +179,7 @@
       dialog.setAttribute("aria-labelledby", "bomCnoPublicTitle");
       document.body.append(dialog);
     }
-    const view = { state: initialState, archive: [], pendingId: initialState?.selectedCandidateId || "", query: "", showAll: false, busy: false, message: "" };
+    const view = { state: initialState, archive: [], pendingId: initialState?.selectedCandidateId || "", query: "", sortMode: "popular", showAll: false, busy: false, message: "" };
     const draw = () => {
       dialog.innerHTML = `<header class="bom-cno-public-hero"><button type="button" data-cno-public-close aria-label="Close Christmas Number 1">EXIT</button><img src="assets/bom-header-logo.png" alt="Bank of Music"><div><p>THE BANK OF MUSIC PRESENTS</p><h1 id="bomCnoPublicTitle">CHRISTMAS NUMBER 1</h1><span>One song. One vote. One festive winner.</span></div></header><main>${publicPanel(view.state, view)}</main>`;
     };
@@ -127,6 +193,8 @@
     }
     dialog.onclick = async event => {
       if (event.target.closest("[data-cno-public-close]")) { dialog.close(); return; }
+      const sort = event.target.closest("[data-cno-public-sort]");
+      if (sort) { view.sortMode = sort.dataset.cnoPublicSort === "az" ? "az" : "popular"; draw(); return; }
       const choice = event.target.closest("[data-cno-select]");
       if (choice && view.state.phase === "open") { view.pendingId = choice.dataset.cnoSelect; view.message = "Review and confirm your choice below."; draw(); return; }
       if (event.target.closest("[data-cno-public-show-all]")) { view.showAll = true; draw(); return; }
@@ -168,7 +236,7 @@
     if (!container || container.dataset.cnoMounted === "true") return false;
     const bridge = options.bridge || window.BOMPresentationBridge;
     const now = options.now || (() => new Date());
-    const state = { year: Number(options.year) || Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric" }).format(now())), scenario: "leader", tab: "vote", query: "", pendingId: "", tieWinnerId: "", tieNote: "", showAll: false, payload: null, busy: false, message: "" };
+    const state = { year: Number(options.year) || Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric" }).format(now())), scenario: "leader", tab: "vote", query: "", sortMode: "popular", pendingId: "", tieWinnerId: "", tieNote: "", showAll: false, payload: null, busy: false, message: "" };
     container.dataset.cnoMounted = "true";
     container.innerHTML = shell();
     const body = container.querySelector("[data-cno-body]");
@@ -178,7 +246,7 @@
     function render() {
       if (!state.payload) return;
       const preview = state.payload.state, results = state.payload.results, schedule = preview.schedule;
-      const cards = candidateCards(preview.candidates || [], preview.selectedCandidateId, state.pendingId, state.query, state.showAll);
+      const cards = candidateCards(preview.candidates || [], preview.selectedCandidateId, state.pendingId, state.query, state.showAll, state.sortMode);
       const pending = currentCandidate(state.pendingId), saved = currentCandidate(preview.selectedCandidateId);
       const tieLeaders = results.leaderTie || [];
       body.innerHTML = `<div class="bom-cno-toolbar">
@@ -198,7 +266,7 @@
       </nav>
       <div data-cno-panel>${state.tab === "vote" ? `<section class="bom-cno-vote-panel">
         <header><div><p>YOUR ${state.year} PREVIEW VOTE</p><h3>Choose the song that should be Christmas Number 1</h3><span>You may change your choice until 20 December at 23:59 UK time. Only the latest selection counts.</span></div>${saved ? `<aside><small>Saved preview selection</small><strong>${esc(saved.title)}</strong><span>${esc(saved.artist)}</span></aside>` : ""}</header>
-        <label class="bom-cno-search"><span>Search the curated 100</span><input type="search" data-cno-search value="${esc(state.query)}" placeholder="Song or artist" autocomplete="off"></label>
+        <div class="bom-cno-catalogue-tools"><label class="bom-cno-search"><span>Search the curated 100</span><input type="search" data-cno-search value="${esc(state.query)}" placeholder="Song or artist" autocomplete="off"></label>${sortControl(state.sortMode, "data-cno-sort")}</div>
         <div class="bom-cno-choices">${cards.html || `<p class="bom-cno-empty">No festive songs match that search.</p>`}</div>
         ${!state.query && cards.total > 12 && !state.showAll ? `<button class="bom-cno-show-all" type="button" data-cno-show-all>Show all ${cards.total} songs</button>` : ""}
         ${pending ? `<div class="bom-cno-confirm"><div><small>${pending.id === preview.selectedCandidateId ? "CURRENT SELECTION" : "CONFIRM YOUR CHOICE"}</small><strong>${esc(pending.title)}</strong><span>${esc(pending.artist)}</span></div><button type="button" data-cno-confirm${state.busy ? " disabled" : ""}>${state.busy ? "Saving…" : pending.id === preview.selectedCandidateId ? "Selection saved" : "Confirm preview vote"}</button></div>` : ""}
@@ -226,6 +294,8 @@
     container.addEventListener("click", async event => {
       const tab = event.target.closest("[data-cno-tab]");
       if (tab) { state.tab = tab.dataset.cnoTab; render(); return; }
+      const sort = event.target.closest("[data-cno-sort]");
+      if (sort) { state.sortMode = sort.dataset.cnoSort === "az" ? "az" : "popular"; render(); return; }
       const choice = event.target.closest("[data-cno-select]");
       if (choice) { state.pendingId = choice.dataset.cnoSelect; state.message = "Review and confirm this preview selection below."; render(); return; }
       const tieWinner = event.target.closest("[data-cno-tie-winner]");
@@ -268,5 +338,5 @@
     return true;
   }
 
-  window.BOMChristmasNumberOneUI = Object.freeze({ countdownParts, countdownLabel, renderReveal, renderArchive, installPublicEntry, openPublic, mountAdmin });
+  window.BOMChristmasNumberOneUI = Object.freeze({ countdownParts, countdownLabel, renderReveal, renderArchive, candidateCards, sortCandidates, popularFirstOrder: POPULAR_FIRST_ORDER, installPublicEntry, openPublic, mountAdmin });
 })();

@@ -4,12 +4,13 @@ import test from "node:test";
 import vm from "node:vm";
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
-const [config, app, html, client, css, migration, futureGrants, rollback] = await Promise.all([
+const [config, app, html, client, css, migration, futureGrants, rollback, manifestJson] = await Promise.all([
   read("config.js"), read("app.js"), read("index.html"), read("bom-christmas-number-one.js"),
   read("bom-christmas-number-one.css"), read("supabase/migrations/20261119120000_bom_christmas_number_one.sql"),
   read("supabase/operations/future-public-launch/20261119123000_bom_christmas_number_one_public_permissions.sql"),
-  read("supabase/operations/20261119_bom_christmas_number_one_rollback.sql")
+  read("supabase/operations/20261119_bom_christmas_number_one_rollback.sql"), read("christmas-100.json")
 ]);
+const manifest = JSON.parse(manifestJson);
 
 function clientHelpers() {
   const context = { window: { setInterval() { return 1; }, clearInterval() {} }, Date, Intl, Object, Array, String, Number, Math };
@@ -27,8 +28,8 @@ test("the new vote is default-off and has no public navigation or automatic Dece
   assert.match(app, /BOM_CHRISTMAS_NUMBER_ONE_FEATURE\?\.enabled !== true/);
   assert.match(app, /state\?\.phase === "disabled" \|\| state\?\.votingApproved !== true/);
   assert.match(app, /BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true/);
-  assert.match(app, /script\.src = "bom-christmas-number-one\.js\?v=2"/);
-  assert.match(app, /style\.href = "bom-christmas-number-one\.css\?v=2"/);
+  assert.match(app, /script\.src = "bom-christmas-number-one\.js\?v=3"/);
+  assert.match(app, /style\.href = "bom-christmas-number-one\.css\?v=3"/);
   assert.equal(/<script[^>]+bom-christmas-number-one\.js/.test(html), false);
 });
 
@@ -85,6 +86,54 @@ test("the UI provides search, changeable saved selection, listening links and ad
   assert.match(css, /\.bom-cno-vote-panel h3,\.bom-cno-results h3,\.bom-cno-archive h3\{color:var\(--cno-ink\)\}/);
   assert.match(css, /\.bom-cno-admin \.sr-only/);
   assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
+});
+
+test("the static UK favourites order is default, maintainable and independent of vote totals", () => {
+  const ui = clientHelpers();
+  const candidates = manifest.tracks.map((track, index) => ({ id: String(index + 1), title: track.title, artist: track.artist }));
+  const rankedKeys = new Set(Array.from(ui.popularFirstOrder, pair => `${pair[0]}\u0000${pair[1]}`));
+  const catalogueKeys = new Set(candidates.map(candidate => `${candidate.title}\u0000${candidate.artist}`));
+  assert.equal(manifest.tracks.length, 100);
+  assert.equal(rankedKeys.size, 40);
+  for (const key of rankedKeys) assert.ok(catalogueKeys.has(key), `ranked favourite is not in the curated Christmas 100: ${key}`);
+
+  const top20 = Array.from(ui.sortCandidates(candidates, "popular").slice(0, 20), candidate => `${candidate.title} — ${candidate.artist}`);
+  assert.deepEqual(top20, [
+    "Last Christmas — Wham!",
+    "All I Want for Christmas Is You — Mariah Carey",
+    "Fairytale of New York — The Pogues feat. Kirsty MacColl",
+    "Merry Xmas Everybody — Slade",
+    "I Wish It Could Be Christmas Everyday — Wizzard",
+    "Driving Home for Christmas — Chris Rea",
+    "Merry Christmas Everyone — Shakin' Stevens",
+    "Rockin' Around the Christmas Tree — Brenda Lee",
+    "Do They Know It's Christmas? — Band Aid",
+    "Step Into Christmas — Elton John",
+    "Santa Tell Me — Ariana Grande",
+    "Underneath the Tree — Kelly Clarkson",
+    "Happy Xmas (War Is Over) — John Lennon & Yoko Ono",
+    "Wonderful Christmastime — Paul McCartney",
+    "Jingle Bell Rock — Bobby Helms",
+    "One More Sleep — Leona Lewis",
+    "White Christmas — Bing Crosby",
+    "Stop the Cavalry — Jona Lewie",
+    "Stay Another Day — East 17",
+    "Christmas Wrapping — The Waitresses"
+  ]);
+
+  const alphabetical = Array.from(ui.sortCandidates(candidates, "az"), candidate => `${candidate.title}\u0000${candidate.artist}`);
+  const expectedAlphabetical = [...candidates].sort((a, b) => a.title.localeCompare(b.title, "en-GB", { sensitivity: "base" })
+    || a.artist.localeCompare(b.artist, "en-GB", { sensitivity: "base" })
+    || a.id.localeCompare(b.id, "en-GB")).map(candidate => `${candidate.title}\u0000${candidate.artist}`);
+  assert.deepEqual(alphabetical, expectedAlphabetical);
+  const search = ui.candidateCards(candidates, "", "", "hippopotamus", true, "popular");
+  assert.equal(search.total, 1);
+  assert.match(search.html, /I Want a Hippopotamus for Christmas/);
+  assert.match(client, /Popular first/);
+  assert.match(client, />A–Z</);
+  assert.match(client, /never BOM vote totals/);
+  assert.match(css, /\.bom-cno-catalogue-tools/);
+  assert.match(css, /\.bom-cno-sort button\{min-height:48px/);
 });
 
 test("winner reveal blocks unresolved first-place ties and renders a transparent top 10", () => {

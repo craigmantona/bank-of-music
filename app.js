@@ -998,13 +998,13 @@ function loadChristmasNumberOneAssets() {
     if (!document.querySelector('link[data-bom-christmas-number-one-style]')) {
       const style = document.createElement("link");
       style.rel = "stylesheet";
-      style.href = "bom-christmas-number-one.css?v=2";
+      style.href = "bom-christmas-number-one.css?v=3";
       style.dataset.bomChristmasNumberOneStyle = "1";
       document.head.append(style);
     }
     if (window.BOMChristmasNumberOneUI) { resolve(); return; }
     const script = document.createElement("script");
-    script.src = "bom-christmas-number-one.js?v=2";
+    script.src = "bom-christmas-number-one.js?v=3";
     script.async = true;
     script.onload = resolve;
     script.onerror = () => reject(new Error("The Christmas Number 1 preview could not load."));
