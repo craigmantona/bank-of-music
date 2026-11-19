@@ -1042,6 +1042,17 @@ async function saveChristmasNumberOneAdminPreviewVote(year, canonicalRecordingId
   return data;
 }
 
+async function resolveChristmasNumberOneAdminPreviewTie(year, canonicalRecordingId, note) {
+  if (!currentUser || !isAdmin) throw new Error("Christmas Number 1 preview requires an administrator account.");
+  const { data, error } = await supabaseClient.rpc("resolve_bom_admin_christmas_number_one_preview_tie", {
+    p_year: Number(year),
+    p_winner_canonical_recording_id: canonicalRecordingId,
+    p_note: String(note || "")
+  });
+  if (error) throw error;
+  return data;
+}
+
 async function loadChristmasNumberOnePublicState(year) {
   if (window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE?.enabled !== true) throw new Error("Christmas Number 1 is not enabled.");
   const { data, error } = await supabaseClient.rpc("get_bom_christmas_number_one_state", { p_year: Number(year) || null });
@@ -1065,11 +1076,11 @@ async function loadChristmasNumberOneArchive() {
   return data || [];
 }
 
-async function mountChristmasNumberOneAdminPreview() {
+globalThis.mountChristmasNumberOneAdminPreview = async () => {
   if (!christmasNumberOneAdminPreview || !currentUser || !isAdmin) return false;
   await loadChristmasNumberOneAssets();
   return window.BOMChristmasNumberOneUI?.mountAdmin?.(christmasNumberOneAdminPreview) || false;
-}
+};
 
 let christmasNumberOnePublicSync = null;
 async function syncChristmasNumberOnePublicEntry() {
@@ -1097,8 +1108,15 @@ async function syncChristmasNumberOnePublicEntry() {
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
-      await ensureFullCatalogue();
-      renderAdminDashboard();
+      showOnlySection(sectionId);
+      try {
+        await ensureFullCatalogue();
+        renderAdminDashboard();
+      } catch (error) {
+        setMessage(adminMessage, "The catalogue tools could not load, but isolated admin previews remain available.");
+        console.warn("Admin catalogue unavailable", error);
+      }
+      return;
     }
     showOnlySection(sectionId);
   },
@@ -1127,6 +1145,7 @@ window.BOMPresentationBridge = Object.freeze({
   saveChristmasTrackRating: (catalogueTrackId, rating) => saveChristmasTrackRating(catalogueTrackId, rating),
   loadChristmasNumberOneAdminPreview: (year, scenario) => loadChristmasNumberOneAdminPreview(year, scenario),
   saveChristmasNumberOneAdminPreviewVote: (year, canonicalRecordingId) => saveChristmasNumberOneAdminPreviewVote(year, canonicalRecordingId),
+  resolveChristmasNumberOneAdminPreviewTie: (year, canonicalRecordingId, note) => resolveChristmasNumberOneAdminPreviewTie(year, canonicalRecordingId, note),
   loadChristmasNumberOnePublicState: year => loadChristmasNumberOnePublicState(year),
   saveChristmasNumberOneVote: (year, canonicalRecordingId) => saveChristmasNumberOneVote(year, canonicalRecordingId),
   loadChristmasNumberOneArchive: () => loadChristmasNumberOneArchive(),
@@ -2429,7 +2448,9 @@ function updateSessionUI() {
   }
 
   updateAdminAccessUI();
-  if (currentUser && isAdmin) window.BOMEmailAnnouncements?.loadAdmin(supabaseClient);
+  if (currentUser && isAdmin && window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+    window.BOMEmailAnnouncements?.loadAdmin(supabaseClient);
+  }
 }
 
 function updateAdminAccessUI() {
@@ -2448,7 +2469,7 @@ function updateAdminAccessUI() {
 
  }
 
- if (isAdmin) void mountChristmasNumberOneAdminPreview().catch(error => {
+ if (isAdmin) void globalThis.mountChristmasNumberOneAdminPreview?.().catch(error => {
    if (christmasNumberOneAdminPreview) christmasNumberOneAdminPreview.innerHTML = `<p class="small" role="status">${escapeHtml(error.message || "Christmas Number 1 preview unavailable.")}</p>`;
  });
 
@@ -13664,7 +13685,9 @@ function renderAdminDashboard() {
   `;
 
 loadAdminStats();
-window.BOMEarlyAccess?.loadAdmin(supabaseClient);
+if (window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+  window.BOMEarlyAccess?.loadAdmin(supabaseClient);
+}
 }
 
 async function loadAdminStats() {
@@ -18745,9 +18768,13 @@ window.BOMAdminCatalogueHost = Object.freeze({
     };
   }
 });
-document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
+if (window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+  document.dispatchEvent(new CustomEvent("bom:admin-catalogue-host-ready"));
+}
 
-window.BOMEmailAnnouncements?.initialise(supabaseClient);
+if (window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
+  window.BOMEmailAnnouncements?.initialise(supabaseClient);
+}
 
 const earlyAccessAdmin = document.getElementById("earlyAccessAdmin");
 earlyAccessAdmin?.addEventListener("click", async event => {

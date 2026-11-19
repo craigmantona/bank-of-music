@@ -168,7 +168,7 @@
     if (!container || container.dataset.cnoMounted === "true") return false;
     const bridge = options.bridge || window.BOMPresentationBridge;
     const now = options.now || (() => new Date());
-    const state = { year: Number(options.year) || Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric" }).format(now())), scenario: "leader", tab: "vote", query: "", pendingId: "", showAll: false, payload: null, busy: false, message: "" };
+    const state = { year: Number(options.year) || Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric" }).format(now())), scenario: "leader", tab: "vote", query: "", pendingId: "", tieWinnerId: "", tieNote: "", showAll: false, payload: null, busy: false, message: "" };
     container.dataset.cnoMounted = "true";
     container.innerHTML = shell();
     const body = container.querySelector("[data-cno-body]");
@@ -180,6 +180,7 @@
       const preview = state.payload.state, results = state.payload.results, schedule = preview.schedule;
       const cards = candidateCards(preview.candidates || [], preview.selectedCandidateId, state.pendingId, state.query, state.showAll);
       const pending = currentCandidate(state.pendingId), saved = currentCandidate(preview.selectedCandidateId);
+      const tieLeaders = results.leaderTie || [];
       body.innerHTML = `<div class="bom-cno-toolbar">
         <label>Preview year<input data-cno-year type="number" min="2025" max="2100" value="${state.year}"></label>
         <label>Result view<select data-cno-scenario><option value="leader"${state.scenario === "leader" ? " selected" : ""}>Simulated clear winner</option><option value="tie"${state.scenario === "tie" ? " selected" : ""}>Simulated first-place tie</option><option value="official"${state.scenario === "official" ? " selected" : ""}>Official results (read-only)</option></select></label>
@@ -202,7 +203,7 @@
         ${!state.query && cards.total > 12 && !state.showAll ? `<button class="bom-cno-show-all" type="button" data-cno-show-all>Show all ${cards.total} songs</button>` : ""}
         ${pending ? `<div class="bom-cno-confirm"><div><small>${pending.id === preview.selectedCandidateId ? "CURRENT SELECTION" : "CONFIRM YOUR CHOICE"}</small><strong>${esc(pending.title)}</strong><span>${esc(pending.artist)}</span></div><button type="button" data-cno-confirm${state.busy ? " disabled" : ""}>${state.busy ? "Saving…" : pending.id === preview.selectedCandidateId ? "Selection saved" : "Confirm preview vote"}</button></div>` : ""}
         <p class="bom-cno-message" role="status" aria-live="polite">${esc(state.message)}</p>
-      </section>` : state.tab === "results" ? `<section class="bom-cno-results"><header><div><p>ADMIN ONLY · HIDDEN FROM MEMBERS</p><h3>${state.year} ${results.preview === false ? "official" : "preview"} standings</h3><span>${results.preview === false ? "Read-only official vote counts." : "Simulated results for safe private testing."} Lower-rank vote ties use title A–Z ordering and are labelled transparently.</span></div><strong>${number(results.turnout)}<small>turnout</small></strong></header><ol>${rankingRows(results)}</ol>${results.publicationBlocked ? `<div class="bom-cno-tie-alert"><b>First-place tie detected</b><span>A documented resolution is required before a single Number 1 can be approved.</span></div>` : ""}</section>` : `${renderReveal(results, { preview: true })}${renderArchive(results.archive || [])}`}</div>`;
+      </section>` : state.tab === "results" ? `<section class="bom-cno-results"><header><div><p>ADMIN ONLY · HIDDEN FROM MEMBERS</p><h3>${state.year} ${results.preview === false ? "official" : "preview"} standings</h3><span>${results.preview === false ? "Read-only official vote counts." : "Simulated results for safe private testing."} Lower-rank vote ties use title A–Z ordering and are labelled transparently.</span></div><strong>${number(results.turnout)}<small>turnout</small></strong></header><ol>${rankingRows(results)}</ol>${results.publicationBlocked ? `<div class="bom-cno-tie-alert"><b>First-place tie detected</b><span>A documented resolution is required before a single Number 1 can be approved.</span></div>` : state.scenario === "tie" ? `<div class="bom-cno-tie-alert is-resolved"><b>Preview tie resolved</b><span>The winner announcement preview is now available. Official votes and approvals remain untouched.</span></div>` : ""}${state.scenario === "tie" ? `<div class="bom-cno-tie-resolution"><header><p>PREVIEW-ONLY DECISION</p><h4>Document the tied winner</h4><span>Choose one of the simulated joint leaders and record the reason. This decision is stored only with your admin preview.</span></header><div class="bom-cno-tie-options">${tieLeaders.map(candidate => `<button type="button" data-cno-tie-winner="${esc(candidate.id)}" aria-pressed="${state.tieWinnerId === candidate.id}"><strong>${esc(candidate.title)}</strong><span>${esc(candidate.artist)} · ${number(candidate.votes)} votes</span></button>`).join("")}</div><label><span>Resolution note · at least 20 characters</span><textarea data-cno-tie-note rows="3" placeholder="Document how the tied winner was selected">${esc(state.tieNote)}</textarea></label><button class="bom-cno-resolve-tie" type="button" data-cno-resolve-tie${state.busy || !state.tieWinnerId || state.tieNote.trim().length < 20 ? " disabled" : ""}>${state.busy ? "Recording…" : results.publicationBlocked ? "Record preview resolution" : "Update preview resolution"}</button><p class="bom-cno-message" role="status" aria-live="polite">${esc(state.message)}</p><small>Preview data only · no official vote, annual approval, result snapshot or audit record is changed.</small></div>` : ""}</section>` : `${renderReveal(results, { preview: true })}${renderArchive(results.archive || [])}`}</div>`;
     }
 
     async function refresh() {
@@ -210,6 +211,10 @@
       try {
         state.payload = await bridge.loadChristmasNumberOneAdminPreview(state.year, state.scenario);
         state.pendingId = state.payload.state.selectedCandidateId || "";
+        if (state.scenario === "tie" && state.payload.results.tieResolution) {
+          state.tieWinnerId = state.payload.results.tieResolution.winnerCandidateId || "";
+          state.tieNote = state.payload.results.tieResolution.note || "";
+        }
         state.message = "";
         state.busy = false;
         render();
@@ -223,8 +228,19 @@
       if (tab) { state.tab = tab.dataset.cnoTab; render(); return; }
       const choice = event.target.closest("[data-cno-select]");
       if (choice) { state.pendingId = choice.dataset.cnoSelect; state.message = "Review and confirm this preview selection below."; render(); return; }
+      const tieWinner = event.target.closest("[data-cno-tie-winner]");
+      if (tieWinner) { state.tieWinnerId = tieWinner.dataset.cnoTieWinner; state.message = "Add a documented reason, then record this preview-only resolution."; render(); return; }
       if (event.target.closest("[data-cno-show-all]")) { state.showAll = true; render(); return; }
       if (event.target.closest("[data-cno-refresh]")) { await refresh(); return; }
+      if (event.target.closest("[data-cno-resolve-tie]") && state.tieWinnerId && state.tieNote.trim().length >= 20) {
+        state.busy = true; render();
+        try {
+          await bridge.resolveChristmasNumberOneAdminPreviewTie(state.year, state.tieWinnerId, state.tieNote);
+          const message = "Preview tie resolution recorded. Open Reveal & archive to inspect the winner announcement.";
+          await refresh(); state.message = message; render();
+        } catch (error) { state.message = error.message || "The preview tie resolution could not be saved."; state.busy = false; render(); }
+        return;
+      }
       if (event.target.closest("[data-cno-confirm]") && state.pendingId && state.pendingId !== state.payload.state.selectedCandidateId) {
         state.busy = true; render();
         try {
@@ -237,6 +253,7 @@
     });
     container.addEventListener("input", event => {
       if (event.target.matches("[data-cno-search]")) { state.query = event.target.value; render(); container.querySelector("[data-cno-search]")?.focus(); }
+      if (event.target.matches("[data-cno-tie-note]")) { state.tieNote = event.target.value; render(); const note = container.querySelector("[data-cno-tie-note]"); note?.focus(); note?.setSelectionRange(state.tieNote.length, state.tieNote.length); }
     });
     container.addEventListener("change", async event => {
       if (event.target.matches("[data-cno-scenario]")) { state.scenario = event.target.value; await refresh(); }

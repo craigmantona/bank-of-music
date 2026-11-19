@@ -26,6 +26,7 @@ test("the new vote is default-off and has no public navigation or automatic Dece
   assert.match(app, /if \(!currentUser \|\| !isAdmin\) throw new Error\("Christmas Number 1 preview requires an administrator account\."\)/);
   assert.match(app, /BOM_CHRISTMAS_NUMBER_ONE_FEATURE\?\.enabled !== true/);
   assert.match(app, /state\?\.phase === "disabled" \|\| state\?\.votingApproved !== true/);
+  assert.match(app, /BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true/);
   assert.match(app, /script\.src = "bom-christmas-number-one\.js\?v=2"/);
   assert.match(app, /style\.href = "bom-christmas-number-one\.css\?v=2"/);
   assert.equal(/<script[^>]+bom-christmas-number-one\.js/.test(html), false);
@@ -46,6 +47,7 @@ test("the UK deadline, Christmas Eve reveal and countdown are exact", () => {
 test("admin preview voting is isolated and official RPCs remain permission-gated", () => {
   assert.match(migration, /create table public\.christmas_number_one_votes/);
   assert.match(migration, /create table public\.christmas_number_one_preview_votes/);
+  assert.match(migration, /create table public\.christmas_number_one_preview_tie_resolutions/);
   assert.match(migration, /primary key \(year, user_id\)/);
   assert.match(migration, /officialVotesAffected', false/);
   assert.match(migration, /private\.require_bom_admin\(\)/);
@@ -67,6 +69,10 @@ test("the UI provides search, changeable saved selection, listening links and ad
   assert.match(client, /saveChristmasNumberOneAdminPreviewVote/);
   assert.match(client, /Result view/);
   assert.match(client, /Simulated first-place tie/);
+  assert.match(client, /Document the tied winner/);
+  assert.match(client, /Preview data only · no official vote, annual approval, result snapshot or audit record is changed/);
+  assert.match(app, /resolve_bom_admin_christmas_number_one_preview_tie/);
+  assert.match(app, /The catalogue tools could not load, but isolated admin previews remain available/);
   assert.match(client, /installPublicEntry/);
   assert.match(client, /openPublic/);
   assert.match(client, /data-cno-public-open/);
@@ -74,7 +80,9 @@ test("the UI provides search, changeable saved selection, listening links and ad
   assert.match(client, /Lower-rank vote ties use title A–Z ordering/);
   assert.match(css, /@media\(max-width:760px\)/);
   assert.match(css, /@media\(max-width:430px\)/);
+  assert.match(css, /\.bom-cno-toolbar input,.bom-cno-toolbar select,.bom-cno-toolbar button\{min-height:44px/);
   assert.match(css, /min-height:55px/);
+  assert.match(css, /\.bom-cno-vote-panel h3,\.bom-cno-results h3,\.bom-cno-archive h3\{color:var\(--cno-ink\)\}/);
   assert.match(css, /\.bom-cno-admin \.sr-only/);
   assert.match(css, /@media\(prefers-reduced-motion:reduce\)/);
 });
@@ -100,6 +108,7 @@ test("winner reveal blocks unresolved first-place ties and renders a transparent
 test("schema enforcement is separate from 0–10 ratings and records every approval", () => {
   assert.doesNotMatch(migration, /\b(insert into|update|delete from) public\.song_ratings\b/i);
   assert.doesNotMatch(migration, /\b(insert into|update|delete from) public\.ratings\b/i);
+  assert.match(migration, /officialApprovalsAffected', false/);
   assert.match(migration, /references public\.christmas_number_one_candidates/);
   assert.match(migration, /Choose a song from the curated Christmas 100/);
   assert.match(migration, /create table public\.christmas_number_one_admin_audit/);
@@ -108,5 +117,5 @@ test("schema enforcement is separate from 0–10 ratings and records every appro
   assert.match(migration, /result_snapshot = v_results/);
   assert.match(migration, /published Christmas Number 1 archive is permanent/);
   assert.match(rollback, /REVIEWED ROLLBACK PLAN — DO NOT APPLY AUTOMATICALLY/);
-  assert.match(rollback, /export the five Christmas Number 1 tables/);
+  assert.match(rollback, /export the six Christmas Number 1 tables/);
 });

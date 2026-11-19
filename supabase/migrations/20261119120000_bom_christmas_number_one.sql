@@ -53,6 +53,14 @@ create table public.christmas_number_one_years (
     (tie_winner_canonical_recording_id is not null and tie_resolution_note is not null and tie_resolved_at is not null and tie_resolved_by is not null)
   )
 );
+create index christmas_number_one_years_voting_approved_by_idx
+  on public.christmas_number_one_years(voting_approved_by) where voting_approved_by is not null;
+create index christmas_number_one_years_reveal_approved_by_idx
+  on public.christmas_number_one_years(reveal_approved_by) where reveal_approved_by is not null;
+create index christmas_number_one_years_tie_winner_idx
+  on public.christmas_number_one_years(tie_winner_canonical_recording_id) where tie_winner_canonical_recording_id is not null;
+create index christmas_number_one_years_tie_resolved_by_idx
+  on public.christmas_number_one_years(tie_resolved_by) where tie_resolved_by is not null;
 
 create table public.christmas_number_one_votes (
   year smallint not null references public.christmas_number_one_years(year) on delete restrict,
@@ -64,6 +72,10 @@ create table public.christmas_number_one_votes (
 );
 create index christmas_number_one_votes_result_idx
   on public.christmas_number_one_votes(year, canonical_recording_id);
+create index christmas_number_one_votes_user_idx
+  on public.christmas_number_one_votes(user_id);
+create index christmas_number_one_votes_candidate_idx
+  on public.christmas_number_one_votes(canonical_recording_id);
 
 -- Admin preview selections are deliberately isolated from official annual votes.
 create table public.christmas_number_one_preview_votes (
@@ -74,6 +86,27 @@ create table public.christmas_number_one_preview_votes (
   updated_at timestamptz not null default clock_timestamp(),
   primary key (year, user_id)
 );
+create index christmas_number_one_preview_votes_user_idx
+  on public.christmas_number_one_preview_votes(user_id);
+create index christmas_number_one_preview_votes_candidate_idx
+  on public.christmas_number_one_preview_votes(canonical_recording_id);
+
+-- Preview tie decisions are also isolated. They exist only so an administrator
+-- can exercise the complete tie workflow without changing an official vote,
+-- annual approval, result snapshot or audit record.
+create table public.christmas_number_one_preview_tie_resolutions (
+  year smallint not null check (year between 2025 and 2100),
+  admin_user_id uuid not null references public.profiles(id) on delete cascade,
+  winner_canonical_recording_id uuid not null references public.christmas_number_one_candidates(canonical_recording_id) on delete restrict,
+  resolution_note text not null check (length(trim(resolution_note)) >= 20),
+  created_at timestamptz not null default clock_timestamp(),
+  updated_at timestamptz not null default clock_timestamp(),
+  primary key (year, admin_user_id)
+);
+create index christmas_number_one_preview_tie_admin_idx
+  on public.christmas_number_one_preview_tie_resolutions(admin_user_id);
+create index christmas_number_one_preview_tie_winner_idx
+  on public.christmas_number_one_preview_tie_resolutions(winner_canonical_recording_id);
 
 create table public.christmas_number_one_admin_audit (
   id bigint generated always as identity primary key,
@@ -83,23 +116,28 @@ create table public.christmas_number_one_admin_audit (
   details jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default clock_timestamp()
 );
+create index christmas_number_one_admin_audit_admin_idx
+  on public.christmas_number_one_admin_audit(admin_user_id);
 
 alter table public.christmas_number_one_candidates enable row level security;
 alter table public.christmas_number_one_years enable row level security;
 alter table public.christmas_number_one_votes enable row level security;
 alter table public.christmas_number_one_preview_votes enable row level security;
+alter table public.christmas_number_one_preview_tie_resolutions enable row level security;
 alter table public.christmas_number_one_admin_audit enable row level security;
 
 revoke all on table public.christmas_number_one_candidates from public, anon, authenticated;
 revoke all on table public.christmas_number_one_years from public, anon, authenticated;
 revoke all on table public.christmas_number_one_votes from public, anon, authenticated;
 revoke all on table public.christmas_number_one_preview_votes from public, anon, authenticated;
+revoke all on table public.christmas_number_one_preview_tie_resolutions from public, anon, authenticated;
 revoke all on table public.christmas_number_one_admin_audit from public, anon, authenticated;
 revoke all on sequence public.christmas_number_one_admin_audit_id_seq from public, anon, authenticated;
 grant all on table public.christmas_number_one_candidates to service_role;
 grant all on table public.christmas_number_one_years to service_role;
 grant all on table public.christmas_number_one_votes to service_role;
 grant all on table public.christmas_number_one_preview_votes to service_role;
+grant all on table public.christmas_number_one_preview_tie_resolutions to service_role;
 grant all on table public.christmas_number_one_admin_audit to service_role;
 grant all on sequence public.christmas_number_one_admin_audit_id_seq to service_role;
 
@@ -109,8 +147,8 @@ revoke all on schema private from public, anon, authenticated;
 -- Kept behind the private schema so tests can replace the clock without ever
 -- accepting a caller-supplied timestamp in a production RPC.
 create or replace function private.christmas_number_one_now()
-returns timestamptz language sql volatile set search_path = ''
-as $$ select clock_timestamp() $$;
+returns timestamptz language sql stable set search_path = ''
+as $$ select statement_timestamp() $$;
 
 create or replace function private.require_bom_admin()
 returns uuid language plpgsql stable security definer set search_path = ''
@@ -398,8 +436,15 @@ begin
     from counts
   ), leaders as (
     select * from ranked where votes = (select max(votes) from ranked)
+  ), resolution as (
+    select winner_canonical_recording_id id, resolution_note note, updated_at
+    from public.christmas_number_one_preview_tie_resolutions
+    where year = p_year and admin_user_id = v_admin_id
   ), winner as (
-    select * from leaders where p_scenario = 'leader' order by title, artist, id limit 1
+    select leader.* from leaders leader
+    where p_scenario = 'leader'
+       or (p_scenario = 'tie' and leader.id = (select id from resolution))
+    order by title, artist, id limit 1
   )
   select jsonb_build_object(
     'preview', true, 'officialVotesAffected', false, 'scenario', p_scenario, 'year', p_year,
@@ -413,12 +458,67 @@ begin
     ) order by title, artist, id) from leaders) else '[]'::jsonb end,
     'winner', (select jsonb_build_object(
       'id', id, 'title', title, 'artist', artist, 'spotifyId', spotify_id,
-      'votes', votes, 'tieResolved', false
+      'votes', votes, 'tieResolved', p_scenario = 'tie'
     ) from winner),
-    'publicationBlocked', p_scenario = 'tie',
+    'tieResolution', case when p_scenario = 'tie' and exists (select 1 from winner)
+      then (select jsonb_build_object('winnerCandidateId', id, 'note', note, 'resolvedAt', updated_at) from resolution)
+      else null end,
+    'publicationBlocked', p_scenario = 'tie' and not exists (select 1 from winner),
     'archive', v_archive
   ) into v_results;
   return v_results;
+end;
+$$;
+
+create or replace function public.resolve_bom_admin_christmas_number_one_preview_tie(
+  p_year smallint,
+  p_winner_canonical_recording_id uuid,
+  p_note text
+)
+returns jsonb language plpgsql volatile security definer set search_path = ''
+as $$
+declare
+  v_admin_id uuid := private.require_bom_admin();
+  v_now timestamptz := private.christmas_number_one_now();
+  v_leader_ids uuid[];
+begin
+  if p_year < 2025 or p_year > 2100 then raise exception 'Unsupported preview year' using errcode = '22023'; end if;
+  if length(trim(coalesce(p_note, ''))) < 20 then
+    raise exception 'Document the preview tie-resolution reason in at least 20 characters' using errcode = '22023';
+  end if;
+
+  with ordered as (
+    select candidate.canonical_recording_id id,
+      row_number() over (order by recording.title, recording.artist, candidate.canonical_recording_id)::integer sequence
+    from public.christmas_number_one_candidates candidate
+    join public.canonical_recordings recording on recording.id = candidate.canonical_recording_id
+  ), counts as (
+    select ordered.id, case when sequence in (1, 2) then 64 when sequence <= 10 then 60 - sequence * 2
+      else abs(hashtext(id::text)) % 35 end::integer votes
+    from ordered
+  )
+  select array_agg(id order by id) into v_leader_ids
+  from counts where votes = (select max(votes) from counts);
+
+  if coalesce(array_length(v_leader_ids, 1), 0) < 2
+     or not (p_winner_canonical_recording_id = any(v_leader_ids)) then
+    raise exception 'Choose one of the simulated tied first-place songs' using errcode = '22023';
+  end if;
+
+  insert into public.christmas_number_one_preview_tie_resolutions(
+    year, admin_user_id, winner_canonical_recording_id, resolution_note, created_at, updated_at
+  ) values (
+    p_year, v_admin_id, p_winner_canonical_recording_id, trim(p_note), v_now, v_now
+  ) on conflict (year, admin_user_id) do update set
+    winner_canonical_recording_id = excluded.winner_canonical_recording_id,
+    resolution_note = excluded.resolution_note,
+    updated_at = excluded.updated_at;
+
+  return jsonb_build_object(
+    'ok', true, 'preview', true, 'officialVotesAffected', false,
+    'officialApprovalsAffected', false, 'year', p_year,
+    'winnerCandidateId', p_winner_canonical_recording_id, 'recordedAt', v_now
+  );
 end;
 $$;
 
@@ -515,10 +615,12 @@ revoke all on function public.get_bom_christmas_number_one_archive() from public
 revoke all on function public.cast_bom_admin_christmas_number_one_preview_vote(smallint, uuid) from public, anon;
 revoke all on function public.get_bom_admin_christmas_number_one_preview(smallint) from public, anon;
 revoke all on function public.get_bom_admin_christmas_number_one_results(smallint, boolean, text) from public, anon;
+revoke all on function public.resolve_bom_admin_christmas_number_one_preview_tie(smallint, uuid, text) from public, anon;
 revoke all on function public.admin_set_bom_christmas_number_one_year(smallint, text, uuid, text) from public, anon;
 grant execute on function public.cast_bom_admin_christmas_number_one_preview_vote(smallint, uuid) to authenticated;
 grant execute on function public.get_bom_admin_christmas_number_one_preview(smallint) to authenticated;
 grant execute on function public.get_bom_admin_christmas_number_one_results(smallint, boolean, text) to authenticated;
+grant execute on function public.resolve_bom_admin_christmas_number_one_preview_tie(smallint, uuid, text) to authenticated;
 grant execute on function public.admin_set_bom_christmas_number_one_year(smallint, text, uuid, text) to authenticated;
 
 commit;

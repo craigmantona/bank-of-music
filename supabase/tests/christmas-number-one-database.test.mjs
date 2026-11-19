@@ -27,7 +27,7 @@ async function asUser(userId, sql, values = []) {
 
 async function clock(value) {
   await db.exec(`create or replace function private.christmas_number_one_now()
-    returns timestamptz language sql volatile set search_path=''
+    returns timestamptz language sql stable set search_path=''
     as $$ select '${value}'::timestamptz $$`);
 }
 
@@ -73,9 +73,15 @@ test("the migration captures exactly the curated 100 and exposes no direct vote 
     has_table_privilege('anon','christmas_number_one_votes','select') anon_votes,
     has_table_privilege('authenticated','christmas_number_one_votes','select') member_votes,
     has_table_privilege('authenticated','christmas_number_one_preview_votes','select') member_preview,
+    has_table_privilege('authenticated','christmas_number_one_preview_tie_resolutions','select') member_preview_ties,
     has_function_privilege('authenticated','cast_bom_christmas_number_one_vote(smallint,uuid)','execute') official_rpc,
-    has_function_privilege('authenticated','cast_bom_admin_christmas_number_one_preview_vote(smallint,uuid)','execute') preview_rpc`)).rows[0];
-  assert.deepEqual(privileges, { anon_votes: false, member_votes: false, member_preview: false, official_rpc: false, preview_rpc: true });
+    has_function_privilege('authenticated','cast_bom_admin_christmas_number_one_preview_vote(smallint,uuid)','execute') preview_rpc,
+    has_function_privilege('authenticated','resolve_bom_admin_christmas_number_one_preview_tie(smallint,uuid,text)','execute') preview_tie_rpc,
+    has_function_privilege('anon','resolve_bom_admin_christmas_number_one_preview_tie(smallint,uuid,text)','execute') anon_preview_tie_rpc`)).rows[0];
+  assert.deepEqual(privileges, {
+    anon_votes: false, member_votes: false, member_preview: false, member_preview_ties: false,
+    official_rpc: false, preview_rpc: true, preview_tie_rpc: true, anon_preview_tie_rpc: false
+  });
 });
 
 test("admin preview writes are admin-only, changeable and isolated from official votes", async () => {
@@ -85,6 +91,30 @@ test("admin preview writes are admin-only, changeable and isolated from official
   assert.equal((await db.query("select count(*)::int count from christmas_number_one_preview_votes where year=2026")).rows[0].count, 1);
   assert.equal((await db.query("select canonical_recording_id::text id from christmas_number_one_preview_votes where year=2026")).rows[0].id, candidates[1]);
   assert.equal((await db.query("select count(*)::int count from christmas_number_one_votes")).rows[0].count, 0);
+});
+
+test("preview tie resolution is documented, admin-only and isolated from official state", async () => {
+  await assert.rejects(asUser(MEMBER, `select public.resolve_bom_admin_christmas_number_one_preview_tie(
+    2026::smallint,$1::uuid,'A sufficiently long preview-only tie resolution note.')`, [candidates[0]]), /administrator access/i);
+  const tied = (await asUser(ADMIN, "select public.get_bom_admin_christmas_number_one_results(2026::smallint,true,'tie') result")).rows[0].result;
+  assert.equal(tied.publicationBlocked, true);
+  assert.equal(tied.leaderTie.length, 2);
+  await assert.rejects(asUser(ADMIN, `select public.resolve_bom_admin_christmas_number_one_preview_tie(
+    2026::smallint,$1::uuid,'too short')`, [candidates[0]]), /at least 20 characters/i);
+  await assert.rejects(asUser(ADMIN, `select public.resolve_bom_admin_christmas_number_one_preview_tie(
+    2026::smallint,$1::uuid,'A long note for a song that is not a simulated leader.')`, [candidates[2]]), /tied first-place songs/i);
+  const resolution = (await asUser(ADMIN, `select public.resolve_bom_admin_christmas_number_one_preview_tie(
+    2026::smallint,$1::uuid,'Preview editorial decision documented for safe testing only.') result`, [candidates[0]])).rows[0].result;
+  assert.equal(resolution.officialVotesAffected, false);
+  assert.equal(resolution.officialApprovalsAffected, false);
+  const resolved = (await asUser(ADMIN, "select public.get_bom_admin_christmas_number_one_results(2026::smallint,true,'tie') result")).rows[0].result;
+  assert.equal(resolved.publicationBlocked, false);
+  assert.equal(resolved.winner.id, candidates[0]);
+  assert.equal(resolved.winner.tieResolved, true);
+  assert.match(resolved.tieResolution.note, /safe testing only/);
+  assert.equal((await db.query("select count(*)::int count from christmas_number_one_votes")).rows[0].count, 0);
+  assert.equal((await db.query("select count(*)::int count from christmas_number_one_years")).rows[0].count, 0);
+  assert.equal((await db.query("select count(*)::int count from christmas_number_one_admin_audit")).rows[0].count, 0);
 });
 
 test("server time enforces approval and the 1–20 December UK voting window", async () => {
