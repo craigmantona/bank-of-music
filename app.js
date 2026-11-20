@@ -9812,13 +9812,54 @@ async function resolveAppleMusicUrl({ type, title, artist, album = "" }) {
 const SPOTIFY_ALBUM_MATCH_CACHE_PREFIX =
   "bom_spotify_album_match_";
 
+/*
+  Exact release links are deliberately curated. They run before the
+  browser cache and Spotify Search so a verified album still opens when
+  OAuth, Search or the listener's API quota is unavailable.
+*/
+const VERIFIED_SPOTIFY_ALBUM_LINKS = Object.freeze({
+  // BoM release group 9d504fde-1b02-4c14-b484-bcf94570153a;
+  // contains stored track 1BgtlF5x3xm5jXA3qwMzX8 at position 10.
+  "pj harvey|let england shake": Object.freeze({
+    id: "2JfiVMvVhdueC48EmskS7t",
+    title: "Let England Shake",
+    artist: "PJ Harvey",
+    externalUrl: "https://open.spotify.com/album/2JfiVMvVhdueC48EmskS7t"
+  })
+});
+
+function getSpotifyAlbumIdentityKey(album) {
+  return [
+    normaliseSpotifyMatchText(album?.artist),
+    normaliseSpotifyMatchText(album?.title)
+  ].join("|");
+}
+
+function getVerifiedSpotifyAlbumMatch(album) {
+  const verified =
+    VERIFIED_SPOTIFY_ALBUM_LINKS[
+      getSpotifyAlbumIdentityKey(album)
+    ];
+
+  if (!verified) return null;
+
+  return {
+    id: verified.id,
+    uri: `spotify:album:${verified.id}`,
+    name: verified.title,
+    artists: [{ name: verified.artist }],
+    externalUrl: verified.externalUrl,
+    external_urls: {
+      spotify: verified.externalUrl
+    },
+    identitySource: "verified-direct-link"
+  };
+}
+
 function getSpotifyAlbumMatchCacheKey(album) {
   return (
     SPOTIFY_ALBUM_MATCH_CACHE_PREFIX +
-    [
-      normaliseSpotifyMatchText(album?.artist),
-      normaliseSpotifyMatchText(album?.title)
-    ].join("|")
+    getSpotifyAlbumIdentityKey(album)
   );
 }
 
@@ -9855,6 +9896,13 @@ function cacheSpotifyAlbumMatch(bomAlbum, spotifyAlbum) {
 }
 
 async function searchSpotifyAlbumForBoMAlbum(bomAlbum) {
+  const verifiedMatch =
+    getVerifiedSpotifyAlbumMatch(bomAlbum);
+
+  if (verifiedMatch) {
+    return verifiedMatch;
+  }
+
   const cachedMatch =
     getCachedSpotifyAlbumMatch(bomAlbum);
 
@@ -9881,7 +9929,7 @@ async function searchSpotifyAlbumForBoMAlbum(bomAlbum) {
       `/search?${new URLSearchParams({
         q: query,
         type: "album",
-        limit: "20"
+        limit: "10"
       }).toString()}`
     );
 
@@ -10441,13 +10489,21 @@ async function openWithMusicProvider({
             artist,
             album
           })
-        : getCachedSpotifyAlbumMatch({
-            title,
-            artist
-          });
+        : (
+            getVerifiedSpotifyAlbumMatch({
+              title,
+              artist
+            }) ||
+            getCachedSpotifyAlbumMatch({
+              title,
+              artist
+            })
+          );
 
     const accessToken =
-      await getValidSpotifyAccessToken();
+      spotifyItem
+        ? null
+        : await getValidSpotifyAccessToken();
 
     if (!spotifyItem && accessToken && type === "song") {
       spotifyItem =
@@ -10541,6 +10597,11 @@ async function openWithMusicProvider({
         "SPOTIFY_NOT_CONNECTED_IN_THIS_BROWSER"
       );
 
+    const isNoExactMatch =
+      reason.includes(
+        "NO_EXACT_SPOTIFY_MATCH"
+      );
+
     if (target) {
       target.classList.remove("hidden");
 
@@ -10577,11 +10638,15 @@ async function openWithMusicProvider({
         : `
           <div class="spotify-embed-error ${inTrackDock ? "album-track-preview-error" : ""}">
             <strong>
-              BoM could not find an exact Spotify match.
+              ${isNoExactMatch
+                ? "BoM could not find an exact Spotify match."
+                : "Spotify lookup is temporarily unavailable."}
             </strong>
 
             <span>
-              You can still search for it directly in Spotify.
+              ${isNoExactMatch
+                ? "You can still search for it directly in Spotify."
+                : "You can still open this search directly in Spotify."}
             </span>
 
             <a
