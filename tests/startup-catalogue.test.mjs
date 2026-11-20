@@ -116,5 +116,8 @@ test("features that need rich catalogue data use the guarded full loader", () =>
   const searchSource = extract("async function runGlobalSearch", "function buildStageOneSearchModel");
   assert.doesNotMatch(searchSource, /ensureFullCatalogue\(\)/);
   assert.match(searchSource, /searchLocalCatalogue\(query/);
+  const chartsSource = extract("async function loadChartSongContext", "function renderAlbumCharts");
+  assert.doesNotMatch(chartsSource, /ensureFullCatalogue\(\)|loadLibrary\(\)|fetchAllRows\(/);
+  assert.match(chartsSource, /fetchRowsInChunks\("songs", "id", songIds/);
   assert.match(app, /async function openQuickRate\([\s\S]*?await ensureFullCatalogue\(\)/);
 });

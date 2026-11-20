@@ -1203,10 +1203,7 @@ window.BOMPresentationBridge = Object.freeze({
   },
   openArtist: (artistName) => window.openArtistPage(artistName),
   refreshDiscover: () => refreshDiscoverUI(),
-  refreshCharts: async () => {
-    await ensureFullCatalogue();
-    return loadCharts();
-  },
+  refreshCharts: () => loadCharts(),
   refreshRatings: async () => {
     const root = document.getElementById("librarySection");
     if (isStageOnePresentation() && window.BOMRatingsUI && root) root.innerHTML = window.BOMRatingsUI.renderLoading();
@@ -1780,6 +1777,71 @@ document.addEventListener(
   }
 );
 
+async function loadChartSongContext(songRows) {
+  if (fullCatalogueReady) return;
+
+  const songIds = [...new Set((songRows || [])
+    .map((row) => Number(row.item_id))
+    .filter((id) => Number.isSafeInteger(id) && id > 0))];
+  if (!songIds.length) return;
+
+  const songColumns = "id,title,artist,album_id,external_source,external_id,canonical_song_id,track_position,is_deleted";
+  const seedSongs = await fetchRowsInChunks("songs", "id", songIds, songColumns);
+  const canonicalIds = seedSongs.map(getCanonicalSongId).filter(Boolean);
+  const recordingIds = seedSongs
+    .filter((song) => !getCanonicalSongId(song))
+    .map(getConfirmedMusicBrainzRecordingId)
+    .filter(Boolean);
+  const [canonicalOccurrences, recordingOccurrences] = await Promise.all([
+    fetchRowsInChunks("songs", "canonical_song_id", canonicalIds, songColumns),
+    fetchRowsInChunks("songs", "external_id", recordingIds, songColumns)
+  ]);
+  const chartSongs = mergeRowsById(seedSongs, [...canonicalOccurrences, ...recordingOccurrences])
+    .filter((song) => !song.is_deleted);
+  const albumIds = [...new Set(chartSongs
+    .map((song) => Number(song.album_id))
+    .filter((id) => Number.isSafeInteger(id) && id > 0))];
+  const knownAlbumIds = new Set(allAlbums.map((album) => Number(album.id)));
+  const missingAlbumIds = albumIds.filter((id) => !knownAlbumIds.has(id));
+  const [albums, canonicalRatings, occurrenceRatings] = await Promise.all([
+    fetchRowsInChunks(
+      "albums",
+      "id",
+      missingAlbumIds,
+      "id,title,artist,external_source,external_id,cover_art_url,release_date,original_release_date,custom_cover,is_deleted"
+    ),
+    fetchRowsInChunks(
+      "song_ratings",
+      "canonical_song_id",
+      canonicalIds,
+      "id,user_id,song_id,canonical_song_id,rating"
+    ),
+    fetchRowsInChunks(
+      "song_ratings",
+      "song_id",
+      chartSongs.map((song) => Number(song.id)),
+      "id,user_id,song_id,canonical_song_id,rating"
+    )
+  ]);
+
+  allAlbums = mergeRowsById(allAlbums, albums.filter((album) => !album.is_deleted));
+  allSongs = mergeRowsById(allSongs, chartSongs);
+  const canonicalIdSet = new Set(canonicalIds.map(String));
+  const occurrenceIdSet = new Set(chartSongs.map((song) => Number(song.id)));
+  const hydratedRatings = mergeRowsById([], [...canonicalRatings, ...occurrenceRatings]);
+  const ratingId = (rating) => {
+    const id = Number(rating?.id);
+    return Number.isSafeInteger(id) && id > 0 ? id : Number.MAX_SAFE_INTEGER;
+  };
+  allSongRatings = [
+    ...allSongRatings.filter((rating) => (
+      !canonicalIdSet.has(String(rating.canonical_song_id || ""))
+      && !occurrenceIdSet.has(Number(rating.song_id))
+    )),
+    ...hydratedRatings
+  ].sort((left, right) => ratingId(left) - ratingId(right));
+}
+
 async function loadCharts() {
   const chartRoot = document.getElementById("chartsSection");
   if (isStageOnePresentation() && window.BOMChartsUI) {
@@ -1791,12 +1853,22 @@ async function loadCharts() {
 
   fixChartSectionHeadings();
 
-  const { data: albums, error: albumError } = await supabaseClient
-    .from("album_rating_charts")
-    .select("*")
-    .order("average_rating", { ascending: false })
-    .order("rating_count", { ascending: false })
-    .limit(20);
+  const [albumResult, songResult] = await Promise.all([
+    supabaseClient
+      .from("album_rating_charts")
+      .select("item_id,item_type,title,artist,cover_art_url,average_rating,rating_count")
+      .order("average_rating", { ascending: false })
+      .order("rating_count", { ascending: false })
+      .limit(20),
+    supabaseClient
+      .from("song_rating_charts")
+      .select("item_id,item_type,title,artist,album_id,average_rating,rating_count")
+      .order("average_rating", { ascending: false })
+      .order("rating_count", { ascending: false })
+      .limit(20)
+  ]);
+  const { data: albums, error: albumError } = albumResult;
+  const { data: songs, error: songError } = songResult;
 
   if (albumError) {
     if (isStageOnePresentation() && window.BOMChartsUI) {
@@ -1806,13 +1878,6 @@ async function loadCharts() {
     globalAlbumCharts.innerHTML = `<p class="small">${escapeHtml(albumError.message)}</p>`;
     return;
   }
-
-  const { data: songs, error: songError } = await supabaseClient
-    .from("song_rating_charts")
-    .select("*")
-    .order("average_rating", { ascending: false })
-    .order("rating_count", { ascending: false })
-    .limit(20);
 
   if (songError) {
     if (isStageOnePresentation() && window.BOMChartsUI) {
@@ -1824,6 +1889,13 @@ async function loadCharts() {
   }
 
   if (isStageOnePresentation() && window.BOMChartsUI) {
+    try {
+      await loadChartSongContext(songs || []);
+    } catch (error) {
+      console.error("Chart context load failed", getBoundedCatalogueDiagnostic(error));
+      chartRoot.innerHTML = window.BOMChartsUI.renderError();
+      return;
+    }
     chartRoot.innerHTML = window.BOMChartsUI.render(buildStageOneChartsModel(albums || [], songs || []));
     return;
   }
@@ -1856,8 +1928,12 @@ function buildStageOneChartsModel(albumRows, songRows) {
   });
   const rowsByIdentity = new Map();
   (songRows || []).forEach((row) => {
-    const song = allSongs.find((item) => Number(item.id) === Number(row.item_id));
-    if (!song) return;
+    const song = allSongs.find((item) => Number(item.id) === Number(row.item_id)) || {
+      id: row.item_id,
+      title: row.title,
+      artist: row.artist,
+      album_id: row.album_id
+    };
     const identity = getSongRatingIdentity(song);
     if (!rowsByIdentity.has(identity)) rowsByIdentity.set(identity, { row, song });
   });
@@ -18841,7 +18917,6 @@ window.goCharts = async function () {
   showOnlySection("chartsSection");
 
   if (typeof loadCharts === "function") {
-    await ensureFullCatalogue();
     await loadCharts();
   }
 };
