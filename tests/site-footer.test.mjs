@@ -28,7 +28,7 @@ test("the footer deployment loads the stylesheet version that contains its style
   for (const page of [html, publicHtml]) {
     assert.match(
       page,
-      /<link rel="stylesheet" href="style\.css\?v=91&listening-ui=6&apple-playlists=2&amazon-music=1&soundiiz=2" \/>/
+      /<link rel="stylesheet" href="style\.css\?v=92&listening-ui=6&apple-playlists=2&amazon-music=1&soundiiz=2" \/>/
     );
   }
 });

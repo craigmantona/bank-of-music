@@ -1603,3 +1603,31 @@
 .bom-christmas-banner button { min-height:44px; padding:0 18px; color:#173728; background:#d4ad62; border:1px solid #f0d79f; border-radius:6px; font-size:11px; font-weight:900; letter-spacing:.09em; }
 .bom-christmas-banner button:hover,.bom-christmas-banner button:focus-visible { background:#fff1c8; outline:2px solid #fff1c8; outline-offset:3px; }
 @media (max-width:700px) { .bom-christmas-banner { grid-template-columns:54px 1fr; gap:14px; padding:18px; } .bom-christmas-banner>div:first-child { width:52px; } .bom-christmas-banner button { grid-column:1/-1; width:100%; } }
+
+/* Spotify iFrame API: highlight only the BoM row named by playingURI. */
+.bom-shell-v1 .bom-v1-tracks-section .track-row-table.bom-v1-track-row.is-spotify-now-playing {
+  background: linear-gradient(90deg, rgba(29,185,84,.13), rgba(29,185,84,.035) 62%, transparent) !important;
+  background-image: linear-gradient(90deg, rgba(29,185,84,.13), rgba(29,185,84,.035) 62%, transparent) !important;
+  border-bottom-color: rgba(66,220,120,.28) !important;
+  box-shadow: inset 3px 0 0 rgba(30,215,96,.78) !important;
+}
+.bom-shell-v1 .bom-v1-tracks-section .track-row-table.bom-v1-track-row.is-spotify-playback-paused,
+.bom-shell-v1 .bom-v1-tracks-section .track-row-table.bom-v1-track-row.is-spotify-playback-buffering {
+  background: linear-gradient(90deg, rgba(29,185,84,.08), rgba(29,185,84,.02) 62%, transparent) !important;
+  background-image: linear-gradient(90deg, rgba(29,185,84,.08), rgba(29,185,84,.02) 62%, transparent) !important;
+}
+.bom-shell-v1 .bom-v1-track-row .spotify-now-playing-status {
+  color: #42dc78;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .09em;
+}
+@media (max-width: 900px) {
+  .bom-shell-v1 .bom-v1-track-row .spotify-now-playing-status { margin-top: 5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bom-shell-v1 .spotify-now-playing-equaliser > span {
+    animation: none !important;
+    transform: scaleY(.68) !important;
+  }
+}

@@ -22,6 +22,7 @@ function harness({ albums = [], songs = [], cached = true, detail = release(), f
   const context = {
     currentUser: { id: 'user-1' }, isAdmin: false, selectedItem: selection(), allAlbums: cached ? structuredClone(albums) : [], allSongs: cached ? structuredClone(songs) : [],
     console: { warn() {}, error() {} }, albumTrackCache: {}, releaseGroupCoverCache: {}, selectedItemDetail: { innerHTML: '' }, window: { setTimeout },
+    spotifyAlbumRenderRequestGeneration: 0, disposeSpotifyAlbumPlayer() {},
     predictiveCataloguePromise: Promise.resolve([]), predictiveCatalogueLoadedAt: 1,
     normaliseText: value => String(value || '').trim().replace(/\s+/g, ' '),
     normaliseCompare: value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, ''),

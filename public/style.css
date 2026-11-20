@@ -8236,3 +8236,89 @@ video {
   height: 18px;
   margin-top: 2px;
 }
+
+/* Event-driven Spotify album playback state. */
+.spotify-iframe-api-mount,
+.spotify-iframe-api-mount > iframe {
+  display: block;
+  width: 100% !important;
+  min-width: 280px;
+  height: 352px;
+  border: 0;
+  border-radius: 16px;
+  background: #121212;
+}
+
+.spotify-now-playing-status {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 5px;
+  color: #42dc78;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.055em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.spotify-now-playing-status[aria-hidden="false"] {
+  display: inline-flex;
+}
+
+.spotify-now-playing-equaliser {
+  display: inline-flex;
+  align-items: end;
+  gap: 2px;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+}
+
+.spotify-now-playing-equaliser > span {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleY(0.34);
+  transform-origin: center bottom;
+}
+
+.is-spotify-now-playing:not(.is-spotify-playback-paused):not(.is-spotify-playback-buffering)
+  .spotify-now-playing-equaliser > span {
+  animation: bom-spotify-equaliser 760ms ease-in-out infinite alternate;
+}
+
+.is-spotify-now-playing:not(.is-spotify-playback-paused):not(.is-spotify-playback-buffering)
+  .spotify-now-playing-equaliser > span:nth-child(2) { animation-delay: -250ms; }
+.is-spotify-now-playing:not(.is-spotify-playback-paused):not(.is-spotify-playback-buffering)
+  .spotify-now-playing-equaliser > span:nth-child(3) { animation-delay: -470ms; }
+
+.track-row-table.is-spotify-now-playing {
+  background: linear-gradient(90deg, rgba(29,185,84,.14), rgba(29,185,84,.045) 58%, transparent) !important;
+  box-shadow: inset 3px 0 0 rgba(30,215,96,.82) !important;
+}
+
+.track-row-table.is-spotify-playback-paused,
+.track-row-table.is-spotify-playback-buffering {
+  background: linear-gradient(90deg, rgba(29,185,84,.09), rgba(29,185,84,.025) 58%, transparent) !important;
+}
+
+@keyframes bom-spotify-equaliser {
+  0% { transform: scaleY(.28); }
+  48% { transform: scaleY(1); }
+  100% { transform: scaleY(.52); }
+}
+
+@media (max-width: 820px) {
+  .spotify-now-playing-status { margin-top: 6px; font-size: .68rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotify-now-playing-equaliser > span {
+    animation: none !important;
+    transform: scaleY(.68) !important;
+  }
+}
