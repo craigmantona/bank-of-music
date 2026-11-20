@@ -1104,7 +1104,6 @@ async function syncChristmasNumberOnePublicEntry() {
   try { return await christmasNumberOnePublicSync; }
   finally { christmasNumberOnePublicSync = null; }
 }
-
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
@@ -1149,6 +1148,7 @@ window.BOMPresentationBridge = Object.freeze({
   loadChristmasNumberOnePublicState: year => loadChristmasNumberOnePublicState(year),
   saveChristmasNumberOneVote: (year, canonicalRecordingId) => saveChristmasNumberOneVote(year, canonicalRecordingId),
   loadChristmasNumberOneArchive: () => loadChristmasNumberOneArchive(),
+  syncChristmasNumberOnePublicEntry: () => syncChristmasNumberOnePublicEntry(),
   showSearch: () => showOnlySection("searchSection"),
   showCharts: () => window.goCharts(),
   showRatings: async () => {
@@ -4910,7 +4910,9 @@ function renderRecommendations() {
   if (isStageOnePresentation() && window.BOMDiscoverUI) {
     recommendationsList.innerHTML = window.BOMDiscoverUI.render(buildStageOneDiscoverModel());
     window.requestAnimationFrame(() => window.BOMDiscoverUI.updateRowControls(recommendationsList));
-    void syncChristmasNumberOnePublicEntry();
+    if (window.BOM_CHRISTMAS_NUMBER_ONE_FEATURE?.enabled === true) {
+      void window.BOMPresentationBridge?.syncChristmasNumberOnePublicEntry?.();
+    }
     return;
   }
   if (!currentUser) {
