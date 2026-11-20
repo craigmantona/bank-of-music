@@ -101,6 +101,18 @@ body {
  
  
 }
+
+.bom-site-footer {
+ width: 100%;
+ margin: 0;
+ padding: 4px 16px;
+ color: #8b909a;
+ background: transparent;
+ border: 0;
+ font-size: 10px;
+ line-height: 1.4;
+ text-align: center;
+}
  
  
 .hidden { display: none !important; }
