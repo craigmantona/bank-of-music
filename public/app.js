@@ -8908,7 +8908,7 @@ function buildTrackListHtml(detail, savedAlbumId) {
   return {
     sortPosition,
     html: `
-      <div class="track-row-table" data-track-index="${number - 1}" data-track-position="${number}" data-disc-number="1" data-disc-track-number="${number}" data-track-title="${escapeHtml(title)}" data-track-artist="${escapeHtml(trackArtistName)}" data-spotify-track-id="${escapeHtml(spotifyTrackId)}" data-song-id="${savedSong ? savedSong.id : ""}">
+      <div class="track-row-table" data-track-index="${number - 1}" data-track-position="${number}" data-disc-number="1" data-disc-track-number="${number}" data-track-title="${escapeHtml(title)}" data-track-artist="${escapeHtml(trackArtistName)}" data-track-duration-ms="${escapeHtml(savedSong?.duration_ms || "")}" data-spotify-track-id="${escapeHtml(spotifyTrackId)}" data-song-id="${savedSong ? savedSong.id : ""}">
         <div class="track-col-number">${number}</div>
 
         <div class="track-col-title">
@@ -9833,18 +9833,39 @@ const VERIFIED_SPOTIFY_ALBUM_LINKS = Object.freeze({
     artist: "PJ Harvey",
     externalUrl: "https://open.spotify.com/album/2JfiVMvVhdueC48EmskS7t",
     tracks: Object.freeze([
-      Object.freeze({ id: "6DST3HT8zF8WpNmg9tHuaa", title: "Let England Shake", artist: "PJ Harvey", trackNumber: 1, discNumber: 1 }),
-      Object.freeze({ id: "2K7qvmfEWQm41wIJkjDBj4", title: "The Last Living Rose", artist: "PJ Harvey", trackNumber: 2, discNumber: 1 }),
-      Object.freeze({ id: "5eAcmyKEmOkdIEBopUqM4J", title: "The Glorious Land", artist: "PJ Harvey", trackNumber: 3, discNumber: 1 }),
-      Object.freeze({ id: "64EePXuDYpMZMvaTT7k8vi", title: "The Words That Maketh Murder", artist: "PJ Harvey", trackNumber: 4, discNumber: 1 }),
-      Object.freeze({ id: "7Bw5XYKi9fBoFbXFoE8PVN", title: "All And Everyone", artist: "PJ Harvey", trackNumber: 5, discNumber: 1 }),
-      Object.freeze({ id: "1u0lFRxxwIqigbkFCRprpV", title: "On Battleship Hill", artist: "PJ Harvey", trackNumber: 6, discNumber: 1 }),
-      Object.freeze({ id: "24AljyKuKotlF2cypaBler", title: "England", artist: "PJ Harvey", trackNumber: 7, discNumber: 1 }),
-      Object.freeze({ id: "0fAoPbcLqVYS11D3Eds7J7", title: "In The Dark Places", artist: "PJ Harvey", trackNumber: 8, discNumber: 1 }),
-      Object.freeze({ id: "7wRQFEIEpRsO3ULL0XGezV", title: "Bitter Branches", artist: "PJ Harvey", trackNumber: 9, discNumber: 1 }),
-      Object.freeze({ id: "1BgtlF5x3xm5jXA3qwMzX8", title: "Hanging In The Wire", artist: "PJ Harvey", trackNumber: 10, discNumber: 1 }),
-      Object.freeze({ id: "3DG8F4L82QAQzpcdCQonab", title: "Written On The Forehead", artist: "PJ Harvey", trackNumber: 11, discNumber: 1 }),
-      Object.freeze({ id: "2DIwxNx5knXRodNGruJdtM", title: "The Colour Of The Earth", artist: "PJ Harvey", trackNumber: 12, discNumber: 1 })
+      Object.freeze({ id: "6DST3HT8zF8WpNmg9tHuaa", title: "Let England Shake", artist: "PJ Harvey", durationMs: 189280, trackNumber: 1, discNumber: 1 }),
+      Object.freeze({ id: "2K7qvmfEWQm41wIJkjDBj4", title: "The Last Living Rose", artist: "PJ Harvey", durationMs: 141280, trackNumber: 2, discNumber: 1 }),
+      Object.freeze({ id: "5eAcmyKEmOkdIEBopUqM4J", title: "The Glorious Land", artist: "PJ Harvey", durationMs: 214693, trackNumber: 3, discNumber: 1 }),
+      Object.freeze({ id: "64EePXuDYpMZMvaTT7k8vi", title: "The Words That Maketh Murder", artist: "PJ Harvey", durationMs: 225840, trackNumber: 4, discNumber: 1 }),
+      Object.freeze({ id: "7Bw5XYKi9fBoFbXFoE8PVN", title: "All And Everyone", artist: "PJ Harvey", durationMs: 339880, trackNumber: 5, discNumber: 1 }),
+      Object.freeze({ id: "1u0lFRxxwIqigbkFCRprpV", title: "On Battleship Hill", artist: "PJ Harvey", durationMs: 247666, trackNumber: 6, discNumber: 1 }),
+      Object.freeze({ id: "24AljyKuKotlF2cypaBler", title: "England", artist: "PJ Harvey", durationMs: 191080, trackNumber: 7, discNumber: 1 }),
+      Object.freeze({ id: "0fAoPbcLqVYS11D3Eds7J7", title: "In The Dark Places", artist: "PJ Harvey", durationMs: 179546, trackNumber: 8, discNumber: 1 }),
+      Object.freeze({ id: "7wRQFEIEpRsO3ULL0XGezV", title: "Bitter Branches", artist: "PJ Harvey", durationMs: 149666, trackNumber: 9, discNumber: 1 }),
+      Object.freeze({ id: "1BgtlF5x3xm5jXA3qwMzX8", title: "Hanging In The Wire", artist: "PJ Harvey", durationMs: 162360, trackNumber: 10, discNumber: 1 }),
+      Object.freeze({ id: "3DG8F4L82QAQzpcdCQonab", title: "Written On The Forehead", artist: "PJ Harvey", durationMs: 219920, trackNumber: 11, discNumber: 1 }),
+      Object.freeze({ id: "2DIwxNx5knXRodNGruJdtM", title: "The Colour Of The Earth", artist: "PJ Harvey", durationMs: 153613, trackNumber: 12, discNumber: 1 })
+    ])
+  }),
+  "kings of leon|come around sundown": Object.freeze({
+    id: "3GQy3QdRfl7RZUix1rhLtB",
+    title: "Come Around Sundown",
+    artist: "Kings of Leon",
+    externalUrl: "https://open.spotify.com/album/3GQy3QdRfl7RZUix1rhLtB",
+    tracks: Object.freeze([
+      Object.freeze({ id: "0O53YcPBLyveU0jVYZpUgk", title: "The End", artist: "Kings of Leon", durationMs: 264013, trackNumber: 1, discNumber: 1 }),
+      Object.freeze({ id: "33DxzZNm85rorgfnilllJg", title: "Radioactive", artist: "Kings of Leon", durationMs: 206186, trackNumber: 2, discNumber: 1 }),
+      Object.freeze({ id: "0Xy9xPPs2zRRFqljGqKXel", title: "Pyro", artist: "Kings of Leon", durationMs: 250533, trackNumber: 3, discNumber: 1 }),
+      Object.freeze({ id: "6Rxw4I2PrJsmx4dbOOylFr", title: "Mary", artist: "Kings of Leon", durationMs: 205373, trackNumber: 4, discNumber: 1 }),
+      Object.freeze({ id: "1lu411ckjAVeJLtnBEkyoi", title: "The Face", artist: "Kings of Leon", durationMs: 208186, trackNumber: 5, discNumber: 1 }),
+      Object.freeze({ id: "5fTHd5hWoCsUiTLhtr1NPi", title: "The Immortals", artist: "Kings of Leon", durationMs: 208933, trackNumber: 6, discNumber: 1 }),
+      Object.freeze({ id: "4AgUbBmuFf2W1V4eYcE8nl", title: "Back Down South", artist: "Kings of Leon", durationMs: 241226, trackNumber: 7, discNumber: 1 }),
+      Object.freeze({ id: "3XfBtSgQcJAja7ViJ7iYKZ", title: "Beach Side", artist: "Kings of Leon", durationMs: 170960, trackNumber: 8, discNumber: 1 }),
+      Object.freeze({ id: "6c9NbUwoLrOof5aLaSK4da", title: "No Money", artist: "Kings of Leon", durationMs: 185880, trackNumber: 9, discNumber: 1 }),
+      Object.freeze({ id: "5mWHX7RApP05snGIZh2gDb", title: "Pony Up", artist: "Kings of Leon", durationMs: 184626, trackNumber: 10, discNumber: 1 }),
+      Object.freeze({ id: "2uDXoZot9AtykYylsLHlpL", title: "Birthday", artist: "Kings of Leon", durationMs: 195426, trackNumber: 11, discNumber: 1 }),
+      Object.freeze({ id: "2vffSQvTWUFTGkrrfkSqAu", title: "Mi Amigo", artist: "Kings of Leon", durationMs: 246800, trackNumber: 12, discNumber: 1 }),
+      Object.freeze({ id: "5fHudjMqR2LxxdgaJHZnQo", title: "Pickup Truck", artist: "Kings of Leon", durationMs: 284600, trackNumber: 13, discNumber: 1 })
     ])
   })
 });
@@ -10474,6 +10495,65 @@ function getSpotifyCandidateTrackArtist(track) {
   return String(artists || track?.artist || track?.subtitle || "").trim();
 }
 
+// Album embeds keep reporting spotify:album:* after track changes. Spotify's
+// event duration is track-specific, but can differ from catalogue duration by
+// a few milliseconds, so accept only one conservative nearby match.
+const SPOTIFY_DURATION_MATCH_TOLERANCE_MS = 500;
+
+function getSpotifyCandidateTrackDurationMs(track) {
+  const durationMs = Number(
+    track?.duration_ms ??
+    track?.durationMs ??
+    0
+  );
+  return Number.isFinite(durationMs) && durationMs > 0
+    ? durationMs
+    : 0;
+}
+
+function findSpotifyAlbumRowForDuration(
+  durationMs,
+  durationCandidates = []
+) {
+  const playbackDuration = Number(durationMs || 0);
+  if (!Number.isFinite(playbackDuration) || playbackDuration <= 0) {
+    return null;
+  }
+
+  const findUniqueMatch = (candidates) => {
+    const matchingRows = new Set(
+      candidates
+        .filter((candidate) =>
+          Math.abs(candidate.durationMs - playbackDuration) <=
+          SPOTIFY_DURATION_MATCH_TOLERANCE_MS
+        )
+        .map((candidate) => candidate.row)
+        .filter(Boolean)
+    );
+    return matchingRows.size === 1
+      ? [...matchingRows][0]
+      : null;
+  };
+
+  const spotifyCandidates = durationCandidates.filter(
+    (candidate) => candidate.source === "spotify"
+  );
+  // Prefer exact Spotify metadata over BoM durations, which may be rounded to
+  // the displayed second and therefore collide across different tracks.
+  const spotifyMatch = findUniqueMatch(spotifyCandidates);
+  if (spotifyMatch) return spotifyMatch;
+
+  const hasNearbySpotifyCandidate = spotifyCandidates.some((candidate) =>
+    Math.abs(candidate.durationMs - playbackDuration) <=
+    SPOTIFY_DURATION_MATCH_TOLERANCE_MS
+  );
+  if (hasNearbySpotifyCandidate) return null;
+
+  return findUniqueMatch(
+    durationCandidates.filter((candidate) => candidate.source !== "spotify")
+  );
+}
+
 function findSpotifyAlbumRowForTrack(track, rows) {
   const candidateIds = getSpotifyCandidateTrackIds(track);
   const storedIdMatch = rows.find((row) =>
@@ -10529,6 +10609,7 @@ function buildSpotifyAlbumTrackRowMap(
 ) {
   const rows = getSpotifyAlbumTrackRows(root);
   const rowByTrackId = new Map();
+  const durationCandidates = [];
 
   rows.forEach((row) => {
     const storedId = String(
@@ -10536,6 +10617,16 @@ function buildSpotifyAlbumTrackRowMap(
     );
     if (/^[A-Za-z0-9]{22}$/.test(storedId)) {
       rowByTrackId.set(storedId, row);
+    }
+    const rowDurationMs = Number(
+      row.dataset.trackDurationMs || 0
+    );
+    if (Number.isFinite(rowDurationMs) && rowDurationMs > 0) {
+      durationCandidates.push({
+        durationMs: rowDurationMs,
+        source: "row",
+        row
+      });
     }
   });
 
@@ -10545,9 +10636,17 @@ function buildSpotifyAlbumTrackRowMap(
     getSpotifyCandidateTrackIds(track).forEach((id) => {
       rowByTrackId.set(id, row);
     });
+    const durationMs = getSpotifyCandidateTrackDurationMs(track);
+    if (durationMs) {
+      durationCandidates.push({
+        durationMs,
+        source: "spotify",
+        row
+      });
+    }
   });
 
-  return { rows, rowByTrackId };
+  return { rows, rowByTrackId, durationCandidates };
 }
 
 function getProvidedSpotifyAlbumTracks(spotifyItem) {
@@ -10694,16 +10793,26 @@ async function getSpotifyTrackTitleFromOEmbed(trackId) {
   return request;
 }
 
-async function applySpotifyAlbumPlaybackState(player, playingUri, state) {
+async function applySpotifyAlbumPlaybackState(player, playbackData, state) {
   if (!player || activeSpotifyAlbumPlayer !== player) return false;
+  const data = typeof playbackData === "string"
+    ? { playingURI: playbackData }
+    : playbackData || {};
+  const playingUri = String(data.playingURI || "");
   const trackId = getSpotifyTrackIdFromPlayingUri(playingUri);
-  if (!trackId) {
+  const isAlbumContext = playingUri === player.albumUri;
+  if (!trackId && !isAlbumContext) {
     clearSpotifyNowPlayingHighlight(player.rowRoot);
     return false;
   }
 
-  let row = player.rowByTrackId.get(trackId) || null;
-  if (!row) {
+  let row = trackId
+    ? player.rowByTrackId.get(trackId) || null
+    : findSpotifyAlbumRowForDuration(
+        data.duration,
+        player.durationCandidates
+      );
+  if (!row && trackId) {
     if (player.rows.some((candidate) =>
       candidate.classList.contains("is-spotify-now-playing")
     )) {
@@ -10735,19 +10844,23 @@ async function applySpotifyAlbumPlaybackState(player, playingUri, state) {
 
 function handleSpotifyAlbumPlaybackStarted(player, event) {
   const playingUri = String(event?.data?.playingURI || "");
-  if (!getSpotifyTrackIdFromPlayingUri(playingUri)) {
+  if (
+    !getSpotifyTrackIdFromPlayingUri(playingUri) &&
+    playingUri !== player?.albumUri
+  ) {
     clearSpotifyNowPlayingHighlight(player?.rowRoot);
     return;
   }
   player.hasStarted = true;
   player.currentPlayingUri = playingUri;
+  player.currentPlaybackData = event?.data || { playingURI: playingUri };
   player.playbackState = {
     isPaused: false,
     isBuffering: false
   };
   void applySpotifyAlbumPlaybackState(
     player,
-    playingUri,
+    player.currentPlaybackData,
     player.playbackState
   );
 }
@@ -10758,7 +10871,8 @@ function handleSpotifyAlbumPlaybackUpdate(player, event) {
   const isTrack = Boolean(
     getSpotifyTrackIdFromPlayingUri(playingUri)
   );
-  if (!isTrack) {
+  const isAlbumContext = playingUri === player?.albumUri;
+  if (!isTrack && !isAlbumContext) {
     player.currentPlayingUri = "";
     player.hasStarted = false;
     clearSpotifyNowPlayingHighlight(player.rowRoot);
@@ -10775,13 +10889,14 @@ function handleSpotifyAlbumPlaybackUpdate(player, event) {
 
   player.hasStarted = true;
   player.currentPlayingUri = playingUri;
+  player.currentPlaybackData = data;
   player.playbackState = {
     isPaused: data.isPaused === true,
     isBuffering: data.isBuffering === true
   };
   void applySpotifyAlbumPlaybackState(
     player,
-    playingUri,
+    data,
     player.playbackState
   );
 }
@@ -10980,7 +11095,8 @@ async function createSpotifyAlbumController({
 
   const albumId = getSpotifyEntityId(spotifyItem);
   if (!albumId) throw new Error("Spotify album identity is unavailable.");
-  const { rows, rowByTrackId } =
+  const albumUri = `spotify:album:${albumId}`;
+  const { rows, rowByTrackId, durationCandidates } =
     buildSpotifyAlbumTrackRowMap(initialTracks, rowRoot);
 
   return new Promise((resolve, reject) => {
@@ -10995,7 +11111,7 @@ async function createSpotifyAlbumController({
       api.createController(
         mount,
         {
-          uri: `spotify:album:${albumId}`,
+          uri: albumUri,
           width: "100%",
           height: 352
         },
@@ -11023,7 +11139,11 @@ async function createSpotifyAlbumController({
             rowRoot,
             rows,
             rowByTrackId,
+            durationCandidates,
+            albumId,
+            albumUri,
             currentPlayingUri: "",
+            currentPlaybackData: null,
             playbackState: null,
             hasStarted: false,
             onPlaybackStarted: null,
@@ -11058,10 +11178,20 @@ async function createSpotifyAlbumController({
             enriched.rowByTrackId.forEach((row, trackId) => {
               player.rowByTrackId.set(trackId, row);
             });
+            enriched.durationCandidates.forEach((candidate) => {
+              const exists = player.durationCandidates.some((current) =>
+                current.row === candidate.row &&
+                current.durationMs === candidate.durationMs &&
+                current.source === candidate.source
+              );
+              if (!exists) player.durationCandidates.push(candidate);
+            });
             if (player.currentPlayingUri) {
               void applySpotifyAlbumPlaybackState(
                 player,
-                player.currentPlayingUri,
+                player.currentPlaybackData || {
+                  playingURI: player.currentPlayingUri
+                },
                 player.playbackState
               );
             }

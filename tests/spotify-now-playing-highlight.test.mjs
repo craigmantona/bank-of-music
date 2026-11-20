@@ -39,7 +39,13 @@ class FakeClassList {
   contains(value) { return this.values.has(value); }
 }
 
-function makeRow({ title, artist = "PJ Harvey", spotifyTrackId = "", position = 1 }) {
+function makeRow({
+  title,
+  artist = "PJ Harvey",
+  spotifyTrackId = "",
+  position = 1,
+  durationMs = 0
+}) {
   const attributes = new Map();
   const statusAttributes = new Map([["aria-hidden", "true"]]);
   const label = { textContent: "Now Playing" };
@@ -57,6 +63,7 @@ function makeRow({ title, artist = "PJ Harvey", spotifyTrackId = "", position = 
       trackArtist: artist,
       spotifyTrackId,
       trackPosition: String(position),
+      trackDurationMs: durationMs ? String(durationMs) : "",
       discNumber: "1",
       discTrackNumber: String(position)
     },
@@ -496,6 +503,175 @@ test("the album controller follows exact Spotify playback events and pause state
   assert.deepEqual(controller.removed.map(([name]) => name), ["playback_started", "playback_update"]);
 });
 
+test("real album-context playback payloads select rows by exact Spotify duration", async () => {
+  const first = makeRow({
+    title: "Let England Shake",
+    position: 1,
+    durationMs: 189000
+  });
+  const second = makeRow({
+    title: "The Last Living Rose",
+    position: 2,
+    durationMs: 141000
+  });
+  const { context, root, controllers } = makePlayerHarness({
+    rows: [first, second]
+  });
+  await context.createSpotifyAlbumController({
+    target: makeTarget(root),
+    title: "Let England Shake",
+    artist: "PJ Harvey",
+    externalUrl: "https://open.spotify.com/album/2JfiVMvVhdueC48EmskS7t",
+    spotifyItem: {
+      id: "2JfiVMvVhdueC48EmskS7t",
+      tracks: [
+        {
+          id: "6DST3HT8zF8WpNmg9tHuaa",
+          title: "Let England Shake",
+          artist: "PJ Harvey",
+          trackNumber: 1,
+          durationMs: 189280
+        },
+        {
+          id: "2K7qvmfEWQm41wIJkjDBj4",
+          title: "The Last Living Rose",
+          artist: "PJ Harvey",
+          trackNumber: 2,
+          durationMs: 141280
+        }
+      ]
+    }
+  });
+
+  const controller = controllers[0];
+  const albumUri = "spotify:album:2JfiVMvVhdueC48EmskS7t";
+  controller.listeners.get("playback_started")({
+    data: { playingURI: albumUri }
+  });
+  assert.equal(
+    first.classList.contains("is-spotify-now-playing"),
+    false,
+    "playback_started has no track identity or duration"
+  );
+
+  controller.listeners.get("playback_update")({
+    data: {
+      playingURI: albumUri,
+      duration: 189327,
+      position: 258,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  assert.equal(first.classList.contains("is-spotify-now-playing"), true);
+  assert.equal(first.dataset.spotifyPlaybackState, "playing");
+
+  controller.listeners.get("playback_update")({
+    data: {
+      playingURI: albumUri,
+      duration: 189327,
+      position: 1059,
+      isPaused: true,
+      isBuffering: false
+    }
+  });
+  assert.equal(first.dataset.spotifyPlaybackState, "paused");
+  assert.equal(first.label.textContent, "Paused");
+
+  controller.listeners.get("playback_update")({
+    data: {
+      playingURI: albumUri,
+      duration: 189327,
+      position: 1059,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  assert.equal(first.dataset.spotifyPlaybackState, "playing");
+
+  controller.listeners.get("playback_update")({
+    data: {
+      playingURI: albumUri,
+      duration: 141327,
+      position: 0,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  assert.equal(first.classList.contains("is-spotify-now-playing"), false);
+  assert.equal(second.classList.contains("is-spotify-now-playing"), true);
+  assert.equal(second.dataset.spotifyPlaybackState, "playing");
+});
+
+test("Spotify durations disambiguate rows with the same rounded BoM time", async () => {
+  const face = makeRow({
+    title: "The Face",
+    artist: "Kings of Leon",
+    position: 5,
+    durationMs: 208000
+  });
+  const immortals = makeRow({
+    title: "The Immortals",
+    artist: "Kings of Leon",
+    position: 6,
+    durationMs: 208000
+  });
+  const { context, root, controllers } = makePlayerHarness({
+    rows: [face, immortals]
+  });
+  await context.createSpotifyAlbumController({
+    target: makeTarget(root),
+    title: "Come Around Sundown",
+    artist: "Kings of Leon",
+    externalUrl: "https://open.spotify.com/album/3GQy3QdRfl7RZUix1rhLtB",
+    spotifyItem: {
+      id: "3GQy3QdRfl7RZUix1rhLtB",
+      tracks: [
+        {
+          id: "1111111111111111111111",
+          title: "The Face",
+          artist: "Kings of Leon",
+          trackNumber: 5,
+          durationMs: 208186
+        },
+        {
+          id: "2222222222222222222222",
+          title: "The Immortals",
+          artist: "Kings of Leon",
+          trackNumber: 6,
+          durationMs: 208933
+        }
+      ]
+    }
+  });
+
+  const update = controllers[0].listeners.get("playback_update");
+  const playingURI = "spotify:album:3GQy3QdRfl7RZUix1rhLtB";
+  update({
+    data: {
+      playingURI,
+      duration: 208234,
+      position: 800,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  assert.equal(face.classList.contains("is-spotify-now-playing"), true);
+  assert.equal(immortals.classList.contains("is-spotify-now-playing"), false);
+
+  update({
+    data: {
+      playingURI,
+      duration: 208980,
+      position: 0,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  assert.equal(face.classList.contains("is-spotify-now-playing"), false);
+  assert.equal(immortals.classList.contains("is-spotify-now-playing"), true);
+});
+
 test("an unmapped event uses Spotify oEmbed title only when the album row is unique", async () => {
   const trackId = "0fAoPbcLqVYS11D3Eds7J7";
   const unique = makeRow({ title: "In The Dark Places", position: 8 });
@@ -560,13 +736,13 @@ test("responsive styling is subtle, animated only while playing, and respects re
   assert.match(foundationStyles, /@media \(max-width: 900px\)[\s\S]*?spotify-now-playing-status/);
 });
 
-test("playback identity comes from playingURI events, never elapsed-time inference", () => {
+test("playback identity uses event context and official duration, never elapsed position", () => {
   assert.match(playerSource, /addListener\([\s\S]*?"playback_started"/);
   assert.match(playerSource, /addListener\([\s\S]*?"playback_update"/);
   assert.match(playerSource, /playingURI/);
+  assert.match(playerSource, /data\.duration/);
   assert.doesNotMatch(playerSource, /setInterval\s*\(/);
   assert.doesNotMatch(playerSource, /position\s*[><=]/);
-  assert.doesNotMatch(playerSource, /duration\s*[><=]/);
 });
 
 test("Textastic fallback uses delegated contextual Settings navigation", () => {
