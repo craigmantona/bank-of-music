@@ -142,6 +142,13 @@ test("the verified direct album beats stale cache and renders without token refr
       return true;
     },
     getOrCreateReusableAlbumPreviewFrame: () => false,
+    spotifyAlbumRenderRequestGeneration: 0,
+    isCurrentSpotifyAlbumRenderRequest: () => true,
+    createSpotifyAlbumPlayerSupersededError: () => {
+      const error = new Error("superseded");
+      error.code = "SPOTIFY_ALBUM_PLAYER_SUPERSEDED";
+      return error;
+    },
     escapeHtml: value => String(value ?? "")
   });
   vm.runInContext(albumResolverSource, context);
@@ -203,6 +210,13 @@ test("Spotify API failures are not mislabeled as exact-match misses", async () =
     buildSpotifyEmbedUrl: () => "",
     renderSpotifyEmbed: () => false,
     getOrCreateReusableAlbumPreviewFrame: () => false,
+    spotifyAlbumRenderRequestGeneration: 0,
+    isCurrentSpotifyAlbumRenderRequest: () => true,
+    createSpotifyAlbumPlayerSupersededError: () => {
+      const error = new Error("superseded");
+      error.code = "SPOTIFY_ALBUM_PLAYER_SUPERSEDED";
+      return error;
+    },
     escapeHtml: value => String(value ?? "")
   });
   const openStart = app.indexOf("async function openWithMusicProvider");
