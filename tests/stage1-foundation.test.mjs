@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
 
 const [html, app, shell, styles] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
@@ -37,6 +38,55 @@ test("the bridge delegates to existing functions", () => {
   assert.match(app, /showProfile: async \(\) => \{[\s\S]*?await ensureFullCatalogue\(\);[\s\S]*?return showUserProfile\(\);[\s\S]*?\}/);
   assert.match(app, /logout: \(\) => logOut\(\)/);
   assert.match(app, /return runGlobalSearch\(\)/);
+});
+
+test("the presentation bridge and Discover helpers initialize outside section navigation", () => {
+  const navigationStart = app.indexOf("function showOnlySection(targetId)");
+  const bridgeStart = app.indexOf("Stage 1 presentation bridge", navigationStart);
+  const helperStart = app.indexOf("async function syncChristmasNumberOnePublicEntry", bridgeStart);
+  const discoverRenderStart = app.indexOf("function renderRecommendations()", helperStart);
+  const spotifyStateStart = app.indexOf("let spotifyConnectionState = false", discoverRenderStart);
+  const readyEventStart = app.indexOf('window.dispatchEvent(new CustomEvent("bom:presentation-ready"))', bridgeStart);
+  const initialDiscoverStart = app.lastIndexOf('showOnlySection("recommendationsSection");', readyEventStart);
+
+  assert.ok(navigationStart >= 0 && bridgeStart > navigationStart);
+  assert.ok(helperStart > bridgeStart, "the Christmas entry helper should initialize with the bridge");
+  assert.ok(discoverRenderStart > helperStart, "Discover should call an in-scope helper");
+  assert.ok(readyEventStart > spotifyStateStart, "the bridge must not signal ready while later state is in its temporal dead zone");
+  assert.ok(readyEventStart > initialDiscoverStart, "the bridge should signal ready after selecting the initial section");
+  assert.match(html, /app\.js\?v=189&autocomplete=2&search-autosave=1&listening-ui=6/);
+});
+
+test("the real Stage 1 Discover renderer can call its helper before any navigation", () => {
+  const navigationStart = app.indexOf("function showOnlySection(targetId)");
+  const profileModalStart = app.indexOf("function createProfileModal()", navigationStart);
+  const discoverRenderStart = app.indexOf("function renderRecommendations()", profileModalStart);
+  const libraryRenderStart = app.indexOf("function renderLibrary()", discoverRenderStart);
+  const updates = [];
+  const context = vm.createContext({
+    currentUser: null,
+    document: { querySelector: () => null },
+    isStageOnePresentation: () => true,
+    buildStageOneDiscoverModel: () => ({ authenticated: false }),
+    recommendationsList: { innerHTML: "" },
+    window: {
+      BOM_CHRISTMAS_NUMBER_ONE_FEATURE: { enabled: false },
+      BOMDiscoverUI: {
+        render: () => '<section data-test="discover">Discover</section>',
+        updateRowControls: target => updates.push(target)
+      },
+      requestAnimationFrame: callback => callback()
+    }
+  });
+
+  vm.runInContext(app.slice(navigationStart, profileModalStart), context);
+  vm.runInContext(app.slice(discoverRenderStart, libraryRenderStart), context);
+
+  assert.equal(typeof context.syncChristmasNumberOnePublicEntry, "function");
+  assert.ok(context.window.BOMPresentationBridge, "the bridge should exist before showOnlySection is called");
+  assert.doesNotThrow(() => context.renderRecommendations());
+  assert.match(context.recommendationsList.innerHTML, /data-test="discover"/);
+  assert.deepEqual(updates, [context.recommendationsList]);
 });
 
 test("Spotify connection state is shared with the primary header", () => {

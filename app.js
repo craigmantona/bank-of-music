@@ -584,6 +584,8 @@ function showOnlySection(targetId) {
   }, 100);
 }
 
+}
+
 /*
   Stage 1 presentation bridge.
   It exposes existing application actions without duplicating their data,
@@ -1357,11 +1359,6 @@ window.BOMPresentationBridge = Object.freeze({
     spotifyConnected: spotifyConnectionState
   })
 });
-
-window.dispatchEvent(new CustomEvent("bom:presentation-ready"));
-
-}
-
 
 function createProfileModal() {
 
@@ -18800,6 +18797,7 @@ earlyAccessAdmin?.addEventListener("submit", async event => {
 });
 
 showOnlySection("recommendationsSection");
+window.dispatchEvent(new CustomEvent("bom:presentation-ready"));
 
 Promise.resolve(window.BOMEarlyAccess?.init(supabaseClient)).finally(() => refreshSessionUI()).then(async () => {
   stageOneInitialDataReady = true;
