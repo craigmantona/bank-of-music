@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [html, styles] = await Promise.all([
+const [html, publicHtml, styles] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
+  readFile(new URL("../public/index.html", import.meta.url), "utf8"),
   readFile(new URL("../style.css", import.meta.url), "utf8")
 ]);
 
@@ -13,10 +14,21 @@ test("the shared site footer includes the Bank of Music copyright notice", () =>
 
 test("the copyright notice stays small, centred and visually subtle", () => {
   const rule = styles.match(/\.bom-site-footer\s*\{([^}]+)\}/)?.[1] || "";
+  assert.match(rule, /width:\s*100%;/);
+  assert.match(rule, /margin:\s*0;/);
   assert.match(rule, /color:\s*#8b909a;/);
   assert.match(rule, /font-size:\s*10px;/);
   assert.match(rule, /text-align:\s*center;/);
   assert.match(rule, /padding:\s*4px 16px;/);
   assert.match(rule, /background:\s*transparent;/);
   assert.match(rule, /border:\s*0;/);
+});
+
+test("the footer deployment loads the stylesheet version that contains its styles", () => {
+  for (const page of [html, publicHtml]) {
+    assert.match(
+      page,
+      /<link rel="stylesheet" href="style\.css\?v=91&listening-ui=6&apple-playlists=2&amazon-music=1&soundiiz=2" \/>/
+    );
+  }
 });
