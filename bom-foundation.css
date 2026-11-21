@@ -1026,7 +1026,7 @@
 .bom-shell-v1 .bom-v1-album-section-header > span { color: var(--bom-v1-muted); }
 
 .bom-shell-v1 .bom-v1-track-header,
-.bom-shell-v1 .bom-v1-track-row { display: grid !important; grid-template-columns: 44px minmax(220px, 1fr) 80px 112px minmax(110px, 140px) 44px !important; grid-template-areas: none !important; gap: 16px !important; align-items: center !important; width: 100% !important; margin: 0 !important; background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow: none !important; overflow: visible !important; }
+.bom-shell-v1 .bom-v1-track-row { display: grid !important; grid-template-columns: 44px minmax(220px, 1fr) 80px 112px minmax(110px, 140px) minmax(150px, auto) !important; grid-template-areas: none !important; gap: 16px !important; align-items: center !important; width: 100% !important; margin: 0 !important; background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--bom-v1-line) !important; border-radius: 0 !important; box-shadow: none !important; overflow: visible !important; }
 .bom-shell-v1 .bom-v1-track-header { min-height: 44px; color: var(--bom-v1-muted); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; border-bottom: 1px solid var(--bom-v1-line); }
 .bom-shell-v1 .bom-v1-track-row { position: relative; min-height: 70px; padding: 10px 0; color: var(--bom-v1-muted); border-bottom: 1px solid var(--bom-v1-line); font-variant-numeric: tabular-nums; }
 .bom-shell-v1 .bom-v1-tracks-section .track-table { gap: 0 !important; background: transparent !important; background-image: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
@@ -1091,7 +1091,7 @@
 @media (max-width: 1050px) {
   .bom-shell-v1 .bom-v1-album-hero { grid-template-columns: minmax(280px, 42%) 1fr; gap: 44px; align-items: center; }
   .bom-shell-v1 .bom-v1-track-header,
-  .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 34px minmax(180px, 1fr) 64px 96px minmax(100px, 130px) 40px !important; gap: 10px !important; }
+  .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 34px minmax(180px, 1fr) 64px 96px minmax(100px, 130px) minmax(140px, auto) !important; gap: 10px !important; }
 }
 
 @media (max-width: 900px) {
@@ -1105,7 +1105,7 @@
   .bom-shell-v1 .bom-v1-album-rating-popover { width: 244px; }
   .bom-shell-v1 .bom-v1-album .bom-v1-album-rating-choice { min-width: 40px; min-height: 40px; }
   .bom-shell-v1 .bom-v1-track-header { display: none; }
-  .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 24px minmax(0, 1fr) auto !important; grid-template-rows: auto auto auto !important; grid-template-areas: "number title actions" "number time time" "number community yours" !important; gap: 4px 10px !important; padding: 10px 0 12px 4px !important; }
+  .bom-shell-v1 .bom-v1-track-row { grid-template-columns: 24px minmax(0, 1fr) auto !important; grid-template-rows: auto auto auto auto !important; grid-template-areas: "number title title" "number time time" "number community yours" "number actions actions" !important; gap: 4px 10px !important; padding: 10px 0 12px 4px !important; }
   .bom-shell-v1 .bom-v1-tracks-section .track-row-table.bom-v1-track-row { min-height: 0 !important; padding: 10px 0 12px 4px !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-number { grid-area: number !important; align-self: start !important; padding-top: 2px !important; }
   .bom-shell-v1 .bom-v1-track-row .track-col-title { grid-area: title !important; padding-right: 0 !important; }
@@ -1118,7 +1118,7 @@
   .bom-shell-v1 .bom-v1-track-rating-trigger { min-height: 36px; padding: 4px 0; }
   .bom-shell-v1 .bom-v1-track-rating-popover { right: 0; width: 244px; }
   .bom-shell-v1 .bom-v1-album .bom-v1-track-rating-choice { min-width: 40px; min-height: 40px; }
-  .bom-shell-v1 .bom-v1-track-row .track-col-actions { grid-area: actions !important; justify-self: end !important; }
+  .bom-shell-v1 .bom-v1-track-row .track-col-actions { grid-area: actions !important; justify-self: start !important; }
   .bom-shell-v1 .bom-v1-recommendation-carousel { grid-auto-columns: minmax(142px, 44vw); gap: 14px; }
 }
 
@@ -1150,6 +1150,9 @@
 .bom-shell-v1 .bom-v1-tracks-section .spotify-embed-error span { display: none !important; }
 .bom-shell-v1 .bom-v1-tracks-section .spotify-connect-from-player-btn,
 .bom-shell-v1 .bom-v1-tracks-section .spotify-open-externally-btn { min-width: 0 !important; min-height: 36px !important; margin: 0 !important; padding: 6px 9px !important; color: var(--bom-v1-muted) !important; background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; font-size: 12px !important; text-decoration: underline; text-underline-offset: 3px; }
+.bom-shell-v1 .bom-v1-track-row .track-spotify-link { position: relative; display: inline-flex !important; align-items: center; justify-content: flex-start; gap: 6px; width: auto !important; min-width: 0 !important; max-width: 100% !important; min-height: 44px !important; padding: 8px 0 !important; color: var(--bom-v1-accent) !important; font-size: 12px !important; font-weight: 600 !important; line-height: 1.25; text-align: left; white-space: normal; }
+.bom-shell-v1 .bom-v1-track-row a.track-spotify-link:hover { color: var(--bom-v1-text) !important; }
+.bom-shell-v1 .bom-v1-track-row .track-spotify-link.is-unavailable { color: var(--bom-v1-muted) !important; text-decoration: none; cursor: default; }
 
 @media (prefers-reduced-motion: reduce) {
   .bom-shell-v1 .bom-v1-album *,

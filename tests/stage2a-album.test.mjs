@@ -24,6 +24,8 @@ function createAlbumModelContext(allSongs = []) {
     getSongAverage: () => null,
     getYourSongRating: () => null,
     renderArtistCreditLinks: value => value,
+    resolveAlbumTrackSpotifyId: ({ storedTrackId }) => storedTrackId || "",
+    buildAlbumTrackSpotifyAction: ({ title }) => `spotify-action-${title}`,
     buildCompactTrackRatingControl: () => "track-rating",
     buildCompactAlbumRatingControl: id => `album-rating-${id}`,
     buildSelectedBackButton: () => "",
@@ -53,7 +55,7 @@ function albumDetail(trackCount) {
 test("Stage 2A remains opt-in and loads after the approved foundation", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /foundationScript\.addEventListener\("load"/);
-  assert.match(html, /bom-album\.js\?v=9/);
+  assert.match(html, /bom-album\.js\?v=10/);
   assert.match(app, /if \(isStageOnePresentation\(\)\)/);
 });
 

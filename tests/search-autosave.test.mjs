@@ -126,7 +126,7 @@ test('signed-out browsing retains the current no-write security boundary', async
   const h = harness(); h.context.currentUser = null; assert.equal(await h.context.autoSaveSelectedAlbum(), null); assert.equal(h.writes.length, 0); assert.equal(h.invocations.length, 0);
 });
 test('search selection no longer saves an unresolved result before rendering', () => {
-  const handler = app.slice(app.indexOf('globalSearchResults.addEventListener("click"'), app.indexOf('let spotifyAlbumWarmupKey'));
+  const handler = app.slice(app.indexOf('globalSearchResults.addEventListener("click"'), app.indexOf('function bindCardClicks'));
   assert.match(handler, /selectedItem = groupedResults\[group\]\[index\]/);
   assert.doesNotMatch(handler, /autoSaveSelectedAlbum\(/);
   assert.match(handler, /await renderSelectedItem\(\)/);

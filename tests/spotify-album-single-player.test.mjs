@@ -3,135 +3,157 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
-const [app, albumPresentation] = await Promise.all([
+const [app, albumPresentation, foundationStyles] = await Promise.all([
   readFile(new URL("../app.js", import.meta.url), "utf8"),
-  readFile(new URL("../bom-album.js", import.meta.url), "utf8")
+  readFile(new URL("../bom-album.js", import.meta.url), "utf8"),
+  readFile(new URL("../bom-foundation.css", import.meta.url), "utf8")
 ]);
 
-const handlerStart = app.indexOf("function getAlbumTrackPlayerDestination");
-const handlerEnd = app.indexOf("/*\n  Handle track previews in the capture phase", handlerStart);
-const handlerSource = app.slice(handlerStart, handlerEnd);
+const actionStart = app.indexOf("function isValidSpotifyTrackId");
+const actionEnd = app.indexOf("function getSpotifyAlbumMatchCacheKey", actionStart);
+assert.ok(actionStart >= 0 && actionEnd > actionStart);
+const actionSource = app.slice(actionStart, actionEnd);
 
-class FakeClassList {
-  constructor(...values) { this.values = new Set(values); }
-  add(...values) { values.forEach(value => this.values.add(value)); }
-  remove(...values) { values.forEach(value => this.values.delete(value)); }
-  contains(value) { return this.values.has(value); }
-}
+const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+})[character]);
 
-function createTrackButton({ title = "The Last Living Rose", row, albumRoot }) {
-  const attributes = new Map([["aria-pressed", "false"]]);
-  return {
-    dataset: {
-      providerTitle: title,
-      providerArtist: "PJ Harvey",
-      providerAlbum: "Let England Shake"
-    },
-    classList: new FakeClassList(),
-    closest(selector) {
-      if (selector === ".bom-v1-album, .detail-panel") return albumRoot;
-      if (selector === ".track-row-table") return row;
-      return null;
-    },
-    setAttribute(name, value) { attributes.set(name, String(value)); },
-    getAttribute(name) { return attributes.get(name) ?? null; }
-  };
-}
-
-function createHandlerHarness({ handled = true } = {}) {
-  const calls = [];
-  const row = { dataset: { spotifyTrackId: "2K7qvmfEWQm41wIJkjDBj4" } };
-  const playerTarget = {};
-  const scrollCalls = [];
-  const providerPanel = {
-    querySelector(selector) {
-      return selector === ".spotify-embed-container" ? playerTarget : null;
-    },
-    scrollIntoView(options) { scrollCalls.push(options); }
-  };
-  const previousAttributes = new Map([["aria-pressed", "true"]]);
-  const previous = {
-    classList: new FakeClassList("is-active"),
-    setAttribute(name, value) { previousAttributes.set(name, String(value)); },
-    getAttribute(name) { return previousAttributes.get(name) ?? null; }
-  };
-  const albumRoot = {
-    querySelector(selector) {
-      return selector.includes("data-music-provider-panel") ? providerPanel : null;
-    },
-    querySelectorAll(selector) {
-      return selector === "[data-track-preview='true'].is-active" ? [previous] : [];
-    }
-  };
-  const button = createTrackButton({ row, albumRoot });
+function makeActionHarness(verifiedTracks = []) {
   const context = vm.createContext({
-    Date,
-    selectedItemDetail: null,
-    lastMusicProviderInteractionAt: 0,
-    openWithMusicProvider: async options => {
-      calls.push(options);
-      return handled;
-    }
+    escapeHtml,
+    getVerifiedSpotifyAlbumMatch: () => ({ tracks: verifiedTracks }),
+    normaliseSpotifyMatchText: (value) => String(value || "").trim().toLowerCase(),
+    getSpotifySearchFallbackUrl: ({ title, artist }) =>
+      `https://open.spotify.com/search/${encodeURIComponent(`${title} ${artist}`.trim())}`
   });
-  vm.runInContext(handlerSource, context);
-  return {
-    context,
-    button,
-    previous,
-    playerTarget,
-    providerPanel,
-    row,
-    calls,
-    scrollCalls
-  };
+  vm.runInContext(actionSource, context);
+  return context;
 }
 
-test("album track controls route into the existing top listening panel", async () => {
-  const harness = createHandlerHarness();
-  await harness.context.handleAlbumTrackPreviewButton(harness.button);
+test("a verified album track ID renders a safe external Spotify link", () => {
+  const context = makeActionHarness();
+  const html = context.buildAlbumTrackSpotifyAction({
+    spotifyTrackId: "2K7qvmfEWQm41wIJkjDBj4",
+    title: "The Last Living Rose",
+    artist: "PJ Harvey",
+    album: "Let England Shake"
+  });
 
-  assert.equal(harness.calls.length, 1);
-  assert.equal(harness.calls[0].type, "song");
-  assert.equal(harness.calls[0].title, "The Last Living Rose");
-  assert.equal(harness.calls[0].targetElement, harness.playerTarget);
-  assert.equal(harness.calls[0].albumTrackSelectionRow, harness.row);
-  assert.equal(harness.button.classList.contains("is-active"), true);
-  assert.equal(harness.button.getAttribute("aria-pressed"), "true");
-  assert.equal(harness.previous.classList.contains("is-active"), false);
-  assert.equal(harness.previous.getAttribute("aria-pressed"), "false");
-  assert.equal(harness.scrollCalls[0]?.behavior, "smooth");
-  assert.equal(harness.scrollCalls[0]?.block, "center");
+  assert.match(html, /href="https:\/\/open\.spotify\.com\/track\/2K7qvmfEWQm41wIJkjDBj4"/);
+  assert.match(html, /data-spotify-track-action="external"/);
+  assert.match(html, /data-spotify-link-kind="exact"/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /rel="noopener noreferrer"/);
+  assert.match(html, />Open track in Spotify</);
+  assert.match(html, /aria-label="Open The Last Living Rose by PJ Harvey in Spotify \(opens in a new tab\)"/);
+  assert.doesNotMatch(html, /aria-pressed|▶|data-track-preview/);
 });
 
-test("a superseded track selection never scrolls an obsolete album panel", async () => {
-  const harness = createHandlerHarness({ handled: false });
-  await harness.context.handleAlbumTrackPreviewButton(harness.button);
-  assert.equal(harness.calls.length, 1);
-  assert.equal(harness.scrollCalls.length, 0);
+test("curated track IDs require both album position and title to match", () => {
+  const trackId = "2K7qvmfEWQm41wIJkjDBj4";
+  const context = makeActionHarness([{
+    id: trackId,
+    title: "The Last Living Rose",
+    trackNumber: 2,
+    discNumber: 1
+  }]);
+  const baseInput = {
+    albumTitle: "Let England Shake",
+    albumArtist: "PJ Harvey",
+    trackNumber: 2,
+    discNumber: 1
+  };
+
+  assert.equal(context.resolveAlbumTrackSpotifyId({
+    ...baseInput,
+    trackTitle: "The Last Living Rose"
+  }), trackId);
+  assert.equal(context.resolveAlbumTrackSpotifyId({
+    ...baseInput,
+    trackTitle: "Alternate-edition bonus track"
+  }), "");
 });
 
-test("album markup has one top player destination and no track-list dock", () => {
-  assert.doesNotMatch(app, /albumTrackPreviewDock/);
-  assert.doesNotMatch(app, /getOrCreateReusableAlbumPreviewFrame/);
-  assert.doesNotMatch(albumPresentation, /albumTrackPreviewDock/);
-  assert.match(app, /data-music-provider-panel="true" data-provider-type="\$\{escapeHtml\(type\)\}"/);
-  assert.match(albumPresentation, /aria-pressed="false"/);
-  assert.match(albumPresentation, /data-spotify-now-playing-status/);
-  assert.match(app, /title: immediatelySavedAlbum\.title[\s\S]*?buildTrackListHtml/);
-  assert.match(app, /title: detail\?\.title \|\| albumSelection\.title[\s\S]*?trackListHtml/);
+test("missing or malformed track IDs use an encoded Spotify search fallback", () => {
+  const context = makeActionHarness();
+  for (const spotifyTrackId of ["", "not-a-valid-id", "javascript:alert(1)"]) {
+    const html = context.buildAlbumTrackSpotifyAction({
+      spotifyTrackId,
+      title: "Song & Dance",
+      artist: "Artist / Guest",
+      album: "Album"
+    });
+    assert.match(
+      html,
+      /href="https:\/\/open\.spotify\.com\/search\/Song%20%26%20Dance%20Artist%20%2F%20Guest"/
+    );
+    assert.match(html, /data-spotify-link-kind="search"/);
+    assert.match(html, />Search track in Spotify</);
+    assert.doesNotMatch(html, /open\.spotify\.com\/track\/(?:not-a-valid-id|javascript)/);
+  }
 });
 
-test("track selection switches entities without attempting autoplay", () => {
+test("an action with no safe identity or search terms is non-interactive", () => {
+  const context = makeActionHarness();
+  const html = context.buildAlbumTrackSpotifyAction({
+    spotifyTrackId: "invalid",
+    title: "",
+    artist: ""
+  });
+  assert.match(html, /Spotify link unavailable/);
+  assert.match(html, /aria-disabled="true"/);
+  assert.doesNotMatch(html, /<a\b|href=/);
+});
+
+test("album track actions cannot replace or control the album Embed", () => {
   const playerStart = app.indexOf("const SPOTIFY_IFRAME_API_SRC");
   const playerEnd = app.indexOf("async function openWithMusicProvider", playerStart);
   const playerSource = app.slice(playerStart, playerEnd);
-  assert.match(playerSource, /controller\.loadEntity\(trackUri\)/);
-  assert.doesNotMatch(playerSource, /controller\.(?:play|resume|togglePlay)\s*\(/);
-  assert.match(playerSource, /pendingSelection/);
-  assert.match(playerSource, /state\?\.isPaused !== false/);
+
+  assert.doesNotMatch(app, /data-track-preview|handleAlbumTrackPreviewButton|albumTrackSelectionRow/);
+  assert.doesNotMatch(playerSource, /loadSpotifyAlbumTrackIntoPlayer|controller\.loadEntity\s*\(/);
+  assert.doesNotMatch(actionSource, /openWithMusicProvider|renderSpotifyEmbed|scrollIntoView|activeSpotifyAlbumPlayer/);
+  assert.match(playerSource, /const entityUri = `spotify:album:\$\{entityId\}`/);
+  assert.match(playerSource, /height: 352/);
+  assert.doesNotMatch(playerSource, /height:\s*152|spotify:track:\$\{entityId\}/);
 });
 
-test("album navigation invalidates pending selections and disposes the old player", () => {
+test("both album renderers use external actions and retain playback status markup", () => {
+  assert.match(app, /buildAlbumTrackSpotifyAction\(\{/);
+  assert.match(app, /\$\{spotifyControlHtml\}/);
+  assert.match(albumPresentation, /track\.spotifyControlHtml/);
+  assert.match(albumPresentation, /data-spotify-now-playing-status/);
+  assert.match(app, /data-spotify-now-playing-status/);
+  assert.doesNotMatch(albumPresentation, /data-track-preview|aria-pressed|▶/);
+  assert.doesNotMatch(app, /albumTrackPreviewDock|getOrCreateReusableAlbumPreviewFrame/);
+  assert.doesNotMatch(albumPresentation, /albumTrackPreviewDock/);
+});
+
+test("external track links keep native navigation and cannot auto-scroll", () => {
+  const bindStart = app.indexOf("function bindCardClicks");
+  const externalStart = app.indexOf("const spotifyExternalLink", bindStart);
+  const externalEnd = app.indexOf("const providerPanel", externalStart);
+  const externalGuard = app.slice(externalStart, externalEnd);
+
+  assert.match(externalGuard, /\.spotify-open-externally-btn/);
+  assert.match(externalGuard, /stopPropagation\(\)/);
+  assert.doesNotMatch(externalGuard, /preventDefault|scrollIntoView|openWithMusicProvider|loadEntity/);
+  assert.match(app, /\[data-spotify-track-action='external'\]/);
+});
+
+test("mobile album rows reserve a readable line for the external action", () => {
+  assert.match(
+    foundationStyles,
+    /grid-template-areas:\s*"number title title" "number time time" "number community yours" "number actions actions"/
+  );
+  assert.match(
+    foundationStyles,
+    /\.bom-v1-track-row \.track-spotify-link[\s\S]*?min-height:\s*44px/
+  );
+  assert.match(foundationStyles, /minmax\(150px, auto\)/);
+});
+
+test("album navigation still disposes the old album controller", () => {
   const renderStart = app.indexOf("async function renderSelectedItem");
   const renderSource = app.slice(renderStart, renderStart + 500);
   assert.match(renderSource, /spotifyAlbumRenderRequestGeneration \+= 1/);

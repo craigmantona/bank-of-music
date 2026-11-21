@@ -8579,11 +8579,25 @@ function buildStageOneAlbumTrackModels(detail, savedAlbumId) {
     if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
     const structuredTrackArtist = track?.recording?.["artist-credit"]?.map(credit => `${credit.name || ""}${credit.joinphrase || ""}`).join("");
     const trackArtist = normaliseText(savedSong?.artist || structuredTrackArtist || artist);
+    const spotifyTrackId = resolveAlbumTrackSpotifyId({
+      storedTrackId: savedSong?.spotify_track_id || "",
+      albumTitle,
+      albumArtist: artist,
+      trackTitle: title,
+      trackNumber: mediumTrackPosition || number,
+      discNumber: mediumPosition || 1
+    });
     rows.push({
       index: Math.max(0, number - 1), number, title, artist:trackArtist, artistControlHtml:renderArtistCreditLinks(trackArtist), album: albumTitle,
       durationMs: Number(savedSong?.duration_ms) > 0 ? Number(savedSong.duration_ms) : null,
       songId: savedSong?.id || null, externalId,
-      spotifyTrackId: savedSong?.spotify_track_id || "",
+      spotifyTrackId,
+      spotifyControlHtml: buildAlbumTrackSpotifyAction({
+        spotifyTrackId,
+        title,
+        artist: trackArtist,
+        album: albumTitle
+      }),
       community, personal, isManual,
       mediumPosition, mediumTrackPosition,
       ratingControlHtml: savedSong?.id ? buildCompactTrackRatingControl(savedSong.id, personal) : "",
@@ -8901,7 +8915,20 @@ function buildTrackListHtml(detail, savedAlbumId) {
   if (savedSong?.external_id) seenExternalIds.add(String(savedSong.external_id));
 
   const avgData = savedSong ? getSongAverage(savedSong.id) : null;
-  const spotifyTrackId = savedSong?.spotify_track_id || "";
+  const spotifyTrackId = resolveAlbumTrackSpotifyId({
+    storedTrackId: savedSong?.spotify_track_id || "",
+    albumTitle: trackAlbumTitle,
+    albumArtist: trackArtistName,
+    trackTitle: title,
+    trackNumber: number,
+    discNumber: 1
+  });
+  const spotifyControlHtml = buildAlbumTrackSpotifyAction({
+    spotifyTrackId,
+    title,
+    artist: trackArtistName,
+    album: trackAlbumTitle
+  });
 
   const yourRating = savedSong ? getYourSongRating(savedSong.id) : null;
 
@@ -8933,22 +8960,7 @@ function buildTrackListHtml(detail, savedAlbumId) {
         </div>
 
         <div class="track-col-actions">
-          <button
-            type="button"
-            class="track-preview-btn"
-            data-track-preview="true"
-            data-provider-type="song"
-            data-provider-title="${escapeHtml(title)}"
-            data-provider-artist="${escapeHtml(trackArtistName)}"
-            data-provider-album="${escapeHtml(trackAlbumTitle)}"
-            title="Select ${escapeHtml(title)} in the Spotify player"
-            aria-label="Select ${escapeHtml(title)} in the Spotify player"
-            aria-pressed="false"
-          >
-            <span class="track-preview-icon" aria-hidden="true">▶</span>
-            <span class="track-preview-label">Play preview</span>
-          </button>
-
+          ${spotifyControlHtml}
         </div>
       </div>
     `
@@ -9894,6 +9906,100 @@ function getVerifiedSpotifyAlbumMatch(album) {
   };
 }
 
+function isValidSpotifyTrackId(value) {
+  return /^[A-Za-z0-9]{22}$/.test(
+    String(value || "").trim()
+  );
+}
+
+function resolveAlbumTrackSpotifyId({
+  storedTrackId = "",
+  albumTitle = "",
+  albumArtist = "",
+  trackTitle = "",
+  trackNumber = 0,
+  discNumber = 1
+}) {
+  const storedId = String(storedTrackId || "").trim();
+  if (isValidSpotifyTrackId(storedId)) return storedId;
+
+  const verifiedAlbum = getVerifiedSpotifyAlbumMatch({
+    title: albumTitle,
+    artist: albumArtist
+  });
+  const positionMatches = (verifiedAlbum?.tracks || []).filter(
+    (track) =>
+      Number(track?.trackNumber) === Number(trackNumber) &&
+      Number(track?.discNumber || 1) === Number(discNumber || 1)
+  );
+  const exactTitleMatches = positionMatches.filter(
+    (track) =>
+      normaliseSpotifyMatchText(track?.title) ===
+      normaliseSpotifyMatchText(trackTitle)
+  );
+  const verifiedTrack = exactTitleMatches.length === 1
+    ? exactTitleMatches[0]
+    : null;
+
+  return isValidSpotifyTrackId(verifiedTrack?.id)
+    ? verifiedTrack.id
+    : "";
+}
+
+function buildAlbumTrackSpotifyAction({
+  spotifyTrackId = "",
+  title = "",
+  artist = "",
+  album = ""
+}) {
+  const trackId = isValidSpotifyTrackId(spotifyTrackId)
+    ? String(spotifyTrackId).trim()
+    : "";
+  const searchTerms = `${title} ${artist}`.trim();
+  const href = trackId
+    ? `https://open.spotify.com/track/${trackId}`
+    : searchTerms
+      ? getSpotifySearchFallbackUrl({ title, artist })
+      : "";
+
+  if (!href) {
+    return `
+      <span
+        class="track-spotify-link is-unavailable"
+        aria-disabled="true"
+      >Spotify link unavailable</span>
+    `;
+  }
+
+  const isExact = Boolean(trackId);
+  const visibleLabel = isExact
+    ? "Open track in Spotify"
+    : "Search track in Spotify";
+  const accessibleSubject = [
+    title || "this track",
+    artist ? `by ${artist}` : ""
+  ].filter(Boolean).join(" ");
+  const accessibleLabel = isExact
+    ? `Open ${accessibleSubject} in Spotify (opens in a new tab)`
+    : `Search for ${accessibleSubject} in Spotify (opens in a new tab)`;
+
+  return `
+    <a
+      class="spotify-open-externally-btn track-spotify-link"
+      data-spotify-track-action="external"
+      data-spotify-link-kind="${isExact ? "exact" : "search"}"
+      data-provider-type="song"
+      data-provider-title="${escapeHtml(title)}"
+      data-provider-artist="${escapeHtml(artist)}"
+      data-provider-album="${escapeHtml(album)}"
+      href="${escapeHtml(href)}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="${escapeHtml(accessibleLabel)}"
+    ><span aria-hidden="true">↗</span><span>${visibleLabel}</span></a>
+  `;
+}
+
 function getSpotifyAlbumMatchCacheKey(album) {
   return (
     SPOTIFY_ALBUM_MATCH_CACHE_PREFIX +
@@ -10830,22 +10936,6 @@ async function applySpotifyAlbumPlaybackState(player, playbackData, state) {
   }
 
   if (activeSpotifyAlbumPlayer !== player) return false;
-  if (player.pendingSelection) {
-    const matchesSelectedTrack = Boolean(
-      trackId && trackId === player.pendingSelection.trackId
-    );
-    const matchesSelectedRow = Boolean(
-      row && row === player.pendingSelection.row
-    );
-    if (
-      (!matchesSelectedTrack && !matchesSelectedRow) ||
-      state?.isPaused !== false
-    ) {
-      clearSpotifyNowPlayingHighlight(player.rowRoot);
-      return false;
-    }
-    player.pendingSelection = null;
-  }
   return showSpotifyNowPlayingHighlight(
     row,
     player.playbackState || state,
@@ -11058,9 +11148,7 @@ async function createSpotifyAlbumController({
   artist,
   externalUrl,
   spotifyItem,
-  requestGeneration = 0,
-  entityType = "album",
-  selectedRow = null
+  requestGeneration = 0
 }) {
   if (!isCurrentSpotifyAlbumRenderRequest(requestGeneration, target)) {
     throw createSpotifyAlbumPlayerSupersededError();
@@ -11071,13 +11159,8 @@ async function createSpotifyAlbumController({
     target.closest?.(".bom-v1-album, .detail-panel") ||
     selectedItemDetail ||
     document;
-  const isTrackEntity = entityType === "song" || entityType === "track";
-  const initialTracks = isTrackEntity
-    ? [spotifyItem]
-    : getProvidedSpotifyAlbumTracks(spotifyItem);
-  const albumTracksPromise = isTrackEntity
-    ? Promise.resolve([])
-    : getSpotifyAlbumTracksForHighlight(spotifyItem);
+  const initialTracks = getProvidedSpotifyAlbumTracks(spotifyItem);
+  const albumTracksPromise = getSpotifyAlbumTracksForHighlight(spotifyItem);
 
   target.classList.remove("hidden");
   target.innerHTML = `
@@ -11113,17 +11196,11 @@ async function createSpotifyAlbumController({
 
   const entityId = getSpotifyEntityId(spotifyItem);
   if (!entityId) throw new Error("Spotify player identity is unavailable.");
-  const entityUri = isTrackEntity
-    ? `spotify:track:${entityId}`
-    : `spotify:album:${entityId}`;
-  const albumId = isTrackEntity ? "" : entityId;
-  const albumUri = albumId ? `spotify:album:${albumId}` : "";
+  const entityUri = `spotify:album:${entityId}`;
+  const albumId = entityId;
+  const albumUri = entityUri;
   const { rows, rowByTrackId, durationCandidates } =
     buildSpotifyAlbumTrackRowMap(initialTracks, rowRoot);
-  if (isTrackEntity && selectedRow) {
-    rowByTrackId.set(entityId, selectedRow);
-    if (!rows.includes(selectedRow)) rows.push(selectedRow);
-  }
 
   return new Promise((resolve, reject) => {
     let settled = false;
@@ -11139,7 +11216,7 @@ async function createSpotifyAlbumController({
         {
           uri: entityUri,
           width: "100%",
-          height: isTrackEntity ? 152 : 352
+          height: 352
         },
         (controller) => {
           if (settled) {
@@ -11168,13 +11245,6 @@ async function createSpotifyAlbumController({
             durationCandidates,
             albumId,
             albumUri,
-            selectedUri: entityUri,
-            pendingSelection: isTrackEntity
-              ? {
-                  trackId: entityId,
-                  row: selectedRow || rowByTrackId.get(entityId) || null
-                }
-              : null,
             currentPlayingUri: "",
             currentPlaybackData: null,
             playbackState: null,
@@ -11247,101 +11317,6 @@ async function createSpotifyAlbumController({
   });
 }
 
-function updateSpotifyAlbumPlayerSelection({
-  player,
-  title,
-  artist,
-  externalUrl,
-  trackUri
-}) {
-  const target = player?.target;
-  if (!target) return;
-  player.selectedUri = trackUri;
-  if (target.dataset) {
-    target.dataset.spotifySelectedUri = trackUri;
-    target.dataset.spotifySelectedTitle = title;
-  }
-  target.querySelector?.("[data-spotify-iframe-api-mount]")
-    ?.setAttribute?.(
-      "aria-label",
-      `Spotify player with ${title} by ${artist} selected`
-    );
-  const openLink = target.querySelector?.(
-    ".spotify-open-externally-btn"
-  );
-  if (openLink) openLink.href = externalUrl;
-}
-
-async function loadSpotifyAlbumTrackIntoPlayer({
-  target,
-  title,
-  artist,
-  externalUrl,
-  spotifyItem,
-  selectedRow,
-  requestGeneration = 0
-}) {
-  if (!isCurrentSpotifyAlbumRenderRequest(requestGeneration, target)) {
-    throw createSpotifyAlbumPlayerSupersededError();
-  }
-
-  const trackId = getSpotifyEntityId(spotifyItem);
-  if (!trackId) throw new Error("Spotify track identity is unavailable.");
-  const trackUri = `spotify:track:${trackId}`;
-  const player = activeSpotifyAlbumPlayer;
-
-  if (player?.target === target && player.controller) {
-    if (selectedRow) {
-      player.rowByTrackId.set(trackId, selectedRow);
-      if (!player.rows.includes(selectedRow)) player.rows.push(selectedRow);
-    }
-
-    if (player.selectedUri !== trackUri) {
-      if (typeof player.controller.loadEntity !== "function") {
-        throw new Error("Spotify player cannot switch tracks in place.");
-      }
-      clearSpotifyNowPlayingHighlight(player.rowRoot);
-      player.hasStarted = false;
-      player.currentPlayingUri = "";
-      player.currentPlaybackData = null;
-      player.playbackState = null;
-      player.pendingSelection = {
-        trackId,
-        row: selectedRow || player.rowByTrackId.get(trackId) || null
-      };
-      await Promise.resolve(
-        player.controller.loadEntity(trackUri)
-      );
-      if (
-        activeSpotifyAlbumPlayer !== player ||
-        !isCurrentSpotifyAlbumRenderRequest(requestGeneration, target)
-      ) {
-        throw createSpotifyAlbumPlayerSupersededError();
-      }
-    }
-
-    updateSpotifyAlbumPlayerSelection({
-      player,
-      title,
-      artist,
-      externalUrl,
-      trackUri
-    });
-    return true;
-  }
-
-  return createSpotifyAlbumController({
-    target,
-    title,
-    artist,
-    externalUrl,
-    spotifyItem,
-    requestGeneration,
-    entityType: "track",
-    selectedRow
-  });
-}
-
 async function renderSpotifyEmbed({
   target,
   type,
@@ -11350,14 +11325,10 @@ async function renderSpotifyEmbed({
   embedUrl,
   externalUrl,
   spotifyItem = null,
-  requestGeneration = 0,
-  albumTrackSelectionRow = null
+  requestGeneration = 0
 }) {
   if (!target || !embedUrl) return false;
-  if (
-    (type !== "album" && !albumTrackSelectionRow) ||
-    !spotifyItem
-  ) {
+  if (type !== "album" || !spotifyItem) {
     return renderStaticSpotifyEmbed({
       target,
       type,
@@ -11369,17 +11340,6 @@ async function renderSpotifyEmbed({
   }
 
   try {
-    if (albumTrackSelectionRow) {
-      return await loadSpotifyAlbumTrackIntoPlayer({
-        target,
-        title,
-        artist,
-        externalUrl,
-        spotifyItem,
-        selectedRow: albumTrackSelectionRow,
-        requestGeneration
-      });
-    }
     return await createSpotifyAlbumController({
       target,
       title,
@@ -11418,8 +11378,7 @@ async function openWithMusicProvider({
   album = "",
   button = null,
   playerTarget = "",
-  targetElement = null,
-  albumTrackSelectionRow = null
+  targetElement = null
 }) {
   const fallbackUrl =
     getSpotifySearchFallbackUrl({
@@ -11444,7 +11403,7 @@ async function openWithMusicProvider({
     );
 
   const managesAlbumPlayer = Boolean(
-    target && (type === "album" || albumTrackSelectionRow)
+    target && type === "album"
   );
   const albumRenderRequestGeneration =
     managesAlbumPlayer
@@ -11468,12 +11427,6 @@ async function openWithMusicProvider({
     disposeSpotifyAlbumPlayer();
   }
 
-  const reusesActiveAlbumPlayer = Boolean(
-    albumTrackSelectionRow &&
-    typeof activeSpotifyAlbumPlayer !== "undefined" &&
-    activeSpotifyAlbumPlayer?.target === target
-  );
-
   if (button) {
     button.disabled = true;
     button.innerHTML =
@@ -11483,13 +11436,11 @@ async function openWithMusicProvider({
   if (target) {
     target.classList.remove("hidden");
     target.setAttribute?.("aria-busy", "true");
-    if (!reusesActiveAlbumPlayer) {
-      target.innerHTML = `
-        <div class="spotify-embed-loading">
-          Finding ${escapeHtml(title)} in Spotify…
-        </div>
-      `;
-    }
+    target.innerHTML = `
+      <div class="spotify-embed-loading">
+        Finding ${escapeHtml(title)} in Spotify…
+      </div>
+    `;
   }
 
   try {
@@ -11509,24 +11460,13 @@ async function openWithMusicProvider({
       sync. This works even when Textastic's Local preview does not
       share the live site's Spotify login/session.
     */
-    const storedTrackId = String(
-      albumTrackSelectionRow?.dataset?.spotifyTrackId || ""
-    );
     let spotifyItem =
       type === "song"
-        ? (
-            /^[A-Za-z0-9]{22}$/.test(storedTrackId)
-              ? {
-                  id: storedTrackId,
-                  uri: `spotify:track:${storedTrackId}`,
-                  externalUrl: `https://open.spotify.com/track/${storedTrackId}`
-                }
-              : getCachedSpotifyMatch({
-                  title,
-                  artist,
-                  album
-                })
-          )
+        ? getCachedSpotifyMatch({
+            title,
+            artist,
+            album
+          })
         : (
             getVerifiedSpotifyAlbumMatch({
               title,
@@ -11605,8 +11545,7 @@ async function openWithMusicProvider({
         embedUrl,
         externalUrl,
         spotifyItem,
-        requestGeneration: albumRenderRequestGeneration,
-        albumTrackSelectionRow
+        requestGeneration: albumRenderRequestGeneration
       });
 
     if (!ownsAlbumRenderRequest()) return false;
@@ -15674,10 +15613,10 @@ document.addEventListener("click", async function (event) {
 }, true);
 
 /*
-  Capture provider-control taps before the main selected-item
-  navigation listener sees them. This is especially important in
-  iOS Safari/Textastic preview where a synthetic second click can
-  land on the album card after the player area expands.
+  Capture provider and external-track actions before the main
+  selected-item navigation listener sees them. This is especially
+  important in iOS Safari/Textastic preview where a synthetic
+  second click can land on the surrounding album card.
 */
 document.addEventListener(
   "pointerdown",
@@ -15687,7 +15626,7 @@ document.addEventListener(
         "[data-music-provider-panel='true']"
       ) ||
       event.target.closest(
-        "[data-track-preview='true']"
+        "[data-spotify-track-action='external']"
       )
     ) {
       lastMusicProviderInteractionAt =
@@ -15740,253 +15679,6 @@ document.addEventListener("click", async (event) => {
   await renderSelectedItem();
 });
 
-
-let spotifyAlbumWarmupKey = "";
-let spotifyAlbumWarmupPromise = null;
-
-function getCurrentAlbumPreviewButtons() {
-  return [
-    ...document.querySelectorAll(
-      "[data-track-preview='true']"
-    )
-  ];
-}
-
-async function warmSpotifyTrackCacheForCurrentAlbum() {
-  const buttons =
-    getCurrentAlbumPreviewButtons();
-
-  if (!buttons.length) return;
-
-  const albumTitle =
-    buttons[0]?.dataset.providerAlbum || "";
-
-  const artist =
-    buttons[0]?.dataset.providerArtist || "";
-
-  const warmupKey =
-    `${normaliseSpotifyMatchText(artist)}|` +
-    `${normaliseSpotifyMatchText(albumTitle)}`;
-
-  if (
-    warmupKey &&
-    spotifyAlbumWarmupKey === warmupKey &&
-    spotifyAlbumWarmupPromise
-  ) {
-    return spotifyAlbumWarmupPromise;
-  }
-
-  spotifyAlbumWarmupKey = warmupKey;
-
-  spotifyAlbumWarmupPromise =
-    (async () => {
-      const accessToken =
-        await getValidSpotifyAccessToken();
-
-      if (!accessToken) return;
-
-      const pending = buttons
-        .map((button) => ({
-          title:
-            button.dataset.providerTitle || "",
-          artist:
-            button.dataset.providerArtist || "",
-          album:
-            button.dataset.providerAlbum || ""
-        }))
-        .filter(
-          (track) =>
-            track.title &&
-            track.artist &&
-            !getCachedSpotifyMatch(track)
-        );
-
-      /*
-        Match a few tracks at a time so album opening stays fast
-        and Spotify is not hit with a burst of requests.
-      */
-      const concurrency = 3;
-      let nextIndex = 0;
-
-      async function worker() {
-        while (nextIndex < pending.length) {
-          const index = nextIndex++;
-          const track = pending[index];
-
-          try {
-            await searchSpotifyTrackForBoMTrack(
-              track
-            );
-          } catch (error) {
-            console.warn(
-              "Spotify preview warmup skipped:",
-              track.title,
-              error
-            );
-          }
-        }
-      }
-
-      await Promise.all(
-        Array.from(
-          {
-            length: Math.min(
-              concurrency,
-              pending.length
-            )
-          },
-          () => worker()
-        )
-      );
-    })();
-
-  return spotifyAlbumWarmupPromise;
-}
-
-function scheduleSpotifyTrackCacheWarmup() {
-  const tryWarmup = (attempt = 0) => {
-    window.setTimeout(
-      () => {
-        const buttons =
-          getCurrentAlbumPreviewButtons();
-
-        if (!buttons.length && attempt < 4) {
-          tryWarmup(attempt + 1);
-          return;
-        }
-
-        void warmSpotifyTrackCacheForCurrentAlbum();
-      },
-      attempt === 0 ? 250 : 350
-    );
-  };
-
-  tryWarmup();
-}
-
-function getAlbumTrackPlayerDestination(trackPreviewButton) {
-  const albumRoot =
-    trackPreviewButton?.closest?.(".bom-v1-album, .detail-panel") ||
-    selectedItemDetail;
-  if (!albumRoot) return null;
-
-  const providerPanel =
-    albumRoot.querySelector?.(
-      "[data-music-provider-panel='true'][data-provider-type='album']"
-    ) ||
-    albumRoot.querySelector?.(
-      "[data-music-provider-panel='true']"
-    );
-  const playerTarget = providerPanel?.querySelector?.(
-    ".spotify-embed-container"
-  );
-  if (!providerPanel || !playerTarget) return null;
-
-  return { albumRoot, providerPanel, playerTarget };
-}
-
-async function handleAlbumTrackPreviewButton(
-  trackPreviewButton
-) {
-  if (!trackPreviewButton) return;
-
-  lastMusicProviderInteractionAt =
-    Date.now();
-
-  const destination =
-    getAlbumTrackPlayerDestination(
-      trackPreviewButton
-    );
-  if (!destination) return;
-  const {
-    albumRoot,
-    providerPanel,
-    playerTarget
-  } = destination;
-
-  albumRoot
-    .querySelectorAll(
-      "[data-track-preview='true'].is-active"
-    )
-    .forEach((button) => {
-      if (button !== trackPreviewButton) {
-        button.classList.remove(
-          "is-active"
-        );
-        button.setAttribute(
-          "aria-pressed",
-          "false"
-        );
-      }
-    });
-
-  trackPreviewButton.classList.add(
-    "is-active"
-  );
-
-  trackPreviewButton.setAttribute(
-    "aria-pressed",
-    "true"
-  );
-
-  const handled = await openWithMusicProvider({
-    type: "song",
-    title:
-      trackPreviewButton.dataset
-        .providerTitle || "",
-    artist:
-      trackPreviewButton.dataset
-        .providerArtist || "",
-    album:
-      trackPreviewButton.dataset
-        .providerAlbum || "",
-    button: null,
-    targetElement: playerTarget,
-    albumTrackSelectionRow:
-      trackPreviewButton.closest?.(
-        ".track-row-table"
-      ) || null
-  });
-  if (!handled) return;
-
-  lastMusicProviderInteractionAt =
-    Date.now();
-
-  providerPanel.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
-
-/*
-  Handle track previews in the capture phase so the tap never
-  reaches album cards, song cards, swipe handlers or other
-  navigation listeners on iOS.
-*/
-document.addEventListener(
-  "click",
-  (event) => {
-    const previewButton =
-      event.target.closest(
-        "[data-track-preview='true']"
-      );
-
-    if (!previewButton) return;
-
-    lastMusicProviderInteractionAt =
-      Date.now();
-
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
-    void handleAlbumTrackPreviewButton(
-      previewButton
-    );
-  },
-  true
-);
-
 function bindCardClicks(container) {
   if (!container) return;
 
@@ -15999,22 +15691,6 @@ if (
 ) {
   return;
 }
-
-    const trackPreviewButton =
-      event.target.closest(
-        "[data-track-preview='true']"
-      );
-
-    /*
-      Track previews are handled by the capture-phase listener
-      above. Keep this guard as a second line of defence.
-    */
-    if (trackPreviewButton) {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      return;
-    }
 
     const musicProviderButton =
       event.target.closest(

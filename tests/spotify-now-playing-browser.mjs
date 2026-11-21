@@ -1,4 +1,4 @@
-// Browser-level regression for the real Spotify album-context event shape.
+// Browser-level regression for album-Embed preservation and confirmed playback state.
 // BOM_PLAYWRIGHT can point to an existing Playwright installation.
 // BOM_BROWSER can select chromium (default) or webkit.
 import assert from "node:assert/strict";
@@ -19,17 +19,6 @@ const playerStart = app.indexOf("const SPOTIFY_IFRAME_API_SRC");
 const playerEnd = app.indexOf("async function openWithMusicProvider", playerStart);
 assert.ok(playerStart >= 0 && playerEnd > playerStart);
 const playerSource = app.slice(playerStart, playerEnd);
-const trackHandlerStart = app.indexOf("function getAlbumTrackPlayerDestination");
-const trackHandlerEnd = app.indexOf(
-  "/*\n  Handle track previews in the capture phase",
-  trackHandlerStart
-);
-assert.ok(trackHandlerStart >= 0 && trackHandlerEnd > trackHandlerStart);
-const trackHandlerSource = app.slice(trackHandlerStart, trackHandlerEnd);
-const providerStart = app.indexOf("async function openWithMusicProvider");
-const providerEnd = app.indexOf("async function renderSelectedItem", providerStart);
-assert.ok(providerStart >= 0 && providerEnd > providerStart);
-const providerSource = app.slice(providerStart, providerEnd);
 
 const fixture = `<!doctype html>
 <html><head>
@@ -43,38 +32,49 @@ const fixture = `<!doctype html>
       <h2>Listen to this album</h2>
       <div id="spotifyEmbedTarget" class="spotify-embed-container"></div>
     </section>
-    <section class="bom-v1-tracks-section">
-      <div class="track-row-table bom-v1-track-row"
-        data-track-title="Let England Shake" data-track-artist="PJ Harvey"
-        data-track-position="1" data-disc-number="1" data-disc-track-number="1"
-        data-track-duration-ms="189000"
-        data-spotify-track-id="6DST3HT8zF8WpNmg9tHuaa">
-        <span class="track-col-number">1</span>
-        <span class="track-col-title">Let England Shake</span>
-        <span class="spotify-now-playing-status" data-spotify-now-playing-status
-          role="status" aria-live="polite" aria-hidden="true">
-          <span data-spotify-playback-label>Now Playing</span>
-          <span class="spotify-now-playing-equaliser"><span></span><span></span><span></span></span>
-        </span>
-        <button type="button" data-track-preview="true"
-          data-provider-title="Let England Shake" data-provider-artist="PJ Harvey"
-          data-provider-album="Let England Shake" aria-pressed="false">Play</button>
-      </div>
-      <div class="track-row-table bom-v1-track-row"
-        data-track-title="The Last Living Rose" data-track-artist="PJ Harvey"
-        data-track-position="2" data-disc-number="1" data-disc-track-number="2"
-        data-track-duration-ms="141000"
-        data-spotify-track-id="2K7qvmfEWQm41wIJkjDBj4">
-        <span class="track-col-number">2</span>
-        <span class="track-col-title">The Last Living Rose</span>
-        <span class="spotify-now-playing-status" data-spotify-now-playing-status
-          role="status" aria-live="polite" aria-hidden="true">
-          <span data-spotify-playback-label>Now Playing</span>
-          <span class="spotify-now-playing-equaliser"><span></span><span></span><span></span></span>
-        </span>
-        <button type="button" data-track-preview="true"
-          data-provider-title="The Last Living Rose" data-provider-artist="PJ Harvey"
-          data-provider-album="Let England Shake" aria-pressed="false">Play</button>
+    <div aria-hidden="true" style="height:700px"></div>
+    <section class="bom-v1-album-section bom-v1-tracks-section">
+      <header class="bom-v1-album-section-header"><h2>Tracks</h2></header>
+      <div class="bom-v1-track-table">
+        <div class="track-row-table bom-v1-track-row"
+          data-track-title="Let England Shake" data-track-artist="PJ Harvey"
+          data-track-position="1" data-disc-number="1" data-disc-track-number="1"
+          data-track-duration-ms="189000"
+          data-spotify-track-id="6DST3HT8zF8WpNmg9tHuaa">
+          <span class="track-col-number">1</span>
+          <span class="track-col-title">Let England Shake
+            <span class="spotify-now-playing-status" data-spotify-now-playing-status
+              role="status" aria-live="polite" aria-hidden="true">
+              <span data-spotify-playback-label>Now Playing</span>
+              <span class="spotify-now-playing-equaliser"><span></span><span></span><span></span></span>
+            </span>
+          </span>
+          <span class="bom-v1-track-time">3:09</span><span class="track-col-average">—</span>
+          <span class="track-col-your-rating">—</span>
+          <span class="track-col-actions"><a class="spotify-open-externally-btn track-spotify-link"
+            data-spotify-track-action="external" data-spotify-link-kind="exact"
+            href="https://open.spotify.com/track/6DST3HT8zF8WpNmg9tHuaa"
+            target="_blank" rel="noopener noreferrer">Open track in Spotify</a></span>
+        </div>
+        <div class="track-row-table bom-v1-track-row"
+          data-track-title="The Last Living Rose" data-track-artist="PJ Harvey"
+          data-track-position="2" data-disc-number="1" data-disc-track-number="2"
+          data-track-duration-ms="141000" data-spotify-track-id="">
+          <span class="track-col-number">2</span>
+          <span class="track-col-title">The Last Living Rose
+            <span class="spotify-now-playing-status" data-spotify-now-playing-status
+              role="status" aria-live="polite" aria-hidden="true">
+              <span data-spotify-playback-label>Now Playing</span>
+              <span class="spotify-now-playing-equaliser"><span></span><span></span><span></span></span>
+            </span>
+          </span>
+          <span class="bom-v1-track-time">2:21</span><span class="track-col-average">—</span>
+          <span class="track-col-your-rating">—</span>
+          <span class="track-col-actions"><a class="spotify-open-externally-btn track-spotify-link"
+            data-spotify-track-action="external" data-spotify-link-kind="search"
+            href="https://open.spotify.com/search/The%20Last%20Living%20Rose%20PJ%20Harvey"
+            target="_blank" rel="noopener noreferrer">Search track in Spotify</a></span>
+        </div>
       </div>
     </section>
   </main>
@@ -103,6 +103,7 @@ const browser = await browserType.launch({
     ? { executablePath: process.env.BOM_CHROMIUM_EXECUTABLE }
     : {})
 });
+
 try {
   for (const mobile of [false, true]) {
     const context = await browser.newContext({
@@ -124,10 +125,7 @@ try {
           mount.appendChild(frame);
           window.__spotifyControllerCreateCount=(window.__spotifyControllerCreateCount||0)+1;
           window.__spotifyController={
-            options,
-            listeners,
-            loadEntityCalls:[],
-            autoplayCalls:[],
+            options,listeners,loadEntityCalls:[],autoplayCalls:[],destroyed:false,
             loadEntity(uri){this.loadEntityCalls.push(uri)},
             play(){this.autoplayCalls.push("play")},
             resume(){this.autoplayCalls.push("resume")},
@@ -150,37 +148,27 @@ try {
         }
         function getSpotifyEntityId(item) { return item?.id || ""; }
         function escapeHtml(value) { return String(value ?? ""); }
-        function getSpotifySearchFallbackUrl() { return "https://open.spotify.com/search"; }
-        function getCachedSpotifyMatch() { return null; }
-        function getVerifiedSpotifyAlbumMatch() { return null; }
-        function getCachedSpotifyAlbumMatch() { return null; }
         async function getValidSpotifyAccessToken() { return null; }
-        async function searchSpotifyTrackForBoMTrack() { return null; }
-        async function searchSpotifyAlbumForBoMAlbum() { return null; }
         async function spotifyApiRequest() { return {items: [], next: null}; }
-        async function recordMusicProviderClick() {
-          if (window.__providerClickGate) await window.__providerClickGate;
-        }
-        function buildSpotifyEmbedUrl({type, spotifyItem}) {
-          return "https://open.spotify.com/embed/" + type + "/" + spotifyItem.id;
-        }
         var selectedItemDetail = document.querySelector(".bom-v1-album");
-        var lastMusicProviderInteractionAt = 0;
         window.__scrollIntoViewCalls = [];
+        window.__trackActions = [];
+        const nativeScrollIntoView = Element.prototype.scrollIntoView;
         Element.prototype.scrollIntoView = function(options) {
           window.__scrollIntoViewCalls.push({
-            id: this.id || "",
-            behavior: options?.behavior || "",
-            block: options?.block || ""
+            id: this.id || "", behavior: options?.behavior || "", block: options?.block || ""
           });
+          return nativeScrollIntoView.call(this, options);
         };
+        document.addEventListener("click", event => {
+          const action = event.target.closest("[data-spotify-track-action='external']");
+          if (!action) return;
+          window.__trackActions.push({href: action.href, kind: action.dataset.spotifyLinkKind});
+          event.preventDefault();
+          event.stopPropagation();
+        }, true);
         ${playerSource}
-        ${providerSource}
-        ${trackHandlerSource}
-        window.spotifyNowPlayingBrowserTest = {
-          createSpotifyAlbumController,
-          handleAlbumTrackPreviewButton
-        };
+        window.spotifyNowPlayingBrowserTest = { createSpotifyAlbumController };
       `
     });
     await page.evaluate(async () => {
@@ -202,215 +190,90 @@ try {
     const emit = (name, data) => page.evaluate(({ name, data }) => {
       window.__spotifyController.listeners.get(name)({ data });
     }, { name, data });
-    const albumUri = "spotify:album:2JfiVMvVhdueC48EmskS7t";
     const firstTrackUri = "spotify:track:6DST3HT8zF8WpNmg9tHuaa";
     const secondTrackUri = "spotify:track:2K7qvmfEWQm41wIJkjDBj4";
     const highlighted = page.locator(".track-row-table.is-spotify-now-playing");
 
-    await emit("playback_started", { playingURI: albumUri });
-    assert.equal(await highlighted.count(), 0, "album URI alone must not guess a row");
-
-    await emit("playback_update", {
-      playingURI: albumUri,
-      duration: 189327,
-      position: 258,
-      isPaused: false,
-      isBuffering: false
+    assert.deepEqual(await page.evaluate(() => ({
+      count: window.__spotifyControllerCreateCount,
+      uri: window.__spotifyController.options.uri,
+      height: window.__spotifyController.options.height
+    })), {
+      count: 1,
+      uri: "spotify:album:2JfiVMvVhdueC48EmskS7t",
+      height: 352
     });
-    assert.equal(await highlighted.getAttribute("data-track-position"), "1");
-    assert.equal(await highlighted.getAttribute("data-spotify-playback-state"), "playing");
 
-    await emit("playback_update", {
-      playingURI: albumUri,
-      duration: 189327,
-      position: 1059,
-      isPaused: true,
-      isBuffering: false
-    });
-    assert.equal(await highlighted.getAttribute("data-spotify-playback-state"), "paused");
-    assert.equal(
-      await highlighted.locator("[data-spotify-playback-label]").textContent(),
-      "Paused"
-    );
-
-    await emit("playback_update", {
-      playingURI: albumUri,
-      duration: 189327,
-      position: 1059,
-      isPaused: false,
-      isBuffering: false
-    });
-    assert.equal(await highlighted.getAttribute("data-spotify-playback-state"), "playing");
-
-    await emit("playback_update", {
-      playingURI: albumUri,
-      duration: 141327,
-      position: 0,
-      isPaused: false,
-      isBuffering: false
-    });
+    await emit("playback_started", { playingURI: secondTrackUri });
     assert.equal(await highlighted.getAttribute("data-track-position"), "2");
-    assert.equal(await page.locator('[data-track-position="1"].is-spotify-now-playing').count(), 0);
 
-    const selectTrack = position => page.evaluate(async trackPosition => {
-      const button = document.querySelector(
-        `[data-track-position="${trackPosition}"] [data-track-preview="true"]`
-      );
-      await window.spotifyNowPlayingBrowserTest.handleAlbumTrackPreviewButton(button);
-    }, position);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const beforeActions = await page.evaluate(() => ({
+      scrollY,
+      scrollCalls: window.__scrollIntoViewCalls.length
+    }));
+    const firstAction = page.locator('[data-track-position="1"] [data-spotify-track-action="external"]');
+    const secondAction = page.locator('[data-track-position="2"] [data-spotify-track-action="external"]');
+    await firstAction.click();
+    await secondAction.click();
+    await firstAction.click();
 
-    await selectTrack("2");
-    assert.equal(
-      await page.evaluate(() => window.__spotifyControllerCreateCount),
-      1,
-      "the existing top controller must be reused"
-    );
-    assert.deepEqual(
-      await page.evaluate(() => window.__spotifyController.loadEntityCalls),
-      [secondTrackUri]
-    );
-    assert.deepEqual(
-      await page.evaluate(() => window.__spotifyController.autoplayCalls),
-      [],
-      "selecting a track must not call play, resume or togglePlay"
-    );
-    assert.equal(
-      await page.locator("#topListeningPanel [data-spotify-iframe-api-mount]").count(),
-      1
-    );
+    assert.deepEqual(await page.evaluate(() => window.__trackActions), [
+      {href: "https://open.spotify.com/track/6DST3HT8zF8WpNmg9tHuaa", kind: "exact"},
+      {href: "https://open.spotify.com/search/The%20Last%20Living%20Rose%20PJ%20Harvey", kind: "search"},
+      {href: "https://open.spotify.com/track/6DST3HT8zF8WpNmg9tHuaa", kind: "exact"}
+    ]);
+    assert.equal(await highlighted.getAttribute("data-track-position"), "2");
+    assert.deepEqual(await page.evaluate(() => ({
+      count: window.__spotifyControllerCreateCount,
+      uri: window.__spotifyController.options.uri,
+      height: window.__spotifyController.options.height,
+      loads: window.__spotifyController.loadEntityCalls,
+      autoplay: window.__spotifyController.autoplayCalls,
+      destroyed: window.__spotifyController.destroyed,
+      scrollCalls: window.__scrollIntoViewCalls.length
+    })), {
+      count: 1,
+      uri: "spotify:album:2JfiVMvVhdueC48EmskS7t",
+      height: 352,
+      loads: [],
+      autoplay: [],
+      destroyed: false,
+      scrollCalls: beforeActions.scrollCalls
+    });
     assert.equal(
       await page.locator("#topListeningPanel iframe[data-spotify-mock-frame]").count(),
       1
     );
     assert.equal(await page.locator("#albumTrackPreviewDock").count(), 0);
-    assert.equal(await highlighted.count(), 0, "selection alone must not claim playback");
-    assert.equal(
-      await page.locator('[data-track-position="2"] [data-track-preview="true"]').getAttribute("aria-pressed"),
-      "true"
-    );
-    assert.equal(
-      await page.locator("#spotifyEmbedTarget").getAttribute("data-spotify-selected-uri"),
-      secondTrackUri
-    );
-    assert.ok(
-      await page.evaluate(() => window.__scrollIntoViewCalls.some(call =>
-        call.id === "topListeningPanel" &&
-        call.behavior === "smooth" &&
-        call.block === "center"
-      )),
-      "track selection must smoothly reveal the top listening panel"
-    );
-
-    await emit("playback_started", { playingURI: albumUri });
-    assert.equal(await highlighted.count(), 0, "album context alone must not confirm the selection");
-
-    await emit("playback_update", {
-      playingURI: albumUri,
-      duration: 189327,
-      position: 0,
-      isPaused: false,
-      isBuffering: false
-    });
-    assert.equal(await highlighted.count(), 0, "a stale prior-track update must not re-highlight it");
-
-    await emit("playback_update", {
-      playingURI: albumUri,
-      duration: 141327,
-      position: 0,
-      isPaused: false,
-      isBuffering: false
-    });
-    assert.equal(await highlighted.getAttribute("data-track-position"), "2");
-
-    await selectTrack("2");
-    assert.deepEqual(
-      await page.evaluate(() => window.__spotifyController.loadEntityCalls),
-      [secondTrackUri],
-      "reselecting the same track must not reload or create another player"
-    );
-    assert.equal(await highlighted.getAttribute("data-track-position"), "2");
-
-    await selectTrack("1");
-    assert.deepEqual(
-      await page.evaluate(() => window.__spotifyController.loadEntityCalls),
-      [secondTrackUri, firstTrackUri]
-    );
-    assert.equal(await highlighted.count(), 0, "switching selection must await confirmed playback");
+    assert.equal(await page.evaluate(() => scrollY), beforeActions.scrollY);
 
     await emit("playback_started", { playingURI: firstTrackUri });
     assert.equal(await highlighted.getAttribute("data-track-position"), "1");
-    assert.equal(
-      await page.locator('[data-track-position="2"].is-spotify-now-playing').count(),
-      0
-    );
-    assert.equal(
-      await page.locator("#topListeningPanel iframe[data-spotify-mock-frame]").count(),
-      1
-    );
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     assert.deepEqual(errors, []);
 
     const mode = mobile ? "mobile" : "desktop";
     await page.screenshot({
-      path: `${tmpdir()}/bom-spotify-now-playing-${mode}.png`,
+      path: `${tmpdir()}/bom-spotify-album-preserved-${mode}.png`,
       fullPage: true
     });
 
-    const scrollCountBeforeNavigation = await page.evaluate(
-      () => window.__scrollIntoViewCalls.length
-    );
-    await page.evaluate(() => {
-      window.__providerClickGate = new Promise(resolve => {
-        window.__resolveProviderClick = resolve;
-      });
-      const button = document.querySelector(
-        '[data-track-position="2"] [data-track-preview="true"]'
-      );
-      window.__pendingNavigationSelection =
-        window.spotifyNowPlayingBrowserTest.handleAlbumTrackPreviewButton(button);
-    });
-    await page.waitForFunction(() =>
-      document.querySelector("#spotifyEmbedTarget")?.getAttribute("aria-busy") === "true"
-    );
     await page.evaluate(() => {
       window.__oldSpotifyController = window.__spotifyController;
       spotifyAlbumRenderRequestGeneration += 1;
       disposeSpotifyAlbumPlayer();
       document.querySelector("main").innerHTML = `
-        <section id="replacementAlbum" class="music-provider-panel"
-          data-music-provider-panel="true" data-provider-type="album">
-          <h2>Replacement album</h2>
-          <div id="replacementSpotifyTarget" class="spotify-embed-container"></div>
-        </section>
+        <section id="replacementAlbum"><h2>Replacement album</h2></section>
       `;
       selectedItemDetail = document.querySelector("main");
-      window.__resolveProviderClick();
     });
-    await page.evaluate(() => window.__pendingNavigationSelection);
-    assert.equal(
-      await page.evaluate(() => window.__oldSpotifyController.destroyed),
-      true,
-      "album navigation must destroy the previous controller"
-    );
-    assert.equal(
-      await page.locator("#replacementAlbum").getByText("Replacement album").count(),
-      1,
-      "a stale track lookup must not overwrite the replacement album"
-    );
-    assert.equal(
-      await page.locator(
-        "#replacementAlbum iframe, #replacementAlbum [data-spotify-iframe-api-mount]"
-      ).count(),
-      0
-    );
-    assert.equal(
-      await page.evaluate(() => window.__scrollIntoViewCalls.length),
-      scrollCountBeforeNavigation,
-      "a stale selection must not scroll the detached album panel"
-    );
-    assert.deepEqual(errors, [], "album navigation must not emit browser errors");
+    assert.equal(await page.evaluate(() => window.__oldSpotifyController.destroyed), true);
+    assert.equal(await page.locator("#replacementAlbum").getByText("Replacement album").count(), 1);
+    assert.equal(await page.locator("iframe, [data-spotify-iframe-api-mount]").count(), 0);
+    assert.deepEqual(errors, []);
     console.log(
-      `PASS ${browserName} ${mode}: one top player, confirmed highlight and track reuse`
+      `PASS ${browserName} ${mode}: album Embed preserved, external actions inert, playback event confirmed`
     );
     await context.close();
   }

@@ -46,7 +46,7 @@
       <div class="track-col-average" data-label="Community" ${track.community ? `title="${track.community.count} community rating${track.community.count === 1 ? "" : "s"}" aria-label="${track.community.average.toFixed(1)} out of 10 from ${track.community.count} community rating${track.community.count === 1 ? "" : "s"}"` : 'aria-label="No community ratings"'}>${track.community ? `<strong>${track.community.average.toFixed(1)}</strong><span> / 10</span>` : "—"}</div>
       <div class="track-col-your-rating${track.personal !== null ? " has-rating" : ""}" data-label="You"><span class="bom-v1-track-rating-slot">${track.ratingControlHtml || `<span class="bom-v1-track-personal-value">${track.personal !== null ? `<strong>${track.personal}</strong><span> / 10</span>` : "—"}</span>`}</span></div>
       <div class="track-col-actions">
-        <button type="button" class="track-preview-btn" data-track-preview="true" data-provider-type="song" data-provider-title="${escapeHtml(track.title)}" data-provider-artist="${escapeHtml(track.artist)}" data-provider-album="${escapeHtml(track.album)}" aria-label="Select ${escapeHtml(track.title)} in the Spotify player" aria-pressed="false"><span aria-hidden="true">▶</span></button>
+        ${track.spotifyControlHtml || '<span class="track-spotify-link is-unavailable" aria-disabled="true">Spotify link unavailable</span>'}
         ${track.saveControlHtml || ""}
       </div>
     </div>`;
@@ -57,7 +57,7 @@
     return `<section class="bom-v1-album-section bom-v1-tracks-section">
       <header class="bom-v1-album-section-header"><h2>Tracks</h2><span>${model.trackCount} track${model.trackCount === 1 ? "" : "s"}</span></header>
       <div class="bom-v1-track-table">
-        <div class="bom-v1-track-header" aria-hidden="true"><span>#</span><span>Track</span><span>Time</span><span>Community</span><span>You</span><span></span></div>
+        <div class="bom-v1-track-header" aria-hidden="true"><span>#</span><span>Track</span><span>Time</span><span>Community</span><span>You</span><span>Spotify</span></div>
         ${model.tracks.map(trackRow).join("")}
       </div>
     </section>`;
