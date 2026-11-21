@@ -123,9 +123,17 @@ function makePlayerHarness({
         options,
         listeners,
         removed,
+        loadEntityCalls: [],
+        playCalls: 0,
+        resumeCalls: 0,
+        togglePlayCalls: 0,
         destroyed: false,
         addListener(name, listener) { listeners.set(name, listener); },
         removeListener(name, listener) { removed.push([name, listener]); listeners.delete(name); },
+        loadEntity(uri) { this.loadEntityCalls.push(uri); },
+        play() { this.playCalls += 1; },
+        resume() { this.resumeCalls += 1; },
+        togglePlay() { this.togglePlayCalls += 1; },
         destroy() { this.destroyed = true; }
       };
       controllers.push(controller);
@@ -240,6 +248,223 @@ test("optional album metadata never blocks the playable controller", async () =>
   ]).finally(() => clearTimeout(timeout));
   assert.equal(result, true);
   assert.equal(controllers.length, 1);
+});
+
+test("a first album-track selection creates a track controller for the selected row", async () => {
+  const trackId = "1111111111111111111111";
+  const selectedRow = makeRow({
+    title: "Selected locally",
+    position: 1
+  });
+  const { context, root, controllers } = makePlayerHarness({
+    rows: [selectedRow]
+  });
+  const target = makeTarget(root);
+
+  const rendered = await context.createSpotifyAlbumController({
+    target,
+    title: "Selected locally",
+    artist: "Artist",
+    externalUrl: `https://open.spotify.com/track/${trackId}`,
+    spotifyItem: {
+      id: trackId,
+      title: "A different remote title",
+      artist: "Artist"
+    },
+    entityType: "track",
+    selectedRow
+  });
+
+  assert.equal(rendered, true);
+  assert.equal(controllers.length, 1);
+  assert.equal(controllers[0].options.uri, `spotify:track:${trackId}`);
+  assert.equal(controllers[0].options.height, 152);
+  assert.equal(target.scrollCalls.length, 1);
+  assert.equal(target.scrollCalls[0].behavior, "smooth");
+  assert.equal(target.scrollCalls[0].block, "nearest");
+  assert.equal(
+    selectedRow.classList.contains("is-spotify-now-playing"),
+    false,
+    "selecting a track must not claim that Spotify started playback"
+  );
+
+  controllers[0].listeners.get("playback_started")({
+    data: { playingURI: `spotify:track:${trackId}` }
+  });
+  assert.equal(
+    selectedRow.classList.contains("is-spotify-now-playing"),
+    true,
+    "Spotify's playback_started event confirms the explicitly selected row"
+  );
+});
+
+test("album-track selections reuse one controller and repeated selection is idempotent", async () => {
+  const albumId = "AAAAAAAAAAAAAAAAAAAAAA";
+  const firstId = "1111111111111111111111";
+  const secondId = "2222222222222222222222";
+  const first = makeRow({
+    title: "First",
+    spotifyTrackId: firstId,
+    position: 1
+  });
+  const second = makeRow({
+    title: "Second",
+    spotifyTrackId: secondId,
+    position: 2
+  });
+  const { context, root, controllers } = makePlayerHarness({
+    rows: [first, second]
+  });
+  const target = makeTarget(root);
+  await context.createSpotifyAlbumController({
+    target,
+    title: "Album",
+    artist: "Artist",
+    externalUrl: `https://open.spotify.com/album/${albumId}`,
+    spotifyItem: {
+      id: albumId,
+      tracks: [
+        { id: firstId, title: "First", artist: "Artist", trackNumber: 1 },
+        { id: secondId, title: "Second", artist: "Artist", trackNumber: 2 }
+      ]
+    }
+  });
+
+  const select = (id, title, selectedRow) =>
+    context.loadSpotifyAlbumTrackIntoPlayer({
+      target,
+      title,
+      artist: "Artist",
+      externalUrl: `https://open.spotify.com/track/${id}`,
+      spotifyItem: { id, title, artist: "Artist" },
+      selectedRow
+    });
+
+  await select(firstId, "First", first);
+  await select(firstId, "First", first);
+  await select(secondId, "Second", second);
+
+  assert.equal(controllers.length, 1, "track changes must keep the top album controller");
+  assert.deepEqual(
+    controllers[0].loadEntityCalls,
+    [`spotify:track:${firstId}`, `spotify:track:${secondId}`],
+    "the same selected URI must not be loaded twice"
+  );
+  assert.equal(controllers[0].playCalls, 0);
+  assert.equal(controllers[0].resumeCalls, 0);
+  assert.equal(controllers[0].togglePlayCalls, 0);
+  assert.equal(
+    second.classList.contains("is-spotify-now-playing"),
+    false,
+    "loadEntity alone is not evidence that playback began"
+  );
+});
+
+test("a pending track selection ignores stale track and album-duration events", async () => {
+  const albumId = "AAAAAAAAAAAAAAAAAAAAAA";
+  const firstId = "1111111111111111111111";
+  const secondId = "2222222222222222222222";
+  const firstDuration = 180100;
+  const secondDuration = 240200;
+  const first = makeRow({
+    title: "First",
+    spotifyTrackId: firstId,
+    position: 1,
+    durationMs: 180000
+  });
+  const second = makeRow({
+    title: "Second",
+    spotifyTrackId: secondId,
+    position: 2,
+    durationMs: 240000
+  });
+  const { context, root, controllers } = makePlayerHarness({
+    rows: [first, second]
+  });
+  const target = makeTarget(root);
+  await context.createSpotifyAlbumController({
+    target,
+    title: "Album",
+    artist: "Artist",
+    externalUrl: `https://open.spotify.com/album/${albumId}`,
+    spotifyItem: {
+      id: albumId,
+      tracks: [
+        {
+          id: firstId,
+          title: "First",
+          artist: "Artist",
+          trackNumber: 1,
+          durationMs: firstDuration
+        },
+        {
+          id: secondId,
+          title: "Second",
+          artist: "Artist",
+          trackNumber: 2,
+          durationMs: secondDuration
+        }
+      ]
+    }
+  });
+  const controller = controllers[0];
+  const albumUri = `spotify:album:${albumId}`;
+
+  controller.listeners.get("playback_started")({
+    data: { playingURI: `spotify:track:${firstId}` }
+  });
+  assert.equal(first.classList.contains("is-spotify-now-playing"), true);
+
+  await context.loadSpotifyAlbumTrackIntoPlayer({
+    target,
+    title: "Second",
+    artist: "Artist",
+    externalUrl: `https://open.spotify.com/track/${secondId}`,
+    spotifyItem: { id: secondId, title: "Second", artist: "Artist" },
+    selectedRow: second
+  });
+  assert.equal(first.classList.contains("is-spotify-now-playing"), false);
+  assert.equal(second.classList.contains("is-spotify-now-playing"), false);
+
+  controller.listeners.get("playback_started")({
+    data: { playingURI: `spotify:track:${firstId}` }
+  });
+  controller.listeners.get("playback_update")({
+    data: {
+      playingURI: albumUri,
+      duration: firstDuration,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  controller.listeners.get("playback_started")({
+    data: { playingURI: albumUri }
+  });
+  assert.equal(
+    first.classList.contains("is-spotify-now-playing"),
+    false,
+    "late events for the previously selected row must be ignored"
+  );
+  assert.equal(
+    second.classList.contains("is-spotify-now-playing"),
+    false,
+    "an album playback_started event has no selected-track evidence"
+  );
+
+  controller.listeners.get("playback_update")({
+    data: {
+      playingURI: albumUri,
+      duration: secondDuration,
+      isPaused: false,
+      isBuffering: false
+    }
+  });
+  assert.equal(first.classList.contains("is-spotify-now-playing"), false);
+  assert.equal(
+    second.classList.contains("is-spotify-now-playing"),
+    true,
+    "a non-paused update resolving to the selected row confirms playback"
+  );
 });
 
 test("a superseded request cannot destroy the current album controller", async () => {
@@ -720,6 +945,27 @@ test("track rows expose stable identities and accessible playback status without
   assert.match(albumPresentation, /track-col-average/);
   assert.match(albumPresentation, /track-col-your-rating/);
   assert.match(albumPresentation, /track-preview-btn/);
+});
+
+test("album track controls target the single listening panel and start unpressed", () => {
+  for (const [fileName, source] of [
+    ["app.js", app],
+    ["bom-album.js", albumPresentation]
+  ]) {
+    assert.doesNotMatch(source, /albumTrackPreviewDock/, `${fileName} must not render a second player dock`);
+    assert.doesNotMatch(source, /getOrCreateReusableAlbumPreviewFrame/, `${fileName} must not retain the legacy preview iframe helper`);
+    const controls = source.match(
+      /<button\b[^>]*data-track-preview="true"[^>]*>/g
+    ) || [];
+    assert.ok(controls.length > 0, `${fileName} must render an album track control`);
+    controls.forEach((control) => {
+      assert.match(
+        control,
+        /aria-pressed="false"/,
+        `${fileName} track controls must not imply playback before Spotify confirms it`
+      );
+    });
+  }
 });
 
 test("responsive styling is subtle, animated only while playing, and respects reduced motion", () => {
