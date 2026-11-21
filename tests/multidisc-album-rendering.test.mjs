@@ -22,7 +22,9 @@ function renderTracks(media) {
     renderArtistCreditLinks: value => String(value),
     getSongAverage: () => null,
     getYourSongRating: () => null,
-    buildCompactTrackRatingControl: () => ""
+    buildCompactTrackRatingControl: () => "",
+    resolveAlbumTrackSpotifyId: ({ storedTrackId }) => storedTrackId || "",
+    buildAlbumTrackSpotifyAction: ({ title }) => `spotify-action-${title}`
   };
   vm.createContext(context);
   vm.runInContext(extract("function buildStageOneAlbumTrackModels", "function buildStageOneAlbumModel"), context);

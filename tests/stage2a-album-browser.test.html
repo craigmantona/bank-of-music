@@ -21,7 +21,7 @@
       <div class="track-col-number">${id}</div><div class="track-col-title"><strong>${title}</strong></div>
       <div class="bom-v1-track-time" data-label="Time">—</div><div class="track-col-average" data-label="Community"><strong>8.0</strong><span> / 10</span></div>
       <div class="track-col-your-rating" data-label="You"><span class="bom-v1-track-rating-slot">${control(id, rating)}</span></div>
-      <div class="track-col-actions"><button class="track-preview-btn" type="button">▶</button></div></div>`;
+      <div class="track-col-actions"><a class="spotify-open-externally-btn track-spotify-link" data-spotify-track-action="external" href="https://open.spotify.com/search/Track%20Artist" target="_blank" rel="noopener noreferrer">Search track in Spotify</a></div></div>`;
     function control(id, rating) {
       const rated = rating !== null;
       return `<details class="bom-v1-track-rating-control"><summary class="bom-v1-track-rating-trigger">${rated ? rating + " / 10" : "Rate +"}</summary>

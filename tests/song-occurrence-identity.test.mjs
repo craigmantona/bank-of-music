@@ -51,7 +51,9 @@ test("album track modelling selects the occurrence belonging to that album", () 
     escapeHtml: value => String(value),
     normaliseText: value => String(value || "").trim().replace(/\s+/g, " "),
     normaliseCompare: value => String(value || "").toLowerCase(),
-    renderArtistCreditLinks: value => String(value || "")
+    renderArtistCreditLinks: value => String(value || ""),
+    resolveAlbumTrackSpotifyId: ({ storedTrackId }) => storedTrackId || "",
+    buildAlbumTrackSpotifyAction: ({ title }) => `spotify-action-${title}`
   });
   vm.runInContext(extract("function buildStageOneAlbumTrackModels", "function buildStageOneAlbumModel"), context);
   const rows = context.buildStageOneAlbumTrackModels({

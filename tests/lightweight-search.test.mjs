@@ -42,7 +42,7 @@ test("submitted Search no longer waits for the full catalogue", () => {
 });
 
 test("selecting a result prevents the old search button from restoring scroll focus", () => {
-  const handler = app.slice(app.indexOf('globalSearchResults.addEventListener("click"'), app.indexOf("let spotifyAlbumWarmupKey"));
+  const handler = app.slice(app.indexOf('globalSearchResults.addEventListener("click"'), app.indexOf("function bindCardClicks"));
   const selection = handler.slice(handler.indexOf('const button = event.target.closest(".select-result-btn")'));
   assert.match(selection, /event\.preventDefault\(\)/);
   assert.match(selection, /event\.stopPropagation\(\)/);
