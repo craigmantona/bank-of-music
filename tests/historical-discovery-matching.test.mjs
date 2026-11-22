@@ -67,3 +67,10 @@ test("normalized title-and-artist matches with different recording identities re
   ];
   assert.equal(resolve({ title: "Example", artist: "Artist" }, songs), null);
 });
+
+test("explicit unresolved and ambiguous chart rows never inherit a catalogue identity", () => {
+  const song = { id: 60, title: "Example", artist: "Artist", canonical_song_id: "canonical-example", external_id: "recording-example" };
+  for (const match_status of ["unresolved", "ambiguous"]) {
+    assert.equal(resolve({ title: "Example", artist: "Artist", song_id: 60, canonical_song_id: "canonical-example", musicbrainz_recording_id: "recording-example", match_status }, [song]), null);
+  }
+});

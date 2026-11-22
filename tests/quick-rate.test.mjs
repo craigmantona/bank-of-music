@@ -430,6 +430,26 @@ test('Quick Rate resolves an imported chart entry through its canonical catalogu
   assert.equal(entry.canonicalRecording.id,'canonical-2026');
 });
 
+test('Quick Rate keeps unresolved and ambiguous chart identities out of canonical rating controls', () => {
+  const context = vm.createContext({
+    getCanonicalSongId: song => song.canonical_song_id || '',
+    getPreferredSongOccurrence: songs => songs[0] || null
+  });
+  vm.runInContext(extract('function buildImportedQuickRateYearModel', 'function getQuickRateEntryIdentity'), context);
+  const songs = [{id:44,title:'Placeholder',artist:'Artist',canonical_song_id:'placeholder'}];
+  const recordings = [{id:'placeholder',title:'Placeholder',artist:'Artist'}];
+  const rows = [
+    {id:1,chart_year:2026,title:'Unresolved',artist:'Artist',song_id:44,canonical_song_id:'placeholder',match_status:'unresolved'},
+    {id:2,chart_year:2026,title:'Ambiguous',artist:'Artist',song_id:44,canonical_song_id:'placeholder',match_status:'ambiguous'}
+  ];
+  const entries = context.buildImportedQuickRateYearModel(rows,songs,recordings,2026);
+  assert.deepEqual(Array.from(entries, entry => entry.status), ['unmatched','ambiguous']);
+  for (const entry of entries) {
+    assert.equal(entry.song, null);
+    assert.equal(entry.canonicalRecording, null);
+  }
+});
+
 test('Quick Rate reuses catalogue identities and existing BOM artist heroes in one load', async () => {
   const requests = [];
   const rows = {
@@ -538,14 +558,15 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
 
 test('Quick Rate artist navigation restores transient collection context through browser history', () => {
   const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
-  assert.match(quickRate, /async function openQuickRate\(restoredState = null\)/);
+  assert.match(quickRate, /async function openQuickRate\(restoredState = null, \{ collectionHistoryOwned = false \} = \{\}\)/);
   assert.match(quickRate, /restoredState\?\.selectedCollection === "uk-singles"[\s\S]*?restoredState\?\.selectedCollection \|\| "uk-number-ones"/);
   assert.match(quickRate, /selectedYear = restoredState\?\.selectedYear \?\? null/);
   assert.match(quickRate, /selectedFilter = restoredState\?\.selectedFilter === "unrated" \? "unrated" : "all"/);
   assert.match(quickRate, /scrollTop: dialog\.scrollTop/);
   assert.match(quickRate, /originIdentity: originRow\?\.dataset\.quickIdentity \|\| expandedIdentity/);
   assert.match(quickRate, /window\.history\.replaceState\([\s\S]*?bomQuickRate:/);
-  assert.match(quickRate, /window\.history\.pushState\(\{ bomQuickRateArtist: true \}/);
+  assert.match(quickRate, /window\.history\.pushState\(\{[\s\S]*?bomQuickRateArtist: true,[\s\S]*?bomQuickRateCollection: selectedCollection,[\s\S]*?bomQuickRateArtistName: artistName,[\s\S]*?bomQuickRateArtistId: artistId,[\s\S]*?bomQuickRateArtistToken: restoreToken/);
+  assert.match(quickRate, /getItemDeepLinkUrl\(artistDestination\)/);
   assert.match(quickRate, /loadSelectedQuickRateYear\(selectedYear\)/);
   assert.match(extract('function mapQuickRateYearProjection', 'async function loadQuickRateCore'), /quickRateYearCache\.has\(key\)/);
   assert.match(quickRate, /dialog\.scrollTop = restoredState\.scrollTop/);
@@ -554,7 +575,8 @@ test('Quick Rate artist navigation restores transient collection context through
 
   const popstate = extract('window.addEventListener("popstate"', 'window.addEventListener("click", (event) =>');
   assert.match(popstate, /event\.state\?\.bomQuickRate/);
-  assert.match(popstate, /await openQuickRate\(event\.state\.bomQuickRate\)/);
+  assert.match(popstate, /await openQuickRate\(event\.state\.bomQuickRate, \{\s*collectionHistoryOwned: Boolean\(event\.state\.bomQuickRateCollectionView\)\s*\}\)/);
+  assert.match(popstate, /event\.state\?\.bomQuickRateArtist && event\.state\.bomQuickRateArtistName\)[\s\S]*?bomQuickRateArtistToken[\s\S]*?isCurrentArtistDestination[\s\S]*?window\.setTimeout\(resolve, 0\)[\s\S]*?await window\.openArtistPage[\s\S]*?if \(!isCurrentArtistDestination\(\)\) return/);
   assert.match(popstate, /return;/);
 });
 

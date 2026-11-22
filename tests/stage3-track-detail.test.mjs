@@ -96,7 +96,7 @@ test("song navigation paints before targeted album hydration and never blocks on
 });
 
 test("shared song transition resets scroll before paint and suppresses repeated taps", () => {
-  const transition = app.match(/async function openSongDetail\(song, trigger = null\) \{[\s\S]*?\n\}/)?.[0] || "";
+  const transition = app.match(/async function openSongDetail\(song, trigger = null, \{ force = false \} = \{\}\) \{[\s\S]*?\n\}/)?.[0] || "";
   assert.match(transition, /pendingSongNavigationKey === key/);
   assert.ok(transition.indexOf('showOnlySection("detailSection")') < transition.indexOf("const renderPromise = renderSelectedItem()"));
   assert.ok(transition.indexOf("focus({ preventScroll: true })") < transition.indexOf("await renderPromise"));

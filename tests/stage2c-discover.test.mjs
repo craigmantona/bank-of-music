@@ -14,7 +14,7 @@ const [html, app, foundation, discover, styles] = await Promise.all([
 test("Stage 2C loads only with the opt-in Stage 1 assets", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
   assert.match(html, /bom-foundation\.js\?v=11/);
-  assert.match(html, /bom-discover\.js\?v=15&history=9&bond=2/);
+  assert.match(html, /bom-discover\.js\?v=16&history=10&bond=2/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMDiscoverUI/);
   assert.match(app, /window\.BOMDiscoverUI\.render\(buildStageOneDiscoverModel\(\)\)/);
 });

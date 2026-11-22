@@ -34,7 +34,7 @@ test("homepage rotates the complete historical feature in place every ten second
     assert.match(source, /title\.textContent=item\.title/);
     assert.match(source, /copy\.textContent=`\$\{item\.artist\} · \$\{item\.chart_year\}/);
     assert.match(source, /action\.dataset\.bomFeaturedHistoryId=item\.id/);
-    assert.match(source, /openHistoricalDetail\(item,\{origin:"feature"\}\)/);
+    assert.match(source, /openHistoricalDetail\(item,\{origin:"feature",trigger:featured\}\)/);
     assert.match(source, /A historical UK chart-topper from this calendar week\./);
   }
 });

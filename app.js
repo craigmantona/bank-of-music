@@ -500,11 +500,11 @@ function markSongNavigation(trigger, active) {
   else trigger.removeAttribute("aria-busy");
 }
 
-async function openSongDetail(song, trigger = null) {
+async function openSongDetail(song, trigger = null, { force = false } = {}) {
   if (!song) return;
   const songId = Number(song.id || song.savedSongId || song.songId || 0);
   const key = songId ? `song:${songId}` : `recording:${song.external_id || song.externalId || ""}`;
-  if (pendingSongNavigationKey === key || (lastSongNavigationKey === key && Date.now() - lastSongNavigationAt < 700)) return;
+  if (!force && (pendingSongNavigationKey === key || (lastSongNavigationKey === key && Date.now() - lastSongNavigationAt < 700))) return;
   pendingSongNavigationKey = key;
   lastSongNavigationKey = key;
   lastSongNavigationAt = Date.now();
@@ -592,6 +592,7 @@ function showOnlySection(targetId) {
   authentication, Spotify, rating, review or catalogue behaviour.
 */
 function resolveHistoricalSongCandidate(row, sources, artworkForSong = () => "") {
+  if (["ambiguous", "unresolved"].includes(String(row?.match_status || "").toLowerCase())) return null;
   const directSong = sources.songsById.get(Number(row.song_id));
   const canonicalCandidates = sources.songsByCanonicalId.get(String(row.canonical_song_id || "").trim()) || [];
   const recordingCandidates = sources.songsByRecordingId.get(String(row.musicbrainz_recording_id || "").trim()) || [];
@@ -1107,6 +1108,36 @@ async function syncChristmasNumberOnePublicEntry() {
   finally { christmasNumberOnePublicSync = null; }
 }
 
+function openUKNumberOnesCollection({ fromHistory = false } = {}) {
+  if (!fromHistory) {
+    window.history.replaceState({
+      ...(window.history.state || {}),
+      bomQuickRate: null,
+      bomQuickRateCollection: null,
+      bomQuickRateTrack: false,
+      bomQuickRateArtist: false,
+      bomQuickRateCollectionView: false,
+      bomHistoricalDetail: false,
+      historicalId: null,
+      historicalOrigin: null,
+      bomHistoricalList: false,
+      bomNumberOneTrack: false,
+      bomNumberOneSongId: null,
+      bomNumberOneOrigin: null,
+      bomDiscover: true,
+      scrollY: window.scrollY
+    }, "", window.location.href);
+    window.history.pushState({
+      bomQuickRateCollectionView: true,
+      bomQuickRateCollection: "uk-number-ones"
+    }, "", window.location.href);
+  }
+  return openQuickRate(
+    { selectedCollection: "uk-number-ones" },
+    { collectionHistoryOwned: true }
+  );
+}
+
 window.BOMPresentationBridge = Object.freeze({
   showSection: async (sectionId) => {
     if (sectionId === "adminSection") {
@@ -1128,6 +1159,7 @@ window.BOMPresentationBridge = Object.freeze({
     renderRecommendations();
   },
   showQuickRate: () => openQuickRate(),
+  showUKNumberOnes: () => openUKNumberOnesCollection(),
   showHigherLower: () => openHigherLower(),
   loadHigherLowerPool: mode => loadHigherLowerPool(mode),
   openHigherLowerItem: (mode, itemId) => openHigherLowerItem(mode, itemId),
@@ -4541,7 +4573,23 @@ function getSelectedArtistIdFallback(artistName = "") {
 }
 
 function buildSelectedBackButton() {
-  const label = previousSectionId === "librarySection" ? "Back to ratings" : previousSectionId === "adminSection" ? "Back to admin" : "Back to search";
+  const navigationState = window.history?.state || {};
+  const quickRateCollection = navigationState.bomQuickRateCollection;
+  const label = navigationState.bomNumberOneTrack
+    ? navigationState.bomNumberOneOrigin === "feature"
+      ? "Back to Discover"
+      : navigationState.bomNumberOneOrigin === "quick-rate"
+        ? "Back to All UK No. 1s"
+        : "Back to UK No. 1s This Week"
+    : quickRateCollection === "uk-number-ones"
+    ? "Back to All UK No. 1s"
+    : quickRateCollection === "bom-tracks"
+      ? "Back to BOM Tracks by Year"
+      : previousSectionId === "librarySection"
+        ? "Back to ratings"
+        : previousSectionId === "adminSection"
+          ? "Back to admin"
+          : "Back to search";
   return `
     <button type="button" class="selected-back-btn" data-back-to-previous="true">
       ← ${escapeHtml(label)}
@@ -13236,17 +13284,20 @@ function buildQuickRateYearModel(entries, songs) {
 
 function buildImportedQuickRateYearModel(rows, songs, canonicalRecordings, year = null) {
   return (rows || []).filter(row => year === null || Number(row.chart_year) === Number(year)).map(row => {
-    const directSong = row.song_id ? songs.find(candidate => Number(candidate.id) === Number(row.song_id) && !candidate.is_deleted) : null;
+    const matchStatus = String(row.match_status || "").toLowerCase();
+    const isAmbiguous = matchStatus === "ambiguous";
+    const isUnresolved = matchStatus === "unresolved";
+    const directSong = !isAmbiguous && !isUnresolved && row.song_id ? songs.find(candidate => Number(candidate.id) === Number(row.song_id) && !candidate.is_deleted) : null;
     const canonicalSongs = !directSong && row.canonical_song_id
       ? songs.filter(candidate => !candidate.is_deleted && getCanonicalSongId(candidate) === row.canonical_song_id)
       : [];
-    const song = directSong || getPreferredSongOccurrence(canonicalSongs);
-    const canonicalRecording = row.canonical_song_id
+    const song = isAmbiguous || isUnresolved ? null : directSong || getPreferredSongOccurrence(canonicalSongs);
+    const canonicalRecording = !isAmbiguous && !isUnresolved && row.canonical_song_id
       ? canonicalRecordings.find(candidate => candidate.id === row.canonical_song_id)
       : null;
     return {
       ...row,
-      status: canonicalRecording || song ? "matched" : row.match_status === "ambiguous" ? "ambiguous" : "unmatched",
+      status: isAmbiguous ? "ambiguous" : isUnresolved ? "unmatched" : canonicalRecording || song ? "matched" : "unmatched",
       song: song || null,
       canonicalRecording: canonicalRecording || null,
       matchMethod: row.match_method || ""
@@ -13738,14 +13789,49 @@ async function loadQuickRateAlbums() {
   }
 }
 
-async function openQuickRate(restoredState = null) {
-  if (!currentUser || document.getElementById("bomQuickRate")) return;
+function bindQuickRateCloseNavigation(dialog, { collectionHistoryOwned = false } = {}) {
+  let returnToCollectionOrigin = false;
+  let preserveRestorationState = false;
+  const requestClose = () => {
+    returnToCollectionOrigin = collectionHistoryOwned;
+    dialog.close();
+  };
+  dialog.replaceQuickRateState = () => {
+    preserveRestorationState = true;
+    dialog.close();
+  };
+  dialog.addEventListener("cancel", () => {
+    returnToCollectionOrigin = collectionHistoryOwned;
+  });
+  dialog.addEventListener("close", () => {
+    if (!preserveRestorationState && window.history.state?.bomQuickRate) {
+      window.history.replaceState({ ...window.history.state, bomQuickRate: null }, "", window.location.href);
+    }
+    dialog.remove();
+    if (returnToCollectionOrigin) window.history.back();
+  });
+  dialog.querySelector("[data-quick-exit]").onclick = requestClose;
+}
+
+function prepareQuickRateDialog(restoredState = null) {
+  const existingDialog = document.getElementById("bomQuickRate");
+  if (existingDialog?.open) {
+    if (!restoredState) return false;
+    if (typeof existingDialog.replaceQuickRateState === "function") existingDialog.replaceQuickRateState();
+    else existingDialog.close();
+  }
+  existingDialog?.remove();
+  return true;
+}
+
+async function openQuickRate(restoredState = null, { collectionHistoryOwned = false } = {}) {
+  if (!currentUser || !prepareQuickRateDialog(restoredState)) return;
   const userId = currentUser.id;
   const dialog = document.createElement("dialog");
   dialog.id = "bomQuickRate";
   dialog.className = "bom-v1-quick-rate bom-v1-album";
   dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
-  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK No.1s</h1><p class="bom-v1-quick-subtitle" data-quick-subtitle>Rate every UK chart-topper from 1952 to today</p></div><button type="button" data-quick-exit>Exit</button></header>
+  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK No.1s</h1><p class="bom-v1-quick-subtitle" data-quick-subtitle>Browse every UK chart-topper from 1952 to today and rate verified recordings</p></div><button type="button" data-quick-exit>Exit</button></header>
     <div data-quick-collections role="group" aria-label="Choose a Quick Rate collection"><button type="button" data-quick-collection="bom-tracks" aria-pressed="false">BOM Tracks by Year</button><button type="button" data-quick-collection="uk-number-ones" aria-pressed="true">UK No.1s</button></div>
     <nav data-quick-years aria-label="Choose a UK singles year"></nav>
     <div data-quick-card></div><p data-quick-status role="status">Loading UK No.1s…</p>`;
@@ -13763,8 +13849,7 @@ async function openQuickRate(restoredState = null) {
   let lastNavigatedIdentity = restoredState?.lastNavigatedIdentity || null;
   let restorePositionPending = Boolean(restoredState);
   let loadSequence = 0;
-  dialog.addEventListener("close", () => dialog.remove());
-  dialog.querySelector("[data-quick-exit]").onclick = () => dialog.close();
+  bindQuickRateCloseNavigation(dialog, { collectionHistoryOwned });
   dialog.showModal();
 
   function render(focus = false) {
@@ -13783,7 +13868,7 @@ async function openQuickRate(restoredState = null) {
     dialog.querySelectorAll("[data-quick-collection]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.quickCollection === selectedCollection)));
     dialog.querySelector("#bomQuickRateTitle").textContent = isNumberOnes ? "UK No.1s" : "BOM Tracks by Year";
     dialog.querySelector("[data-quick-subtitle]").textContent = isNumberOnes
-      ? "Rate every UK chart-topper from 1952 to today"
+      ? "Browse every UK chart-topper from 1952 to today and rate verified recordings"
       : "Explore and rate the BOM catalogue by original release year";
     if (selectedYear === null) {
       dialog.querySelector("[data-quick-years]").innerHTML = '<p class="bom-v1-quick-years-loading">Loading available years…</p>';
@@ -13981,8 +14066,8 @@ async function openQuickRate(restoredState = null) {
       if (!entry || busy) return;
       const restoreState = {selectedCollection,selectedYear,selectedFilter,pickerDecade,expandedIdentity,lastNavigatedIdentity,scrollTop:dialog.scrollTop};
       window.history.replaceState({...(window.history.state||{}),bomQuickRate:restoreState},"",window.location.href);
-      dialog.close();
       window.BOMDiscoverUI?.openHistoricalDetail?.(entry,{origin:"quick-rate"});
+      dialog.close();
       return;
     }
     const expandButton = event.target.closest("[data-quick-expand]");
@@ -14002,7 +14087,7 @@ async function openQuickRate(restoredState = null) {
       const restoreToken = `quick-rate-${Date.now()}-${Math.random().toString(36).slice(2)}`;
       quickRateHistoryRestore = {token:restoreToken,data:{songs,albums,artistIdentities,canonicalRecordings,importedEntries}};
       window.history.replaceState({...(window.history.state||{}),bomQuickRate:{...restoreState,restoreToken}},"",window.location.href);
-      window.history.pushState({bomQuickRateTrack:true},"",window.location.href);
+      window.history.pushState({bomQuickRateTrack:true,bomQuickRateCollection:selectedCollection,bomQuickRateSongId:songId},"",window.location.href);
       dialog.close();
       await window.BOMPresentationBridge?.openTrackById(songId,trackButton);
       return;
@@ -14029,7 +14114,21 @@ async function openQuickRate(restoredState = null) {
         data: { songs, albums, artistIdentities, canonicalRecordings, importedEntries }
       };
       window.history.replaceState({ ...(window.history.state || {}), bomQuickRate: { ...restoreState, restoreToken } }, "", window.location.href);
-      window.history.pushState({ bomQuickRateArtist: true }, "", window.location.href);
+      const artistDestination = {
+        type: "artist",
+        title: artistName,
+        name: artistName,
+        artist: artistName,
+        externalId: artistId,
+        artistId
+      };
+      window.history.pushState({
+        bomQuickRateArtist: true,
+        bomQuickRateCollection: selectedCollection,
+        bomQuickRateArtistName: artistName,
+        bomQuickRateArtistId: artistId,
+        bomQuickRateArtistToken: restoreToken
+      }, "", getItemDeepLinkUrl(artistDestination));
       dialog.close();
       await window.openArtistPage(artistName, artistId);
       return;
@@ -18873,10 +18972,50 @@ window.toggleReviewEditor = function () {
 window.addEventListener("popstate", async (event) => {
   if (event.state?.bomQuickRate) {
     selectedItem = null;
-    await openQuickRate(event.state.bomQuickRate);
+    await openQuickRate(event.state.bomQuickRate, {
+      collectionHistoryOwned: Boolean(event.state.bomQuickRateCollectionView)
+    });
     return;
   }
   document.getElementById("bomQuickRate")?.close();
+  if (event.state?.bomQuickRateCollectionView && event.state.bomQuickRateCollection === "uk-number-ones") {
+    await openUKNumberOnesCollection({ fromHistory: true });
+    return;
+  }
+  if (isStageOnePresentation() && event.state?.bomQuickRateTrack) {
+    const song = allSongs.find((item) => Number(item.id) === Number(event.state.bomQuickRateSongId));
+    if (song) {
+      await openSongDetail(song, null, { force: true });
+      showOnlySection("detailSection");
+      return;
+    }
+  }
+  if (isStageOnePresentation() && event.state?.bomQuickRateArtist && event.state.bomQuickRateArtistName) {
+    const artistName = String(event.state.bomQuickRateArtistName);
+    const artistId = String(event.state.bomQuickRateArtistId || "");
+    const artistToken = String(event.state.bomQuickRateArtistToken || "");
+    const isCurrentArtistDestination = () => {
+      const state = window.history.state;
+      return Boolean(state?.bomQuickRateArtist)
+        && String(state.bomQuickRateArtistName || "") === artistName
+        && String(state.bomQuickRateArtistId || "") === artistId
+        && (!artistToken || String(state.bomQuickRateArtistToken || "") === artistToken);
+    };
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+    if (!isCurrentArtistDestination()) return;
+    await window.openArtistPage(artistName, artistId);
+    if (!isCurrentArtistDestination()) return;
+    showOnlySection("detailSection");
+    return;
+  }
+  if (isStageOnePresentation() && event.state?.bomNumberOneTrack) {
+    const song = allSongs.find((item) => Number(item.id) === Number(event.state.bomNumberOneSongId));
+    if (song) {
+      await openSongDetail(song, null, { force: true });
+      showOnlySection("detailSection");
+      return;
+    }
+  }
   if (isStageOnePresentation() && event.state?.bomDiscover) {
     selectedItem = null;
     showOnlySection("recommendationsSection");

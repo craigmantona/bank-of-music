@@ -54,7 +54,7 @@ test("the presentation bridge and Discover helpers initialize outside section na
   assert.ok(discoverRenderStart > helperStart, "Discover should call an in-scope helper");
   assert.ok(readyEventStart > spotifyStateStart, "the bridge must not signal ready while later state is in its temporal dead zone");
   assert.ok(readyEventStart > initialDiscoverStart, "the bridge should signal ready after selecting the initial section");
-  assert.match(html, /app\.js\?v=197&autocomplete=2&search-autosave=1&listening-ui=6/);
+  assert.match(html, /app\.js\?v=198&autocomplete=2&search-autosave=1&listening-ui=6/);
 });
 
 test("the real Stage 1 Discover renderer can call its helper before any navigation", () => {
