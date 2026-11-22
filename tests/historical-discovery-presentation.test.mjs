@@ -94,7 +94,7 @@ test("provisional summaries are batched and writes suppress duplicate interactio
   assert.match(app, /offset \+= 250/);
   assert.match(app, /p_chart_entry_ids: batch/);
   assert.match(discover, /historicalRatingPending/);
-  assert.match(discover, /if\(ratingButton&&historicalDetailItem&&!historicalRatingPending\)/);
+  assert.match(discover, /if\(ratingButton&&historicalDetailItem&&canRateHistoricalEntry\(historicalDetailItem\)&&!historicalRatingPending\)/);
   assert.match(discover, /Saving…/);
   assert.match(discover, /result\?\.ok/);
 });
@@ -115,6 +115,6 @@ test("historical detail replaces only the legacy recommendation heading", () => 
   assert.match(heading, /UK No\.1s — Music History/);
   assert.match(heading, /verified chart stories that reached No\.1/);
   assert.match(heading, /Recommended Albums/);
-  assert.match(discover, /setHistoricalDetailHeading\(true\);[\s\S]*?root\.innerHTML=historicalDetail\(item\)/);
+  assert.match(discover, /setHistoricalDetailHeading\(true\);[\s\S]*?root\.innerHTML=historicalDetail\(item,\{origin\}\)/);
   assert.match(discover, /if\(!root\.querySelector\?\.\("\.bom-v1-historical-detail"\)\)setHistoricalDetailHeading\(false\)/);
 });

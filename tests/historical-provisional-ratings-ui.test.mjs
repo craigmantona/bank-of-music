@@ -83,10 +83,11 @@ test("historical panel distinguishes unrated from zero and supports logged-out r
     addEventListener() {}, history: { state: null, replaceState() {}, pushState() {} }, location: { href: "http://localhost/" }
   };
   vm.runInNewContext(discover, { window, document, URL, Math, Map, Set, Number, String });
-  const panel = window.BOMDiscoverHelpers.historicalRatingPanel({ provisionalRatingSummary: { communityAverage: 0, communityRatingCount: 1, personalRating: 0 } });
+  const unresolved = { match_status: "unresolved", song_id: null, resolvedSongId: null };
+  const panel = window.BOMDiscoverHelpers.historicalRatingPanel({ ...unresolved, provisionalRatingSummary: { communityAverage: 0, communityRatingCount: 1, personalRating: 0 } });
   assert.match(panel, /<strong>0 \/ 10<\/strong>/);
   assert.match(panel, /aria-pressed="true"[^>]*>0<\/button>/);
   assert.doesNotMatch(panel, /<strong>Not rated<\/strong>/);
   window.BOMPresentationBridge.getState = () => ({ authenticated: false });
-  assert.match(window.BOMDiscoverHelpers.historicalRatingPanel({}), /Sign in to add your historical rating/);
+  assert.match(window.BOMDiscoverHelpers.historicalRatingPanel(unresolved), /Sign in to add your historical rating/);
 });
