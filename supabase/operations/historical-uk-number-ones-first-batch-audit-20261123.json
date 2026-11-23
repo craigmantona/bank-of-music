@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "artifact": "historical-uk-number-ones-first-batch-audit",
+  "status": "proposed_not_executed",
+  "snapshot_date": "2026-11-23",
+  "captured_at": "2026-11-23T13:13:49.685207Z",
+  "baseline": {
+    "total_chart_entries": 1298,
+    "resolved_chart_entries": 415,
+    "unresolved_chart_entries": 883
+  },
+  "production_integrity": {
+    "catalogue": {
+      "albums": 1730,
+      "songs": 16161,
+      "canonical_recordings": 17095,
+      "duplicate_canonical_recording_mbids": 0
+    },
+    "song_ratings": {
+      "rows": 1746,
+      "canonical_rows": 976,
+      "legacy_rows": 770,
+      "sum": 13446,
+      "invalid_rows": 0
+    },
+    "provisional_chart_entry_ratings": {
+      "rows": 5,
+      "sum": 43
+    }
+  },
+  "identity_classification": {
+    "verified_existing_link": 3,
+    "verified_catalogue_import": 1,
+    "ambiguous_or_insufficient_version_evidence": 879
+  },
+  "rating_exposure": {
+    "unrated_entries": 791,
+    "placeholder_canonical_rated": {
+      "entries": 89,
+      "rows": 89
+    },
+    "provisional_chart_entry_rated": {
+      "entries": 5,
+      "rows": 5
+    },
+    "entries_present_in_both_rating_stores": 2,
+    "rating_bearing_entries": 92
+  },
+  "raw_leads": {
+    "before_batch": {
+      "unique_normalized_mbid_identities": 9,
+      "multiple_normalized_mbid_identities": 1,
+      "no_normalized_mbid_lead": 873
+    },
+    "remaining_after_proposed_batch": {
+      "unverified_unique_normalized_mbid_leads": 6,
+      "multiple_normalized_mbid_identities": 1,
+      "no_normalized_mbid_lead": 872
+    }
+  },
+  "selection_policy": {
+    "default_order": "recent-first by chart year for unrated verified entries",
+    "exception": "Papa Don't Preach is an explicit rated reconciliation pilot and is placed last",
+    "batch_chart_ids": [2498, 2456, 1975, 486]
+  },
+  "proposed_batch": [
+    {
+      "batch_order": 1,
+      "classification": "verified_catalogue_import",
+      "priority_reason": "recent_first",
+      "lead_state": "no_normalized_mbid_lead",
+      "chart_entry": {
+        "id": 2498,
+        "source_entry_key": "2025:1434:lola young:messy",
+        "chart_year": 2025,
+        "title": "Messy",
+        "artist": "Lola Young",
+        "placeholder_canonical_id": "5aff2430-94b5-41be-9775-c228e67b2afb"
+      },
+      "target": {
+        "canonical_id": "5aff2430-94b5-41be-9775-c228e67b2afb",
+        "canonical_action": "preserve_existing_id",
+        "song_id": null,
+        "song_action": "insert_new",
+        "stored_title": "Messy",
+        "stored_artist": "Lola Young",
+        "recording_id": "0ae5ee0e-084e-458b-87ba-76cef24cfff3",
+        "album_id": null,
+        "album": {
+          "action": "insert_new",
+          "title": "This Wasn’t Meant for You Anyway",
+          "release_id": "48351084-aeb6-4a12-a8e7-eb166df6f47f",
+          "release_group_id": "1f428f20-2d3b-4535-a11d-85d28aa37203",
+          "country": "XW",
+          "release_date": "2024-06-21"
+        }
+      },
+      "release_evidence": {
+        "release_id": "48351084-aeb6-4a12-a8e7-eb166df6f47f",
+        "release_group_id": "1f428f20-2d3b-4535-a11d-85d28aa37203",
+        "track_position": 5,
+        "duration_ms": 284066,
+        "isrc": "GBUM72401610"
+      },
+      "rating_state": {
+        "state": "unrated",
+        "rating_rows": 0,
+        "requires_rating_preserving_reconciliation": false
+      },
+      "sources": {
+        "official_charts": "https://www.officialcharts.com/songs/lola-young-messy/",
+        "musicbrainz_recording": "https://musicbrainz.org/recording/0ae5ee0e-084e-458b-87ba-76cef24cfff3",
+        "musicbrainz_release": "https://musicbrainz.org/release/48351084-aeb6-4a12-a8e7-eb166df6f47f",
+        "musicbrainz_release_group": "https://musicbrainz.org/release-group/1f428f20-2d3b-4535-a11d-85d28aa37203"
+      }
+    },
+    {
+      "batch_order": 2,
+      "classification": "verified_existing_link",
+      "priority_reason": "recent_first",
+      "lead_state": "unique_normalized_mbid_identity",
+      "chart_entry": {
+        "id": 2456,
+        "source_entry_key": "2021:1382:little mix:sweet melody",
+        "chart_year": 2021,
+        "title": "Sweet Melody",
+        "artist": "Little Mix",
+        "placeholder_canonical_id": "832ec4da-357a-4d99-94c0-a28b904a3b86"
+      },
+      "target": {
+        "song_id": 20308,
+        "canonical_id": "a98ca8b6-da4d-462d-ac3f-2e08da73f93b",
+        "stored_title": "Sweet Melody",
+        "stored_artist": "Little Mix",
+        "recording_id": "ece5f285-c5c4-4080-a28d-70409fb802fe",
+        "album_id": 1875
+      },
+      "release_evidence": {
+        "release_id": "3907c437-a144-433b-aff7-b172d45a2f3c",
+        "release_group_id": "1a06adad-a1f9-4c1f-8a99-8ad2ea5be289",
+        "track_position": 3,
+        "duration_ms": 213693,
+        "isrc": "GBHMU2000062"
+      },
+      "rating_state": {
+        "state": "unrated",
+        "rating_rows": 0,
+        "requires_rating_preserving_reconciliation": false
+      },
+      "sources": {
+        "official_charts": "https://www.officialcharts.com/songs/little-mix-sweet-melody/",
+        "musicbrainz_recording": "https://musicbrainz.org/recording/ece5f285-c5c4-4080-a28d-70409fb802fe",
+        "musicbrainz_release": "https://musicbrainz.org/release/3907c437-a144-433b-aff7-b172d45a2f3c",
+        "musicbrainz_release_group": "https://musicbrainz.org/release-group/1a06adad-a1f9-4c1f-8a99-8ad2ea5be289"
+      }
+    },
+    {
+      "batch_order": 3,
+      "classification": "verified_existing_link",
+      "priority_reason": "recent_first",
+      "lead_state": "unique_normalized_mbid_identity",
+      "chart_entry": {
+        "id": 1975,
+        "source_entry_key": "2015:1298:charlie puth meghan trainor:marvin gaye",
+        "chart_year": 2015,
+        "title": "Marvin Gaye",
+        "artist": "Charlie Puth featuring Meghan Trainor",
+        "placeholder_canonical_id": "8387dca0-8cb2-40d2-a72b-ddf0c3da66d5"
+      },
+      "target": {
+        "song_id": 19302,
+        "canonical_id": "694b6994-1780-4f45-bca5-e29e5b62c289",
+        "stored_title": "Marvin Gaye",
+        "stored_artist": "Charlie PuthMeghan Trainor",
+        "metadata_note": "The exact existing BOM artist credit is malformed and is guarded as stored; this proposal does not silently rewrite catalogue metadata.",
+        "recording_id": "b6ce4adc-5aa2-41d1-8e60-5e4c5bdff371",
+        "album_id": 1486
+      },
+      "release_evidence": {
+        "release_id": "6091a9cd-a772-47b9-8082-727facacc97b",
+        "release_group_id": "3c82ff29-b9f1-4348-b20e-11d24d295845",
+        "track_position": 3,
+        "duration_ms": 190453,
+        "isrc": "USAT21500254"
+      },
+      "rating_state": {
+        "state": "unrated",
+        "rating_rows": 0,
+        "requires_rating_preserving_reconciliation": false
+      },
+      "sources": {
+        "official_charts": "https://www.officialcharts.com/songs/charlie-puth-ft-meghan-trainor-marvin-gaye/",
+        "musicbrainz_recording": "https://musicbrainz.org/recording/b6ce4adc-5aa2-41d1-8e60-5e4c5bdff371",
+        "musicbrainz_release": "https://musicbrainz.org/release/6091a9cd-a772-47b9-8082-727facacc97b",
+        "musicbrainz_release_group": "https://musicbrainz.org/release-group/3c82ff29-b9f1-4348-b20e-11d24d295845"
+      }
+    },
+    {
+      "batch_order": 4,
+      "classification": "verified_existing_link",
+      "priority_reason": "explicit_rated_pilot",
+      "lead_state": "unique_normalized_mbid_identity",
+      "chart_entry": {
+        "id": 486,
+        "source_entry_key": "1986:573:madonna:papa don t preach",
+        "chart_year": 1986,
+        "title": "Papa Don't Preach",
+        "artist": "Madonna",
+        "placeholder_canonical_id": "a4a08d9e-2a24-4afb-adee-a2d196141b5b"
+      },
+      "target": {
+        "song_id": 20169,
+        "canonical_id": "2a602676-3db2-44c2-9446-d2068410953c",
+        "stored_title": "Papa Don’t Preach",
+        "stored_artist": "Madonna",
+        "recording_id": "cc63a878-8663-41ea-884e-873625b6af68",
+        "album_id": 1570
+      },
+      "release_evidence": {
+        "release_id": "63180ccf-ac86-40ab-bcef-40b3df8dc385",
+        "release_group_id": "eb9c3e50-cfa9-3502-af63-41d39c4c3fa6",
+        "track_position": 1,
+        "duration_ms": 269000
+      },
+      "chart_version_evidence": {
+        "release_id": "b03043fe-52e6-49b9-90da-8e1ea15d78cd",
+        "status": "Official",
+        "country": "GB",
+        "release_date": "1986-06-16",
+        "catalogue_number": "W 8636",
+        "track_position": 1,
+        "duration_ms": 267000,
+        "recording_id": "cc63a878-8663-41ea-884e-873625b6af68"
+      },
+      "rating_state": {
+        "state": "copyable_rated_placeholder",
+        "copyable_rows": 1,
+        "requires_rating_preserving_reconciliation": true
+      },
+      "sources": {
+        "official_charts": "https://www.officialcharts.com/songs/madonna-papa-dont-preach/",
+        "musicbrainz_recording": "https://musicbrainz.org/recording/cc63a878-8663-41ea-884e-873625b6af68",
+        "musicbrainz_chart_single_release": "https://musicbrainz.org/release/b03043fe-52e6-49b9-90da-8e1ea15d78cd",
+        "musicbrainz_release": "https://musicbrainz.org/release/63180ccf-ac86-40ab-bcef-40b3df8dc385",
+        "musicbrainz_release_group": "https://musicbrainz.org/release-group/eb9c3e50-cfa9-3502-af63-41d39c4c3fa6"
+      }
+    }
+  ],
+  "expected_deltas": {
+    "albums": 1,
+    "songs": 1,
+    "canonical_recordings": 0,
+    "historical_chart_links": 4
+  },
+  "proposed_result": {
+    "resolved_delta": 4,
+    "resolved_chart_entries": 419,
+    "remaining_unresolved_chart_entries": 879
+  }
+}
