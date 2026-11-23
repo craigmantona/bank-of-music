@@ -26,10 +26,11 @@ test('year loads are cached, deduplicated, retryable and rating-cache safe', () 
   const loader = app.slice(app.indexOf('async function loadQuickRateYearData'), app.indexOf('async function loadQuickRateCore'));
   assert.match(loader, /quickRateYearCache\.has\(key\)/);
   assert.match(loader, /quickRateYearPromises\.has\(key\)/);
-  assert.match(loader, /allSongRatings\.filter\(row => row\.user_id === userId\)/);
+  assert.match(loader, /cacheGeneration !== quickRateYearCacheGeneration[\s\S]*?loadQuickRateYearData\(collection, requestedYear, userId\)/);
   assert.match(loader, /finally[\s\S]*?quickRateYearPromises\.delete\(key\)/);
   assert.doesNotMatch(loader, /catch[\s\S]*?quickRateYearCache\.set/);
   const open = app.slice(app.indexOf('async function openQuickRate'), app.indexOf('window.handleQuickRateClick'));
+  assert.match(open, /mergeQuickRateUserRatings\([\s\S]*?loaded\.ratings,[\s\S]*?loaded\.importedEntries/);
   assert.match(open, /previousRating === null && overallProgressOverride/);
   assert.match(open, /removed && hadRating && overallProgressOverride/);
 });

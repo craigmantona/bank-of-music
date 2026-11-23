@@ -3212,6 +3212,8 @@ function upsertLocalSongRating(songId, rating, canonicalSongId = "") {
 
   }
 
+  if (typeof invalidateQuickRateYearDataCache === "function") invalidateQuickRateYearDataCache();
+
 }
 
 
@@ -3228,6 +3230,8 @@ function removeLocalSongRating(songId) {
 
   );
 
+  if (typeof invalidateQuickRateYearDataCache === "function") invalidateQuickRateYearDataCache();
+
 }
 
 function removeLocalCanonicalRating(canonicalSongId) {
@@ -3240,6 +3244,7 @@ function removeLocalCanonicalRating(canonicalSongId) {
       row.canonical_song_id === canonicalSongId || occurrenceIds.has(Number(row.song_id))
     )
   ));
+  if (typeof invalidateQuickRateYearDataCache === "function") invalidateQuickRateYearDataCache();
 }
 
 
@@ -13659,6 +13664,36 @@ let quickRateAlbumsCache = null;
 let quickRateAlbumsPromise = null;
 const quickRateYearCache = new Map();
 const quickRateYearPromises = new Map();
+let quickRateYearCacheGeneration = 0;
+
+function invalidateQuickRateYearDataCache() {
+  quickRateYearCacheGeneration += 1;
+  quickRateYearCache.clear();
+  quickRateYearPromises.clear();
+}
+
+function getQuickRateRatingRowIdentity(row) {
+  if (row?.canonical_song_id) return `canonical:${row.canonical_song_id}`;
+  const songId = Number(row?.song_id);
+  return Number.isSafeInteger(songId) && songId > 0 ? `song:${songId}` : "";
+}
+
+function mergeQuickRateUserRatings(existingRows, loadedRatings, loadedEntries, userId) {
+  const loadedIdentities = new Set((loadedEntries || []).map(row => getQuickRateRatingRowIdentity({
+    canonical_song_id: row.canonical_song_id,
+    song_id: row.resolved_song_id || row.song_id
+  })).filter(Boolean));
+  const retained = (existingRows || []).filter(row =>
+    row.user_id !== userId || !loadedIdentities.has(getQuickRateRatingRowIdentity(row))
+  );
+  const merged = new Map();
+  [...retained, ...(loadedRatings || [])].forEach((row, index) => {
+    const identity = getQuickRateRatingRowIdentity(row);
+    const key = row.user_id === userId && identity ? `${userId}:${identity}` : `row:${index}`;
+    merged.set(key, row);
+  });
+  return [...merged.values()];
+}
 
 function mapQuickRateYearProjection(payload, userId) {
   const rows = Array.isArray(payload?.entries) ? payload.entries : [];
@@ -13714,9 +13749,10 @@ async function loadQuickRateYearData(collection, year, userId) {
   const requestedYear = Number(year) || 0;
   const key = `${userId}:${collection}:${requestedYear || "latest"}`;
   if (quickRateYearCache.has(key)) {
-    return { ...quickRateYearCache.get(key), ratings: allSongRatings.filter(row => row.user_id === userId) };
+    return { ...quickRateYearCache.get(key) };
   }
   if (quickRateYearPromises.has(key)) return quickRateYearPromises.get(key);
+  const cacheGeneration = quickRateYearCacheGeneration;
   const promise = (async () => {
     if (collection === "uk-number-ones" || collection === "bom-tracks") {
       const { data, error } = await supabaseClient.rpc("get_quick_rate_year", {
@@ -13746,6 +13782,9 @@ async function loadQuickRateYearData(collection, year, userId) {
   quickRateYearPromises.set(key, promise);
   try {
     const result = await promise;
+    if (cacheGeneration !== quickRateYearCacheGeneration) {
+      return loadQuickRateYearData(collection, requestedYear, userId);
+    }
     quickRateYearCache.set(key, result);
     return result;
   } finally {
@@ -14199,8 +14238,12 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
       allSongs = mergeRowsById(allSongs, songs);
       allAlbums = mergeRowsById(allAlbums, albums);
       allCanonicalRecordings = mergeRowsById(allCanonicalRecordings, canonicalRecordings);
-      const otherUsersRows = allSongRatings.filter(row => row.user_id !== userId);
-      allSongRatings = [...otherUsersRows, ...loaded.ratings];
+      allSongRatings = mergeQuickRateUserRatings(
+        allSongRatings,
+        loaded.ratings,
+        loaded.importedEntries,
+        userId
+      );
       render(focus);
       const artistLookupNames = getArtistCreditLookupNames(yearEntries.map(entry => entry.song?.artist || entry.canonicalRecording?.artist || entry.artist));
       enrichQuickRateArtistIdentities(dialog, userId, identities => {

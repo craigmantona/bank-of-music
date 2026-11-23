@@ -5,16 +5,24 @@ import { test } from "node:test";
 
 const require = createRequire(process.env.CATALOGUE_TEST_PACKAGE || import.meta.url);
 const { PGlite } = require("@electric-sql/pglite");
-const migration = await readFile(
+const progressMigration = await readFile(
   new URL("../migrations/20261122160519_exclude_unrateable_number_ones_from_progress.sql", import.meta.url),
+  "utf8"
+);
+const chronologyMigration = await readFile(
+  new URL("../migrations/20261123120000_fix_uk_number_ones_chronology.sql", import.meta.url),
   "utf8"
 );
 
 const USER_ID = "11111111-1111-4111-8111-111111111111";
 const VERIFIED_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const UNRESOLVED_ID = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+const REPEAT_ID = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
+const POPULAR_ID = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
+const LOWER_ID = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
+const UNRATED_ID = "ffffffff-ffff-4fff-8fff-ffffffffffff";
 
-test("UK No. 1s overall progress excludes unrateable identities without hiding chart evidence", async () => {
+test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart date", async () => {
   const db = new PGlite();
   try {
     await db.exec(`
@@ -77,37 +85,99 @@ test("UK No. 1s overall progress excludes unrateable identities without hiding c
 
       insert into public.albums values
         (1, 'Verified album', 'Verified artist', '2025-01-01', '2025-01-01', null, null, false),
-        (2, 'Ambiguous album', 'Ambiguous artist', '2026-01-01', '2026-01-01', null, null, false);
+        (2, 'Ambiguous album', 'Ambiguous artist', '2024-01-01', '2024-01-01', null, null, false),
+        (3, 'Repeat album', 'Repeat artist', '2025-06-01', '2025-06-01', null, null, false),
+        (10, 'Popular album', 'Popular artist', '2026-05-01', '2026-05-01', null, null, false),
+        (11, 'Lower album', 'Lower artist', '2026-06-01', '2026-06-01', null, null, false),
+        (12, 'Unrated album', 'Unrated artist', '2026-07-01', '2026-07-01', null, null, false);
       insert into public.canonical_recordings values
         ('${VERIFIED_ID}', 'Verified song', 'Verified artist', null),
-        ('${UNRESOLVED_ID}', 'Placeholder song', 'Unresolved artist', null);
+        ('${UNRESOLVED_ID}', 'Placeholder song', 'Unresolved artist', null),
+        ('${REPEAT_ID}', 'Repeat Return', 'Repeat artist', null),
+        ('${POPULAR_ID}', 'Popular song', 'Popular artist', null),
+        ('${LOWER_ID}', 'Lower song', 'Lower artist', null),
+        ('${UNRATED_ID}', 'Unrated song', 'Unrated artist', null);
       insert into public.songs values
         (1, 'Verified song', 'Verified artist', 1, 'musicbrainz', 'verified-recording', '${VERIFIED_ID}', false, null),
-        (3, 'Ambiguous song', 'Ambiguous artist', 2, 'manual', 'ambiguous-recording', null, false, null);
+        (3, 'Ambiguous song', 'Ambiguous artist', 2, 'manual', 'ambiguous-recording', null, false, null),
+        (6, 'Repeat Return', 'Repeat artist', 3, 'musicbrainz', 'repeat-recording', '${REPEAT_ID}', false, null),
+        (10, 'Popular song', 'Popular artist', 10, 'musicbrainz', 'popular-recording', '${POPULAR_ID}', false, null),
+        (11, 'Lower song', 'Lower artist', 11, 'musicbrainz', 'lower-recording', '${LOWER_ID}', false, null),
+        (12, 'Unrated song', 'Unrated artist', 12, 'musicbrainz', 'unrated-recording', '${UNRATED_ID}', false, null);
       insert into public.quick_rate_collection_tracks values
         (1, 'uk-number-ones', 2025, 'Verified song', 'Verified artist', '2025-01-05', 1, 1, null, 1, '${VERIFIED_ID}', 'direct_mbid', 'musicbrainz', null),
-        (2, 'uk-number-ones', 2026, 'Verified song', 'Verified artist', '2026-01-04', 1, 1, null, 1, '${VERIFIED_ID}', 'direct_mbid', 'musicbrainz', null),
-        (3, 'uk-number-ones', 2026, 'Unresolved song', 'Unresolved artist', '2026-02-01', 1, 1, null, null, '${UNRESOLVED_ID}', 'unresolved', 'placeholder', null),
-        (4, 'uk-number-ones', 2026, 'Ambiguous song', 'Ambiguous artist', '2026-03-01', 1, 1, null, 3, null, 'ambiguous', 'title_artist', null);
+        (2, 'uk-number-ones', 2026, 'Verified song', 'Verified artist', '2026-04-04', 1, 1, null, 1, '${VERIFIED_ID}', 'direct_mbid', 'musicbrainz', null),
+        (3, 'uk-number-ones', 2026, 'Beta tie', 'Beta artist', '2026-02-01', 1, 1, null, null, '${UNRESOLVED_ID}', 'unresolved', 'placeholder', null),
+        (4, 'uk-number-ones', 2026, 'Alpha tie', 'Zulu artist', '2026-02-01', 1, 1, null, 3, null, 'ambiguous', 'title_artist', null),
+        (5, 'uk-number-ones', 2026, 'Beta tie', 'Alpha artist', '2026-02-01', 1, 1, null, null, null, 'unresolved', null, null),
+        (6, 'uk-number-ones', 2026, 'Repeat Return', 'Repeat artist', '2026-01-05', 3, 2, null, 6, '${REPEAT_ID}', 'direct_mbid', 'musicbrainz', null),
+        (8, 'uk-number-ones', 2026, 'Beta tie', 'Beta artist', '2026-02-01', 1, 1, null, null, null, 'unresolved', null, null);
       insert into public.song_ratings(user_id, song_id, canonical_song_id, rating) values
         ('${USER_ID}', null, '${VERIFIED_ID}', 9),
         ('${USER_ID}', null, '${UNRESOLVED_ID}', 7),
-        ('${USER_ID}', 3, null, 6);
+        ('${USER_ID}', 3, null, 6),
+        ('${USER_ID}', null, '${REPEAT_ID}', 8),
+        ('${USER_ID}', null, '${POPULAR_ID}', 10),
+        ('${USER_ID}', null, '${LOWER_ID}', 4);
       select set_config('request.jwt.claim.sub', '${USER_ID}', false);
     `);
 
-    await db.exec(migration);
+    const ratingsBefore = (await db.query(`select
+      id, user_id::text, song_id, canonical_song_id::text, rating::text
+      from public.song_ratings order by id`
+    )).rows;
+
+    await db.exec(progressMigration);
+    await db.exec(chronologyMigration);
     const result = (await db.query(
       "select public.get_quick_rate_year('uk-number-ones', 2026) result"
     )).rows[0].result;
 
-    assert.equal(Number(result.overall_total), 1);
-    assert.equal(Number(result.overall_rated), 1);
+    assert.equal(Number(result.overall_total), 2);
+    assert.equal(Number(result.overall_rated), 2);
     assert.deepEqual(
-      result.entries.map((entry) => entry.match_status).sort(),
-      ["ambiguous", "direct_mbid", "unresolved"]
+      result.entries.map((entry) => ({
+        id: Number(entry.id),
+        title: entry.title,
+        artist: entry.artist,
+        firstNumberOneDate: entry.first_number_one_date
+      })),
+      [
+        { id: 6, title: "Repeat Return", artist: "Repeat artist", firstNumberOneDate: "2026-01-05" },
+        { id: 4, title: "Alpha tie", artist: "Zulu artist", firstNumberOneDate: "2026-02-01" },
+        { id: 5, title: "Beta tie", artist: "Alpha artist", firstNumberOneDate: "2026-02-01" },
+        { id: 3, title: "Beta tie", artist: "Beta artist", firstNumberOneDate: "2026-02-01" },
+        { id: 8, title: "Beta tie", artist: "Beta artist", firstNumberOneDate: "2026-02-01" },
+        { id: 2, title: "Verified song", artist: "Verified artist", firstNumberOneDate: "2026-04-04" }
+      ]
     );
-    assert.equal((await db.query("select count(*)::int count from public.song_ratings")).rows[0].count, 3);
+
+    const repeatEntry = result.entries.find((entry) => Number(entry.id) === 6);
+    assert.equal(Number(repeatEntry.weeks_at_number_one), 3);
+    assert.equal(Number(repeatEntry.number_one_runs), 2);
+    assert.equal(Number(repeatEntry.personal_rating), 8);
+    assert.equal(Number(result.entries.find((entry) => Number(entry.id) === 3).personal_rating), 7);
+    assert.equal(Number(result.entries.find((entry) => Number(entry.id) === 4).personal_rating), 6);
+
+    const bomResult = (await db.query(
+      "select public.get_quick_rate_year('bom-tracks', 2026) result"
+    )).rows[0].result;
+    assert.equal(Number(bomResult.overall_total), 6);
+    assert.equal(Number(bomResult.overall_rated), 5);
+    assert.deepEqual(
+      bomResult.entries.map((entry) => entry.title),
+      ["Popular song", "Lower song", "Unrated song"]
+    );
+    assert.deepEqual(
+      bomResult.entries.map((entry) => Number(entry.community_rating_count)),
+      [1, 1, 0]
+    );
+
+    const ratingsAfter = (await db.query(`select
+      id, user_id::text, song_id, canonical_song_id::text, rating::text
+      from public.song_ratings order by id`
+    )).rows;
+    assert.deepEqual(ratingsAfter, ratingsBefore);
 
     const privileges = (await db.query(`select
       has_function_privilege('anon', 'public.get_quick_rate_year(text,integer)', 'execute') anon_execute,

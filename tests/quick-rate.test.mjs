@@ -46,6 +46,75 @@ test('Quick Rate paginates own ratings and propagates query failures', async () 
   await assert.rejects(context.fetchQuickRateRows('albums','*'), /offline/);
 });
 
+test('Quick Rate keeps ratings from other years while replacing the freshly loaded year', () => {
+  const context = vm.createContext({});
+  vm.runInContext(extract('function getQuickRateRatingRowIdentity', 'function mapQuickRateYearProjection'), context);
+  const otherUser = {user_id:'other',song_id:99,canonical_song_id:null,rating:4};
+  const yearA = {user_id:'me',song_id:null,canonical_song_id:'year-a',rating:7};
+  const yearB = {user_id:'me',song_id:null,canonical_song_id:'year-b',rating:8};
+
+  let ratings = context.mergeQuickRateUserRatings(
+    [otherUser, yearA],
+    [yearB],
+    [{canonical_song_id:'year-b'}],
+    'me'
+  );
+  assert.deepEqual(Array.from(ratings, row => row.canonical_song_id || `song:${row.song_id}`), ['song:99','year-a','year-b']);
+
+  ratings = context.mergeQuickRateUserRatings(
+    ratings,
+    [yearA],
+    [{canonical_song_id:'year-a'}],
+    'me'
+  );
+  assert.deepEqual(Array.from(ratings, row => row.canonical_song_id || `song:${row.song_id}`), ['song:99','year-b','year-a']);
+
+  ratings = context.mergeQuickRateUserRatings(
+    ratings,
+    [],
+    [{canonical_song_id:'year-a'}],
+    'me'
+  );
+  assert.deepEqual(Array.from(ratings, row => row.canonical_song_id || `song:${row.song_id}`), ['song:99','year-b']);
+});
+
+test('rating mutations invalidate year projections and stale in-flight loads refetch', async () => {
+  const source = extract('let quickRateHistoryRestore', 'function mapQuickRateYearProjection');
+  const context = vm.createContext({Map});
+  vm.runInContext(source, context);
+  const state = vm.runInContext(`(() => {
+    quickRateYearCache.set('year', {overallProgress:{rated:1,total:2}});
+    const before = quickRateYearCacheGeneration;
+    invalidateQuickRateYearDataCache();
+    return {before, after:quickRateYearCacheGeneration, size:quickRateYearCache.size};
+  })()`, context);
+  assert.deepEqual({...state}, {before:0,after:1,size:0});
+  assert.match(source, /quickRateYearPromises\.clear\(\)/);
+  assert.match(extract('function upsertLocalSongRating', 'function updateTrackRowUi'), /invalidateQuickRateYearDataCache/);
+
+  let resolveStale;
+  let calls = 0;
+  const asyncContext = vm.createContext({
+    Map,
+    QUICK_RATE_UK_SINGLES:{},
+    mergeRowsById:(_existing,incoming)=>incoming,
+    supabaseClient:{rpc:()=>{
+      calls += 1;
+      if (calls === 1) return new Promise(resolve => { resolveStale = resolve; });
+      return Promise.resolve({data:{selected_year:2025,years:[2025],entries:[{id:2,title:'Fresh'}],overall_total:1,overall_rated:0},error:null});
+    }}
+  });
+  vm.runInContext(extract('let quickRateHistoryRestore', 'async function loadQuickRateCore'), asyncContext);
+  const staleLoad = asyncContext.loadQuickRateYearData('uk-number-ones', 2025, 'me');
+  asyncContext.invalidateQuickRateYearDataCache();
+  const freshLoad = asyncContext.loadQuickRateYearData('uk-number-ones', 2025, 'me');
+  resolveStale({data:{selected_year:2025,years:[2025],entries:[{id:1,title:'Stale'}],overall_total:1,overall_rated:0},error:null});
+  const [staleCallerResult, freshCallerResult] = await Promise.all([staleLoad, freshLoad]);
+  assert.equal(calls, 2);
+  assert.equal(staleCallerResult.importedEntries[0].id, 2);
+  assert.equal(freshCallerResult.importedEntries[0].id, 2);
+});
+
 test('Quick Rate reuses track rating upsert and reports success only after persistence', async () => {
   const writes = [], local = [];
   let error = null;
@@ -430,6 +499,27 @@ test('Quick Rate resolves an imported chart entry through its canonical catalogu
   assert.equal(entry.canonicalRecording.id,'canonical-2026');
 });
 
+test('a verified repeat chart entry becomes clickable and rateable through its existing song identity', () => {
+  const context = vm.createContext({
+    getCanonicalSongId: song => song.canonical_song_id || '',
+    getPreferredSongOccurrence: songs => songs[0] || null
+  });
+  vm.runInContext(extract('function buildImportedQuickRateYearModel', 'function getQuickRateEntryIdentity'), context);
+  const canonicalId = 'e6b4276a-684b-4baa-b90e-cd48bb35963b';
+  const rows = [{
+    id:2497, chart_year:2025, title:"That's So True", artist:'Gracie Abrams',
+    song_id:19786, canonical_song_id:canonicalId, match_status:'direct_mbid',
+    match_method:'bulk_verified_repeat'
+  }];
+  const songs = [{id:19786,title:"That's So True",artist:'Gracie Abrams',canonical_song_id:canonicalId,album_id:7}];
+  const recordings = [{id:canonicalId,title:"That's So True",artist:'Gracie Abrams'}];
+  const [entry] = context.buildImportedQuickRateYearModel(rows,songs,recordings,2025);
+  assert.equal(entry.status,'matched');
+  assert.equal(entry.song.id,19786);
+  assert.equal(entry.canonicalRecording.id,canonicalId);
+  assert.equal(entry.matchMethod,'bulk_verified_repeat');
+});
+
 test('Quick Rate keeps unresolved and ambiguous chart identities out of canonical rating controls', () => {
   const context = vm.createContext({
     getCanonicalSongId: song => song.canonical_song_id || '',
@@ -728,9 +818,9 @@ test('Next unrated excludes rated, unmatched and ambiguous entries and wraps cle
   vm.runInContext(extract('function getQuickRateEntryIdentity', '// The original random queue'), context);
   const entries = [
     {status:'matched',song:songs[0]},
-    {status:'unmatched',song:null},
+    {status:'unmatched',song:null,canonical_song_id:'unresolved-placeholder'},
     {status:'matched',song:songs[1]},
-    {status:'ambiguous',song:null},
+    {status:'ambiguous',song:songs[1],canonical_song_id:'ambiguous-placeholder'},
     {status:'matched',song:songs[2]}
   ];
   assert.equal(context.getNextUnratedQuickRateEntry(entries).song.id, 2);
