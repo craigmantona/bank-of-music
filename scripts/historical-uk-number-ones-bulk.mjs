@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -518,6 +517,9 @@ export function summarise(classified, snapshot = {}) {
 }
 
 async function main() {
+  if (process.argv.includes("--commit")) {
+    throw new Error("Direct --commit is disabled. Use an independently reviewed, manifest-bound, approval-gated atomic operation.");
+  }
   const snapshotPath = option("snapshot");
   if (!snapshotPath) throw new Error("--snapshot is required for a reproducible dry-run.");
   const snapshot = JSON.parse(await readFile(resolve(snapshotPath), "utf8"));
@@ -538,10 +540,11 @@ async function main() {
   await writeFile(resolve(outputDir, "historical-uk-number-ones-unavailable.csv"), toCsv(unavailable));
   const batches = createBatches(safe, Number(option("batch-size", "25")));
   const plan = { generated_at: new Date().toISOString(), source_snapshot: snapshotPath, dry_run: true,
+    execution_policy: "reviewed_approval_gated_atomic_sql_only",
     safeguards: {
       maximum_batch_size: 25,
-      transaction_scope: "one record per transaction within independently resumable batches",
-      failure_policy: "rollback the affected record, record the reason, and continue",
+      transaction_scope: "review artifact only; this script never writes database rows",
+      failure_policy: "production changes require a separately reviewed all-or-nothing operation",
       dates: "only valid YYYY-MM-DD values are written; partial dates remain NULL",
       ratings: "rated canonical placeholders are rejected and existing rating rows are never updated"
     },
@@ -559,27 +562,11 @@ async function main() {
       "A future production run must use a fresh read-only snapshot so stale preconditions fail closed."
     ],
     summary: summarise(classified, snapshot),
-    batches: batches.map(batch => ({ batch: batch.batch, records: batch.records.map(item => ({ chart_id: item.row.id, action: item.action, sql: recordTransactionSql(item, snapshot) })) })) };
+    batches: batches.map(batch => ({ batch: batch.batch, records: batch.records.map(item => ({ chart_id: item.row.id, action: item.action })) })) };
   const planPath = resolve(option("plan-output", resolve(outputDir, "historical-uk-number-ones-bulk-plan.json")));
   await writeFile(planPath, `${JSON.stringify(plan, null, 2)}\n`);
   console.log(JSON.stringify(plan.summary, null, 2));
-  if (!process.argv.includes("--commit")) { console.log("Dry run only. No database rows were written."); return; }
-  const databaseUrl = process.env.BOM_DATABASE_URL;
-  if (!databaseUrl) throw new Error("--commit requires BOM_DATABASE_URL.");
-  const checkpointPath = resolve(option("checkpoint", resolve(HERE, ".cache/historical-uk-number-ones-bulk-state.json")));
-  let checkpoint = { completed: [], failures: [] };
-  try { checkpoint = JSON.parse(await readFile(checkpointPath, "utf8")); } catch (error) { if (error.code !== "ENOENT") throw error; }
-  for (const batch of plan.batches) {
-    for (const record of batch.records) {
-      if (checkpoint.completed.includes(record.chart_id)) continue;
-      const execution = spawnSync(option("psql", "psql"), ["--no-psqlrc", "--set", "ON_ERROR_STOP=1"], { input: record.sql, encoding: "utf8", env: { ...process.env, PGDATABASE: databaseUrl } });
-      if (execution.status === 0) checkpoint.completed.push(record.chart_id);
-      else checkpoint.failures.push({ chart_id: record.chart_id, batch: batch.batch, error: execution.stderr?.trim() || execution.error?.message || "psql failed" });
-      await mkdir(dirname(checkpointPath), { recursive: true });
-      await writeFile(checkpointPath, `${JSON.stringify(checkpoint, null, 2)}\n`);
-    }
-  }
-  if (checkpoint.failures.length) process.exitCode = 1;
+  console.log("Dry run only. No database rows were written; direct execution is disabled.");
 }
 
 if (typeof process !== "undefined" && process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

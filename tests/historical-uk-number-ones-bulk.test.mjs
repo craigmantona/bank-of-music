@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import {
   classifyRows, createBatches, parseCsv, recordTransactionSql, summarise, toCsv
 } from "../scripts/historical-uk-number-ones-bulk.mjs";
@@ -11,6 +14,30 @@ const chart = (overrides = {}) => ({
   match_status: "unresolved", song_id: null,
   canonical_song_id: "0a5b0716-545b-4171-8b00-03088aa43aa0",
   musicbrainz_recording_id: null, ...overrides
+});
+
+test("legacy historical workflows reject direct commit before any input or output", async () => {
+  for (const relative of [
+    "../scripts/historical-uk-number-ones-bulk.mjs",
+    "../scripts/historical-uk-number-ones-pilot.mjs"
+  ]) {
+    const url = new URL(relative, import.meta.url);
+    const execution = spawnSync(process.execPath, [fileURLToPath(url), "--commit"], { encoding: "utf8" });
+    assert.notEqual(execution.status, 0);
+    assert.match(execution.stderr, /Direct --commit is disabled/);
+    assert.doesNotMatch(execution.stderr, /--snapshot is required|BOM_DATABASE_URL/);
+
+    const source = await readFile(url, "utf8");
+    assert.doesNotMatch(source, /BOM_DATABASE_URL|spawnSync\(|PGDATABASE/);
+  }
+
+  const pilot = fileURLToPath(new URL("../scripts/historical-uk-number-ones-pilot.mjs", import.meta.url));
+  const sqlOutput = spawnSync(process.execPath, [pilot, "--sql-output=/tmp/disabled-historical-operation.sql"], {
+    encoding: "utf8"
+  });
+  assert.notEqual(sqlOutput.status, 0);
+  assert.match(sqlOutput.stderr, /Direct SQL output is disabled/);
+  assert.doesNotMatch(sqlOutput.stderr, /ENOENT|MusicBrainz/i);
 });
 
 const candidate = (overrides = {}) => ({

@@ -1,0 +1,2628 @@
+{
+  "schema_version": 3,
+  "artifact": "historical-uk-number-ones-verified-batch-2-audit",
+  "status": "proposed_not_executed",
+  "snapshot": {
+    "captured_at": "2026-11-23T13:59:56.371326Z",
+    "raw_snapshot_sha256": "a271c5e335af07943652d45a5f71a34c402cf75a541ec4d04b6da66225eeade0",
+    "row_identity_sha256": "2db427f65412250956c39f7d9d39ee3b9498ff78af3b52e047ed16f21f1f9126",
+    "candidate_state_artifact": "historical-uk-number-ones-verified-batch-2-live-state-20261123.json",
+    "candidate_state_sha256": "90492794feff32e2fb3ff334e96f89a133c741f83c20bfa848183a85ed9de70c",
+    "production_integrity": {
+      "total_chart_entries": 1298,
+      "resolved_chart_entries": 419,
+      "unresolved_chart_entries": 879,
+      "albums": 1731,
+      "songs": 16162,
+      "canonical_recordings": 17095,
+      "duplicate_recording_mbids": 0,
+      "song_rating_rows": 1747,
+      "song_rating_sum": 13454,
+      "invalid_song_rating_rows": 0,
+      "historical_rating_rows": 5,
+      "historical_rating_sum": 43,
+      "first_batch_rating_reconciliation_audit_rows": 1
+    }
+  },
+  "audit_coverage": {
+    "inventory_rows_classified": 879,
+    "verified_existing_link": 1,
+    "verified_catalogue_import": 19,
+    "explicit_ambiguous_or_version_conflict": 11,
+    "insufficient_authoritative_evidence": 848,
+    "reviewed_but_not_selected": 28,
+    "remaining_inventory_without_a_complete_evidence_chain": 831,
+    "method": "Every unresolved row was inventoried. Only rows with an exact Official Charts identifier, a unique MusicBrainz ISRC recording, a reviewed official release track, and a clean live-catalogue collision check were promoted."
+  },
+  "selection_policy": {
+    "batch_size": 20,
+    "min_batch_size": 20,
+    "max_batch_size": 25,
+    "ordering": "recent-first, then chart entry id descending",
+    "force_matching_prohibited": true,
+    "all_candidates_unrated": true,
+    "source_release_note": "Daisies, Too Sweet, Godzilla, Shotgun, Stay with Me, When Love Takes Over and Breathless use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46.",
+    "selected_track_import_chart_entry_ids": [
+      2503,
+      2489,
+      2441,
+      2015,
+      1940,
+      1552,
+      1353
+    ]
+  },
+  "proposed_batch": [
+    {
+      "batch_order": 1,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2503,
+        "source_entry_key": "2025:1441:justin bieber:daisies",
+        "chart_year": 2025,
+        "title": "Daisies",
+        "artist": "Justin Bieber",
+        "placeholder_canonical_id": "205ae581-5bfe-42bc-9a59-85b68ef69bfd",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "11941adafc2a4c2eea0c546c732859e59438782d21f28444418993a37e7b9d92",
+        "canonical_metadata_sha256": "2d61723477187afde3d1d43a5029dde27e5d09980ef7f4a70d60cabb34c1bdbe"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "205ae581-5bfe-42bc-9a59-85b68ef69bfd",
+        "album_id": null,
+        "stored_title": "Daisies",
+        "stored_artist": "Justin Bieber",
+        "track_position": 2,
+        "duration_ms": 176000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/justin-bieber-daisies/",
+        "catalogue_number": "USUG12504304",
+        "raw_sha256": "ae17fb8a95e1b7ce180841f6f45c153446f9862cd6d9db2c30af6cb7247707f7"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUG12504304?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "c271f29fa53f0be1195862f9d14ea9b6594e14d85c121b156bc34aff80938df6",
+        "recording_id": "6be45a90-ae92-42ac-bc56-925e4454ba60",
+        "title": "DAISIES",
+        "artist_credit": "Justin Bieber",
+        "duration_ms": 176333,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/561c8bbe-26f6-4232-93a7-735186b34456",
+        "release_id": "561c8bbe-26f6-4232-93a7-735186b34456",
+        "release_group_id": "fe9cce8b-2f9e-4016-b6cb-859d4d3d0d5d",
+        "status": "Official",
+        "title": "SWAG",
+        "artist_credit": "Justin Bieber",
+        "primary_type": "Album",
+        "country": "XW",
+        "release_date": "2025-07-11",
+        "matching_track_count": 1,
+        "release_track_count": 21,
+        "track_position": 2,
+        "track_duration_ms": 176000,
+        "track_recording_id": "6be45a90-ae92-42ac-bc56-925e4454ba60",
+        "track_isrc": "USUG12504304",
+        "raw_sha256": "b8d96635687e59a7cf42f6217981653a3d52565e6ffc4a5827fb51871292f170"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "312a24b60c6600ca230af3b406915e2efe39f2ee8c69462d818eaae77061c57f",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    },
+    {
+      "batch_order": 2,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2489,
+        "source_entry_key": "2024:1424:hozier:too sweet",
+        "chart_year": 2024,
+        "title": "Too Sweet",
+        "artist": "Hozier",
+        "placeholder_canonical_id": "6db536b6-3676-4b8c-8316-19e203f82865",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "04df401ccb03b133d0a3691dc1257fd89d18038aece3adefbf5a0b3e6f940446",
+        "canonical_metadata_sha256": "3a1abd81eb07398906e10be5949425cc05d8d83ea681154547921849b4226ef2"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "6db536b6-3676-4b8c-8316-19e203f82865",
+        "album_id": null,
+        "stored_title": "Too Sweet",
+        "stored_artist": "Hozier",
+        "track_position": 1,
+        "duration_ms": 251424
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/hozier-too-sweet/",
+        "catalogue_number": "IEACJ2300335",
+        "raw_sha256": "75f4db310223a049bad90ee7b8678ef7c8a4744f46ba7534e6bad5e1b646acb7"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/IEACJ2300335?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "41eb8fa331886163649fd4f72aa6f2a946b724953c487ad6288736b18fa3aef1",
+        "recording_id": "272be1e2-9599-4b8d-b872-5e879881d103",
+        "title": "Too Sweet",
+        "artist_credit": "Hozier",
+        "duration_ms": 251000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/9e773c80-86fe-47ae-b96f-ca9b7e1876c8",
+        "release_id": "9e773c80-86fe-47ae-b96f-ca9b7e1876c8",
+        "release_group_id": "bba57a38-1823-4b37-a999-ddc7654757e8",
+        "status": "Official",
+        "title": "Unheard",
+        "artist_credit": "Hozier",
+        "primary_type": "EP",
+        "country": "XW",
+        "release_date": "2024-03-22",
+        "matching_track_count": 1,
+        "release_track_count": 4,
+        "track_position": 1,
+        "track_duration_ms": 251424,
+        "track_recording_id": "272be1e2-9599-4b8d-b872-5e879881d103",
+        "track_isrc": "IEACJ2300335",
+        "raw_sha256": "18f4a14a4f9a875696d8c2532007d2264bb3b4bb0080223c2dd8f6a449174b3e"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "599252048a6e971966c7a7558655d7a5d4bbfbc4eb7cd4e9c7bc10f4f8e14d0f",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    },
+    {
+      "batch_order": 3,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2488,
+        "source_entry_key": "2024:1422:beyonce:texas hold em",
+        "chart_year": 2024,
+        "title": "Texas Hold 'Em",
+        "artist": "Beyoncé",
+        "placeholder_canonical_id": "8fadf844-3c4a-4d54-96c9-7a43e41a9071",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "75c57115f6e19547bb63cd5ffda8cff3e72cf1f8612bd51a42fc8527e6fbae3b",
+        "canonical_metadata_sha256": "e5ff3ec1262c0db733d100342462821388f5eebfb99d2cdec4e541117e45f1a1"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "8fadf844-3c4a-4d54-96c9-7a43e41a9071",
+        "album_id": null,
+        "stored_title": "Texas Hold 'Em",
+        "stored_artist": "Beyoncé",
+        "track_position": 1,
+        "duration_ms": 236000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/beyonce-texas-hold-em/",
+        "catalogue_number": "USSM12401302",
+        "raw_sha256": "b10fd6107f6f0c86547b3d9a2a86be171ad3741e17d454d26329b95b3d538e69"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USSM12401302?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "829e80d2cec91c4fb1ca689ab8a495eed8cd01bb671265a6140b8f579cb01a5a",
+        "recording_id": "2d947ada-862c-452e-95a6-091edd4330ee",
+        "title": "TEXAS HOLD ’EM",
+        "artist_credit": "Beyoncé",
+        "duration_ms": 233453,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/579fd7f8-0791-424a-a1e2-2e60518d9709",
+        "release_id": "579fd7f8-0791-424a-a1e2-2e60518d9709",
+        "release_group_id": "9f9306ab-fe7a-44d3-9ddb-6a36bcceda73",
+        "status": "Official",
+        "title": "TEXAS HOLD ’EM",
+        "artist_credit": "Beyoncé",
+        "primary_type": "Single",
+        "country": null,
+        "release_date": "2024-02-11",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 236000,
+        "track_recording_id": "2d947ada-862c-452e-95a6-091edd4330ee",
+        "track_isrc": "USSM12401302",
+        "raw_sha256": "e93a9eb9ddc82c7c2c2116a7fd8299741b98b67e5bc9c89616c1a7eb1fffb323"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "21f573610564d484df9d883019fd97be38532b54a6af4351c2b686c2f3c7dc95",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 4,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2483,
+        "source_entry_key": "2023:1417:kenya grace:strangers",
+        "chart_year": 2023,
+        "title": "Strangers",
+        "artist": "Kenya Grace",
+        "placeholder_canonical_id": "e071f663-46f3-443f-85be-641aecf5071f",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "40ee7e70e7cf715eafaa9d9e000a6b21959f4f6f209d06e8fc7d60485ac5578c",
+        "canonical_metadata_sha256": "a74c5e75aea3d3c44ff22fe8fcd5249cc9396871a2701ae4f0bfce312da0d816"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "e071f663-46f3-443f-85be-641aecf5071f",
+        "album_id": null,
+        "stored_title": "Strangers",
+        "stored_artist": "Kenya Grace",
+        "track_position": 1,
+        "duration_ms": 172964
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/kenya-grace-strangers/",
+        "catalogue_number": "USWB12305048",
+        "raw_sha256": "317d449537840b71f6bdb2dc1efa980cb5466eb9c94bf2b76c0f430e335f39f8"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USWB12305048?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "f8797cc8d09757a79973d3d03420c91854c3917a9349f5226b11355630114697",
+        "recording_id": "d41e7f0b-ab24-4212-9b81-02f6e876d6d2",
+        "title": "Strangers",
+        "artist_credit": "Kenya Grace",
+        "duration_ms": 172964,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/806c5890-198b-4ffc-8ce1-cc0b5dc60c5d",
+        "release_id": "806c5890-198b-4ffc-8ce1-cc0b5dc60c5d",
+        "release_group_id": "725ed5e5-cdad-49a3-af8b-6c7c59ad1c61",
+        "status": "Official",
+        "title": "Strangers",
+        "artist_credit": "Kenya Grace",
+        "primary_type": "Single",
+        "country": null,
+        "release_date": "2023-09-01",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 172964,
+        "track_recording_id": "d41e7f0b-ab24-4212-9b81-02f6e876d6d2",
+        "track_isrc": "USWB12305048",
+        "raw_sha256": "a4512daf1dcf2a9c2759079a202c5762bd485524e8afeed633652b1857e22337"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "222103e86eeacdd2320997b51f1c17b29df86a1a6aaabb176f38583471ffd7bb",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 5,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2468,
+        "source_entry_key": "2022:1396:dave:starlight",
+        "chart_year": 2022,
+        "title": "Starlight",
+        "artist": "Dave",
+        "placeholder_canonical_id": "93449649-93bf-431a-891e-8d961aac2cad",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "f08a6d79d5c4ad4f30079f77ba63b6cfaf88ff332070fbcc06277725627f7ec6",
+        "canonical_metadata_sha256": "3abd4d1ac4d84ff9a4def61ae0daba2701fdd304474230be0e0ab22d0f64305e"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "93449649-93bf-431a-891e-8d961aac2cad",
+        "album_id": null,
+        "stored_title": "Starlight",
+        "stored_artist": "Dave",
+        "track_position": 1,
+        "duration_ms": 211935
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/dave-starlight/",
+        "catalogue_number": "GBUM72201160",
+        "raw_sha256": "7029625440c05a2b58dd26418398c4e6744af9b2e6c88b8c72a6b4edc74137b3"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM72201160?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "84c025523fdc5aa040441d990dbb0e887b6783678202dc8511304727b208ed42",
+        "recording_id": "fe987f4d-c05b-4afd-b79b-5e35aee763e9",
+        "title": "Starlight",
+        "artist_credit": "Dave",
+        "duration_ms": 211935,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/c3f1fb0c-f009-4381-bbae-08cb94bd410b",
+        "release_id": "c3f1fb0c-f009-4381-bbae-08cb94bd410b",
+        "release_group_id": "a65bd8d9-9d77-4779-9650-c2f9a1514637",
+        "status": "Official",
+        "title": "Starlight",
+        "artist_credit": "Dave",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2022-03-03",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 211935,
+        "track_recording_id": "fe987f4d-c05b-4afd-b79b-5e35aee763e9",
+        "track_isrc": "GBUM72201160",
+        "raw_sha256": "83697b5ab99a431cef64857021c24550f4afbee24fa9b1f44c51e821a48e5f4b"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "186a2f5c90fda236e07a7b74d8a1e942558a1a3d8b8ad0645d93f848808d3c51",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 6,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2460,
+        "source_entry_key": "2021:1388:ed sheeran:bad habits",
+        "chart_year": 2021,
+        "title": "Bad Habits",
+        "artist": "Ed Sheeran",
+        "placeholder_canonical_id": "c5c0a5e6-ef1a-4692-9e73-c2e7f660ee3b",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "8d6a7b3ac99a82cdc1fcc0c9d4432e6a23d160159b8115fb7e214fd319a24615",
+        "canonical_metadata_sha256": "2219f12a2258c2750e94e723217aff2f771d8e6e526d5966b1b515e0f3b3054b"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "c5c0a5e6-ef1a-4692-9e73-c2e7f660ee3b",
+        "album_id": null,
+        "stored_title": "Bad Habits",
+        "stored_artist": "Ed Sheeran",
+        "track_position": 1,
+        "duration_ms": 231041
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/ed-sheeran-bad-habits/",
+        "catalogue_number": "GBAHS2100318",
+        "raw_sha256": "65dfa934d2907e81881c555c94e864d6406798f257594652fbc8296808868ba1"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS2100318?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "631506ca45471cdc6e08cbdb662239cae727ebef390595bfa2e6a289c1451725",
+        "recording_id": "2d24a8d7-66ad-40b2-8ae7-5f6fc9981646",
+        "title": "Bad Habits",
+        "artist_credit": "Ed Sheeran",
+        "duration_ms": 230746,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/1d13b9ff-f267-4c53-b8b1-0c8d7328dcee",
+        "release_id": "1d13b9ff-f267-4c53-b8b1-0c8d7328dcee",
+        "release_group_id": "08a4883b-4a5e-4974-b2bd-f200d9702f89",
+        "status": "Official",
+        "title": "Bad Habits",
+        "artist_credit": "Ed Sheeran",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2021-06-25",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 231041,
+        "track_recording_id": "2d24a8d7-66ad-40b2-8ae7-5f6fc9981646",
+        "track_isrc": "GBAHS2100318",
+        "raw_sha256": "95dca1365b19152c86af6715e07132477bae2a5a90803a263af94aedbfa90ba0"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "4ba2ba5d804b9b25c755f78639937c22944de70da4cfc129c4387241b9124a50",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 7,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2454,
+        "source_entry_key": "2020:1378:ariana grande:positions",
+        "chart_year": 2020,
+        "title": "Positions",
+        "artist": "Ariana Grande",
+        "placeholder_canonical_id": "b86cb30b-3d50-48eb-a53c-aaf9454e469c",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "97f2b8de7f930ef1703ea3b02daf8f008c7268bef275a20b8c0d5c1057c5d2e0",
+        "canonical_metadata_sha256": "de9efed47063bf3f31eb52442d9331046cdace26f29e6882855cab0e58e1f8fd"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "b86cb30b-3d50-48eb-a53c-aaf9454e469c",
+        "album_id": null,
+        "stored_title": "Positions",
+        "stored_artist": "Ariana Grande",
+        "track_position": 1,
+        "duration_ms": 172324
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/ariana-grande-positions/",
+        "catalogue_number": "USUM72019412",
+        "raw_sha256": "25dce61e153963f3cc942ece240dfb8202c3cd6fcdc08753b4b2716d80b74069"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM72019412?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "e2e19d234cf4a81fd47cdfab9c168183b56df0d6a9f82fed793df28f437a4809",
+        "recording_id": "9ccbc110-3d50-498f-9edc-6bcdef21ab0c",
+        "title": "positions",
+        "artist_credit": "Ariana Grande",
+        "duration_ms": 172080,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/ec1c27e7-768d-4458-a73f-03503fe2bfd5",
+        "release_id": "ec1c27e7-768d-4458-a73f-03503fe2bfd5",
+        "release_group_id": "438d86bf-b03b-4d9a-8022-3d4807926926",
+        "status": "Official",
+        "title": "positions",
+        "artist_credit": "Ariana Grande",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2020-10-23",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 172324,
+        "track_recording_id": "9ccbc110-3d50-498f-9edc-6bcdef21ab0c",
+        "track_isrc": "USUM72019412",
+        "raw_sha256": "3616470f5670c9590261bafab008d745d3b63cf6bf10b98a26fa261a362fa687"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "7226eb842d757a6f8e608954d7758f88a43b4e2dd3570faa4b69448d58f249d9",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 8,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2452,
+        "source_entry_key": "2020:1376:24kgoldn iann dior:mood",
+        "chart_year": 2020,
+        "title": "Mood",
+        "artist": "24kGoldn featuring Iann Dior",
+        "placeholder_canonical_id": "1f4cb0c8-8263-4a2a-beb6-66c5e518db1b",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "54c0b198ae6545507ac4380168dcd128b9c2aa8c109940ee2a5c1d27ef81bb78",
+        "canonical_metadata_sha256": "6e536b2dfd2d8897e9c7b9f935341b5cd3146d5dcd65909f60a5ad613c860640"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "1f4cb0c8-8263-4a2a-beb6-66c5e518db1b",
+        "album_id": null,
+        "stored_title": "Mood",
+        "stored_artist": "24kGoldn featuring Iann Dior",
+        "track_position": 1,
+        "duration_ms": 140525
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/24kgoldn-ft-iann-dior-mood/",
+        "catalogue_number": "USQX92003025",
+        "raw_sha256": "19bfbe5e4a9c07eb23cd1bb2a490221627a4fdeafd083a189f3a4edd089c0766"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USQX92003025?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "1ba93200f8983cbedeac2e0dd2c09355e99b55648bbacec4a2105830c2a577f8",
+        "recording_id": "b2688f22-2e08-43bc-b206-17ca9599e83b",
+        "title": "Mood",
+        "artist_credit": "24kGoldn feat. iann dior",
+        "duration_ms": 140525,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/8eac58d2-c46f-40a6-a9cf-a3f9691e65f0",
+        "release_id": "8eac58d2-c46f-40a6-a9cf-a3f9691e65f0",
+        "release_group_id": "70363b9a-3756-4412-808f-80a389053eb1",
+        "status": "Official",
+        "title": "Mood",
+        "artist_credit": "24kGoldn ft. iann dior",
+        "primary_type": "Single",
+        "country": "AF",
+        "release_date": "2020-07-24",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 140525,
+        "track_recording_id": "b2688f22-2e08-43bc-b206-17ca9599e83b",
+        "track_isrc": "USQX92003025",
+        "raw_sha256": "5df93e6148a7e332d550c86bd4e4adc35c6ae113d3e233f9c40d7f696409d24d"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "aef1096b217536fd5f9d59b438eac52e724cbcf0bf187aa637a33d21ebf1563e",
+      "risk_notes": [
+        "MusicBrainz country is anomalously AF; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording, and official Columbia/RECORDS single."
+      ]
+    },
+    {
+      "batch_order": 9,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2451,
+        "source_entry_key": "2020:1375:cardi b megan thee stallion:wap",
+        "chart_year": 2020,
+        "title": "WAP",
+        "artist": "Cardi B featuring Megan Thee Stallion",
+        "placeholder_canonical_id": "64ac44f9-c3af-411b-bbdb-dc042a3f9c38",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "99c2196d45aec4ae1e99fb25b62e4cae0f995a97dbea53570e3f175cf7a5104d",
+        "canonical_metadata_sha256": "36ec2e8e1717f456307307500c7f12f539dd9fb60e9716ce9f103ac3d670831c"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "64ac44f9-c3af-411b-bbdb-dc042a3f9c38",
+        "album_id": null,
+        "stored_title": "WAP",
+        "stored_artist": "Cardi B featuring Megan Thee Stallion",
+        "track_position": 1,
+        "duration_ms": 187541
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/cardi-b-ft-megan-thee-stallion-wap/",
+        "catalogue_number": "USAT22005111",
+        "raw_sha256": "3495f30db2c37dc828c63618993ee14a04478b6f3cd98258dda7455b90f214cb"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USAT22005111?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "bda80029cf54467516835d9182be9d242100d0192906166ebc87175ded9ac3c9",
+        "recording_id": "3af602f0-e273-4d66-83c2-8d55243cc56b",
+        "title": "WAP",
+        "artist_credit": "Cardi B feat. Megan Thee Stallion",
+        "duration_ms": 187546,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/8bb5807f-d41a-4484-a8bb-024b8fdc9c6e",
+        "release_id": "8bb5807f-d41a-4484-a8bb-024b8fdc9c6e",
+        "release_group_id": "49deb866-e5b1-400d-8464-45ab63191ed6",
+        "status": "Official",
+        "title": "WAP",
+        "artist_credit": "Cardi B feat. Megan Thee Stallion",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2020-08-07",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 187541,
+        "track_recording_id": "3af602f0-e273-4d66-83c2-8d55243cc56b",
+        "track_isrc": "USAT22005111",
+        "raw_sha256": "08fdb0e5f3a1d915f5af922695ad591a6eb101e761ed7e250f64b570b4a1fc31"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "bafe0dd9fd58af8f38a5916c9b9745c6d601b160d72c0f3d98f865448228867d",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 10,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2441,
+        "source_entry_key": "2020:1363:eminem juice wrld:godzilla",
+        "chart_year": 2020,
+        "title": "Godzilla",
+        "artist": "Eminem featuring Juice Wrld",
+        "placeholder_canonical_id": "2b6d4e8b-cb94-4bf3-adf9-347e81dfb470",
+        "source_revision": "1380580667"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "7aafb5ef913eebf6715c25b6770e638d84ae5ab54f659b98954373eeb6230416",
+        "canonical_metadata_sha256": "b8922b74fe3c5e9faf88b10b937c7ebf47c6a8a0fa27633e72668e0da7884550"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "2b6d4e8b-cb94-4bf3-adf9-347e81dfb470",
+        "album_id": null,
+        "stored_title": "Godzilla",
+        "stored_artist": "Eminem featuring Juice Wrld",
+        "track_position": 7,
+        "duration_ms": 210800
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/eminem-ft-juice-wrld-godzilla/",
+        "catalogue_number": "USUM72000788",
+        "raw_sha256": "9a570d83db312ef568016cfc35d91c59ae6f084f3c149fabf2610eac571085bc"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM72000788?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "461fe9ad3fd734e27c6f249f1c687007f076f8a8aabce55ed067949ce26ef2da",
+        "recording_id": "3b1808a9-a935-46ae-add1-7485af7e67e1",
+        "title": "Godzilla",
+        "artist_credit": "Eminem ft. Juice WRLD",
+        "duration_ms": 210800,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/1fb7517b-2fb9-40ec-910f-0a3a514fb70c",
+        "release_id": "1fb7517b-2fb9-40ec-910f-0a3a514fb70c",
+        "release_group_id": "bc217c64-db43-4311-9b73-fca6d25c4ac5",
+        "status": "Official",
+        "title": "Music to Be Murdered By",
+        "artist_credit": "Eminem",
+        "primary_type": "Album",
+        "country": "XW",
+        "release_date": "2020-01-17",
+        "matching_track_count": 1,
+        "release_track_count": 20,
+        "track_position": 7,
+        "track_duration_ms": 210800,
+        "track_recording_id": "3b1808a9-a935-46ae-add1-7485af7e67e1",
+        "track_isrc": "USUM72000788",
+        "raw_sha256": "00856d94a5c9fa617a0d67f5e9884f447339c7ae20cd692fab8ea985ee257ccd"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "cf23cee188c56e89c892643a50d33deb8ec9ffa0748d96cef7b870cef6e967dd",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    },
+    {
+      "batch_order": 11,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2022,
+        "source_entry_key": "2018:1347:ariana grande:thank u next",
+        "chart_year": 2018,
+        "title": "Thank U, Next",
+        "artist": "Ariana Grande",
+        "placeholder_canonical_id": "ea463c6e-f79c-4236-b0ac-aad36ffb850c",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "c9f03f6ff0fdc6fbc9c741ba59d1f9bacc5866d6cd2631f2306a05734c7c2fd7",
+        "canonical_metadata_sha256": "6f166f31edefd38eff231f343fb3940c2d12a07c4ae560cb7782c4cb94748171"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "ea463c6e-f79c-4236-b0ac-aad36ffb850c",
+        "album_id": null,
+        "stored_title": "Thank U, Next",
+        "stored_artist": "Ariana Grande",
+        "track_position": 1,
+        "duration_ms": 207000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/ariana-grande-thank-u-next/",
+        "catalogue_number": "USUM71819361",
+        "raw_sha256": "d337f9826c7bf151d56044a19fcb6a7a87c27ade58f0abb4a8dd9fc8d97061b9"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71819361?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "786a6990f3df737a1cc5c0c4386dfaa474211a88c33c39109e677a8e683ad2c2",
+        "recording_id": "274b3a7b-64bd-4af3-9af9-dd41277ddc17",
+        "title": "thank u, next",
+        "artist_credit": "Ariana Grande",
+        "duration_ms": 207000,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/52cbc5d7-7194-428e-8c69-b62414c1d25e",
+        "release_id": "52cbc5d7-7194-428e-8c69-b62414c1d25e",
+        "release_group_id": "b6728a22-1934-4840-92ec-096944f20e12",
+        "status": "Official",
+        "title": "thank u, next",
+        "artist_credit": "Ariana Grande",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2018-11-03",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 207000,
+        "track_recording_id": "274b3a7b-64bd-4af3-9af9-dd41277ddc17",
+        "track_isrc": "USUM71819361",
+        "raw_sha256": "7d11ef2a8e830735798a991311375d12eba429af4874e089201a3357b5a6b5b9"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "1a611c0fc7ceb6dd6dd93b300840f3463b750eeb22fa3163c7a51c4481b9333d",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 12,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2015,
+        "source_entry_key": "2018:1341:george ezra:shotgun",
+        "chart_year": 2018,
+        "title": "Shotgun",
+        "artist": "George Ezra",
+        "placeholder_canonical_id": "358ded20-02ed-44e5-937e-fde356950e67",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "d5832aed077daab437c1f51746ab3132cb57b1eb3013be668f3bf6601c36c32e",
+        "canonical_metadata_sha256": "4c2268c117bee594ca87d287b37bec7b293a9b459c0b9dd99980c8bceecee833"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "358ded20-02ed-44e5-937e-fde356950e67",
+        "album_id": null,
+        "stored_title": "Shotgun",
+        "stored_artist": "George Ezra",
+        "track_position": 4,
+        "duration_ms": 201293
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/george-ezra-shotgun/",
+        "catalogue_number": "GBARL1701372",
+        "raw_sha256": "cbf07b4928725a6a06f19a8c0070fb8fe304b6d2b67980e412d73b3ef796845b"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBARL1701372?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "ccd53e8724f9464a2fc4bd823867c8a587e293cdc8bb6c4bcee84e74684d3a6f",
+        "recording_id": "81614e2f-298e-4644-aaed-36fe57fb1eb3",
+        "title": "Shotgun",
+        "artist_credit": "George Ezra",
+        "duration_ms": 199000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/210dc0d8-d828-446e-b6cd-f27c8d7508f2",
+        "release_id": "210dc0d8-d828-446e-b6cd-f27c8d7508f2",
+        "release_group_id": "26a02214-cdc6-4297-b434-a225af91c658",
+        "status": "Official",
+        "title": "Staying at Tamara’s",
+        "artist_credit": "George Ezra",
+        "primary_type": "Album",
+        "country": "XE",
+        "release_date": "2018-03-23",
+        "matching_track_count": 1,
+        "release_track_count": 11,
+        "track_position": 4,
+        "track_duration_ms": 201293,
+        "track_recording_id": "81614e2f-298e-4644-aaed-36fe57fb1eb3",
+        "track_isrc": "GBARL1701372",
+        "raw_sha256": "064fe3b8764f49c54a4d2fb7ce3d78035987e87a598e8b30dcf4069efb0f43ea"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "5606c9a11f5d27fe1dff035d8b9a7bf47b810157d9d46fa16931e368d11414a1",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    },
+    {
+      "batch_order": 13,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1989,
+        "source_entry_key": "2016:1313:drake wizkid and kyla:one dance",
+        "chart_year": 2016,
+        "title": "One Dance",
+        "artist": "Drake featuring Wizkid and Kyla",
+        "placeholder_canonical_id": "21a718c5-d7ca-40f5-b553-a42365a48212",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "cb5b644db81211313c3db0e99c4de9e1972fc13331f215f02ef4ae555906c2ee",
+        "canonical_metadata_sha256": "f76fd500f423963df0c3703f76b9bb78cc95776509fb992bf51d03296348b11a"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "21a718c5-d7ca-40f5-b553-a42365a48212",
+        "album_id": null,
+        "stored_title": "One Dance",
+        "stored_artist": "Drake featuring Wizkid and Kyla",
+        "track_position": 1,
+        "duration_ms": 173000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/drake-ft-wizkid-kyla-one-dance/",
+        "catalogue_number": "USCM51600028",
+        "raw_sha256": "49faa0dcaee13180a1b16429fe2c6ef6351903fef2286a89fc65ab2a99b3d4c4"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USCM51600028?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "a464e99445cdba2c8d4878fc5bd17664cb8a8bee897715d7e6ff48533ed71391",
+        "recording_id": "be9e4a6b-3f56-468a-aa61-b1bcb6fc277f",
+        "title": "One Dance",
+        "artist_credit": "Drake feat. Wizkid & Kyla",
+        "duration_ms": 174000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/e2f55bbb-a03a-4f83-8122-a536406a1e69",
+        "release_id": "e2f55bbb-a03a-4f83-8122-a536406a1e69",
+        "release_group_id": "626d569f-adaf-4fff-a326-9adc0158a01f",
+        "status": "Official",
+        "title": "One Dance",
+        "artist_credit": "Drake feat. WizKid & Kyla",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2016-04-05",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 173000,
+        "track_recording_id": "be9e4a6b-3f56-468a-aa61-b1bcb6fc277f",
+        "track_isrc": "USCM51600028",
+        "raw_sha256": "969f146998805845a0287353842802b98e82ad1d4f3a13557166386369914054"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "df100a08f9f9185dc420f93ec3266ddbe7489f379b322cb6d205b37b4da63e9a",
+      "risk_notes": [
+        "A same-title Drake catalogue song is a different MusicBrainz recording and ISRC; the operation must not title-link it."
+      ]
+    },
+    {
+      "batch_order": 14,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1969,
+        "source_entry_key": "2015:1291:omi:cheerleader",
+        "chart_year": 2015,
+        "title": "Cheerleader",
+        "artist": "Omi",
+        "placeholder_canonical_id": "e85e0ffd-3bf5-48e7-af33-370f91946238",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "48135363a68c9c7337d7affda6709e67c6d173cbef9ab6ad7529ac6d98f43118",
+        "canonical_metadata_sha256": "095543032123a8e08d30962b40fea5ea73adcd256b86a7c675806d40916f11e3"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "e85e0ffd-3bf5-48e7-af33-370f91946238",
+        "album_id": null,
+        "stored_title": "Cheerleader",
+        "stored_artist": "Omi",
+        "track_position": 1,
+        "duration_ms": 180021
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/omi-cheerleader-felix-jaehn-remix/",
+        "catalogue_number": "USUS11202574",
+        "raw_sha256": "35b315868109e51ff0777254bef981d81d80a1ad5b91d55e2ebef574ce0ab7e3"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUS11202574?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "d7bc58a5d6b8ef29a46ac8b20d8f6b3677293262e80755f6fb8615e6c2f77e6c",
+        "recording_id": "3d05947b-f269-43da-8e4a-c7596533ea67",
+        "title": "Cheerleader (Felix Jaehn remix / radio edit)",
+        "artist_credit": "OMI",
+        "duration_ms": 181280,
+        "disambiguation": "clean"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/43d34384-0b41-4353-bbe5-60045fc6efb5",
+        "release_id": "43d34384-0b41-4353-bbe5-60045fc6efb5",
+        "release_group_id": "86991689-9595-4de3-b14d-c7f1ea4caac5",
+        "status": "Official",
+        "title": "Cheerleader (Felix Jaehn Remix Radio Edit)",
+        "artist_credit": "Omi",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2014-05-19",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 180021,
+        "track_recording_id": "3d05947b-f269-43da-8e4a-c7596533ea67",
+        "track_isrc": "USUS11202574",
+        "raw_sha256": "968545793b508a10b3af80c652b638beb5eadfec7e3230c19837c76c276b3db5"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "f3d61ee94dee843b4b94e0fdda95166abc10a731546973c0cee2f89503ba7684",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 15,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1940,
+        "source_entry_key": "2014:1262:sam smith:stay with me",
+        "chart_year": 2014,
+        "title": "Stay with Me",
+        "artist": "Sam Smith",
+        "placeholder_canonical_id": "919c18cb-b30a-44dc-89c0-42374704ccf8",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "099569d87aa52bda0c8d8264e4cfae73bb3d1936ba67124123835f066b7ef11c",
+        "canonical_metadata_sha256": "cf7cb8805e9bfc16bc4593db412f0c35279a79ac6a3e484d1cbfb07abf2bba65"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "919c18cb-b30a-44dc-89c0-42374704ccf8",
+        "album_id": null,
+        "stored_title": "Stay with Me",
+        "stored_artist": "Sam Smith",
+        "track_position": 3,
+        "duration_ms": 172680
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/sam-smith-stay-with-me/",
+        "catalogue_number": "GBUM71308833",
+        "raw_sha256": "2d2559087adfd926aea10af3b9f6e606e925ef7733c2e665856d84a406977cc9"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM71308833?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "70b29d58f8dd829200752068a2928d5b7891f16c51e05e3a1258b00af93be646",
+        "recording_id": "e4c0494d-5ab6-479a-a527-cfdc41f7c595",
+        "title": "Stay With Me",
+        "artist_credit": "Sam Smith",
+        "duration_ms": 172724,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/003b2d0a-2c85-43f2-bc69-c5587daef8d3",
+        "release_id": "003b2d0a-2c85-43f2-bc69-c5587daef8d3",
+        "release_group_id": "c8d660d1-4181-4a5b-9507-346970dffe96",
+        "status": "Official",
+        "title": "In the Lonely Hour",
+        "artist_credit": "Sam Smith",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2014-05-26",
+        "matching_track_count": 1,
+        "release_track_count": 14,
+        "track_position": 3,
+        "track_duration_ms": 172680,
+        "track_recording_id": "e4c0494d-5ab6-479a-a527-cfdc41f7c595",
+        "track_isrc": "GBUM71308833",
+        "raw_sha256": "867b1252388388a91d45e9d545f17d5ffbe3dd46d872bf3ed3b7a93cd6e66ca9"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "719c2bdbcb74b9adfbcc5166db5d126f5d477e87e88fcb8cd08fc570a24e9374",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    },
+    {
+      "batch_order": 16,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1926,
+        "source_entry_key": "2014:1248:pharrell williams:happy",
+        "chart_year": 2014,
+        "title": "Happy",
+        "artist": "Pharrell Williams",
+        "placeholder_canonical_id": "ea11b619-fe8c-4e8e-9ec1-731213aa4c3e",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "31bafe31f424364d3d2dadc23c31afff5fe608442a17081aa3c56282096521ec",
+        "canonical_metadata_sha256": "bc82fa45d3212bef0d8373cfe13e25294e2495b4b37f239dbfb89473dfe7e34d"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "ea11b619-fe8c-4e8e-9ec1-731213aa4c3e",
+        "album_id": null,
+        "stored_title": "Happy",
+        "stored_artist": "Pharrell Williams",
+        "track_position": 1,
+        "duration_ms": 233000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/pharrell-happy/",
+        "catalogue_number": "USQ4E1300686",
+        "raw_sha256": "813afadcaf94b4666892f38a7fc7e695bed0a6b9f59c7d9803e9787d24d17fd8"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USQ4E1300686?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "f01d0c7ee34772d27e11d494dfaa8bfe56596c58afd4bae07f8639d1990e20ec",
+        "recording_id": "f367ad6e-efd5-4496-aba5-21a4edcd82c6",
+        "title": "Happy",
+        "artist_credit": "Pharrell Williams",
+        "duration_ms": 232720,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/75f43353-fbe4-41b5-9ee8-c8c562e00480",
+        "release_id": "75f43353-fbe4-41b5-9ee8-c8c562e00480",
+        "release_group_id": "79796d6a-eed3-42d3-85fb-1b9a015bc1a8",
+        "status": "Official",
+        "title": "Happy",
+        "artist_credit": "Pharrell Williams",
+        "primary_type": "Single",
+        "country": "US",
+        "release_date": "2013-12-16",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 233000,
+        "track_recording_id": "f367ad6e-efd5-4496-aba5-21a4edcd82c6",
+        "track_isrc": "USQ4E1300686",
+        "raw_sha256": "b1b547fccd929d5a12b9d293b5d615bbf50b7da3c2869d12cbbc177397b87278"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "f18db3feb64a22c2ec4991ef2064530d46d11601893e83f843ebc630e3681d1c",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 17,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1919,
+        "source_entry_key": "2013:1240:miley cyrus:wrecking ball",
+        "chart_year": 2013,
+        "title": "Wrecking Ball",
+        "artist": "Miley Cyrus",
+        "placeholder_canonical_id": "147d5dcb-d930-40da-a670-bff994740a9e",
+        "source_revision": "1356457366"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "009db909394714ed21b9ec1127702de4f462d7b20df0161b2ba0adbc1295cfef",
+        "canonical_metadata_sha256": "9398b6aef6c5f1dad661bda628d3e6e2d8cd9c80c28e09fd85d9ffbba7d67b71"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "147d5dcb-d930-40da-a670-bff994740a9e",
+        "album_id": null,
+        "stored_title": "Wrecking Ball",
+        "stored_artist": "Miley Cyrus",
+        "track_position": 1,
+        "duration_ms": 223240
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/miley-cyrus-wrecking-ball/",
+        "catalogue_number": "USRC11301214",
+        "raw_sha256": "9535d6abade73090ca52183e33b7e60c8c929b392ec81d5390650ae86d2985c6"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USRC11301214?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "ae906721937a418573224fce6c92a6ea02a4f5eabbf515f80051a21225ac5bb4",
+        "recording_id": "8c8b2d45-6043-47c5-8c12-16fb8050817b",
+        "title": "Wrecking Ball",
+        "artist_credit": "Miley Cyrus",
+        "duration_ms": 221800,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/ac162d2d-7a61-4a7b-b83f-1189eacf9454",
+        "release_id": "ac162d2d-7a61-4a7b-b83f-1189eacf9454",
+        "release_group_id": "28bcd5ce-4245-45fc-8e61-303fd9b3ea87",
+        "status": "Official",
+        "title": "Wrecking Ball",
+        "artist_credit": "Miley Cyrus",
+        "primary_type": "Single",
+        "country": "US",
+        "release_date": "2013-08-25",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 223240,
+        "track_recording_id": "8c8b2d45-6043-47c5-8c12-16fb8050817b",
+        "track_isrc": "USRC11301214",
+        "raw_sha256": "f29f86dbd420fe20b6e52f125df01b6bdf54a075099942b9e5aa596e6078c8b0"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "a01a6684a4a5b326b966c90b86d52650ac0e74e6603bee56b851564cbc00b895",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 18,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1552,
+        "source_entry_key": "2009:1098:david guetta kelly rowland:when love takes over",
+        "chart_year": 2009,
+        "title": "When Love Takes Over",
+        "artist": "David Guetta featuring Kelly Rowland",
+        "placeholder_canonical_id": "abff20d9-abaf-46a7-ae47-c17773d78362",
+        "source_revision": "1380229024"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+        "source_metadata_sha256": "379b039ce85bcf69baa85dba56d2d810ede9ccbe8ed223dd5a6322757eeab756",
+        "canonical_metadata_sha256": "379b039ce85bcf69baa85dba56d2d810ede9ccbe8ed223dd5a6322757eeab756"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "abff20d9-abaf-46a7-ae47-c17773d78362",
+        "album_id": null,
+        "stored_title": "When Love Takes Over",
+        "stored_artist": "David Guetta featuring Kelly Rowland",
+        "track_position": 1,
+        "duration_ms": 203000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/david-guetta-ft-kelly-rowland-when-love-takes-over/",
+        "catalogue_number": "FRZID0900210",
+        "raw_sha256": "cc8137b936aad84e1a3e61ebfbb21350e93ddbedf6db1a39961159dfe570fff5"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/FRZID0900210?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "997ddbe9c8244001641c2246242b71f140dead727850d9ea8fa8a0187b69bbe5",
+        "recording_id": "e17a4f6d-42c7-428e-b8ea-4dd5bee4d34a",
+        "title": "When Love Takes Over (UK radio edit)",
+        "artist_credit": "David Guetta feat. Kelly Rowland",
+        "duration_ms": 204000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/2f0c2a89-c3a2-4763-9a0f-3b4b5a351c9b",
+        "release_id": "2f0c2a89-c3a2-4763-9a0f-3b4b5a351c9b",
+        "release_group_id": "3ac3e564-9dcf-4afc-8e52-8822f45e10cf",
+        "status": "Official",
+        "title": "When Love Takes Over",
+        "artist_credit": "David Guetta feat. Kelly Rowland",
+        "primary_type": "Single",
+        "country": "GB",
+        "release_date": "2009-06-15",
+        "matching_track_count": 1,
+        "release_track_count": 2,
+        "track_position": 1,
+        "track_duration_ms": 203000,
+        "track_recording_id": "e17a4f6d-42c7-428e-b8ea-4dd5bee4d34a",
+        "track_isrc": "FRZID0900210",
+        "raw_sha256": "5e932ab7a160c5d15865e0522c41de7e290181a08ebe60a1a4de9f2d709a4755"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "5feb2a6fd5edf22153dd7abc513f0287a473f7eb93a3f520f6b3eea4dac7bfa6",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    },
+    {
+      "batch_order": 19,
+      "classification": "verified_existing_link",
+      "action": "link_existing",
+      "chart_entry": {
+        "id": 1519,
+        "source_entry_key": "2007:1058:rihanna jay z:umbrella",
+        "chart_year": 2007,
+        "title": "Umbrella",
+        "artist": "Rihanna featuring Jay-Z",
+        "placeholder_canonical_id": "b07348a4-406c-4f8c-9d81-fdb0147d6659",
+        "source_revision": "1380229024"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+        "source_metadata_sha256": "e3160910a375abd751c52d36e65d6edb97a8e387d48a50f2e4852971bebd0a77",
+        "canonical_metadata_sha256": "e3160910a375abd751c52d36e65d6edb97a8e387d48a50f2e4852971bebd0a77"
+      },
+      "target": {
+        "song_id": 11020,
+        "canonical_id": "c7f9abc5-7fd7-483b-b557-6c32ed716db5",
+        "album_id": 816,
+        "stored_title": "Umbrella",
+        "stored_artist": "Rihanna",
+        "track_position": 1,
+        "duration_ms": null
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/rihanna-feat-jay-z-umbrella/",
+        "catalogue_number": "USUM70736771",
+        "raw_sha256": "6658ed03743036e5a3396fba7fbcc48c006f2d594fbde8a69378570815773ed7"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM70736771?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "f0eb9bae516285fac2016e924f2461788a5fc84536ac68a4f24882a2dd9da57d",
+        "recording_id": "0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d",
+        "title": "Umbrella",
+        "artist_credit": "Rihanna feat. JAY‐Z",
+        "duration_ms": 276000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/768695cf-35fa-4919-9090-25c5200e6836",
+        "release_id": "768695cf-35fa-4919-9090-25c5200e6836",
+        "release_group_id": "7e48f018-b774-32e6-a68b-b42db04535c0",
+        "status": "Official",
+        "title": "Good Girl Gone Bad",
+        "artist_credit": "Rihanna",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2007-06-04",
+        "matching_track_count": 1,
+        "release_track_count": 13,
+        "track_position": 1,
+        "track_duration_ms": 275986,
+        "track_recording_id": "0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d",
+        "track_isrc": "USUM70736771",
+        "raw_sha256": "b59dfa7dae2ac32a40a0cca5f949b0812fcc47ba9c989cea54af966fc25268bb"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "f92474608c0223b4e6c649ac78f84829d099fe749168f4fc20ab30b482993657",
+      "risk_notes": []
+    },
+    {
+      "batch_order": 20,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1353,
+        "source_entry_key": "2000:865:the corrs:breathless",
+        "chart_year": 2000,
+        "title": "Breathless",
+        "artist": "The Corrs",
+        "placeholder_canonical_id": "ec59bc93-7176-454a-b982-7fb715d89bfb",
+        "source_revision": "1380229024"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+        "source_metadata_sha256": "2543db61f414cf7e4c8cd60f834429fe124f37e7ba220caa51329a5ff6c26b53",
+        "canonical_metadata_sha256": "2543db61f414cf7e4c8cd60f834429fe124f37e7ba220caa51329a5ff6c26b53"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "ec59bc93-7176-454a-b982-7fb715d89bfb",
+        "album_id": null,
+        "stored_title": "Breathless",
+        "stored_artist": "The Corrs",
+        "track_position": 1,
+        "duration_ms": 209133
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/corrs-breathless/",
+        "catalogue_number": "USAT20001907",
+        "raw_sha256": "96bacc12fc13a05b033b1c2c12f11dbc9c5c34c3c164ba93695f21f54c9c0be4"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USAT20001907?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "e9bd4c3bfc9abb11113eeccedc5f423defe1edc74b2c693a3ec533833e062d7e",
+        "recording_id": "fe0b0eb0-fb63-4603-8df2-a82b5207f2bb",
+        "title": "Breathless",
+        "artist_credit": "The Corrs",
+        "duration_ms": 207360,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/f1b5c2ff-6715-3bbb-8ac6-789fd5c0b540",
+        "release_id": "f1b5c2ff-6715-3bbb-8ac6-789fd5c0b540",
+        "release_group_id": "74ef08a1-0817-3e22-9cef-c52e3057b3a7",
+        "status": "Official",
+        "title": "Breathless",
+        "artist_credit": "The Corrs",
+        "primary_type": "Single",
+        "country": "GB",
+        "release_date": "2000-07-03",
+        "matching_track_count": 1,
+        "release_track_count": 3,
+        "track_position": 1,
+        "track_duration_ms": 209133,
+        "track_recording_id": "fe0b0eb0-fb63-4603-8df2-a82b5207f2bb",
+        "track_isrc": "USAT20001907",
+        "raw_sha256": "d976ad64b265ee179b9c77f35cf39fe8826756ad13e6f480fb774682e911df00"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "evidence_sha256": "d0db75667be8f39ae52f8be88463c894a74f687eb0a4afdf9d613b76a4086686",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
+    }
+  ],
+  "rejected_version_leads": [
+    {
+      "chart_entry_id": 1996,
+      "title": "Symphony",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1979,
+      "title": "Easy Love",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1968,
+      "title": "See You Again",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1959,
+      "title": "Wake Me Up (Gareth Malone's All Star Choir)",
+      "reason_code": "stored_isrc_belongs_to_different_artist_version"
+    },
+    {
+      "chart_entry_id": 1913,
+      "title": "Wake Me Up (Avicii)",
+      "reason_code": "isrc_maps_multiple_recording_versions"
+    },
+    {
+      "chart_entry_id": 1522,
+      "title": "Beautiful Girls",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1467,
+      "title": "Call on Me",
+      "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version"
+    },
+    {
+      "chart_entry_id": 1418,
+      "title": "Dilemma",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 107,
+      "title": "Breathe",
+      "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge"
+    },
+    {
+      "chart_entry_id": 45,
+      "title": "No Limit",
+      "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording"
+    },
+    {
+      "chart_entry_id": 2491,
+      "title": "Houdini",
+      "reason_code": "isrc_maps_music_video_not_audio_single"
+    }
+  ],
+  "reviewed_incomplete_leads": [
+    {
+      "chart_entry_id": 2485,
+      "title": "Now and Then",
+      "reason_code": "official_charts_page_has_no_catalogue_identifier"
+    },
+    {
+      "chart_entry_id": 1545,
+      "title": "Right Round",
+      "reason_code": "official_charts_catalogue_value_is_not_the_stored_isrc"
+    },
+    {
+      "chart_entry_id": 1437,
+      "title": "Breathe (Blu Cantrell)",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 191,
+      "title": "Lift Me Up",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 180,
+      "title": "9 PM (Till I Come)",
+      "reason_code": "official_charts_song_page_not_found"
+    },
+    {
+      "chart_entry_id": 167,
+      "title": "Fly Away",
+      "reason_code": "official_charts_catalogue_value_does_not_bridge_to_stored_isrc"
+    },
+    {
+      "chart_entry_id": 41,
+      "title": "Sleeping Satellite",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 541,
+      "title": "All Around the World",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 531,
+      "title": "Like a Prayer",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 425,
+      "title": "Ebony and Ivory",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 845,
+      "title": "Message in a Bottle",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 2505,
+      "title": "The Subway",
+      "reason_code": "official_charts_catalogue_value_is_not_an_isrc"
+    },
+    {
+      "chart_entry_id": 2501,
+      "title": "Survive",
+      "reason_code": "release_level_verification_not_completed"
+    },
+    {
+      "chart_entry_id": 2500,
+      "title": "Ordinary",
+      "reason_code": "musicbrainz_isrc_lookup_unavailable"
+    },
+    {
+      "chart_entry_id": 2486,
+      "title": "Lovin on Me",
+      "reason_code": "musicbrainz_isrc_lookup_unavailable"
+    },
+    {
+      "chart_entry_id": 2476,
+      "title": "Flowers",
+      "reason_code": "official_charts_page_has_no_catalogue_identifier"
+    },
+    {
+      "chart_entry_id": 2473,
+      "title": "Anti-Hero",
+      "reason_code": "release_level_verification_not_completed"
+    }
+  ],
+  "manifest_payload": {
+    "operation_key": "20261123_uk_number_ones_verified_batch_2",
+    "snapshot": {
+      "captured_at": "2026-11-23T13:59:56.371326Z",
+      "raw_snapshot_sha256": "a271c5e335af07943652d45a5f71a34c402cf75a541ec4d04b6da66225eeade0",
+      "row_identity_sha256": "2db427f65412250956c39f7d9d39ee3b9498ff78af3b52e047ed16f21f1f9126",
+      "candidate_state_artifact": "historical-uk-number-ones-verified-batch-2-live-state-20261123.json",
+      "candidate_state_sha256": "90492794feff32e2fb3ff334e96f89a133c741f83c20bfa848183a85ed9de70c",
+      "production_integrity": {
+        "total_chart_entries": 1298,
+        "resolved_chart_entries": 419,
+        "unresolved_chart_entries": 879,
+        "albums": 1731,
+        "songs": 16162,
+        "canonical_recordings": 17095,
+        "duplicate_recording_mbids": 0,
+        "song_rating_rows": 1747,
+        "song_rating_sum": 13454,
+        "invalid_song_rating_rows": 0,
+        "historical_rating_rows": 5,
+        "historical_rating_sum": 43,
+        "first_batch_rating_reconciliation_audit_rows": 1
+      }
+    },
+    "audit_coverage": {
+      "inventory_rows_classified": 879,
+      "verified_existing_link": 1,
+      "verified_catalogue_import": 19,
+      "explicit_ambiguous_or_version_conflict": 11,
+      "insufficient_authoritative_evidence": 848,
+      "reviewed_but_not_selected": 28,
+      "remaining_inventory_without_a_complete_evidence_chain": 831,
+      "method": "Every unresolved row was inventoried. Only rows with an exact Official Charts identifier, a unique MusicBrainz ISRC recording, a reviewed official release track, and a clean live-catalogue collision check were promoted."
+    },
+    "selection_policy": {
+      "batch_size": 20,
+      "min_batch_size": 20,
+      "max_batch_size": 25,
+      "ordering": "recent-first, then chart entry id descending",
+      "force_matching_prohibited": true,
+      "all_candidates_unrated": true,
+      "source_release_note": "Daisies, Too Sweet, Godzilla, Shotgun, Stay with Me, When Love Takes Over and Breathless use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46.",
+      "selected_track_import_chart_entry_ids": [
+        2503,
+        2489,
+        2441,
+        2015,
+        1940,
+        1552,
+        1353
+      ]
+    },
+    "candidates": [
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2503,
+          "source_entry_key": "2025:1441:justin bieber:daisies",
+          "chart_year": 2025,
+          "title": "Daisies",
+          "artist": "Justin Bieber",
+          "placeholder_canonical_id": "205ae581-5bfe-42bc-9a59-85b68ef69bfd",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "11941adafc2a4c2eea0c546c732859e59438782d21f28444418993a37e7b9d92",
+          "canonical_metadata_sha256": "2d61723477187afde3d1d43a5029dde27e5d09980ef7f4a70d60cabb34c1bdbe"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "205ae581-5bfe-42bc-9a59-85b68ef69bfd",
+          "album_id": null,
+          "stored_title": "Daisies",
+          "stored_artist": "Justin Bieber",
+          "track_position": 2,
+          "duration_ms": 176000
+        },
+        "isrc": "USUG12504304",
+        "recording_id": "6be45a90-ae92-42ac-bc56-925e4454ba60",
+        "release_id": "561c8bbe-26f6-4232-93a7-735186b34456",
+        "release_group_id": "fe9cce8b-2f9e-4016-b6cb-859d4d3d0d5d",
+        "album_title": "SWAG",
+        "album_artist": "Justin Bieber",
+        "release_date": "2025-07-11",
+        "country": "XW",
+        "release_track_count": 21,
+        "evidence_sha256": "312a24b60c6600ca230af3b406915e2efe39f2ee8c69462d818eaae77061c57f",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2489,
+          "source_entry_key": "2024:1424:hozier:too sweet",
+          "chart_year": 2024,
+          "title": "Too Sweet",
+          "artist": "Hozier",
+          "placeholder_canonical_id": "6db536b6-3676-4b8c-8316-19e203f82865",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "04df401ccb03b133d0a3691dc1257fd89d18038aece3adefbf5a0b3e6f940446",
+          "canonical_metadata_sha256": "3a1abd81eb07398906e10be5949425cc05d8d83ea681154547921849b4226ef2"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "6db536b6-3676-4b8c-8316-19e203f82865",
+          "album_id": null,
+          "stored_title": "Too Sweet",
+          "stored_artist": "Hozier",
+          "track_position": 1,
+          "duration_ms": 251424
+        },
+        "isrc": "IEACJ2300335",
+        "recording_id": "272be1e2-9599-4b8d-b872-5e879881d103",
+        "release_id": "9e773c80-86fe-47ae-b96f-ca9b7e1876c8",
+        "release_group_id": "bba57a38-1823-4b37-a999-ddc7654757e8",
+        "album_title": "Unheard",
+        "album_artist": "Hozier",
+        "release_date": "2024-03-22",
+        "country": "XW",
+        "release_track_count": 4,
+        "evidence_sha256": "599252048a6e971966c7a7558655d7a5d4bbfbc4eb7cd4e9c7bc10f4f8e14d0f",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2488,
+          "source_entry_key": "2024:1422:beyonce:texas hold em",
+          "chart_year": 2024,
+          "title": "Texas Hold 'Em",
+          "artist": "Beyoncé",
+          "placeholder_canonical_id": "8fadf844-3c4a-4d54-96c9-7a43e41a9071",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "75c57115f6e19547bb63cd5ffda8cff3e72cf1f8612bd51a42fc8527e6fbae3b",
+          "canonical_metadata_sha256": "e5ff3ec1262c0db733d100342462821388f5eebfb99d2cdec4e541117e45f1a1"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "8fadf844-3c4a-4d54-96c9-7a43e41a9071",
+          "album_id": null,
+          "stored_title": "Texas Hold 'Em",
+          "stored_artist": "Beyoncé",
+          "track_position": 1,
+          "duration_ms": 236000
+        },
+        "isrc": "USSM12401302",
+        "recording_id": "2d947ada-862c-452e-95a6-091edd4330ee",
+        "release_id": "579fd7f8-0791-424a-a1e2-2e60518d9709",
+        "release_group_id": "9f9306ab-fe7a-44d3-9ddb-6a36bcceda73",
+        "album_title": "TEXAS HOLD ’EM",
+        "album_artist": "Beyoncé",
+        "release_date": "2024-02-11",
+        "country": null,
+        "release_track_count": 1,
+        "evidence_sha256": "21f573610564d484df9d883019fd97be38532b54a6af4351c2b686c2f3c7dc95",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2483,
+          "source_entry_key": "2023:1417:kenya grace:strangers",
+          "chart_year": 2023,
+          "title": "Strangers",
+          "artist": "Kenya Grace",
+          "placeholder_canonical_id": "e071f663-46f3-443f-85be-641aecf5071f",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "40ee7e70e7cf715eafaa9d9e000a6b21959f4f6f209d06e8fc7d60485ac5578c",
+          "canonical_metadata_sha256": "a74c5e75aea3d3c44ff22fe8fcd5249cc9396871a2701ae4f0bfce312da0d816"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "e071f663-46f3-443f-85be-641aecf5071f",
+          "album_id": null,
+          "stored_title": "Strangers",
+          "stored_artist": "Kenya Grace",
+          "track_position": 1,
+          "duration_ms": 172964
+        },
+        "isrc": "USWB12305048",
+        "recording_id": "d41e7f0b-ab24-4212-9b81-02f6e876d6d2",
+        "release_id": "806c5890-198b-4ffc-8ce1-cc0b5dc60c5d",
+        "release_group_id": "725ed5e5-cdad-49a3-af8b-6c7c59ad1c61",
+        "album_title": "Strangers",
+        "album_artist": "Kenya Grace",
+        "release_date": "2023-09-01",
+        "country": null,
+        "release_track_count": 1,
+        "evidence_sha256": "222103e86eeacdd2320997b51f1c17b29df86a1a6aaabb176f38583471ffd7bb",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2468,
+          "source_entry_key": "2022:1396:dave:starlight",
+          "chart_year": 2022,
+          "title": "Starlight",
+          "artist": "Dave",
+          "placeholder_canonical_id": "93449649-93bf-431a-891e-8d961aac2cad",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "f08a6d79d5c4ad4f30079f77ba63b6cfaf88ff332070fbcc06277725627f7ec6",
+          "canonical_metadata_sha256": "3abd4d1ac4d84ff9a4def61ae0daba2701fdd304474230be0e0ab22d0f64305e"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "93449649-93bf-431a-891e-8d961aac2cad",
+          "album_id": null,
+          "stored_title": "Starlight",
+          "stored_artist": "Dave",
+          "track_position": 1,
+          "duration_ms": 211935
+        },
+        "isrc": "GBUM72201160",
+        "recording_id": "fe987f4d-c05b-4afd-b79b-5e35aee763e9",
+        "release_id": "c3f1fb0c-f009-4381-bbae-08cb94bd410b",
+        "release_group_id": "a65bd8d9-9d77-4779-9650-c2f9a1514637",
+        "album_title": "Starlight",
+        "album_artist": "Dave",
+        "release_date": "2022-03-03",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "186a2f5c90fda236e07a7b74d8a1e942558a1a3d8b8ad0645d93f848808d3c51",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2460,
+          "source_entry_key": "2021:1388:ed sheeran:bad habits",
+          "chart_year": 2021,
+          "title": "Bad Habits",
+          "artist": "Ed Sheeran",
+          "placeholder_canonical_id": "c5c0a5e6-ef1a-4692-9e73-c2e7f660ee3b",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "8d6a7b3ac99a82cdc1fcc0c9d4432e6a23d160159b8115fb7e214fd319a24615",
+          "canonical_metadata_sha256": "2219f12a2258c2750e94e723217aff2f771d8e6e526d5966b1b515e0f3b3054b"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "c5c0a5e6-ef1a-4692-9e73-c2e7f660ee3b",
+          "album_id": null,
+          "stored_title": "Bad Habits",
+          "stored_artist": "Ed Sheeran",
+          "track_position": 1,
+          "duration_ms": 231041
+        },
+        "isrc": "GBAHS2100318",
+        "recording_id": "2d24a8d7-66ad-40b2-8ae7-5f6fc9981646",
+        "release_id": "1d13b9ff-f267-4c53-b8b1-0c8d7328dcee",
+        "release_group_id": "08a4883b-4a5e-4974-b2bd-f200d9702f89",
+        "album_title": "Bad Habits",
+        "album_artist": "Ed Sheeran",
+        "release_date": "2021-06-25",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "4ba2ba5d804b9b25c755f78639937c22944de70da4cfc129c4387241b9124a50",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2454,
+          "source_entry_key": "2020:1378:ariana grande:positions",
+          "chart_year": 2020,
+          "title": "Positions",
+          "artist": "Ariana Grande",
+          "placeholder_canonical_id": "b86cb30b-3d50-48eb-a53c-aaf9454e469c",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "97f2b8de7f930ef1703ea3b02daf8f008c7268bef275a20b8c0d5c1057c5d2e0",
+          "canonical_metadata_sha256": "de9efed47063bf3f31eb52442d9331046cdace26f29e6882855cab0e58e1f8fd"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "b86cb30b-3d50-48eb-a53c-aaf9454e469c",
+          "album_id": null,
+          "stored_title": "Positions",
+          "stored_artist": "Ariana Grande",
+          "track_position": 1,
+          "duration_ms": 172324
+        },
+        "isrc": "USUM72019412",
+        "recording_id": "9ccbc110-3d50-498f-9edc-6bcdef21ab0c",
+        "release_id": "ec1c27e7-768d-4458-a73f-03503fe2bfd5",
+        "release_group_id": "438d86bf-b03b-4d9a-8022-3d4807926926",
+        "album_title": "positions",
+        "album_artist": "Ariana Grande",
+        "release_date": "2020-10-23",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "7226eb842d757a6f8e608954d7758f88a43b4e2dd3570faa4b69448d58f249d9",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2452,
+          "source_entry_key": "2020:1376:24kgoldn iann dior:mood",
+          "chart_year": 2020,
+          "title": "Mood",
+          "artist": "24kGoldn featuring Iann Dior",
+          "placeholder_canonical_id": "1f4cb0c8-8263-4a2a-beb6-66c5e518db1b",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "54c0b198ae6545507ac4380168dcd128b9c2aa8c109940ee2a5c1d27ef81bb78",
+          "canonical_metadata_sha256": "6e536b2dfd2d8897e9c7b9f935341b5cd3146d5dcd65909f60a5ad613c860640"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "1f4cb0c8-8263-4a2a-beb6-66c5e518db1b",
+          "album_id": null,
+          "stored_title": "Mood",
+          "stored_artist": "24kGoldn featuring Iann Dior",
+          "track_position": 1,
+          "duration_ms": 140525
+        },
+        "isrc": "USQX92003025",
+        "recording_id": "b2688f22-2e08-43bc-b206-17ca9599e83b",
+        "release_id": "8eac58d2-c46f-40a6-a9cf-a3f9691e65f0",
+        "release_group_id": "70363b9a-3756-4412-808f-80a389053eb1",
+        "album_title": "Mood",
+        "album_artist": "24kGoldn ft. iann dior",
+        "release_date": "2020-07-24",
+        "country": "AF",
+        "release_track_count": 1,
+        "evidence_sha256": "aef1096b217536fd5f9d59b438eac52e724cbcf0bf187aa637a33d21ebf1563e",
+        "risk_notes": [
+          "MusicBrainz country is anomalously AF; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording, and official Columbia/RECORDS single."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2451,
+          "source_entry_key": "2020:1375:cardi b megan thee stallion:wap",
+          "chart_year": 2020,
+          "title": "WAP",
+          "artist": "Cardi B featuring Megan Thee Stallion",
+          "placeholder_canonical_id": "64ac44f9-c3af-411b-bbdb-dc042a3f9c38",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "99c2196d45aec4ae1e99fb25b62e4cae0f995a97dbea53570e3f175cf7a5104d",
+          "canonical_metadata_sha256": "36ec2e8e1717f456307307500c7f12f539dd9fb60e9716ce9f103ac3d670831c"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "64ac44f9-c3af-411b-bbdb-dc042a3f9c38",
+          "album_id": null,
+          "stored_title": "WAP",
+          "stored_artist": "Cardi B featuring Megan Thee Stallion",
+          "track_position": 1,
+          "duration_ms": 187541
+        },
+        "isrc": "USAT22005111",
+        "recording_id": "3af602f0-e273-4d66-83c2-8d55243cc56b",
+        "release_id": "8bb5807f-d41a-4484-a8bb-024b8fdc9c6e",
+        "release_group_id": "49deb866-e5b1-400d-8464-45ab63191ed6",
+        "album_title": "WAP",
+        "album_artist": "Cardi B feat. Megan Thee Stallion",
+        "release_date": "2020-08-07",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "bafe0dd9fd58af8f38a5916c9b9745c6d601b160d72c0f3d98f865448228867d",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2441,
+          "source_entry_key": "2020:1363:eminem juice wrld:godzilla",
+          "chart_year": 2020,
+          "title": "Godzilla",
+          "artist": "Eminem featuring Juice Wrld",
+          "placeholder_canonical_id": "2b6d4e8b-cb94-4bf3-adf9-347e81dfb470",
+          "source_revision": "1380580667"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+          "source_metadata_sha256": "7aafb5ef913eebf6715c25b6770e638d84ae5ab54f659b98954373eeb6230416",
+          "canonical_metadata_sha256": "b8922b74fe3c5e9faf88b10b937c7ebf47c6a8a0fa27633e72668e0da7884550"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "2b6d4e8b-cb94-4bf3-adf9-347e81dfb470",
+          "album_id": null,
+          "stored_title": "Godzilla",
+          "stored_artist": "Eminem featuring Juice Wrld",
+          "track_position": 7,
+          "duration_ms": 210800
+        },
+        "isrc": "USUM72000788",
+        "recording_id": "3b1808a9-a935-46ae-add1-7485af7e67e1",
+        "release_id": "1fb7517b-2fb9-40ec-910f-0a3a514fb70c",
+        "release_group_id": "bc217c64-db43-4311-9b73-fca6d25c4ac5",
+        "album_title": "Music to Be Murdered By",
+        "album_artist": "Eminem",
+        "release_date": "2020-01-17",
+        "country": "XW",
+        "release_track_count": 20,
+        "evidence_sha256": "cf23cee188c56e89c892643a50d33deb8ec9ffa0748d96cef7b870cef6e967dd",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2022,
+          "source_entry_key": "2018:1347:ariana grande:thank u next",
+          "chart_year": 2018,
+          "title": "Thank U, Next",
+          "artist": "Ariana Grande",
+          "placeholder_canonical_id": "ea463c6e-f79c-4236-b0ac-aad36ffb850c",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "c9f03f6ff0fdc6fbc9c741ba59d1f9bacc5866d6cd2631f2306a05734c7c2fd7",
+          "canonical_metadata_sha256": "6f166f31edefd38eff231f343fb3940c2d12a07c4ae560cb7782c4cb94748171"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "ea463c6e-f79c-4236-b0ac-aad36ffb850c",
+          "album_id": null,
+          "stored_title": "Thank U, Next",
+          "stored_artist": "Ariana Grande",
+          "track_position": 1,
+          "duration_ms": 207000
+        },
+        "isrc": "USUM71819361",
+        "recording_id": "274b3a7b-64bd-4af3-9af9-dd41277ddc17",
+        "release_id": "52cbc5d7-7194-428e-8c69-b62414c1d25e",
+        "release_group_id": "b6728a22-1934-4840-92ec-096944f20e12",
+        "album_title": "thank u, next",
+        "album_artist": "Ariana Grande",
+        "release_date": "2018-11-03",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "1a611c0fc7ceb6dd6dd93b300840f3463b750eeb22fa3163c7a51c4481b9333d",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2015,
+          "source_entry_key": "2018:1341:george ezra:shotgun",
+          "chart_year": 2018,
+          "title": "Shotgun",
+          "artist": "George Ezra",
+          "placeholder_canonical_id": "358ded20-02ed-44e5-937e-fde356950e67",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "d5832aed077daab437c1f51746ab3132cb57b1eb3013be668f3bf6601c36c32e",
+          "canonical_metadata_sha256": "4c2268c117bee594ca87d287b37bec7b293a9b459c0b9dd99980c8bceecee833"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "358ded20-02ed-44e5-937e-fde356950e67",
+          "album_id": null,
+          "stored_title": "Shotgun",
+          "stored_artist": "George Ezra",
+          "track_position": 4,
+          "duration_ms": 201293
+        },
+        "isrc": "GBARL1701372",
+        "recording_id": "81614e2f-298e-4644-aaed-36fe57fb1eb3",
+        "release_id": "210dc0d8-d828-446e-b6cd-f27c8d7508f2",
+        "release_group_id": "26a02214-cdc6-4297-b434-a225af91c658",
+        "album_title": "Staying at Tamara’s",
+        "album_artist": "George Ezra",
+        "release_date": "2018-03-23",
+        "country": "XE",
+        "release_track_count": 11,
+        "evidence_sha256": "5606c9a11f5d27fe1dff035d8b9a7bf47b810157d9d46fa16931e368d11414a1",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1989,
+          "source_entry_key": "2016:1313:drake wizkid and kyla:one dance",
+          "chart_year": 2016,
+          "title": "One Dance",
+          "artist": "Drake featuring Wizkid and Kyla",
+          "placeholder_canonical_id": "21a718c5-d7ca-40f5-b553-a42365a48212",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "cb5b644db81211313c3db0e99c4de9e1972fc13331f215f02ef4ae555906c2ee",
+          "canonical_metadata_sha256": "f76fd500f423963df0c3703f76b9bb78cc95776509fb992bf51d03296348b11a"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "21a718c5-d7ca-40f5-b553-a42365a48212",
+          "album_id": null,
+          "stored_title": "One Dance",
+          "stored_artist": "Drake featuring Wizkid and Kyla",
+          "track_position": 1,
+          "duration_ms": 173000
+        },
+        "isrc": "USCM51600028",
+        "recording_id": "be9e4a6b-3f56-468a-aa61-b1bcb6fc277f",
+        "release_id": "e2f55bbb-a03a-4f83-8122-a536406a1e69",
+        "release_group_id": "626d569f-adaf-4fff-a326-9adc0158a01f",
+        "album_title": "One Dance",
+        "album_artist": "Drake feat. WizKid & Kyla",
+        "release_date": "2016-04-05",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "df100a08f9f9185dc420f93ec3266ddbe7489f379b322cb6d205b37b4da63e9a",
+        "risk_notes": [
+          "A same-title Drake catalogue song is a different MusicBrainz recording and ISRC; the operation must not title-link it."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1969,
+          "source_entry_key": "2015:1291:omi:cheerleader",
+          "chart_year": 2015,
+          "title": "Cheerleader",
+          "artist": "Omi",
+          "placeholder_canonical_id": "e85e0ffd-3bf5-48e7-af33-370f91946238",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "48135363a68c9c7337d7affda6709e67c6d173cbef9ab6ad7529ac6d98f43118",
+          "canonical_metadata_sha256": "095543032123a8e08d30962b40fea5ea73adcd256b86a7c675806d40916f11e3"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "e85e0ffd-3bf5-48e7-af33-370f91946238",
+          "album_id": null,
+          "stored_title": "Cheerleader",
+          "stored_artist": "Omi",
+          "track_position": 1,
+          "duration_ms": 180021
+        },
+        "isrc": "USUS11202574",
+        "recording_id": "3d05947b-f269-43da-8e4a-c7596533ea67",
+        "release_id": "43d34384-0b41-4353-bbe5-60045fc6efb5",
+        "release_group_id": "86991689-9595-4de3-b14d-c7f1ea4caac5",
+        "album_title": "Cheerleader (Felix Jaehn Remix Radio Edit)",
+        "album_artist": "Omi",
+        "release_date": "2014-05-19",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "f3d61ee94dee843b4b94e0fdda95166abc10a731546973c0cee2f89503ba7684",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1940,
+          "source_entry_key": "2014:1262:sam smith:stay with me",
+          "chart_year": 2014,
+          "title": "Stay with Me",
+          "artist": "Sam Smith",
+          "placeholder_canonical_id": "919c18cb-b30a-44dc-89c0-42374704ccf8",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "099569d87aa52bda0c8d8264e4cfae73bb3d1936ba67124123835f066b7ef11c",
+          "canonical_metadata_sha256": "cf7cb8805e9bfc16bc4593db412f0c35279a79ac6a3e484d1cbfb07abf2bba65"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "919c18cb-b30a-44dc-89c0-42374704ccf8",
+          "album_id": null,
+          "stored_title": "Stay with Me",
+          "stored_artist": "Sam Smith",
+          "track_position": 3,
+          "duration_ms": 172680
+        },
+        "isrc": "GBUM71308833",
+        "recording_id": "e4c0494d-5ab6-479a-a527-cfdc41f7c595",
+        "release_id": "003b2d0a-2c85-43f2-bc69-c5587daef8d3",
+        "release_group_id": "c8d660d1-4181-4a5b-9507-346970dffe96",
+        "album_title": "In the Lonely Hour",
+        "album_artist": "Sam Smith",
+        "release_date": "2014-05-26",
+        "country": "GB",
+        "release_track_count": 14,
+        "evidence_sha256": "719c2bdbcb74b9adfbcc5166db5d126f5d477e87e88fcb8cd08fc570a24e9374",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1926,
+          "source_entry_key": "2014:1248:pharrell williams:happy",
+          "chart_year": 2014,
+          "title": "Happy",
+          "artist": "Pharrell Williams",
+          "placeholder_canonical_id": "ea11b619-fe8c-4e8e-9ec1-731213aa4c3e",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "31bafe31f424364d3d2dadc23c31afff5fe608442a17081aa3c56282096521ec",
+          "canonical_metadata_sha256": "bc82fa45d3212bef0d8373cfe13e25294e2495b4b37f239dbfb89473dfe7e34d"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "ea11b619-fe8c-4e8e-9ec1-731213aa4c3e",
+          "album_id": null,
+          "stored_title": "Happy",
+          "stored_artist": "Pharrell Williams",
+          "track_position": 1,
+          "duration_ms": 233000
+        },
+        "isrc": "USQ4E1300686",
+        "recording_id": "f367ad6e-efd5-4496-aba5-21a4edcd82c6",
+        "release_id": "75f43353-fbe4-41b5-9ee8-c8c562e00480",
+        "release_group_id": "79796d6a-eed3-42d3-85fb-1b9a015bc1a8",
+        "album_title": "Happy",
+        "album_artist": "Pharrell Williams",
+        "release_date": "2013-12-16",
+        "country": "US",
+        "release_track_count": 1,
+        "evidence_sha256": "f18db3feb64a22c2ec4991ef2064530d46d11601893e83f843ebc630e3681d1c",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1919,
+          "source_entry_key": "2013:1240:miley cyrus:wrecking ball",
+          "chart_year": 2013,
+          "title": "Wrecking Ball",
+          "artist": "Miley Cyrus",
+          "placeholder_canonical_id": "147d5dcb-d930-40da-a670-bff994740a9e",
+          "source_revision": "1356457366"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+          "source_metadata_sha256": "009db909394714ed21b9ec1127702de4f462d7b20df0161b2ba0adbc1295cfef",
+          "canonical_metadata_sha256": "9398b6aef6c5f1dad661bda628d3e6e2d8cd9c80c28e09fd85d9ffbba7d67b71"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "147d5dcb-d930-40da-a670-bff994740a9e",
+          "album_id": null,
+          "stored_title": "Wrecking Ball",
+          "stored_artist": "Miley Cyrus",
+          "track_position": 1,
+          "duration_ms": 223240
+        },
+        "isrc": "USRC11301214",
+        "recording_id": "8c8b2d45-6043-47c5-8c12-16fb8050817b",
+        "release_id": "ac162d2d-7a61-4a7b-b83f-1189eacf9454",
+        "release_group_id": "28bcd5ce-4245-45fc-8e61-303fd9b3ea87",
+        "album_title": "Wrecking Ball",
+        "album_artist": "Miley Cyrus",
+        "release_date": "2013-08-25",
+        "country": "US",
+        "release_track_count": 1,
+        "evidence_sha256": "a01a6684a4a5b326b966c90b86d52650ac0e74e6603bee56b851564cbc00b895",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1552,
+          "source_entry_key": "2009:1098:david guetta kelly rowland:when love takes over",
+          "chart_year": 2009,
+          "title": "When Love Takes Over",
+          "artist": "David Guetta featuring Kelly Rowland",
+          "placeholder_canonical_id": "abff20d9-abaf-46a7-ae47-c17773d78362",
+          "source_revision": "1380229024"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+          "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+          "source_metadata_sha256": "379b039ce85bcf69baa85dba56d2d810ede9ccbe8ed223dd5a6322757eeab756",
+          "canonical_metadata_sha256": "379b039ce85bcf69baa85dba56d2d810ede9ccbe8ed223dd5a6322757eeab756"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "abff20d9-abaf-46a7-ae47-c17773d78362",
+          "album_id": null,
+          "stored_title": "When Love Takes Over",
+          "stored_artist": "David Guetta featuring Kelly Rowland",
+          "track_position": 1,
+          "duration_ms": 203000
+        },
+        "isrc": "FRZID0900210",
+        "recording_id": "e17a4f6d-42c7-428e-b8ea-4dd5bee4d34a",
+        "release_id": "2f0c2a89-c3a2-4763-9a0f-3b4b5a351c9b",
+        "release_group_id": "3ac3e564-9dcf-4afc-8e52-8822f45e10cf",
+        "album_title": "When Love Takes Over",
+        "album_artist": "David Guetta feat. Kelly Rowland",
+        "release_date": "2009-06-15",
+        "country": "GB",
+        "release_track_count": 2,
+        "evidence_sha256": "5feb2a6fd5edf22153dd7abc513f0287a473f7eb93a3f520f6b3eea4dac7bfa6",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "link_existing",
+        "chart_entry": {
+          "id": 1519,
+          "source_entry_key": "2007:1058:rihanna jay z:umbrella",
+          "chart_year": 2007,
+          "title": "Umbrella",
+          "artist": "Rihanna featuring Jay-Z",
+          "placeholder_canonical_id": "b07348a4-406c-4f8c-9d81-fdb0147d6659",
+          "source_revision": "1380229024"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+          "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+          "source_metadata_sha256": "e3160910a375abd751c52d36e65d6edb97a8e387d48a50f2e4852971bebd0a77",
+          "canonical_metadata_sha256": "e3160910a375abd751c52d36e65d6edb97a8e387d48a50f2e4852971bebd0a77"
+        },
+        "target": {
+          "song_id": 11020,
+          "canonical_id": "c7f9abc5-7fd7-483b-b557-6c32ed716db5",
+          "album_id": 816,
+          "stored_title": "Umbrella",
+          "stored_artist": "Rihanna",
+          "track_position": 1,
+          "duration_ms": null
+        },
+        "isrc": "USUM70736771",
+        "recording_id": "0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d",
+        "release_id": "768695cf-35fa-4919-9090-25c5200e6836",
+        "release_group_id": "7e48f018-b774-32e6-a68b-b42db04535c0",
+        "album_title": "Good Girl Gone Bad",
+        "album_artist": "Rihanna",
+        "release_date": "2007-06-04",
+        "country": "GB",
+        "release_track_count": 13,
+        "evidence_sha256": "f92474608c0223b4e6c649ac78f84829d099fe749168f4fc20ab30b482993657",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1353,
+          "source_entry_key": "2000:865:the corrs:breathless",
+          "chart_year": 2000,
+          "title": "Breathless",
+          "artist": "The Corrs",
+          "placeholder_canonical_id": "ec59bc93-7176-454a-b982-7fb715d89bfb",
+          "source_revision": "1380229024"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+          "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+          "source_metadata_sha256": "2543db61f414cf7e4c8cd60f834429fe124f37e7ba220caa51329a5ff6c26b53",
+          "canonical_metadata_sha256": "2543db61f414cf7e4c8cd60f834429fe124f37e7ba220caa51329a5ff6c26b53"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "ec59bc93-7176-454a-b982-7fb715d89bfb",
+          "album_id": null,
+          "stored_title": "Breathless",
+          "stored_artist": "The Corrs",
+          "track_position": 1,
+          "duration_ms": 209133
+        },
+        "isrc": "USAT20001907",
+        "recording_id": "fe0b0eb0-fb63-4603-8df2-a82b5207f2bb",
+        "release_id": "f1b5c2ff-6715-3bbb-8ac6-789fd5c0b540",
+        "release_group_id": "74ef08a1-0817-3e22-9cef-c52e3057b3a7",
+        "album_title": "Breathless",
+        "album_artist": "The Corrs",
+        "release_date": "2000-07-03",
+        "country": "GB",
+        "release_track_count": 3,
+        "evidence_sha256": "d0db75667be8f39ae52f8be88463c894a74f687eb0a4afdf9d613b76a4086686",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      }
+    ],
+    "rejected_version_leads": [
+      {
+        "chart_entry_id": 1996,
+        "title": "Symphony",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1979,
+        "title": "Easy Love",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1968,
+        "title": "See You Again",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1959,
+        "title": "Wake Me Up (Gareth Malone's All Star Choir)",
+        "reason_code": "stored_isrc_belongs_to_different_artist_version"
+      },
+      {
+        "chart_entry_id": 1913,
+        "title": "Wake Me Up (Avicii)",
+        "reason_code": "isrc_maps_multiple_recording_versions"
+      },
+      {
+        "chart_entry_id": 1522,
+        "title": "Beautiful Girls",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1467,
+        "title": "Call on Me",
+        "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version"
+      },
+      {
+        "chart_entry_id": 1418,
+        "title": "Dilemma",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 107,
+        "title": "Breathe",
+        "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge"
+      },
+      {
+        "chart_entry_id": 45,
+        "title": "No Limit",
+        "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording"
+      },
+      {
+        "chart_entry_id": 2491,
+        "title": "Houdini",
+        "reason_code": "isrc_maps_music_video_not_audio_single"
+      }
+    ],
+    "reviewed_incomplete_leads": [
+      {
+        "chart_entry_id": 2485,
+        "title": "Now and Then",
+        "reason_code": "official_charts_page_has_no_catalogue_identifier"
+      },
+      {
+        "chart_entry_id": 1545,
+        "title": "Right Round",
+        "reason_code": "official_charts_catalogue_value_is_not_the_stored_isrc"
+      },
+      {
+        "chart_entry_id": 1437,
+        "title": "Breathe (Blu Cantrell)",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 191,
+        "title": "Lift Me Up",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 180,
+        "title": "9 PM (Till I Come)",
+        "reason_code": "official_charts_song_page_not_found"
+      },
+      {
+        "chart_entry_id": 167,
+        "title": "Fly Away",
+        "reason_code": "official_charts_catalogue_value_does_not_bridge_to_stored_isrc"
+      },
+      {
+        "chart_entry_id": 41,
+        "title": "Sleeping Satellite",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 541,
+        "title": "All Around the World",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 531,
+        "title": "Like a Prayer",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 425,
+        "title": "Ebony and Ivory",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 845,
+        "title": "Message in a Bottle",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 2505,
+        "title": "The Subway",
+        "reason_code": "official_charts_catalogue_value_is_not_an_isrc"
+      },
+      {
+        "chart_entry_id": 2501,
+        "title": "Survive",
+        "reason_code": "release_level_verification_not_completed"
+      },
+      {
+        "chart_entry_id": 2500,
+        "title": "Ordinary",
+        "reason_code": "musicbrainz_isrc_lookup_unavailable"
+      },
+      {
+        "chart_entry_id": 2486,
+        "title": "Lovin on Me",
+        "reason_code": "musicbrainz_isrc_lookup_unavailable"
+      },
+      {
+        "chart_entry_id": 2476,
+        "title": "Flowers",
+        "reason_code": "official_charts_page_has_no_catalogue_identifier"
+      },
+      {
+        "chart_entry_id": 2473,
+        "title": "Anti-Hero",
+        "reason_code": "release_level_verification_not_completed"
+      }
+    ],
+    "expected_deltas": {
+      "albums": 19,
+      "songs": 19,
+      "canonical_recordings": 0,
+      "historical_chart_links": 20,
+      "ratings": 0
+    },
+    "proposed_result": {
+      "resolved_delta": 20,
+      "resolved_chart_entries": 439,
+      "remaining_unresolved_chart_entries": 859
+    },
+    "safety_contract": {
+      "atomic_transaction": true,
+      "global_stale_baseline_abort": true,
+      "per_candidate_stale_fingerprint_abort": true,
+      "deterministic_advisory_lock_order": true,
+      "immutable_private_operation_evidence": true,
+      "preserve_all_song_ratings_byte_for_byte": true,
+      "preserve_all_historical_chart_ratings_byte_for_byte": true,
+      "preserve_first_batch_papa_dont_preach_reconciliation": true,
+      "duplicate_and_partial_identity_abort": true,
+      "rollback_operation_required": true,
+      "production_execution_authorized": false
+    }
+  },
+  "manifest_sha256": "b33891a3312d72c76958af4dab578d0ba165ac3aa894d26ee415ba6ec8237032",
+  "expected_deltas": {
+    "albums": 19,
+    "songs": 19,
+    "canonical_recordings": 0,
+    "historical_chart_links": 20,
+    "ratings": 0
+  },
+  "proposed_result": {
+    "resolved_delta": 20,
+    "resolved_chart_entries": 439,
+    "remaining_unresolved_chart_entries": 859
+  },
+  "safety_contract": {
+    "approval_gate": "SET bom.approved_historical_reconciliation = '20261123_uk_number_ones_verified_batch_2:b33891a3312d72c76958af4dab578d0ba165ac3aa894d26ee415ba6ec8237032' before executing the operation in the same session",
+    "atomic_transaction": true,
+    "global_stale_baseline_abort": true,
+    "per_candidate_stale_fingerprint_abort": true,
+    "deterministic_advisory_lock_order": true,
+    "immutable_private_operation_evidence": true,
+    "preserve_all_song_ratings_byte_for_byte": true,
+    "preserve_all_historical_chart_ratings_byte_for_byte": true,
+    "preserve_first_batch_papa_dont_preach_reconciliation": true,
+    "duplicate_and_partial_identity_abort": true,
+    "rollback_operation_required": true,
+    "production_execution_authorized": false
+  }
+}
