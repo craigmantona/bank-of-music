@@ -1,0 +1,1375 @@
+{
+  "schema_version": 1,
+  "artifact": "historical-uk-number-ones-verified-batch-2-live-state",
+  "status": "read_only_snapshot",
+  "project_id": "xevxjggauscyrvvtmftx",
+  "captured_at": "2026-11-23T13:59:56.371326Z",
+  "candidates": [
+    {
+      "chart_entry": {
+        "id": 2503,
+        "source_entry_key": "2025:1441:justin bieber:daisies",
+        "chart_year": 2025,
+        "title": "Daisies",
+        "artist": "Justin Bieber",
+        "placeholder_canonical_id": "205ae581-5bfe-42bc-9a59-85b68ef69bfd",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "11941adafc2a4c2eea0c546c732859e59438782d21f28444418993a37e7b9d92",
+        "canonical_metadata_sha256": "2d61723477187afde3d1d43a5029dde27e5d09980ef7f4a70d60cabb34c1bdbe"
+      },
+      "placeholder": {
+        "id": "205ae581-5bfe-42bc-9a59-85b68ef69bfd",
+        "title": "Daisies",
+        "artist": "Justin Bieber",
+        "origin_key": "quick-rate:uk-number-ones:2025:1441:justin bieber:daisies",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1441,
+          "article_titles": [
+            "Daisies (Justin Bieber song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2025,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2025-07-31"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2489,
+        "source_entry_key": "2024:1424:hozier:too sweet",
+        "chart_year": 2024,
+        "title": "Too Sweet",
+        "artist": "Hozier",
+        "placeholder_canonical_id": "6db536b6-3676-4b8c-8316-19e203f82865",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "04df401ccb03b133d0a3691dc1257fd89d18038aece3adefbf5a0b3e6f940446",
+        "canonical_metadata_sha256": "3a1abd81eb07398906e10be5949425cc05d8d83ea681154547921849b4226ef2"
+      },
+      "placeholder": {
+        "id": "6db536b6-3676-4b8c-8316-19e203f82865",
+        "title": "Too Sweet",
+        "artist": "Hozier",
+        "origin_key": "quick-rate:uk-number-ones:2024:1424:hozier:too sweet",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1424,
+          "article_titles": [
+            "Too Sweet"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2024,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 2,
+          "first_number_one_date": "2024-04-18"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2488,
+        "source_entry_key": "2024:1422:beyonce:texas hold em",
+        "chart_year": 2024,
+        "title": "Texas Hold 'Em",
+        "artist": "Beyoncé",
+        "placeholder_canonical_id": "8fadf844-3c4a-4d54-96c9-7a43e41a9071",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "75c57115f6e19547bb63cd5ffda8cff3e72cf1f8612bd51a42fc8527e6fbae3b",
+        "canonical_metadata_sha256": "e5ff3ec1262c0db733d100342462821388f5eebfb99d2cdec4e541117e45f1a1"
+      },
+      "placeholder": {
+        "id": "8fadf844-3c4a-4d54-96c9-7a43e41a9071",
+        "title": "Texas Hold 'Em",
+        "artist": "Beyoncé",
+        "origin_key": "quick-rate:uk-number-ones:2024:1422:beyonce:texas hold em",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1422,
+          "article_titles": [
+            "Texas Hold 'Em (song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2024,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 2,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 5,
+          "first_number_one_date": "2024-02-29"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2483,
+        "source_entry_key": "2023:1417:kenya grace:strangers",
+        "chart_year": 2023,
+        "title": "Strangers",
+        "artist": "Kenya Grace",
+        "placeholder_canonical_id": "e071f663-46f3-443f-85be-641aecf5071f",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "40ee7e70e7cf715eafaa9d9e000a6b21959f4f6f209d06e8fc7d60485ac5578c",
+        "canonical_metadata_sha256": "a74c5e75aea3d3c44ff22fe8fcd5249cc9396871a2701ae4f0bfce312da0d816"
+      },
+      "placeholder": {
+        "id": "e071f663-46f3-443f-85be-641aecf5071f",
+        "title": "Strangers",
+        "artist": "Kenya Grace",
+        "origin_key": "quick-rate:uk-number-ones:2023:1417:kenya grace:strangers",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1417,
+          "article_titles": [
+            "Strangers (Kenya Grace song)"
+          ],
+          "spotify_track_ids": [
+            "5mjYQaktjmjcMKcUIcqz4s"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2023,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 3,
+          "first_number_one_date": "2023-10-19"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2468,
+        "source_entry_key": "2022:1396:dave:starlight",
+        "chart_year": 2022,
+        "title": "Starlight",
+        "artist": "Dave",
+        "placeholder_canonical_id": "93449649-93bf-431a-891e-8d961aac2cad",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "f08a6d79d5c4ad4f30079f77ba63b6cfaf88ff332070fbcc06277725627f7ec6",
+        "canonical_metadata_sha256": "3abd4d1ac4d84ff9a4def61ae0daba2701fdd304474230be0e0ab22d0f64305e"
+      },
+      "placeholder": {
+        "id": "93449649-93bf-431a-891e-8d961aac2cad",
+        "title": "Starlight",
+        "artist": "Dave",
+        "origin_key": "quick-rate:uk-number-ones:2022:1396:dave:starlight",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1396,
+          "article_titles": [
+            "Starlight (Dave song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2022,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 4,
+          "first_number_one_date": "2022-03-17"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2460,
+        "source_entry_key": "2021:1388:ed sheeran:bad habits",
+        "chart_year": 2021,
+        "title": "Bad Habits",
+        "artist": "Ed Sheeran",
+        "placeholder_canonical_id": "c5c0a5e6-ef1a-4692-9e73-c2e7f660ee3b",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "8d6a7b3ac99a82cdc1fcc0c9d4432e6a23d160159b8115fb7e214fd319a24615",
+        "canonical_metadata_sha256": "2219f12a2258c2750e94e723217aff2f771d8e6e526d5966b1b515e0f3b3054b"
+      },
+      "placeholder": {
+        "id": "c5c0a5e6-ef1a-4692-9e73-c2e7f660ee3b",
+        "title": "Bad Habits",
+        "artist": "Ed Sheeran",
+        "origin_key": "quick-rate:uk-number-ones:2021:1388:ed sheeran:bad habits",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1388,
+          "article_titles": [
+            "Bad Habits (Ed Sheeran song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2021,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 11,
+          "first_number_one_date": "2021-07-08"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2454,
+        "source_entry_key": "2020:1378:ariana grande:positions",
+        "chart_year": 2020,
+        "title": "Positions",
+        "artist": "Ariana Grande",
+        "placeholder_canonical_id": "b86cb30b-3d50-48eb-a53c-aaf9454e469c",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "97f2b8de7f930ef1703ea3b02daf8f008c7268bef275a20b8c0d5c1057c5d2e0",
+        "canonical_metadata_sha256": "de9efed47063bf3f31eb52442d9331046cdace26f29e6882855cab0e58e1f8fd"
+      },
+      "placeholder": {
+        "id": "b86cb30b-3d50-48eb-a53c-aaf9454e469c",
+        "title": "Positions",
+        "artist": "Ariana Grande",
+        "origin_key": "quick-rate:uk-number-ones:2020:1378:ariana grande:positions",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1378,
+          "article_titles": [
+            "Positions (song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 6,
+          "first_number_one_date": "2020-11-05"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2452,
+        "source_entry_key": "2020:1376:24kgoldn iann dior:mood",
+        "chart_year": 2020,
+        "title": "Mood",
+        "artist": "24kGoldn featuring Iann Dior",
+        "placeholder_canonical_id": "1f4cb0c8-8263-4a2a-beb6-66c5e518db1b",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "54c0b198ae6545507ac4380168dcd128b9c2aa8c109940ee2a5c1d27ef81bb78",
+        "canonical_metadata_sha256": "6e536b2dfd2d8897e9c7b9f935341b5cd3146d5dcd65909f60a5ad613c860640"
+      },
+      "placeholder": {
+        "id": "1f4cb0c8-8263-4a2a-beb6-66c5e518db1b",
+        "title": "Mood",
+        "artist": "24kGoldn featuring Iann Dior",
+        "origin_key": "quick-rate:uk-number-ones:2020:1376:24kgoldn iann dior:mood",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1376,
+          "article_titles": [
+            "Mood (24kGoldn song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 4,
+          "first_number_one_date": "2020-10-01"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2451,
+        "source_entry_key": "2020:1375:cardi b megan thee stallion:wap",
+        "chart_year": 2020,
+        "title": "WAP",
+        "artist": "Cardi B featuring Megan Thee Stallion",
+        "placeholder_canonical_id": "64ac44f9-c3af-411b-bbdb-dc042a3f9c38",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "99c2196d45aec4ae1e99fb25b62e4cae0f995a97dbea53570e3f175cf7a5104d",
+        "canonical_metadata_sha256": "36ec2e8e1717f456307307500c7f12f539dd9fb60e9716ce9f103ac3d670831c"
+      },
+      "placeholder": {
+        "id": "64ac44f9-c3af-411b-bbdb-dc042a3f9c38",
+        "title": "WAP",
+        "artist": "Cardi B featuring Megan Thee Stallion",
+        "origin_key": "quick-rate:uk-number-ones:2020:1375:cardi b megan thee stallion:wap",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USAT22005111"
+          ],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1375,
+          "article_titles": [
+            "WAP (song)"
+          ],
+          "spotify_track_ids": [
+            "4Oun2ylbjFKMPTiaSbbCih"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": "USAT22005111",
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 3,
+          "first_number_one_date": "2020-09-10"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2441,
+        "source_entry_key": "2020:1363:eminem juice wrld:godzilla",
+        "chart_year": 2020,
+        "title": "Godzilla",
+        "artist": "Eminem featuring Juice Wrld",
+        "placeholder_canonical_id": "2b6d4e8b-cb94-4bf3-adf9-347e81dfb470",
+        "source_revision": "1380580667"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303Z",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303Z",
+        "source_metadata_sha256": "7aafb5ef913eebf6715c25b6770e638d84ae5ab54f659b98954373eeb6230416",
+        "canonical_metadata_sha256": "b8922b74fe3c5e9faf88b10b937c7ebf47c6a8a0fa27633e72668e0da7884550"
+      },
+      "placeholder": {
+        "id": "2b6d4e8b-cb94-4bf3-adf9-347e81dfb470",
+        "title": "Godzilla",
+        "artist": "Eminem featuring Juice Wrld",
+        "origin_key": "quick-rate:uk-number-ones:2020:1363:eminem juice wrld:godzilla",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1363,
+          "article_titles": [
+            "Godzilla (Eminem song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2020-01-30"
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2022,
+        "source_entry_key": "2018:1347:ariana grande:thank u next",
+        "chart_year": 2018,
+        "title": "Thank U, Next",
+        "artist": "Ariana Grande",
+        "placeholder_canonical_id": "ea463c6e-f79c-4236-b0ac-aad36ffb850c",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "c9f03f6ff0fdc6fbc9c741ba59d1f9bacc5866d6cd2631f2306a05734c7c2fd7",
+        "canonical_metadata_sha256": "6f166f31edefd38eff231f343fb3940c2d12a07c4ae560cb7782c4cb94748171"
+      },
+      "placeholder": {
+        "id": "ea463c6e-f79c-4236-b0ac-aad36ffb850c",
+        "title": "Thank U, Next",
+        "artist": "Ariana Grande",
+        "origin_key": "quick-rate:uk-number-ones:2018:1347:ariana grande:thank u next",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USUM71819361"
+          ],
+          "source_number": 1347,
+          "article_titles": [
+            "Thank U, Next (song)"
+          ],
+          "spotify_track_ids": [
+            "3e9HZxeyfWwjeyPAMmWSSQ"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USUM71819361"
+          ],
+          "source_number": 1347,
+          "article_titles": [
+            "Thank U, Next (song)"
+          ],
+          "spotify_track_ids": [
+            "3e9HZxeyfWwjeyPAMmWSSQ"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2018-11-15",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 2015,
+        "source_entry_key": "2018:1341:george ezra:shotgun",
+        "chart_year": 2018,
+        "title": "Shotgun",
+        "artist": "George Ezra",
+        "placeholder_canonical_id": "358ded20-02ed-44e5-937e-fde356950e67",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "d5832aed077daab437c1f51746ab3132cb57b1eb3013be668f3bf6601c36c32e",
+        "canonical_metadata_sha256": "4c2268c117bee594ca87d287b37bec7b293a9b459c0b9dd99980c8bceecee833"
+      },
+      "placeholder": {
+        "id": "358ded20-02ed-44e5-937e-fde356950e67",
+        "title": "Shotgun",
+        "artist": "George Ezra",
+        "origin_key": "quick-rate:uk-number-ones:2018:1341:george ezra:shotgun",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "GBARL1701372"
+          ],
+          "source_number": 1341,
+          "article_titles": [
+            "Shotgun (George Ezra song)"
+          ],
+          "spotify_track_ids": [
+            "4ofwffwvvnbSkrMSCKQDaC"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "GBARL1701372"
+          ],
+          "source_number": 1341,
+          "article_titles": [
+            "Shotgun (George Ezra song)"
+          ],
+          "spotify_track_ids": [
+            "4ofwffwvvnbSkrMSCKQDaC"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2018-07-05",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1989,
+        "source_entry_key": "2016:1313:drake wizkid and kyla:one dance",
+        "chart_year": 2016,
+        "title": "One Dance",
+        "artist": "Drake featuring Wizkid and Kyla",
+        "placeholder_canonical_id": "21a718c5-d7ca-40f5-b553-a42365a48212",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "cb5b644db81211313c3db0e99c4de9e1972fc13331f215f02ef4ae555906c2ee",
+        "canonical_metadata_sha256": "f76fd500f423963df0c3703f76b9bb78cc95776509fb992bf51d03296348b11a"
+      },
+      "placeholder": {
+        "id": "21a718c5-d7ca-40f5-b553-a42365a48212",
+        "title": "One Dance",
+        "artist": "Drake featuring Wizkid and Kyla",
+        "origin_key": "quick-rate:uk-number-ones:2016:1313:drake wizkid and kyla:one dance",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USCM51600028"
+          ],
+          "source_number": 1313,
+          "article_titles": [
+            "One Dance"
+          ],
+          "spotify_track_ids": [
+            "1zi7xx7UVEFkmKfv06H8x0"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USCM51600028"
+          ],
+          "source_number": 1313,
+          "article_titles": [
+            "One Dance"
+          ],
+          "spotify_track_ids": [
+            "1zi7xx7UVEFkmKfv06H8x0"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2016-04-21",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1969,
+        "source_entry_key": "2015:1291:omi:cheerleader",
+        "chart_year": 2015,
+        "title": "Cheerleader",
+        "artist": "Omi",
+        "placeholder_canonical_id": "e85e0ffd-3bf5-48e7-af33-370f91946238",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "48135363a68c9c7337d7affda6709e67c6d173cbef9ab6ad7529ac6d98f43118",
+        "canonical_metadata_sha256": "095543032123a8e08d30962b40fea5ea73adcd256b86a7c675806d40916f11e3"
+      },
+      "placeholder": {
+        "id": "e85e0ffd-3bf5-48e7-af33-370f91946238",
+        "title": "Cheerleader",
+        "artist": "Omi",
+        "origin_key": "quick-rate:uk-number-ones:2015:1291:omi:cheerleader",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USUS11202574"
+          ],
+          "source_number": 1291,
+          "article_titles": [
+            "Cheerleader (Omi song)"
+          ],
+          "spotify_track_ids": [
+            "6fQcqEcXfnY0L6VwS0c3gT"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USUS11202574"
+          ],
+          "source_number": 1291,
+          "article_titles": [
+            "Cheerleader (Omi song)"
+          ],
+          "spotify_track_ids": [
+            "6fQcqEcXfnY0L6VwS0c3gT"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2015-05-09",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1940,
+        "source_entry_key": "2014:1262:sam smith:stay with me",
+        "chart_year": 2014,
+        "title": "Stay with Me",
+        "artist": "Sam Smith",
+        "placeholder_canonical_id": "919c18cb-b30a-44dc-89c0-42374704ccf8",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "099569d87aa52bda0c8d8264e4cfae73bb3d1936ba67124123835f066b7ef11c",
+        "canonical_metadata_sha256": "cf7cb8805e9bfc16bc4593db412f0c35279a79ac6a3e484d1cbfb07abf2bba65"
+      },
+      "placeholder": {
+        "id": "919c18cb-b30a-44dc-89c0-42374704ccf8",
+        "title": "Stay with Me",
+        "artist": "Sam Smith",
+        "origin_key": "quick-rate:uk-number-ones:2014:1262:sam smith:stay with me",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "GBUM71308833"
+          ],
+          "source_number": 1262,
+          "article_titles": [
+            "Stay with Me (Sam Smith song)"
+          ],
+          "spotify_track_ids": [
+            "5Nm9ERjJZ5oyfXZTECKmRt"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "GBUM71308833"
+          ],
+          "source_number": 1262,
+          "article_titles": [
+            "Stay with Me (Sam Smith song)"
+          ],
+          "spotify_track_ids": [
+            "5Nm9ERjJZ5oyfXZTECKmRt"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2014-05-31",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1926,
+        "source_entry_key": "2014:1248:pharrell williams:happy",
+        "chart_year": 2014,
+        "title": "Happy",
+        "artist": "Pharrell Williams",
+        "placeholder_canonical_id": "ea11b619-fe8c-4e8e-9ec1-731213aa4c3e",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "31bafe31f424364d3d2dadc23c31afff5fe608442a17081aa3c56282096521ec",
+        "canonical_metadata_sha256": "bc82fa45d3212bef0d8373cfe13e25294e2495b4b37f239dbfb89473dfe7e34d"
+      },
+      "placeholder": {
+        "id": "ea11b619-fe8c-4e8e-9ec1-731213aa4c3e",
+        "title": "Happy",
+        "artist": "Pharrell Williams",
+        "origin_key": "quick-rate:uk-number-ones:2014:1248:pharrell williams:happy",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USQ4E1300686"
+          ],
+          "source_number": 1248,
+          "article_titles": [
+            "Happy (Pharrell Williams song)"
+          ],
+          "spotify_track_ids": [
+            "60nZcImufyMA1MKQY3dcCH"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USQ4E1300686"
+          ],
+          "source_number": 1248,
+          "article_titles": [
+            "Happy (Pharrell Williams song)"
+          ],
+          "spotify_track_ids": [
+            "60nZcImufyMA1MKQY3dcCH"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2014-01-04",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1919,
+        "source_entry_key": "2013:1240:miley cyrus:wrecking ball",
+        "chart_year": 2013,
+        "title": "Wrecking Ball",
+        "artist": "Miley Cyrus",
+        "placeholder_canonical_id": "147d5dcb-d930-40da-a670-bff994740a9e",
+        "source_revision": "1356457366"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997Z",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997Z",
+        "source_metadata_sha256": "009db909394714ed21b9ec1127702de4f462d7b20df0161b2ba0adbc1295cfef",
+        "canonical_metadata_sha256": "9398b6aef6c5f1dad661bda628d3e6e2d8cd9c80c28e09fd85d9ffbba7d67b71"
+      },
+      "placeholder": {
+        "id": "147d5dcb-d930-40da-a670-bff994740a9e",
+        "title": "Wrecking Ball",
+        "artist": "Miley Cyrus",
+        "origin_key": "quick-rate:uk-number-ones:2013:1240:miley cyrus:wrecking ball",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USRC11301214"
+          ],
+          "source_number": 1240,
+          "article_titles": [
+            "Wrecking Ball (Miley Cyrus song)"
+          ],
+          "spotify_track_ids": [
+            "2vwlzO0Qp8kfEtzTsCXfyE"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USRC11301214"
+          ],
+          "source_number": 1240,
+          "article_titles": [
+            "Wrecking Ball (Miley Cyrus song)"
+          ],
+          "spotify_track_ids": [
+            "2vwlzO0Qp8kfEtzTsCXfyE"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2013-10-19",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1552,
+        "source_entry_key": "2009:1098:david guetta kelly rowland:when love takes over",
+        "chart_year": 2009,
+        "title": "When Love Takes Over",
+        "artist": "David Guetta featuring Kelly Rowland",
+        "placeholder_canonical_id": "abff20d9-abaf-46a7-ae47-c17773d78362",
+        "source_revision": "1380229024"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+        "source_metadata_sha256": "379b039ce85bcf69baa85dba56d2d810ede9ccbe8ed223dd5a6322757eeab756",
+        "canonical_metadata_sha256": "379b039ce85bcf69baa85dba56d2d810ede9ccbe8ed223dd5a6322757eeab756"
+      },
+      "placeholder": {
+        "id": "abff20d9-abaf-46a7-ae47-c17773d78362",
+        "title": "When Love Takes Over",
+        "artist": "David Guetta featuring Kelly Rowland",
+        "origin_key": "quick-rate:uk-number-ones:2009:1098:david guetta kelly rowland:when love takes over",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "FRZID0900200"
+          ],
+          "source_number": 1098,
+          "article_titles": [
+            "When Love Takes Over"
+          ],
+          "spotify_track_ids": [
+            "0Wuhqs2vyEfRvLhRVzOAR5"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "FRZID0900200"
+          ],
+          "source_number": 1098,
+          "article_titles": [
+            "When Love Takes Over"
+          ],
+          "spotify_track_ids": [
+            "0Wuhqs2vyEfRvLhRVzOAR5"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1519,
+        "source_entry_key": "2007:1058:rihanna jay z:umbrella",
+        "chart_year": 2007,
+        "title": "Umbrella",
+        "artist": "Rihanna featuring Jay-Z",
+        "placeholder_canonical_id": "b07348a4-406c-4f8c-9d81-fdb0147d6659",
+        "source_revision": "1380229024"
+      },
+      "action": "link_existing",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+        "source_metadata_sha256": "e3160910a375abd751c52d36e65d6edb97a8e387d48a50f2e4852971bebd0a77",
+        "canonical_metadata_sha256": "e3160910a375abd751c52d36e65d6edb97a8e387d48a50f2e4852971bebd0a77"
+      },
+      "placeholder": {
+        "id": "b07348a4-406c-4f8c-9d81-fdb0147d6659",
+        "title": "Umbrella",
+        "artist": "Rihanna featuring Jay-Z",
+        "origin_key": "quick-rate:uk-number-ones:2007:1058:rihanna jay z:umbrella",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 1,
+        "canonical_recording_rows": 1,
+        "album_release_rows": 1,
+        "album_release_group_rows": 1
+      },
+      "existing_target": {
+        "song": {
+          "title": "Umbrella",
+          "artist": "Rihanna",
+          "song_id": 11020,
+          "is_deleted": false,
+          "duration_ms": null,
+          "external_id": "0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d",
+          "track_position": 1,
+          "external_source": "musicbrainz",
+          "canonical_song_id": "c7f9abc5-7fd7-483b-b557-6c32ed716db5"
+        },
+        "canonical": {
+          "id": "c7f9abc5-7fd7-483b-b557-6c32ed716db5",
+          "title": "Umbrella",
+          "artist": "Rihanna",
+          "origin_key": "musicbrainz:0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d",
+          "musicbrainz_recording_id": "0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d"
+        },
+        "album": {
+          "id": 816,
+          "title": "Good Girl Gone Bad",
+          "artist": "Rihanna",
+          "is_deleted": false,
+          "external_id": "768695cf-35fa-4919-9090-25c5200e6836",
+          "release_date": "2007-06-04",
+          "external_source": "musicbrainz",
+          "canonical_release_date": null,
+          "musicbrainz_release_id": "768695cf-35fa-4919-9090-25c5200e6836",
+          "canonical_release_country": null,
+          "musicbrainz_release_group_id": "7e48f018-b774-32e6-a68b-b42db04535c0"
+        }
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USUM70736771"
+          ],
+          "source_number": 1058,
+          "article_titles": [
+            "Umbrella (song)"
+          ],
+          "spotify_track_ids": [
+            "49FYlytm3dAAraYgpoJZux"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USUM70736771"
+          ],
+          "source_number": 1058,
+          "article_titles": [
+            "Umbrella (song)"
+          ],
+          "spotify_track_ids": [
+            "49FYlytm3dAAraYgpoJZux"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    },
+    {
+      "chart_entry": {
+        "id": 1353,
+        "source_entry_key": "2000:865:the corrs:breathless",
+        "chart_year": 2000,
+        "title": "Breathless",
+        "artist": "The Corrs",
+        "placeholder_canonical_id": "ec59bc93-7176-454a-b982-7fb715d89bfb",
+        "source_revision": "1380229024"
+      },
+      "action": "import_verified",
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T12:46:12.603787Z",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787Z",
+        "source_metadata_sha256": "2543db61f414cf7e4c8cd60f834429fe124f37e7ba220caa51329a5ff6c26b53",
+        "canonical_metadata_sha256": "2543db61f414cf7e4c8cd60f834429fe124f37e7ba220caa51329a5ff6c26b53"
+      },
+      "placeholder": {
+        "id": "ec59bc93-7176-454a-b982-7fb715d89bfb",
+        "title": "Breathless",
+        "artist": "The Corrs",
+        "origin_key": "quick-rate:uk-number-ones:2000:865:the corrs:breathless",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "catalogue_collision": {
+        "song_recording_rows": 0,
+        "canonical_recording_rows": 0,
+        "album_release_rows": 0,
+        "album_release_group_rows": 0
+      },
+      "existing_target": null,
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [
+            "USAT20001907"
+          ],
+          "source_number": 865,
+          "article_titles": [
+            "Breathless (The Corrs song)"
+          ],
+          "spotify_track_ids": [
+            "5OQGeJ1ceykovrykZsGhqL"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [
+            "USAT20001907"
+          ],
+          "source_number": 865,
+          "article_titles": [
+            "Breathless (The Corrs song)"
+          ],
+          "spotify_track_ids": [
+            "5OQGeJ1ceykovrykZsGhqL"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      }
+    }
+  ]
+}
+

@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -275,28 +274,20 @@ commit;
 }
 
 export async function main() {
-  const commit = process.argv.includes("--commit");
+  if (process.argv.includes("--commit")) {
+    throw new Error("Direct --commit is disabled. Use an independently reviewed, manifest-bound, approval-gated atomic operation.");
+  }
+  if (option("sql-output")) {
+    throw new Error("Direct SQL output is disabled. Use an independently reviewed, manifest-bound, approval-gated atomic operation.");
+  }
   const manifest = validateManifest(JSON.parse(await readFile(resolve(option("manifest", DEFAULT_MANIFEST)), "utf8")));
   const cacheFile = resolve(option("musicbrainz-cache", resolve(HERE, ".cache/historical-uk-number-ones-pilot.json")));
   const musicbrainz = await validateMusicBrainz(manifest, { cacheFile });
   const snapshotPath = option("snapshot");
   const snapshot = snapshotPath ? JSON.parse(await readFile(resolve(snapshotPath), "utf8")) : await restSnapshot(manifest);
   const plan = buildPlan(manifest, snapshot, musicbrainz.releases);
-  const sql = generateTransactionSql(manifest, plan);
-  if (option("sql-output")) await writeFile(resolve(option("sql-output")), sql);
-  console.log(JSON.stringify({ mode: commit ? "commit" : "dry-run", musicbrainz: { requests: musicbrainz.requests, cache_hits: musicbrainz.cache_hits, validated: musicbrainz.validations.length }, planned: plan.counts, albums: plan.album_actions, blockers: [] }, null, 2));
-  if (!commit) { console.log("Dry run succeeded. No database rows were written; --commit is required for changes."); return; }
-  if (snapshotPath) throw new Error("--commit refuses --snapshot; live guards must be re-read immediately before execution.");
-  const databaseUrl = process.env.BOM_DATABASE_URL;
-  if (!databaseUrl) throw new Error("--commit requires BOM_DATABASE_URL for one atomic PostgreSQL transaction.");
-  const psql = option("psql", "psql");
-  const result = spawnSync(psql, ["--no-psqlrc", "--set", "ON_ERROR_STOP=1"], {
-    input: sql, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"],
-    env: { ...process.env, PGDATABASE: databaseUrl }
-  });
-  if (result.error) throw result.error;
-  if (result.status !== 0) throw new Error(`Transaction failed and rolled back: ${result.stderr.trim()}`);
-  console.log(result.stdout.trim());
+  console.log(JSON.stringify({ mode: "dry-run", execution_policy: "reviewed_approval_gated_atomic_sql_only", musicbrainz: { requests: musicbrainz.requests, cache_hits: musicbrainz.cache_hits, validated: musicbrainz.validations.length }, planned: plan.counts, albums: plan.album_actions, blockers: [] }, null, 2));
+  console.log("Dry run succeeded. No database rows were written; direct execution is disabled.");
 }
 
 if (typeof process !== "undefined" && process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
