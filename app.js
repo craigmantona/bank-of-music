@@ -13753,7 +13753,7 @@ async function loadQuickRateYearData(collection, year, userId) {
   }
   if (quickRateYearPromises.has(key)) return quickRateYearPromises.get(key);
   const cacheGeneration = quickRateYearCacheGeneration;
-  const promise = (async () => {
+  const request = (async () => {
     if (collection === "uk-number-ones" || collection === "bom-tracks") {
       const { data, error } = await supabaseClient.rpc("get_quick_rate_year", {
         p_collection_key: collection,
@@ -13779,14 +13779,25 @@ async function loadQuickRateYearData(collection, year, userId) {
       importedEntries: [], songs: visibleSongs, albums, canonicalRecordings, ratings, overallProgress: null
     };
   })();
-  quickRateYearPromises.set(key, promise);
-  try {
-    const result = await promise;
+  const promise = (async () => {
+    let result;
+    try {
+      result = await request;
+    } catch (error) {
+      if (cacheGeneration !== quickRateYearCacheGeneration) {
+        return loadQuickRateYearData(collection, requestedYear, userId);
+      }
+      throw error;
+    }
     if (cacheGeneration !== quickRateYearCacheGeneration) {
       return loadQuickRateYearData(collection, requestedYear, userId);
     }
     quickRateYearCache.set(key, result);
     return result;
+  })();
+  quickRateYearPromises.set(key, promise);
+  try {
+    return await promise;
   } finally {
     if (quickRateYearPromises.get(key) === promise) quickRateYearPromises.delete(key);
   }
@@ -14247,6 +14258,7 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
       render(focus);
       const artistLookupNames = getArtistCreditLookupNames(yearEntries.map(entry => entry.song?.artist || entry.canonicalRecording?.artist || entry.artist));
       enrichQuickRateArtistIdentities(dialog, userId, identities => {
+        if (sequence !== loadSequence || !dialog.open || currentUser?.id !== userId) return;
         const scrollTop = dialog.scrollTop;
         artistIdentities = identities;
         loadedArtistIdentities = identities;

@@ -78,7 +78,7 @@ test('Quick Rate keeps ratings from other years while replacing the freshly load
   assert.deepEqual(Array.from(ratings, row => row.canonical_song_id || `song:${row.song_id}`), ['song:99','year-b']);
 });
 
-test('rating mutations invalidate year projections and stale in-flight loads refetch', async () => {
+test('rating mutations make every in-flight caller refetch, including pre-invalidation joiners', async () => {
   const source = extract('let quickRateHistoryRestore', 'function mapQuickRateYearProjection');
   const context = vm.createContext({Map});
   vm.runInContext(source, context);
@@ -93,26 +93,86 @@ test('rating mutations invalidate year projections and stale in-flight loads ref
   assert.match(extract('function upsertLocalSongRating', 'function updateTrackRowUi'), /invalidateQuickRateYearDataCache/);
 
   let resolveStale;
+  let resolveFresh;
   let calls = 0;
   const asyncContext = vm.createContext({
     Map,
+    currentUser:{id:'me'},
+    allSongRatings:[],
     QUICK_RATE_UK_SINGLES:{},
     mergeRowsById:(_existing,incoming)=>incoming,
     supabaseClient:{rpc:()=>{
       calls += 1;
       if (calls === 1) return new Promise(resolve => { resolveStale = resolve; });
-      return Promise.resolve({data:{selected_year:2025,years:[2025],entries:[{id:2,title:'Fresh'}],overall_total:1,overall_rated:0},error:null});
+      if (calls === 2) return new Promise(resolve => { resolveFresh = resolve; });
+      throw new Error(`Unexpected RPC call ${calls}`);
     }}
   });
   vm.runInContext(extract('let quickRateHistoryRestore', 'async function loadQuickRateCore'), asyncContext);
+  vm.runInContext(extract('function upsertLocalSongRating', 'function removeLocalSongRating'), asyncContext);
   const staleLoad = asyncContext.loadQuickRateYearData('uk-number-ones', 2025, 'me');
-  asyncContext.invalidateQuickRateYearDataCache();
+  const joinedStaleLoad = asyncContext.loadQuickRateYearData('uk-number-ones', 2025, 'me');
+  assert.equal(calls, 1);
+  asyncContext.upsertLocalSongRating(77, 9);
+  assert.equal(asyncContext.allSongRatings[0].rating, 9);
   const freshLoad = asyncContext.loadQuickRateYearData('uk-number-ones', 2025, 'me');
-  resolveStale({data:{selected_year:2025,years:[2025],entries:[{id:1,title:'Stale'}],overall_total:1,overall_rated:0},error:null});
-  const [staleCallerResult, freshCallerResult] = await Promise.all([staleLoad, freshLoad]);
   assert.equal(calls, 2);
-  assert.equal(staleCallerResult.importedEntries[0].id, 2);
-  assert.equal(freshCallerResult.importedEntries[0].id, 2);
+  let settled = 0;
+  staleLoad.then(() => { settled += 1; });
+  joinedStaleLoad.then(() => { settled += 1; });
+  resolveStale({data:{selected_year:2025,years:[2025],entries:[{
+    id:1,title:'Stale',resolved_song_id:101,canonical_song_id:'stale',personal_rating:2
+  }],overall_total:2,overall_rated:0},error:null});
+  await Promise.resolve();
+  await Promise.resolve();
+  assert.equal(calls, 2, 'stale callers join the already in-flight current generation');
+  assert.equal(settled, 0, 'stale callers cannot receive the superseded response');
+  resolveFresh({data:{selected_year:2025,years:[2025],entries:[{
+    id:2,title:'Fresh',resolved_song_id:202,canonical_song_id:'fresh',personal_rating:9
+  }],overall_total:2,overall_rated:1},error:null});
+  const results = await Promise.all([staleLoad, joinedStaleLoad, freshLoad]);
+  assert.equal(calls, 2);
+  assert.deepEqual(results.map(result => result.importedEntries[0].id), [2,2,2]);
+  assert.deepEqual(results.map(result => result.ratings[0].rating), [9,9,9]);
+  assert.deepEqual(results.map(result => result.overallProgress.rated), [1,1,1]);
+  assert.deepEqual(results.map(result => result.overallProgress.percentage), [50,50,50]);
+  assert.equal((await asyncContext.loadQuickRateYearData('uk-number-ones', 2025, 'me')).importedEntries[0].id, 2);
+  assert.equal(calls, 2);
+});
+
+test('superseded Quick Rate failures join the current generation and active failures remain retryable', async () => {
+  let rejectStale;
+  let resolveFresh;
+  let calls = 0;
+  const context = vm.createContext({
+    Map,
+    QUICK_RATE_UK_SINGLES:{},
+    mergeRowsById:(_existing,incoming)=>incoming,
+    supabaseClient:{rpc:()=>{
+      calls += 1;
+      if (calls === 1) return new Promise((_resolve, reject) => { rejectStale = reject; });
+      if (calls === 2) return new Promise(resolve => { resolveFresh = resolve; });
+      if (calls === 3) return Promise.resolve({data:null,error:new Error('current generation failed')});
+      if (calls === 4) return Promise.resolve({data:{selected_year:2025,years:[2025],entries:[{id:4,title:'Retry'}]},error:null});
+      throw new Error(`Unexpected RPC call ${calls}`);
+    }}
+  });
+  vm.runInContext(extract('let quickRateHistoryRestore', 'async function loadQuickRateCore'), context);
+
+  const staleLoad = context.loadQuickRateYearData('uk-number-ones', 2025, 'me');
+  const joinedStaleLoad = context.loadQuickRateYearData('uk-number-ones', 2025, 'me');
+  context.invalidateQuickRateYearDataCache();
+  const freshLoad = context.loadQuickRateYearData('uk-number-ones', 2025, 'me');
+  rejectStale(new Error('superseded request failed'));
+  resolveFresh({data:{selected_year:2025,years:[2025],entries:[{id:2,title:'Fresh'}]},error:null});
+  assert.deepEqual((await Promise.all([staleLoad, joinedStaleLoad, freshLoad])).map(result => result.importedEntries[0].id), [2,2,2]);
+  assert.equal(calls, 2);
+
+  context.invalidateQuickRateYearDataCache();
+  await assert.rejects(context.loadQuickRateYearData('uk-number-ones', 2025, 'me'), /current generation failed/);
+  assert.equal(calls, 3);
+  assert.equal((await context.loadQuickRateYearData('uk-number-ones', 2025, 'me')).importedEntries[0].id, 4);
+  assert.equal(calls, 4);
 });
 
 test('Quick Rate reuses track rating upsert and reports success only after persistence', async () => {
