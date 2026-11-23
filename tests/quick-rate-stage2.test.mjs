@@ -26,10 +26,12 @@ test('year loads are cached, deduplicated, retryable and rating-cache safe', () 
   const loader = app.slice(app.indexOf('async function loadQuickRateYearData'), app.indexOf('async function loadQuickRateCore'));
   assert.match(loader, /quickRateYearCache\.has\(key\)/);
   assert.match(loader, /quickRateYearPromises\.has\(key\)/);
-  assert.match(loader, /allSongRatings\.filter\(row => row\.user_id === userId\)/);
+  assert.match(loader, /cacheGeneration !== quickRateYearCacheGeneration[\s\S]*?loadQuickRateYearData\(collection, requestedYear, userId\)/);
+  assert.match(loader, /const request = \(async \(\) => \{[\s\S]*?const promise = \(async \(\) => \{[\s\S]*?quickRateYearPromises\.set\(key, promise\)/);
   assert.match(loader, /finally[\s\S]*?quickRateYearPromises\.delete\(key\)/);
-  assert.doesNotMatch(loader, /catch[\s\S]*?quickRateYearCache\.set/);
+  assert.doesNotMatch(loader, /catch \(error\) \{(?:(?!throw error;)[\s\S])*quickRateYearCache\.set/);
   const open = app.slice(app.indexOf('async function openQuickRate'), app.indexOf('window.handleQuickRateClick'));
+  assert.match(open, /mergeQuickRateUserRatings\([\s\S]*?loaded\.ratings,[\s\S]*?loaded\.importedEntries/);
   assert.match(open, /previousRating === null && overallProgressOverride/);
   assert.match(open, /removed && hadRating && overallProgressOverride/);
 });
@@ -45,5 +47,6 @@ test('immediate shell and stale-request protection remain in place', () => {
   assert.ok(open.indexOf('dialog.showModal();') < open.indexOf('await loadSelectedQuickRateYear(selectedYear)'));
   assert.match(open, /const sequence = \+\+loadSequence/);
   assert.match(open, /sequence !== loadSequence/);
+  assert.match(open, /enrichQuickRateArtistIdentities\(dialog, userId, identities => \{\s*if \(sequence !== loadSequence \|\| !dialog\.open \|\| currentUser\?\.id !== userId\) return;/);
   assert.match(open, /loading="lazy" decoding="async"/);
 });

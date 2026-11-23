@@ -1,0 +1,48 @@
+{
+  "operation": "20261123_reconcile_verified_uk_number_one_reentries.sql",
+  "executed_at": "2026-11-23T10:48:10Z",
+  "result": {
+    "updated_chart_rows": 2,
+    "resolved_rows_before": 413,
+    "resolved_rows_after": 415,
+    "unresolved_rows_before": 885,
+    "unresolved_rows_after": 883,
+    "rateable_identities_before": 409,
+    "rateable_identities_after": 409,
+    "album_inserts": 0,
+    "song_inserts": 0,
+    "canonical_inserts": 0
+  },
+  "repaired": [
+    {
+      "chart_id": 2016,
+      "title": "Three Lions",
+      "artist": "Baddiel, Skinner and The Lightning Seeds",
+      "song_id": 19795,
+      "canonical_song_id": "d5add943-d61e-46f3-9cca-03f78133b765",
+      "musicbrainz_recording_id": "9f03bee4-0c72-409b-9575-09a2f9c2fa7e",
+      "match_method": "bulk_verified_repeat"
+    },
+    {
+      "chart_id": 2497,
+      "title": "That's So True",
+      "artist": "Gracie Abrams",
+      "song_id": 19786,
+      "canonical_song_id": "e6b4276a-684b-4baa-b90e-cd48bb35963b",
+      "musicbrainz_recording_id": "a6ff57e9-5ba8-4a32-8ac3-e5e8c42796dc",
+      "match_method": "bulk_verified_repeat"
+    }
+  ],
+  "integrity": {
+    "song_ratings_before": 1746,
+    "song_ratings_after": 1746,
+    "song_rating_sum_before": 13446,
+    "song_rating_sum_after": 13446,
+    "song_rating_hash_before": "dc07ccdd6c124337f6d25c22ca4a7343",
+    "song_rating_hash_after": "dc07ccdd6c124337f6d25c22ca4a7343",
+    "historical_chart_entry_ratings_after": 5,
+    "albums_after": 1730,
+    "songs_after": 16161,
+    "canonical_recordings_after": 17095
+  }
+}
