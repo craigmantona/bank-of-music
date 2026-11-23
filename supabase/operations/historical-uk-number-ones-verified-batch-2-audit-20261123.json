@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "artifact": "historical-uk-number-ones-verified-batch-2-audit",
   "status": "proposed_not_executed",
   "snapshot": {
@@ -41,7 +41,16 @@
     "ordering": "recent-first, then chart entry id descending",
     "force_matching_prohibited": true,
     "all_candidates_unrated": true,
-    "source_release_note": "Shotgun, Stay with Me, Daisies and Godzilla use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46."
+    "source_release_note": "Daisies, Too Sweet, Godzilla, Shotgun, Stay with Me, When Love Takes Over and Breathless use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46.",
+    "selected_track_import_chart_entry_ids": [
+      2503,
+      2489,
+      2441,
+      2015,
+      1940,
+      1552,
+      1353
+    ]
   },
   "proposed_batch": [
     {
@@ -98,6 +107,7 @@
         "country": "XW",
         "release_date": "2025-07-11",
         "matching_track_count": 1,
+        "release_track_count": 21,
         "track_position": 2,
         "track_duration_ms": 176000,
         "track_recording_id": "6be45a90-ae92-42ac-bc56-925e4454ba60",
@@ -109,7 +119,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "14ddb2beb2b1283b7a23737a90d3c4e58dd711beac64742b0c73e488cee282ed",
+      "evidence_sha256": "312a24b60c6600ca230af3b406915e2efe39f2ee8c69462d818eaae77061c57f",
       "risk_notes": [
         "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
       ]
@@ -168,6 +178,7 @@
         "country": "XW",
         "release_date": "2024-03-22",
         "matching_track_count": 1,
+        "release_track_count": 4,
         "track_position": 1,
         "track_duration_ms": 251424,
         "track_recording_id": "272be1e2-9599-4b8d-b872-5e879881d103",
@@ -179,8 +190,10 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "c969335378e351134b38ab17cec65fe7a52d2924bd0c184aaadda49e9554b1fc",
-      "risk_notes": []
+      "evidence_sha256": "599252048a6e971966c7a7558655d7a5d4bbfbc4eb7cd4e9c7bc10f4f8e14d0f",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
     },
     {
       "batch_order": 3,
@@ -236,6 +249,7 @@
         "country": null,
         "release_date": "2024-02-11",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 236000,
         "track_recording_id": "2d947ada-862c-452e-95a6-091edd4330ee",
@@ -247,7 +261,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "bc4a7efe48b66add54203b3807c07df0b531c5110197c52cb4d879e1f15f4cc8",
+      "evidence_sha256": "21f573610564d484df9d883019fd97be38532b54a6af4351c2b686c2f3c7dc95",
       "risk_notes": []
     },
     {
@@ -304,6 +318,7 @@
         "country": null,
         "release_date": "2023-09-01",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 172964,
         "track_recording_id": "d41e7f0b-ab24-4212-9b81-02f6e876d6d2",
@@ -315,7 +330,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "a9ef4d00460df4fa711d5385677296eef8bf52c59f9be6d1f29adac37548c164",
+      "evidence_sha256": "222103e86eeacdd2320997b51f1c17b29df86a1a6aaabb176f38583471ffd7bb",
       "risk_notes": []
     },
     {
@@ -372,6 +387,7 @@
         "country": "XW",
         "release_date": "2022-03-03",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 211935,
         "track_recording_id": "fe987f4d-c05b-4afd-b79b-5e35aee763e9",
@@ -383,7 +399,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "712a2f49a0e73e59b89dc2dea41ac40df53e36fd929984b39ca7a0e6d483c2e5",
+      "evidence_sha256": "186a2f5c90fda236e07a7b74d8a1e942558a1a3d8b8ad0645d93f848808d3c51",
       "risk_notes": []
     },
     {
@@ -440,6 +456,7 @@
         "country": "XW",
         "release_date": "2021-06-25",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 231041,
         "track_recording_id": "2d24a8d7-66ad-40b2-8ae7-5f6fc9981646",
@@ -451,7 +468,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "f4223b304f6ac7d51cad180d90e727baf0679ae7dd72f182c8191fe6db006af0",
+      "evidence_sha256": "4ba2ba5d804b9b25c755f78639937c22944de70da4cfc129c4387241b9124a50",
       "risk_notes": []
     },
     {
@@ -508,6 +525,7 @@
         "country": "XW",
         "release_date": "2020-10-23",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 172324,
         "track_recording_id": "9ccbc110-3d50-498f-9edc-6bcdef21ab0c",
@@ -519,7 +537,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "07425bdf76d38a94ce03467c465227a7acaa62710ca419e52473f0d8fa9a54ff",
+      "evidence_sha256": "7226eb842d757a6f8e608954d7758f88a43b4e2dd3570faa4b69448d58f249d9",
       "risk_notes": []
     },
     {
@@ -576,6 +594,7 @@
         "country": "AF",
         "release_date": "2020-07-24",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 140525,
         "track_recording_id": "b2688f22-2e08-43bc-b206-17ca9599e83b",
@@ -587,7 +606,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "1339eb84366697fc687239eccff19aba5454ff6fbabf8afeba730c09fdb07a34",
+      "evidence_sha256": "aef1096b217536fd5f9d59b438eac52e724cbcf0bf187aa637a33d21ebf1563e",
       "risk_notes": [
         "MusicBrainz country is anomalously AF; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording, and official Columbia/RECORDS single."
       ]
@@ -646,6 +665,7 @@
         "country": "XW",
         "release_date": "2020-08-07",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 187541,
         "track_recording_id": "3af602f0-e273-4d66-83c2-8d55243cc56b",
@@ -657,7 +677,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "b599ef0b8b7869ea9e1a84b9b9593ed4601f50ac69fe52828cfd44d3e1ad0353",
+      "evidence_sha256": "bafe0dd9fd58af8f38a5916c9b9745c6d601b160d72c0f3d98f865448228867d",
       "risk_notes": []
     },
     {
@@ -714,6 +734,7 @@
         "country": "XW",
         "release_date": "2020-01-17",
         "matching_track_count": 1,
+        "release_track_count": 20,
         "track_position": 7,
         "track_duration_ms": 210800,
         "track_recording_id": "3b1808a9-a935-46ae-add1-7485af7e67e1",
@@ -725,7 +746,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "41e30b0aa5affd14d3f721e716f9c33788ccf2d697e421b04463e7a8b5bf1f6e",
+      "evidence_sha256": "cf23cee188c56e89c892643a50d33deb8ec9ffa0748d96cef7b870cef6e967dd",
       "risk_notes": [
         "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
       ]
@@ -784,6 +805,7 @@
         "country": "XW",
         "release_date": "2018-11-03",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 207000,
         "track_recording_id": "274b3a7b-64bd-4af3-9af9-dd41277ddc17",
@@ -795,7 +817,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "7a158cfbe796a1ced7cc9f69bbb09e576835a7b421d15a0c24bbd8f8af11e311",
+      "evidence_sha256": "1a611c0fc7ceb6dd6dd93b300840f3463b750eeb22fa3163c7a51c4481b9333d",
       "risk_notes": []
     },
     {
@@ -852,6 +874,7 @@
         "country": "XE",
         "release_date": "2018-03-23",
         "matching_track_count": 1,
+        "release_track_count": 11,
         "track_position": 4,
         "track_duration_ms": 201293,
         "track_recording_id": "81614e2f-298e-4644-aaed-36fe57fb1eb3",
@@ -863,7 +886,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "d95d5f7a58088494d8298a0fc3fcacd7ad307b97ef4236d76ee088bc9f55b060",
+      "evidence_sha256": "5606c9a11f5d27fe1dff035d8b9a7bf47b810157d9d46fa16931e368d11414a1",
       "risk_notes": [
         "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
       ]
@@ -922,6 +945,7 @@
         "country": "XW",
         "release_date": "2016-04-05",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 173000,
         "track_recording_id": "be9e4a6b-3f56-468a-aa61-b1bcb6fc277f",
@@ -933,7 +957,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "8d8a029170d9c4fd632fdc2a7b428a14cc5a0fd43692a14a4bd385a30a233e25",
+      "evidence_sha256": "df100a08f9f9185dc420f93ec3266ddbe7489f379b322cb6d205b37b4da63e9a",
       "risk_notes": [
         "A same-title Drake catalogue song is a different MusicBrainz recording and ISRC; the operation must not title-link it."
       ]
@@ -992,6 +1016,7 @@
         "country": "XW",
         "release_date": "2014-05-19",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 180021,
         "track_recording_id": "3d05947b-f269-43da-8e4a-c7596533ea67",
@@ -1003,7 +1028,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "219d0dc3048b80fa0c5e6a4ef96040e8ce3ef11b10c07920866c0e03903ca4d5",
+      "evidence_sha256": "f3d61ee94dee843b4b94e0fdda95166abc10a731546973c0cee2f89503ba7684",
       "risk_notes": []
     },
     {
@@ -1060,6 +1085,7 @@
         "country": "GB",
         "release_date": "2014-05-26",
         "matching_track_count": 1,
+        "release_track_count": 14,
         "track_position": 3,
         "track_duration_ms": 172680,
         "track_recording_id": "e4c0494d-5ab6-479a-a527-cfdc41f7c595",
@@ -1071,7 +1097,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "868b91359ff90f0a73e9d85be2ba6332f07a8cba51345a278d93b92b76180f5c",
+      "evidence_sha256": "719c2bdbcb74b9adfbcc5166db5d126f5d477e87e88fcb8cd08fc570a24e9374",
       "risk_notes": [
         "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
       ]
@@ -1130,6 +1156,7 @@
         "country": "US",
         "release_date": "2013-12-16",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 233000,
         "track_recording_id": "f367ad6e-efd5-4496-aba5-21a4edcd82c6",
@@ -1141,7 +1168,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "9cc70580b7574a6736ad450cb9bdc6c373deccfa63751eab3c75d7271fa84416",
+      "evidence_sha256": "f18db3feb64a22c2ec4991ef2064530d46d11601893e83f843ebc630e3681d1c",
       "risk_notes": []
     },
     {
@@ -1198,6 +1225,7 @@
         "country": "US",
         "release_date": "2013-08-25",
         "matching_track_count": 1,
+        "release_track_count": 1,
         "track_position": 1,
         "track_duration_ms": 223240,
         "track_recording_id": "8c8b2d45-6043-47c5-8c12-16fb8050817b",
@@ -1209,7 +1237,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "1ffe18f1a5534141b3c2df33562b040f64f9f3df64c85e0ae3c86511deedc6b9",
+      "evidence_sha256": "a01a6684a4a5b326b966c90b86d52650ac0e74e6603bee56b851564cbc00b895",
       "risk_notes": []
     },
     {
@@ -1266,6 +1294,7 @@
         "country": "GB",
         "release_date": "2009-06-15",
         "matching_track_count": 1,
+        "release_track_count": 2,
         "track_position": 1,
         "track_duration_ms": 203000,
         "track_recording_id": "e17a4f6d-42c7-428e-b8ea-4dd5bee4d34a",
@@ -1277,8 +1306,10 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "b692117cc72d16114f199d60aa000a688b1ba4d25e68ba74e7ff5ef33e2865a0",
-      "risk_notes": []
+      "evidence_sha256": "5feb2a6fd5edf22153dd7abc513f0287a473f7eb93a3f520f6b3eea4dac7bfa6",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
     },
     {
       "batch_order": 19,
@@ -1334,6 +1365,7 @@
         "country": "GB",
         "release_date": "2007-06-04",
         "matching_track_count": 1,
+        "release_track_count": 13,
         "track_position": 1,
         "track_duration_ms": 275986,
         "track_recording_id": "0b4b1b0c-e057-4d8d-9a47-12a97ff6fb3d",
@@ -1345,7 +1377,7 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "4f5f8e386c5b1d08fcd6a9ead9efcbed48b820c27d6a3d4dc9af40f2c36056b5",
+      "evidence_sha256": "f92474608c0223b4e6c649ac78f84829d099fe749168f4fc20ab30b482993657",
       "risk_notes": []
     },
     {
@@ -1402,6 +1434,7 @@
         "country": "GB",
         "release_date": "2000-07-03",
         "matching_track_count": 1,
+        "release_track_count": 3,
         "track_position": 1,
         "track_duration_ms": 209133,
         "track_recording_id": "fe0b0eb0-fb63-4603-8df2-a82b5207f2bb",
@@ -1413,8 +1446,10 @@
         "historical_chart_entry_rows": 0,
         "operation_policy": "abort_if_any_rating_appears"
       },
-      "evidence_sha256": "c7e02d3f006b863fa07efaeeaa007f01da5b87048fe9fd8e2b77e1eb4daa7143",
-      "risk_notes": []
+      "evidence_sha256": "d0db75667be8f39ae52f8be88463c894a74f687eb0a4afdf9d613b76a4086686",
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ]
     }
   ],
   "rejected_version_leads": [
@@ -1602,7 +1637,16 @@
       "ordering": "recent-first, then chart entry id descending",
       "force_matching_prohibited": true,
       "all_candidates_unrated": true,
-      "source_release_note": "Shotgun, Stay with Me, Daisies and Godzilla use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46."
+      "source_release_note": "Daisies, Too Sweet, Godzilla, Shotgun, Stay with Me, When Love Takes Over and Breathless use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46.",
+      "selected_track_import_chart_entry_ids": [
+        2503,
+        2489,
+        2441,
+        2015,
+        1940,
+        1552,
+        1353
+      ]
     },
     "candidates": [
       {
@@ -1639,7 +1683,8 @@
         "album_artist": "Justin Bieber",
         "release_date": "2025-07-11",
         "country": "XW",
-        "evidence_sha256": "14ddb2beb2b1283b7a23737a90d3c4e58dd711beac64742b0c73e488cee282ed",
+        "release_track_count": 21,
+        "evidence_sha256": "312a24b60c6600ca230af3b406915e2efe39f2ee8c69462d818eaae77061c57f",
         "risk_notes": [
           "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
         ]
@@ -1678,8 +1723,11 @@
         "album_artist": "Hozier",
         "release_date": "2024-03-22",
         "country": "XW",
-        "evidence_sha256": "c969335378e351134b38ab17cec65fe7a52d2924bd0c184aaadda49e9554b1fc",
-        "risk_notes": []
+        "release_track_count": 4,
+        "evidence_sha256": "599252048a6e971966c7a7558655d7a5d4bbfbc4eb7cd4e9c7bc10f4f8e14d0f",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
       },
       {
         "action": "import_verified",
@@ -1715,7 +1763,8 @@
         "album_artist": "Beyoncé",
         "release_date": "2024-02-11",
         "country": null,
-        "evidence_sha256": "bc4a7efe48b66add54203b3807c07df0b531c5110197c52cb4d879e1f15f4cc8",
+        "release_track_count": 1,
+        "evidence_sha256": "21f573610564d484df9d883019fd97be38532b54a6af4351c2b686c2f3c7dc95",
         "risk_notes": []
       },
       {
@@ -1752,7 +1801,8 @@
         "album_artist": "Kenya Grace",
         "release_date": "2023-09-01",
         "country": null,
-        "evidence_sha256": "a9ef4d00460df4fa711d5385677296eef8bf52c59f9be6d1f29adac37548c164",
+        "release_track_count": 1,
+        "evidence_sha256": "222103e86eeacdd2320997b51f1c17b29df86a1a6aaabb176f38583471ffd7bb",
         "risk_notes": []
       },
       {
@@ -1789,7 +1839,8 @@
         "album_artist": "Dave",
         "release_date": "2022-03-03",
         "country": "XW",
-        "evidence_sha256": "712a2f49a0e73e59b89dc2dea41ac40df53e36fd929984b39ca7a0e6d483c2e5",
+        "release_track_count": 1,
+        "evidence_sha256": "186a2f5c90fda236e07a7b74d8a1e942558a1a3d8b8ad0645d93f848808d3c51",
         "risk_notes": []
       },
       {
@@ -1826,7 +1877,8 @@
         "album_artist": "Ed Sheeran",
         "release_date": "2021-06-25",
         "country": "XW",
-        "evidence_sha256": "f4223b304f6ac7d51cad180d90e727baf0679ae7dd72f182c8191fe6db006af0",
+        "release_track_count": 1,
+        "evidence_sha256": "4ba2ba5d804b9b25c755f78639937c22944de70da4cfc129c4387241b9124a50",
         "risk_notes": []
       },
       {
@@ -1863,7 +1915,8 @@
         "album_artist": "Ariana Grande",
         "release_date": "2020-10-23",
         "country": "XW",
-        "evidence_sha256": "07425bdf76d38a94ce03467c465227a7acaa62710ca419e52473f0d8fa9a54ff",
+        "release_track_count": 1,
+        "evidence_sha256": "7226eb842d757a6f8e608954d7758f88a43b4e2dd3570faa4b69448d58f249d9",
         "risk_notes": []
       },
       {
@@ -1900,7 +1953,8 @@
         "album_artist": "24kGoldn ft. iann dior",
         "release_date": "2020-07-24",
         "country": "AF",
-        "evidence_sha256": "1339eb84366697fc687239eccff19aba5454ff6fbabf8afeba730c09fdb07a34",
+        "release_track_count": 1,
+        "evidence_sha256": "aef1096b217536fd5f9d59b438eac52e724cbcf0bf187aa637a33d21ebf1563e",
         "risk_notes": [
           "MusicBrainz country is anomalously AF; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording, and official Columbia/RECORDS single."
         ]
@@ -1939,7 +1993,8 @@
         "album_artist": "Cardi B feat. Megan Thee Stallion",
         "release_date": "2020-08-07",
         "country": "XW",
-        "evidence_sha256": "b599ef0b8b7869ea9e1a84b9b9593ed4601f50ac69fe52828cfd44d3e1ad0353",
+        "release_track_count": 1,
+        "evidence_sha256": "bafe0dd9fd58af8f38a5916c9b9745c6d601b160d72c0f3d98f865448228867d",
         "risk_notes": []
       },
       {
@@ -1976,7 +2031,8 @@
         "album_artist": "Eminem",
         "release_date": "2020-01-17",
         "country": "XW",
-        "evidence_sha256": "41e30b0aa5affd14d3f721e716f9c33788ccf2d697e421b04463e7a8b5bf1f6e",
+        "release_track_count": 20,
+        "evidence_sha256": "cf23cee188c56e89c892643a50d33deb8ec9ffa0748d96cef7b870cef6e967dd",
         "risk_notes": [
           "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
         ]
@@ -2015,7 +2071,8 @@
         "album_artist": "Ariana Grande",
         "release_date": "2018-11-03",
         "country": "XW",
-        "evidence_sha256": "7a158cfbe796a1ced7cc9f69bbb09e576835a7b421d15a0c24bbd8f8af11e311",
+        "release_track_count": 1,
+        "evidence_sha256": "1a611c0fc7ceb6dd6dd93b300840f3463b750eeb22fa3163c7a51c4481b9333d",
         "risk_notes": []
       },
       {
@@ -2052,7 +2109,8 @@
         "album_artist": "George Ezra",
         "release_date": "2018-03-23",
         "country": "XE",
-        "evidence_sha256": "d95d5f7a58088494d8298a0fc3fcacd7ad307b97ef4236d76ee088bc9f55b060",
+        "release_track_count": 11,
+        "evidence_sha256": "5606c9a11f5d27fe1dff035d8b9a7bf47b810157d9d46fa16931e368d11414a1",
         "risk_notes": [
           "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
         ]
@@ -2091,7 +2149,8 @@
         "album_artist": "Drake feat. WizKid & Kyla",
         "release_date": "2016-04-05",
         "country": "XW",
-        "evidence_sha256": "8d8a029170d9c4fd632fdc2a7b428a14cc5a0fd43692a14a4bd385a30a233e25",
+        "release_track_count": 1,
+        "evidence_sha256": "df100a08f9f9185dc420f93ec3266ddbe7489f379b322cb6d205b37b4da63e9a",
         "risk_notes": [
           "A same-title Drake catalogue song is a different MusicBrainz recording and ISRC; the operation must not title-link it."
         ]
@@ -2130,7 +2189,8 @@
         "album_artist": "Omi",
         "release_date": "2014-05-19",
         "country": "XW",
-        "evidence_sha256": "219d0dc3048b80fa0c5e6a4ef96040e8ce3ef11b10c07920866c0e03903ca4d5",
+        "release_track_count": 1,
+        "evidence_sha256": "f3d61ee94dee843b4b94e0fdda95166abc10a731546973c0cee2f89503ba7684",
         "risk_notes": []
       },
       {
@@ -2167,7 +2227,8 @@
         "album_artist": "Sam Smith",
         "release_date": "2014-05-26",
         "country": "GB",
-        "evidence_sha256": "868b91359ff90f0a73e9d85be2ba6332f07a8cba51345a278d93b92b76180f5c",
+        "release_track_count": 14,
+        "evidence_sha256": "719c2bdbcb74b9adfbcc5166db5d126f5d477e87e88fcb8cd08fc570a24e9374",
         "risk_notes": [
           "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
         ]
@@ -2206,7 +2267,8 @@
         "album_artist": "Pharrell Williams",
         "release_date": "2013-12-16",
         "country": "US",
-        "evidence_sha256": "9cc70580b7574a6736ad450cb9bdc6c373deccfa63751eab3c75d7271fa84416",
+        "release_track_count": 1,
+        "evidence_sha256": "f18db3feb64a22c2ec4991ef2064530d46d11601893e83f843ebc630e3681d1c",
         "risk_notes": []
       },
       {
@@ -2243,7 +2305,8 @@
         "album_artist": "Miley Cyrus",
         "release_date": "2013-08-25",
         "country": "US",
-        "evidence_sha256": "1ffe18f1a5534141b3c2df33562b040f64f9f3df64c85e0ae3c86511deedc6b9",
+        "release_track_count": 1,
+        "evidence_sha256": "a01a6684a4a5b326b966c90b86d52650ac0e74e6603bee56b851564cbc00b895",
         "risk_notes": []
       },
       {
@@ -2280,8 +2343,11 @@
         "album_artist": "David Guetta feat. Kelly Rowland",
         "release_date": "2009-06-15",
         "country": "GB",
-        "evidence_sha256": "b692117cc72d16114f199d60aa000a688b1ba4d25e68ba74e7ff5ef33e2865a0",
-        "risk_notes": []
+        "release_track_count": 2,
+        "evidence_sha256": "5feb2a6fd5edf22153dd7abc513f0287a473f7eb93a3f520f6b3eea4dac7bfa6",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
       },
       {
         "action": "link_existing",
@@ -2317,7 +2383,8 @@
         "album_artist": "Rihanna",
         "release_date": "2007-06-04",
         "country": "GB",
-        "evidence_sha256": "4f5f8e386c5b1d08fcd6a9ead9efcbed48b820c27d6a3d4dc9af40f2c36056b5",
+        "release_track_count": 13,
+        "evidence_sha256": "f92474608c0223b4e6c649ac78f84829d099fe749168f4fc20ab30b482993657",
         "risk_notes": []
       },
       {
@@ -2354,8 +2421,11 @@
         "album_artist": "The Corrs",
         "release_date": "2000-07-03",
         "country": "GB",
-        "evidence_sha256": "c7e02d3f006b863fa07efaeeaa007f01da5b87048fe9fd8e2b77e1eb4daa7143",
-        "risk_notes": []
+        "release_track_count": 3,
+        "evidence_sha256": "d0db75667be8f39ae52f8be88463c894a74f687eb0a4afdf9d613b76a4086686",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
       }
     ],
     "rejected_version_leads": [
@@ -2528,7 +2598,7 @@
       "production_execution_authorized": false
     }
   },
-  "manifest_sha256": "474f1b4dba9620b9195f143a1b14cc10dfccffc67b1cadf9558570acafba18fc",
+  "manifest_sha256": "b33891a3312d72c76958af4dab578d0ba165ac3aa894d26ee415ba6ec8237032",
   "expected_deltas": {
     "albums": 19,
     "songs": 19,
@@ -2542,7 +2612,7 @@
     "remaining_unresolved_chart_entries": 859
   },
   "safety_contract": {
-    "approval_gate": "SET bom.approved_historical_reconciliation = '20261123_uk_number_ones_verified_batch_2:474f1b4dba9620b9195f143a1b14cc10dfccffc67b1cadf9558570acafba18fc' before executing the operation in the same session",
+    "approval_gate": "SET bom.approved_historical_reconciliation = '20261123_uk_number_ones_verified_batch_2:b33891a3312d72c76958af4dab578d0ba165ac3aa894d26ee415ba6ec8237032' before executing the operation in the same session",
     "atomic_transaction": true,
     "global_stale_baseline_abort": true,
     "per_candidate_stale_fingerprint_abort": true,

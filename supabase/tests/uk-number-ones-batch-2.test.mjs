@@ -62,7 +62,7 @@ const embeddedManifest = embeddedManifestPayload.candidates;
 
 const OPERATION_KEY = "20261123_uk_number_ones_verified_batch_2";
 const MANIFEST_SHA =
-  "474f1b4dba9620b9195f143a1b14cc10dfccffc67b1cadf9558570acafba18fc";
+  "b33891a3312d72c76958af4dab578d0ba165ac3aa894d26ee415ba6ec8237032";
 const LIVE_STATE_SHA =
   "90492794feff32e2fb3ff334e96f89a133c741f83c20bfa848183a85ed9de70c";
 const APPROVAL = `${OPERATION_KEY}:${MANIFEST_SHA}`;
@@ -80,6 +80,23 @@ const candidateById = new Map(
 const manifestById = new Map(
   embeddedManifest.map(candidate => [candidate.chart_entry.id, candidate])
 );
+
+function resignOperation(mutator) {
+  const manifest = structuredClone(embeddedManifestPayload);
+  mutator(manifest);
+  const rawManifest = JSON.stringify(manifest);
+  const manifestSha = createHash("sha256").update(rawManifest).digest("hex");
+  const approval = `${OPERATION_KEY}:${manifestSha}`;
+  const sqlWithManifest = operation.replace(
+    /\$batch_manifest\$[\s\S]*?\$batch_manifest\$::text/,
+    `$batch_manifest$${rawManifest}$batch_manifest$::text`
+  );
+  const sql = sqlWithManifest.replace(APPROVAL, approval);
+  assert.notEqual(sql, operation);
+  assert.equal(sql.includes(APPROVAL), false);
+  assert.equal(sql.includes(approval), true);
+  return { approval, manifestSha, sql };
+}
 
 const SNAPSHOT_TABLES = [
   "public.albums",
@@ -731,6 +748,51 @@ test("reviewed artifact hashes and exact SQL approval bindings are fixed", () =>
     rollbackOperation,
     /set_config\s*\(\s*'bom\.approved_historical_reconciliation_rollback'/i
   );
+});
+
+test("a newly signed incomplete selected-track declaration fails before durable changes", async () => {
+  const db = await createFixture();
+  try {
+    const initial = await stateSnapshot(db);
+
+    const missingRisk = resignOperation(manifest => {
+      manifest.candidates.find(candidate => candidate.chart_entry.id === 2489).risk_notes = [];
+    });
+    await approveApply(db, missingRisk.approval);
+    await rejectAndRollback(
+      db,
+      missingRisk.sql,
+      /selected-track risk disclosure failed/
+    );
+    assert.deepEqual(await stateSnapshot(db), initial);
+
+    const incompleteDisclosure = resignOperation(manifest => {
+      manifest.selection_policy.selected_track_import_chart_entry_ids =
+        manifest.selection_policy.selected_track_import_chart_entry_ids
+          .filter(chartEntryId => chartEntryId !== 2489);
+    });
+    await approveApply(db, incompleteDisclosure.approval);
+    await rejectAndRollback(
+      db,
+      incompleteDisclosure.sql,
+      /selected-track disclosure set failed/
+    );
+    assert.deepEqual(await stateSnapshot(db), initial);
+
+    const incompleteReleaseNote = resignOperation(manifest => {
+      manifest.selection_policy.source_release_note =
+        manifest.selection_policy.source_release_note.replace("Too Sweet, ", "");
+    });
+    await approveApply(db, incompleteReleaseNote.approval);
+    await rejectAndRollback(
+      db,
+      incompleteReleaseNote.sql,
+      /selected-track release note failed/
+    );
+    assert.deepEqual(await stateSnapshot(db), initial);
+  } finally {
+    await db.close();
+  }
 });
 
 test("missing and wrong approval fail closed before a clean batch-2 apply", async () => {

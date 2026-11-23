@@ -8,6 +8,7 @@ import {
   buildManifestPayload,
   candidateEvidencePayload,
   postgresJsonbText,
+  SELECTED_TRACK_RISK_NOTE,
   sha256,
   snapshotRowIdentity,
   validateAudit
@@ -31,6 +32,14 @@ const rollbackOperation = await readFile(
 );
 
 const clone = value => structuredClone(value);
+
+function resignAudit(value) {
+  value.manifest_payload = buildManifestPayload(value);
+  value.manifest_sha256 = sha256(value.manifest_payload);
+  value.safety_contract.approval_gate =
+    `SET bom.approved_historical_reconciliation = '20261123_uk_number_ones_verified_batch_2:${value.manifest_sha256}' before executing the operation in the same session`;
+  return value;
+}
 
 test("batch-2 evidence covers all 879 unresolved entries without force matching", () => {
   validateAudit(audit);
@@ -78,6 +87,51 @@ test("all 20 candidates freeze three independent evidence digests and exact vers
   assert.equal(byId.get(2441).musicbrainz_release_evidence.release_id, "1fb7517b-2fb9-40ec-910f-0a3a514fb70c");
 });
 
+test("every multi-track import has a signed selected-track disclosure", () => {
+  const selectedTrackImports = audit.proposed_batch.filter(candidate =>
+    candidate.action === "import_verified"
+      && candidate.musicbrainz_release_evidence.release_track_count > 1
+  );
+  assert.deepEqual(
+    selectedTrackImports.map(candidate => candidate.chart_entry.id),
+    [2503, 2489, 2441, 2015, 1940, 1552, 1353]
+  );
+  assert.deepEqual(
+    audit.selection_policy.selected_track_import_chart_entry_ids,
+    selectedTrackImports.map(candidate => candidate.chart_entry.id)
+  );
+  for (const candidate of selectedTrackImports) {
+    assert.ok(candidate.risk_notes.includes(SELECTED_TRACK_RISK_NOTE));
+  }
+
+  const missingRisk = clone(audit);
+  missingRisk.proposed_batch.find(candidate => candidate.chart_entry.id === 2489).risk_notes = [];
+  resignAudit(missingRisk);
+  assert.throws(
+    () => validateAudit(missingRisk),
+    /selected-track risk disclosure missing for chart entry 2489/
+  );
+
+  const incompleteDisclosure = clone(audit);
+  incompleteDisclosure.selection_policy.selected_track_import_chart_entry_ids =
+    incompleteDisclosure.selection_policy.selected_track_import_chart_entry_ids
+      .filter(chartEntryId => chartEntryId !== 2489);
+  resignAudit(incompleteDisclosure);
+  assert.throws(
+    () => validateAudit(incompleteDisclosure),
+    /selected-track disclosure IDs must match every multi-track import/
+  );
+
+  const incompleteReleaseNote = clone(audit);
+  incompleteReleaseNote.selection_policy.source_release_note =
+    incompleteReleaseNote.selection_policy.source_release_note.replace("Too Sweet, ", "");
+  resignAudit(incompleteReleaseNote);
+  assert.throws(
+    () => validateAudit(incompleteReleaseNote),
+    /selected-track release note must name every multi-track import/
+  );
+});
+
 test("Umbrella alone reuses an exact BOM identity and stored credit is preserved", () => {
   const existing = audit.proposed_batch.filter(candidate => candidate.action === "link_existing");
   assert.equal(existing.length, 1);
@@ -120,7 +174,7 @@ test("manifest digest rejects any evidence or operational mutation", () => {
 
   const riskMutation = clone(audit);
   riskMutation.proposed_batch[0].risk_notes = [];
-  assert.throws(() => validateAudit(riskMutation), /strictly deep-equal/);
+  assert.throws(() => validateAudit(riskMutation), /selected-track risk disclosure missing/);
 
   const safetyMutation = clone(audit);
   safetyMutation.safety_contract.production_execution_authorized = true;

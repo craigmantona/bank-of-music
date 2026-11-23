@@ -11,7 +11,7 @@ set local statement_timeout = '120s';
 do $approval$
 declare
   v_expected constant text :=
-    '20261123_uk_number_ones_verified_batch_2:474f1b4dba9620b9195f143a1b14cc10dfccffc67b1cadf9558570acafba18fc';
+    '20261123_uk_number_ones_verified_batch_2:b33891a3312d72c76958af4dab578d0ba165ac3aa894d26ee415ba6ec8237032';
 begin
   if nullif(
        current_setting(

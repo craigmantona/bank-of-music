@@ -8,6 +8,9 @@ import { fileURLToPath } from "node:url";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 
+export const SELECTED_TRACK_RISK_NOTE =
+  "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.";
+
 export const sha256 = value => createHash("sha256")
   .update(typeof value === "string" || Buffer.isBuffer(value) ? value : JSON.stringify(value))
   .digest("hex");
@@ -71,6 +74,7 @@ export function buildManifestPayload(audit) {
       album_artist: candidate.musicbrainz_release_evidence.artist_credit,
       release_date: candidate.musicbrainz_release_evidence.release_date,
       country: candidate.musicbrainz_release_evidence.country,
+      release_track_count: candidate.musicbrainz_release_evidence.release_track_count,
       evidence_sha256: candidate.evidence_sha256,
       risk_notes: candidate.risk_notes
     })),
@@ -87,7 +91,7 @@ function unique(values, label) {
 }
 
 export function validateAudit(audit) {
-  assert.equal(audit.schema_version, 2);
+  assert.equal(audit.schema_version, 3);
   assert.equal(audit.status, "proposed_not_executed");
   assert.equal(Object.hasOwn(audit, "executed_at"), false);
   assert.match(audit.snapshot.raw_snapshot_sha256, SHA256);
@@ -168,6 +172,15 @@ export function validateAudit(audit) {
     assert.equal(recording.isrc_lookup_count, 1);
     assert.equal(release.status, "Official");
     assert.equal(release.matching_track_count, 1);
+    assert.ok(
+      Number.isSafeInteger(release.release_track_count)
+        && release.release_track_count >= 1,
+      `release track count is invalid for chart entry ${chart.id}`
+    );
+    assert.ok(
+      release.track_position <= release.release_track_count,
+      `selected track position exceeds release track count for chart entry ${chart.id}`
+    );
     assert.equal(release.track_recording_id, recording.recording_id);
     assert.equal(release.track_isrc, official.catalogue_number);
     assert.equal(candidate.target.track_position, release.track_position);
@@ -193,6 +206,35 @@ export function validateAudit(audit) {
       assert.equal(candidate.target.duration_ms, release.track_duration_ms);
     }
   }
+
+  const selectedTrackImports = batch.filter(candidate =>
+    candidate.action === "import_verified"
+      && candidate.musicbrainz_release_evidence.release_track_count > 1
+  );
+  for (const candidate of batch) {
+    const mustDisclose = selectedTrackImports.includes(candidate);
+    assert.equal(
+      candidate.risk_notes.includes(SELECTED_TRACK_RISK_NOTE),
+      mustDisclose,
+      mustDisclose
+        ? `selected-track risk disclosure missing for chart entry ${candidate.chart_entry.id}`
+        : `unexpected selected-track risk disclosure for chart entry ${candidate.chart_entry.id}`
+    );
+  }
+  assert.deepEqual(
+    audit.selection_policy.selected_track_import_chart_entry_ids,
+    selectedTrackImports.map(candidate => candidate.chart_entry.id),
+    "selected-track disclosure IDs must match every multi-track import"
+  );
+  const selectedTrackTitles = selectedTrackImports.map(candidate => candidate.chart_entry.title);
+  const selectedTrackTitleList = selectedTrackTitles.length < 2
+    ? selectedTrackTitles.join("")
+    : `${selectedTrackTitles.slice(0, -1).join(", ")} and ${selectedTrackTitles.at(-1)}`;
+  assert.equal(
+    audit.selection_policy.source_release_note,
+    `${selectedTrackTitleList} use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46.`,
+    "selected-track release note must name every multi-track import"
+  );
 
   assert.deepEqual(audit.manifest_payload, buildManifestPayload(audit));
   assert.equal(audit.manifest_sha256, sha256(audit.manifest_payload));
