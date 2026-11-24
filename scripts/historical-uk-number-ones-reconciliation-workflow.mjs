@@ -39,6 +39,31 @@ export function rowFingerprint(row) {
   });
 }
 
+export function exclusionRegistryDigest(registry = {}) {
+  return digest({ schema_version: registry.schema_version, policy: registry.policy, entries: registry.entries || [] });
+}
+
+export function historicalExclusion(row, evidence, registry = {}) {
+  const matches = (registry.entries || []).filter(entry =>
+    entry.source_entry_key === row.source_entry_key || Number(entry.chart_row_id) === Number(row.id));
+  if (!matches.length) return null;
+  if (matches.length !== 1) return { reason: "historical_exclusion_registry_duplicate", entry: matches[0] || null };
+  const entry = matches[0];
+  if (Number(entry.chart_row_id) !== Number(row.id) || entry.source_entry_key !== row.source_entry_key ||
+      normalise(entry.title) !== normalise(row.title) || normalise(entry.artist) !== normalise(row.artist)) {
+    return { reason: "historical_exclusion_registry_identity_mismatch", entry };
+  }
+  const overrides = entry.approved_overrides || [];
+  if (!overrides.length) return { reason: `historical_identity_conflict_excluded:${entry.reason_code}`, entry };
+  if (!evidence) return { pending_evidence_validation: true, entry };
+  const evidenceSha256 = digest(evidence);
+  const approved = overrides.some(override => override.status === "independently_approved" &&
+    String(override.recording_mbid || "").toLowerCase() === String(evidence.recording_mbid || "").toLowerCase() &&
+    override.evidence_sha256 === evidenceSha256 && String(override.approved_by || "").trim() &&
+    String(override.approval_reference || "").trim() && Number.isFinite(Date.parse(override.approved_at || "")));
+  return approved ? null : { reason: `historical_identity_conflict_excluded:${entry.reason_code}`, entry };
+}
+
 export function compactSnapshot(snapshot) {
   const fields = ["id", "collection_key", "source_entry_key", "chart_year", "title", "artist", "song_id", "canonical_song_id",
     "musicbrainz_recording_id", "canonical_recording_id", "match_status", "updated_at", "canonical_updated_at",
@@ -109,13 +134,14 @@ function unresolvedReason(row, chartEvidence, prior) {
   return "authoritative_identity_evidence_missing";
 }
 
-export function classifyFullScan(snapshot, { evidence = {}, chartEvidence = {}, priorStates = [] } = {}) {
+export function classifyFullScan(snapshot, { evidence = {}, chartEvidence = {}, priorStates = [], exclusionRegistry = {} } = {}) {
   if (!Array.isArray(snapshot?.rows)) throw new Error("Live-state snapshot rows are required.");
   const ids = snapshot.rows.map(row => Number(row.id));
   if (ids.some(id => !Number.isInteger(id)) || new Set(ids).size !== ids.length) throw new Error("Snapshot row IDs must be unique integers.");
   const rows = snapshot.rows.map(row => {
     const reviewed = evidence[String(row.id)];
     const failures = reviewed ? validateIndependentEvidence(row, reviewed) : [];
+    const exclusion = historicalExclusion(row, reviewed, exclusionRegistry);
     const prior = priorResult(row, priorStates);
     const base = {
       chart_row_id: Number(row.id), chart_year: Number(row.chart_year), title: row.title, artist: row.artist,
@@ -123,12 +149,12 @@ export function classifyFullScan(snapshot, { evidence = {}, chartEvidence = {}, 
       row_fingerprint: rowFingerprint(row), prior_research_reason: prior?.reason || null,
       evidence_cache_status: chartEvidence[String(row.id)]?.status || "not_cached"
     };
-    if (reviewed && failures.length === 0 && !Number(row.canonical_rating_rows) && !Number(row.historical_rating_rows) && !Number(row.song_occurrences) && !row.song_id) {
+    if (reviewed && failures.length === 0 && !exclusion && !Number(row.canonical_rating_rows) && !Number(row.historical_rating_rows) && !Number(row.song_occurrences) && !row.song_id) {
       return { ...base, category: reviewed.action === "existing_recording" ? "VERIFIED_EXISTING" : "VERIFIED_IMPORT", reason: "exact_independently_verified_identity", evidence: reviewed };
     }
     return {
       ...base, category: "UNRESOLVED",
-      reason: reviewed && failures.length ? `evidence_contract_failed:${failures.join(",")}` : unresolvedReason(row, chartEvidence[String(row.id)], prior),
+      reason: exclusion?.reason || (reviewed && failures.length ? `evidence_contract_failed:${failures.join(",")}` : unresolvedReason(row, chartEvidence[String(row.id)], prior)),
       prior_candidate_count: prior?.candidate_evidence?.length || 0
     };
   });
@@ -255,12 +281,14 @@ async function main() {
   const snapshot = compactSnapshot(await readJson(snapshotPath));
   const evidenceBundle = option("evidence") ? await readJson(option("evidence")) : { entries: {} };
   const chartBundle = option("chart-evidence") ? await readJson(option("chart-evidence")) : { entries: {} };
+  const exclusionRegistry = option("exclusions") ? await readJson(option("exclusions")) : { entries: [] };
   const priorStates = [];
   for (const path of option("prior-states").split(",").filter(Boolean)) priorStates.push(await readJson(path));
-  const scan = classifyFullScan(snapshot, { evidence: evidenceBundle.entries || {}, chartEvidence: chartBundle.entries || {}, priorStates });
+  const scan = classifyFullScan(snapshot, { evidence: evidenceBundle.entries || {}, chartEvidence: chartBundle.entries || {}, priorStates, exclusionRegistry });
   const report = {
     schema_version: 1, generated_at: new Date().toISOString(), read_only: true,
     snapshot_sha256: digest(snapshot), evidence_sha256: digest(evidenceBundle), chart_evidence_sha256: digest(chartBundle),
+    exclusion_registry_sha256: exclusionRegistryDigest(exclusionRegistry),
     results: scan
   };
   const plan = buildReviewPlan(scan, snapshot);
@@ -269,7 +297,9 @@ async function main() {
   const summary = summarise(scan, {
     snapshot_sha256: report.snapshot_sha256, report_sha256: digest(report.results), plan_sha256: plan.plan_sha256,
     prior_evidence_rows_reused: scan.filter(row => row.prior_research_reason).length,
-    authoritative_chart_cache_hits: scan.filter(row => row.evidence_cache_status !== "not_cached").length
+    authoritative_chart_cache_hits: scan.filter(row => row.evidence_cache_status !== "not_cached").length,
+    exclusion_registry_sha256: report.exclusion_registry_sha256,
+    historically_excluded: scan.filter(row => row.reason?.startsWith("historical_identity_conflict_excluded:")).length
   });
   if (option("compact-snapshot-output")) await writeJson(option("compact-snapshot-output"), snapshot);
   await writeJson(reportPath, report); await writeJson(planPath, plan); await writeJson(summaryPath, summary);

@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-24T14:03:11.677Z",
+  "generated_at": "2026-11-24T17:03:31.714Z",
+  "exclusion_registry_sha256": "c8c7ffe5bdc8f50c6ac5c80776bd1d128f84c6e2639cc68fde64890e10d8ec01",
   "failures": [
     {
       "chart_row_id": 2512,
@@ -15,8 +16,8 @@
       "chart_year": 2025,
       "title": "Ordinary",
       "artist": "Alex Warren",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 2502,
@@ -47,7 +48,7 @@
       "chart_year": 2024,
       "title": "Houdini",
       "artist": "Eminem",
-      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_music_video_not_audio_single",
       "final": true
     },
     {
@@ -87,16 +88,16 @@
       "chart_year": 2023,
       "title": "Lovin on Me",
       "artist": "Jack Harlow",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 2465,
       "chart_year": 2022,
       "title": "Merry Christmas",
       "artist": "Ed Sheeran and Elton John",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 2467,
@@ -143,8 +144,8 @@
       "chart_year": 2021,
       "title": "Merry Christmas",
       "artist": "Ed Sheeran and Elton John",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 2464,
@@ -211,11 +212,27 @@
       "final": true
     },
     {
+      "chart_row_id": 2013,
+      "chart_year": 2018,
+      "title": "I'll Be There",
+      "artist": "Jess Glynne",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "final": true
+    },
+    {
       "chart_row_id": 2014,
       "chart_year": 2018,
       "title": "Solo",
       "artist": "Clean Bandit featuring Demi Lovato",
-      "reason": "official_charts_exact_title_artist_not_found",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 1996,
+      "chart_year": 2017,
+      "title": "Symphony",
+      "artist": "Clean Bandit featuring Zara Larsson",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "final": true
     },
     {
@@ -231,7 +248,7 @@
       "chart_year": 2017,
       "title": "Perfect",
       "artist": "Ed Sheeran",
-      "reason": "official_charts_exact_title_artist_not_found",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "final": true
     },
     {
@@ -259,6 +276,14 @@
       "final": true
     },
     {
+      "chart_row_id": 1968,
+      "chart_year": 2015,
+      "title": "See You Again",
+      "artist": "Wiz Khalifa featuring Charlie Puth",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "final": true
+    },
+    {
       "chart_row_id": 1972,
       "chart_year": 2015,
       "title": "Are You with Me",
@@ -279,7 +304,7 @@
       "chart_year": 2015,
       "title": "Easy Love",
       "artist": "Sigala",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "final": true
     },
     {
@@ -303,8 +328,8 @@
       "chart_year": 2015,
       "title": "A Bridge over You",
       "artist": "The Lewisham and Greenwich NHS Choir",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1927,
@@ -391,8 +416,8 @@
       "chart_year": 2014,
       "title": "Blame",
       "artist": "Calvin Harris featuring John Newman",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1955,
@@ -407,7 +432,7 @@
       "chart_year": 2014,
       "title": "Wake Me Up",
       "artist": "Gareth Malone's All Star Choir",
-      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "reason": "historical_identity_conflict_excluded:stored_isrc_belongs_to_different_artist_version",
       "final": true
     },
     {
@@ -499,6 +524,14 @@
       "final": true
     },
     {
+      "chart_row_id": 1913,
+      "chart_year": 2013,
+      "title": "Wake Me Up",
+      "artist": "Avicii",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recording_versions",
+      "final": true
+    },
+    {
       "chart_row_id": 1915,
       "chart_year": 2013,
       "title": "Burn",
@@ -527,8 +560,8 @@
       "chart_year": 2012,
       "title": "Twilight",
       "artist": "Cover Drive",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1868,
@@ -543,8 +576,8 @@
       "chart_year": 2012,
       "title": "Hot Right Now",
       "artist": "DJ Fresh featuring Rita Ora",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1875,
@@ -575,8 +608,8 @@
       "chart_year": 2012,
       "title": "This Is Love",
       "artist": "will.i.am featuring Eva Simons",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1882,
@@ -607,8 +640,8 @@
       "chart_year": 2012,
       "title": "Hall of Fame",
       "artist": "The Script featuring will.i.am",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1889,
@@ -663,8 +696,8 @@
       "chart_year": 2011,
       "title": "On the Floor",
       "artist": "Jennifer Lopez featuring Pitbull",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1844,
@@ -679,8 +712,8 @@
       "chart_year": 2011,
       "title": "Louder",
       "artist": "DJ Fresh featuring Sian Evans",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1852,
@@ -703,8 +736,8 @@
       "chart_year": 2011,
       "title": "No Regrets",
       "artist": "Dappy",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1859,
@@ -759,8 +792,8 @@
       "chart_year": 2010,
       "title": "Good Times",
       "artist": "Roll Deep",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1816,
@@ -879,7 +912,7 @@
       "chart_year": 2009,
       "title": "Right Round",
       "artist": "Flo Rida featuring Kesha",
-      "reason": "official_charts_page_has_no_isrc",
+      "reason": "historical_identity_conflict_excluded:official_charts_catalogue_conflicts_with_stored_evidence",
       "final": true
     },
     {
@@ -983,8 +1016,8 @@
       "chart_year": 2008,
       "title": "That's Not My Name",
       "artist": "The Ting Tings",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1532,
@@ -1039,8 +1072,8 @@
       "chart_year": 2007,
       "title": "Grace Kelly",
       "artist": "Mika",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1515,
@@ -1079,7 +1112,15 @@
       "chart_year": 2007,
       "title": "With Every Heartbeat",
       "artist": "Robyn with Kleerup",
-      "reason": "musicbrainz_isrc_not_found",
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
+    },
+    {
+      "chart_row_id": 1522,
+      "chart_year": 2007,
+      "title": "Beautiful Girls",
+      "artist": "Sean Kingston",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "final": true
     },
     {
@@ -1135,8 +1176,8 @@
       "chart_year": 2006,
       "title": "Hips Don't Lie",
       "artist": "Shakira featuring Wyclef Jean",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1504,
@@ -1279,16 +1320,16 @@
       "chart_year": 2005,
       "title": "Don't Cha",
       "artist": "The Pussycat Dolls featuring Busta Rhymes",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1492,
       "chart_year": 2005,
       "title": "JCB",
       "artist": "Nizlopi",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1449,
@@ -1407,7 +1448,7 @@
       "chart_year": 2004,
       "title": "Call on Me",
       "artist": "Eric Prydz",
-      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "reason": "historical_identity_conflict_excluded:official_isrc_maps_filterheadz_remix_not_chart_version",
       "final": true
     },
     {
@@ -1551,8 +1592,8 @@
       "chart_year": 2002,
       "title": "Gotta Get Thru This",
       "artist": "Daniel Bedingfield",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1400,
@@ -1591,8 +1632,8 @@
       "chart_year": 2002,
       "title": "A Little Less Conversation",
       "artist": "Elvis vs. JXL",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1411,
@@ -1640,6 +1681,14 @@
       "title": "The Ketchup Song",
       "artist": "Las Ketchup",
       "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1418,
+      "chart_year": 2002,
+      "title": "Dilemma",
+      "artist": "Nelly featuring Kelly Rowland",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "final": true
     },
     {
@@ -1815,8 +1864,8 @@
       "chart_year": 2001,
       "title": "Gotta Get Thru This",
       "artist": "Daniel Bedingfield",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1338,
@@ -2331,6 +2380,14 @@
       "final": true
     },
     {
+      "chart_row_id": 107,
+      "chart_year": 1996,
+      "title": "Breathe",
+      "artist": "The Prodigy",
+      "reason": "historical_identity_conflict_excluded:album_version_postdates_number_one_without_contemporaneous_bridge",
+      "final": true
+    },
+    {
       "chart_row_id": 108,
       "chart_year": 1996,
       "title": "I Feel You",
@@ -2455,7 +2512,7 @@
       "chart_year": 1993,
       "title": "No Limit",
       "artist": "2 Unlimited",
-      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "reason": "historical_identity_conflict_excluded:contemporary_uk_single_uses_different_radio_edit_recording",
       "final": true
     },
     {
@@ -3423,8 +3480,8 @@
       "chart_year": 1980,
       "title": "(Just Like) Starting Over",
       "artist": "John Lennon",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 838,
@@ -3447,8 +3504,8 @@
       "chart_year": 1979,
       "title": "Ring My Bell",
       "artist": "Anita Ward",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 842,
@@ -4031,8 +4088,8 @@
       "chart_year": 1971,
       "title": "Hot Love",
       "artist": "T. Rex",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 721,
@@ -4223,8 +4280,8 @@
       "chart_year": 1969,
       "title": "Je t'aime... moi non plus",
       "artist": "Jane Birkin and Serge Gainsbourg",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 1165,
@@ -5471,8 +5528,8 @@
       "chart_year": 1956,
       "title": "Sixteen Tons",
       "artist": "Tennessee Ernie Ford",
-      "reason": "musicbrainz_isrc_not_found",
-      "final": true
+      "reason": "retrieval_failed:fetch failed",
+      "final": false
     },
     {
       "chart_row_id": 2302,

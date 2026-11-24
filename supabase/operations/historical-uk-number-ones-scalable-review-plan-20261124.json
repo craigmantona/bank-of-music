@@ -204,104 +204,6 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-2013-3bf8edb9c625",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "3bf8edb9c6258b60d520c41361b5f901d66bd68aa324682606ab0d67406836ac",
-      "preconditions": {
-        "row_fingerprint": "d92237d37a634e08fc6e3d86fac61221992169bbe43582ae56308f1e57c3f52b",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "2018:1339:jess glynne:i ll be there",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "4a2c4ee9-4f51-4d9e-ac7a-27056a664a10",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 2013,
-        "action": "import_verified",
-        "placeholder_canonical_id": "4a2c4ee9-4f51-4d9e-ac7a-27056a664a10",
-        "recording_mbid": "b1953e74-8a8f-4c4c-97fb-c3f9268e2ef5",
-        "release_mbid": "c20f6820-96d5-43e0-b79c-3ebdd2800d96",
-        "release_group_mbid": "bd441d47-8bcf-4311-afa8-445135884e75",
-        "track_position": 1,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:3bf8edb9c6258b60d520c41361b5f901d66bd68aa324682606ab0d67406836ac",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
-      "operation_key": "historical-uk-number-ones-v5-row-1996-c860a5c16546",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "c860a5c16546aefae1e4e4495e37e012a0a22ed154f8a72a8ce95682ec79a2f5",
-      "preconditions": {
-        "row_fingerprint": "1018643f646922df59f078613bab3a3efc59e9052f3579be8bbe95f6e3f5642d",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "2017:1321:clean bandit zara larsson:symphony",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "42d7ff02-b9d8-4b51-a13b-e26162de66a7",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 1996,
-        "action": "import_verified",
-        "placeholder_canonical_id": "42d7ff02-b9d8-4b51-a13b-e26162de66a7",
-        "recording_mbid": "072fc090-5b35-4ae7-9976-cb785fd0983a",
-        "release_mbid": "9e7cf9f2-c455-4af0-8ce1-b0783db16ed1",
-        "release_group_mbid": "28159c4c-beda-4351-af2d-1c5b8464a406",
-        "track_position": 1,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:c860a5c16546aefae1e4e4495e37e012a0a22ed154f8a72a8ce95682ec79a2f5",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
       "operation_key": "historical-uk-number-ones-v5-row-1999-9338a59a3e15",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
@@ -445,55 +347,6 @@
       "rollback": {
         "required": true,
         "approval_token_scope": "rollback:e11ba7f18beafeca221937144ff68ece2f494f38a6c389ca519bce1a400d6da5",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
-      "operation_key": "historical-uk-number-ones-v5-row-1968-3ac034f7eb33",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "3ac034f7eb33df4e1b40e7fa1c7e4917dea2c429ac748f9f8d478711c9840783",
-      "preconditions": {
-        "row_fingerprint": "b88209b2f57b9b21649b87cdf930e12438b23b2c8b5cdde7e28d6f6f9c490f54",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "2015:1290:wiz khalifa charlie puth:see you again",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "77e93e4d-e47e-46ee-ae67-d7ca0459ccd7",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 1968,
-        "action": "import_verified",
-        "placeholder_canonical_id": "77e93e4d-e47e-46ee-ae67-d7ca0459ccd7",
-        "recording_mbid": "c6cf4924-75b7-40b3-8d66-f50ff8aec30e",
-        "release_mbid": "aaf79fbb-11af-4f4b-84ea-bb76183b20a1",
-        "release_group_mbid": "9cfacb1d-9b60-4090-bd3d-bf9efefba493",
-        "track_position": 7,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:3ac034f7eb33df4e1b40e7fa1c7e4917dea2c429ac748f9f8d478711c9840783",
         "restores_exact_snapshot": true
       }
     },
@@ -837,55 +690,6 @@
       "rollback": {
         "required": true,
         "approval_token_scope": "rollback:704fa214e73967228cdfb771fb7d5302c4238b46b085520f2faf19788bca73b5",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
-      "operation_key": "historical-uk-number-ones-v5-row-1913-1cc57d40fb70",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "1cc57d40fb70d524d9bdd3a1d7d7586206d95b6fbd5feef9486a3e5142d00c76",
-      "preconditions": {
-        "row_fingerprint": "780a72386846fafaa436521d533b5cbef959bbde46b7583e2b8d237fe3b7ba5f",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "2013:1234:avicii:wake me up",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "e14d6099-82fe-4771-bff2-ffedc8c53f3c",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 1913,
-        "action": "import_verified",
-        "placeholder_canonical_id": "e14d6099-82fe-4771-bff2-ffedc8c53f3c",
-        "recording_mbid": "b437fbda-9c32-4078-afa2-1afb98ff0d74",
-        "release_mbid": "c9baf701-1991-4403-9e38-151997305684",
-        "release_group_mbid": "8243edf0-1c84-4c5e-b693-811b1a2ef070",
-        "track_position": 1,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:1cc57d40fb70d524d9bdd3a1d7d7586206d95b6fbd5feef9486a3e5142d00c76",
         "restores_exact_snapshot": true
       }
     },
@@ -2017,55 +1821,6 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1522-a2915d86083f",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "a2915d86083ff69553f8c99895a44986d8cec200bbbcb9d69116a5572426b8fe",
-      "preconditions": {
-        "row_fingerprint": "695ac55c891164f1f924ea9193a1e62eee4eaffc705d5b09b93294c63f43afcf",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "2007:1062:sean kingston:beautiful girls",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "a2249085-e07b-49a2-b065-9a1cf89e2285",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 1522,
-        "action": "import_verified",
-        "placeholder_canonical_id": "a2249085-e07b-49a2-b065-9a1cf89e2285",
-        "recording_mbid": "47e69f86-0f49-4803-b936-1384048c1644",
-        "release_mbid": "64f55c34-39e9-4796-bcf2-96441fe918b6",
-        "release_group_mbid": "aade3c33-d968-39e3-8fbd-a5c62e0158b6",
-        "track_position": 5,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:a2915d86083ff69553f8c99895a44986d8cec200bbbcb9d69116a5572426b8fe",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
       "operation_key": "historical-uk-number-ones-v5-row-1502-05f34f3f910d",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
@@ -2360,55 +2115,6 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1418-19254b12e83e",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "19254b12e83e0c604f9ef8ff47969199460490948179b1a2d1b84dbc7be89558",
-      "preconditions": {
-        "row_fingerprint": "7be8709e7f16aa782d9672f62b9a5cac6dd908dd50b48457923aeb8efe36a1cb",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "2002:939:nelly kelly rowland:dilemma",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "23f5c80a-4c3e-4138-90c3-ed14b950e059",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 1418,
-        "action": "import_verified",
-        "placeholder_canonical_id": "23f5c80a-4c3e-4138-90c3-ed14b950e059",
-        "recording_mbid": "f8f6017d-9d25-4b85-8318-05548cba94a1",
-        "release_mbid": "16967611-e6d4-40ab-b9a1-f6922f92a6a6",
-        "release_group_mbid": "8bea71d9-b1ae-3b02-bcca-cc3c2bde130d",
-        "track_position": 10,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:19254b12e83e0c604f9ef8ff47969199460490948179b1a2d1b84dbc7be89558",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
       "operation_key": "historical-uk-number-ones-v5-row-1352-46834ae724b5",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
@@ -2650,55 +2356,6 @@
       "rollback": {
         "required": true,
         "approval_token_scope": "rollback:6162931d28ba3d4268e715465a665708a80206d267828069857ae77576e230b4",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
-      "operation_key": "historical-uk-number-ones-v5-row-107-87438185c7e8",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "87438185c7e879d841585b1c94d41a026c25e38c19f35be6c83250bd4d1a2b5f",
-      "preconditions": {
-        "row_fingerprint": "19c96ec2cc3d0270f755a536960d2d2c928f44161210c892585d69f773d65495",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "1996:751:the prodigy:breathe",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "0a1b1cc0-d31b-45c8-8018-146128ddc4ff",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 107,
-        "action": "import_verified",
-        "placeholder_canonical_id": "0a1b1cc0-d31b-45c8-8018-146128ddc4ff",
-        "recording_mbid": "4f063cd8-1c74-4ef1-8d68-236123ef6438",
-        "release_mbid": "2892b1e6-59d1-48c0-8295-24c663d9c573",
-        "release_group_mbid": "ac9138ce-6331-3f8d-86d7-69f13e4ab4f4",
-        "track_position": 2,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:87438185c7e879d841585b1c94d41a026c25e38c19f35be6c83250bd4d1a2b5f",
         "restores_exact_snapshot": true
       }
     },
@@ -3683,5 +3340,5 @@
       }
     }
   ],
-  "plan_sha256": "0af99d859cf1a442bb7a92eb6a28732bbb6686b15bdac5e3c51ff63caa294b8f"
+  "plan_sha256": "185fd010d9e0813af1603d8e9f1007482f7d3284f1e102e64e0fce7261a95977"
 }

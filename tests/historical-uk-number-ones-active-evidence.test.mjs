@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import {
-  EvidenceFetcher, parseOfficialChartCatalogueNumbers, rankReleases, retrieveEntryEvidence, selectOfficialChartResult
+  EvidenceFetcher, parseOfficialChartCatalogueNumbers, rankReleases, retrieveEntryEvidence, reusableCheckpoint,
+  selectOfficialChartResult
 } from "../scripts/historical-uk-number-ones-active-evidence.mjs";
 
 const entry = (overrides = {}) => ({
@@ -85,6 +86,13 @@ test("ratings remain outside evidence qualification and catalogue collisions bec
     { recordings: { [recordingId]: { song_id: 42 } } }, { url: fixture.officialUrl, catalogue_number: "GBAHS1700199" });
   assert.equal(result.evidence.action, "existing_recording");
   assert.equal(result.evidence.existing_song_id, 42);
+});
+
+test("a changed exclusion registry invalidates completed checkpoints", () => {
+  const previous = { final: true, row_fingerprint: "row-digest" };
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a"), true);
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-b"), false);
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a", true), false);
 });
 
 test("multiple ISRCs, wrong stored ISRCs and duplicate release occurrences fail closed", async () => {

@@ -4,7 +4,7 @@ import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { artistCompatible } from "./historical-uk-number-ones-discovery.mjs";
-import { compactSnapshot, rowFingerprint } from "./historical-uk-number-ones-reconciliation-workflow.mjs";
+import { compactSnapshot, exclusionRegistryDigest, historicalExclusion, rowFingerprint } from "./historical-uk-number-ones-reconciliation-workflow.mjs";
 import { normalise } from "./uk-number-ones-lib.mjs";
 
 const MBID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -148,6 +148,11 @@ export function parseOfficialChartCatalogueNumbers(html) {
     .map(match => decodeHtml(match[1]).replace(/\s+/g, "").toUpperCase()).filter(Boolean))];
 }
 
+export function reusableCheckpoint(previous, fingerprint, previousRegistrySha256, registrySha256, refresh = false) {
+  return previous?.final === true && previous.row_fingerprint === fingerprint &&
+    previousRegistrySha256 === registrySha256 && !refresh;
+}
+
 export function selectOfficialChartResult(entry, search) {
   const exact = (search?.singles || []).filter(result => normalise(result.title) === normalise(entry.title) && artistCompatible(entry.artist, result.artist));
   const urls = [...new Set(exact.map(result => String(result.url || "").replace(/\/$/, "")))];
@@ -274,6 +279,10 @@ async function main() {
   await officialCache.load(); await musicbrainzCache.load();
   const baseMusicbrainzCache = option("base-musicbrainz-cache") ? await readJson(option("base-musicbrainz-cache"), {}) : {};
   const chartEvidence = option("chart-evidence") ? await readJson(option("chart-evidence"), { entries: {} }) : { entries: {} };
+  const exclusionRegistry = option("exclusions") ? await readJson(option("exclusions"), { entries: [] }) : { entries: [] };
+  const registrySha256 = exclusionRegistryDigest(exclusionRegistry);
+  const previousRegistrySha256 = state.exclusion_registry_sha256 || null;
+  state.exclusion_registry_sha256 = registrySha256;
   const catalogue = option("catalogue-snapshot") ? await readJson(option("catalogue-snapshot"), {}) : {};
   const fetcher = new EvidenceFetcher({ officialCache, musicbrainzCache, baseMusicbrainzCache,
     officialIntervalMs: Number(option("official-interval-ms", "1100")), musicbrainzIntervalMs: Number(option("musicbrainz-interval-ms", "1100")) });
@@ -282,11 +291,18 @@ async function main() {
   if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 8) throw new Error("Concurrency must be between 1 and 8.");
   const processEntry = async entry => {
     const key = String(entry.id), fingerprint = rowFingerprint(entry), previous = state.results[key];
-    if (previous?.final && previous.row_fingerprint === fingerprint && !process.argv.includes("--refresh")) return;
+    if (reusableCheckpoint(previous, fingerprint, previousRegistrySha256, registrySha256, process.argv.includes("--refresh"))) return;
     try {
+      const preliminaryExclusion = historicalExclusion(entry, null, exclusionRegistry);
+      if (preliminaryExclusion && !preliminaryExclusion.pending_evidence_validation) {
+        state.results[key] = { chart_row_id: entry.id, title: entry.title, artist: entry.artist, chart_year: entry.chart_year,
+          row_fingerprint: fingerprint, reason: preliminaryExclusion.reason, final: true };
+        return;
+      }
       const result = await retrieveEntryEvidence(entry, fetcher, catalogue, chartEvidence.entries?.[key]);
+      const finalExclusion = result.evidence ? historicalExclusion(entry, result.evidence, exclusionRegistry) : null;
       state.results[key] = { chart_row_id: entry.id, title: entry.title, artist: entry.artist, chart_year: entry.chart_year,
-        row_fingerprint: fingerprint, ...result, final: true };
+        row_fingerprint: fingerprint, ...(finalExclusion ? { reason: finalExclusion.reason } : result), final: true };
     } catch (error) {
       state.results[key] = { chart_row_id: entry.id, title: entry.title, artist: entry.artist, chart_year: entry.chart_year,
         row_fingerprint: fingerprint, reason: `retrieval_failed:${error.message}`, final: false };
@@ -302,8 +318,8 @@ async function main() {
   const evidence = Object.fromEntries(ordered.filter(row => row?.evidence).map(row => [String(row.chart_row_id), row.evidence]));
   const failures = ordered.filter(row => !row?.evidence).map(row => ({ chart_row_id: row.chart_row_id, chart_year: row.chart_year,
     title: row.title, artist: row.artist, reason: row.reason, final: row.final }));
-  await writeJson(evidenceOutput, { schema_version: 1, generated_at: new Date().toISOString(), entries: evidence });
-  await writeJson(failuresOutput, { schema_version: 1, generated_at: new Date().toISOString(), failures });
+  await writeJson(evidenceOutput, { schema_version: 1, generated_at: new Date().toISOString(), exclusion_registry_sha256: registrySha256, entries: evidence });
+  await writeJson(failuresOutput, { schema_version: 1, generated_at: new Date().toISOString(), exclusion_registry_sha256: registrySha256, failures });
   console.log(JSON.stringify({ scanned: ordered.length, verified: Object.keys(evidence).length, unresolved: failures.length, ...fetcher.metrics }));
 }
 

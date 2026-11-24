@@ -4,8 +4,8 @@ import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import {
-  buildReviewPlan, classifyFullScan, compactSnapshot, digest, resumableQueue, rowFingerprint, stableJson, summarise,
-  validateIndependentEvidence, validateReviewPlan
+  buildReviewPlan, classifyFullScan, compactSnapshot, digest, exclusionRegistryDigest, historicalExclusion,
+  resumableQueue, rowFingerprint, stableJson, summarise, validateIndependentEvidence, validateReviewPlan
 } from "../scripts/historical-uk-number-ones-reconciliation-workflow.mjs";
 
 const row = (overrides = {}) => ({
@@ -31,6 +31,12 @@ const evidence = (overrides = {}) => ({
   risk_notes: "Single-track official release.", ...overrides
 });
 
+const exclusionRegistry = (overrides = {}) => ({
+  schema_version: 1, policy: "fail_closed_until_exact_evidence_is_independently_approved",
+  entries: [{ chart_row_id: 1, source_entry_key: row().source_entry_key, title: "Song", artist: "Artist",
+    reason_code: "isrc_maps_multiple_recordings", approved_overrides: [], ...overrides }]
+});
+
 test("stable digests and row fingerprints are deterministic", () => {
   assert.equal(stableJson({ b: 2, a: 1 }), stableJson({ a: 1, b: 2 }));
   assert.equal(digest({ b: 2, a: 1 }), digest({ a: 1, b: 2 }));
@@ -48,6 +54,27 @@ test("selected-track imports require explicit risk disclosure", () => {
   const failures = validateIndependentEvidence(row(), evidence({ release_track_count: 4, risk_notes: "" }));
   assert.ok(failures.includes("selected_track_risk_not_disclosed"));
   assert.deepEqual(validateIndependentEvidence(row(), evidence({ release_track_count: 4, risk_notes: "Selected-track import: track 1 only from a four-track official release." })), []);
+});
+
+test("historical identity exclusions fail closed and require a digest-bound independent approval", () => {
+  const registry = exclusionRegistry();
+  const [excluded] = classifyFullScan({ rows: [row()] }, { evidence: { "1": evidence() }, exclusionRegistry: registry });
+  assert.equal(excluded.category, "UNRESOLVED");
+  assert.equal(excluded.reason, "historical_identity_conflict_excluded:isrc_maps_multiple_recordings");
+  assert.equal(historicalExclusion(row(), evidence(), registry).entry.chart_row_id, 1);
+
+  const approved = exclusionRegistry({ approved_overrides: [{
+    status: "independently_approved", recording_mbid: evidence().recording_mbid,
+    evidence_sha256: digest(evidence()), approved_by: "independent-reviewer", approved_at: "2026-11-24T12:00:00Z",
+    approval_reference: "review:exact-version-evidence"
+  }] });
+  const [qualified] = classifyFullScan({ rows: [row()] }, { evidence: { "1": evidence() }, exclusionRegistry: approved });
+  assert.equal(qualified.category, "VERIFIED_IMPORT");
+  const tamperedEvidence = evidence({ duration_ms: 213000 });
+  const [tampered] = classifyFullScan({ rows: [row()] }, { evidence: { "1": tamperedEvidence }, exclusionRegistry: approved });
+  assert.equal(tampered.category, "UNRESOLVED");
+  assert.match(tampered.reason, /^historical_identity_conflict_excluded:/);
+  assert.match(exclusionRegistryDigest(registry), /^[0-9a-f]{64}$/);
 });
 
 test("rating, identity, ISRC, exact-track and release failures fail closed", () => {
@@ -138,6 +165,13 @@ test("the committed active scan reports and safely classifies every one of the 8
   const activeEvidence = await load("historical-uk-number-ones-active-verified-evidence-20261124.json");
   const activeFailures = await load("historical-uk-number-ones-active-failures-20261124.json");
   const activeState = await load("historical-uk-number-ones-active-evidence-state-20261124.json");
+  const exclusions = await load("historical-uk-number-ones-identity-exclusions.json");
+  const authoritative = await load("historical-uk-number-ones-authoritative-chart-evidence.json");
+  const priorAudits = await Promise.all([
+    "historical-uk-number-ones-verified-batch-2-audit-20261123.json",
+    "historical-uk-number-ones-verified-batch-3-audit-20261124.json",
+    "historical-uk-number-ones-verified-batch-4-audit-20261124.json"
+  ].map(load));
   assert.equal(snapshot.read_only, true);
   assert.equal(snapshot.rows.length, 819);
   assert.equal(report.read_only, true);
@@ -145,17 +179,26 @@ test("the committed active scan reports and safely classifies every one of the 8
   assert.equal(new Set(report.results.map(result => result.chart_row_id)).size, 819);
   assert.ok(report.results.every(result => result.category === "UNRESOLVED" ? Boolean(result.reason) :
     ["VERIFIED_EXISTING", "VERIFIED_IMPORT"].includes(result.category) && Boolean(result.evidence)));
-  assert.equal(Object.keys(activeEvidence.entries).length, 88);
-  assert.equal(activeFailures.failures.length, 731);
+  assert.equal(exclusions.entries.length, 15);
+  const documentedIds = new Set(priorAudits.flatMap(audit => audit.rejected_version_leads || []).map(entry => entry.chart_entry_id));
+  for (const [id, entry] of Object.entries(authoritative.entries)) if (entry.status === "identity_conflict") documentedIds.add(Number(id));
+  assert.deepEqual(exclusions.entries.map(entry => entry.chart_row_id).sort((a, b) => a - b), [...documentedIds].sort((a, b) => a - b));
+  const blockedRecordingMbids = exclusions.entries.flatMap(entry => entry.blocked_recording_mbids || []);
+  assert.equal(blockedRecordingMbids.length, 7);
+  assert.ok(Object.values(activeEvidence.entries).every(entry => !blockedRecordingMbids.includes(entry.recording_mbid)));
+  assert.equal(Object.keys(activeEvidence.entries).length, 81);
+  assert.equal(activeFailures.failures.length, 738);
   assert.equal(Object.keys(activeState.results).length, 819);
+  assert.equal(activeState.exclusion_registry_sha256, summary.exclusion_registry_sha256);
   assert.ok(Object.values(activeState.results).every(result => result.final === true));
   assert.equal(summary.verified_existing, 3);
-  assert.equal(summary.verified_imports, 72);
-  assert.equal(summary.verified_total, 75);
-  assert.equal(summary.unresolved, 744);
+  assert.equal(summary.verified_imports, 65);
+  assert.equal(summary.verified_total, 68);
+  assert.equal(summary.unresolved, 751);
+  assert.equal(summary.historically_excluded, 15);
   assert.equal(summary.prior_evidence_rows_reused, 576);
   assert.equal(plan.production_authorized, false);
-  assert.equal(plan.records.length, 75);
+  assert.equal(plan.records.length, 68);
   assert.ok(plan.records.every(record => record.preconditions.canonical_rating_rows === 0 &&
     record.preconditions.historical_rating_rows === 0 && record.safety_contract.preserve_all_ratings === true));
 });

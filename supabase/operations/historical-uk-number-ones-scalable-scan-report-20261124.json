@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-24T14:03:24.787Z",
+  "generated_at": "2026-11-24T17:03:37.001Z",
   "read_only": true,
   "snapshot_sha256": "0dbc96dca56f595e2473f6c33f36852755620e020e1776818a29440f998a9d53",
-  "evidence_sha256": "170ca3a6192814d5c0caecf9d0d3b263c4474a2b64bd8e933c033cebbf135874",
+  "evidence_sha256": "c3f0d4776675f2cbadf43f38616b717b2189febe26d24ff1532489c1a72f4493",
   "chart_evidence_sha256": "24be00d2c0ca21af26dde3d10fe2e1c66775da5c13c5d20927176a4b201e78d7",
+  "exclusion_registry_sha256": "c8c7ffe5bdc8f50c6ac5c80776bd1d128f84c6e2639cc68fde64890e10d8ec01",
   "results": [
     {
       "chart_row_id": 2510,
@@ -217,7 +218,7 @@
       "prior_research_reason": null,
       "evidence_cache_status": "not_cached",
       "category": "UNRESOLVED",
-      "reason": "authoritative_identity_evidence_missing",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_music_video_not_audio_single",
       "prior_candidate_count": 0
     },
     {
@@ -553,39 +554,9 @@
       "row_fingerprint": "d92237d37a634e08fc6e3d86fac61221992169bbe43582ae56308f1e57c3f52b",
       "prior_research_reason": null,
       "evidence_cache_status": "not_cached",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "I'll Be There",
-        "artist": "Jess Glynne",
-        "official_charts_url": "https://www.officialcharts.com/songs/jess-glynne-ill-be-there/",
-        "official_charts_isrc": "GBAHS1800322",
-        "recording_mbid": "b1953e74-8a8f-4c4c-97fb-c3f9268e2ef5",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/b1953e74-8a8f-4c4c-97fb-c3f9268e2ef5",
-        "recording_isrcs": [
-          "GBAHS1800322",
-          "GBAHS1800486"
-        ],
-        "release_mbid": "c20f6820-96d5-43e0-b79c-3ebdd2800d96",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/c20f6820-96d5-43e0-b79c-3ebdd2800d96",
-        "release_group_mbid": "bd441d47-8bcf-4311-afa8-445135884e75",
-        "release_status": "Official",
-        "release_date": "2018-05-04",
-        "release_country": "US",
-        "release_title": "I'll Be There",
-        "medium_position": 1,
-        "track_position": 1,
-        "track_recording_mbid": "b1953e74-8a8f-4c4c-97fb-c3f9268e2ef5",
-        "release_recording_occurrences": 1,
-        "release_track_count": 1,
-        "duration_ms": 193924,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Single-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "prior_candidate_count": 0
     },
     {
       "chart_row_id": 2014,
@@ -598,7 +569,7 @@
       "prior_research_reason": null,
       "evidence_cache_status": "not_cached",
       "category": "UNRESOLVED",
-      "reason": "authoritative_identity_evidence_missing",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "prior_candidate_count": 0
     },
     {
@@ -611,38 +582,9 @@
       "row_fingerprint": "1018643f646922df59f078613bab3a3efc59e9052f3579be8bbe95f6e3f5642d",
       "prior_research_reason": "automated_pass_no_single_official_release_validates_recording",
       "evidence_cache_status": "chart_identity_only",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "Symphony",
-        "artist": "Clean Bandit featuring Zara Larsson",
-        "official_charts_url": "https://www.officialcharts.com/songs/clean-bandit-ft-zara-larsson-symphony/",
-        "official_charts_isrc": "GBAHS1700199",
-        "recording_mbid": "072fc090-5b35-4ae7-9976-cb785fd0983a",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/072fc090-5b35-4ae7-9976-cb785fd0983a",
-        "recording_isrcs": [
-          "GBAHS1700199"
-        ],
-        "release_mbid": "9e7cf9f2-c455-4af0-8ce1-b0783db16ed1",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/9e7cf9f2-c455-4af0-8ce1-b0783db16ed1",
-        "release_group_mbid": "28159c4c-beda-4351-af2d-1c5b8464a406",
-        "release_status": "Official",
-        "release_date": "2017-03-17",
-        "release_country": "DE",
-        "release_title": "Symphony",
-        "medium_position": 1,
-        "track_position": 1,
-        "track_recording_mbid": "072fc090-5b35-4ae7-9976-cb785fd0983a",
-        "release_recording_occurrences": 1,
-        "release_track_count": 2,
-        "duration_ms": 216000,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "prior_candidate_count": 1
     },
     {
       "chart_row_id": 1997,
@@ -712,7 +654,7 @@
       "prior_research_reason": null,
       "evidence_cache_status": "not_cached",
       "category": "UNRESOLVED",
-      "reason": "authoritative_identity_evidence_missing",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "prior_candidate_count": 0
     },
     {
@@ -855,41 +797,9 @@
       "row_fingerprint": "b88209b2f57b9b21649b87cdf930e12438b23b2c8b5cdde7e28d6f6f9c490f54",
       "prior_research_reason": "automated_pass_no_single_official_release_validates_recording",
       "evidence_cache_status": "chart_identity_only",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "See You Again",
-        "artist": "Wiz Khalifa featuring Charlie Puth",
-        "official_charts_url": "https://www.officialcharts.com/songs/wiz-khalifa-ft-charlie-puth-see-you-again/",
-        "official_charts_isrc": "USAT21500313",
-        "recording_mbid": "c6cf4924-75b7-40b3-8d66-f50ff8aec30e",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/c6cf4924-75b7-40b3-8d66-f50ff8aec30e",
-        "recording_isrcs": [
-          "USAT21500313",
-          "USAT21501111",
-          "USAT21503426",
-          "USAT21703595"
-        ],
-        "release_mbid": "aaf79fbb-11af-4f4b-84ea-bb76183b20a1",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/aaf79fbb-11af-4f4b-84ea-bb76183b20a1",
-        "release_group_mbid": "9cfacb1d-9b60-4090-bd3d-bf9efefba493",
-        "release_status": "Official",
-        "release_date": "2015-05-17",
-        "release_country": "",
-        "release_title": "Furious 7: Original Motion Picture Soundtrack",
-        "medium_position": 1,
-        "track_position": 7,
-        "track_recording_mbid": "c6cf4924-75b7-40b3-8d66-f50ff8aec30e",
-        "release_recording_occurrences": 1,
-        "release_track_count": 16,
-        "duration_ms": 229000,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 7 only from a 16-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "prior_candidate_count": 1
     },
     {
       "chart_row_id": 1972,
@@ -930,7 +840,7 @@
       "prior_research_reason": "automated_pass_no_qualifying_contemporary_official_release",
       "evidence_cache_status": "chart_identity_only",
       "category": "UNRESOLVED",
-      "reason": "musicbrainz_recording_and_exact_release_track_evidence_missing",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
       "prior_candidate_count": 10
     },
     {
@@ -1370,7 +1280,7 @@
       "prior_research_reason": null,
       "evidence_cache_status": "identity_conflict",
       "category": "UNRESOLVED",
-      "reason": "authoritative_chart_identity_conflict",
+      "reason": "historical_identity_conflict_excluded:stored_isrc_belongs_to_different_artist_version",
       "prior_candidate_count": 0
     },
     {
@@ -1623,38 +1533,9 @@
       "row_fingerprint": "780a72386846fafaa436521d533b5cbef959bbde46b7583e2b8d237fe3b7ba5f",
       "prior_research_reason": null,
       "evidence_cache_status": "chart_identity_only",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "Wake Me Up",
-        "artist": "Avicii",
-        "official_charts_url": "https://www.officialcharts.com/songs/avicii-wake-me-up/",
-        "official_charts_isrc": "SEUM71301326",
-        "recording_mbid": "b437fbda-9c32-4078-afa2-1afb98ff0d74",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/b437fbda-9c32-4078-afa2-1afb98ff0d74",
-        "recording_isrcs": [
-          "SEUM71301326"
-        ],
-        "release_mbid": "c9baf701-1991-4403-9e38-151997305684",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/c9baf701-1991-4403-9e38-151997305684",
-        "release_group_mbid": "8243edf0-1c84-4c5e-b693-811b1a2ef070",
-        "release_status": "Official",
-        "release_date": "2013-07-02",
-        "release_country": "CA",
-        "release_title": "Wake Me Up",
-        "medium_position": 1,
-        "track_position": 1,
-        "track_recording_mbid": "b437fbda-9c32-4078-afa2-1afb98ff0d74",
-        "release_recording_occurrences": 1,
-        "release_track_count": 1,
-        "duration_ms": 249693,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Single-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recording_versions",
+      "prior_candidate_count": 0
     },
     {
       "chart_row_id": 1915,
@@ -3146,7 +3027,7 @@
       "prior_research_reason": "automated_pass_no_qualifying_contemporary_official_release",
       "evidence_cache_status": "identity_conflict",
       "category": "UNRESOLVED",
-      "reason": "authoritative_chart_identity_conflict",
+      "reason": "historical_identity_conflict_excluded:official_charts_catalogue_conflicts_with_stored_evidence",
       "prior_candidate_count": 1
     },
     {
@@ -3684,38 +3565,9 @@
       "row_fingerprint": "695ac55c891164f1f924ea9193a1e62eee4eaffc705d5b09b93294c63f43afcf",
       "prior_research_reason": "automated_pass_no_single_official_release_validates_recording",
       "evidence_cache_status": "chart_identity_only",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "Beautiful Girls",
-        "artist": "Sean Kingston",
-        "official_charts_url": "https://www.officialcharts.com/songs/sean-kingston-beautiful-girls/",
-        "official_charts_isrc": "USSM10701781",
-        "recording_mbid": "47e69f86-0f49-4803-b936-1384048c1644",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/47e69f86-0f49-4803-b936-1384048c1644",
-        "recording_isrcs": [
-          "USSM10701781"
-        ],
-        "release_mbid": "64f55c34-39e9-4796-bcf2-96441fe918b6",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/64f55c34-39e9-4796-bcf2-96441fe918b6",
-        "release_group_mbid": "aade3c33-d968-39e3-8fbd-a5c62e0158b6",
-        "release_status": "Official",
-        "release_date": "2007-07-31",
-        "release_country": "XW",
-        "release_title": "Sean Kingston",
-        "medium_position": 1,
-        "track_position": 5,
-        "track_recording_mbid": "47e69f86-0f49-4803-b936-1384048c1644",
-        "release_recording_occurrences": 1,
-        "release_track_count": 14,
-        "duration_ms": 241000,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 5 only from a 14-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "prior_candidate_count": 2
     },
     {
       "chart_row_id": 1525,
@@ -4417,7 +4269,7 @@
       "prior_research_reason": null,
       "evidence_cache_status": "identity_conflict",
       "category": "UNRESOLVED",
-      "reason": "authoritative_chart_identity_conflict",
+      "reason": "historical_identity_conflict_excluded:official_isrc_maps_filterheadz_remix_not_chart_version",
       "prior_candidate_count": 0
     },
     {
@@ -4967,42 +4819,9 @@
       "row_fingerprint": "7be8709e7f16aa782d9672f62b9a5cac6dd908dd50b48457923aeb8efe36a1cb",
       "prior_research_reason": null,
       "evidence_cache_status": "chart_identity_only",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "Dilemma",
-        "artist": "Nelly featuring Kelly Rowland",
-        "official_charts_url": "https://www.officialcharts.com/songs/nelly-ft-kelly-rowland-dilemma/",
-        "official_charts_isrc": "USUR10200370",
-        "recording_mbid": "f8f6017d-9d25-4b85-8318-05548cba94a1",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/f8f6017d-9d25-4b85-8318-05548cba94a1",
-        "recording_isrcs": [
-          "USIR10200370",
-          "USSM10211190",
-          "USUM71200805",
-          "USUR10200357",
-          "USUR10200370"
-        ],
-        "release_mbid": "16967611-e6d4-40ab-b9a1-f6922f92a6a6",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/16967611-e6d4-40ab-b9a1-f6922f92a6a6",
-        "release_group_mbid": "8bea71d9-b1ae-3b02-bcca-cc3c2bde130d",
-        "release_status": "Official",
-        "release_date": "2002-07-01",
-        "release_country": "GB",
-        "release_title": "Nellyville",
-        "medium_position": 1,
-        "track_position": 10,
-        "track_recording_mbid": "f8f6017d-9d25-4b85-8318-05548cba94a1",
-        "release_recording_occurrences": 1,
-        "release_track_count": 20,
-        "duration_ms": 289160,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 10 only from a 20-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:isrc_maps_multiple_recordings",
+      "prior_candidate_count": 0
     },
     {
       "chart_row_id": 1419,
@@ -6452,38 +6271,9 @@
       "row_fingerprint": "19c96ec2cc3d0270f755a536960d2d2c928f44161210c892585d69f773d65495",
       "prior_research_reason": null,
       "evidence_cache_status": "chart_identity_only",
-      "category": "VERIFIED_IMPORT",
-      "reason": "exact_independently_verified_identity",
-      "evidence": {
-        "status": "independently_verified",
-        "title": "Breathe",
-        "artist": "The Prodigy",
-        "official_charts_url": "https://www.officialcharts.com/songs/prodigy-breathe/",
-        "official_charts_isrc": "GBBKS9700074",
-        "recording_mbid": "4f063cd8-1c74-4ef1-8d68-236123ef6438",
-        "musicbrainz_recording_url": "https://musicbrainz.org/recording/4f063cd8-1c74-4ef1-8d68-236123ef6438",
-        "recording_isrcs": [
-          "GBBKS9700074"
-        ],
-        "release_mbid": "2892b1e6-59d1-48c0-8295-24c663d9c573",
-        "musicbrainz_release_url": "https://musicbrainz.org/release/2892b1e6-59d1-48c0-8295-24c663d9c573",
-        "release_group_mbid": "ac9138ce-6331-3f8d-86d7-69f13e4ab4f4",
-        "release_status": "Official",
-        "release_date": "1997-06-30",
-        "release_country": "GB",
-        "release_title": "The Fat of the Land",
-        "medium_position": 1,
-        "track_position": 2,
-        "track_recording_mbid": "4f063cd8-1c74-4ef1-8d68-236123ef6438",
-        "release_recording_occurrences": 1,
-        "release_track_count": 10,
-        "duration_ms": 334800,
-        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 2 only from a 10-track official release.",
-        "action": "safe_import",
-        "existing_song_id": null,
-        "reuse_album_id": null
-      }
+      "category": "UNRESOLVED",
+      "reason": "historical_identity_conflict_excluded:album_version_postdates_number_one_without_contemporaneous_bridge",
+      "prior_candidate_count": 0
     },
     {
       "chart_row_id": 108,
@@ -6706,7 +6496,7 @@
       "prior_research_reason": "automated_pass_no_qualifying_contemporary_official_release",
       "evidence_cache_status": "identity_conflict",
       "category": "UNRESOLVED",
-      "reason": "authoritative_chart_identity_conflict",
+      "reason": "historical_identity_conflict_excluded:contemporary_uk_single_uses_different_radio_edit_recording",
       "prior_candidate_count": 10
     },
     {
