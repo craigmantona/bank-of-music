@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "workflow": "historical-uk-number-ones-scalable-reconciliation-v1",
+  "executable": false,
+  "production_authorized": false,
+  "max_in_flight": 1,
+  "resume_strategy": "skip only immutable-audit verified records",
+  "snapshot_sha256": "0dbc96dca56f595e2473f6c33f36852755620e020e1776818a29440f998a9d53",
+  "records": [],
+  "plan_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+}

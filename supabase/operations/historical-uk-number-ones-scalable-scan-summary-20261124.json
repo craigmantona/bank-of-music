@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "workflow": "historical-uk-number-ones-scalable-reconciliation-v1",
+  "read_only_scan": true,
+  "scanned": 819,
+  "verified_existing": 0,
+  "verified_imports": 0,
+  "verified_total": 0,
+  "unresolved": 819,
+  "unresolved_reasons": {
+    "existing_research_exhausted:automated_pass_no_qualifying_contemporary_official_release": 369,
+    "authoritative_identity_evidence_missing": 222,
+    "existing_research_exhausted:automated_pass_no_single_official_release_validates_recording": 91,
+    "rated_placeholder_protected": 91,
+    "existing_research_exhausted:automated_pass_multiple_versions_remain_tied": 26,
+    "musicbrainz_recording_and_exact_release_track_evidence_missing": 7,
+    "authoritative_chart_identity_conflict": 4,
+    "authoritative_chart_page_has_no_recording_isrc": 3,
+    "preexisting_recording_identity_requires_manual_reconciliation": 3,
+    "existing_research_exhausted:duplicate_recording_relationship_requires_manual_review": 2,
+    "multiple_or_conflicting_stored_isrcs": 1
+  },
+  "snapshot_sha256": "0dbc96dca56f595e2473f6c33f36852755620e020e1776818a29440f998a9d53",
+  "report_sha256": "575bd7a08ba9da4c1d4519760fb16011f669c397cc36e4ad46b667076d9f35e1",
+  "plan_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "prior_evidence_rows_reused": 576,
+  "authoritative_chart_cache_hits": 14
+}
