@@ -1,7 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   buildExecutorBundle, executionQueue, validateApproval, validateExecutorBundle
@@ -19,6 +21,7 @@ test("the reviewed executor bundle is deterministic, complete and deliberately u
   assert.equal(committed.records.length, 71);
   assert.equal(committed.records.filter(record => record.mutation_payload.action === "import_verified").length, 68);
   assert.equal(committed.records.filter(record => record.mutation_payload.action === "link_existing").length, 3);
+  assert.equal(committed.execution_contract.required_transport, "direct-postgres-psql-v1");
   assert.equal(new Set(committed.records.map(record => record.mutation_payload.recording_mbid)).size, 71);
   assert.ok(committed.records.every(record => record.preconditions.canonical_rating_rows === 0 &&
     record.preconditions.historical_rating_rows === 0 && record.preconditions.song_occurrences === 0));
@@ -40,11 +43,12 @@ test("execution and rollback require a separate digest-bound approval", async ()
   const approval = {
     status: "independently_approved", operation_key: bundle.operation_key, bundle_sha256: bundle.bundle_sha256,
     mode: "apply", approved_by: "independent-reviewer", approved_at: "2026-11-24T17:00:00Z",
-    approval_reference: "review:executor-head"
+    approval_reference: "review:executor-head", execution_transport: bundle.execution_contract.required_transport
   };
   assert.deepEqual(validateApproval(approval, bundle, "apply"), []);
   assert.ok(validateApproval({ ...approval, bundle_sha256: "0".repeat(64) }, bundle, "apply").includes("approval_bundle_digest_mismatch"));
   assert.ok(validateApproval(approval, bundle, "rollback").includes("approval_mode_mismatch"));
+  assert.ok(validateApproval({ ...approval, execution_transport: "supabase-mcp" }, bundle, "apply").includes("approval_transport_mismatch"));
 });
 
 test("reviewed SQL provides one transaction per record with stale, rating, duplicate, audit and rollback guards", async () => {
@@ -56,6 +60,7 @@ test("reviewed SQL provides one transaction per record with stale, rating, dupli
     assert.match(sql, /commit;/i);
     assert.match(sql, /pg_advisory_xact_lock/);
     assert.match(sql, /approved_historical_reconciliation/);
+    assert.match(sql, /direct-postgres-psql-v1/);
     assert.match(sql, /historical_chart_reconciliation_operation_audit/);
     assert.match(sql, /bom_executor_song_ratings_before/);
     assert.match(sql, /bom_executor_historical_ratings_before/);
@@ -66,6 +71,23 @@ test("reviewed SQL provides one transaction per record with stale, rating, dupli
   assert.match(apply, /duplicate recording identity/);
   assert.match(rollback, /after-state guard failed/);
   assert.match(rollback, /refuses a newly rated candidate/);
+});
+
+test("a systemic transport failure stops before attempting a second record", async () => {
+  const script = fileURLToPath(new URL("../scripts/historical-uk-number-ones-production-executor.mjs", import.meta.url));
+  const bundle = await load(bundlePath);
+  const directory = await mkdtemp(join(tmpdir(), "bom-executor-"));
+  const approvalPath = join(directory, "approval.json");
+  await writeFile(approvalPath, JSON.stringify({
+    status: "independently_approved", operation_key: bundle.operation_key, bundle_sha256: bundle.bundle_sha256,
+    mode: "apply", approved_by: "independent-reviewer", approved_at: "2026-11-24T17:00:00Z",
+    approval_reference: "review:executor-head", execution_transport: bundle.execution_contract.required_transport
+  }));
+  const execution = spawnSync(process.execPath, [script, "--execute", "--approval-file", approvalPath], {
+    encoding: "utf8", env: { ...process.env, BOM_DATABASE_URL: "postgresql://invalid", BOM_PSQL_BIN: join(directory, "missing-psql") }
+  });
+  assert.equal(execution.status, 2);
+  assert.match(execution.stdout, /"succeeded":0,"failed":1/);
 });
 
 test("the command is review-only by default and refuses execution before database access without approval", async () => {
