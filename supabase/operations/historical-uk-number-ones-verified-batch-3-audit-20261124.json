@@ -1,0 +1,2700 @@
+{
+  "schema_version": 3,
+  "artifact": "historical-uk-number-ones-verified-batch-3-audit",
+  "status": "proposed_not_executed",
+  "snapshot": {
+    "captured_at": "2026-11-24T09:33:25.050876+00:00",
+    "candidate_state_artifact": "historical-uk-number-ones-verified-batch-3-live-state-20261124.json",
+    "candidate_state_sha256": "2ceb34ca312097c476bf4f0c41f25f3a32bf320aba3e30218195ed363d9c1c6f",
+    "production_integrity": {
+      "songs": 16181,
+      "albums": 1750,
+      "song_rating_sum": 13454,
+      "song_rating_rows": 1747,
+      "total_chart_entries": 1298,
+      "canonical_recordings": 17095,
+      "historical_rating_sum": 43,
+      "historical_rating_rows": 5,
+      "resolved_chart_entries": 439,
+      "invalid_song_rating_rows": 0,
+      "unresolved_chart_entries": 859,
+      "duplicate_recording_mbids": 0,
+      "prior_operation_audit_rows": 20,
+      "first_batch_rating_reconciliation_audit_rows": 1
+    }
+  },
+  "audit_coverage": {
+    "inventory_rows_classified": 859,
+    "verified_existing_link": 0,
+    "verified_catalogue_import": 20,
+    "explicit_ambiguous_or_version_conflict": 14,
+    "insufficient_authoritative_evidence": 825,
+    "reviewed_but_not_selected": 32,
+    "remaining_inventory_without_a_complete_evidence_chain": 807,
+    "method": "The prior 859-row unresolved inventory was reused. Only the 20 previously verified exact Official Charts ISRC, unique MusicBrainz recording and official release-track chains were promoted; no title or artist force matching was used."
+  },
+  "selection_policy": {
+    "batch_size": 20,
+    "min_batch_size": 20,
+    "max_batch_size": 25,
+    "ordering": "previously verified batch order",
+    "force_matching_prohibited": true,
+    "all_candidates_unrated": true,
+    "source_release_note": "Miracle, Escapism, Cold Heart (Pnau remix), Take Me Back to London, Beautiful People and River use exact tracks on reviewed official multi-track releases; only those selected tracks are imported.",
+    "selected_track_import_chart_entry_ids": [
+      2478,
+      2475,
+      2462,
+      2030,
+      2029,
+      2007
+    ]
+  },
+  "proposed_batch": [
+    {
+      "batch_order": 1,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2494,
+        "title": "Backbone",
+        "artist": "Chase & Status and Stormzy",
+        "chart_year": 2024,
+        "source_revision": "1380580667",
+        "source_entry_key": "2024:1430:chase status and stormzy:backbone",
+        "placeholder_canonical_id": "f4278fde-aefe-437b-9db8-81893a51f4e0"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "56410459a04f7ba8ea4440507ae0681cdae2156344a13eadf0e0df20d86dd61d",
+        "canonical_metadata_sha256": "a526073cc657293b8ab92a53d10b84dafd95a48e931934ccde2ed7be0c6cd95c"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "f4278fde-aefe-437b-9db8-81893a51f4e0",
+        "album_id": null,
+        "stored_title": "Backbone",
+        "stored_artist": "Chase & Status and Stormzy",
+        "track_position": 1,
+        "duration_ms": 166000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/chase-status-stormzy-backbone/",
+        "catalogue_number": "GBUM72404368",
+        "raw_sha256": "ecad2d68799e39c6fe3da46f5da8c93c4e2da4981c2b88a076bea4c82ee01be0"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM72404368?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "43789e255fe806942a91691dd968b7d7045f31263fe1402bfc7ac8f7b23a471a",
+        "recording_id": "50bc5312-36ea-42b2-8bbc-e7831021ab5d",
+        "title": "BACKBONE",
+        "artist_credit": "Chase & Status & Stormzy",
+        "duration_ms": 166000,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/34d89bc2-c489-4285-afe5-acf631259268",
+        "release_id": "34d89bc2-c489-4285-afe5-acf631259268",
+        "release_group_id": "63fa6531-7057-4ab7-93a6-a179f0712256",
+        "status": "Official",
+        "title": "BACKBONE",
+        "artist_credit": "Chase & Status & Stormzy",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2024-08-08",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 166000,
+        "track_recording_id": "50bc5312-36ea-42b2-8bbc-e7831021ab5d",
+        "track_isrc": "GBUM72404368",
+        "raw_sha256": "f72475ed43b2f13065c358ee665809a55df10bebfdaa915b82beffcbc16d69bb"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The reviewed MusicBrainz recording is explicitly marked explicit; clean or alternate edits must not be substituted."
+      ],
+      "evidence_sha256": "cabea4ff26fff540ac8c0014e2745e1d1e8d277501bded494f9c22ac42eec61e"
+    },
+    {
+      "batch_order": 2,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2493,
+        "title": "Guess",
+        "artist": "Charli XCX featuring Billie Eilish",
+        "chart_year": 2024,
+        "source_revision": "1380580667",
+        "source_entry_key": "2024:1429:charli xcx billie eilish:guess",
+        "placeholder_canonical_id": "a2f04003-b5b4-4fc3-b9c7-9328e541b210"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "b72e873ec7a7552ce71d78c497235dd79339935821583927640d06e9b81fef67",
+        "canonical_metadata_sha256": "720dcf8b642f8a39a9fa5c9a52449d500731e0830a6d9d5ab2b0b63775708407"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "a2f04003-b5b4-4fc3-b9c7-9328e541b210",
+        "album_id": null,
+        "stored_title": "Guess",
+        "stored_artist": "Charli XCX featuring Billie Eilish",
+        "track_position": 1,
+        "duration_ms": 143331
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/charli-xcx-ft-billie-eilish-guess/",
+        "catalogue_number": "USAT22406808",
+        "raw_sha256": "68cbab4a546a1b8cf8432432122813c46f85f90015271f731d16e886f11857ad"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USAT22406808?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "6f398e2cd02fd551734461b826c3f9108a202a560c05f2b35b1548b215fe1932",
+        "recording_id": "8a1aba5a-c84b-4499-8d8b-5a8dd19fe863",
+        "title": "Guess",
+        "artist_credit": "Charli xcx featuring billie eilish",
+        "duration_ms": 143330,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/36b7fb54-a842-4418-aeea-e4a0649e139c",
+        "release_id": "36b7fb54-a842-4418-aeea-e4a0649e139c",
+        "release_group_id": "57bf15e0-a785-4e92-b931-967a5a2d871b",
+        "status": "Official",
+        "title": "Guess",
+        "artist_credit": "Charli xcx featuring billie eilish",
+        "primary_type": "Single",
+        "country": "BN",
+        "release_date": "2024-08-01",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 143331,
+        "track_recording_id": "8a1aba5a-c84b-4499-8d8b-5a8dd19fe863",
+        "track_isrc": "USAT22406808",
+        "raw_sha256": "bdd06eec73da1a4ce3926d0f3374b609dab5e88612f90c757b4ccc4095322335"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "MusicBrainz country is anomalously BN; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording and reviewed official single."
+      ],
+      "evidence_sha256": "e6e23eb658f44dbd3e924913389fc3f88c166f64f5541d0ba5499f45b11cf415"
+    },
+    {
+      "batch_order": 3,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2490,
+        "title": "Fortnight",
+        "artist": "Taylor Swift featuring Post Malone",
+        "chart_year": 2024,
+        "source_revision": "1380580667",
+        "source_entry_key": "2024:1425:taylor swift post malone:fortnight",
+        "placeholder_canonical_id": "f04c6928-856f-45c0-a40a-1c158093ca7a"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "f5950b0fc27ad83b7612f3c40f4aa3315a60def7634b78ab3a8d0af42d2fac03",
+        "canonical_metadata_sha256": "f74a492acc50b6a0e73315151efb6f536355508c11b362167d5c1aae4d52fc12"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "f04c6928-856f-45c0-a40a-1c158093ca7a",
+        "album_id": null,
+        "stored_title": "Fortnight",
+        "stored_artist": "Taylor Swift featuring Post Malone",
+        "track_position": 1,
+        "duration_ms": 228986
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/taylor-swift-ft-post-malone-fortnight/",
+        "catalogue_number": "USUG12401028",
+        "raw_sha256": "9cdf0b81b7350c5d2741172aa67951909cdc0f8f25ee03f74ce73086736f915d"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUG12401028?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "6e1b10b12e67ca67b27d4849efb7b2b9b4a5a103fb6c4b20a8b856071395b49a",
+        "recording_id": "a06d6b37-9cae-40a5-806d-1a3c4f8098c0",
+        "title": "Fortnight",
+        "artist_credit": "Taylor Swift featuring Post Malone",
+        "duration_ms": 228965,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/303d4166-95e1-47ce-a298-91d26ae3ea46",
+        "release_id": "303d4166-95e1-47ce-a298-91d26ae3ea46",
+        "release_group_id": "1a304bed-1abe-4a26-b3c6-e582d91739a4",
+        "status": "Official",
+        "title": "Fortnight",
+        "artist_credit": "Taylor Swift featuring Post Malone",
+        "primary_type": "Single",
+        "country": "DE",
+        "release_date": "2024-04-26",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 228986,
+        "track_recording_id": "a06d6b37-9cae-40a5-806d-1a3c4f8098c0",
+        "track_isrc": "USUG12401028",
+        "raw_sha256": "7ea94cb4473856fcb162b90f2793cfd89cef4fcf89569ee094e8895d8ea13a7d"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "27fe757daa9c485af9c0bb1a37e2b33cce03984c2e256b4bfe4ea9286d04957f"
+    },
+    {
+      "batch_order": 4,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2480,
+        "title": "What Was I Made For?",
+        "artist": "Billie Eilish",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1413:billie eilish:what was i made for",
+        "placeholder_canonical_id": "83a25e68-0d85-4e48-b15a-98c1de208f9e"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "1951af7b66c3705d5da987be3a15b2b94d96584494ec786ac0517e33b1fc4c2a",
+        "canonical_metadata_sha256": "afba28823353017c673303d9453f1b2456e374ba6931efa88e2821c8bdaf1ef2"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "83a25e68-0d85-4e48-b15a-98c1de208f9e",
+        "album_id": null,
+        "stored_title": "What Was I Made For?",
+        "stored_artist": "Billie Eilish",
+        "track_position": 1,
+        "duration_ms": 222370
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/billie-eilish-what-was-i-made-for/",
+        "catalogue_number": "USUM72307484",
+        "raw_sha256": "0f4482be03f8e8fcdb5166fdd3d5b724ed99cefaa900304b3ea7161c838a5caf"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM72307484?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "3395ca4872de7fc9c0ef44083ff645fed818c9d257bc3c1b9a3c089857eeb41a",
+        "recording_id": "74c2e388-4e59-4ed1-8c97-f3fd3317323d",
+        "title": "What Was I Made For?",
+        "artist_credit": "Billie Eilish",
+        "duration_ms": 222000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/4d1222ac-fbfa-469a-a62f-6f4a47802ace",
+        "release_id": "4d1222ac-fbfa-469a-a62f-6f4a47802ace",
+        "release_group_id": "60d1c6ed-e236-4c5a-94bc-403ba7c4fefb",
+        "status": "Official",
+        "title": "What Was I Made For?",
+        "artist_credit": "Billie Eilish",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2023-07-13",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 222370,
+        "track_recording_id": "74c2e388-4e59-4ed1-8c97-f3fd3317323d",
+        "track_isrc": "USUM72307484",
+        "raw_sha256": "6fd640bcbcd53c2ceb03c714d473c2e14fc73a5bdfce3b46bdab70aa71be2358"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The reviewed one-track official worldwide single avoids the later UK cassette that repeats the same recording on both sides."
+      ],
+      "evidence_sha256": "87681186c9f30bcf0cce4ca2bd109fddc04222fcb76705a4285f441908d67e6d"
+    },
+    {
+      "batch_order": 5,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2479,
+        "title": "Sprinter",
+        "artist": "Dave and Central Cee",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1412:dave and central cee:sprinter",
+        "placeholder_canonical_id": "9ec3833f-60b5-4517-b0ef-2a258e024716"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "4f138986856b2edb288a55a305282aad3e1f7b78e5baf96dbd4c9c459ecfefc7",
+        "canonical_metadata_sha256": "c08868d48be237685358b5db9dbc058b4f2a2a70f14027f9b70e6d8e0e109676"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "9ec3833f-60b5-4517-b0ef-2a258e024716",
+        "album_id": null,
+        "stored_title": "Sprinter",
+        "stored_artist": "Dave and Central Cee",
+        "track_position": 1,
+        "duration_ms": 229133
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/davecentral-cee-sprinter/",
+        "catalogue_number": "GBUM72305159",
+        "raw_sha256": "0ca1b21a14bee2eb82e25602f706d520b32ba4e03f931e8ddb39c39b00d96ce9"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM72305159?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "8e0d4ee9026c7be199c7b15c7724e025de54ad3762a88570547620edc713c313",
+        "recording_id": "1ec1bfc4-2407-4369-b070-177fea0b38ba",
+        "title": "Sprinter",
+        "artist_credit": "Dave & Central Cee",
+        "duration_ms": 229000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/813c4748-d6a5-4e9d-aedb-054b4a0cc776",
+        "release_id": "813c4748-d6a5-4e9d-aedb-054b4a0cc776",
+        "release_group_id": "cd3bde26-2929-4404-86ef-4623e57b66cd",
+        "status": "Official",
+        "title": "Sprinter",
+        "artist_credit": "Dave & Central Cee",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2023-06-01",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 229133,
+        "track_recording_id": "1ec1bfc4-2407-4369-b070-177fea0b38ba",
+        "track_isrc": "GBUM72305159",
+        "raw_sha256": "283220a71405f292647642013f6faebf6ac4e60c99e2f9ae09024cb72022dbae"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The reviewed release uses ampersand credit punctuation; the BOM chart credit is preserved unchanged."
+      ],
+      "evidence_sha256": "908ef900c2f8b4ba042555d4da04174ddb84bda6660528f7647ac61e001fc425"
+    },
+    {
+      "batch_order": 6,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2478,
+        "title": "Miracle",
+        "artist": "Calvin Harris and Ellie Goulding",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1410:calvin harris and ellie goulding:miracle",
+        "placeholder_canonical_id": "cc5bf8fb-1329-46e1-a635-00430a041c90"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "99da38d79851a468c57dce30e8343ec50a105737551ff1b839ddb770ceeb9543",
+        "canonical_metadata_sha256": "971cd50d158155651e724400d5ae7d5434fdeb303837f91d5a56b412c7f4dffe"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "cc5bf8fb-1329-46e1-a635-00430a041c90",
+        "album_id": null,
+        "stored_title": "Miracle",
+        "stored_artist": "Calvin Harris and Ellie Goulding",
+        "track_position": 2,
+        "duration_ms": 186496
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/calvin-harris-ellie-goulding-miracle/",
+        "catalogue_number": "GBARL2300300",
+        "raw_sha256": "58100907a4c0e96d4587c0a83934dd570aa9bc9be58c01ec10f484d6ee23a3f8"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBARL2300300?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "47044503869fce77dde2aec743caf65bdc7d696259662270afd1ecf07dc2368a",
+        "recording_id": "c658c2e5-0712-468b-ac40-fc0e764f80b7",
+        "title": "Miracle",
+        "artist_credit": "Calvin Harris & Ellie Goulding",
+        "duration_ms": 186496,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/e965f766-a9e3-478f-8638-bb525c682276",
+        "release_id": "e965f766-a9e3-478f-8638-bb525c682276",
+        "release_group_id": "8984b2ef-eb00-4211-a671-594ffa51ca8f",
+        "status": "Official",
+        "title": "Miracle (Hardwell remix)",
+        "artist_credit": "Calvin Harris & Ellie Goulding",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2023-04-14",
+        "matching_track_count": 1,
+        "release_track_count": 2,
+        "track_position": 2,
+        "track_duration_ms": 186496,
+        "track_recording_id": "c658c2e5-0712-468b-ac40-fc0e764f80b7",
+        "track_isrc": "GBARL2300300",
+        "raw_sha256": "39cfaebdc41bdcb92c243e81a9e36597d800e3fd31f4a1c6ad9beccdf75070d3"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The reviewed track is the exact original Miracle recording on a two-track Hardwell remix release; the Hardwell remix must not be substituted."
+      ],
+      "evidence_sha256": "1c0a7d028d8a1013ead6f42a439661771692db369520af255b1f59496cf85663"
+    },
+    {
+      "batch_order": 7,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2475,
+        "title": "Escapism",
+        "artist": "Raye featuring 070 Shake",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1406:raye 070 shake:escapism",
+        "placeholder_canonical_id": "162b3fb9-0179-44e7-a34d-84f704c4222e"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "8e9bb44b8eccda4c84c74ee636f68f0a0b7a4920bcf1a80aec320e51a95eeadd",
+        "canonical_metadata_sha256": "3faceaaba190c8189c4cb23579240c760e2fbe8789c55e1bb22538416796d2f6"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "162b3fb9-0179-44e7-a34d-84f704c4222e",
+        "album_id": null,
+        "stored_title": "Escapism",
+        "stored_artist": "Raye featuring 070 Shake",
+        "track_position": 5,
+        "duration_ms": 272373
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/raye-ft-070-shake-escapism/",
+        "catalogue_number": "QMDA62217995",
+        "raw_sha256": "55b18d6492471d3e85b6fdec17af6ec6f3867a6b6e23ce6c027d86d193c50ebd"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/QMDA62217995?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "ab9022c474dec9da7bc4025556239d2a265dfaf1dafdd52081123a510596d29e",
+        "recording_id": "16994009-4a36-4b4c-865a-f4e7bc2ef6e1",
+        "title": "Escapism.",
+        "artist_credit": "RAYE ft. 070 Shake",
+        "duration_ms": 272373,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/b4c35a7a-a36b-4c90-b866-38800a56eb5f",
+        "release_id": "b4c35a7a-a36b-4c90-b866-38800a56eb5f",
+        "release_group_id": "35266d41-c2d4-4ad4-b624-02d4a0b2c489",
+        "status": "Official",
+        "title": "Ice Cream Man.",
+        "artist_credit": "RAYE",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2023-01-31",
+        "matching_track_count": 1,
+        "release_track_count": 5,
+        "track_position": 5,
+        "track_duration_ms": 272373,
+        "track_recording_id": "16994009-4a36-4b4c-865a-f4e7bc2ef6e1",
+        "track_isrc": "QMDA62217995",
+        "raw_sha256": "b9ed54ad1b3a9a6726153fa4a52aa3abdb2d9474cf4ee2ad81b8757eab86a7b3"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ],
+      "evidence_sha256": "41dda65ece3ae95d9e1d68fbe831fcbb3a175628a309bf5ca6519867247ffe36"
+    },
+    {
+      "batch_order": 8,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2469,
+        "title": "Afraid to Feel",
+        "artist": "LF System",
+        "chart_year": 2022,
+        "source_revision": "1380580667",
+        "source_entry_key": "2022:1399:lf system:afraid to feel",
+        "placeholder_canonical_id": "9d0052a7-5abb-437b-9cf6-1b8843113c8d"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "82caf85277cd4a04007f0578e08b614e435b5477bb7c1262c860783268ce3f9c",
+        "canonical_metadata_sha256": "f9eff6b19b7a62039d92f385b58e5ee87af2818934a279418c8115fce631605b"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "9d0052a7-5abb-437b-9cf6-1b8843113c8d",
+        "album_id": null,
+        "stored_title": "Afraid to Feel",
+        "stored_artist": "LF System",
+        "track_position": 1,
+        "duration_ms": 177000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/lf-system-afraid-to-feel/",
+        "catalogue_number": "GBAHT2200492",
+        "raw_sha256": "709647572a62dc1d2a1edb5e3d878b027904c88500e6ac1c8ed86a8335a549da"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHT2200492?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "8f9a30b37c951e2485c397e0735bfb4ac9a9d39e29e61be8b6d76ab89d7c71c1",
+        "recording_id": "d71f7d62-f7fc-4907-ba37-3f97a12448f7",
+        "title": "Afraid to Feel",
+        "artist_credit": "LF SYSTEM",
+        "duration_ms": 177524,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/633c9295-51dc-4454-9b38-2bd0437fd20c",
+        "release_id": "633c9295-51dc-4454-9b38-2bd0437fd20c",
+        "release_group_id": "32c77089-45f7-4bb8-9960-9b11899d4743",
+        "status": "Official",
+        "title": "Afraid to Feel",
+        "artist_credit": "LF SYSTEM",
+        "primary_type": "Single",
+        "country": null,
+        "release_date": "2022-05-02",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 177000,
+        "track_recording_id": "d71f7d62-f7fc-4907-ba37-3f97a12448f7",
+        "track_isrc": "GBAHT2200492",
+        "raw_sha256": "b18e2526a8fec7d5b0f3ef567adb2eebf08a47ab735bd347347a380e68f16ea4"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "e066ad05b299d397f43f2048fd6ca7692c1099f8e501155a956ece1e4c89e07d"
+    },
+    {
+      "batch_order": 9,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2462,
+        "title": "Cold Heart (Pnau remix)",
+        "artist": "Elton John and Dua Lipa",
+        "chart_year": 2021,
+        "source_revision": "1380580667",
+        "source_entry_key": "2021:1390:elton john and dua lipa:cold heart pnau remix",
+        "placeholder_canonical_id": "2dfed403-ee71-42aa-9e45-cf1f9c07bda0"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "d89cfc9962fd8a42bc17ec1f38767281a74f888efc85bc45d9dbdfbfca2b735b",
+        "canonical_metadata_sha256": "ee0bbeccaa429fdc8294a7d9699c32a87d31515044d8df148da645cdd3b4cc2e"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "2dfed403-ee71-42aa-9e45-cf1f9c07bda0",
+        "album_id": null,
+        "stored_title": "Cold Heart (Pnau remix)",
+        "stored_artist": "Elton John and Dua Lipa",
+        "track_position": 2,
+        "duration_ms": 202735
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/elton-john-dua-lipa-cold-heart/",
+        "catalogue_number": "GBUM72104705",
+        "raw_sha256": "808b9665be5acbd778513883ef2a098281b1f75544a2d76d5101da56e825dd46"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM72104705?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "0e9125c772e4b20d13b93d222e1ebefb24ea98dfaa5984e61560d51c8109b4f6",
+        "recording_id": "a3906438-a1b2-403d-a7c2-7f48fca0a586",
+        "title": "Cold Heart (PNAU remix)",
+        "artist_credit": "Elton John & Dua Lipa",
+        "duration_ms": 202735,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/b1a5d4cb-579a-4139-8ae6-13af0d5269f0",
+        "release_id": "b1a5d4cb-579a-4139-8ae6-13af0d5269f0",
+        "release_group_id": "78b65cee-4a6d-49c8-a98e-9159bf147cd1",
+        "status": "Official",
+        "title": "The Lockdown Sessions",
+        "artist_credit": "Elton John",
+        "primary_type": "Album",
+        "country": "CA",
+        "release_date": "2021-12-03",
+        "matching_track_count": 1,
+        "release_track_count": 17,
+        "track_position": 2,
+        "track_duration_ms": 202735,
+        "track_recording_id": "a3906438-a1b2-403d-a7c2-7f48fca0a586",
+        "track_isrc": "GBUM72104705",
+        "raw_sha256": "d409811c870bbd8eabd4de9ec50c6e03459331bf6af0b99a471ba2703e7dee96"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The charted Pnau remix identity is exact; original, acoustic and alternate remixes must not be substituted."
+      ],
+      "evidence_sha256": "86d39434ea17dfe359c0a97245bcdd9b80bade9e2ae22f220625ec94ee7c097f"
+    },
+    {
+      "batch_order": 10,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2450,
+        "title": "Head & Heart",
+        "artist": "Joel Corry and MNEK",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1374:joel corry and mnek:head heart",
+        "placeholder_canonical_id": "6df38772-ea83-46d8-b2d6-fd36791abda6"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "b6bbd6dac500036ea2f21d011bc1102db237fea202bc892bd6c5a77696e5d0a2",
+        "canonical_metadata_sha256": "4350864a34a3dc1db454bd69205c90440facaa9dbc66d68421a01f860f0cbd56"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "6df38772-ea83-46d8-b2d6-fd36791abda6",
+        "album_id": null,
+        "stored_title": "Head & Heart",
+        "stored_artist": "Joel Corry and MNEK",
+        "track_position": 1,
+        "duration_ms": 166028
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/joel-corry-ft-mnek-head-heart/",
+        "catalogue_number": "UK4ZF2000305",
+        "raw_sha256": "af3604ec1428c0d7e7dd87fe5c817ba02348af4d09c87dd0c566180707e16a7c"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/UK4ZF2000305?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "1f93e7e909d760d2626ddd0e810e370e8259a6b13f1dc3735e518bb5f4b447dc",
+        "recording_id": "168c30ff-7597-471b-a4c8-31c719f4f8af",
+        "title": "Head & Heart",
+        "artist_credit": "Joel Corry × MNEK",
+        "duration_ms": 166028,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/19e240f2-bae8-49a6-9c5c-3c3e040e49cd",
+        "release_id": "19e240f2-bae8-49a6-9c5c-3c3e040e49cd",
+        "release_group_id": "5369b02b-78d2-4361-83dd-d26dfd96eda7",
+        "status": "Official",
+        "title": "Head & Heart",
+        "artist_credit": "Joel Corry feat. MNEK",
+        "primary_type": "Single",
+        "country": "AF",
+        "release_date": "2020-07-03",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 166028,
+        "track_recording_id": "168c30ff-7597-471b-a4c8-31c719f4f8af",
+        "track_isrc": "UK4ZF2000305",
+        "raw_sha256": "62bee387f8b8c29eb0acdb5f376c2f619fec109c797f8bd112fa46af06a295a4"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "MusicBrainz country is anomalously AF; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording and reviewed official single."
+      ],
+      "evidence_sha256": "a28630b2028376bb5113fa4421ebf861f95713c144fbace1c5e2b32070fae10a"
+    },
+    {
+      "batch_order": 11,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2448,
+        "title": "Rain on Me",
+        "artist": "Lady Gaga and Ariana Grande",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1372:lady gaga and ariana grande:rain on me",
+        "placeholder_canonical_id": "e74a7629-6482-4cb1-8177-7077d163c0a1"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "a20ccfbc19cacfba4f491a77d16def37b37efa7eda6bbdc4c084088b8bdabd42",
+        "canonical_metadata_sha256": "c0eb484ac769c484274c4ce972e0408e0cbd9d4b59cdd3d9bad117c7e5073c3e"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "e74a7629-6482-4cb1-8177-7077d163c0a1",
+        "album_id": null,
+        "stored_title": "Rain on Me",
+        "stored_artist": "Lady Gaga and Ariana Grande",
+        "track_position": 1,
+        "duration_ms": 182000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/lady-gaga-ariana-grande-rain-on-me/",
+        "catalogue_number": "USUM72004304",
+        "raw_sha256": "58d2868850c1e7dbcebb3630f37e9ed8e344590873a63d2469db7ba2fe9dec59"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM72004304?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "3124c712d7c856eedc1aeb2a56605b75078f024f23b03f0d2a7d0b290236f84f",
+        "recording_id": "a0eb8c91-e3ce-4fef-a9d7-3d03753c6ece",
+        "title": "Rain on Me",
+        "artist_credit": "Lady Gaga with Ariana Grande",
+        "duration_ms": 182200,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/6a82f0ec-148f-4942-bb51-5423695f6da8",
+        "release_id": "6a82f0ec-148f-4942-bb51-5423695f6da8",
+        "release_group_id": "06c74f2f-e1ee-4c32-aee0-3bbbbb02bd11",
+        "status": "Official",
+        "title": "Rain on Me",
+        "artist_credit": "Lady Gaga & Ariana Grande",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2020-05-22",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 182000,
+        "track_recording_id": "a0eb8c91-e3ce-4fef-a9d7-3d03753c6ece",
+        "track_isrc": "USUM72004304",
+        "raw_sha256": "283094fb47566e840de76d6d1845a39ff8b0b24ff3c56a797c7ef64c29a6b4ba"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "52ac04632ff5bccb9247ffb396b77e8acde9dedf659933d59fe70222c65fc4eb"
+    },
+    {
+      "batch_order": 12,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2447,
+        "title": "Rockstar",
+        "artist": "DaBaby featuring Roddy Ricch",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1371:dababy roddy ricch:rockstar",
+        "placeholder_canonical_id": "f03df823-d739-4002-a1f6-5b7ec7efddf8"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "bb354460da92840d44e31fa9273104e5ca8c92dbddbd6912106045831f091876",
+        "canonical_metadata_sha256": "2614c5414fdcf6813977c9478dfa3db934df0580e534b797da06ca6d1a95892d"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "f03df823-d739-4002-a1f6-5b7ec7efddf8",
+        "album_id": null,
+        "stored_title": "Rockstar",
+        "stored_artist": "DaBaby featuring Roddy Ricch",
+        "track_position": 1,
+        "duration_ms": 181000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/dababy-ft-roddy-ricch-rockstar/",
+        "catalogue_number": "USUM72007941",
+        "raw_sha256": "38d33c3210c7a4462c3c76d5c78be0b9a162594e7abc33f5b6c6f0ba9ad2618a"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM72007941?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "3c347e16e7b45915cad9ace756976639666f158c3517fff7a5fa4e65e202d717",
+        "recording_id": "50a4f12b-8b19-4387-85e6-4ec98e1f2f69",
+        "title": "ROCKSTAR",
+        "artist_credit": "DaBaby feat. Roddy Ricch",
+        "duration_ms": 181733,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/72c84d21-eb61-4b38-b65f-f82843c2f95b",
+        "release_id": "72c84d21-eb61-4b38-b65f-f82843c2f95b",
+        "release_group_id": "cb8e4abb-774d-4df3-aa40-d1d9770188b4",
+        "status": "Official",
+        "title": "ROCKSTAR",
+        "artist_credit": "DaBaby feat. Roddy Ricch",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2020-04-17",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 181000,
+        "track_recording_id": "50a4f12b-8b19-4387-85e6-4ec98e1f2f69",
+        "track_isrc": "USUM72007941",
+        "raw_sha256": "845d2bcf7dad3c59089314ef00f57a519c52c5c3b91d294dc8b41c26bdb1fc6a"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The reviewed MusicBrainz recording is explicitly marked explicit; clean or alternate edits must not be substituted."
+      ],
+      "evidence_sha256": "23e0a76d696c42777db03dce5f1b1856384119d1987d4a406d2f434d901876ab"
+    },
+    {
+      "batch_order": 13,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2030,
+        "title": "Take Me Back to London",
+        "artist": "Ed Sheeran featuring Stormzy",
+        "chart_year": 2019,
+        "source_revision": "1356457366",
+        "source_entry_key": "2019:1358:ed sheeran stormzy:take me back to london",
+        "placeholder_canonical_id": "332b8c84-c749-40d5-be40-f06f7050b091"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "1de1ed1cc97a66fd397819fbdc2b6a7217d9267f9c2181bfb3e1c0dbb8dd0553",
+        "canonical_metadata_sha256": "16be13269bff110dec101e242fd280f5d4e4c898c044f75a00e0bfa567814b60"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "332b8c84-c749-40d5-be40-f06f7050b091",
+        "album_id": null,
+        "stored_title": "Take Me Back to London",
+        "stored_artist": "Ed Sheeran featuring Stormzy",
+        "track_position": 4,
+        "duration_ms": 189733
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/ed-sheeran-ft-stormzy-take-me-back-to-london/",
+        "catalogue_number": "GBAHS1900716",
+        "raw_sha256": "5dd24c76b8742402ece14c132e23087e7ed09a439a262d4d865be4626e5e1c74"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS1900716?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "3f1efface79ab5073dc71bb059b57fe87f224de1d38a4286f33379654cd8378f",
+        "recording_id": "34a37727-9553-48f6-8ddf-a573f046b29d",
+        "title": "Take Me Back to London",
+        "artist_credit": "Ed Sheeran feat. Stormzy",
+        "duration_ms": 189733,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_id": "466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_group_id": "852e109b-d04d-4bc2-a4b0-f0d1817480ec",
+        "status": "Official",
+        "title": "No.6 Collaborations Project",
+        "artist_credit": "Ed Sheeran",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2019-07-12",
+        "matching_track_count": 1,
+        "release_track_count": 15,
+        "track_position": 4,
+        "track_duration_ms": 189733,
+        "track_recording_id": "34a37727-9553-48f6-8ddf-a573f046b29d",
+        "track_isrc": "GBAHS1900716",
+        "raw_sha256": "64fa1ed019cdb12ffb464127796bcb59496d1e3cc5ddec7d36f224cd60b23f94"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "This and Beautiful People intentionally share one reviewed official release; the operation must create that album once and attach both exact tracks."
+      ],
+      "evidence_sha256": "d4a1a2ca653e067306ff2cf89b1eefc8b720b24b9b91b0651a3e129ee86e5087"
+    },
+    {
+      "batch_order": 14,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2029,
+        "title": "Beautiful People",
+        "artist": "Ed Sheeran featuring Khalid",
+        "chart_year": 2019,
+        "source_revision": "1356457366",
+        "source_entry_key": "2019:1357:ed sheeran khalid:beautiful people",
+        "placeholder_canonical_id": "9179a83f-6a6e-4f1d-a383-7732e3211164"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "f65415e612adf0a109babd432860a0fa68cd7e8ace56744c97151e3c762c68d1",
+        "canonical_metadata_sha256": "b72c551790d1871f749c674bd8560ce8bea97e4c5088176af06b39bc0a91283d"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "9179a83f-6a6e-4f1d-a383-7732e3211164",
+        "album_id": null,
+        "stored_title": "Beautiful People",
+        "stored_artist": "Ed Sheeran featuring Khalid",
+        "track_position": 1,
+        "duration_ms": 197867
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/ed-sheeran-ft-khalid-beautiful-people/",
+        "catalogue_number": "GBAHS1900713",
+        "raw_sha256": "8de109a61f6bb35f929dcedb90dc1c7aad879714c121c107cdc280fcf817a542"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS1900713?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "e99d87dbb0dbcd0c53566fcbd2dc9663a6a3d7f28a3b0f9981c82c888a594cca",
+        "recording_id": "611ffa00-29c1-46bc-843e-2f2168101ec8",
+        "title": "Beautiful People",
+        "artist_credit": "Ed Sheeran feat. Khalid",
+        "duration_ms": 197867,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_id": "466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_group_id": "852e109b-d04d-4bc2-a4b0-f0d1817480ec",
+        "status": "Official",
+        "title": "No.6 Collaborations Project",
+        "artist_credit": "Ed Sheeran",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2019-07-12",
+        "matching_track_count": 1,
+        "release_track_count": 15,
+        "track_position": 1,
+        "track_duration_ms": 197867,
+        "track_recording_id": "611ffa00-29c1-46bc-843e-2f2168101ec8",
+        "track_isrc": "GBAHS1900713",
+        "raw_sha256": "64fa1ed019cdb12ffb464127796bcb59496d1e3cc5ddec7d36f224cd60b23f94"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "This and Take Me Back to London intentionally share one reviewed official release; the operation must create that album once and attach both exact tracks."
+      ],
+      "evidence_sha256": "c45a5c2798854e2516937711447dfd07745e97870eebdb3569ce987f2660f2e2"
+    },
+    {
+      "batch_order": 15,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2021,
+        "title": "Shallow",
+        "artist": "Lady Gaga and Bradley Cooper",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1346:lady gaga and bradley cooper:shallow",
+        "placeholder_canonical_id": "316fe98f-2c2f-4103-bff7-29491d86c2ce"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "972ff78617c69399c75ce8e672e5e9ace582182cb51287fa11413017412411cb",
+        "canonical_metadata_sha256": "8d9cf87b39055734b81dc6ff905632f27fa920862f5876d158c8334583f79312"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "316fe98f-2c2f-4103-bff7-29491d86c2ce",
+        "album_id": null,
+        "stored_title": "Shallow",
+        "stored_artist": "Lady Gaga and Bradley Cooper",
+        "track_position": 1,
+        "duration_ms": 215000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/lady-gaga-bradley-cooper-shallow/",
+        "catalogue_number": "USUM71813192",
+        "raw_sha256": "048a0a2847d8d7eb7ba39c2af2959d09ae1e08ea6527cf46a9230a369e536efb"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71813192?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "30f0356d43dd9ebc4b29717f0d41d8993f59add118849595d523ce2780ac4a44",
+        "recording_id": "e8191687-56bf-4e69-860f-a898735ec268",
+        "title": "Shallow",
+        "artist_credit": "Lady Gaga & Bradley Cooper",
+        "duration_ms": 216000,
+        "disambiguation": "with audience noises"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/fe5944f9-293a-46b1-b7e2-73df7df989d1",
+        "release_id": "fe5944f9-293a-46b1-b7e2-73df7df989d1",
+        "release_group_id": "a8dbba8b-0c37-4352-8e88-0c5a01e1fe0c",
+        "status": "Official",
+        "title": "Shallow",
+        "artist_credit": "Lady Gaga & Bradley Cooper",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2018-09-27",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 215000,
+        "track_recording_id": "e8191687-56bf-4e69-860f-a898735ec268",
+        "track_isrc": "USUM71813192",
+        "raw_sha256": "2a318aa6536507a7fe7505d55f455ca82631d1ad2be78e27b31fc7309f0dd38b"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "MusicBrainz disambiguates the exact ISRC recording as with audience noises; studio or alternate versions must not be substituted."
+      ],
+      "evidence_sha256": "af80abe99c3fbfeddc29b7eef6963fc01a5057075ee81883f894451ddaf443e6"
+    },
+    {
+      "batch_order": 16,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2019,
+        "title": "Promises",
+        "artist": "Calvin Harris and Sam Smith",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1344:calvin harris and sam smith:promises",
+        "placeholder_canonical_id": "da9922da-fda4-4dc5-856a-ef17c77c485b"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "e31788dcfe707c2e946e484944ff09334d11ebf2c33ee200ac92ad83214cbbbe",
+        "canonical_metadata_sha256": "733cfda15cba18a6864e48081d36e63cb8a1fedd6de7908bc2ce790422cad401"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "da9922da-fda4-4dc5-856a-ef17c77c485b",
+        "album_id": null,
+        "stored_title": "Promises",
+        "stored_artist": "Calvin Harris and Sam Smith",
+        "track_position": 1,
+        "duration_ms": 213309
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/calvin-harris-sam-smith-promises/",
+        "catalogue_number": "GBARL1801049",
+        "raw_sha256": "19114a3faceedf5e16ca4de2905e36e4b96f48b78f9077504d91085b4ec99c35"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBARL1801049?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "f366bd23b56bcaf9b9f02e9e8cdc7e9fb5d8da53719425bcd287829c99a571e5",
+        "recording_id": "416612cb-759e-4b40-9e1c-ce560cf7ddaf",
+        "title": "Promises",
+        "artist_credit": "Calvin Harris & Sam Smith",
+        "duration_ms": 213693,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/6cc278f9-637f-4014-a296-a6022033658b",
+        "release_id": "6cc278f9-637f-4014-a296-a6022033658b",
+        "release_group_id": "b631b1ef-6b33-4876-8374-9108ed5b12bd",
+        "status": "Official",
+        "title": "Promises",
+        "artist_credit": "Calvin Harris & Sam Smith",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2018-08-17",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 213309,
+        "track_recording_id": "416612cb-759e-4b40-9e1c-ce560cf7ddaf",
+        "track_isrc": "GBARL1801049",
+        "raw_sha256": "9637c2ad13bf8ee9f51a2cb5a883686e2be5aded243d492b1235d8337b671e17"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "2c01d14f0c0608bbfa9fcad1e18710c1782b52dbb816d84aeb01455a158daf56"
+    },
+    {
+      "batch_order": 17,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2007,
+        "title": "River",
+        "artist": "Eminem featuring Ed Sheeran",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1333:eminem ed sheeran:river",
+        "placeholder_canonical_id": "3853a2c0-ea63-476f-8b4c-7aeacb4416c8"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "1d645c2c42a9c451f197631d432b43ffbf528d2eefb391b3f55f33b64e85a7e2",
+        "canonical_metadata_sha256": "e0d26a368031c25682e9c33fd432e2f10377733569725f24e2901a826b0465df"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "3853a2c0-ea63-476f-8b4c-7aeacb4416c8",
+        "album_id": null,
+        "stored_title": "River",
+        "stored_artist": "Eminem featuring Ed Sheeran",
+        "track_position": 5,
+        "duration_ms": 221013
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/eminem-ft-ed-sheeran-river/",
+        "catalogue_number": "USUM71712944",
+        "raw_sha256": "b21c052ceada35a1e21e925cf8503dac42500c8d9c419e34e75d1dc6b7693dd3"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71712944?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "5aef79ff6a2337a80036b848d7ddae7dabe9b441c3327502ce3f55d0d654ec8c",
+        "recording_id": "32d6bfe9-b231-4d5f-9034-61226f7d7d96",
+        "title": "River",
+        "artist_credit": "Eminem feat. Ed Sheeran",
+        "duration_ms": 221013,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/72fb262d-c517-4e94-9f08-eefa95df8b34",
+        "release_id": "72fb262d-c517-4e94-9f08-eefa95df8b34",
+        "release_group_id": "cfc62e61-686c-46cd-a453-608979646f71",
+        "status": "Official",
+        "title": "Revival",
+        "artist_credit": "Eminem",
+        "primary_type": "Album",
+        "country": "XE",
+        "release_date": "2017-12-15",
+        "matching_track_count": 1,
+        "release_track_count": 19,
+        "track_position": 5,
+        "track_duration_ms": 221013,
+        "track_recording_id": "32d6bfe9-b231-4d5f-9034-61226f7d7d96",
+        "track_isrc": "USUM71712944",
+        "raw_sha256": "bb5ad2b2d3b2db203748cfc1950e31461332ff1de15916220c022e3ac110d6d4"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The reviewed MusicBrainz recording is explicitly marked explicit; clean or alternate edits must not be substituted."
+      ],
+      "evidence_sha256": "d4c287b2313886fd92f533c9cd17bf8da07beef960600527f982aa3736146d58"
+    },
+    {
+      "batch_order": 18,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2004,
+        "title": "Rockstar",
+        "artist": "Post Malone featuring 21 Savage",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1330:post malone 21 savage:rockstar",
+        "placeholder_canonical_id": "dd7d96a6-b84d-411a-97ec-5eb42d22c2ba"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "939ed7dd14edb0eb020d6882bfca335022cccc5268a63955037b3b4241b3b380",
+        "canonical_metadata_sha256": "f7625c2662d5da42c5471df3aa5db6eb286037efc6f9855663a9375cdde70772"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "dd7d96a6-b84d-411a-97ec-5eb42d22c2ba",
+        "album_id": null,
+        "stored_title": "Rockstar",
+        "stored_artist": "Post Malone featuring 21 Savage",
+        "track_position": 1,
+        "duration_ms": 218000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/post-malone-ft-21-savage-rockstar/",
+        "catalogue_number": "USUM71710097",
+        "raw_sha256": "5d10ab348c929d8cf3d6c2003ae9126942395310b366e160fb0b629f1776b69c"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71710097?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "a4fdeb7a6160746f2c98984723a735895b45442ec7ffd640f65980845bd0d3b4",
+        "recording_id": "08cbf725-d3d1-48e7-8629-c9117e85d8f6",
+        "title": "rockstar",
+        "artist_credit": "Post Malone feat. 21 Savage",
+        "duration_ms": 218146,
+        "disambiguation": "clean"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/067a0f7a-f63b-41ec-947d-7f07721119cb",
+        "release_id": "067a0f7a-f63b-41ec-947d-7f07721119cb",
+        "release_group_id": "9af98551-17ee-4882-90da-981bb9bede7c",
+        "status": "Official",
+        "title": "rockstar",
+        "artist_credit": "Post Malone feat. 21 Savage",
+        "primary_type": "Single",
+        "country": "US",
+        "release_date": "2017-09-15",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 218000,
+        "track_recording_id": "08cbf725-d3d1-48e7-8629-c9117e85d8f6",
+        "track_isrc": "USUM71710097",
+        "raw_sha256": "2f7f7908cfaa94b68e6743462c8f155ed8b92d92bb539925b2bc65ad93ff428a"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The exact Official Charts ISRC resolves to the clean version; the explicit recording must not be substituted."
+      ],
+      "evidence_sha256": "e646d9b4f5ac0f717fd446926792cf758a51acc188b4626cd2b21adac97fc7c4"
+    },
+    {
+      "batch_order": 19,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2002,
+        "title": "Look What You Made Me Do",
+        "artist": "Taylor Swift",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1328:taylor swift:look what you made me do",
+        "placeholder_canonical_id": "062e4f47-6c80-4816-8b38-6e40554a993f"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "9942600a6e4cb5ebd55a4f096c66290892d4f86bcbbcecb4f65ee455866be4a6",
+        "canonical_metadata_sha256": "0317997484873163c1a18b8c6d46dfc714444e40c48cdabe7ff4db324255c24f"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "062e4f47-6c80-4816-8b38-6e40554a993f",
+        "album_id": null,
+        "stored_title": "Look What You Made Me Do",
+        "stored_artist": "Taylor Swift",
+        "track_position": 1,
+        "duration_ms": 211000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/taylor-swift-look-what-you-made-me-do/",
+        "catalogue_number": "USCJY1750000",
+        "raw_sha256": "a863a2c5de88fbd8bd3dba4ecc078ddad5942d6a2c94066d0a306379d6449efc"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USCJY1750000?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "e3b4e56de5b85437c64e21186ab7a5daa7b327fac1c2c9ff1c5e9c1412d1ab3a",
+        "recording_id": "d06c9d0f-2dbf-4272-9c0d-6d182ca41c67",
+        "title": "Look What You Made Me Do",
+        "artist_credit": "Taylor Swift",
+        "duration_ms": 211000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/ece1a954-47f1-4fd2-b041-ec57d43a28cc",
+        "release_id": "ece1a954-47f1-4fd2-b041-ec57d43a28cc",
+        "release_group_id": "c2f50e2e-9280-4d24-9d90-e367a7d740b6",
+        "status": "Official",
+        "title": "Look What You Made Me Do",
+        "artist_credit": "Taylor Swift",
+        "primary_type": "Single",
+        "country": "AT",
+        "release_date": "2017-10-27",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 211000,
+        "track_recording_id": "d06c9d0f-2dbf-4272-9c0d-6d182ca41c67",
+        "track_isrc": "USCJY1750000",
+        "raw_sha256": "a077acd5225b418460fa5a6f50c0ab3f8e661bd83e06bb873d2c2facf2e9af8b"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The exact Official Charts ISRC resolves the prior same-title ambiguity; alternate recordings must not be title-matched."
+      ],
+      "evidence_sha256": "6a33dd193d595bd9686fc56e3ac2207f124a33d3e03b253ed33f966fd52f1c5d"
+    },
+    {
+      "batch_order": 20,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1991,
+        "title": "Closer",
+        "artist": "The Chainsmokers featuring Halsey",
+        "chart_year": 2016,
+        "source_revision": "1356457366",
+        "source_entry_key": "2016:1315:the chainsmokers halsey:closer",
+        "placeholder_canonical_id": "8f52cf33-df3d-453d-9038-89a437604b9c"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "a1f85bdb269d710c19cfaaf5da5afc76de4f71e11f8a7ac72b7eea5f535aa336",
+        "canonical_metadata_sha256": "a83b4ee903a6a5a99c56889328cd7dec55fc597933a397c4231c8fd193d31282"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "8f52cf33-df3d-453d-9038-89a437604b9c",
+        "album_id": null,
+        "stored_title": "Closer",
+        "stored_artist": "The Chainsmokers featuring Halsey",
+        "track_position": 1,
+        "duration_ms": 244000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/chainsmokers-ft-halsey-closer/",
+        "catalogue_number": "USQX91601347",
+        "raw_sha256": "077f80c79de6f87eb3a0c806fa2c01769673e2e90a1ab93eeaa5281d0ec8b126"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USQX91601347?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "e261b3230fd3578bf044b520240513e89dfcd3a2b01688f158e6e290e8cf0253",
+        "recording_id": "fb7963d0-d06f-45ca-a647-2b00a963179f",
+        "title": "Closer",
+        "artist_credit": "The Chainsmokers ft. Halsey",
+        "duration_ms": 245080,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/1eb06cd0-1c8f-4535-b7d7-115c8d44eb01",
+        "release_id": "1eb06cd0-1c8f-4535-b7d7-115c8d44eb01",
+        "release_group_id": "2c0acac5-36fe-4731-877c-c4812ad751d9",
+        "status": "Official",
+        "title": "Closer",
+        "artist_credit": "The Chainsmokers ft. Halsey",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2016-07-29",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 244000,
+        "track_recording_id": "fb7963d0-d06f-45ca-a647-2b00a963179f",
+        "track_isrc": "USQX91601347",
+        "raw_sha256": "ba3cd2aefdbdb25d85646edd13d5e9a524fc842525214a4499666be5067c2c83"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "9331d87097c38561c80613d6373bf0b849143e6ae67d316177545f118bf7c8bb"
+    }
+  ],
+  "rejected_version_leads": [
+    {
+      "chart_entry_id": 1996,
+      "title": "Symphony",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1979,
+      "title": "Easy Love",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1968,
+      "title": "See You Again",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1959,
+      "title": "Wake Me Up (Gareth Malone's All Star Choir)",
+      "reason_code": "stored_isrc_belongs_to_different_artist_version"
+    },
+    {
+      "chart_entry_id": 1913,
+      "title": "Wake Me Up (Avicii)",
+      "reason_code": "isrc_maps_multiple_recording_versions"
+    },
+    {
+      "chart_entry_id": 1522,
+      "title": "Beautiful Girls",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1467,
+      "title": "Call on Me",
+      "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version"
+    },
+    {
+      "chart_entry_id": 1418,
+      "title": "Dilemma",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 107,
+      "title": "Breathe",
+      "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge"
+    },
+    {
+      "chart_entry_id": 45,
+      "title": "No Limit",
+      "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording"
+    },
+    {
+      "chart_entry_id": 2491,
+      "title": "Houdini",
+      "reason_code": "isrc_maps_music_video_not_audio_single"
+    },
+    {
+      "chart_entry_id": 2013,
+      "title": "I'll Be There",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 2006,
+      "title": "Perfect",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 2014,
+      "title": "Solo",
+      "reason_code": "isrc_maps_multiple_recordings"
+    }
+  ],
+  "reviewed_incomplete_leads": [
+    {
+      "chart_entry_id": 2485,
+      "title": "Now and Then",
+      "reason_code": "official_charts_page_has_no_catalogue_identifier"
+    },
+    {
+      "chart_entry_id": 1545,
+      "title": "Right Round",
+      "reason_code": "official_charts_catalogue_value_is_not_the_stored_isrc"
+    },
+    {
+      "chart_entry_id": 1437,
+      "title": "Breathe (Blu Cantrell)",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 191,
+      "title": "Lift Me Up",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 180,
+      "title": "9 PM (Till I Come)",
+      "reason_code": "official_charts_song_page_not_found"
+    },
+    {
+      "chart_entry_id": 167,
+      "title": "Fly Away",
+      "reason_code": "official_charts_catalogue_value_does_not_bridge_to_stored_isrc"
+    },
+    {
+      "chart_entry_id": 41,
+      "title": "Sleeping Satellite",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 541,
+      "title": "All Around the World",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 531,
+      "title": "Like a Prayer",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 425,
+      "title": "Ebony and Ivory",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 845,
+      "title": "Message in a Bottle",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 2505,
+      "title": "The Subway",
+      "reason_code": "official_charts_catalogue_value_is_not_an_isrc"
+    },
+    {
+      "chart_entry_id": 2501,
+      "title": "Survive",
+      "reason_code": "release_level_verification_not_completed"
+    },
+    {
+      "chart_entry_id": 2500,
+      "title": "Ordinary",
+      "reason_code": "musicbrainz_isrc_lookup_unavailable"
+    },
+    {
+      "chart_entry_id": 2486,
+      "title": "Lovin on Me",
+      "reason_code": "musicbrainz_isrc_lookup_unavailable"
+    },
+    {
+      "chart_entry_id": 2476,
+      "title": "Flowers",
+      "reason_code": "official_charts_page_has_no_catalogue_identifier"
+    },
+    {
+      "chart_entry_id": 2473,
+      "title": "Anti-Hero",
+      "reason_code": "release_level_verification_not_completed"
+    },
+    {
+      "chart_entry_id": 2459,
+      "title": "Body",
+      "reason_code": "official_isrc_absent_from_musicbrainz"
+    }
+  ],
+  "expected_deltas": {
+    "albums": 19,
+    "songs": 20,
+    "canonical_recordings": 0,
+    "historical_chart_links": 20,
+    "ratings": 0
+  },
+  "proposed_result": {
+    "resolved_delta": 20,
+    "resolved_chart_entries": 459,
+    "remaining_unresolved_chart_entries": 839
+  },
+  "safety_contract": {
+    "approval_gate": "SET bom.approved_historical_reconciliation = '20261124_uk_number_ones_verified_batch_3:49b05d4ed317b0a22ae3aff5365f3c9835d40f3ba771d3ac19308c3d90db54b9' before executing the operation in the same session",
+    "atomic_transaction": true,
+    "global_stale_baseline_abort": true,
+    "per_candidate_stale_fingerprint_abort": true,
+    "deterministic_advisory_lock_order": true,
+    "immutable_private_operation_evidence": true,
+    "preserve_all_song_ratings_byte_for_byte": true,
+    "preserve_all_historical_chart_ratings_byte_for_byte": true,
+    "preserve_first_batch_papa_dont_preach_reconciliation": true,
+    "duplicate_and_partial_identity_abort": true,
+    "shared_reviewed_release_insert_once": true,
+    "rollback_operation_required": true,
+    "production_execution_authorized": false
+  },
+  "manifest_payload": {
+    "operation_key": "20261124_uk_number_ones_verified_batch_3",
+    "snapshot": {
+      "captured_at": "2026-11-24T09:33:25.050876+00:00",
+      "candidate_state_artifact": "historical-uk-number-ones-verified-batch-3-live-state-20261124.json",
+      "candidate_state_sha256": "2ceb34ca312097c476bf4f0c41f25f3a32bf320aba3e30218195ed363d9c1c6f",
+      "production_integrity": {
+        "songs": 16181,
+        "albums": 1750,
+        "song_rating_sum": 13454,
+        "song_rating_rows": 1747,
+        "total_chart_entries": 1298,
+        "canonical_recordings": 17095,
+        "historical_rating_sum": 43,
+        "historical_rating_rows": 5,
+        "resolved_chart_entries": 439,
+        "invalid_song_rating_rows": 0,
+        "unresolved_chart_entries": 859,
+        "duplicate_recording_mbids": 0,
+        "prior_operation_audit_rows": 20,
+        "first_batch_rating_reconciliation_audit_rows": 1
+      }
+    },
+    "audit_coverage": {
+      "inventory_rows_classified": 859,
+      "verified_existing_link": 0,
+      "verified_catalogue_import": 20,
+      "explicit_ambiguous_or_version_conflict": 14,
+      "insufficient_authoritative_evidence": 825,
+      "reviewed_but_not_selected": 32,
+      "remaining_inventory_without_a_complete_evidence_chain": 807,
+      "method": "The prior 859-row unresolved inventory was reused. Only the 20 previously verified exact Official Charts ISRC, unique MusicBrainz recording and official release-track chains were promoted; no title or artist force matching was used."
+    },
+    "selection_policy": {
+      "batch_size": 20,
+      "min_batch_size": 20,
+      "max_batch_size": 25,
+      "ordering": "previously verified batch order",
+      "force_matching_prohibited": true,
+      "all_candidates_unrated": true,
+      "source_release_note": "Miracle, Escapism, Cold Heart (Pnau remix), Take Me Back to London, Beautiful People and River use exact tracks on reviewed official multi-track releases; only those selected tracks are imported.",
+      "selected_track_import_chart_entry_ids": [
+        2478,
+        2475,
+        2462,
+        2030,
+        2029,
+        2007
+      ]
+    },
+    "candidates": [
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2494,
+          "title": "Backbone",
+          "artist": "Chase & Status and Stormzy",
+          "chart_year": 2024,
+          "source_revision": "1380580667",
+          "source_entry_key": "2024:1430:chase status and stormzy:backbone",
+          "placeholder_canonical_id": "f4278fde-aefe-437b-9db8-81893a51f4e0"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "56410459a04f7ba8ea4440507ae0681cdae2156344a13eadf0e0df20d86dd61d",
+          "canonical_metadata_sha256": "a526073cc657293b8ab92a53d10b84dafd95a48e931934ccde2ed7be0c6cd95c"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "f4278fde-aefe-437b-9db8-81893a51f4e0",
+          "album_id": null,
+          "stored_title": "Backbone",
+          "stored_artist": "Chase & Status and Stormzy",
+          "track_position": 1,
+          "duration_ms": 166000
+        },
+        "isrc": "GBUM72404368",
+        "recording_id": "50bc5312-36ea-42b2-8bbc-e7831021ab5d",
+        "release_id": "34d89bc2-c489-4285-afe5-acf631259268",
+        "release_group_id": "63fa6531-7057-4ab7-93a6-a179f0712256",
+        "album_title": "BACKBONE",
+        "album_artist": "Chase & Status & Stormzy",
+        "release_date": "2024-08-08",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "cabea4ff26fff540ac8c0014e2745e1d1e8d277501bded494f9c22ac42eec61e",
+        "risk_notes": [
+          "The reviewed MusicBrainz recording is explicitly marked explicit; clean or alternate edits must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2493,
+          "title": "Guess",
+          "artist": "Charli XCX featuring Billie Eilish",
+          "chart_year": 2024,
+          "source_revision": "1380580667",
+          "source_entry_key": "2024:1429:charli xcx billie eilish:guess",
+          "placeholder_canonical_id": "a2f04003-b5b4-4fc3-b9c7-9328e541b210"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "b72e873ec7a7552ce71d78c497235dd79339935821583927640d06e9b81fef67",
+          "canonical_metadata_sha256": "720dcf8b642f8a39a9fa5c9a52449d500731e0830a6d9d5ab2b0b63775708407"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "a2f04003-b5b4-4fc3-b9c7-9328e541b210",
+          "album_id": null,
+          "stored_title": "Guess",
+          "stored_artist": "Charli XCX featuring Billie Eilish",
+          "track_position": 1,
+          "duration_ms": 143331
+        },
+        "isrc": "USAT22406808",
+        "recording_id": "8a1aba5a-c84b-4499-8d8b-5a8dd19fe863",
+        "release_id": "36b7fb54-a842-4418-aeea-e4a0649e139c",
+        "release_group_id": "57bf15e0-a785-4e92-b931-967a5a2d871b",
+        "album_title": "Guess",
+        "album_artist": "Charli xcx featuring billie eilish",
+        "release_date": "2024-08-01",
+        "country": "BN",
+        "release_track_count": 1,
+        "evidence_sha256": "e6e23eb658f44dbd3e924913389fc3f88c166f64f5541d0ba5499f45b11cf415",
+        "risk_notes": [
+          "MusicBrainz country is anomalously BN; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording and reviewed official single."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2490,
+          "title": "Fortnight",
+          "artist": "Taylor Swift featuring Post Malone",
+          "chart_year": 2024,
+          "source_revision": "1380580667",
+          "source_entry_key": "2024:1425:taylor swift post malone:fortnight",
+          "placeholder_canonical_id": "f04c6928-856f-45c0-a40a-1c158093ca7a"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "f5950b0fc27ad83b7612f3c40f4aa3315a60def7634b78ab3a8d0af42d2fac03",
+          "canonical_metadata_sha256": "f74a492acc50b6a0e73315151efb6f536355508c11b362167d5c1aae4d52fc12"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "f04c6928-856f-45c0-a40a-1c158093ca7a",
+          "album_id": null,
+          "stored_title": "Fortnight",
+          "stored_artist": "Taylor Swift featuring Post Malone",
+          "track_position": 1,
+          "duration_ms": 228986
+        },
+        "isrc": "USUG12401028",
+        "recording_id": "a06d6b37-9cae-40a5-806d-1a3c4f8098c0",
+        "release_id": "303d4166-95e1-47ce-a298-91d26ae3ea46",
+        "release_group_id": "1a304bed-1abe-4a26-b3c6-e582d91739a4",
+        "album_title": "Fortnight",
+        "album_artist": "Taylor Swift featuring Post Malone",
+        "release_date": "2024-04-26",
+        "country": "DE",
+        "release_track_count": 1,
+        "evidence_sha256": "27fe757daa9c485af9c0bb1a37e2b33cce03984c2e256b4bfe4ea9286d04957f",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2480,
+          "title": "What Was I Made For?",
+          "artist": "Billie Eilish",
+          "chart_year": 2023,
+          "source_revision": "1380580667",
+          "source_entry_key": "2023:1413:billie eilish:what was i made for",
+          "placeholder_canonical_id": "83a25e68-0d85-4e48-b15a-98c1de208f9e"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "1951af7b66c3705d5da987be3a15b2b94d96584494ec786ac0517e33b1fc4c2a",
+          "canonical_metadata_sha256": "afba28823353017c673303d9453f1b2456e374ba6931efa88e2821c8bdaf1ef2"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "83a25e68-0d85-4e48-b15a-98c1de208f9e",
+          "album_id": null,
+          "stored_title": "What Was I Made For?",
+          "stored_artist": "Billie Eilish",
+          "track_position": 1,
+          "duration_ms": 222370
+        },
+        "isrc": "USUM72307484",
+        "recording_id": "74c2e388-4e59-4ed1-8c97-f3fd3317323d",
+        "release_id": "4d1222ac-fbfa-469a-a62f-6f4a47802ace",
+        "release_group_id": "60d1c6ed-e236-4c5a-94bc-403ba7c4fefb",
+        "album_title": "What Was I Made For?",
+        "album_artist": "Billie Eilish",
+        "release_date": "2023-07-13",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "87681186c9f30bcf0cce4ca2bd109fddc04222fcb76705a4285f441908d67e6d",
+        "risk_notes": [
+          "The reviewed one-track official worldwide single avoids the later UK cassette that repeats the same recording on both sides."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2479,
+          "title": "Sprinter",
+          "artist": "Dave and Central Cee",
+          "chart_year": 2023,
+          "source_revision": "1380580667",
+          "source_entry_key": "2023:1412:dave and central cee:sprinter",
+          "placeholder_canonical_id": "9ec3833f-60b5-4517-b0ef-2a258e024716"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "4f138986856b2edb288a55a305282aad3e1f7b78e5baf96dbd4c9c459ecfefc7",
+          "canonical_metadata_sha256": "c08868d48be237685358b5db9dbc058b4f2a2a70f14027f9b70e6d8e0e109676"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "9ec3833f-60b5-4517-b0ef-2a258e024716",
+          "album_id": null,
+          "stored_title": "Sprinter",
+          "stored_artist": "Dave and Central Cee",
+          "track_position": 1,
+          "duration_ms": 229133
+        },
+        "isrc": "GBUM72305159",
+        "recording_id": "1ec1bfc4-2407-4369-b070-177fea0b38ba",
+        "release_id": "813c4748-d6a5-4e9d-aedb-054b4a0cc776",
+        "release_group_id": "cd3bde26-2929-4404-86ef-4623e57b66cd",
+        "album_title": "Sprinter",
+        "album_artist": "Dave & Central Cee",
+        "release_date": "2023-06-01",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "908ef900c2f8b4ba042555d4da04174ddb84bda6660528f7647ac61e001fc425",
+        "risk_notes": [
+          "The reviewed release uses ampersand credit punctuation; the BOM chart credit is preserved unchanged."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2478,
+          "title": "Miracle",
+          "artist": "Calvin Harris and Ellie Goulding",
+          "chart_year": 2023,
+          "source_revision": "1380580667",
+          "source_entry_key": "2023:1410:calvin harris and ellie goulding:miracle",
+          "placeholder_canonical_id": "cc5bf8fb-1329-46e1-a635-00430a041c90"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "99da38d79851a468c57dce30e8343ec50a105737551ff1b839ddb770ceeb9543",
+          "canonical_metadata_sha256": "971cd50d158155651e724400d5ae7d5434fdeb303837f91d5a56b412c7f4dffe"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "cc5bf8fb-1329-46e1-a635-00430a041c90",
+          "album_id": null,
+          "stored_title": "Miracle",
+          "stored_artist": "Calvin Harris and Ellie Goulding",
+          "track_position": 2,
+          "duration_ms": 186496
+        },
+        "isrc": "GBARL2300300",
+        "recording_id": "c658c2e5-0712-468b-ac40-fc0e764f80b7",
+        "release_id": "e965f766-a9e3-478f-8638-bb525c682276",
+        "release_group_id": "8984b2ef-eb00-4211-a671-594ffa51ca8f",
+        "album_title": "Miracle (Hardwell remix)",
+        "album_artist": "Calvin Harris & Ellie Goulding",
+        "release_date": "2023-04-14",
+        "country": "XW",
+        "release_track_count": 2,
+        "evidence_sha256": "1c0a7d028d8a1013ead6f42a439661771692db369520af255b1f59496cf85663",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The reviewed track is the exact original Miracle recording on a two-track Hardwell remix release; the Hardwell remix must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2475,
+          "title": "Escapism",
+          "artist": "Raye featuring 070 Shake",
+          "chart_year": 2023,
+          "source_revision": "1380580667",
+          "source_entry_key": "2023:1406:raye 070 shake:escapism",
+          "placeholder_canonical_id": "162b3fb9-0179-44e7-a34d-84f704c4222e"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "8e9bb44b8eccda4c84c74ee636f68f0a0b7a4920bcf1a80aec320e51a95eeadd",
+          "canonical_metadata_sha256": "3faceaaba190c8189c4cb23579240c760e2fbe8789c55e1bb22538416796d2f6"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "162b3fb9-0179-44e7-a34d-84f704c4222e",
+          "album_id": null,
+          "stored_title": "Escapism",
+          "stored_artist": "Raye featuring 070 Shake",
+          "track_position": 5,
+          "duration_ms": 272373
+        },
+        "isrc": "QMDA62217995",
+        "recording_id": "16994009-4a36-4b4c-865a-f4e7bc2ef6e1",
+        "release_id": "b4c35a7a-a36b-4c90-b866-38800a56eb5f",
+        "release_group_id": "35266d41-c2d4-4ad4-b624-02d4a0b2c489",
+        "album_title": "Ice Cream Man.",
+        "album_artist": "RAYE",
+        "release_date": "2023-01-31",
+        "country": "XW",
+        "release_track_count": 5,
+        "evidence_sha256": "41dda65ece3ae95d9e1d68fbe831fcbb3a175628a309bf5ca6519867247ffe36",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2469,
+          "title": "Afraid to Feel",
+          "artist": "LF System",
+          "chart_year": 2022,
+          "source_revision": "1380580667",
+          "source_entry_key": "2022:1399:lf system:afraid to feel",
+          "placeholder_canonical_id": "9d0052a7-5abb-437b-9cf6-1b8843113c8d"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "82caf85277cd4a04007f0578e08b614e435b5477bb7c1262c860783268ce3f9c",
+          "canonical_metadata_sha256": "f9eff6b19b7a62039d92f385b58e5ee87af2818934a279418c8115fce631605b"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "9d0052a7-5abb-437b-9cf6-1b8843113c8d",
+          "album_id": null,
+          "stored_title": "Afraid to Feel",
+          "stored_artist": "LF System",
+          "track_position": 1,
+          "duration_ms": 177000
+        },
+        "isrc": "GBAHT2200492",
+        "recording_id": "d71f7d62-f7fc-4907-ba37-3f97a12448f7",
+        "release_id": "633c9295-51dc-4454-9b38-2bd0437fd20c",
+        "release_group_id": "32c77089-45f7-4bb8-9960-9b11899d4743",
+        "album_title": "Afraid to Feel",
+        "album_artist": "LF SYSTEM",
+        "release_date": "2022-05-02",
+        "country": null,
+        "release_track_count": 1,
+        "evidence_sha256": "e066ad05b299d397f43f2048fd6ca7692c1099f8e501155a956ece1e4c89e07d",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2462,
+          "title": "Cold Heart (Pnau remix)",
+          "artist": "Elton John and Dua Lipa",
+          "chart_year": 2021,
+          "source_revision": "1380580667",
+          "source_entry_key": "2021:1390:elton john and dua lipa:cold heart pnau remix",
+          "placeholder_canonical_id": "2dfed403-ee71-42aa-9e45-cf1f9c07bda0"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "d89cfc9962fd8a42bc17ec1f38767281a74f888efc85bc45d9dbdfbfca2b735b",
+          "canonical_metadata_sha256": "ee0bbeccaa429fdc8294a7d9699c32a87d31515044d8df148da645cdd3b4cc2e"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "2dfed403-ee71-42aa-9e45-cf1f9c07bda0",
+          "album_id": null,
+          "stored_title": "Cold Heart (Pnau remix)",
+          "stored_artist": "Elton John and Dua Lipa",
+          "track_position": 2,
+          "duration_ms": 202735
+        },
+        "isrc": "GBUM72104705",
+        "recording_id": "a3906438-a1b2-403d-a7c2-7f48fca0a586",
+        "release_id": "b1a5d4cb-579a-4139-8ae6-13af0d5269f0",
+        "release_group_id": "78b65cee-4a6d-49c8-a98e-9159bf147cd1",
+        "album_title": "The Lockdown Sessions",
+        "album_artist": "Elton John",
+        "release_date": "2021-12-03",
+        "country": "CA",
+        "release_track_count": 17,
+        "evidence_sha256": "86d39434ea17dfe359c0a97245bcdd9b80bade9e2ae22f220625ec94ee7c097f",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The charted Pnau remix identity is exact; original, acoustic and alternate remixes must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2450,
+          "title": "Head & Heart",
+          "artist": "Joel Corry and MNEK",
+          "chart_year": 2020,
+          "source_revision": "1380580667",
+          "source_entry_key": "2020:1374:joel corry and mnek:head heart",
+          "placeholder_canonical_id": "6df38772-ea83-46d8-b2d6-fd36791abda6"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "b6bbd6dac500036ea2f21d011bc1102db237fea202bc892bd6c5a77696e5d0a2",
+          "canonical_metadata_sha256": "4350864a34a3dc1db454bd69205c90440facaa9dbc66d68421a01f860f0cbd56"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "6df38772-ea83-46d8-b2d6-fd36791abda6",
+          "album_id": null,
+          "stored_title": "Head & Heart",
+          "stored_artist": "Joel Corry and MNEK",
+          "track_position": 1,
+          "duration_ms": 166028
+        },
+        "isrc": "UK4ZF2000305",
+        "recording_id": "168c30ff-7597-471b-a4c8-31c719f4f8af",
+        "release_id": "19e240f2-bae8-49a6-9c5c-3c3e040e49cd",
+        "release_group_id": "5369b02b-78d2-4361-83dd-d26dfd96eda7",
+        "album_title": "Head & Heart",
+        "album_artist": "Joel Corry feat. MNEK",
+        "release_date": "2020-07-03",
+        "country": "AF",
+        "release_track_count": 1,
+        "evidence_sha256": "a28630b2028376bb5113fa4421ebf861f95713c144fbace1c5e2b32070fae10a",
+        "risk_notes": [
+          "MusicBrainz country is anomalously AF; identity is supported by the exact Official Charts ISRC, unique MusicBrainz recording and reviewed official single."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2448,
+          "title": "Rain on Me",
+          "artist": "Lady Gaga and Ariana Grande",
+          "chart_year": 2020,
+          "source_revision": "1380580667",
+          "source_entry_key": "2020:1372:lady gaga and ariana grande:rain on me",
+          "placeholder_canonical_id": "e74a7629-6482-4cb1-8177-7077d163c0a1"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "a20ccfbc19cacfba4f491a77d16def37b37efa7eda6bbdc4c084088b8bdabd42",
+          "canonical_metadata_sha256": "c0eb484ac769c484274c4ce972e0408e0cbd9d4b59cdd3d9bad117c7e5073c3e"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "e74a7629-6482-4cb1-8177-7077d163c0a1",
+          "album_id": null,
+          "stored_title": "Rain on Me",
+          "stored_artist": "Lady Gaga and Ariana Grande",
+          "track_position": 1,
+          "duration_ms": 182000
+        },
+        "isrc": "USUM72004304",
+        "recording_id": "a0eb8c91-e3ce-4fef-a9d7-3d03753c6ece",
+        "release_id": "6a82f0ec-148f-4942-bb51-5423695f6da8",
+        "release_group_id": "06c74f2f-e1ee-4c32-aee0-3bbbbb02bd11",
+        "album_title": "Rain on Me",
+        "album_artist": "Lady Gaga & Ariana Grande",
+        "release_date": "2020-05-22",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "52ac04632ff5bccb9247ffb396b77e8acde9dedf659933d59fe70222c65fc4eb",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2447,
+          "title": "Rockstar",
+          "artist": "DaBaby featuring Roddy Ricch",
+          "chart_year": 2020,
+          "source_revision": "1380580667",
+          "source_entry_key": "2020:1371:dababy roddy ricch:rockstar",
+          "placeholder_canonical_id": "f03df823-d739-4002-a1f6-5b7ec7efddf8"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "bb354460da92840d44e31fa9273104e5ca8c92dbddbd6912106045831f091876",
+          "canonical_metadata_sha256": "2614c5414fdcf6813977c9478dfa3db934df0580e534b797da06ca6d1a95892d"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "f03df823-d739-4002-a1f6-5b7ec7efddf8",
+          "album_id": null,
+          "stored_title": "Rockstar",
+          "stored_artist": "DaBaby featuring Roddy Ricch",
+          "track_position": 1,
+          "duration_ms": 181000
+        },
+        "isrc": "USUM72007941",
+        "recording_id": "50a4f12b-8b19-4387-85e6-4ec98e1f2f69",
+        "release_id": "72c84d21-eb61-4b38-b65f-f82843c2f95b",
+        "release_group_id": "cb8e4abb-774d-4df3-aa40-d1d9770188b4",
+        "album_title": "ROCKSTAR",
+        "album_artist": "DaBaby feat. Roddy Ricch",
+        "release_date": "2020-04-17",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "23e0a76d696c42777db03dce5f1b1856384119d1987d4a406d2f434d901876ab",
+        "risk_notes": [
+          "The reviewed MusicBrainz recording is explicitly marked explicit; clean or alternate edits must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2030,
+          "title": "Take Me Back to London",
+          "artist": "Ed Sheeran featuring Stormzy",
+          "chart_year": 2019,
+          "source_revision": "1356457366",
+          "source_entry_key": "2019:1358:ed sheeran stormzy:take me back to london",
+          "placeholder_canonical_id": "332b8c84-c749-40d5-be40-f06f7050b091"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "1de1ed1cc97a66fd397819fbdc2b6a7217d9267f9c2181bfb3e1c0dbb8dd0553",
+          "canonical_metadata_sha256": "16be13269bff110dec101e242fd280f5d4e4c898c044f75a00e0bfa567814b60"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "332b8c84-c749-40d5-be40-f06f7050b091",
+          "album_id": null,
+          "stored_title": "Take Me Back to London",
+          "stored_artist": "Ed Sheeran featuring Stormzy",
+          "track_position": 4,
+          "duration_ms": 189733
+        },
+        "isrc": "GBAHS1900716",
+        "recording_id": "34a37727-9553-48f6-8ddf-a573f046b29d",
+        "release_id": "466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_group_id": "852e109b-d04d-4bc2-a4b0-f0d1817480ec",
+        "album_title": "No.6 Collaborations Project",
+        "album_artist": "Ed Sheeran",
+        "release_date": "2019-07-12",
+        "country": "GB",
+        "release_track_count": 15,
+        "evidence_sha256": "d4a1a2ca653e067306ff2cf89b1eefc8b720b24b9b91b0651a3e129ee86e5087",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "This and Beautiful People intentionally share one reviewed official release; the operation must create that album once and attach both exact tracks."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2029,
+          "title": "Beautiful People",
+          "artist": "Ed Sheeran featuring Khalid",
+          "chart_year": 2019,
+          "source_revision": "1356457366",
+          "source_entry_key": "2019:1357:ed sheeran khalid:beautiful people",
+          "placeholder_canonical_id": "9179a83f-6a6e-4f1d-a383-7732e3211164"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "f65415e612adf0a109babd432860a0fa68cd7e8ace56744c97151e3c762c68d1",
+          "canonical_metadata_sha256": "b72c551790d1871f749c674bd8560ce8bea97e4c5088176af06b39bc0a91283d"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "9179a83f-6a6e-4f1d-a383-7732e3211164",
+          "album_id": null,
+          "stored_title": "Beautiful People",
+          "stored_artist": "Ed Sheeran featuring Khalid",
+          "track_position": 1,
+          "duration_ms": 197867
+        },
+        "isrc": "GBAHS1900713",
+        "recording_id": "611ffa00-29c1-46bc-843e-2f2168101ec8",
+        "release_id": "466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_group_id": "852e109b-d04d-4bc2-a4b0-f0d1817480ec",
+        "album_title": "No.6 Collaborations Project",
+        "album_artist": "Ed Sheeran",
+        "release_date": "2019-07-12",
+        "country": "GB",
+        "release_track_count": 15,
+        "evidence_sha256": "c45a5c2798854e2516937711447dfd07745e97870eebdb3569ce987f2660f2e2",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "This and Take Me Back to London intentionally share one reviewed official release; the operation must create that album once and attach both exact tracks."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2021,
+          "title": "Shallow",
+          "artist": "Lady Gaga and Bradley Cooper",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1346:lady gaga and bradley cooper:shallow",
+          "placeholder_canonical_id": "316fe98f-2c2f-4103-bff7-29491d86c2ce"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "972ff78617c69399c75ce8e672e5e9ace582182cb51287fa11413017412411cb",
+          "canonical_metadata_sha256": "8d9cf87b39055734b81dc6ff905632f27fa920862f5876d158c8334583f79312"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "316fe98f-2c2f-4103-bff7-29491d86c2ce",
+          "album_id": null,
+          "stored_title": "Shallow",
+          "stored_artist": "Lady Gaga and Bradley Cooper",
+          "track_position": 1,
+          "duration_ms": 215000
+        },
+        "isrc": "USUM71813192",
+        "recording_id": "e8191687-56bf-4e69-860f-a898735ec268",
+        "release_id": "fe5944f9-293a-46b1-b7e2-73df7df989d1",
+        "release_group_id": "a8dbba8b-0c37-4352-8e88-0c5a01e1fe0c",
+        "album_title": "Shallow",
+        "album_artist": "Lady Gaga & Bradley Cooper",
+        "release_date": "2018-09-27",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "af80abe99c3fbfeddc29b7eef6963fc01a5057075ee81883f894451ddaf443e6",
+        "risk_notes": [
+          "MusicBrainz disambiguates the exact ISRC recording as with audience noises; studio or alternate versions must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2019,
+          "title": "Promises",
+          "artist": "Calvin Harris and Sam Smith",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1344:calvin harris and sam smith:promises",
+          "placeholder_canonical_id": "da9922da-fda4-4dc5-856a-ef17c77c485b"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "e31788dcfe707c2e946e484944ff09334d11ebf2c33ee200ac92ad83214cbbbe",
+          "canonical_metadata_sha256": "733cfda15cba18a6864e48081d36e63cb8a1fedd6de7908bc2ce790422cad401"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "da9922da-fda4-4dc5-856a-ef17c77c485b",
+          "album_id": null,
+          "stored_title": "Promises",
+          "stored_artist": "Calvin Harris and Sam Smith",
+          "track_position": 1,
+          "duration_ms": 213309
+        },
+        "isrc": "GBARL1801049",
+        "recording_id": "416612cb-759e-4b40-9e1c-ce560cf7ddaf",
+        "release_id": "6cc278f9-637f-4014-a296-a6022033658b",
+        "release_group_id": "b631b1ef-6b33-4876-8374-9108ed5b12bd",
+        "album_title": "Promises",
+        "album_artist": "Calvin Harris & Sam Smith",
+        "release_date": "2018-08-17",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "2c01d14f0c0608bbfa9fcad1e18710c1782b52dbb816d84aeb01455a158daf56",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2007,
+          "title": "River",
+          "artist": "Eminem featuring Ed Sheeran",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1333:eminem ed sheeran:river",
+          "placeholder_canonical_id": "3853a2c0-ea63-476f-8b4c-7aeacb4416c8"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "1d645c2c42a9c451f197631d432b43ffbf528d2eefb391b3f55f33b64e85a7e2",
+          "canonical_metadata_sha256": "e0d26a368031c25682e9c33fd432e2f10377733569725f24e2901a826b0465df"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "3853a2c0-ea63-476f-8b4c-7aeacb4416c8",
+          "album_id": null,
+          "stored_title": "River",
+          "stored_artist": "Eminem featuring Ed Sheeran",
+          "track_position": 5,
+          "duration_ms": 221013
+        },
+        "isrc": "USUM71712944",
+        "recording_id": "32d6bfe9-b231-4d5f-9034-61226f7d7d96",
+        "release_id": "72fb262d-c517-4e94-9f08-eefa95df8b34",
+        "release_group_id": "cfc62e61-686c-46cd-a453-608979646f71",
+        "album_title": "Revival",
+        "album_artist": "Eminem",
+        "release_date": "2017-12-15",
+        "country": "XE",
+        "release_track_count": 19,
+        "evidence_sha256": "d4c287b2313886fd92f533c9cd17bf8da07beef960600527f982aa3736146d58",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The reviewed MusicBrainz recording is explicitly marked explicit; clean or alternate edits must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2004,
+          "title": "Rockstar",
+          "artist": "Post Malone featuring 21 Savage",
+          "chart_year": 2017,
+          "source_revision": "1356457366",
+          "source_entry_key": "2017:1330:post malone 21 savage:rockstar",
+          "placeholder_canonical_id": "dd7d96a6-b84d-411a-97ec-5eb42d22c2ba"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "939ed7dd14edb0eb020d6882bfca335022cccc5268a63955037b3b4241b3b380",
+          "canonical_metadata_sha256": "f7625c2662d5da42c5471df3aa5db6eb286037efc6f9855663a9375cdde70772"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "dd7d96a6-b84d-411a-97ec-5eb42d22c2ba",
+          "album_id": null,
+          "stored_title": "Rockstar",
+          "stored_artist": "Post Malone featuring 21 Savage",
+          "track_position": 1,
+          "duration_ms": 218000
+        },
+        "isrc": "USUM71710097",
+        "recording_id": "08cbf725-d3d1-48e7-8629-c9117e85d8f6",
+        "release_id": "067a0f7a-f63b-41ec-947d-7f07721119cb",
+        "release_group_id": "9af98551-17ee-4882-90da-981bb9bede7c",
+        "album_title": "rockstar",
+        "album_artist": "Post Malone feat. 21 Savage",
+        "release_date": "2017-09-15",
+        "country": "US",
+        "release_track_count": 1,
+        "evidence_sha256": "e646d9b4f5ac0f717fd446926792cf758a51acc188b4626cd2b21adac97fc7c4",
+        "risk_notes": [
+          "The exact Official Charts ISRC resolves to the clean version; the explicit recording must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2002,
+          "title": "Look What You Made Me Do",
+          "artist": "Taylor Swift",
+          "chart_year": 2017,
+          "source_revision": "1356457366",
+          "source_entry_key": "2017:1328:taylor swift:look what you made me do",
+          "placeholder_canonical_id": "062e4f47-6c80-4816-8b38-6e40554a993f"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "9942600a6e4cb5ebd55a4f096c66290892d4f86bcbbcecb4f65ee455866be4a6",
+          "canonical_metadata_sha256": "0317997484873163c1a18b8c6d46dfc714444e40c48cdabe7ff4db324255c24f"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "062e4f47-6c80-4816-8b38-6e40554a993f",
+          "album_id": null,
+          "stored_title": "Look What You Made Me Do",
+          "stored_artist": "Taylor Swift",
+          "track_position": 1,
+          "duration_ms": 211000
+        },
+        "isrc": "USCJY1750000",
+        "recording_id": "d06c9d0f-2dbf-4272-9c0d-6d182ca41c67",
+        "release_id": "ece1a954-47f1-4fd2-b041-ec57d43a28cc",
+        "release_group_id": "c2f50e2e-9280-4d24-9d90-e367a7d740b6",
+        "album_title": "Look What You Made Me Do",
+        "album_artist": "Taylor Swift",
+        "release_date": "2017-10-27",
+        "country": "AT",
+        "release_track_count": 1,
+        "evidence_sha256": "6a33dd193d595bd9686fc56e3ac2207f124a33d3e03b253ed33f966fd52f1c5d",
+        "risk_notes": [
+          "The exact Official Charts ISRC resolves the prior same-title ambiguity; alternate recordings must not be title-matched."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1991,
+          "title": "Closer",
+          "artist": "The Chainsmokers featuring Halsey",
+          "chart_year": 2016,
+          "source_revision": "1356457366",
+          "source_entry_key": "2016:1315:the chainsmokers halsey:closer",
+          "placeholder_canonical_id": "8f52cf33-df3d-453d-9038-89a437604b9c"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "a1f85bdb269d710c19cfaaf5da5afc76de4f71e11f8a7ac72b7eea5f535aa336",
+          "canonical_metadata_sha256": "a83b4ee903a6a5a99c56889328cd7dec55fc597933a397c4231c8fd193d31282"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "8f52cf33-df3d-453d-9038-89a437604b9c",
+          "album_id": null,
+          "stored_title": "Closer",
+          "stored_artist": "The Chainsmokers featuring Halsey",
+          "track_position": 1,
+          "duration_ms": 244000
+        },
+        "isrc": "USQX91601347",
+        "recording_id": "fb7963d0-d06f-45ca-a647-2b00a963179f",
+        "release_id": "1eb06cd0-1c8f-4535-b7d7-115c8d44eb01",
+        "release_group_id": "2c0acac5-36fe-4731-877c-c4812ad751d9",
+        "album_title": "Closer",
+        "album_artist": "The Chainsmokers ft. Halsey",
+        "release_date": "2016-07-29",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "9331d87097c38561c80613d6373bf0b849143e6ae67d316177545f118bf7c8bb",
+        "risk_notes": []
+      }
+    ],
+    "rejected_version_leads": [
+      {
+        "chart_entry_id": 1996,
+        "title": "Symphony",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1979,
+        "title": "Easy Love",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1968,
+        "title": "See You Again",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1959,
+        "title": "Wake Me Up (Gareth Malone's All Star Choir)",
+        "reason_code": "stored_isrc_belongs_to_different_artist_version"
+      },
+      {
+        "chart_entry_id": 1913,
+        "title": "Wake Me Up (Avicii)",
+        "reason_code": "isrc_maps_multiple_recording_versions"
+      },
+      {
+        "chart_entry_id": 1522,
+        "title": "Beautiful Girls",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1467,
+        "title": "Call on Me",
+        "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version"
+      },
+      {
+        "chart_entry_id": 1418,
+        "title": "Dilemma",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 107,
+        "title": "Breathe",
+        "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge"
+      },
+      {
+        "chart_entry_id": 45,
+        "title": "No Limit",
+        "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording"
+      },
+      {
+        "chart_entry_id": 2491,
+        "title": "Houdini",
+        "reason_code": "isrc_maps_music_video_not_audio_single"
+      },
+      {
+        "chart_entry_id": 2013,
+        "title": "I'll Be There",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 2006,
+        "title": "Perfect",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 2014,
+        "title": "Solo",
+        "reason_code": "isrc_maps_multiple_recordings"
+      }
+    ],
+    "reviewed_incomplete_leads": [
+      {
+        "chart_entry_id": 2485,
+        "title": "Now and Then",
+        "reason_code": "official_charts_page_has_no_catalogue_identifier"
+      },
+      {
+        "chart_entry_id": 1545,
+        "title": "Right Round",
+        "reason_code": "official_charts_catalogue_value_is_not_the_stored_isrc"
+      },
+      {
+        "chart_entry_id": 1437,
+        "title": "Breathe (Blu Cantrell)",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 191,
+        "title": "Lift Me Up",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 180,
+        "title": "9 PM (Till I Come)",
+        "reason_code": "official_charts_song_page_not_found"
+      },
+      {
+        "chart_entry_id": 167,
+        "title": "Fly Away",
+        "reason_code": "official_charts_catalogue_value_does_not_bridge_to_stored_isrc"
+      },
+      {
+        "chart_entry_id": 41,
+        "title": "Sleeping Satellite",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 541,
+        "title": "All Around the World",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 531,
+        "title": "Like a Prayer",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 425,
+        "title": "Ebony and Ivory",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 845,
+        "title": "Message in a Bottle",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 2505,
+        "title": "The Subway",
+        "reason_code": "official_charts_catalogue_value_is_not_an_isrc"
+      },
+      {
+        "chart_entry_id": 2501,
+        "title": "Survive",
+        "reason_code": "release_level_verification_not_completed"
+      },
+      {
+        "chart_entry_id": 2500,
+        "title": "Ordinary",
+        "reason_code": "musicbrainz_isrc_lookup_unavailable"
+      },
+      {
+        "chart_entry_id": 2486,
+        "title": "Lovin on Me",
+        "reason_code": "musicbrainz_isrc_lookup_unavailable"
+      },
+      {
+        "chart_entry_id": 2476,
+        "title": "Flowers",
+        "reason_code": "official_charts_page_has_no_catalogue_identifier"
+      },
+      {
+        "chart_entry_id": 2473,
+        "title": "Anti-Hero",
+        "reason_code": "release_level_verification_not_completed"
+      },
+      {
+        "chart_entry_id": 2459,
+        "title": "Body",
+        "reason_code": "official_isrc_absent_from_musicbrainz"
+      }
+    ],
+    "expected_deltas": {
+      "albums": 19,
+      "songs": 20,
+      "canonical_recordings": 0,
+      "historical_chart_links": 20,
+      "ratings": 0
+    },
+    "proposed_result": {
+      "resolved_delta": 20,
+      "resolved_chart_entries": 459,
+      "remaining_unresolved_chart_entries": 839
+    },
+    "safety_contract": {
+      "atomic_transaction": true,
+      "global_stale_baseline_abort": true,
+      "per_candidate_stale_fingerprint_abort": true,
+      "deterministic_advisory_lock_order": true,
+      "immutable_private_operation_evidence": true,
+      "preserve_all_song_ratings_byte_for_byte": true,
+      "preserve_all_historical_chart_ratings_byte_for_byte": true,
+      "preserve_first_batch_papa_dont_preach_reconciliation": true,
+      "duplicate_and_partial_identity_abort": true,
+      "shared_reviewed_release_insert_once": true,
+      "rollback_operation_required": true,
+      "production_execution_authorized": false
+    }
+  },
+  "manifest_sha256": "49b05d4ed317b0a22ae3aff5365f3c9835d40f3ba771d3ac19308c3d90db54b9"
+}

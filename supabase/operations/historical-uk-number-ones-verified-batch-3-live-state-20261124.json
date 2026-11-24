@@ -1,0 +1,1283 @@
+{
+  "status": "read_only_snapshot",
+  "artifact": "historical-uk-number-ones-verified-batch-3-live-state",
+  "candidates": [
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2494,
+        "title": "Backbone",
+        "artist": "Chase & Status and Stormzy",
+        "chart_year": 2024,
+        "source_revision": "1380580667",
+        "source_entry_key": "2024:1430:chase status and stormzy:backbone",
+        "placeholder_canonical_id": "f4278fde-aefe-437b-9db8-81893a51f4e0"
+      },
+      "placeholder": {
+        "id": "f4278fde-aefe-437b-9db8-81893a51f4e0",
+        "title": "Backbone",
+        "artist": "Chase & Status and Stormzy",
+        "origin_key": "quick-rate:uk-number-ones:2024:1430:chase status and stormzy:backbone",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1430,
+          "article_titles": [
+            "Backbone (Chase & Status and Stormzy song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2024,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 2,
+          "first_number_one_date": "2024-08-22"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "56410459a04f7ba8ea4440507ae0681cdae2156344a13eadf0e0df20d86dd61d",
+        "canonical_metadata_sha256": "a526073cc657293b8ab92a53d10b84dafd95a48e931934ccde2ed7be0c6cd95c"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2493,
+        "title": "Guess",
+        "artist": "Charli XCX featuring Billie Eilish",
+        "chart_year": 2024,
+        "source_revision": "1380580667",
+        "source_entry_key": "2024:1429:charli xcx billie eilish:guess",
+        "placeholder_canonical_id": "a2f04003-b5b4-4fc3-b9c7-9328e541b210"
+      },
+      "placeholder": {
+        "id": "a2f04003-b5b4-4fc3-b9c7-9328e541b210",
+        "title": "Guess",
+        "artist": "Charli XCX featuring Billie Eilish",
+        "origin_key": "quick-rate:uk-number-ones:2024:1429:charli xcx billie eilish:guess",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1429,
+          "article_titles": [
+            "Guess (song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2024,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2024-08-15"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "b72e873ec7a7552ce71d78c497235dd79339935821583927640d06e9b81fef67",
+        "canonical_metadata_sha256": "720dcf8b642f8a39a9fa5c9a52449d500731e0830a6d9d5ab2b0b63775708407"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2490,
+        "title": "Fortnight",
+        "artist": "Taylor Swift featuring Post Malone",
+        "chart_year": 2024,
+        "source_revision": "1380580667",
+        "source_entry_key": "2024:1425:taylor swift post malone:fortnight",
+        "placeholder_canonical_id": "f04c6928-856f-45c0-a40a-1c158093ca7a"
+      },
+      "placeholder": {
+        "id": "f04c6928-856f-45c0-a40a-1c158093ca7a",
+        "title": "Fortnight",
+        "artist": "Taylor Swift featuring Post Malone",
+        "origin_key": "quick-rate:uk-number-ones:2024:1425:taylor swift post malone:fortnight",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1425,
+          "article_titles": [
+            "Fortnight (song)"
+          ],
+          "spotify_track_ids": [
+            "2OzhQlSqBEmt7hmkYxfT6m"
+          ],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2024,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2024-05-02"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "f5950b0fc27ad83b7612f3c40f4aa3315a60def7634b78ab3a8d0af42d2fac03",
+        "canonical_metadata_sha256": "f74a492acc50b6a0e73315151efb6f536355508c11b362167d5c1aae4d52fc12"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2480,
+        "title": "What Was I Made For?",
+        "artist": "Billie Eilish",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1413:billie eilish:what was i made for",
+        "placeholder_canonical_id": "83a25e68-0d85-4e48-b15a-98c1de208f9e"
+      },
+      "placeholder": {
+        "id": "83a25e68-0d85-4e48-b15a-98c1de208f9e",
+        "title": "What Was I Made For?",
+        "artist": "Billie Eilish",
+        "origin_key": "quick-rate:uk-number-ones:2023:1413:billie eilish:what was i made for",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1413,
+          "article_titles": [
+            "What Was I Made For? (song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2023,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2023-08-24"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "1951af7b66c3705d5da987be3a15b2b94d96584494ec786ac0517e33b1fc4c2a",
+        "canonical_metadata_sha256": "afba28823353017c673303d9453f1b2456e374ba6931efa88e2821c8bdaf1ef2"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2479,
+        "title": "Sprinter",
+        "artist": "Dave and Central Cee",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1412:dave and central cee:sprinter",
+        "placeholder_canonical_id": "9ec3833f-60b5-4517-b0ef-2a258e024716"
+      },
+      "placeholder": {
+        "id": "9ec3833f-60b5-4517-b0ef-2a258e024716",
+        "title": "Sprinter",
+        "artist": "Dave and Central Cee",
+        "origin_key": "quick-rate:uk-number-ones:2023:1412:dave and central cee:sprinter",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1412,
+          "article_titles": [
+            "Sprinter (song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2023,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 10,
+          "first_number_one_date": "2023-06-15"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "4f138986856b2edb288a55a305282aad3e1f7b78e5baf96dbd4c9c459ecfefc7",
+        "canonical_metadata_sha256": "c08868d48be237685358b5db9dbc058b4f2a2a70f14027f9b70e6d8e0e109676"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2478,
+        "title": "Miracle",
+        "artist": "Calvin Harris and Ellie Goulding",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1410:calvin harris and ellie goulding:miracle",
+        "placeholder_canonical_id": "cc5bf8fb-1329-46e1-a635-00430a041c90"
+      },
+      "placeholder": {
+        "id": "cc5bf8fb-1329-46e1-a635-00430a041c90",
+        "title": "Miracle",
+        "artist": "Calvin Harris and Ellie Goulding",
+        "origin_key": "quick-rate:uk-number-ones:2023:1410:calvin harris and ellie goulding:miracle",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1410,
+          "article_titles": [
+            "Miracle (Calvin Harris and Ellie Goulding song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2023,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 2,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 8,
+          "first_number_one_date": "2023-04-13"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "99da38d79851a468c57dce30e8343ec50a105737551ff1b839ddb770ceeb9543",
+        "canonical_metadata_sha256": "971cd50d158155651e724400d5ae7d5434fdeb303837f91d5a56b412c7f4dffe"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2475,
+        "title": "Escapism",
+        "artist": "Raye featuring 070 Shake",
+        "chart_year": 2023,
+        "source_revision": "1380580667",
+        "source_entry_key": "2023:1406:raye 070 shake:escapism",
+        "placeholder_canonical_id": "162b3fb9-0179-44e7-a34d-84f704c4222e"
+      },
+      "placeholder": {
+        "id": "162b3fb9-0179-44e7-a34d-84f704c4222e",
+        "title": "Escapism",
+        "artist": "Raye featuring 070 Shake",
+        "origin_key": "quick-rate:uk-number-ones:2023:1406:raye 070 shake:escapism",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1406,
+          "article_titles": [
+            "Escapism (Raye song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2023,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2023-01-12"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "8e9bb44b8eccda4c84c74ee636f68f0a0b7a4920bcf1a80aec320e51a95eeadd",
+        "canonical_metadata_sha256": "3faceaaba190c8189c4cb23579240c760e2fbe8789c55e1bb22538416796d2f6"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2469,
+        "title": "Afraid to Feel",
+        "artist": "LF System",
+        "chart_year": 2022,
+        "source_revision": "1380580667",
+        "source_entry_key": "2022:1399:lf system:afraid to feel",
+        "placeholder_canonical_id": "9d0052a7-5abb-437b-9cf6-1b8843113c8d"
+      },
+      "placeholder": {
+        "id": "9d0052a7-5abb-437b-9cf6-1b8843113c8d",
+        "title": "Afraid to Feel",
+        "artist": "LF System",
+        "origin_key": "quick-rate:uk-number-ones:2022:1399:lf system:afraid to feel",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1399,
+          "article_titles": [
+            "Afraid to Feel"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2022,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 8,
+          "first_number_one_date": "2022-07-14"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "82caf85277cd4a04007f0578e08b614e435b5477bb7c1262c860783268ce3f9c",
+        "canonical_metadata_sha256": "f9eff6b19b7a62039d92f385b58e5ee87af2818934a279418c8115fce631605b"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2462,
+        "title": "Cold Heart (Pnau remix)",
+        "artist": "Elton John and Dua Lipa",
+        "chart_year": 2021,
+        "source_revision": "1380580667",
+        "source_entry_key": "2021:1390:elton john and dua lipa:cold heart pnau remix",
+        "placeholder_canonical_id": "2dfed403-ee71-42aa-9e45-cf1f9c07bda0"
+      },
+      "placeholder": {
+        "id": "2dfed403-ee71-42aa-9e45-cf1f9c07bda0",
+        "title": "Cold Heart (Pnau remix)",
+        "artist": "Elton John and Dua Lipa",
+        "origin_key": "quick-rate:uk-number-ones:2021:1390:elton john and dua lipa:cold heart pnau remix",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1390,
+          "article_titles": [
+            "Cold Heart (Pnau remix)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2021,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2021-10-21"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "d89cfc9962fd8a42bc17ec1f38767281a74f888efc85bc45d9dbdfbfca2b735b",
+        "canonical_metadata_sha256": "ee0bbeccaa429fdc8294a7d9699c32a87d31515044d8df148da645cdd3b4cc2e"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2450,
+        "title": "Head & Heart",
+        "artist": "Joel Corry and MNEK",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1374:joel corry and mnek:head heart",
+        "placeholder_canonical_id": "6df38772-ea83-46d8-b2d6-fd36791abda6"
+      },
+      "placeholder": {
+        "id": "6df38772-ea83-46d8-b2d6-fd36791abda6",
+        "title": "Head & Heart",
+        "artist": "Joel Corry and MNEK",
+        "origin_key": "quick-rate:uk-number-ones:2020:1374:joel corry and mnek:head heart",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1374,
+          "article_titles": [
+            "Head & Heart"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 6,
+          "first_number_one_date": "2020-07-30"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "b6bbd6dac500036ea2f21d011bc1102db237fea202bc892bd6c5a77696e5d0a2",
+        "canonical_metadata_sha256": "4350864a34a3dc1db454bd69205c90440facaa9dbc66d68421a01f860f0cbd56"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2448,
+        "title": "Rain on Me",
+        "artist": "Lady Gaga and Ariana Grande",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1372:lady gaga and ariana grande:rain on me",
+        "placeholder_canonical_id": "e74a7629-6482-4cb1-8177-7077d163c0a1"
+      },
+      "placeholder": {
+        "id": "e74a7629-6482-4cb1-8177-7077d163c0a1",
+        "title": "Rain on Me",
+        "artist": "Lady Gaga and Ariana Grande",
+        "origin_key": "quick-rate:uk-number-ones:2020:1372:lady gaga and ariana grande:rain on me",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1372,
+          "article_titles": [
+            "Rain on Me (Lady Gaga and Ariana Grande song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 1,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 1,
+          "first_number_one_date": "2020-06-04"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "a20ccfbc19cacfba4f491a77d16def37b37efa7eda6bbdc4c084088b8bdabd42",
+        "canonical_metadata_sha256": "c0eb484ac769c484274c4ce972e0408e0cbd9d4b59cdd3d9bad117c7e5073c3e"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2447,
+        "title": "Rockstar",
+        "artist": "DaBaby featuring Roddy Ricch",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1371:dababy roddy ricch:rockstar",
+        "placeholder_canonical_id": "f03df823-d739-4002-a1f6-5b7ec7efddf8"
+      },
+      "placeholder": {
+        "id": "f03df823-d739-4002-a1f6-5b7ec7efddf8",
+        "title": "Rockstar",
+        "artist": "DaBaby featuring Roddy Ricch",
+        "origin_key": "quick-rate:uk-number-ones:2020:1371:dababy roddy ricch:rockstar",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_number": 1371,
+          "article_titles": [
+            "Rockstar (DaBaby song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrc": null,
+          "chart_year": 2020,
+          "source_url": "https://en.wikipedia.org/wiki/List_of_UK_singles_chart_number_ones_of_the_2020s",
+          "imported_at": "2026-10-23T14:53:07.351303",
+          "source_name": "wikimedia",
+          "match_method": null,
+          "match_status": "unresolved",
+          "collection_key": "uk-number-ones",
+          "number_one_runs": 2,
+          "source_revision": "1380580667",
+          "weeks_at_number_one": 6,
+          "first_number_one_date": "2020-05-21"
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "bb354460da92840d44e31fa9273104e5ca8c92dbddbd6912106045831f091876",
+        "canonical_metadata_sha256": "2614c5414fdcf6813977c9478dfa3db934df0580e534b797da06ca6d1a95892d"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2030,
+        "title": "Take Me Back to London",
+        "artist": "Ed Sheeran featuring Stormzy",
+        "chart_year": 2019,
+        "source_revision": "1356457366",
+        "source_entry_key": "2019:1358:ed sheeran stormzy:take me back to london",
+        "placeholder_canonical_id": "332b8c84-c749-40d5-be40-f06f7050b091"
+      },
+      "placeholder": {
+        "id": "332b8c84-c749-40d5-be40-f06f7050b091",
+        "title": "Take Me Back to London",
+        "artist": "Ed Sheeran featuring Stormzy",
+        "origin_key": "quick-rate:uk-number-ones:2019:1358:ed sheeran stormzy:take me back to london",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1358,
+          "article_titles": [
+            "Take Me Back to London"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1358,
+          "article_titles": [
+            "Take Me Back to London"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2019-09-05",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "1de1ed1cc97a66fd397819fbdc2b6a7217d9267f9c2181bfb3e1c0dbb8dd0553",
+        "canonical_metadata_sha256": "16be13269bff110dec101e242fd280f5d4e4c898c044f75a00e0bfa567814b60"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2029,
+        "title": "Beautiful People",
+        "artist": "Ed Sheeran featuring Khalid",
+        "chart_year": 2019,
+        "source_revision": "1356457366",
+        "source_entry_key": "2019:1357:ed sheeran khalid:beautiful people",
+        "placeholder_canonical_id": "9179a83f-6a6e-4f1d-a383-7732e3211164"
+      },
+      "placeholder": {
+        "id": "9179a83f-6a6e-4f1d-a383-7732e3211164",
+        "title": "Beautiful People",
+        "artist": "Ed Sheeran featuring Khalid",
+        "origin_key": "quick-rate:uk-number-ones:2019:1357:ed sheeran khalid:beautiful people",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1357,
+          "article_titles": [
+            "Beautiful People (Ed Sheeran song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1357,
+          "article_titles": [
+            "Beautiful People (Ed Sheeran song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2019-07-25",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "f65415e612adf0a109babd432860a0fa68cd7e8ace56744c97151e3c762c68d1",
+        "canonical_metadata_sha256": "b72c551790d1871f749c674bd8560ce8bea97e4c5088176af06b39bc0a91283d"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2021,
+        "title": "Shallow",
+        "artist": "Lady Gaga and Bradley Cooper",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1346:lady gaga and bradley cooper:shallow",
+        "placeholder_canonical_id": "316fe98f-2c2f-4103-bff7-29491d86c2ce"
+      },
+      "placeholder": {
+        "id": "316fe98f-2c2f-4103-bff7-29491d86c2ce",
+        "title": "Shallow",
+        "artist": "Lady Gaga and Bradley Cooper",
+        "origin_key": "quick-rate:uk-number-ones:2018:1346:lady gaga and bradley cooper:shallow",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1346,
+          "article_titles": [
+            "Shallow (Lady Gaga and Bradley Cooper song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1346,
+          "article_titles": [
+            "Shallow (Lady Gaga and Bradley Cooper song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2018-11-01",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "972ff78617c69399c75ce8e672e5e9ace582182cb51287fa11413017412411cb",
+        "canonical_metadata_sha256": "8d9cf87b39055734b81dc6ff905632f27fa920862f5876d158c8334583f79312"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2019,
+        "title": "Promises",
+        "artist": "Calvin Harris and Sam Smith",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1344:calvin harris and sam smith:promises",
+        "placeholder_canonical_id": "da9922da-fda4-4dc5-856a-ef17c77c485b"
+      },
+      "placeholder": {
+        "id": "da9922da-fda4-4dc5-856a-ef17c77c485b",
+        "title": "Promises",
+        "artist": "Calvin Harris and Sam Smith",
+        "origin_key": "quick-rate:uk-number-ones:2018:1344:calvin harris and sam smith:promises",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1344,
+          "article_titles": [
+            "Promises (Calvin Harris and Sam Smith song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1344,
+          "article_titles": [
+            "Promises (Calvin Harris and Sam Smith song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2018-09-13",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "e31788dcfe707c2e946e484944ff09334d11ebf2c33ee200ac92ad83214cbbbe",
+        "canonical_metadata_sha256": "733cfda15cba18a6864e48081d36e63cb8a1fedd6de7908bc2ce790422cad401"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2007,
+        "title": "River",
+        "artist": "Eminem featuring Ed Sheeran",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1333:eminem ed sheeran:river",
+        "placeholder_canonical_id": "3853a2c0-ea63-476f-8b4c-7aeacb4416c8"
+      },
+      "placeholder": {
+        "id": "3853a2c0-ea63-476f-8b4c-7aeacb4416c8",
+        "title": "River",
+        "artist": "Eminem featuring Ed Sheeran",
+        "origin_key": "quick-rate:uk-number-ones:2018:1333:eminem ed sheeran:river",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1333,
+          "article_titles": [
+            "River (Eminem song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1333,
+          "article_titles": [
+            "River (Eminem song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2018-01-25",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "1d645c2c42a9c451f197631d432b43ffbf528d2eefb391b3f55f33b64e85a7e2",
+        "canonical_metadata_sha256": "e0d26a368031c25682e9c33fd432e2f10377733569725f24e2901a826b0465df"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2004,
+        "title": "Rockstar",
+        "artist": "Post Malone featuring 21 Savage",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1330:post malone 21 savage:rockstar",
+        "placeholder_canonical_id": "dd7d96a6-b84d-411a-97ec-5eb42d22c2ba"
+      },
+      "placeholder": {
+        "id": "dd7d96a6-b84d-411a-97ec-5eb42d22c2ba",
+        "title": "Rockstar",
+        "artist": "Post Malone featuring 21 Savage",
+        "origin_key": "quick-rate:uk-number-ones:2017:1330:post malone 21 savage:rockstar",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1330,
+          "article_titles": [
+            "Rockstar (Post Malone song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1330,
+          "article_titles": [
+            "Rockstar (Post Malone song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2017-10-12",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "939ed7dd14edb0eb020d6882bfca335022cccc5268a63955037b3b4241b3b380",
+        "canonical_metadata_sha256": "f7625c2662d5da42c5471df3aa5db6eb286037efc6f9855663a9375cdde70772"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2002,
+        "title": "Look What You Made Me Do",
+        "artist": "Taylor Swift",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1328:taylor swift:look what you made me do",
+        "placeholder_canonical_id": "062e4f47-6c80-4816-8b38-6e40554a993f"
+      },
+      "placeholder": {
+        "id": "062e4f47-6c80-4816-8b38-6e40554a993f",
+        "title": "Look What You Made Me Do",
+        "artist": "Taylor Swift",
+        "origin_key": "quick-rate:uk-number-ones:2017:1328:taylor swift:look what you made me do",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1328,
+          "article_titles": [
+            "Look What You Made Me Do"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1328,
+          "article_titles": [
+            "Look What You Made Me Do"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2017-09-07",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "9942600a6e4cb5ebd55a4f096c66290892d4f86bcbbcecb4f65ee455866be4a6",
+        "canonical_metadata_sha256": "0317997484873163c1a18b8c6d46dfc714444e40c48cdabe7ff4db324255c24f"
+      }
+    },
+    {
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1991,
+        "title": "Closer",
+        "artist": "The Chainsmokers featuring Halsey",
+        "chart_year": 2016,
+        "source_revision": "1356457366",
+        "source_entry_key": "2016:1315:the chainsmokers halsey:closer",
+        "placeholder_canonical_id": "8f52cf33-df3d-453d-9038-89a437604b9c"
+      },
+      "placeholder": {
+        "id": "8f52cf33-df3d-453d-9038-89a437604b9c",
+        "title": "Closer",
+        "artist": "The Chainsmokers featuring Halsey",
+        "origin_key": "quick-rate:uk-number-ones:2016:1315:the chainsmokers halsey:closer",
+        "chart_references": 1,
+        "song_occurrences": 0,
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "musicbrainz_recording_id": null
+      },
+      "source_rows": {
+        "chart_source_metadata": {
+          "isrcs": [],
+          "source_number": 1315,
+          "article_titles": [
+            "Closer (Chainsmokers song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        },
+        "canonical_source_metadata": {
+          "isrcs": [],
+          "source_number": 1315,
+          "article_titles": [
+            "Closer (Chainsmokers song)"
+          ],
+          "spotify_track_ids": [],
+          "classification_reason": "safe_new_bom_native_canonical",
+          "first_number_one_date": "2016-09-08",
+          "canonical_classification": "B",
+          "musicbrainz_recording_ids": []
+        }
+      },
+      "existing_target": null,
+      "catalogue_collision": {
+        "album_release_rows": 0,
+        "song_recording_rows": 0,
+        "album_release_group_rows": 0,
+        "canonical_recording_rows": 0
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "a1f85bdb269d710c19cfaaf5da5afc76de4f71e11f8a7ac72b7eea5f535aa336",
+        "canonical_metadata_sha256": "a83b4ee903a6a5a99c56889328cd7dec55fc597933a397c4231c8fd193d31282"
+      }
+    }
+  ],
+  "project_id": "xevxjggauscyrvvtmftx",
+  "captured_at": "2026-11-24T09:33:25.050876+00:00",
+  "schema_version": 1,
+  "production_integrity": {
+    "songs": 16181,
+    "albums": 1750,
+    "song_rating_sum": 13454,
+    "song_rating_rows": 1747,
+    "total_chart_entries": 1298,
+    "canonical_recordings": 17095,
+    "historical_rating_sum": 43,
+    "historical_rating_rows": 5,
+    "resolved_chart_entries": 439,
+    "invalid_song_rating_rows": 0,
+    "unresolved_chart_entries": 859,
+    "duplicate_recording_mbids": 0,
+    "prior_operation_audit_rows": 20,
+    "first_batch_rating_reconciliation_audit_rows": 1
+  }
+}
