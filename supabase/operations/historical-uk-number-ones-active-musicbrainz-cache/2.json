@@ -3782,5 +3782,1104 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/dcf6a587-7388-4020-bc3e-e380da86b151?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "dcf6a587-7388-4020-bc3e-e380da86b151",
+    "title": "Party Rock Anthem",
+    "length": 233000,
+    "disambiguation": "radio edit",
+    "isrcs": [
+      "USUM71100061",
+      "USUM71105650"
+    ],
+    "first_release_date": "2011-01-25",
+    "artist_credit": [
+      {
+        "name": "LMFAO",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Lauren Bennett",
+        "joinphrase": " & "
+      },
+      {
+        "name": "GoonRock",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "75b0af22-9302-4028-9b93-789f15473f35",
+        "status": "Promotion",
+        "title": "Party Rock Anthem",
+        "date": "2011-01-25",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7c0f188b-d754-4003-b64b-6198d9a60d8c",
+          "title": "Party Rock Anthem",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a96022f5-80e8-422b-bd62-ae3629834938",
+        "status": "Official",
+        "title": "Beach Party 2011",
+        "date": "2011-07-29",
+        "country": "BE",
+        "disambiguation": "iTunes",
+        "release_group": {
+          "id": "6cfc1501-f217-428a-b1d9-fe903eacbc29",
+          "title": "Beach Party 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "248020c5-3fad-47a7-9127-5214f51e640a",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 39",
+        "date": "2011-08-09",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "61557c8c-ceef-42c4-baee-38142ffa968a",
+          "title": "Now That’s What I Call Music! 39",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d99d5253-ba7b-4946-8965-0e84329757e5",
+        "status": "Official",
+        "title": "Absolute Music 67",
+        "date": "2011-08-31",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d6b4575d-0930-4f81-9b56-8b85315a7c8a",
+          "title": "Absolute Music 67",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "778086e6-27d2-41e0-a900-36e33a7fe709",
+        "status": "Official",
+        "title": "Absolute Dance Autumn 2011",
+        "date": "2011-09-14",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "156440d0-b747-4a69-8f9b-20a670709a64",
+          "title": "Absolute Dance Autumn 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "dce4969d-abe1-4368-9daa-1ab090405f5c",
+        "status": "Official",
+        "title": "Pop Party 9",
+        "date": "2011-10-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b3ae7c0f-84e6-4415-b7cc-25c5160c1688",
+          "title": "Pop Party 9",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c4e0e337-71c4-4bb7-96a1-3ab3c376f730",
+        "status": "Official",
+        "title": "Bravo Hits: Best of 2011",
+        "date": "2011-11-21",
+        "country": "PL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "722e1b55-332b-4b90-bf2a-c9478790bad1",
+          "title": "Bravo Hits: Best of 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ef761114-ba99-4cca-9572-e2ae2d419d62",
+        "status": "Official",
+        "title": "Absolute Hits 2011",
+        "date": "2011",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "798d31c3-0275-452e-98b2-54e19986848e",
+          "title": "Absolute Hits 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "43fac0f9-997a-46f5-b848-72ff915c1584",
+        "status": "Official",
+        "title": "Absolute Kidz 31",
+        "date": "2011",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0b43a301-0a83-465c-8617-bf78166be6ec",
+          "title": "Absolute Kidz 31",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d97e98cf-8eeb-42fc-90cb-b955285b8594",
+        "status": "Official",
+        "title": "Hot Party Back 2 Skool 2011",
+        "date": "2011",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6c591fc0-68eb-4b82-ae4b-d2d874b08aa3",
+          "title": "Hot Party Back 2 Skool 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "dc8700b5-1b21-4f45-a855-ab746b989f17",
+        "status": "Official",
+        "title": "Maximum Hit Music 02 2011",
+        "date": "2011",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c4cd62b2-dae7-4b40-9fdc-00a1db831f1d",
+          "title": "Maximum Hit Music 02 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d34ad347-d374-43fa-ae6d-850ecac16599",
+        "status": "Official",
+        "title": "MNM Big Hits Best of 2011",
+        "date": "2011",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "68b75d7c-c71f-4bbb-811b-ec7cefa752bb",
+          "title": "MNM Big Hits Best of 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "732fcb46-008c-4368-9e74-de59a96315e5",
+        "status": "Official",
+        "title": "Monster Floorfillers 2011",
+        "date": "2011",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a98c4b7d-c627-47e6-9bd7-fe9f61dbdd0b",
+          "title": "Monster Floorfillers 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c2b2ced8-b8a7-4fed-aad0-e342cce0cfad",
+        "status": "Official",
+        "title": "Now That’s What I Call Music 36",
+        "date": "2011",
+        "country": "NZ",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c56bfa41-5d4c-4295-9891-7bcfcfc72cd9",
+          "title": "Now That’s What I Call Music 36",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "dab6164c-e24f-47b8-8d44-7cfd00c2071e",
+        "status": "Official",
+        "title": "Now! 18",
+        "date": "2011",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d6e4f16d-6f35-4670-8950-77eba81f618b",
+          "title": "Now! 18",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a6b58e97-3d94-44cb-a0f9-4756c2a2832e",
+        "status": "Official",
+        "title": "Pop Party 9",
+        "date": "2011",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b3ae7c0f-84e6-4415-b7cc-25c5160c1688",
+          "title": "Pop Party 9",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "91a463d5-7c78-4849-85cf-c968ed8fadad",
+        "status": "Official",
+        "title": "VTM Kzoom Hits Best of 2011",
+        "date": "2011",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "15028720-492f-48e5-ba9c-1e45ad91117d",
+          "title": "VtmKzoom - Best of 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "983d8810-bbc0-424a-9722-86f8caa39357",
+        "status": "Official",
+        "title": "VtmKzoom - Best of 2011",
+        "date": "2011",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "15028720-492f-48e5-ba9c-1e45ad91117d",
+          "title": "VtmKzoom - Best of 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7db29a3c-cc1c-4e68-a8bb-045dc909e314",
+        "status": "Official",
+        "title": "Pumped Up Hits - Summer Mix Tape 2012",
+        "date": "2012-01-20",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0aa2da15-64f4-43cb-9a6d-3a7509458435",
+          "title": "Pumped Up Hits: Summer Mix Tape 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b53f7b52-a66b-4918-a910-823ee772bff1",
+        "status": "Official",
+        "title": "Dance Party 2012",
+        "date": "2012-05-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "50790333-f1f4-4088-b571-c7a8bec91d1e",
+          "title": "Dance Party 2012",
+          "primary_type": "Other",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "eeddff82-705d-404a-8028-3a38864d08fb",
+        "status": "Official",
+        "title": "MNM Ski Party Hits",
+        "date": "2012-05-25",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cc04a566-8bc7-40a6-96aa-4217de2e82ba",
+          "title": "MNM Ski Party Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "95adb666-075e-474c-9d49-95b892d0a3e1",
+        "status": "Official",
+        "title": "Pop Jr: Big Songs for Little People",
+        "date": "2012-08-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "420616e1-7911-44ff-b560-5da38d5fc063",
+          "title": "Pop Jr: Big Songs for Little People",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "15139b8f-2c11-414d-8ba4-a8569101585b",
+        "status": null,
+        "title": "Alles Kapot!",
+        "date": "2012-08-31",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "87600e8f-c0a6-46cc-975f-1f8e95429dc7",
+          "title": "Alles Kapot!",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ac432aa0-992f-4a00-b018-929595b72496",
+        "status": "Official",
+        "title": "Now! Party Anthems",
+        "date": "2012-12-18",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "867e2461-3386-4a7a-ac09-dc7b00070f38",
+          "title": "Now! Party Anthems",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "91c56fa5-9404-4f20-9a91-a80016a5af32",
+        "status": "Official",
+        "title": "Pumped Up Hits: Summer Mix Tape 2012",
+        "date": "2012",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0aa2da15-64f4-43cb-9a6d-3a7509458435",
+          "title": "Pumped Up Hits: Summer Mix Tape 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/518242bd-6470-49f0-be72-784e0d17bc45?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "518242bd-6470-49f0-be72-784e0d17bc45",
+    "title": "Flat Beat",
+    "length": 322186,
+    "disambiguation": "",
+    "isrcs": [
+      "FRV229900012",
+      "FRV229900020"
+    ],
+    "first_release_date": "1999-03-22",
+    "artist_credit": [
+      {
+        "name": "Mr. Oizo",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "cbb922b6-33fc-4023-991b-2887558868f6",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999-03-22",
+        "country": "FR",
+        "disambiguation": "Slimline Case",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3e24502a-b357-43eb-a209-a07d4c55169e",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999-03-22",
+        "country": "FR",
+        "disambiguation": "Digipak",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0d286c36-3042-42f1-8c94-9869a2e9121c",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999-03-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "db354a02-b93e-40e3-b372-018fca9e52bf",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999-03",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0e65966a-48bc-35c0-8bc5-d9f74199ec2d",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999-03",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5d98926e-11af-4b05-8c7d-efeef41ae409",
+        "status": "Official",
+        "title": "Dream Dance, Vol. 12",
+        "date": "1999-04-23",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6ac3ca05-1208-35a3-9bed-011f65b84473",
+          "title": "Dream Dance, Vol. 12",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "361c424a-129a-3d02-b092-e4ab6d7399e9",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "1999-10-19",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1c17696c-9596-4675-aab4-8db1038ede52",
+        "status": "Promotion",
+        "title": "Analog Worms Attack",
+        "date": "1999-10",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "97d6229b-be51-434b-96d5-53579cf27952",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "1999-11-01",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a64bbc26-ac0c-3917-80b8-c95c8b523f72",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "1999",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1a3d6a88-8bc0-4a3f-b706-b4176565e085",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "1999",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2a5aefb7-e469-336f-94ea-a583aed4e4a4",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "1999",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0bbcfcc0-f234-4a09-91a4-866a0bfb21cc",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "1999",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "692680ed-49a5-418d-a4ae-1468ee128701",
+        "status": "Promotion",
+        "title": "Flat Beat",
+        "date": "1999",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5fe099ab-680a-43d5-9de1-648b8d80e443",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "793dd1b6-3c2a-4d94-8c35-22d684b0b2bc",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "32aa71d7-5d29-464d-9cfa-2dbb48a50086",
+        "status": "Official",
+        "title": "Flat Beat",
+        "date": "1999",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+          "title": "Flat Beat",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1282f382-b055-4e03-ab0d-ab610347b6e6",
+        "status": "Official",
+        "title": "Hit Club 99.2",
+        "date": "1999",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2bcca9c0-6791-3168-b26a-23f6e4232ce0",
+          "title": "Hit Club 99.2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1a5f08c6-b305-4fe5-aaa1-cc8c6305c25c",
+        "status": "Official",
+        "title": "Out Soon",
+        "date": "1999",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6abebfa7-96bc-4732-b785-fa328a094414",
+          "title": "Out Soon",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6c67605e-d62e-465d-8540-2209c2a70fea",
+        "status": "Official",
+        "title": "Tecnolandia 99",
+        "date": "1999",
+        "country": "PT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e78ee191-1014-4530-ac5c-86a15d03d488",
+          "title": "Tecnolandia 99",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d80812fd-37a2-492c-8520-b98019cec554",
+        "status": "Official",
+        "title": "Underground Beats, Series 2: Volume 7",
+        "date": "1999",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d56d1af6-757d-4b84-b515-be86a0d09d55",
+          "title": "Underground Beats, Series 2: Volume 7",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "175702cc-39ad-49e6-95d3-db0484dd37dc",
+        "status": "Official",
+        "title": "Werbehits",
+        "date": "1999",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8d79c369-76a6-323e-b90e-7c09d04f7186",
+          "title": "Werbehits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "da578a20-9a75-43e1-8ed2-dd4fcd3f7ce6",
+        "status": "Promotion",
+        "title": "URB - Future: Music: Culture - Sampler 2000",
+        "date": "2000-03",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9984d5d1-0a73-48a1-8165-d36bbb8e0860",
+          "title": "URB - Future: Music: Culture - Sampler 2000",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "89675c4d-b65e-49be-9f78-74836e8b2e92",
+        "status": "Promotion",
+        "title": "CMJ New Music Monthly, Volume 80: April 2000",
+        "date": "2000-04",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4c5ecd03-cb25-3e91-810d-c7401b3d1119",
+          "title": "CMJ New Music Monthly, Volume 80: April 2000",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "51c21a95-8fcc-361e-8424-e51ddc8d75d2",
+        "status": "Official",
+        "title": "Analog Worms Attack",
+        "date": "2000-11-21",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "582cb922-de5e-3367-9205-bdd44bf7c507",
+          "title": "Analog Worms Attack",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/905be453-ec00-4847-ba70-1232023028de?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "905be453-ec00-4847-ba70-1232023028de",
+    "title": "The Millennium Prayer",
+    "length": 279346,
+    "disambiguation": "",
+    "isrcs": [
+      "GBCZ59900015"
+    ],
+    "first_release_date": "2008-09-15",
+    "artist_credit": [
+      {
+        "name": "Cliff Richard",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "4835f27d-ed69-4db0-af34-223e3bc34726",
+        "status": "Official",
+        "title": "And They Said It Wouldn't Last (My 50 Years in Music)",
+        "date": "2008-09-15",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b05d6c25-d379-4284-b9dd-90c331a64596",
+          "title": "And They Said It Wouldn't Last (My 50 Years In Music)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/a988ad98-c801-4889-a059-42b20efe1e2b?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "a988ad98-c801-4889-a059-42b20efe1e2b",
+    "status": "Official",
+    "title": "Spaceman",
+    "date": "1996-01-12",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Babylon Zoo",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "febc7c6b-413a-3769-8abd-f136d552b87e",
+      "title": "Spaceman",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Spaceman (radio edit)",
+            "length": 245666,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d96495c5-7406-4e18-ba76-6c70af484cf5",
+              "title": "Spaceman",
+              "length": 241320,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Metal Vision",
+            "length": 230866,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1a718633-dbd4-4e01-8ac2-87f331c3bad0",
+              "title": "Metal Vision",
+              "length": 230866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Blue Nude",
+            "length": 132266,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4673c53b-db4c-4d13-9231-77db71ef220c",
+              "title": "Blue Nude",
+              "length": 132266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Spaceman – The 5th Dimension",
+            "length": 310200,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ba9ce204-643b-4b3f-8f1f-ca87f2abe529",
+              "title": "Spaceman (The 5th Dimension)",
+              "length": 310200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/2a6f2d59-97ba-480c-a00d-f805dacd543b?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "2a6f2d59-97ba-480c-a00d-f805dacd543b",
+    "title": "The One and Only",
+    "length": 221267,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYK9100001"
+    ],
+    "first_release_date": "2026-01-30",
+    "artist_credit": [
+      {
+        "name": "Chesney Hawkes",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "cfcda1b7-349a-46bc-97ed-95dcba34ad5a",
+        "status": "Official",
+        "title": "NOW That’s What I Call Timeless - The Eternal Collection",
+        "date": "2026-01-30",
+        "country": "IE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "265fd0f0-cb7f-487d-92ce-58707142486c",
+          "title": "NOW That’s What I Call Timeless: The Eternal Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b066b823-d4ae-498a-a0fc-71fcaa2216c3",
+        "status": "Official",
+        "title": "NOW That’s What I Call Timeless: The Eternal Collection",
+        "date": "2026-01-30",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "265fd0f0-cb7f-487d-92ce-58707142486c",
+          "title": "NOW That’s What I Call Timeless: The Eternal Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "000178d9-a542-4f53-bdf3-f56558910159",
+        "status": "Official",
+        "title": "NOW That’s What I Call Timeless: The Eternal Collection",
+        "date": "2026-01-30",
+        "country": "IE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "265fd0f0-cb7f-487d-92ce-58707142486c",
+          "title": "NOW That’s What I Call Timeless: The Eternal Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/9a8f6c80-8ed6-40a6-b3d1-5c97866f191c?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "9a8f6c80-8ed6-40a6-b3d1-5c97866f191c",
+    "title": "Careless Whisper",
+    "length": 303000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBBM8402006"
+    ],
+    "first_release_date": "1999-12",
+    "artist_credit": [
+      {
+        "name": "George Michael",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "69205df9-e4c3-41f2-9ff5-ad9714b0c210",
+        "status": "Official",
+        "title": "Ladies & Gentlemen: The Best of George Michael",
+        "date": "1999-12",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5739e5ac-a4fd-3719-bc30-ce143c2217b7",
+          "title": "Ladies & Gentlemen: The Best of George Michael",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "50520b9b-ec12-4d33-9c98-bb2190d64324",
+        "status": "Official",
+        "title": "Testament van de Eighties",
+        "date": "2011",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f85e4b42-bcf4-4e62-927e-299fea467768",
+          "title": "Testament van de Eighties",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f4574e51-7cd5-443e-a46b-283ef2eea222",
+        "status": "Official",
+        "title": "Japanese Singles Collection: Greatest Hits",
+        "date": "2020-11-11",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7e77d1db-14b2-4c2e-88b8-11d138168e85",
+          "title": "Japanese Singles Collection: Greatest Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

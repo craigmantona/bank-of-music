@@ -5781,5 +5781,73 @@
         }
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/e9a93a03-191e-40d1-87f9-21f2456c2bec?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "e9a93a03-191e-40d1-87f9-21f2456c2bec",
+    "title": "Mistletoe and Wine",
+    "length": 245333,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE8800240"
+    ],
+    "first_release_date": "2026-11-08",
+    "artist_credit": [
+      {
+        "name": "Cliff Richard",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "7085ec99-58be-405a-9378-291fb2996d56",
+        "status": "Official",
+        "title": "Christmas Gold",
+        "date": "2026-11-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c16f1f44-d1f9-4d38-8f1a-4c386aac8abd",
+          "title": "Christmas Gold",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/7e2a8918-0171-4e43-be4c-7b2cee8e26a3?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "7e2a8918-0171-4e43-be4c-7b2cee8e26a3",
+    "title": "Only You",
+    "length": 203333,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAA8300337"
+    ],
+    "first_release_date": "2024-11-01",
+    "artist_credit": [
+      {
+        "name": "The Flying Pickets",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "c4ef2f1a-5317-48c6-b962-4894344d94ff",
+        "status": "Official",
+        "title": "80s/90s Christmas Music",
+        "date": "2024-11-01",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b020aa5d-48f9-4754-94fa-7864f796727a",
+          "title": "80s/90s Christmas Music",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

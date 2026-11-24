@@ -111,6 +111,14 @@ export function validateIndependentEvidence(row, evidence) {
   if (!Number.isInteger(evidence?.duration_ms) || evidence.duration_ms < 30000) failures.push("exact_track_duration_missing_or_invalid");
   if (evidence?.release_track_count > 1 && !String(evidence?.risk_notes || "").match(/selected[- ]track/i)) failures.push("selected_track_risk_not_disclosed");
   if (!String(evidence?.version_notes || "").trim()) failures.push("version_risk_not_disclosed");
+  const selection = evidence?.recording_selection;
+  const candidates = selection?.isrc_candidate_recording_mbids;
+  const validated = selection?.exact_release_validated_recording_mbids;
+  if (!Array.isArray(candidates) || !candidates.length || new Set(candidates).size !== candidates.length ||
+      !candidates.includes(evidence?.recording_mbid)) failures.push("recording_candidate_set_missing_or_invalid");
+  if (!Array.isArray(validated) || validated.length !== 1 || validated[0] !== evidence?.recording_mbid) failures.push("unique_exact_release_recording_not_proven");
+  if (candidates?.length > 1 && selection?.basis !== "unique_exact_release_evidence") failures.push("ambiguous_isrc_selection_basis_invalid");
+  if (candidates?.length === 1 && selection?.basis !== "single_exact_title_artist_recording") failures.push("single_isrc_selection_basis_invalid");
   if (!["existing_recording", "safe_import"].includes(evidence?.action)) failures.push("unsupported_action");
   if (evidence?.action === "existing_recording" && !Number.isInteger(evidence?.existing_song_id)) failures.push("existing_song_id_missing");
   return failures;

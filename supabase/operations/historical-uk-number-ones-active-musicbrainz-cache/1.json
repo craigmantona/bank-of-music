@@ -5184,5 +5184,155 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/7dba7cc6-6b80-489d-b290-560e4fc58748?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "7dba7cc6-6b80-489d-b290-560e4fc58748",
+    "title": "House Every Weekend",
+    "length": 293600,
+    "disambiguation": "",
+    "isrcs": [
+      "GBUM71501279"
+    ],
+    "first_release_date": "2022-11-25",
+    "artist_credit": [
+      {
+        "name": "David Zowie",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "56a79b3b-9574-4ff4-86f8-f1a375092ec1",
+        "status": "Official",
+        "title": "Serious Beats 100 (Anniversary Edition) (The Ultimate Saga of House - Box Set II)",
+        "date": "2022-11-25",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c7c6ff1f-e283-450a-9957-81dcdac812f6",
+          "title": "Serious Beats 100 Anniversary Edition",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4d81d001-3441-4331-8659-58eea2fd16fe",
+        "status": "Official",
+        "title": "Serious Beats 100 Anniversary Edition",
+        "date": "2022-11-25",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c7c6ff1f-e283-450a-9957-81dcdac812f6",
+          "title": "Serious Beats 100 Anniversary Edition",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "fcf74bb2-b596-4fb2-bd64-3e4a92887dca",
+        "status": "Official",
+        "title": "Serious Beats 100 Anniversary Edition",
+        "date": "2022-11-25",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c7c6ff1f-e283-450a-9957-81dcdac812f6",
+          "title": "Serious Beats 100 Anniversary Edition",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/bdb1cf5a-0105-4962-aecf-5a00f2de16d5?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "bdb1cf5a-0105-4962-aecf-5a00f2de16d5",
+    "title": "Am I Wrong",
+    "length": 245000,
+    "disambiguation": "",
+    "isrcs": [
+      "USWB11304681"
+    ],
+    "first_release_date": "2025-11-05",
+    "artist_credit": [
+      {
+        "name": "Nico & Vinz",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "a655458a-b64b-47f3-bf73-e1c4eb866f9c",
+        "status": "Official",
+        "title": "Pop Essentials 2010s",
+        "date": "2025-11-05",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "41075d51-140b-4eef-aeeb-bffcfde4c3ac",
+          "title": "Pop Essentials 2010s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/6fd76e68-5926-4bd5-b218-e3593b88491f?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "6fd76e68-5926-4bd5-b218-e3593b88491f",
+    "title": "The Millennium Prayer",
+    "length": 281000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBCZ59900015"
+    ],
+    "first_release_date": "2015-09-18",
+    "artist_credit": [
+      {
+        "name": "Cliff Richard",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "6087c336-7d84-4a18-af9a-140b4d4faaae",
+        "status": "Official",
+        "title": "75 at 75",
+        "date": "2015-09-18",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1d1010ed-8211-4dc5-b247-3a327280ebac",
+          "title": "75 at 75",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "61928e2c-364c-4bec-9f7e-5e91bb5d9d35",
+        "status": "Official",
+        "title": "75 at 75",
+        "date": "2015",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1d1010ed-8211-4dc5-b247-3a327280ebac",
+          "title": "75 at 75",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

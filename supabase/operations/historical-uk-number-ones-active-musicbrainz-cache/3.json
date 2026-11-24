@@ -2724,5 +2724,1134 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/94733e1e-cc16-443d-84f8-db279325c086?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "94733e1e-cc16-443d-84f8-db279325c086",
+    "title": "Talk Dirty",
+    "length": 177685,
+    "disambiguation": "",
+    "isrcs": [
+      "USWB11302648"
+    ],
+    "first_release_date": "2024-05-25",
+    "artist_credit": [
+      {
+        "name": "Jason Derulo",
+        "joinphrase": " & "
+      },
+      {
+        "name": "2 Chainz",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "604d91da-815e-4d6d-8234-f6d4b5d7aad4",
+        "status": "Official",
+        "title": "Best 10s Songs",
+        "date": "2024-05-25",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1e641100-dbdd-4f02-b6cf-c30f40c6145c",
+          "title": "Best 10s Songs",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/0069c0f7-9274-4b4b-a10e-110b90a4bcc0?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "0069c0f7-9274-4b4b-a10e-110b90a4bcc0",
+    "title": "Titanium",
+    "length": 245026,
+    "disambiguation": "album",
+    "isrcs": [
+      "GB28K1100036",
+      "GB28K1100054"
+    ],
+    "first_release_date": "2011-08-24",
+    "artist_credit": [
+      {
+        "name": "David Guetta",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Sia",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "ec59611a-b370-46c6-bad8-bda9ea579103",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-24",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ec467779-96e6-45a6-95af-b41f94915df0",
+        "status": "Official",
+        "title": "Nothing But the Beat Ultimate",
+        "date": "2011-08-24",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ed601d5a-540e-41a7-840f-ce74aeed3433",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-26",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7328c58f-81c6-4105-90ca-54e0d7199f65",
+        "status": "Official",
+        "title": "Nothing But the Beat Ultimate",
+        "date": "2011-08-26",
+        "country": "BS",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "53cd2e35-505e-4051-9b9d-e6bbf7d7ccda",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-28",
+        "country": "GB",
+        "disambiguation": "deluxe edition",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f54d0ce4-88be-490e-a8c3-098712c70228",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-29",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "31c2e90e-2f43-480b-a4b0-1523c6fbd676",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-29",
+        "country": "US",
+        "disambiguation": "explicit lyrics",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "05b8c34d-e064-45cd-87e5-b870b7a6a8c3",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-29",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e482fee8-b5c2-4a3d-8236-97b9a23b329b",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-29",
+        "country": "XW",
+        "disambiguation": "deluxe version",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7c68669c-25f8-48dd-895a-4e73c4b55b88",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-29",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "eceb629b-b7ac-43d8-82e6-38e0e4a1e791",
+        "status": "Official",
+        "title": "Nothing But the Beat",
+        "date": "2011-08-29",
+        "country": "US",
+        "disambiguation": "clean edit",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ed039e37-c276-461f-987c-bcc28199a8a8",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-08-31",
+        "country": "CA",
+        "disambiguation": "explicit lyrics/Deezer/Spotify",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "fe18586b-13fc-4cac-8971-b4933fc8d73e",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011-11-25",
+        "country": "XE",
+        "disambiguation": "deluxe edition",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "dace0bae-b2a3-485f-b508-662a9cd72875",
+        "status": "Official",
+        "title": "Nothing but the Beat",
+        "date": "2011",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+          "title": "Nothing but the Beat",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "faefb383-d974-4aa6-919d-ae16479b7715",
+        "status": "Official",
+        "title": "Now 20",
+        "date": "2012-01-01",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "31f0bc39-5783-410c-bd72-5bf3319d5495",
+          "title": "NOW! 20",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0add44dc-b013-463c-86bf-40a4f2121722",
+        "status": "Official",
+        "title": "NRJ 200% Hits 2012",
+        "date": "2012-02-13",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "63ce15f5-0424-4193-8b30-b9e531b663e1",
+          "title": "NRJ 200% Hits 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "378b36e2-0a3a-4d3c-bbc7-297a64882f63",
+        "status": "Official",
+        "title": "Absolute Kids",
+        "date": "2012-03-12",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8fbfec07-175a-49d7-a6f8-482ef14802d3",
+          "title": "Absolute Kids",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4f97f9e8-5592-4532-b330-8b997a88de1d",
+        "status": "Official",
+        "title": "NRJ Extravadance 2012",
+        "date": "2012-03-12",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2c1ba408-62e0-4436-b354-afda5de4d309",
+          "title": "NRJ Extravadance 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ae1fba1d-8a02-4929-8069-79f1847935f8",
+        "status": "Withdrawn",
+        "title": "Best of…",
+        "date": "2012-03-30",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f844a10f-c0e1-482a-b934-b8fac5b5aab3",
+          "title": "Best of…",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a8230cda-1cd8-414f-97e6-7be478269dde",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 81",
+        "date": "2012-04-02",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4440d2e9-8f1b-4154-9927-d37a65c2d7ae",
+          "title": "Now That’s What I Call Music! 81",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c0a24c6a-cdb7-426e-ac3e-24fd37015c90",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 81",
+        "date": "2012-04-02",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4440d2e9-8f1b-4154-9927-d37a65c2d7ae",
+          "title": "Now That’s What I Call Music! 81",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0db1f7a6-19a1-4d59-af6c-fb0d02553fca",
+        "status": "Official",
+        "title": "Best of…",
+        "date": "2012-04-10",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f844a10f-c0e1-482a-b934-b8fac5b5aab3",
+          "title": "Best of…",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "63dba509-4939-49ae-846d-9ba894c803bb",
+        "status": "Official",
+        "title": "Striscia la compilation Summer 2012",
+        "date": "2012-06-29",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33242139-111a-4250-8308-90145de16312",
+          "title": "Striscia la compilation Summer 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cb1a3554-ecb2-424f-8ead-8b509379b9a0",
+        "status": "Official",
+        "title": "Now That’s What I Call a Number One",
+        "date": "2012-07-07",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ff90066f-b09d-4209-ab43-85f2cae9bfef",
+          "title": "NOW That's What I Call a No.1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "feff289b-73bf-4405-92c8-6e96729d0969",
+        "status": "Official",
+        "title": "NOW That's What I Call a No.1",
+        "date": "2012-07-09",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ff90066f-b09d-4209-ab43-85f2cae9bfef",
+          "title": "NOW That's What I Call a No.1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/f26960ab-a238-4cbe-938e-6199ee9dcbcc?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "f26960ab-a238-4cbe-938e-6199ee9dcbcc",
+    "status": "Official",
+    "title": "Lonely",
+    "date": "2005-05-02",
+    "country": "XE",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Akon",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "4531b2ce-ffc3-4ac8-898e-6026be69950b",
+      "title": "Lonely",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Lonely",
+            "length": 237200,
+            "artist_credit": [
+              {
+                "name": "Akon",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+              "title": "Lonely",
+              "length": 235800,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Akon",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Kill the Dance (Got Something for Ya)",
+            "length": 175680,
+            "artist_credit": [
+              {
+                "name": "Akon",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "bfb37fdc-0081-40ae-8a22-3b49b442553f",
+              "title": "Kill the Dance (Got Something for Ya)",
+              "length": 176266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Akon",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/0d02411d-0eeb-4f5e-afa6-aaa32d1d1184?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "0d02411d-0eeb-4f5e-afa6-aaa32d1d1184",
+    "title": "Lonely",
+    "length": 237173,
+    "disambiguation": "",
+    "isrcs": [
+      "USUR10400235"
+    ],
+    "first_release_date": "2007",
+    "artist_credit": [
+      {
+        "name": "Akon",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "da70e552-7bea-4ab9-81a2-8b2d03e254ec",
+        "status": "Official",
+        "title": "As Cinco Melhores",
+        "date": "2007",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fc4721b1-c9d3-444a-8535-138958ae433c",
+          "title": "As Cinco Melhores",
+          "primary_type": "EP",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d068edb4-c1b2-4adb-8ce8-c2d33da0850d",
+        "status": "Bootleg",
+        "title": "Lonely",
+        "date": "",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1a88462e-3c54-4911-bac8-e672de1fe891",
+          "title": "Lonely",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/8c6b9255-da1b-4b0a-bd08-55800377e81f?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "8c6b9255-da1b-4b0a-bd08-55800377e81f",
+    "title": "World of Our Own",
+    "length": 211466,
+    "disambiguation": "",
+    "isrcs": [
+      "GBARL0100292"
+    ],
+    "first_release_date": "2025-10-24",
+    "artist_credit": [
+      {
+        "name": "Westlife",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "3a226bfd-20df-459a-9de1-a78789bb29b0",
+        "status": "Official",
+        "title": "25 - The Ultimate Collection",
+        "date": "2025-10-24",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ef97c752-c242-43d7-b179-f8010ffd98cd",
+          "title": "25 - The Ultimate Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/0cebe177-3f21-4b5e-a701-50d20eb4758f?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "0cebe177-3f21-4b5e-a701-50d20eb4758f",
+    "title": "Just a Little",
+    "length": 233000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBLK0200083"
+    ],
+    "first_release_date": "2014-03-03",
+    "artist_credit": [
+      {
+        "name": "Liberty X",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "379651b7-ea7a-4430-a10e-9a44a3805522",
+        "status": "Official",
+        "title": "The Big Reunion 2014",
+        "date": "2014-03-03",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "156b944d-ca24-4eab-9f66-26133e8198d9",
+          "title": "The Big Reunion 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "13e0c0f5-36a4-47d6-8140-8f945f5e846b",
+        "status": "Official",
+        "title": "The Big Reunion 2014 (deluxe)",
+        "date": "2014-03-03",
+        "country": "IE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "156b944d-ca24-4eab-9f66-26133e8198d9",
+          "title": "The Big Reunion 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6e4addbf-af2a-41cb-8d50-394fb71ecfad",
+        "status": "Official",
+        "title": "The Big Reunion 2014",
+        "date": "",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "156b944d-ca24-4eab-9f66-26133e8198d9",
+          "title": "The Big Reunion 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/0d286c36-3042-42f1-8c94-9869a2e9121c?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "0d286c36-3042-42f1-8c94-9869a2e9121c",
+    "status": "Official",
+    "title": "Flat Beat",
+    "date": "1999-03-22",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Mr. Oizo",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "e31749af-ca16-37ef-acff-fa67ff998db5",
+      "title": "Flat Beat",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Flat Beat (radio edit)",
+            "length": 237746,
+            "artist_credit": [
+              {
+                "name": "Mr. Oizo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "37177670-0343-4697-b2f9-0fd44181e849",
+              "title": "Flat Beat (radio edit)",
+              "length": 236026,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Mr. Oizo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Flat Beat",
+            "length": 324786,
+            "artist_credit": [
+              {
+                "name": "Mr. Oizo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "518242bd-6470-49f0-be72-784e0d17bc45",
+              "title": "Flat Beat",
+              "length": 322186,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Mr. Oizo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Monday Massacre",
+            "length": 214467,
+            "artist_credit": [
+              {
+                "name": "Mr. Oizo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9a367d6e-2095-471b-a2c1-d90311008253",
+              "title": "Monday Massacre",
+              "length": 213266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Mr. Oizo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/ba7b1b4e-d568-458e-b838-389cb645eabd?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "ba7b1b4e-d568-458e-b838-389cb645eabd",
+    "title": "Flat Beat",
+    "length": 235746,
+    "disambiguation": "",
+    "isrcs": [
+      "FRV229900020"
+    ],
+    "first_release_date": "1999",
+    "artist_credit": [
+      {
+        "name": "Mr. Oizo",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "d509059a-59f8-4e88-bf92-dafe524c05fd",
+        "status": "Official",
+        "title": "Electronic",
+        "date": "1999",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5c8169fa-b4b5-4939-a913-9356ac13c564",
+          "title": "Electronic",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "779603c4-663e-4fdf-86f1-8b9af8130f1d",
+        "status": "Official",
+        "title": "Back to the 90’s",
+        "date": "2009",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2fb07f95-3d47-40d4-bc8e-ec731510400f",
+          "title": "Back to the 90’s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/b80d007d-500f-4c63-ba74-bcae4a9f3df6?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "b80d007d-500f-4c63-ba74-bcae4a9f3df6",
+    "status": "Official",
+    "title": "When You Say Nothing at All",
+    "date": "1999-08-30",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Ronan Keating",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "565c70ad-825e-3212-8680-5a6de68cb16e",
+      "title": "When You Say Nothing at All",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "When You Say Nothing at All",
+            "length": 258026,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "08fcc35d-d0d3-48b1-b8de-f4af249dcd7b",
+              "title": "When You Say Nothing at All",
+              "length": 255760,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "When You Say Nothing at All (acoustic version)",
+            "length": 211040,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8c1966f8-fb89-46e0-9a33-aa840c646def",
+              "title": "When You Say Nothing at All (acoustic version)",
+              "length": 211173,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "This Is Your Song",
+            "length": 225533,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "196b25be-e3db-4681-800d-5e82fadcc575",
+              "title": "This Is Your Song",
+              "length": 225533,
+              "disambiguation": "1999 version",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/e2fc30c4-2666-4189-af73-63646a960684?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "e2fc30c4-2666-4189-af73-63646a960684",
+    "status": "Official",
+    "title": "Down Under",
+    "date": "1982",
+    "country": "US",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Men at Work",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+      "title": "Down Under",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "Down Under",
+            "length": 221000,
+            "artist_credit": [
+              {
+                "name": "Men at Work",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "78c2a211-1c63-48f1-ad20-28b70eb98491",
+              "title": "Down Under",
+              "length": 221760,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Men at Work",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Crazy",
+            "length": 154000,
+            "artist_credit": [
+              {
+                "name": "Men at Work",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "675fdf00-9edb-4f33-aaa9-44dd017023b6",
+              "title": "Crazy",
+              "length": 157266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Men at Work",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/ea6e52c2-5336-4a01-997c-1e00f35b1202?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "ea6e52c2-5336-4a01-997c-1e00f35b1202",
+    "status": "Official",
+    "title": "Red Red Wine",
+    "date": "1983-08-08",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "UB40",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "dd1ee46e-4784-4ac8-9b43-e1a1613eff47",
+      "title": "Red Red Wine",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "Red Red Wine",
+            "length": 181000,
+            "artist_credit": [
+              {
+                "name": "UB40",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "fa7a5f63-2129-431e-8385-aa437d09bea2",
+              "title": "Red Red Wine",
+              "length": 182000,
+              "disambiguation": "7″ version",
+              "artist_credit": [
+                {
+                  "name": "UB40",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Sufferin’ (version)",
+            "length": 225000,
+            "artist_credit": [
+              {
+                "name": "UB40",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "000c6d60-55d5-4ab7-9461-cae5992018e4",
+              "title": "Sufferin’",
+              "length": 225000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "UB40",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/213c8f9c-a47e-408c-94a9-402a930ebc1d?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "213c8f9c-a47e-408c-94a9-402a930ebc1d",
+    "status": "Official",
+    "title": "Eye of the Tiger",
+    "date": "1982",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Survivor",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "c0474f4e-6c19-4075-a3c3-05b20399b0bb",
+      "title": "Eye of the Tiger",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "Eye of the Tiger",
+            "length": 225000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "bed25b7f-15af-48e8-a62f-6aa41faf3b10",
+              "title": "Eye of the Tiger",
+              "length": 227760,
+              "disambiguation": "single version, has early fade",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Take You on a Saturday",
+            "length": 247000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4849b756-e467-4e48-816d-f06bb9090cdf",
+              "title": "Take You on a Saturday",
+              "length": 247000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   }
 }

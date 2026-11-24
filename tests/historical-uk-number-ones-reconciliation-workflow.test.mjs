@@ -28,7 +28,13 @@ const evidence = (overrides = {}) => ({
   track_position: 1, track_recording_mbid: "11111111-1111-4111-8111-111111111112",
   release_recording_occurrences: 1, release_track_count: 1, duration_ms: 212000,
   version_notes: "Original studio recording; no remix, live or cover indicators.",
-  risk_notes: "Single-track official release.", ...overrides
+  risk_notes: "Single-track official release.",
+  recording_selection: {
+    basis: "single_exact_title_artist_recording",
+    isrc_candidate_recording_mbids: ["11111111-1111-4111-8111-111111111112"],
+    exact_release_validated_recording_mbids: ["11111111-1111-4111-8111-111111111112"],
+    rejected_recording_candidates: []
+  }, ...overrides
 });
 
 const exclusionRegistry = (overrides = {}) => ({
@@ -54,6 +60,16 @@ test("selected-track imports require explicit risk disclosure", () => {
   const failures = validateIndependentEvidence(row(), evidence({ release_track_count: 4, risk_notes: "" }));
   assert.ok(failures.includes("selected_track_risk_not_disclosed"));
   assert.deepEqual(validateIndependentEvidence(row(), evidence({ release_track_count: 4, risk_notes: "Selected-track import: track 1 only from a four-track official release." })), []);
+});
+
+test("multiple ISRC recordings require exactly one independently release-validated identity", () => {
+  const ambiguous = evidence({ recording_selection: {
+    basis: "unique_exact_release_evidence",
+    isrc_candidate_recording_mbids: [evidence().recording_mbid, "22222222-2222-4222-8222-222222222222"],
+    exact_release_validated_recording_mbids: [evidence().recording_mbid, "22222222-2222-4222-8222-222222222222"],
+    rejected_recording_candidates: []
+  } });
+  assert.ok(validateIndependentEvidence(row(), ambiguous).includes("unique_exact_release_recording_not_proven"));
 });
 
 test("historical identity exclusions fail closed and require a digest-bound independent approval", () => {
@@ -186,19 +202,26 @@ test("the committed active scan reports and safely classifies every one of the 8
   const blockedRecordingMbids = exclusions.entries.flatMap(entry => entry.blocked_recording_mbids || []);
   assert.equal(blockedRecordingMbids.length, 7);
   assert.ok(Object.values(activeEvidence.entries).every(entry => !blockedRecordingMbids.includes(entry.recording_mbid)));
-  assert.equal(Object.keys(activeEvidence.entries).length, 81);
-  assert.equal(activeFailures.failures.length, 738);
+  assert.equal(Object.keys(activeEvidence.entries).length, 85);
+  assert.equal(activeFailures.failures.length, 734);
   assert.equal(Object.keys(activeState.results).length, 819);
   assert.equal(activeState.exclusion_registry_sha256, summary.exclusion_registry_sha256);
   assert.ok(Object.values(activeState.results).every(result => result.final === true));
+  assert.ok(Object.values(activeEvidence.entries).every(entry =>
+    entry.recording_selection?.exact_release_validated_recording_mbids?.length === 1 &&
+    entry.recording_selection.exact_release_validated_recording_mbids[0] === entry.recording_mbid));
+  assert.equal(Object.values(activeEvidence.entries).filter(entry =>
+    entry.recording_selection.isrc_candidate_recording_mbids.length > 1).length, 26);
+  assert.equal(Object.values(activeState.results).filter(result =>
+    result.reason === "musicbrainz_isrc_has_multiple_exact_release_recordings").length, 6);
   assert.equal(summary.verified_existing, 3);
-  assert.equal(summary.verified_imports, 65);
-  assert.equal(summary.verified_total, 68);
-  assert.equal(summary.unresolved, 751);
+  assert.equal(summary.verified_imports, 68);
+  assert.equal(summary.verified_total, 71);
+  assert.equal(summary.unresolved, 748);
   assert.equal(summary.historically_excluded, 15);
   assert.equal(summary.prior_evidence_rows_reused, 576);
   assert.equal(plan.production_authorized, false);
-  assert.equal(plan.records.length, 68);
+  assert.equal(plan.records.length, 71);
   assert.ok(plan.records.every(record => record.preconditions.canonical_rating_rows === 0 &&
     record.preconditions.historical_rating_rows === 0 && record.safety_contract.preserve_all_ratings === true));
 });

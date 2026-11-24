@@ -6404,5 +6404,188 @@
         }
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/release/60ff378c-ca99-4957-8ce0-2a035b6095ee?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "60ff378c-ca99-4957-8ce0-2a035b6095ee",
+    "status": "Official",
+    "title": "When You Say Nothing at All",
+    "date": "1999",
+    "country": "AU",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Ronan Keating",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "565c70ad-825e-3212-8680-5a6de68cb16e",
+      "title": "When You Say Nothing at All",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "When You Say Nothing at All",
+            "length": 253133,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "bb1a2564-9748-4aea-aa9e-a7d4ce634050",
+              "title": "When You Say Nothing at All",
+              "length": 245946,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "This Is Your Song",
+            "length": 226960,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "196b25be-e3db-4681-800d-5e82fadcc575",
+              "title": "This Is Your Song",
+              "length": 225533,
+              "disambiguation": "1999 version",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "When You Say Nothing at All (acoustic version)",
+            "length": 211173,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8c1966f8-fb89-46e0-9a33-aa840c646def",
+              "title": "When You Say Nothing at All (acoustic version)",
+              "length": 211173,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/2c63359c-1b1b-44db-a4f2-977620cf15cb?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "2c63359c-1b1b-44db-a4f2-977620cf15cb",
+    "title": "Lonely This Christmas",
+    "length": 213133,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE7400041"
+    ],
+    "first_release_date": "1998",
+    "artist_credit": [
+      {
+        "name": "Mud",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "02c1ded2-4437-4b32-815e-e9f8b9d91b1b",
+        "status": "Official",
+        "title": "The Sounds Of Christmas",
+        "date": "1998",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cdc94de8-7e09-4f92-9866-16f28cbf5e1b",
+          "title": "The Sounds Of Christmas",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "afd8d3b1-0b80-44ed-a2c2-d324ca986b94",
+        "status": "Official",
+        "title": "Goldene Weihnachtshits: Die Neue",
+        "date": "2021-11-05",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dc11263e-eed9-4b30-98ed-e9e1a85f3d5f",
+          "title": "Goldene Weihnachtshits: Die Neue",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/45beaff1-36ce-4771-9be6-44fe68c2e86e?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "45beaff1-36ce-4771-9be6-44fe68c2e86e",
+    "title": "Lonely This Christmas",
+    "length": 213160,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE7400041"
+    ],
+    "first_release_date": "2026-11-08",
+    "artist_credit": [
+      {
+        "name": "Mud",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "7085ec99-58be-405a-9378-291fb2996d56",
+        "status": "Official",
+        "title": "Christmas Gold",
+        "date": "2026-11-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c16f1f44-d1f9-4d38-8f1a-4c386aac8abd",
+          "title": "Christmas Gold",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

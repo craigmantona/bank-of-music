@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-24T17:03:31.714Z",
+  "generated_at": "2026-11-24T17:53:38.047Z",
   "exclusion_registry_sha256": "c8c7ffe5bdc8f50c6ac5c80776bd1d128f84c6e2639cc68fde64890e10d8ec01",
   "failures": [
     {
@@ -16,8 +16,8 @@
       "chart_year": 2025,
       "title": "Ordinary",
       "artist": "Alex Warren",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 2502,
@@ -88,16 +88,16 @@
       "chart_year": 2023,
       "title": "Lovin on Me",
       "artist": "Jack Harlow",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 2465,
       "chart_year": 2022,
       "title": "Merry Christmas",
       "artist": "Ed Sheeran and Elton John",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 2467,
@@ -120,7 +120,7 @@
       "chart_year": 2022,
       "title": "Unholy",
       "artist": "Sam Smith and Kim Petras",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -144,8 +144,8 @@
       "chart_year": 2021,
       "title": "Merry Christmas",
       "artist": "Ed Sheeran and Elton John",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 2464,
@@ -296,7 +296,7 @@
       "chart_year": 2015,
       "title": "House Every Weekend",
       "artist": "David Zowie",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -328,8 +328,8 @@
       "chart_year": 2015,
       "title": "A Bridge over You",
       "artist": "The Lewisham and Greenwich NHS Choir",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1927,
@@ -392,7 +392,7 @@
       "chart_year": 2014,
       "title": "It's My Birthday",
       "artist": "will.i.am featuring Cody Wise",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -416,8 +416,8 @@
       "chart_year": 2014,
       "title": "Blame",
       "artist": "Calvin Harris featuring John Newman",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1955,
@@ -441,14 +441,6 @@
       "title": "Do They Know It's Christmas?",
       "artist": "Band Aid 30",
       "reason": "official_charts_exact_title_artist_not_found",
-      "final": true
-    },
-    {
-      "chart_row_id": 1899,
-      "chart_year": 2013,
-      "title": "Scream & Shout",
-      "artist": "will.i.am featuring Britney Spears",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
       "final": true
     },
     {
@@ -560,15 +552,7 @@
       "chart_year": 2012,
       "title": "Twilight",
       "artist": "Cover Drive",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
-    },
-    {
-      "chart_row_id": 1868,
-      "chart_year": 2012,
-      "title": "Titanium",
-      "artist": "David Guetta featuring Sia",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "musicbrainz_isrc_not_found",
       "final": true
     },
     {
@@ -576,8 +560,8 @@
       "chart_year": 2012,
       "title": "Hot Right Now",
       "artist": "DJ Fresh featuring Rita Ora",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1875,
@@ -608,8 +592,8 @@
       "chart_year": 2012,
       "title": "This Is Love",
       "artist": "will.i.am featuring Eva Simons",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1882,
@@ -640,8 +624,8 @@
       "chart_year": 2012,
       "title": "Hall of Fame",
       "artist": "The Script featuring will.i.am",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1889,
@@ -696,15 +680,7 @@
       "chart_year": 2011,
       "title": "On the Floor",
       "artist": "Jennifer Lopez featuring Pitbull",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
-    },
-    {
-      "chart_row_id": 1844,
-      "chart_year": 2011,
-      "title": "Party Rock Anthem",
-      "artist": "LMFAO featuring Lauren Bennett and GoonRock",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_not_found",
       "final": true
     },
     {
@@ -712,8 +688,8 @@
       "chart_year": 2011,
       "title": "Louder",
       "artist": "DJ Fresh featuring Sian Evans",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1852,
@@ -736,8 +712,8 @@
       "chart_year": 2011,
       "title": "No Regrets",
       "artist": "Dappy",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1859,
@@ -792,8 +768,8 @@
       "chart_year": 2010,
       "title": "Good Times",
       "artist": "Roll Deep",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1816,
@@ -992,7 +968,7 @@
       "chart_year": 2009,
       "title": "Killing in the Name",
       "artist": "Rage Against the Machine",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -1016,8 +992,8 @@
       "chart_year": 2008,
       "title": "That's Not My Name",
       "artist": "The Ting Tings",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1532,
@@ -1072,8 +1048,8 @@
       "chart_year": 2007,
       "title": "Grace Kelly",
       "artist": "Mika",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1515,
@@ -1112,8 +1088,8 @@
       "chart_year": 2007,
       "title": "With Every Heartbeat",
       "artist": "Robyn with Kleerup",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1522,
@@ -1176,8 +1152,8 @@
       "chart_year": 2006,
       "title": "Hips Don't Lie",
       "artist": "Shakira featuring Wyclef Jean",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1504,
@@ -1284,14 +1260,6 @@
       "final": true
     },
     {
-      "chart_row_id": 1482,
-      "chart_year": 2005,
-      "title": "Lonely",
-      "artist": "Akon",
-      "reason": "musicbrainz_no_contemporary_official_release",
-      "final": true
-    },
-    {
       "chart_row_id": 1483,
       "chart_year": 2005,
       "title": "Axel F",
@@ -1320,16 +1288,16 @@
       "chart_year": 2005,
       "title": "Don't Cha",
       "artist": "The Pussycat Dolls featuring Busta Rhymes",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1492,
       "chart_year": 2005,
       "title": "JCB",
       "artist": "Nizlopi",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1449,
@@ -1560,7 +1528,7 @@
       "chart_year": 2003,
       "title": "Crashed the Wedding",
       "artist": "| Busted",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_has_multiple_exact_release_recordings",
       "final": true
     },
     {
@@ -1592,8 +1560,8 @@
       "chart_year": 2002,
       "title": "Gotta Get Thru This",
       "artist": "Daniel Bedingfield",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1400,
@@ -1632,8 +1600,8 @@
       "chart_year": 2002,
       "title": "A Little Less Conversation",
       "artist": "Elvis vs. JXL",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1411,
@@ -1864,8 +1832,8 @@
       "chart_year": 2001,
       "title": "Gotta Get Thru This",
       "artist": "Daniel Bedingfield",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1338,
@@ -2068,14 +2036,6 @@
       "final": true
     },
     {
-      "chart_row_id": 171,
-      "chart_year": 1999,
-      "title": "Flat Beat",
-      "artist": "Mr. Oizo",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
-      "final": true
-    },
-    {
       "chart_row_id": 172,
       "chart_year": 1999,
       "title": "Perfect Moment",
@@ -2136,7 +2096,7 @@
       "chart_year": 1999,
       "title": "When You Say Nothing at All",
       "artist": "Ronan Keating",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_has_multiple_exact_release_recordings",
       "final": true
     },
     {
@@ -2200,7 +2160,7 @@
       "chart_year": 1999,
       "title": "The Millennium Prayer",
       "artist": "Cliff Richard",
-      "reason": "exact_release_track_identity_mismatch",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -2345,6 +2305,14 @@
       "title": "Teletubbies say \"Eh-oh!",
       "artist": "Teletubbies",
       "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 90,
+      "chart_year": 1996,
+      "title": "Spaceman",
+      "artist": "Babylon Zoo",
+      "reason": "musicbrainz_isrc_has_multiple_exact_release_recordings",
       "final": true
     },
     {
@@ -2960,7 +2928,7 @@
       "chart_year": 1988,
       "title": "Mistletoe and Wine",
       "artist": "Cliff Richard",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -3248,7 +3216,7 @@
       "chart_year": 1983,
       "title": "Down Under",
       "artist": "Men at Work",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_has_multiple_exact_release_recordings",
       "final": true
     },
     {
@@ -3288,7 +3256,7 @@
       "chart_year": 1983,
       "title": "Red Red Wine",
       "artist": "UB40",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_has_multiple_exact_release_recordings",
       "final": true
     },
     {
@@ -3344,7 +3312,7 @@
       "chart_year": 1982,
       "title": "Eye of the Tiger",
       "artist": "Survivor",
-      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "reason": "musicbrainz_isrc_has_multiple_exact_release_recordings",
       "final": true
     },
     {
@@ -3480,8 +3448,8 @@
       "chart_year": 1980,
       "title": "(Just Like) Starting Over",
       "artist": "John Lennon",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 838,
@@ -3504,8 +3472,8 @@
       "chart_year": 1979,
       "title": "Ring My Bell",
       "artist": "Anita Ward",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 842,
@@ -3904,7 +3872,7 @@
       "chart_year": 1974,
       "title": "Lonely This Christmas",
       "artist": "Mud",
-      "reason": "exact_release_track_identity_mismatch",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -3912,7 +3880,7 @@
       "chart_year": 1973,
       "title": "Blockbuster!",
       "artist": "The Sweet",
-      "reason": "musicbrainz_no_contemporary_official_release",
+      "reason": "musicbrainz_isrc_has_no_unique_exact_release_recording",
       "final": true
     },
     {
@@ -4088,8 +4056,8 @@
       "chart_year": 1971,
       "title": "Hot Love",
       "artist": "T. Rex",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 721,
@@ -4280,8 +4248,8 @@
       "chart_year": 1969,
       "title": "Je t'aime... moi non plus",
       "artist": "Jane Birkin and Serge Gainsbourg",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 1165,
@@ -5528,8 +5496,8 @@
       "chart_year": 1956,
       "title": "Sixteen Tons",
       "artist": "Tennessee Ernie Ford",
-      "reason": "retrieval_failed:fetch failed",
-      "final": false
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
     },
     {
       "chart_row_id": 2302,

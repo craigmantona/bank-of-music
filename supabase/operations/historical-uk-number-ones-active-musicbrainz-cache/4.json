@@ -3260,5 +3260,128 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/release/ecc86000-29fd-4c2b-91ef-570501106cce?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "ecc86000-29fd-4c2b-91ef-570501106cce",
+    "status": "Official",
+    "title": "Spaceman",
+    "date": "1995",
+    "country": "US",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Babylon Zoo",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "febc7c6b-413a-3769-8abd-f136d552b87e",
+      "title": "Spaceman",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Spaceman (radio edit)",
+            "length": 249000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d96495c5-7406-4e18-ba76-6c70af484cf5",
+              "title": "Spaceman",
+              "length": 241320,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Metal Vision",
+            "length": 232000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1a718633-dbd4-4e01-8ac2-87f331c3bad0",
+              "title": "Metal Vision",
+              "length": 230866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Blue Nude",
+            "length": 134000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4673c53b-db4c-4d13-9231-77db71ef220c",
+              "title": "Blue Nude",
+              "length": 132266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Spaceman (the 5th dimension)",
+            "length": 310200,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ba9ce204-643b-4b3f-8f1f-ca87f2abe529",
+              "title": "Spaceman (The 5th Dimension)",
+              "length": 310200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   }
 }

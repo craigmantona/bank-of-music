@@ -3597,5 +3597,819 @@
         }
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/7c5b6609-0e04-4ea4-a871-513301db8c9a?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+    "title": "Party Rock Anthem",
+    "length": 263573,
+    "disambiguation": "",
+    "isrcs": [
+      "USUM71100061",
+      "USUM71105650"
+    ],
+    "first_release_date": "2011-02-11",
+    "artist_credit": [
+      {
+        "name": "LMFAO",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Lauren Bennett",
+        "joinphrase": " & "
+      },
+      {
+        "name": "GoonRock",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "138c1ccf-6be3-4cab-b5c1-98c36f4104ff",
+        "status": "Official",
+        "title": "Party Rock Anthem",
+        "date": "2011-02-11",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7c0f188b-d754-4003-b64b-6198d9a60d8c",
+          "title": "Party Rock Anthem",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "65eab1ad-9373-4ad5-8a1a-a5b65933e756",
+        "status": "Official",
+        "title": "Party Rock Anthem",
+        "date": "2011-05-06",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7c0f188b-d754-4003-b64b-6198d9a60d8c",
+          "title": "Party Rock Anthem",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ca709af7-84ef-4f30-936a-894adb7567b0",
+        "status": "Promotion",
+        "title": "Promo Only: Mainstream Radio, May 2011",
+        "date": "2011-05",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "10073053-65a2-44f7-ad0f-b6e5c0529f63",
+          "title": "Promo Only: Mainstream Radio, May 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c0ffc4d3-e291-47fa-ba24-ce67eb42ecd3",
+        "status": "Official",
+        "title": "538 Dance Smash 2011, Volume 3",
+        "date": "2011-06-01",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "17a3cd9f-5e18-422c-80e5-4ef9cba6d115",
+          "title": "538 Dance Smash 2011, Volume 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "790675b4-ddf9-48a2-bbac-045251e03c98",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-17",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e8e6b5cd-94b0-4c25-a4b5-33aac18d77c1",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "bddb462c-69d7-4385-9f85-17be1602b072",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4ce07c1b-015b-4996-9240-e9a8ceafc03f",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "US",
+        "disambiguation": "Deluxe Edition",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "15804658-f932-43a4-a50b-fc0151c62cb7",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2f5f1f4f-7c78-4964-aec1-499f4b97493f",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "CA",
+        "disambiguation": "deluxe version",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "990fb7aa-273c-4285-9457-76091c0a932b",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "US",
+        "disambiguation": "Amazon MP3 Deluxe Exclusive Version",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "555e982d-31d2-436e-ad90-a47f4b196a9f",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1aebc3ef-c984-408d-9e1e-b9fe4b3f56da",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "",
+        "disambiguation": "Deluxe Version",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9197df9f-7f26-4498-af10-4eb5e67d6c8b",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-21",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-06-24",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "cc7817c1-5672-4913-af01-8834b31c6a52",
+        "status": "Official",
+        "title": "538 Hitzone 58",
+        "date": "2011-07-07",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a6d7f584-76e5-498f-a47e-97150235ac34",
+          "title": "538 Hitzone 58",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6cda638f-ee11-44b1-8f76-b062e80d4179",
+        "status": "Official",
+        "title": "Radio 538: Hitzone 58",
+        "date": "2011-07-08",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a6d7f584-76e5-498f-a47e-97150235ac34",
+          "title": "538 Hitzone 58",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9f78acaf-b54a-407a-b908-0c241c496da0",
+        "status": "Official",
+        "title": "The Dome: Summer 2011",
+        "date": "2011-07-08",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ac6da86c-e841-4942-8f81-add55718f5f3",
+          "title": "The Dome: Summer 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a511fa2d-e42c-4e97-93a2-7549961a0e60",
+        "status": "Official",
+        "title": "Sorry for Party Rocking",
+        "date": "2011-07-18",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c6903aa5-2cf7-4106-aac9-bba3b4b0bdb8",
+        "status": "Official",
+        "title": "Sorry for Party Rocking (Limited Tour Edition)",
+        "date": "2011-07-18",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+          "title": "Sorry for Party Rocking",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2bde276e-61a9-4ac8-a063-170e3046914c",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 79",
+        "date": "2011-07-25",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "96a9391d-237e-4fda-8e14-691f1c4926de",
+          "title": "Now That’s What I Call Music! 79",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1ee5629a-bf8e-4df2-9aac-dd61d87414f7",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 79",
+        "date": "2011-07-25",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "96a9391d-237e-4fda-8e14-691f1c4926de",
+          "title": "Now That’s What I Call Music! 79",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "23327653-dc43-4f0f-a39d-1e9ce71fdc3f",
+        "status": "Official",
+        "title": "Bravo Hits 74",
+        "date": "2011-07-29",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cb24578e-1ab0-485a-a844-bdcaca42fbb3",
+          "title": "Bravo Hits 74",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "52d7f881-5b5e-4406-b0a9-6065990c814c",
+        "status": "Official",
+        "title": "NRJ Extravadance 2011",
+        "date": "2011-08-03",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "055423a0-d9d9-4289-98e0-ca543e5d6cf3",
+          "title": "NRJ Extravadance 2011",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a8ca3736-e37b-4913-a78e-6d8aa0612097",
+        "status": "Official",
+        "title": "Nachtschicht, Volume 42",
+        "date": "2011-08-19",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e4e04dd8-0bb1-4e84-924e-d85009071291",
+          "title": "Nachtschicht, Volume 42",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/bd7f1a56-68ee-4870-8095-2a8e3835e98e?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "bd7f1a56-68ee-4870-8095-2a8e3835e98e",
+    "title": "Killing in the Name",
+    "length": 313000,
+    "disambiguation": "",
+    "isrcs": [
+      "USSM19200613"
+    ],
+    "first_release_date": "",
+    "artist_credit": [
+      {
+        "name": "Rage Against the Machine",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "c4a9d32c-8736-4315-8cea-feffa7a66a78",
+        "status": "Official",
+        "title": "The Train Kept a Rollin’… 30 Years of Rock",
+        "date": "",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1ace60c0-6bcf-4d83-9649-2700ad59e96d",
+          "title": "The Train Kept a Rollin’… 30 Years of Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/b4d60df3-3e1b-4495-b082-530d72c81cd6?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "b4d60df3-3e1b-4495-b082-530d72c81cd6",
+    "title": "Crashed the Wedding",
+    "length": 160000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAN0300537",
+      "GBO700300116"
+    ],
+    "first_release_date": "2003-11-10",
+    "artist_credit": [
+      {
+        "name": "Busted",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "01b155aa-ae3d-49f2-9362-e809b368e484",
+        "status": "Official",
+        "title": "Crashed the Wedding",
+        "date": "2003-11-10",
+        "country": "GB",
+        "disambiguation": "CD1",
+        "release_group": {
+          "id": "e546ba88-f9df-31aa-8e59-14e25ef03534",
+          "title": "Crashed the Wedding",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "cd98740b-7a69-47ef-b5e1-6507fa159832",
+        "status": "Official",
+        "title": "Crashed the Wedding",
+        "date": "2003-11-10",
+        "country": "GB",
+        "disambiguation": "CD2",
+        "release_group": {
+          "id": "e546ba88-f9df-31aa-8e59-14e25ef03534",
+          "title": "Crashed the Wedding",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3b2f7ee8-bcbf-417b-bc02-6f325df9d560",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003-11-17",
+        "country": "GB",
+        "disambiguation": "Special Edition",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9b4ac6d0-b5c6-4baf-82f6-95f89592d473",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003-11-19",
+        "country": "JP",
+        "disambiguation": "Limited Edition",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "554c6dff-4b49-3e58-a4c2-5870ffee75c9",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5dbe21bb-1beb-4be4-ba58-f998b14cd8fd",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "SG",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "23d0eaf1-1561-384c-82c3-7d69025aec3b",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "TW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "30b83d7a-14cb-4a3a-b8dc-2e61bf3942a3",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5593ea9c-0e4e-43f8-ad63-9053452399a7",
+        "status": "Promotion",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "GB",
+        "disambiguation": "Album Sampler",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "744769ee-a149-482c-8973-b86819bdb700",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2b9bcf4d-b1c0-4846-86cf-ae21d624f7a1",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003",
+        "country": "JP",
+        "disambiguation": "Bonus Tracks",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1e8170b5-1c81-45b2-aa26-a219c9edcc22",
+        "status": "Official",
+        "title": "I Luv Smash! Hits 2004",
+        "date": "2004-02-09",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6e2f12c2-4273-3907-b50d-9929c5e23b70",
+          "title": "I Luv Smash! Hits 2004",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "75ae2dcf-1128-4cc2-9766-c2548d7eef0e",
+        "status": "Official",
+        "title": "Crossing All Over! Vol. 17",
+        "date": "2004-03-22",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9b5e058d-1339-3ea1-9f41-9b6c7646c6bc",
+          "title": "Crossing All Over! Vol. 17",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3163e9e3-5aa4-4b85-8780-6b563e820ccc",
+        "status": "Official",
+        "title": "All the Hits: Radio Clyde’s 30th Anniversary",
+        "date": "2004-09-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b7def7a1-a4ea-3fee-88ee-1cab02e79dce",
+          "title": "All the Hits: Radio Clyde’s 30th Anniversary",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2a83933f-0f83-4d7f-8edb-a93f1d16c530",
+        "status": "Official",
+        "title": "Pop Party 2",
+        "date": "2004-10-25",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "89c73551-2331-429a-8c55-4f2353770a2b",
+          "title": "Pop Party 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "318fe1a5-109d-4427-8db0-e47b2192fc03",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2004",
+        "country": "TH",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "764f58b1-6fef-4c67-b2a8-b4cf10841558",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2004",
+        "country": "XE",
+        "disambiguation": "Special Edition",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "23874f8e-5b49-491a-b1e4-20a7f9830b1f",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2004",
+        "country": "ID",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9ea9aa05-11f1-49e5-8ca0-fb155db0e9fb",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2004",
+        "country": "TH",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a464b79b-7f8a-48c7-839f-359a45ea5382",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2004",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b0ac4f2a-0669-4c41-a179-c0a568dd6777",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2004",
+        "country": "MY",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "296a8ad7-8134-433c-873c-25acd83ee4c8",
+        "status": "Official",
+        "title": "Busted",
+        "date": "2004",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "149f56d7-a507-3b30-8517-c1f468cacaf0",
+          "title": "Busted",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "66e12d9f-403f-48e8-afa4-af1dc7a2efd9",
+        "status": "Official",
+        "title": "Hits 58",
+        "date": "2004",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64e5c1b8-959f-33d9-a7ae-b0379e069069",
+          "title": "Hits 58",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b6bd4957-a0dd-4e38-9be3-8b66a66621f3",
+        "status": "Official",
+        "title": "Hits for Kids 11",
+        "date": "2004",
+        "country": "NO",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd903cba-b901-47ff-bb99-51d77544fc60",
+          "title": "Hits for Kids 11",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4da5ea37-6daa-40dd-8853-ae2cd5f34d24",
+        "status": "Official",
+        "title": "Barbie Summer Hits",
+        "date": "2005",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19670ea4-2966-3c42-9443-3a41bff81ee6",
+          "title": "Barbie Summer Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

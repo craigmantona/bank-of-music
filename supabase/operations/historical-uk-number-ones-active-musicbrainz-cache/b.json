@@ -4894,5 +4894,414 @@
         }
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/606d1005-58af-4e38-9016-165dd0888646?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "606d1005-58af-4e38-9016-165dd0888646",
+    "title": "La La La",
+    "length": 221933,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAA1300148"
+    ],
+    "first_release_date": "2026-11-14",
+    "artist_credit": [
+      {
+        "name": "Naughty Boy",
+        "joinphrase": " & "
+      },
+      {
+        "name": "Sam Smith",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "24ef8184-c54c-47bd-9c9b-794b3ca75011",
+        "status": "Official",
+        "title": "Confidence Boost 2027",
+        "date": "2026-11-14",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ea0bae6a-c747-4b6c-9062-7a5a5bcc0e3d",
+          "title": "Confidence Boost 2027",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/b71b3d23-71c4-440b-847d-ff90d208907c?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "b71b3d23-71c4-440b-847d-ff90d208907c",
+    "title": "Crashed the Wedding",
+    "length": 158720,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAN0300537"
+    ],
+    "first_release_date": "2003-01-01",
+    "artist_credit": [
+      {
+        "name": "Busted",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "f0b25a04-8b04-4fc9-a7a4-617220aa88d6",
+        "status": "Official",
+        "title": "A Present for Everyone",
+        "date": "2003-01-01",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0304fcea-aa44-39a1-88bd-63806e85298a",
+          "title": "A Present for Everyone",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/01b155aa-ae3d-49f2-9362-e809b368e484?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "01b155aa-ae3d-49f2-9362-e809b368e484",
+    "status": "Official",
+    "title": "Crashed the Wedding",
+    "date": "2003-11-10",
+    "country": "GB",
+    "disambiguation": "CD1",
+    "artist_credit": [
+      {
+        "name": "Busted",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "e546ba88-f9df-31aa-8e59-14e25ef03534",
+      "title": "Crashed the Wedding",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Crashed the Wedding",
+            "length": 162000,
+            "artist_credit": [
+              {
+                "name": "Busted",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b4d60df3-3e1b-4495-b082-530d72c81cd6",
+              "title": "Crashed the Wedding",
+              "length": 160000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Busted",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Build Me Up Buttercup",
+            "length": 161000,
+            "artist_credit": [
+              {
+                "name": "Busted",
+                "joinphrase": " collaboration with "
+              },
+              {
+                "name": "McFly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4dc9f083-edc4-4afc-800d-12115e84fd22",
+              "title": "Build Me Up Buttercup",
+              "length": 161000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Busted",
+                  "joinphrase": " collaboration with "
+                },
+                {
+                  "name": "McFly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "That’s Entertainment",
+            "length": 263000,
+            "artist_credit": [
+              {
+                "name": "Busted",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "3e1e2ba4-15f8-4cf3-941d-8832346c2555",
+              "title": "That’s Entertainment",
+              "length": 263000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Busted",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/619da03c-f58c-44ca-a0b0-f4ce70c1d4db?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "619da03c-f58c-44ca-a0b0-f4ce70c1d4db",
+    "status": "Official",
+    "title": "Spaceman",
+    "date": "1996",
+    "country": "XE",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Babylon Zoo",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "febc7c6b-413a-3769-8abd-f136d552b87e",
+      "title": "Spaceman",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Spaceman (radio edit)",
+            "length": 248000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d96495c5-7406-4e18-ba76-6c70af484cf5",
+              "title": "Spaceman",
+              "length": 241320,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Spaceman (The 5th Dimension)",
+            "length": 309000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ba9ce204-643b-4b3f-8f1f-ca87f2abe529",
+              "title": "Spaceman (The 5th Dimension)",
+              "length": 310200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Spaceman (Arthur Meets the Spaceman)",
+            "length": 356000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "482fb70e-ba6f-4528-bdf8-620b408317a8",
+              "title": "Spaceman (Arthur Meets the Spaceman)",
+              "length": 356000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Spaceman (E Before I)",
+            "length": 397000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "fcaf9e09-f59c-47db-a9f7-36f78ed3eb92",
+              "title": "Spaceman (E Before I)",
+              "length": 397000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/6eaf322d-4472-45a1-adfe-7e1ed2174509?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "6eaf322d-4472-45a1-adfe-7e1ed2174509",
+    "status": "Official",
+    "title": "Down Under",
+    "date": "1981",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Men at Work",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+      "title": "Down Under",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "Down Under",
+            "length": 205720,
+            "artist_credit": [
+              {
+                "name": "Men at Work",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8ac43c1e-f34a-4f2a-b41c-e4c769016305",
+              "title": "Down Under",
+              "length": 205720,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Men at Work",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Crazy",
+            "length": 157266,
+            "artist_credit": [
+              {
+                "name": "Men at Work",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "675fdf00-9edb-4f33-aaa9-44dd017023b6",
+              "title": "Crazy",
+              "length": 157266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Men at Work",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/de742bd7-40d1-4d52-9959-3620d925831c?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "de742bd7-40d1-4d52-9959-3620d925831c",
+    "title": "Eye of the Tiger",
+    "length": 248467,
+    "disambiguation": "",
+    "isrcs": [
+      "USVR19600010"
+    ],
+    "first_release_date": "2023-12-08",
+    "artist_credit": [
+      {
+        "name": "Survivor",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "a068d407-8389-461c-95f6-661dbf0442ae",
+        "status": "Official",
+        "title": "Melhores Hits / 80, 90",
+        "date": "2023-12-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dbde789e-d5d0-4648-a3d3-60df2efae5e2",
+          "title": "Melhores Hits / 80, 90",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

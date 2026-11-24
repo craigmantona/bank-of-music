@@ -3395,5 +3395,1209 @@
         }
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/1c855b21-9d2f-42ec-82e8-53bfb94cde38?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "1c855b21-9d2f-42ec-82e8-53bfb94cde38",
+    "title": "Unholy",
+    "length": 156943,
+    "disambiguation": "",
+    "isrcs": [
+      "GBUM72205415"
+    ],
+    "first_release_date": "2025-05-23",
+    "artist_credit": [
+      {
+        "name": "Sam Smith",
+        "joinphrase": " & "
+      },
+      {
+        "name": "Kim Petras",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "cef873b0-8605-4295-a5f9-4adff31b7575",
+        "status": "Official",
+        "title": "Now That’s What I Call Pop!",
+        "date": "2025-05-23",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "53e8a848-eece-488d-b24a-ef4a0a2e1bf8",
+          "title": "Now That’s What I Call Pop!",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "889e78f6-1fca-43bf-9e65-94829eab52d3",
+        "status": "Official",
+        "title": "girly winter arc",
+        "date": "2026-10-23",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3a3a35fb-6936-4655-a41a-a57e6c05fcb9",
+          "title": "girly winter arc",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c",
+    "status": "Official",
+    "title": "Sorry for Party Rocking",
+    "date": "2011-06-24",
+    "country": "AU",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "LMFAO",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "3be839a3-1d35-4846-aa64-9d1532648799",
+      "title": "Sorry for Party Rocking",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Rock the Beat II",
+            "length": 113946,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "e53b4ea5-1a7a-4e31-803a-595f75794061",
+              "title": "Rock the Beat II",
+              "length": 113946,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Sorry for Party Rocking",
+            "length": 203973,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "5e61e5aa-3fe0-4bb5-aa14-1b950b43684a",
+              "title": "Sorry for Party Rocking",
+              "length": 203973,
+              "disambiguation": "album version, explicit",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Party Rock Anthem",
+            "length": 262146,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Lauren Bennett",
+                "joinphrase": " and "
+              },
+              {
+                "name": "GoonRock",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+              "title": "Party Rock Anthem",
+              "length": 263573,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Lauren Bennett",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "GoonRock",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Sexy and I Know It",
+            "length": 199480,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c8200a2c-fbae-4c01-be04-94818a069364",
+              "title": "Sexy and I Know It",
+              "length": 199560,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "Champagne Showers",
+            "length": 264093,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Natalia Kills",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1d99ecf0-4980-4b95-922f-d6005b302f28",
+              "title": "Champagne Showers",
+              "length": 264093,
+              "disambiguation": "album version",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Natalia Kills",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "One Day",
+            "length": 197600,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c69cdc1a-1889-4df0-8b61-a439de2f5e83",
+              "title": "One Day",
+              "length": 197600,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "Put That A$$ to Work",
+            "length": 236160,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c6076121-6b04-4a9e-ac3f-9f0d783ff5bf",
+              "title": "Put That Ass to Work",
+              "length": 236160,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "8",
+            "title": "Take It to the Hole",
+            "length": 216840,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Busta Rhymes",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1a856996-3e6b-4869-a293-1cf814cf6716",
+              "title": "Take It to the Hole",
+              "length": 216840,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Busta Rhymes",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "9",
+            "title": "We Came Here to Party",
+            "length": 226866,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "GoonRock",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "6ea7198c-d097-424c-8ccb-3638111ec0e3",
+              "title": "We Came Here to Party",
+              "length": 226866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "GoonRock",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 10,
+            "number": "10",
+            "title": "Reminds Me of You",
+            "length": 227080,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " with "
+              },
+              {
+                "name": "Calvin Harris",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "09c87a46-aafa-4ae5-93bb-77a6cfbc7123",
+              "title": "Reminds Me of You",
+              "length": 227080,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " with "
+                },
+                {
+                  "name": "Calvin Harris",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 11,
+            "number": "11",
+            "title": "Best Night",
+            "length": 300000,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "will.i.am",
+                "joinphrase": ", "
+              },
+              {
+                "name": "GoonRock",
+                "joinphrase": " and "
+              },
+              {
+                "name": "Eva Simons",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1ae2afbe-0c85-4a62-b8c0-366a182d046b",
+              "title": "Best Night",
+              "length": 300000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "will.i.am",
+                  "joinphrase": ", "
+                },
+                {
+                  "name": "GoonRock",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Eva Simons",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 12,
+            "number": "12",
+            "title": "All Night Long",
+            "length": 227066,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Lisa",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d503b235-973e-47c8-b0b9-48c5c738a455",
+              "title": "All Night Long",
+              "length": 227066,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Lisa",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 13,
+            "number": "13",
+            "title": "With You",
+            "length": 253586,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9bfc0d76-876f-49c9-9c1f-65f2f096374e",
+              "title": "With You",
+              "length": 253586,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 14,
+            "number": "14",
+            "title": "Hot Dog",
+            "length": 147146,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1b35b45d-6412-4cc7-b0a5-7d32c9c3a5d5",
+              "title": "Hot Dog",
+              "length": 147080,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 15,
+            "number": "15",
+            "title": "I'm in Miami *****",
+            "length": 228453,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "e03c2c20-29c6-442d-ac76-aab9403d8277",
+              "title": "I’m in Miami Bitch",
+              "length": 228000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 16,
+            "number": "16",
+            "title": "Shots",
+            "length": 222560,
+            "artist_credit": [
+              {
+                "name": "LMFAO",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Lil Jon",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "3c8a8b3f-169b-420b-a23c-e850c2b01767",
+              "title": "Shots",
+              "length": 222560,
+              "disambiguation": "original version that starts with the \"I fucked up\" moan",
+              "artist_credit": [
+                {
+                  "name": "LMFAO",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Lil Jon",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/338371ca-2311-4733-8673-b13001b7f57f?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "338371ca-2311-4733-8673-b13001b7f57f",
+    "title": "Party Rock Anthem",
+    "length": 245800,
+    "disambiguation": "",
+    "isrcs": [
+      "USUM71100061"
+    ],
+    "first_release_date": "2019-12-27",
+    "artist_credit": [
+      {
+        "name": "LMFAO",
+        "joinphrase": ", "
+      },
+      {
+        "name": "Lauren Bennett",
+        "joinphrase": " & "
+      },
+      {
+        "name": "GoonRock",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "5cd86650-28e2-4e66-b5cf-edc904a85958",
+        "status": "Official",
+        "title": "Best of 2010s",
+        "date": "2019-12-27",
+        "country": "DZ",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bd27af94-ea82-4f59-8848-23615a1c3c06",
+          "title": "Best of 2010s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c7eff5f0-4ebd-4073-a822-658a32a05ea0",
+        "status": "Official",
+        "title": "Party Throwback",
+        "date": "2019-12-27",
+        "country": "DZ",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2924ee74-0b3a-45b6-b944-0da98dfd8332",
+          "title": "Party Throwback",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7176cddf-3284-4675-a206-b4e32edb7bab",
+        "status": "Official",
+        "title": "Throwback Summer",
+        "date": "2020-01-03",
+        "country": "DZ",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0558c3c6-a684-439b-849f-35e41bfc187c",
+          "title": "Throwback Summer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0d26da12-306e-4fe1-9663-8adad48d41ba",
+        "status": "Official",
+        "title": "Cottage Music: Pop for the Family",
+        "date": "2020-01-10",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7006c426-17ea-4a75-948b-731981e0a4c7",
+          "title": "Cottage Music: Pop for the Family",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/5d61a3b2-3190-4408-9920-aa650da0ade8?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "5d61a3b2-3190-4408-9920-aa650da0ade8",
+    "title": "Who's That Girl",
+    "length": 238000,
+    "disambiguation": "",
+    "isrcs": [
+      "USWB10002766"
+    ],
+    "first_release_date": "2026-09-18",
+    "artist_credit": [
+      {
+        "name": "Madonna",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "8831d2bc-181e-4e8b-84b9-5b31fc27ef19",
+        "status": null,
+        "title": "Who's That Girl: Original Motion Picture Soundtrack",
+        "date": "2026-09-18",
+        "country": "JP",
+        "disambiguation": "2026 Japanese reissue",
+        "release_group": {
+          "id": "ef3ddb39-4ac9-3339-b0ee-a86f8fc4be25",
+          "title": "Who’s That Girl: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/78c2a211-1c63-48f1-ad20-28b70eb98491?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "78c2a211-1c63-48f1-ad20-28b70eb98491",
+    "title": "Down Under",
+    "length": 221760,
+    "disambiguation": "",
+    "isrcs": [
+      "AUSM08100002",
+      "NLB638140003",
+      "USSM18100058",
+      "USSM18100411"
+    ],
+    "first_release_date": "1981-11-09",
+    "artist_credit": [
+      {
+        "name": "Men at Work",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "1d607bc7-fac7-429b-9fc0-310d5e4f9d1f",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1981-11-09",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c4177af3-b7a2-4dd6-adb6-3cb6b218bc20",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1982",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "57c55a65-7312-49cf-8ede-15645ba8f64e",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1982",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8889cfad-3b67-3f6a-962b-deb41b6cc7cf",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1982",
+        "country": "US",
+        "disambiguation": "Carrollton pressing",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9e67e01e-036c-4232-8179-6cff68811b40",
+        "status": "Official",
+        "title": "Business As Usual",
+        "date": "1982",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e13de143-1198-4607-8a6a-b0ca49470639",
+        "status": "Official",
+        "title": "Business As Usual",
+        "date": "1982",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e2fc30c4-2666-4189-af73-63646a960684",
+        "status": "Official",
+        "title": "Down Under",
+        "date": "1982",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+          "title": "Down Under",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c9a75932-e39d-4779-abc3-4781d7cf2d84",
+        "status": "Official",
+        "title": "Wired, Vol. 1",
+        "date": "1982",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ef2f6527-8bb9-48a1-9574-27a7e4c051ab",
+          "title": "Wired, Vol. 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "203f2262-b2ad-4a7e-96f5-66b63ac4562c",
+        "status": "Official",
+        "title": "Work Songs",
+        "date": "1983-05-21",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e2efdc06-0fa7-4e9d-835c-2a99b255b4b6",
+        "status": "Official",
+        "title": "Now That’s What I Call Music",
+        "date": "1983-11-28",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bcd7ac33-7a46-346d-b2f2-72dcf51012af",
+          "title": "Now That’s What I Call Music",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f42bca16-03a3-3373-9589-be16a4aa06b4",
+        "status": "Official",
+        "title": "Now That’s What I Call Music",
+        "date": "1983-11-28",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bcd7ac33-7a46-346d-b2f2-72dcf51012af",
+          "title": "Now That’s What I Call Music",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "417dc1e8-8b65-3227-8ee2-b5378a1528cc",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1983",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "cff7fe38-24d9-4ab8-8c9f-2e3a4e4ecf6b",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1983",
+        "country": "US",
+        "disambiguation": "Best Value series",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "59f820b1-dc46-4c66-bdda-1d0ecbc56dd8",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1983",
+        "country": "US",
+        "disambiguation": "made in Japan",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c1b2bc11-669a-4ece-b989-5eaa9629c1b7",
+        "status": "Official",
+        "title": "Chart Action",
+        "date": "1983",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "31c09a0b-e20e-411d-b8e6-2cdebddf3883",
+          "title": "Chart Action",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "523c0ff1-4b44-4669-b498-0d15121b28d6",
+        "status": "Official",
+        "title": "Chart Runners",
+        "date": "1983",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "873f5883-0230-4701-bc40-a9b6de871fca",
+          "title": "Chart Runners",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "325a2afc-ed2b-4d84-a5d5-40e6023772f4",
+        "status": "Official",
+        "title": "Hotline 1",
+        "date": "1983",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4b0368ed-69ba-4831-8857-5588c6816a4d",
+          "title": "Hotline",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "dc5e923e-a605-4db9-a1e6-f3158db6ea30",
+        "status": "Official",
+        "title": "Stereoplay Highlights CD 7: Meisterwerke aus Pop und Rock",
+        "date": "1985",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b68eac24-e4f3-4050-a3e2-6f7ac4190f0f",
+          "title": "Stereoplay Highlights CD 7: Meisterwerke aus Pop und Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5c16fcec-4991-4279-b070-7ac4c9823c63",
+        "status": "Official",
+        "title": "’81 – ’85",
+        "date": "1986",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d07f9835-18c8-47a3-b5a3-9be25db518d4",
+          "title": "’81 – ’85",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "024bbb17-8674-4416-917d-105bf7cf71f6",
+        "status": "Official",
+        "title": "’81–’85 / Business as Usual",
+        "date": "1986",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4c949280-858d-4c84-923b-9af9181d4370",
+          "title": "’81–’85 / Business as Usual",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9183f1e9-ddfc-48c0-9392-b31365f37d8e",
+        "status": "Promotion",
+        "title": "10 Χρόνια CBS",
+        "date": "1986",
+        "country": "GR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "098bc180-832d-4f9c-8cd8-a4ce3d75e08c",
+          "title": "10 Χρόνια CBS",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0c77657d-6f77-4e6a-a220-b3bfeb5bfaf9",
+        "status": "Official",
+        "title": "Business as Usual",
+        "date": "1987",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c9bff180-434f-3c93-aba5-ff579e3976aa",
+          "title": "Business As Usual",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "82e338dc-dda0-4858-84ad-4485a945e492",
+        "status": "Official",
+        "title": "25 Years of Rock ’n’ Roll: 1983: 20 of the Year’s Greatest Tracks",
+        "date": "1988",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "94ade07e-62d4-4146-98e0-115b13655434",
+          "title": "25 Years of Rock ’n’ Roll: 1983: 20 of the Year’s Greatest Tracks",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "82f43280-da6c-3e89-a438-bbce77b9e527",
+        "status": "Official",
+        "title": "Down Under",
+        "date": "1989",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+          "title": "Down Under",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "df76a656-b9ea-3ce8-9604-2c1bf3391cab",
+        "status": "Official",
+        "title": "Down Under",
+        "date": "1989",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+          "title": "Down Under",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/2f89c7b5-017a-497c-a925-601a59eab975?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "2f89c7b5-017a-497c-a925-601a59eab975",
+    "title": "Only You",
+    "length": 203333,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAA8300337"
+    ],
+    "first_release_date": "2023-07-01",
+    "artist_credit": [
+      {
+        "name": "The Flying Pickets",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "aed01cb4-83e9-47b0-978f-b8c9cb09d537",
+        "status": "Official",
+        "title": "1983 Best Of by uDiscover",
+        "date": "2023-07-01",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e42fe123-935f-4f5e-a9ff-c0fbee15c5d5",
+          "title": "1983 Best Of by uDiscover",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/bd27b173-89ab-4ad3-b59b-bb146045c731?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "bd27b173-89ab-4ad3-b59b-bb146045c731",
+    "title": "Eye of the Tiger",
+    "length": 163600,
+    "disambiguation": "",
+    "isrcs": [
+      "USVR19600010"
+    ],
+    "first_release_date": "1990",
+    "artist_credit": [
+      {
+        "name": "Survivor",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "e2c32c97-eda2-444e-ba73-8f2e2831d87f",
+        "status": "Official",
+        "title": "Larry präsentiert: Party Rock",
+        "date": "1990",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "70134c6e-4160-3d12-9fe1-b1f66464364e",
+          "title": "Larry präsentiert: Party Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a048cb02-de3b-4d5c-88b7-3670a61f7dc5",
+        "status": "Official",
+        "title": "Larry präsentiert: Party Rock",
+        "date": "1990",
+        "country": "AT",
+        "disambiguation": "first edition",
+        "release_group": {
+          "id": "70134c6e-4160-3d12-9fe1-b1f66464364e",
+          "title": "Larry präsentiert: Party Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/b20d9dfd-b0ed-4623-a428-a20e9254518a?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "b20d9dfd-b0ed-4623-a428-a20e9254518a",
+    "title": "Honky Tonk Women",
+    "length": 182000,
+    "disambiguation": "",
+    "isrcs": [
+      "USA176910010"
+    ],
+    "first_release_date": "2002",
+    "artist_credit": [
+      {
+        "name": "The Rolling Stones",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "5cf67d31-5e86-497e-9aee-c18905058305",
+        "status": "Official",
+        "title": "Through the Past, Darkly (Big Hits, Vol. 2)",
+        "date": "2002",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "049a49d2-56e4-3501-bcba-214134605d4a",
+          "title": "Through the Past, Darkly (Big Hits, Vol. 2)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c8ecb92d-a452-4082-8113-937642107fef",
+        "status": "Official",
+        "title": "Singles 1968–1971",
+        "date": "2005-08-03",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9a2a295f-5570-3919-b126-5d8a2b9620c4",
+          "title": "Singles 1968–1971",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

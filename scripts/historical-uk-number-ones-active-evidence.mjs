@@ -13,6 +13,7 @@ const REJECTED = /\b(live|demo|bootleg|remix|karaoke|instrumental|cover|re[ -]?r
 const REJECTED_SECONDARY = new Set(["Live", "Remix", "DJ-mix", "Mixtape/Street", "Compilation"]);
 const PROHIBITED = new Set(["--commit", "--execute", "--apply", "--production"]);
 const WRITE_ENV = ["BOM_DATABASE_URL", "DATABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
+const EVIDENCE_POLICY_VERSION = 3;
 
 function option(name, fallback = "") {
   const inline = process.argv.find(value => value.startsWith(`--${name}=`));
@@ -148,9 +149,10 @@ export function parseOfficialChartCatalogueNumbers(html) {
     .map(match => decodeHtml(match[1]).replace(/\s+/g, "").toUpperCase()).filter(Boolean))];
 }
 
-export function reusableCheckpoint(previous, fingerprint, previousRegistrySha256, registrySha256, refresh = false) {
+export function reusableCheckpoint(previous, fingerprint, previousRegistrySha256, registrySha256,
+    previousPolicyVersion, policyVersion, refresh = false) {
   return previous?.final === true && previous.row_fingerprint === fingerprint &&
-    previousRegistrySha256 === registrySha256 && !refresh;
+    previousRegistrySha256 === registrySha256 && previousPolicyVersion === policyVersion && !refresh;
 }
 
 export function selectOfficialChartResult(entry, search) {
@@ -162,14 +164,15 @@ export function selectOfficialChartResult(entry, search) {
   return { url: `${urls[0]}/` };
 }
 
-function selectRecording(entry, isrcResult) {
+function selectRecordings(entry, isrcResult) {
   const exact = (isrcResult?.recordings || []).filter(recording => normalise(recording.title) === normalise(entry.title) &&
     artistCompatible(entry.artist, creditText(recording.artist_credit)) && !REJECTED.test(`${recording.title} ${recording.disambiguation}`));
   if (!exact.length) return { reason: "musicbrainz_isrc_has_no_exact_title_artist_recording" };
-  const ranked = exact.map(recording => ({ recording, distance: Math.abs((releaseYear({ date: recording.first_release_date }) || 9999) - entry.chart_year) }))
-    .sort((a, b) => a.distance - b.distance || String(a.recording.id).localeCompare(String(b.recording.id)));
-  if (ranked.length > 1 && ranked[0].distance === ranked[1].distance) return { reason: "musicbrainz_isrc_has_multiple_exact_recordings", candidates: exact.map(row => row.id) };
-  return { recording: ranked[0].recording };
+  if (!entry.musicbrainz_recording_id) return { recordings: exact };
+  const stored = exact.find(recording => recording.id.toLowerCase() === entry.musicbrainz_recording_id.toLowerCase());
+  return stored ? { recordings: [stored] } : {
+    reason: "musicbrainz_recording_conflicts_with_stored_evidence", candidates: exact.map(recording => recording.id)
+  };
 }
 
 function eligibleRelease(entry, release) {
@@ -236,17 +239,40 @@ export async function retrieveEntryEvidence(entry, fetcher, catalogue = {}, seed
   let isrcResult;
   try { isrcResult = await fetcher.get(isrcUrl, "mb_isrc"); }
   catch (error) { if (isNotFound(error)) return { reason: "musicbrainz_isrc_not_found", official_charts_url: officialUrl, isrc }; throw error; }
-  const selected = selectRecording(entry, isrcResult);
-  if (!selected.recording) return { ...selected, official_charts_url: officialUrl, isrc };
-  const recording = selected.recording;
-  if (entry.musicbrainz_recording_id && entry.musicbrainz_recording_id.toLowerCase() !== recording.id.toLowerCase()) return { reason: "musicbrainz_recording_conflicts_with_stored_evidence", official_charts_url: officialUrl, isrc, recording_mbid: recording.id };
+  const selected = selectRecordings(entry, isrcResult);
+  if (!selected.recordings) return { ...selected, official_charts_url: officialUrl, isrc };
+  const qualified = [], rejected = [];
+  for (const recording of selected.recordings) {
+    const result = await retrieveRecordingEvidence(entry, fetcher, catalogue, officialUrl, isrc, recording);
+    if (result.evidence) qualified.push(result.evidence);
+    else rejected.push({ recording_mbid: recording.id, reason: result.reason });
+  }
+  if (qualified.length === 1) return { evidence: { ...qualified[0], recording_selection: {
+    basis: selected.recordings.length === 1 ? "single_exact_title_artist_recording" : "unique_exact_release_evidence",
+    isrc_candidate_recording_mbids: selected.recordings.map(recording => recording.id),
+    exact_release_validated_recording_mbids: qualified.map(evidence => evidence.recording_mbid),
+    rejected_recording_candidates: rejected
+  } } };
+  if (qualified.length > 1) return {
+    reason: "musicbrainz_isrc_has_multiple_exact_release_recordings", official_charts_url: officialUrl, isrc,
+    candidates: qualified.map(evidence => evidence.recording_mbid)
+  };
+  if (selected.recordings.length > 1) return {
+    reason: "musicbrainz_isrc_has_no_unique_exact_release_recording", official_charts_url: officialUrl, isrc,
+    candidates: selected.recordings.map(recording => recording.id), candidate_failures: rejected
+  };
+  return { reason: rejected[0]?.reason || "musicbrainz_no_exact_release_track_validated", official_charts_url: officialUrl, isrc,
+    recording_mbid: selected.recordings[0].id };
+}
+
+async function retrieveRecordingEvidence(entry, fetcher, catalogue, officialUrl, isrc, recording) {
   const recordingUrl = `https://musicbrainz.org/ws/2/recording/${recording.id}?inc=isrcs+artist-credits+releases+release-groups&fmt=json`;
   let details;
   try { details = await fetcher.get(recordingUrl, "mb_recording"); }
-  catch (error) { if (isNotFound(error)) return { reason: "musicbrainz_recording_not_found", official_charts_url: officialUrl, isrc, recording_mbid: recording.id }; throw error; }
-  if (!(details.isrcs || []).includes(isrc)) return { reason: "musicbrainz_recording_does_not_confirm_official_isrc", official_charts_url: officialUrl, isrc, recording_mbid: recording.id };
+  catch (error) { if (isNotFound(error)) return { reason: "musicbrainz_recording_not_found" }; throw error; }
+  if (!(details.isrcs || []).includes(isrc)) return { reason: "musicbrainz_recording_does_not_confirm_official_isrc" };
   const releases = rankReleases(entry, details.releases || []);
-  if (!releases.length) return { reason: "musicbrainz_no_contemporary_official_release", official_charts_url: officialUrl, isrc, recording_mbid: recording.id };
+  if (!releases.length) return { reason: "musicbrainz_no_contemporary_official_release" };
   let lastFailure = "musicbrainz_no_exact_release_track_validated";
   for (const summary of releases.slice(0, 8)) {
     const releaseUrl = `https://musicbrainz.org/ws/2/release/${summary.id}?inc=recordings+artist-credits+release-groups&fmt=json`;
@@ -257,7 +283,7 @@ export async function retrieveEntryEvidence(entry, fetcher, catalogue = {}, seed
     if (result.evidence) return result;
     lastFailure = result.reason;
   }
-  return { reason: lastFailure, official_charts_url: officialUrl, isrc, recording_mbid: recording.id };
+  return { reason: lastFailure };
 }
 
 async function readJson(path, fallback = null) {
@@ -282,7 +308,9 @@ async function main() {
   const exclusionRegistry = option("exclusions") ? await readJson(option("exclusions"), { entries: [] }) : { entries: [] };
   const registrySha256 = exclusionRegistryDigest(exclusionRegistry);
   const previousRegistrySha256 = state.exclusion_registry_sha256 || null;
+  const previousPolicyVersion = state.evidence_policy_version || null;
   state.exclusion_registry_sha256 = registrySha256;
+  state.evidence_policy_version = EVIDENCE_POLICY_VERSION;
   const catalogue = option("catalogue-snapshot") ? await readJson(option("catalogue-snapshot"), {}) : {};
   const fetcher = new EvidenceFetcher({ officialCache, musicbrainzCache, baseMusicbrainzCache,
     officialIntervalMs: Number(option("official-interval-ms", "1100")), musicbrainzIntervalMs: Number(option("musicbrainz-interval-ms", "1100")) });
@@ -291,7 +319,8 @@ async function main() {
   if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 8) throw new Error("Concurrency must be between 1 and 8.");
   const processEntry = async entry => {
     const key = String(entry.id), fingerprint = rowFingerprint(entry), previous = state.results[key];
-    if (reusableCheckpoint(previous, fingerprint, previousRegistrySha256, registrySha256, process.argv.includes("--refresh"))) return;
+    if (reusableCheckpoint(previous, fingerprint, previousRegistrySha256, registrySha256,
+      previousPolicyVersion, EVIDENCE_POLICY_VERSION, process.argv.includes("--refresh"))) return;
     try {
       const preliminaryExclusion = historicalExclusion(entry, null, exclusionRegistry);
       if (preliminaryExclusion && !preliminaryExclusion.pending_evidence_validation) {

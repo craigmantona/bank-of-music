@@ -2616,5 +2616,196 @@
         }
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/13ffad17-bd06-4c01-bb92-e78e4a0f8270?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "13ffad17-bd06-4c01-bb92-e78e4a0f8270",
+    "title": "Flat Beat",
+    "length": 309040,
+    "disambiguation": "",
+    "isrcs": [
+      "FRV229900020"
+    ],
+    "first_release_date": "2006-08-21",
+    "artist_credit": [
+      {
+        "name": "Mr. Oizo",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "40ff92b7-da86-418a-a7b7-040a6b74f5ae",
+        "status": "Official",
+        "title": "Number One Dance Anthems",
+        "date": "2006-08-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9379767e-b875-38c0-8338-b307da68ee2e",
+          "title": "Number One Dance Anthems",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/d5b5a8a5-3393-4d10-b75f-5fa21fd2e65a?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "d5b5a8a5-3393-4d10-b75f-5fa21fd2e65a",
+    "status": "Official",
+    "title": "Spaceman",
+    "date": "1996-01-16",
+    "country": "XE",
+    "disambiguation": "French price code PM515",
+    "artist_credit": [
+      {
+        "name": "Babylon Zoo",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "febc7c6b-413a-3769-8abd-f136d552b87e",
+      "title": "Spaceman",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Spaceman (radio edit)",
+            "length": 245666,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d96495c5-7406-4e18-ba76-6c70af484cf5",
+              "title": "Spaceman",
+              "length": 241320,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Metal Vision",
+            "length": 230866,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1a718633-dbd4-4e01-8ac2-87f331c3bad0",
+              "title": "Metal Vision",
+              "length": 230866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Blue Nude",
+            "length": 132266,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4673c53b-db4c-4d13-9231-77db71ef220c",
+              "title": "Blue Nude",
+              "length": 132266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Spaceman – The 5th Dimension",
+            "length": 310200,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ba9ce204-643b-4b3f-8f1f-ca87f2abe529",
+              "title": "Spaceman (The 5th Dimension)",
+              "length": 310200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/eb1d85b2-81fb-4e70-b4b0-b7e83a7deb08?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "eb1d85b2-81fb-4e70-b4b0-b7e83a7deb08",
+    "title": "Under The Moon Of Love",
+    "length": 192160,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBPJ9800694"
+    ],
+    "first_release_date": "2012-12-17",
+    "artist_credit": [
+      {
+        "name": "Showaddywaddy",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "eb327cd5-3aa2-425e-9c2d-037dce9c81e3",
+        "status": "Official",
+        "title": "Greatest, Vol.1",
+        "date": "2012-12-17",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "11c7178c-8d45-4e58-8275-9cdf8c17e6ac",
+          "title": "Greatest, Vol.1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

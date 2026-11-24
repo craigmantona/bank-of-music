@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-24T17:03:31.713Z",
+  "generated_at": "2026-11-24T17:53:38.044Z",
   "exclusion_registry_sha256": "c8c7ffe5bdc8f50c6ac5c80776bd1d128f84c6e2639cc68fde64890e10d8ec01",
   "entries": {
     "14": {
@@ -31,7 +31,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "44612124-bad8-4060-a272-0aecb7f99b4f",
+          "bf86154e-3985-493a-bb88-bb2f7b2ea089"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "44612124-bad8-4060-a272-0aecb7f99b4f"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "bf86154e-3985-493a-bb88-bb2f7b2ea089",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "25": {
       "status": "independently_verified",
@@ -61,37 +77,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
-    },
-    "90": {
-      "status": "independently_verified",
-      "title": "Spaceman",
-      "artist": "Babylon Zoo",
-      "official_charts_url": "https://www.officialcharts.com/songs/babylon-zoo-spaceman/",
-      "official_charts_isrc": "GBAYE9500084",
-      "recording_mbid": "b2d1dadc-b2a8-4870-b0b2-9cf026dbbb72",
-      "musicbrainz_recording_url": "https://musicbrainz.org/recording/b2d1dadc-b2a8-4870-b0b2-9cf026dbbb72",
-      "recording_isrcs": [
-        "GBAYE9500084"
-      ],
-      "release_mbid": "2733229c-16f1-4700-85f7-ef5143da1802",
-      "musicbrainz_release_url": "https://musicbrainz.org/release/2733229c-16f1-4700-85f7-ef5143da1802",
-      "release_group_mbid": "8f25dad8-0200-3fc3-8115-f538bfb7e3db",
-      "release_status": "Official",
-      "release_date": "1996-02-05",
-      "release_country": "GB",
-      "release_title": "The Boy With the X-Ray Eyes",
-      "medium_position": 1,
-      "track_position": 2,
-      "track_recording_mbid": "b2d1dadc-b2a8-4870-b0b2-9cf026dbbb72",
-      "release_recording_occurrences": 1,
-      "release_track_count": 11,
-      "duration_ms": 340600,
-      "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-      "risk_notes": "Selected-track import: track 2 only from a 11-track official release.",
-      "action": "safe_import",
-      "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "2555962d-16d6-4aa2-bfc8-352e66f08213",
+          "2a6f2d59-97ba-480c-a00d-f805dacd543b"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "2555962d-16d6-4aa2-bfc8-352e66f08213"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "2a6f2d59-97ba-480c-a00d-f805dacd543b",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "118": {
       "status": "independently_verified",
@@ -124,7 +126,17 @@
       "risk_notes": "Selected-track import: track 4 only from a 14-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "a6685ec6-2a43-42ee-901d-8b498e3ba868"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "a6685ec6-2a43-42ee-901d-8b498e3ba868"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "153": {
       "status": "independently_verified",
@@ -154,7 +166,69 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "799efc4a-aae5-4b93-94a3-6d418ec7af0d"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "799efc4a-aae5-4b93-94a3-6d418ec7af0d"
+        ],
+        "rejected_recording_candidates": []
+      }
+    },
+    "171": {
+      "status": "independently_verified",
+      "title": "Flat Beat",
+      "artist": "Mr. Oizo",
+      "official_charts_url": "https://www.officialcharts.com/songs/mr-oizo-flat-beat/",
+      "official_charts_isrc": "FRV229900020",
+      "recording_mbid": "518242bd-6470-49f0-be72-784e0d17bc45",
+      "musicbrainz_recording_url": "https://musicbrainz.org/recording/518242bd-6470-49f0-be72-784e0d17bc45",
+      "recording_isrcs": [
+        "FRV229900012",
+        "FRV229900020"
+      ],
+      "release_mbid": "0d286c36-3042-42f1-8c94-9869a2e9121c",
+      "musicbrainz_release_url": "https://musicbrainz.org/release/0d286c36-3042-42f1-8c94-9869a2e9121c",
+      "release_group_mbid": "e31749af-ca16-37ef-acff-fa67ff998db5",
+      "release_status": "Official",
+      "release_date": "1999-03-22",
+      "release_country": "GB",
+      "release_title": "Flat Beat",
+      "medium_position": 1,
+      "track_position": 2,
+      "track_recording_mbid": "518242bd-6470-49f0-be72-784e0d17bc45",
+      "release_recording_occurrences": 1,
+      "release_track_count": 3,
+      "duration_ms": 324786,
+      "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+      "risk_notes": "Selected-track import: track 2 only from a 3-track official release.",
+      "action": "safe_import",
+      "existing_song_id": null,
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "518242bd-6470-49f0-be72-784e0d17bc45",
+          "13ffad17-bd06-4c01-bb92-e78e4a0f8270",
+          "ba7b1b4e-d568-458e-b838-389cb645eabd"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "518242bd-6470-49f0-be72-784e0d17bc45"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "13ffad17-bd06-4c01-bb92-e78e4a0f8270",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "ba7b1b4e-d568-458e-b838-389cb645eabd",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "185": {
       "status": "independently_verified",
@@ -187,7 +261,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "be78b3cc-9b1b-4df9-b832-575b6af1cf89"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "be78b3cc-9b1b-4df9-b832-575b6af1cf89"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "412": {
       "status": "independently_verified",
@@ -217,7 +301,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "91a35dfb-f746-4a4d-a0a9-fe5f932f2923"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "91a35dfb-f746-4a4d-a0a9-fe5f932f2923"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "415": {
       "status": "independently_verified",
@@ -251,7 +345,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "ef4c6855-949e-4e22-b41e-8e0a2d372d5f"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "ef4c6855-949e-4e22-b41e-8e0a2d372d5f"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "441": {
       "status": "independently_verified",
@@ -283,7 +387,17 @@
       "risk_notes": "Selected-track import: track 6 only from a 9-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "f980fc14-e29b-481d-ad3a-5ed9b4ab6340"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "f980fc14-e29b-481d-ad3a-5ed9b4ab6340"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "445": {
       "status": "independently_verified",
@@ -319,7 +433,28 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "745c92a7-395a-4730-88a1-fa94bc94f4cf",
+          "2d020c74-7790-4bbc-ae9d-3ecb3282cc63",
+          "440e9c0d-d33e-4c30-9001-3f1cf541a342"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "2d020c74-7790-4bbc-ae9d-3ecb3282cc63"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "745c92a7-395a-4730-88a1-fa94bc94f4cf",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "440e9c0d-d33e-4c30-9001-3f1cf541a342",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "452": {
       "status": "independently_verified",
@@ -349,7 +484,28 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "7e2a8918-0171-4e43-be4c-7b2cee8e26a3",
+          "efc40ac6-d6fb-43ee-8af2-4c4f8a74a021",
+          "2f89c7b5-017a-497c-a925-601a59eab975"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "efc40ac6-d6fb-43ee-8af2-4c4f8a74a021"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "7e2a8918-0171-4e43-be4c-7b2cee8e26a3",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "2f89c7b5-017a-497c-a925-601a59eab975",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "457": {
       "status": "independently_verified",
@@ -381,7 +537,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "9a8f6c80-8ed6-40a6-b3d1-5c97866f191c",
+          "7313c159-ee3b-4f16-b46c-81f7982b91db"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "7313c159-ee3b-4f16-b46c-81f7982b91db"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "9a8f6c80-8ed6-40a6-b3d1-5c97866f191c",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "458": {
       "status": "independently_verified",
@@ -412,7 +584,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "632a2454-b1b5-4483-b85d-4e5c39e8590d"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "632a2454-b1b5-4483-b85d-4e5c39e8590d"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "463": {
       "status": "independently_verified",
@@ -448,7 +630,17 @@
       "risk_notes": "Selected-track import: track 3 only from a 10-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "9128e802-502a-433b-8b31-78b3ddc31647"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "9128e802-502a-433b-8b31-78b3ddc31647"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "467": {
       "status": "independently_verified",
@@ -479,7 +671,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 10-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "94f5e5cc-d1de-454c-b50f-8d2e4b28f22a"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "94f5e5cc-d1de-454c-b50f-8d2e4b28f22a"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "482": {
       "status": "independently_verified",
@@ -510,7 +712,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "dba5b89a-970a-4b5d-bd1c-d494f37452e3"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "dba5b89a-970a-4b5d-bd1c-d494f37452e3"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "492": {
       "status": "independently_verified",
@@ -543,7 +755,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "f45c5a92-c668-4070-a078-4f11c397b8c2"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "f45c5a92-c668-4070-a078-4f11c397b8c2"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "503": {
       "status": "independently_verified",
@@ -574,7 +796,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "6ac93614-4674-4366-b787-4ad9a39064d7"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "6ac93614-4674-4366-b787-4ad9a39064d7"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "505": {
       "status": "independently_verified",
@@ -605,7 +837,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "80983228-4292-4f64-a7cf-92707f8e297f",
+          "5d61a3b2-3190-4408-9920-aa650da0ade8"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "80983228-4292-4f64-a7cf-92707f8e297f"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "5d61a3b2-3190-4408-9920-aa650da0ade8",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "508": {
       "status": "independently_verified",
@@ -642,7 +890,23 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae",
+          "e00ebb77-541e-41f3-86ba-a90530414922"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "e00ebb77-541e-41f3-86ba-a90530414922",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "539": {
       "status": "independently_verified",
@@ -675,7 +939,23 @@
       "risk_notes": "Selected-track import: track 6 only from a 9-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "420570a6-0e60-428a-a394-c73553a6351c",
+          "8eb04280-529d-43cf-98e3-6a17ddb79c46"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "8eb04280-529d-43cf-98e3-6a17ddb79c46"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "420570a6-0e60-428a-a394-c73553a6351c",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "736": {
       "status": "independently_verified",
@@ -712,7 +992,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "0395e870-aa32-468f-a4c0-372fcc6ebf18"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "0395e870-aa32-468f-a4c0-372fcc6ebf18"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "764": {
       "status": "independently_verified",
@@ -744,7 +1034,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "existing_recording",
       "existing_song_id": 8858,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "bfdcfb41-167c-4f5b-b163-bde83bbf69ac"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "bfdcfb41-167c-4f5b-b163-bde83bbf69ac"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "793": {
       "status": "independently_verified",
@@ -777,7 +1077,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "6f379c0e-82a9-450c-8bc4-5cbae9182866"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "6f379c0e-82a9-450c-8bc4-5cbae9182866"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "805": {
       "status": "independently_verified",
@@ -808,7 +1118,17 @@
       "risk_notes": "Selected-track import: track 2 only from a 10-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "bec30aa1-a779-4c0d-90d0-67b5361b7763"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "bec30aa1-a779-4c0d-90d0-67b5361b7763"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "808": {
       "status": "independently_verified",
@@ -844,7 +1164,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "7e42ec62-b028-4de4-b0cc-63874bfae34c"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "7e42ec62-b028-4de4-b0cc-63874bfae34c"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "809": {
       "status": "independently_verified",
@@ -874,7 +1204,33 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "0b27ab7a-414a-4444-88f1-d9debaee47b5",
+          "eb1d85b2-81fb-4e70-b4b0-b7e83a7deb08",
+          "9dac9025-232f-4be0-8925-e3ddb536f0c7",
+          "d1e69e14-ade5-4519-92fb-601bd1f5e262"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "d1e69e14-ade5-4519-92fb-601bd1f5e262"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "0b27ab7a-414a-4444-88f1-d9debaee47b5",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "eb1d85b2-81fb-4e70-b4b0-b7e83a7deb08",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "9dac9025-232f-4be0-8925-e3ddb536f0c7",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "813": {
       "status": "independently_verified",
@@ -908,7 +1264,23 @@
       "risk_notes": "Selected-track import: track 4 only from a 10-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "e83438f6-b1b1-4782-adfe-24c5479a3de6",
+          "f8718dab-55ea-4d45-9d62-23eb69d55e69"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "f8718dab-55ea-4d45-9d62-23eb69d55e69"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "e83438f6-b1b1-4782-adfe-24c5479a3de6",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "823": {
       "status": "independently_verified",
@@ -940,7 +1312,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 11-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "0d766d15-a6c3-42a1-809e-d068fe803103"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "0d766d15-a6c3-42a1-809e-d068fe803103"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1086": {
       "status": "independently_verified",
@@ -972,7 +1354,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "ae81e0fa-1636-46ce-a899-6a7d2e744c84"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "ae81e0fa-1636-46ce-a899-6a7d2e744c84"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1096": {
       "status": "independently_verified",
@@ -1003,7 +1395,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "57888c47-f976-4417-9577-f45f118b58ca"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "57888c47-f976-4417-9577-f45f118b58ca"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1116": {
       "status": "independently_verified",
@@ -1041,7 +1443,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "3ad31947-ae54-4409-aeaa-8dbd16c3825f"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "3ad31947-ae54-4409-aeaa-8dbd16c3825f"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1137": {
       "status": "independently_verified",
@@ -1076,7 +1488,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "20655d93-c325-4825-9018-50fa1b54bf77",
+          "b79be24d-7bcf-4561-b2df-5fbfefb7d42c"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "20655d93-c325-4825-9018-50fa1b54bf77"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "b79be24d-7bcf-4561-b2df-5fbfefb7d42c",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1152": {
       "status": "independently_verified",
@@ -1108,7 +1536,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "488eacf5-1175-4001-be2e-c10194d767a9"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "488eacf5-1175-4001-be2e-c10194d767a9"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1155": {
       "status": "independently_verified",
@@ -1138,7 +1576,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "d8dec018-29f0-431f-9661-a97bb5e420e9",
+          "6442972c-2ae1-429e-9595-ae5a11a02e0d"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "6442972c-2ae1-429e-9595-ae5a11a02e0d"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "d8dec018-29f0-431f-9661-a97bb5e420e9",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1162": {
       "status": "independently_verified",
@@ -1169,7 +1623,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "b20d9dfd-b0ed-4623-a428-a20e9254518a",
+          "c0b7b368-ad18-481f-9184-2d92fa5799df"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "c0b7b368-ad18-481f-9184-2d92fa5799df"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "b20d9dfd-b0ed-4623-a428-a20e9254518a",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1352": {
       "status": "independently_verified",
@@ -1199,7 +1669,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "2096b403-6059-4149-9c86-51b6e463fe12"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "2096b403-6059-4149-9c86-51b6e463fe12"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1364": {
       "status": "independently_verified",
@@ -1231,7 +1711,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "809e8321-9e38-4ebf-b467-1cb6d85f5076"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "809e8321-9e38-4ebf-b467-1cb6d85f5076"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1403": {
       "status": "independently_verified",
@@ -1261,7 +1751,23 @@
       "risk_notes": "Selected-track import: track 9 only from a 19-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "8c6b9255-da1b-4b0a-bd08-55800377e81f",
+          "1734d7f8-1473-4914-8a3e-4e2fc705f3db"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "1734d7f8-1473-4914-8a3e-4e2fc705f3db"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "8c6b9255-da1b-4b0a-bd08-55800377e81f",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1407": {
       "status": "independently_verified",
@@ -1291,7 +1797,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "c59ee855-c988-442b-922b-61e029b6aee0"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "c59ee855-c988-442b-922b-61e029b6aee0"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1408": {
       "status": "independently_verified",
@@ -1323,7 +1839,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "0cebe177-3f21-4b5e-a701-50d20eb4758f",
+          "a3e3e340-8a08-4fa6-926d-009c8aa191e2"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "a3e3e340-8a08-4fa6-926d-009c8aa191e2"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "0cebe177-3f21-4b5e-a701-50d20eb4758f",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1461": {
       "status": "independently_verified",
@@ -1353,7 +1885,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "559b48c8-5544-43da-ada3-dd861a8c2fa5"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "559b48c8-5544-43da-ada3-dd861a8c2fa5"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1466": {
       "status": "independently_verified",
@@ -1383,7 +1925,70 @@
       "risk_notes": "Selected-track import: track 2 only from a 11-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "c89f602e-487e-4479-985f-159de528b3d2"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "c89f602e-487e-4479-985f-159de528b3d2"
+        ],
+        "rejected_recording_candidates": []
+      }
+    },
+    "1482": {
+      "status": "independently_verified",
+      "title": "Lonely",
+      "artist": "Akon",
+      "official_charts_url": "https://www.officialcharts.com/songs/akon-lonely-0/",
+      "official_charts_isrc": "USUR10400235",
+      "recording_mbid": "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+      "musicbrainz_recording_url": "https://musicbrainz.org/recording/1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+      "recording_isrcs": [
+        "USUR10400230",
+        "USUR10400234",
+        "USUR10400235"
+      ],
+      "release_mbid": "f26960ab-a238-4cbe-938e-6199ee9dcbcc",
+      "musicbrainz_release_url": "https://musicbrainz.org/release/f26960ab-a238-4cbe-938e-6199ee9dcbcc",
+      "release_group_mbid": "4531b2ce-ffc3-4ac8-898e-6026be69950b",
+      "release_status": "Official",
+      "release_date": "2005-05-02",
+      "release_country": "XE",
+      "release_title": "Lonely",
+      "medium_position": 1,
+      "track_position": 1,
+      "track_recording_mbid": "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+      "release_recording_occurrences": 1,
+      "release_track_count": 2,
+      "duration_ms": 237200,
+      "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+      "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
+      "action": "safe_import",
+      "existing_song_id": null,
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "5ad9b3e7-1e2b-49ba-bae3-fdea9ce9e624",
+          "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+          "0d02411d-0eeb-4f5e-afa6-aaa32d1d1184"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "1f6a1148-ffe8-4e96-b9f5-2e6701af6573"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "5ad9b3e7-1e2b-49ba-bae3-fdea9ce9e624",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "0d02411d-0eeb-4f5e-afa6-aaa32d1d1184",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1502": {
       "status": "independently_verified",
@@ -1413,7 +2018,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "61c6c68c-d630-46d4-bdbf-57ba4e3af784"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "61c6c68c-d630-46d4-bdbf-57ba4e3af784"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1529": {
       "status": "independently_verified",
@@ -1444,7 +2059,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "192333bd-5f71-4d0e-9356-f4bf2ff848c5"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "192333bd-5f71-4d0e-9356-f4bf2ff848c5"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1534": {
       "status": "independently_verified",
@@ -1476,7 +2101,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 3-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "34bb4161-8c39-4fad-8a75-32733b1bb732"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "34bb4161-8c39-4fad-8a75-32733b1bb732"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1538": {
       "status": "independently_verified",
@@ -1506,7 +2141,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "b896292e-ea21-41c0-92d6-81f4bcb7fe58"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "b896292e-ea21-41c0-92d6-81f4bcb7fe58"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1542": {
       "status": "independently_verified",
@@ -1536,7 +2181,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "existing_recording",
       "existing_song_id": 14589,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "0810268f-2e52-4f89-86be-42762ea3f6d4"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "0810268f-2e52-4f89-86be-42762ea3f6d4"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1558": {
       "status": "independently_verified",
@@ -1566,7 +2221,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 7-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "8bef9c82-26f9-49ab-ae14-1da303e73abf"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "8bef9c82-26f9-49ab-ae14-1da303e73abf"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1811": {
       "status": "independently_verified",
@@ -1596,7 +2261,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 18-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "4dd140f2-8546-48a6-8000-eb16fb98ff05"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "4dd140f2-8546-48a6-8000-eb16fb98ff05"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1812": {
       "status": "independently_verified",
@@ -1626,7 +2301,17 @@
       "risk_notes": "Selected-track import: track 6 only from a 24-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": 1112
+      "reuse_album_id": 1112,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "fa8fb8c8-c3a8-4978-ae7c-c121c57c7f8f"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "fa8fb8c8-c3a8-4978-ae7c-c121c57c7f8f"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1813": {
       "status": "independently_verified",
@@ -1656,7 +2341,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "8bb81269-6443-438c-a567-21a5e1b40607"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "8bb81269-6443-438c-a567-21a5e1b40607"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1820": {
       "status": "independently_verified",
@@ -1688,7 +2383,17 @@
       "risk_notes": "Selected-track import: track 3 only from a 14-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "44e88237-bdb1-4176-9687-714f0d9f6f76"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "44e88237-bdb1-4176-9687-714f0d9f6f76"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1839": {
       "status": "independently_verified",
@@ -1718,7 +2423,69 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "existing_recording",
       "existing_song_id": 11047,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "2eab2264-5b01-4454-b66c-3eeb46d37e0c"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "2eab2264-5b01-4454-b66c-3eeb46d37e0c"
+        ],
+        "rejected_recording_candidates": []
+      }
+    },
+    "1844": {
+      "status": "independently_verified",
+      "title": "Party Rock Anthem",
+      "artist": "LMFAO featuring Lauren Bennett and GoonRock",
+      "official_charts_url": "https://www.officialcharts.com/songs/lmfaolauren-bennettgoonrock-party-rock-anthem/",
+      "official_charts_isrc": "USUM71100061",
+      "recording_mbid": "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+      "musicbrainz_recording_url": "https://musicbrainz.org/recording/7c5b6609-0e04-4ea4-a871-513301db8c9a",
+      "recording_isrcs": [
+        "USUM71100061",
+        "USUM71105650"
+      ],
+      "release_mbid": "4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c",
+      "musicbrainz_release_url": "https://musicbrainz.org/release/4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c",
+      "release_group_mbid": "3be839a3-1d35-4846-aa64-9d1532648799",
+      "release_status": "Official",
+      "release_date": "2011-06-24",
+      "release_country": "AU",
+      "release_title": "Sorry for Party Rocking",
+      "medium_position": 1,
+      "track_position": 3,
+      "track_recording_mbid": "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+      "release_recording_occurrences": 1,
+      "release_track_count": 16,
+      "duration_ms": 262146,
+      "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+      "risk_notes": "Selected-track import: track 3 only from a 16-track official release.",
+      "action": "safe_import",
+      "existing_song_id": null,
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+          "338371ca-2311-4733-8673-b13001b7f57f",
+          "dcf6a587-7388-4020-bc3e-e380da86b151"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "7c5b6609-0e04-4ea4-a871-513301db8c9a"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "338371ca-2311-4733-8673-b13001b7f57f",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "dcf6a587-7388-4020-bc3e-e380da86b151",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1845": {
       "status": "independently_verified",
@@ -1748,7 +2515,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "748b6681-c103-4a6f-bb8f-769e620d2121"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "748b6681-c103-4a6f-bb8f-769e620d2121"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1854": {
       "status": "independently_verified",
@@ -1778,7 +2555,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 13-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "51fe96c7-0fe0-49be-bd22-4906b8c3d327"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "51fe96c7-0fe0-49be-bd22-4906b8c3d327"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1860": {
       "status": "independently_verified",
@@ -1809,7 +2596,17 @@
       "risk_notes": "Selected-track import: track 3 only from a 18-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "0404d8b1-1394-45ca-8fd9-e738a7c7b839"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "0404d8b1-1394-45ca-8fd9-e738a7c7b839"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1862": {
       "status": "independently_verified",
@@ -1839,7 +2636,23 @@
       "risk_notes": "Selected-track import: track 3 only from a 13-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "47db2348-5764-4475-88db-7b4ab5fdc539",
+          "f3af8160-e4e1-4ee7-91a3-3658c5d79d26"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "f3af8160-e4e1-4ee7-91a3-3658c5d79d26"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "47db2348-5764-4475-88db-7b4ab5fdc539",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1863": {
       "status": "independently_verified",
@@ -1869,7 +2682,64 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "d056a318-4272-458c-be4d-47ead34c3d8d"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "d056a318-4272-458c-be4d-47ead34c3d8d"
+        ],
+        "rejected_recording_candidates": []
+      }
+    },
+    "1868": {
+      "status": "independently_verified",
+      "title": "Titanium",
+      "artist": "David Guetta featuring Sia",
+      "official_charts_url": "https://www.officialcharts.com/songs/david-guetta-ft-sia-titanium/",
+      "official_charts_isrc": "GB28K1100036",
+      "recording_mbid": "0069c0f7-9274-4b4b-a10e-110b90a4bcc0",
+      "musicbrainz_recording_url": "https://musicbrainz.org/recording/0069c0f7-9274-4b4b-a10e-110b90a4bcc0",
+      "recording_isrcs": [
+        "GB28K1100036",
+        "GB28K1100054"
+      ],
+      "release_mbid": "05b8c34d-e064-45cd-87e5-b870b7a6a8c3",
+      "musicbrainz_release_url": "https://musicbrainz.org/release/05b8c34d-e064-45cd-87e5-b870b7a6a8c3",
+      "release_group_mbid": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+      "release_status": "Official",
+      "release_date": "2011-08-29",
+      "release_country": "GB",
+      "release_title": "Nothing but the Beat",
+      "medium_position": 1,
+      "track_position": 12,
+      "track_recording_mbid": "0069c0f7-9274-4b4b-a10e-110b90a4bcc0",
+      "release_recording_occurrences": 1,
+      "release_track_count": 22,
+      "duration_ms": 245120,
+      "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+      "risk_notes": "Selected-track import: track 12 only from a 22-track official release.",
+      "action": "safe_import",
+      "existing_song_id": null,
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "4c49ff0b-4824-423b-bb84-0fa97a5a7679",
+          "0069c0f7-9274-4b4b-a10e-110b90a4bcc0"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "0069c0f7-9274-4b4b-a10e-110b90a4bcc0"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "4c49ff0b-4824-423b-bb84-0fa97a5a7679",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1880": {
       "status": "independently_verified",
@@ -1899,7 +2769,17 @@
       "risk_notes": "Selected-track import: track 2 only from a 21-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "bcd54ab6-9552-44cd-a09d-d46a8a374c35"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "bcd54ab6-9552-44cd-a09d-d46a8a374c35"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1892": {
       "status": "independently_verified",
@@ -1929,7 +2809,17 @@
       "risk_notes": "Selected-track import: track 18 only from a 19-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "d232ad4e-b26b-4224-a475-cb4c4f8dc22a"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "d232ad4e-b26b-4224-a475-cb4c4f8dc22a"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1894": {
       "status": "independently_verified",
@@ -1959,7 +2849,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "27c81996-a8a8-4b44-8322-b46cc9e59377"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "27c81996-a8a8-4b44-8322-b46cc9e59377"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1895": {
       "status": "independently_verified",
@@ -1989,7 +2889,23 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "edcb9af4-e0d8-4b5d-bc4f-0c1a36cb092c",
+          "2bfe7235-20c4-4feb-a067-01850062a71f"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "2bfe7235-20c4-4feb-a067-01850062a71f"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "edcb9af4-e0d8-4b5d-bc4f-0c1a36cb092c",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1896": {
       "status": "independently_verified",
@@ -2020,7 +2936,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 4-track official release.",
       "action": "existing_recording",
       "existing_song_id": 20717,
-      "reuse_album_id": 1959
+      "reuse_album_id": 1959,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "2a330498-8fe8-45e1-8536-dc0679fd7a37"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "2a330498-8fe8-45e1-8536-dc0679fd7a37"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1897": {
       "status": "independently_verified",
@@ -2050,7 +2976,63 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "54a0b7c4-26b4-43fe-af7c-717e70ba3d68"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "54a0b7c4-26b4-43fe-af7c-717e70ba3d68"
+        ],
+        "rejected_recording_candidates": []
+      }
+    },
+    "1899": {
+      "status": "independently_verified",
+      "title": "Scream & Shout",
+      "artist": "will.i.am featuring Britney Spears",
+      "official_charts_url": "https://www.officialcharts.com/songs/will-i-am-ft-britney-spears-scream-shout/",
+      "official_charts_isrc": "USUM71215597",
+      "recording_mbid": "ff657e64-51ff-47b9-a8c7-ed3666a78bd6",
+      "musicbrainz_recording_url": "https://musicbrainz.org/recording/ff657e64-51ff-47b9-a8c7-ed3666a78bd6",
+      "recording_isrcs": [
+        "USUM71215597"
+      ],
+      "release_mbid": "3df59ec7-6574-4ffa-9d96-2fad3be976d0",
+      "musicbrainz_release_url": "https://musicbrainz.org/release/3df59ec7-6574-4ffa-9d96-2fad3be976d0",
+      "release_group_mbid": "9dc491dc-96ae-4aa3-ae5d-1cd695496fae",
+      "release_status": "Official",
+      "release_date": "2013-01-01",
+      "release_country": "",
+      "release_title": "#willpower",
+      "medium_position": 1,
+      "track_position": 4,
+      "track_recording_mbid": "ff657e64-51ff-47b9-a8c7-ed3666a78bd6",
+      "release_recording_occurrences": 1,
+      "release_track_count": 15,
+      "duration_ms": 252266,
+      "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+      "risk_notes": "Selected-track import: track 4 only from a 15-track official release.",
+      "action": "safe_import",
+      "existing_song_id": null,
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "fd14ed7f-7a99-4222-b7f5-f4507aab9262",
+          "ff657e64-51ff-47b9-a8c7-ed3666a78bd6"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "ff657e64-51ff-47b9-a8c7-ed3666a78bd6"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "fd14ed7f-7a99-4222-b7f5-f4507aab9262",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1907": {
       "status": "independently_verified",
@@ -2080,7 +3062,17 @@
       "risk_notes": "Selected-track import: track 1 only from a 7-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "b3e47ce7-875d-427a-9d7f-e113aeb22b23"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "b3e47ce7-875d-427a-9d7f-e113aeb22b23"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1909": {
       "status": "independently_verified",
@@ -2110,7 +3102,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 5-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "9a339179-6d01-49ca-ac66-2e246fbd5323",
+          "606d1005-58af-4e38-9016-165dd0888646"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "9a339179-6d01-49ca-ac66-2e246fbd5323"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "606d1005-58af-4e38-9016-165dd0888646",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1917": {
       "status": "independently_verified",
@@ -2140,7 +3148,23 @@
       "risk_notes": "Selected-track import: track 2 only from a 14-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "94733e1e-cc16-443d-84f8-db279325c086",
+          "24647d10-f3a8-4a03-bed9-b6f1846dc4d4"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "24647d10-f3a8-4a03-bed9-b6f1846dc4d4"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "94733e1e-cc16-443d-84f8-db279325c086",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1923": {
       "status": "independently_verified",
@@ -2170,7 +3194,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "b89531ad-2ef0-4ced-8552-7465b57a1c34"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "b89531ad-2ef0-4ced-8552-7465b57a1c34"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1928": {
       "status": "independently_verified",
@@ -2200,7 +3234,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "78a8d975-1257-4fc4-a634-50f89a62de47"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "78a8d975-1257-4fc4-a634-50f89a62de47"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1934": {
       "status": "independently_verified",
@@ -2230,7 +3274,17 @@
       "risk_notes": "Selected-track import: track 2 only from a 16-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "c68948a7-d8ef-409c-adf8-bcf2afeb656f"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "c68948a7-d8ef-409c-adf8-bcf2afeb656f"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1943": {
       "status": "independently_verified",
@@ -2260,7 +3314,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "859678f6-cc24-4dfa-9ad5-09b38bc72461"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "859678f6-cc24-4dfa-9ad5-09b38bc72461"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1950": {
       "status": "independently_verified",
@@ -2291,7 +3355,28 @@
       "risk_notes": "Selected-track import: track 1 only from a 2-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "d7149e80-103c-4b3e-9ece-0b6345975606",
+          "5e58bc59-aa38-43ca-9740-fa79533679b3",
+          "bdb1cf5a-0105-4962-aecf-5a00f2de16d5"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "5e58bc59-aa38-43ca-9740-fa79533679b3"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "d7149e80-103c-4b3e-9ece-0b6345975606",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          },
+          {
+            "recording_mbid": "bdb1cf5a-0105-4962-aecf-5a00f2de16d5",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1951": {
       "status": "independently_verified",
@@ -2321,7 +3406,17 @@
       "risk_notes": "Selected-track import: track 4 only from a 18-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "a4b95583-262e-4599-bd98-9415cd2010ce"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "a4b95583-262e-4599-bd98-9415cd2010ce"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1985": {
       "status": "independently_verified",
@@ -2352,7 +3447,17 @@
       "risk_notes": "Selected-track import: track 2 only from a 16-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "8efe2cd3-2adc-4abf-b06c-536208ca71fa"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "8efe2cd3-2adc-4abf-b06c-536208ca71fa"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "1987": {
       "status": "independently_verified",
@@ -2383,7 +3488,23 @@
       "risk_notes": "Selected-track import: track 1 only from a 11-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "unique_exact_release_evidence",
+        "isrc_candidate_recording_mbids": [
+          "87e36ab4-6914-44ab-b740-7abb37678040",
+          "d018b6a8-1796-4682-ba5a-5362c53d7fe5"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "87e36ab4-6914-44ab-b740-7abb37678040"
+        ],
+        "rejected_recording_candidates": [
+          {
+            "recording_mbid": "d018b6a8-1796-4682-ba5a-5362c53d7fe5",
+            "reason": "musicbrainz_no_contemporary_official_release"
+          }
+        ]
+      }
     },
     "1999": {
       "status": "independently_verified",
@@ -2413,7 +3534,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "31b385a1-8d23-4ff6-b17e-8c038cc8b3af"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "31b385a1-8d23-4ff6-b17e-8c038cc8b3af"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "2439": {
       "status": "independently_verified",
@@ -2443,7 +3574,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "b1dcd614-1bca-4c23-b92a-2ea4c6d8dc9e"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "b1dcd614-1bca-4c23-b92a-2ea4c6d8dc9e"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "2501": {
       "status": "independently_verified",
@@ -2473,7 +3614,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "949385ab-a15d-4805-bfbe-beddd4ae4cc4"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "949385ab-a15d-4805-bfbe-beddd4ae4cc4"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "2507": {
       "status": "independently_verified",
@@ -2503,7 +3654,17 @@
       "risk_notes": "Single-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "9cc1e4e4-8da0-4faa-9335-ae59ea4040bf"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "9cc1e4e4-8da0-4faa-9335-ae59ea4040bf"
+        ],
+        "rejected_recording_candidates": []
+      }
     },
     "2510": {
       "status": "independently_verified",
@@ -2534,7 +3695,17 @@
       "risk_notes": "Selected-track import: track 5 only from a 10-track official release.",
       "action": "safe_import",
       "existing_song_id": null,
-      "reuse_album_id": null
+      "reuse_album_id": null,
+      "recording_selection": {
+        "basis": "single_exact_title_artist_recording",
+        "isrc_candidate_recording_mbids": [
+          "ff554e54-309b-40db-b564-0837b78d8516"
+        ],
+        "exact_release_validated_recording_mbids": [
+          "ff554e54-309b-40db-b564-0837b78d8516"
+        ],
+        "rejected_recording_candidates": []
+      }
     }
   }
 }

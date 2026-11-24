@@ -4894,5 +4894,1543 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/release/3df59ec7-6574-4ffa-9d96-2fad3be976d0?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "3df59ec7-6574-4ffa-9d96-2fad3be976d0",
+    "status": "Official",
+    "title": "#willpower",
+    "date": "2013-01-01",
+    "country": "",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "will.i.am",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "9dc491dc-96ae-4aa3-ae5d-1cd695496fae",
+      "title": "#willpower",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Good Morning",
+            "length": 104426,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8afc1b72-d1a3-4cfb-bcb5-fddd7a0e3c45",
+              "title": "Good Morning",
+              "length": 104426,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Hello",
+            "length": 285146,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "AFROJACK",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8b85e6a2-58f1-4b65-a9ec-fe235052f52c",
+              "title": "Hello",
+              "length": 285173,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "This Is Love",
+            "length": 279026,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Eva Simons",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "db1b0e31-4de8-4adb-8eeb-2a1c8da4869b",
+              "title": "This Is Love",
+              "length": 280000,
+              "disambiguation": "album version",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Eva Simons",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Scream & Shout",
+            "length": 252266,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Britney Spears",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ff657e64-51ff-47b9-a8c7-ed3666a78bd6",
+              "title": "Scream & Shout",
+              "length": 285000,
+              "disambiguation": "dirty main",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Britney Spears",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "Feelin' Myself",
+            "length": 253480,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": ", "
+              },
+              {
+                "name": "Miley Cyrus",
+                "joinphrase": ", "
+              },
+              {
+                "name": "French Montana",
+                "joinphrase": ", "
+              },
+              {
+                "name": "Wiz Khalifa",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Mustard",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4cfe3acd-df14-4b1f-8730-a592f17f868b",
+              "title": "Feelin' Myself",
+              "length": 253570,
+              "disambiguation": "explicit",
+              "artist_credit": [
+                {
+                  "name": "Hanumankind",
+                  "joinphrase": " x "
+                },
+                {
+                  "name": "Kalmi",
+                  "joinphrase": ", "
+                },
+                {
+                  "name": "Miley Cyrus",
+                  "joinphrase": ", "
+                },
+                {
+                  "name": "French Montana",
+                  "joinphrase": ", "
+                },
+                {
+                  "name": "Wiz Khalifa",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "DJ Mustard",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "Gettin' Dumb",
+            "length": 313933,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": ", "
+              },
+              {
+                "name": "apl.de.ap",
+                "joinphrase": " & "
+              },
+              {
+                "name": "2NE1",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "6cd186ac-563f-4981-9af4-6a8ba4681e84",
+              "title": "Gettin' Dumb",
+              "length": 313933,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "apl.de.ap",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "2NE1",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "Geekin’",
+            "length": 214186,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "509cc839-4722-4046-85ea-71aced0bff68",
+              "title": "Geekin’",
+              "length": 214186,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "8",
+            "title": "Freshy",
+            "length": 246653,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Juicy J",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "532afee0-5dc0-45e0-879f-5b63465ce9bf",
+              "title": "Freshy",
+              "length": 246642,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Juicy J",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "9",
+            "title": "#thatPOWER",
+            "length": 279426,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Justin Bieber",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "27e319ad-44b4-4a0a-875e-33b1af39308d",
+              "title": "#thatPOWER",
+              "length": 280000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Justin Bieber",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 10,
+            "number": "10",
+            "title": "Great Times Are Coming",
+            "length": 276400,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9e754441-01ab-4a59-bd3c-0d4f86ede73e",
+              "title": "Great Times Are Coming",
+              "length": 276413,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 11,
+            "number": "11",
+            "title": "The World Is Crazy",
+            "length": 239360,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Dante Santiago",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "068a15b8-654f-4f07-a558-43d6a1d27592",
+              "title": "The World Is Crazy",
+              "length": 239360,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Dante Santiago",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 12,
+            "number": "12",
+            "title": "Fall Down",
+            "length": 307466,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Miley Cyrus",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "339f566f-aab1-4c8e-9fe0-40f4b5e92974",
+              "title": "Fall Down",
+              "length": 307493,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Miley Cyrus",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 13,
+            "number": "13",
+            "title": "Love Bullets",
+            "length": 251013,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Skylar Grey",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "848b07fa-2478-4185-8204-b989c2678da6",
+              "title": "Love Bullets",
+              "length": 251026,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Skylar Grey",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 14,
+            "number": "14",
+            "title": "Far Away From Home",
+            "length": 233986,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Nicole Scherzinger",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "68f90c48-6fdb-4bbb-ba7f-2588380b7f58",
+              "title": "Far Away From Home",
+              "length": 233986,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Nicole Scherzinger",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 15,
+            "number": "15",
+            "title": "Ghetto Ghetto",
+            "length": 230613,
+            "artist_credit": [
+              {
+                "name": "will.i.am",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Baby Kaely",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b7ed8d3c-d3ad-48e0-9128-e1c90bbe67d8",
+              "title": "Ghetto Ghetto",
+              "length": 231000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "will.i.am",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Baby Kaely",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/1f6a1148-ffe8-4e96-b9f5-2e6701af6573?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+    "title": "Lonely",
+    "length": 235800,
+    "disambiguation": "",
+    "isrcs": [
+      "USUR10400230",
+      "USUR10400234",
+      "USUR10400235"
+    ],
+    "first_release_date": "2003",
+    "artist_credit": [
+      {
+        "name": "Akon",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "93b38342-5292-4fdf-80e2-4ee805cadb17",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2003",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2d1bb658-761c-4e72-aab6-db02d19792bc",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2003",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "47f40751-a138-4af2-bee7-4622c49860d0",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2004-06-29",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "912b3373-5da4-4386-817a-38ba4d3865aa",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2004-06-29",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e2597361-e5bc-4baf-a5e7-98c43f40f8db",
+        "status": "Promotion",
+        "title": "iTunes New Music Sampler (Universal Motown Edition)",
+        "date": "2004-10-21",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "04046153-cdf6-3813-9006-9909da7f64e5",
+          "title": "iTunes New Music Sampler (Universal Motown Edition)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ad2b5ccc-91ec-4f77-ad39-11abee953554",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2004",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3023585a-770b-3fc0-88e2-d4781a187092",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2005-01-01",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5a243b6b-4fa7-3745-9b03-d6b3cd0a86e1",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2005-01-31",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a27b0daf-5189-4fa4-b65e-40e1759e905e",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2005-02-07",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f26960ab-a238-4cbe-938e-6199ee9dcbcc",
+        "status": "Official",
+        "title": "Lonely",
+        "date": "2005-05-02",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4531b2ce-ffc3-4ac8-898e-6026be69950b",
+          "title": "Lonely",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d790a484-59bb-4479-a9cd-674b963c211b",
+        "status": "Official",
+        "title": "Festivalbar 2005: Compilation rossa",
+        "date": "2005-06",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e415394a-6061-3844-bed6-f4d3d39604a6",
+          "title": "Festivalbar 2005: Compilation rossa",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4bdc61bb-ef43-483e-84c4-5febe2aebf3b",
+        "status": "Official",
+        "title": "Hits 2005 : Spécial été",
+        "date": "2005-06",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a5670b98-9514-3a40-89a8-68a0fdd9932f",
+          "title": "Hits 2005 : Spécial été",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ec5df34a-efdb-423b-95df-2578211e9312",
+        "status": "Official",
+        "title": "Liebe ist… Volume 2",
+        "date": "2005-07-01",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e1fdac73-c192-3e43-9dab-a9ad6cded734",
+          "title": "Liebe ist… Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a2d8aa69-6233-477a-b4ca-05086820e78b",
+        "status": "Official",
+        "title": "Radio 538: Hitzone 32",
+        "date": "2005-07-13",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4e7207f2-76e5-38ef-bf35-7db65545494b",
+          "title": "Radio 538: Hitzone 32",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a7ff1b5b-75a7-4a45-8bfd-10767ca44c06",
+        "status": "Official",
+        "title": "Bravo Hits 50",
+        "date": "2005-08-12",
+        "country": "CH",
+        "disambiguation": "Swiss edition",
+        "release_group": {
+          "id": "78762501-fb22-3135-8612-a58ee715e2db",
+          "title": "Bravo Hits 50",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b124831d-e597-4860-b8c4-2d74652238d4",
+        "status": "Official",
+        "title": "Bravo Hits 50",
+        "date": "2005-08-12",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "78762501-fb22-3135-8612-a58ee715e2db",
+          "title": "Bravo Hits 50",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "aff46490-6ec1-45ae-b00f-a25a5f02e6e6",
+        "status": "Official",
+        "title": "Bravo Hits 50",
+        "date": "2005-08-12",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "78762501-fb22-3135-8612-a58ee715e2db",
+          "title": "Bravo Hits 50",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "33179fe2-9cfe-4c20-bdd6-17ef6d0a1f40",
+        "status": "Official",
+        "title": "Jamba! Hits, Volume 4",
+        "date": "2005-08-22",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ae71b4db-0148-38f0-bab7-ab5a1169fbed",
+          "title": "Jamba! Hits, Volume 4",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7c653e5f-0b17-4e58-b003-08cb2c2b6993",
+        "status": "Official",
+        "title": "Radio 538 Hitzone: Best of 2005",
+        "date": "2005-11-14",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fbd543fd-eac0-3b56-acb4-3d5b8a4a16b5",
+          "title": "Radio 538 Hitzone: Best of 2005",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0e6b5474-307c-4842-833b-4abfb8236c71",
+        "status": "Official",
+        "title": "The R&B Yearbook",
+        "date": "2005-11-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e90d45ac-b6c1-3841-8aaa-5e0b9113ee38",
+          "title": "The R&B Yearbook",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8202d2ec-6df7-42bb-ab92-622229e74cea",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2005-11-21",
+        "country": "US",
+        "disambiguation": "explicit deluxe international version",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b26c8541-d60d-4b18-b71b-9564b5721b77",
+        "status": "Official",
+        "title": "Trouble",
+        "date": "2005-11-22",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d516fab2-65e2-3c4b-b576-9c30a5b94d00",
+          "title": "Trouble",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e3823279-7f4a-4596-adf5-a5a659aa9ed1",
+        "status": "Official",
+        "title": "Hitbox: The Very Best of 2005",
+        "date": "2005",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0b31eb99-8fca-40e3-8f9b-16d85707fe93",
+          "title": "Hitbox: The Very Best of 2005",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "60f649b9-7852-446a-a103-367bfd4193a2",
+        "status": "Official",
+        "title": "Megahits 2005: Die Zweite",
+        "date": "2005",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6c784f90-828a-44b3-bbaf-1a468b93cb1a",
+          "title": "Megahits 2005: Die Zweite",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "68a44f0c-3dca-4dd0-9134-f204ad47cfbf",
+        "status": "Official",
+        "title": "Now 13",
+        "date": "2005",
+        "country": "PT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "53e8308e-4839-3d30-a4b1-3d2bfb8c2c05",
+          "title": "Now 13",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/e73d163e-f818-4af7-98d7-299850173423?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "e73d163e-f818-4af7-98d7-299850173423",
+    "status": "Official",
+    "title": "Hits 96",
+    "date": "1996",
+    "country": "FR",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Various Artists",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "71eb8096-5e7b-4f58-8948-e31c997214a0",
+      "title": "Hits 96",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Fu-Gee-La",
+            "length": 255533,
+            "artist_credit": [
+              {
+                "name": "The Fugees",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "46919d36-ca3d-4196-be75-f2391188d3a3",
+              "title": "Fu‐Gee‐La",
+              "length": 257413,
+              "disambiguation": "explicit",
+              "artist_credit": [
+                {
+                  "name": "Fugees",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Virtual Insanity",
+            "length": 244600,
+            "artist_credit": [
+              {
+                "name": "Jamiroquai",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "e90d76d0-5f53-410f-b2fb-7184d06f2439",
+              "title": "Virtual Insanity",
+              "length": 244600,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Jamiroquai",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Falling Into You",
+            "length": 258040,
+            "artist_credit": [
+              {
+                "name": "Céline Dion",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d3b6ac5c-6fc0-4d31-9149-f48d98c6c8fb",
+              "title": "Falling Into You",
+              "length": 259000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Céline Dion",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Lemon Tree",
+            "length": 190200,
+            "artist_credit": [
+              {
+                "name": "Fool's Garden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "de10d477-5f22-4ea8-b5cb-52664261ea12",
+              "title": "Lemon Tree",
+              "length": 191280,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Fool’s Garden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "Anything",
+            "length": 258893,
+            "artist_credit": [
+              {
+                "name": "3T",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "7371b92b-b924-4f3f-ac8f-0e27385e60c9",
+              "title": "Anything",
+              "length": 261493,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "3T",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "Return Of The Mack",
+            "length": 211440,
+            "artist_credit": [
+              {
+                "name": "Mark Morrison",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b338ab79-cd19-442d-a5a3-c2086db87e96",
+              "title": "Return of the Mack (C & J radio edit)",
+              "length": 212000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Mark Morrison",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "Always You",
+            "length": 169400,
+            "artist_credit": [
+              {
+                "name": "Sophie Zelmani",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d5cd9e7d-a713-4ae5-8fcc-c93d0d861ee4",
+              "title": "Always You",
+              "length": 172573,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Sophie Zelmani",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "8",
+            "title": "Sambolera Mayi Son",
+            "length": 268360,
+            "artist_credit": [
+              {
+                "name": "Khadja Nin",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "e083e8ae-bf3e-4efe-a81d-e1c570592281",
+              "title": "Sambolera Mayi Son",
+              "length": 270026,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Khadja Nin",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "9",
+            "title": "Tu Compliques Tout",
+            "length": 257733,
+            "artist_credit": [
+              {
+                "name": "Pascal Obispo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1a75b2a0-2ac8-482c-a86e-ffc821f2f77d",
+              "title": "Tu compliques tout",
+              "length": 258000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Pascal Obispo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 10,
+            "number": "10",
+            "title": "Paris A Le Blues",
+            "length": 259066,
+            "artist_credit": [
+              {
+                "name": "Mad In Paris",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ae5f67fc-3bbc-40f5-9389-f3041cb52cb3",
+              "title": "Paris a le blues (radio edit)",
+              "length": 259066,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Mad in Paris",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 11,
+            "number": "11",
+            "title": "Balance Toi",
+            "length": 207773,
+            "artist_credit": [
+              {
+                "name": "Reciprok",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "12299240-e703-4cdd-8902-ca6bf52b49c5",
+              "title": "Balance-toi (radio remix)",
+              "length": 210333,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Reciprok",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 12,
+            "number": "12",
+            "title": "Feels Like A Woman",
+            "length": 235893,
+            "artist_credit": [
+              {
+                "name": "Zucchero",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "36220f00-f2f7-407b-9c4d-520b9fd074d3",
+              "title": "Senza una donna",
+              "length": 267000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Zucchero Sugar Fornaciari",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 13,
+            "number": "13",
+            "title": "Spaceman",
+            "length": 234573,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d96495c5-7406-4e18-ba76-6c70af484cf5",
+              "title": "Spaceman",
+              "length": 241320,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 14,
+            "number": "14",
+            "title": "Le Brio (Branchez La Guitare)",
+            "length": 126066,
+            "artist_credit": [
+              {
+                "name": "Big Soul",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "85232eaf-db3e-4622-849f-286c4e2d0f09",
+              "title": "Le Brio (Branchez la guitare)",
+              "length": 127973,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Big Soul",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 15,
+            "number": "15",
+            "title": "Charmless Man",
+            "length": 212400,
+            "artist_credit": [
+              {
+                "name": "Blur",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "2a7e7309-3c47-4a1b-b4a6-2a3c85a06a85",
+              "title": "Charmless Man",
+              "length": 213600,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Blur",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 16,
+            "number": "16",
+            "title": "Peaches",
+            "length": 169133,
+            "artist_credit": [
+              {
+                "name": "The Presidents Of The USA",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "46c166de-1626-40ec-8281-e4a14e92d01c",
+              "title": "Peaches",
+              "length": 171000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "The Presidents of the United States of America",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 17,
+            "number": "17",
+            "title": "Not An Addict",
+            "length": 258293,
+            "artist_credit": [
+              {
+                "name": "K’s Choice",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "75871703-798c-433b-a1e8-c841aeda9909",
+              "title": "Not an Addict",
+              "length": 258586,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "K’s Choice",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 18,
+            "number": "18",
+            "title": "Love Me For A Reason",
+            "length": 214640,
+            "artist_credit": [
+              {
+                "name": "Boyzone",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c77d48be-ace0-48ad-afd0-3f17add00335",
+              "title": "Love Me for a Reason",
+              "length": 218360,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Boyzone",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 19,
+            "number": "19",
+            "title": "Children",
+            "length": 242533,
+            "artist_credit": [
+              {
+                "name": "Robert Miles",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8562b9bc-b324-4da1-bc17-c321d98713ed",
+              "title": "Children (Eat Me edit)",
+              "length": 243733,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Robert Miles",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 20,
+            "number": "20",
+            "title": "Soirée Disco",
+            "length": 226226,
+            "artist_credit": [
+              {
+                "name": "Boris",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a9ddd26f-2693-462b-af31-1cf20f3d80c0",
+              "title": "Soirée Disco",
+              "length": 224867,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Boris",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/bf86154e-3985-493a-bb88-bb2f7b2ea089?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "bf86154e-3985-493a-bb88-bb2f7b2ea089",
+    "title": "A Little Time",
+    "length": 178178,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAQT9000004"
+    ],
+    "first_release_date": "2023-07-05",
+    "artist_credit": [
+      {
+        "name": "The Beautiful South",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "81c3cc4b-f3a5-49e6-b1be-5f01c2b05edc",
+        "status": "Official",
+        "title": "1990 Best Of by uDiscover",
+        "date": "2023-07-05",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "13209c4b-2fe8-4912-a0fd-1b4dfb8d9d86",
+          "title": "1990 Best Of by uDiscover",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/745c92a7-395a-4730-88a1-fa94bc94f4cf?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "745c92a7-395a-4730-88a1-fa94bc94f4cf",
+    "title": "True",
+    "length": 260603,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYK8300004"
+    ],
+    "first_release_date": "2008",
+    "artist_credit": [
+      {
+        "name": "Spandau Ballet",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "1ae5d0c5-2c2e-4521-93a0-e96947b31af1",
+        "status": "Official",
+        "title": "Top 50 - Les 100 Plus Gros Tubes Du Top 50 Des Années 80 !",
+        "date": "2008",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0746d7d0-18b1-46ea-8517-5745eb6977df",
+          "title": "Top 50 - Les 100 Plus Gros Tubes Du Top 50 Des Années 80 !",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/e83438f6-b1b1-4782-adfe-24c5479a3de6?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "e83438f6-b1b1-4782-adfe-24c5479a3de6",
+    "title": "When I Need You",
+    "length": 249426,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBLG7600258"
+    ],
+    "first_release_date": "1991",
+    "artist_credit": [
+      {
+        "name": "Leo Sayer",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "a47a38bf-36b3-440b-b000-371cb19eac23",
+        "status": "Official",
+        "title": "Noches de Blanco Satén",
+        "date": "1991",
+        "country": "ES",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c447c1ab-c1cd-3eda-ba7e-21a0e4982f61",
+          "title": "Noches de Blanco Satén",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e2b01d08-b189-4a29-86ad-ce1ebe0260a4",
+        "status": "Official",
+        "title": "Die Hit Giganten Best of Lovesongs",
+        "date": "2019-10-18",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "748a1e76-3198-4649-addf-2796132dba8f",
+          "title": "Die Hit Giganten Best of Lovesongs",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

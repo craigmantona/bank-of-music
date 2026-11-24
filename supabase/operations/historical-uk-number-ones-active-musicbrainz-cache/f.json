@@ -4505,5 +4505,1686 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/edcb9af4-e0d8-4b5d-bc4f-0c1a36cb092c?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "edcb9af4-e0d8-4b5d-bc4f-0c1a36cb092c",
+    "title": "The Power of Love",
+    "length": 245160,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE1202354"
+    ],
+    "first_release_date": "2026-11-08",
+    "artist_credit": [
+      {
+        "name": "Gabrielle Aplin",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "7085ec99-58be-405a-9378-291fb2996d56",
+        "status": "Official",
+        "title": "Christmas Gold",
+        "date": "2026-11-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c16f1f44-d1f9-4d38-8f1a-4c386aac8abd",
+          "title": "Christmas Gold",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/8ac43c1e-f34a-4f2a-b41c-e4c769016305?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "8ac43c1e-f34a-4f2a-b41c-e4c769016305",
+    "title": "Down Under",
+    "length": 205720,
+    "disambiguation": "",
+    "isrcs": [
+      "AUSM08100002"
+    ],
+    "first_release_date": "1981",
+    "artist_credit": [
+      {
+        "name": "Men at Work",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "6eaf322d-4472-45a1-adfe-7e1ed2174509",
+        "status": "Official",
+        "title": "Down Under",
+        "date": "1981",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+          "title": "Down Under",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "44004703-a2c1-4fd3-849e-2f11524ff16f",
+        "status": "Official",
+        "title": "Down Under",
+        "date": "1982",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+          "title": "Down Under",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "456f6c91-6e1b-4069-8d88-76b801ae6476",
+        "status": "Official",
+        "title": "Superchart 83, Volume One",
+        "date": "1983",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "55c256ce-46c1-4113-9d87-9190a153c1e9",
+          "title": "Superchart 83, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7720e5ef-7575-4f13-9075-e8cc9b35f947",
+        "status": "Official",
+        "title": "The Hits of '83, Vol. 1",
+        "date": "1983",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f38e8c16-9415-4626-af82-7c428990f86f",
+          "title": "The Hits of '83, Vol. 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f189186c-0922-4b6d-ad04-8ae39848b4aa",
+        "status": "Official",
+        "title": "Jack Pop ’90",
+        "date": "1990",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "696c2c3a-a13f-4578-b540-b9fffd096034",
+          "title": "Jack Pop ’90",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9d327b1d-68d4-4862-b7c0-ec54670c588b",
+        "status": "Official",
+        "title": "Metropol: En epok i radio 1982-1991",
+        "date": "1993",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ff9b9d79-2b7e-32d2-9038-7b31e2b78580",
+          "title": "Metropol: En epok i radio 1982-1991",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8df1048d-f3d2-4d6b-a18e-d4753e7cd49a",
+        "status": "Official",
+        "title": "100 Pophits",
+        "date": "2000",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c40992e7-0d13-323a-8a29-b18092b53729",
+          "title": "100 Pophits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "96f6c4ed-5ab1-4160-adbd-c3a8339ab23c",
+        "status": "Promotion",
+        "title": "Sheer Idiocy 2002 House Mix 1",
+        "date": "2002",
+        "country": "PL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bb5ebdfd-426e-31a2-a9e9-f7f34d8b6a62",
+          "title": "Sheer Idiocy 2002 House Mix 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "83dc62f8-1d10-4d93-8530-dfa8e36a23f9",
+        "status": "Official",
+        "title": "Absolute 80s",
+        "date": "2003-04-22",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "969c34e5-35a7-3d35-965e-8dad50925c0f",
+          "title": "Absolute 80s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bceb24c2-8912-445e-8e15-920ef7dae705",
+        "status": "Official",
+        "title": "Party Pack",
+        "date": "2003",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "69b3b3b5-cb47-4068-a888-efe3455e3a86",
+          "title": "Party Pack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4c843ef3-e153-461e-b4c1-5e1c51118d1d",
+        "status": "Official",
+        "title": "Tele Atlas – Drivers’ Choice – Pop",
+        "date": "2003",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e33c9880-4970-4262-b8b9-6953f98cf09e",
+          "title": "Tele Atlas – Drivers’ Choice – Pop",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "88f8e315-6df0-4dc1-8c8c-34fd0efb8a12",
+        "status": "Official",
+        "title": "Absolute One Hit Wonders",
+        "date": "2005-03-16",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4d858a33-dd31-3712-9055-e9d93e9c793b",
+          "title": "Absolute One Hit Wonders",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c2676b57-1b3f-41dd-a87b-01442cc9ac53",
+        "status": "Official",
+        "title": "Halvliter rock",
+        "date": "2005",
+        "country": "NO",
+        "disambiguation": "",
+        "release_group": {
+          "id": "debf19bd-f108-3c39-a8bc-979a3af25f09",
+          "title": "Halvliter rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "845a16ee-c44d-4761-a67f-b88a0efd267d",
+        "status": "Official",
+        "title": "Absolute 80’s 2",
+        "date": "2009",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d13f851f-bfdb-4749-8ac2-5d945358bbad",
+          "title": "Absolute 80’s 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d134f80d-c9b7-432e-9181-7485c02663a2",
+        "status": "Official",
+        "title": "Night to Remember: The Eighties Edition",
+        "date": "2010",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "35e55ddf-b361-446f-87b4-307753f87543",
+          "title": "Night to Remember: The Eighties Edition",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "220d7e5e-35b9-4206-8a3a-005073c80cd3",
+        "status": "Official",
+        "title": "Het Beste Uit De 80ies Top 800",
+        "date": "2012-01-01",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1ed1ef3a-4fdd-4adb-ade4-e3fca43d4cd6",
+          "title": "Het Beste Uit De 80ies Top 800",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3db2619b-3a62-41c1-bfbb-9f837cf6881a",
+        "status": "Official",
+        "title": "Het Beste Uit De 80ies Top 800",
+        "date": "2012",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1ed1ef3a-4fdd-4adb-ade4-e3fca43d4cd6",
+          "title": "Het Beste Uit De 80ies Top 800",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bb8bd11f-04ec-408b-beeb-bf4708b19a33",
+        "status": "Official",
+        "title": "Down Under",
+        "date": "",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c5639f4d-8363-3447-b44b-5983d933cea7",
+          "title": "Down Under",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/440e9c0d-d33e-4c30-9001-3f1cf541a342?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "440e9c0d-d33e-4c30-9001-3f1cf541a342",
+    "title": "True",
+    "length": 340506,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYK0300117",
+      "GBAYK8300004",
+      "GBUM70911469"
+    ],
+    "first_release_date": "1988",
+    "artist_credit": [
+      {
+        "name": "Spandau Ballet",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "82e338dc-dda0-4858-84ad-4485a945e492",
+        "status": "Official",
+        "title": "25 Years of Rock ’n’ Roll: 1983: 20 of the Year’s Greatest Tracks",
+        "date": "1988",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "94ade07e-62d4-4146-98e0-115b13655434",
+          "title": "25 Years of Rock ’n’ Roll: 1983: 20 of the Year’s Greatest Tracks",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "93f31ce5-dfdd-41b7-a698-e8a48d8dae82",
+        "status": "Official",
+        "title": "The 80's Collection, Volume One",
+        "date": "1990",
+        "country": "NZ",
+        "disambiguation": "",
+        "release_group": {
+          "id": "df9dfc3b-30cd-36d4-9cf2-97141b6d30fc",
+          "title": "The 80's Collection, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b62205d5-2178-443f-aca5-5926567c35be",
+        "status": "Official",
+        "title": "The Ultimate Eighties: The Album of the Decade",
+        "date": "1994",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "565fe867-e95f-31af-876a-4c9f6a3e3d6b",
+          "title": "The Ultimate Eighties: The Album of the Decade",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c384ca8d-7e28-4841-8ef6-af9f0bb83d9b",
+        "status": "Official",
+        "title": "The Ultimate Eighties: The Album of the Decade",
+        "date": "1994",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "565fe867-e95f-31af-876a-4c9f6a3e3d6b",
+          "title": "The Ultimate Eighties: The Album of the Decade",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cb4e6b31-8360-4d90-b0ce-a1057bef3ac1",
+        "status": "Official",
+        "title": "Classic Eighties",
+        "date": "1997",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d9ae0f15-e02c-3712-a92e-8732d57dd8d2",
+          "title": "Classic Eighties",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "adb9dfb6-cfe8-42b4-85bb-0d800201fe43",
+        "status": "Official",
+        "title": "Eighties Complete",
+        "date": "1997",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f6abc9ae-da9d-381b-84f4-353ca3a6979b",
+          "title": "Eighties Complete",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "68fd9669-7862-4537-96d9-1fd85a4784f8",
+        "status": "Official",
+        "title": "Essential Eighties",
+        "date": "1997",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f55ba421-d2e3-3e7d-865b-e0532d692881",
+          "title": "Essential Eighties",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "492afd34-c002-4d17-b073-61a6490c8c32",
+        "status": "Official",
+        "title": "Essential Eighties 2",
+        "date": "1997",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2bc11aea-d7a8-4161-be12-8f0b35c7bd48",
+          "title": "Essential Eighties 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6c243bf5-f784-4a9c-950b-b0a48c9f4b66",
+        "status": "Official",
+        "title": "Missing You, Vol. 1: An Album of Love",
+        "date": "1997",
+        "country": "CO",
+        "disambiguation": "",
+        "release_group": {
+          "id": "451b369d-8d82-4f16-a03b-12344e539881",
+          "title": "Missing You: An Album of Love",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d0d8016b-751e-4e15-84d8-0338b659aaf9",
+        "status": "Official",
+        "title": "The Eighties: Original Hits Original Artists",
+        "date": "1998",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "135482b7-3e6d-394d-ad02-34ab35d33d8f",
+          "title": "The Eighties: Original Hits Original Artists",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "34d72edf-a811-4c15-81d4-324a016d84c9",
+        "status": "Official",
+        "title": "Best of the 80’s",
+        "date": "1999",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5cf24ff3-7555-3bff-8a8c-f567478485a2",
+          "title": "Best of the 80’s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bab80ddb-a0b9-4871-bbe2-f5caac8c97cb",
+        "status": "Official",
+        "title": "Sounds of the Eighties: '80s Blockbusters",
+        "date": "1999",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b67cd51c-18c1-3a15-988c-aecedcee6023",
+          "title": "Sounds of the Eighties: '80s Blockbusters",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "72445176-37e5-479e-ba7f-e1c5f6c16b37",
+        "status": "Promotion",
+        "title": "The Radio Essential Series",
+        "date": "2000",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "db3380c7-102c-482f-84dd-35b18d927cd0",
+          "title": "The Radio Essential Series",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9321f88b-f709-4dec-93b6-cf309c14483f",
+        "status": "Official",
+        "title": "Greatest Hits of the 80s, Volume 2",
+        "date": "2002",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "914fa4a8-8d1d-3ce8-9de6-abb533c7dfee",
+          "title": "Greatest Hits of the 80s, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1317edd3-6880-4bae-8d48-8dab36b1b719",
+        "status": "Official",
+        "title": "Kisses",
+        "date": "2004",
+        "country": "HK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "40a0e8df-213e-48be-b7f5-61f9a9cb8aa5",
+          "title": "Kisses",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "340e940d-a379-4dba-b70c-737ec9f8f989",
+        "status": "Official",
+        "title": "Movie Hits (Original Masters)",
+        "date": "2004",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bfd1f80e-1fad-4d69-bfbe-e6e8361e4698",
+          "title": "Movie Hits (Original Masters)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2827aa80-4c1b-44fd-ae59-8f2299a46398",
+        "status": "Official",
+        "title": "The Greatest Love Album",
+        "date": "2004",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1c59e538-1e3d-4c70-9838-fb34f8f45177",
+          "title": "The Greatest Love Album",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6808eae5-6098-4bb2-817f-826dca2bac5c",
+        "status": "Official",
+        "title": "Sounds of the 80s, Volume 1",
+        "date": "2005-06-14",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9ce191e2-3b25-42b3-b837-f14ed868ca84",
+          "title": "Sounds of the 80s, Volume 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "90e683ee-2762-4749-942a-3834814a4cd9",
+        "status": "Official",
+        "title": "Pop & Wave - Ultimate 80's Love Songs",
+        "date": "2005",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "96268963-645b-4197-81a3-c762fc6309b3",
+          "title": "Pop & Wave - Ultimate 80's Love Songs",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2567e582-67f6-4630-aecc-3d71827b7077",
+        "status": "Official",
+        "title": "Once More",
+        "date": "2009-10-19",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3bb5b3cd-c6ae-478b-8f29-4c81b05d3568",
+          "title": "Once More",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9237d87d-e039-4bc2-a45f-6dd29387f125",
+        "status": "Official",
+        "title": "Top of the Pops: Top Tens",
+        "date": "2009",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9aa760ce-7f66-4e13-baba-da29e6554b0c",
+          "title": "Top of the Pops: Top Tens",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9c540de2-98e2-4f71-8bfc-2685e7874eba",
+        "status": "Official",
+        "title": "Steve Wright’s Sunday Love Songs: Make Ups & Break Ups",
+        "date": "2010-02-01",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64d19320-2e45-4976-b811-26aad5d43e5f",
+          "title": "Steve Wright’s Sunday Love Songs: Make Ups & Break Ups",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "71c81d79-818d-4926-92ba-c930ef4c4bcf",
+        "status": "Official",
+        "title": "Top of the Pops: 125 Original Hits",
+        "date": "2010-09-13",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ea1a3dc7-5842-444a-ae73-316315a71e21",
+          "title": "Top of the Pops: 125 Original Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d55dac19-a8db-49b7-8808-c91773806823",
+        "status": "Official",
+        "title": "Love Stories",
+        "date": "2010",
+        "country": "HK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "53306d29-7a54-4482-9d43-feff935bff00",
+          "title": "Love Stories",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0e4e2686-9746-4f70-9e48-3713b12df3c0",
+        "status": "Official",
+        "title": "Songs About Love",
+        "date": "2010",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6cd52408-7c7a-4be7-a30b-01d81d8c4f0b",
+          "title": "Songs About Love",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/fa7a5f63-2129-431e-8385-aa437d09bea2?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "fa7a5f63-2129-431e-8385-aa437d09bea2",
+    "title": "Red Red Wine",
+    "length": 182000,
+    "disambiguation": "7″ version",
+    "isrcs": [
+      "GBAAA0300255",
+      "GBAAA0900868",
+      "GBDDH8300002",
+      "GBUM71306053"
+    ],
+    "first_release_date": "1983-08-08",
+    "artist_credit": [
+      {
+        "name": "UB40",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "ea6e52c2-5336-4a01-997c-1e00f35b1202",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1983-08-08",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd1ee46e-4784-4ac8-9b43-e1a1613eff47",
+          "title": "Red Red Wine",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e2efdc06-0fa7-4e9d-835c-2a99b255b4b6",
+        "status": "Official",
+        "title": "Now That’s What I Call Music",
+        "date": "1983-11-28",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bcd7ac33-7a46-346d-b2f2-72dcf51012af",
+          "title": "Now That’s What I Call Music",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f42bca16-03a3-3373-9589-be16a4aa06b4",
+        "status": "Official",
+        "title": "Now That’s What I Call Music",
+        "date": "1983-11-28",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bcd7ac33-7a46-346d-b2f2-72dcf51012af",
+          "title": "Now That’s What I Call Music",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8789ff4f-ac0f-4131-b533-2b7380226bb3",
+        "status": "Official",
+        "title": "Het beste uit de Top 40 van het jaar",
+        "date": "1983",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cb4a2c7f-85b2-4c8c-b5eb-c695335e0b21",
+          "title": "Het beste uit de Top 40 van het jaar",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4135f2a9-9ebd-4188-aff2-553f199ad34b",
+        "status": "Official",
+        "title": "Hot Super 20",
+        "date": "1983",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f6af847f-9757-46e8-996c-cd7cc7774179",
+          "title": "Hot Super 20",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "12b93b3b-6d12-4e7a-8bea-c3da7e02d760",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1983",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd1ee46e-4784-4ac8-9b43-e1a1613eff47",
+          "title": "Red Red Wine",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a5ca70e7-4651-4a28-bcf6-05831e140cd8",
+        "status": "Official",
+        "title": "Now That’s What I Call Music: Smash Hits",
+        "date": "1987-09-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "07d13bc9-932d-3868-8030-b8624afc658e",
+          "title": "Now That’s What I Call Music! Smash Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "431543c7-d26d-4342-a87e-ae89e764e7eb",
+        "status": "Official",
+        "title": "Now That’s What I Call Music: Smash Hits",
+        "date": "1987-09-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "07d13bc9-932d-3868-8030-b8624afc658e",
+          "title": "Now That’s What I Call Music! Smash Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b3e80a5a-e2fb-443c-aab2-c0fd400797ca",
+        "status": "Official",
+        "title": "The Best of UB40, Volume One",
+        "date": "1987-10-26",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0a73fdf5-e16a-3e90-9654-da2129ad559f",
+          "title": "The Best of UB40, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "15fb3c10-a3c1-4471-8354-1e7fcd95e2ab",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! Smash Hits",
+        "date": "1987-10",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "07d13bc9-932d-3868-8030-b8624afc658e",
+          "title": "Now That’s What I Call Music! Smash Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "256ab10a-790c-4221-b7e2-2b45fe94dc6f",
+        "status": "Official",
+        "title": "16 No. 1 Hits: 1974–1986",
+        "date": "1987",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "606e1c9b-0b43-32d6-82b1-3b6f4de8e5bb",
+          "title": "16 No. 1 Hits: 1974–1986",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "22477362-c020-47c7-8185-c59903e2df44",
+        "status": "Official",
+        "title": "Stereoplay Highlights CD 24",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f5b1935c-31ea-4800-9cb0-ea07acc5f60d",
+          "title": "Stereoplay Highlights CD 24",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7a62b3c0-9afd-48c0-b10f-8d50c59ffac7",
+        "status": "Official",
+        "title": "The Best Of UB40 - Volume 1",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0a73fdf5-e16a-3e90-9654-da2129ad559f",
+          "title": "The Best of UB40, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b915bdd9-befe-4ad7-968d-a650eba1c3a6",
+        "status": "Official",
+        "title": "The Best of UB40, Volume One",
+        "date": "1987",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0a73fdf5-e16a-3e90-9654-da2129ad559f",
+          "title": "The Best of UB40, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e383d4cc-8c2b-3b2d-a3f6-f833419e9bbb",
+        "status": "Official",
+        "title": "The Best of UB40, Volume One",
+        "date": "1987",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0a73fdf5-e16a-3e90-9654-da2129ad559f",
+          "title": "The Best of UB40, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "16d68a8f-73c0-45c4-96f0-47f4fbd677cb",
+        "status": "Official",
+        "title": "The Best of UB40, Volume One",
+        "date": "1989-01-16",
+        "country": "XE",
+        "disambiguation": "picture CD",
+        "release_group": {
+          "id": "0a73fdf5-e16a-3e90-9654-da2129ad559f",
+          "title": "The Best of UB40, Volume One",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3bdd62d9-bace-4c72-ace7-4566ba00545b",
+        "status": "Official",
+        "title": "The 80’s: The Album of the Decade",
+        "date": "1989-10-01",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dbad4be8-caa6-3b46-967e-f39c5a84a036",
+          "title": "The 80’s: The Album of the Decade",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3cf6179a-744b-430d-9531-cd150470798e",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1989",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b8d496ef-b312-45cf-8e78-4404cf3b81f1",
+          "title": "Red Red Wine",
+          "primary_type": "EP",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "606de45b-93f9-4ec5-9e48-6f8ea32b1042",
+        "status": "Official",
+        "title": "Absolute Reggae",
+        "date": "1991-06-20",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4e614574-c56d-41a2-9459-c279714a298b",
+          "title": "Absolute Reggae",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "93787c87-4f35-43ee-bad7-c2da09723eab",
+        "status": "Official",
+        "title": "Sun Jammin’",
+        "date": "1991-07-20",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "753f76a6-97fe-44e5-8421-02bae8bfce70",
+          "title": "Sun Jammin’",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "24503bf0-d226-4c94-9799-87cd5fa5b6cf",
+        "status": "Promotion",
+        "title": "Absolute Reggae Medley",
+        "date": "1991",
+        "country": "SE",
+        "disambiguation": "Promotion CD for the compilation album \"Absolute Reggae\"",
+        "release_group": {
+          "id": "4f62ffa5-e0c0-457c-8816-5a2bab651d72",
+          "title": "Absolute Reggae Medley",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5d899822-12c3-44cc-8958-0dc2fa97b589",
+        "status": "Official",
+        "title": "Sun Jammin’",
+        "date": "1991",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "753f76a6-97fe-44e5-8421-02bae8bfce70",
+          "title": "Sun Jammin’",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "35a072f9-5da1-4343-ba81-cc09f21e1490",
+        "status": "Official",
+        "title": "De Pre Historie 1983",
+        "date": "1992",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d2677ac5-2451-3787-85da-41848339aa41",
+          "title": "De Pre Historie 1983",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "61a7ea24-4190-4972-94a6-1ef0cfb7483e",
+        "status": "Official",
+        "title": "Reggae Night - 20 Top Reggae Hits",
+        "date": "1992",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "eb982cdb-787d-4452-be5c-f3a6fa8ee9be",
+          "title": "Reggae Night - 20 Top Reggae Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2456e414-35d0-4bb9-8b52-e534694f5ce2",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 1983",
+        "date": "1993-08-23",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5a1b8eee-c7b0-3501-9abc-8e18041f59e4",
+          "title": "Now That’s What I Call Music! 1983",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/bed25b7f-15af-48e8-a62f-6aa41faf3b10?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "bed25b7f-15af-48e8-a62f-6aa41faf3b10",
+    "title": "Eye of the Tiger",
+    "length": 227760,
+    "disambiguation": "single version, has early fade",
+    "isrcs": [
+      "USJI10400693",
+      "USSB18280010",
+      "USVR10400292",
+      "USVR19600010"
+    ],
+    "first_release_date": "1982",
+    "artist_credit": [
+      {
+        "name": "Survivor",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "213c8f9c-a47e-408c-94a9-402a930ebc1d",
+        "status": "Official",
+        "title": "Eye of the Tiger",
+        "date": "1982",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c0474f4e-6c19-4075-a3c3-05b20399b0bb",
+          "title": "Eye of the Tiger",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "53aa0683-a329-4d1f-b6c3-c4a7a44ed87b",
+        "status": "Official",
+        "title": "Eye of the Tiger",
+        "date": "1982",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c0474f4e-6c19-4075-a3c3-05b20399b0bb",
+          "title": "Eye of the Tiger",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "fd9e3b88-3a14-46e1-9c13-b1a0ce031254",
+        "status": "Official",
+        "title": "Eye of the Tiger (Theme From Rocky III)",
+        "date": "1982",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c0474f4e-6c19-4075-a3c3-05b20399b0bb",
+          "title": "Eye of the Tiger",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5e1c15aa-ae8b-4520-b517-f9cabae67225",
+        "status": "Official",
+        "title": "Raiders of the Pop Charts",
+        "date": "1983",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b87b2283-ae79-43cc-9fde-545052d62d9e",
+          "title": "Raiders of the Pop Charts",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7f605b16-ac89-47e9-8a88-07d897618c2b",
+        "status": "Official",
+        "title": "American Heartbeat",
+        "date": "1984-06-09",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bddbc075-f1b0-3edd-98c2-b85aa748f07f",
+          "title": "American Heartbeat",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d83b4062-43da-4ce9-b8fe-47f9f758513f",
+        "status": "Official",
+        "title": "American Heartbeat",
+        "date": "1984",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bddbc075-f1b0-3edd-98c2-b85aa748f07f",
+          "title": "American Heartbeat",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b3f50107-4115-4425-aaf3-76c3d15abd6a",
+        "status": "Official",
+        "title": "American Heartbeat",
+        "date": "1984",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bddbc075-f1b0-3edd-98c2-b85aa748f07f",
+          "title": "American Heartbeat",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ea7b7152-fafb-4411-94f1-e5c864df9cc2",
+        "status": "Official",
+        "title": "Burning Heart",
+        "date": "1985",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a30f73e8-7381-37c8-94ab-af8dde3ccadf",
+          "title": "Burning Heart",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "17aa025c-45d1-4589-8616-d0949767b5b0",
+        "status": "Official",
+        "title": "Rocky IV",
+        "date": "1985",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "072e8ecb-680c-33fa-ad15-556771d849ad",
+          "title": "Rocky IV: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "a73fb260-da55-4642-b8fb-e4d214844185",
+        "status": "Official",
+        "title": "Rocky IV: Original Motion Picture Soundtrack",
+        "date": "1985",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "072e8ecb-680c-33fa-ad15-556771d849ad",
+          "title": "Rocky IV: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "ab8b7990-e8d2-46f7-bf33-6630ba6324d6",
+        "status": "Official",
+        "title": "Rocky IV: Original Motion Picture Soundtrack",
+        "date": "1985",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "072e8ecb-680c-33fa-ad15-556771d849ad",
+          "title": "Rocky IV: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "8308de87-1462-44be-850f-0257614c95b1",
+        "status": "Official",
+        "title": "Rocky IV: Original Motion Picture Soundtrack",
+        "date": "1985",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "072e8ecb-680c-33fa-ad15-556771d849ad",
+          "title": "Rocky IV: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "6b88d0a1-ca78-48ef-b1b8-046fd11941f6",
+        "status": null,
+        "title": "Best collection - Survivor",
+        "date": "1986",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2de4ab1f-0ee5-438e-9f09-6fa9ab82ce82",
+          "title": "Best collection - Survivor",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "dcb0894a-459c-4fc0-b22d-c5f03ac24ee9",
+        "status": "Official",
+        "title": "Rocky IV: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "072e8ecb-680c-33fa-ad15-556771d849ad",
+          "title": "Rocky IV: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "ac7bfb59-01d0-48f4-85c4-a04cec94276d",
+        "status": "Official",
+        "title": "Rock of the 80's",
+        "date": "1988",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5382c43d-290c-3951-80c5-0f3fea9ae8da",
+          "title": "Rock of the 80's",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "42129535-f255-30a5-a73d-533238860119",
+        "status": "Official",
+        "title": "The Rocky Story",
+        "date": "1990",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "60cb6126-4198-34d8-9e63-b5c33d1bd29d",
+          "title": "The Rocky Story",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "04e7c9e4-c55d-4740-b3f2-fde3ac590778",
+        "status": "Official",
+        "title": "The Rocky Story",
+        "date": "1990",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "60cb6126-4198-34d8-9e63-b5c33d1bd29d",
+          "title": "The Rocky Story",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "1e4a9678-2b8a-4eac-9bba-8b0463bef2fe",
+        "status": "Official",
+        "title": "The Rocky Story",
+        "date": "1990",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "60cb6126-4198-34d8-9e63-b5c33d1bd29d",
+          "title": "The Rocky Story",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "39d03130-16fb-47ec-ac76-24f3cc04dda6",
+        "status": "Official",
+        "title": "The Rocky Story (The Original Soundtrack Songs From The Rocky Movies)",
+        "date": "1990",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "60cb6126-4198-34d8-9e63-b5c33d1bd29d",
+          "title": "The Rocky Story",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "3d6e8a3d-20fe-44c0-bd37-6aabe20135dc",
+        "status": "Official",
+        "title": "Film Parade 2",
+        "date": "1991",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ec9000bf-eb3b-4265-b9a1-65fe300eee50",
+          "title": "Film Parade 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "56bbd0ff-dc5c-4477-8d10-8b9fa9ed6ed6",
+        "status": "Official",
+        "title": "Soft Rock",
+        "date": "1991",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e1b3cc15-d815-3203-8791-1413ab5e65c1",
+          "title": "Soft Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "092b3b62-fdcf-466b-9203-9797c8de5da6",
+        "status": "Official",
+        "title": "The Hit Box",
+        "date": "1991",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "078d6062-a730-4f56-8262-aa359ab3f6f3",
+          "title": "The Hit Box",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "db119723-cbc8-442e-960c-381ed803f9ce",
+        "status": "Pseudo-Release",
+        "title": "The Hit Box CD 3 - The 80’s Smash Hits",
+        "date": "1991",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "078d6062-a730-4f56-8262-aa359ab3f6f3",
+          "title": "The Hit Box",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "23c159d2-111b-4bcc-b11d-530690a062e6",
+        "status": "Official",
+        "title": "The Rock Collection: Rock Hits",
+        "date": "1991",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2947d3cd-6da6-4226-bd9f-c8d300be7776",
+          "title": "The Rock Collection: Rock Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c4696c3e-5a85-44b4-997c-5aeaab4d9673",
+        "status": "Official",
+        "title": "The Rocky Story",
+        "date": "1991",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "60cb6126-4198-34d8-9e63-b5c33d1bd29d",
+          "title": "The Rocky Story",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/0b27ab7a-414a-4444-88f1-d9debaee47b5?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "0b27ab7a-414a-4444-88f1-d9debaee47b5",
+    "title": "Under the Moon of Love",
+    "length": 184440,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBPJ9800694"
+    ],
+    "first_release_date": "1996",
+    "artist_credit": [
+      {
+        "name": "Showaddywaddy",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "31f00b7f-4a6f-4f9b-9c24-9dfc8db33245",
+        "status": "Official",
+        "title": "Pop Parade",
+        "date": "1996",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "de388dc0-3bb3-4f05-8733-f70fb51bae3f",
+          "title": "Pop Parade",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c3b6d5ec-4ed0-4f82-b6f8-9f3d8f7ed505",
+        "status": "Official",
+        "title": "Die Hit-Giganten: Best of 70s",
+        "date": "2011-09-16",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1cc5edfb-8c15-4e78-aa83-3d7e82e03ad2",
+          "title": "Die Hit-Giganten: Best of 70s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "df6a00cf-ebee-4a0d-8f7f-699e313611d5",
+        "status": "Official",
+        "title": "Golden Hit Collection - 1976",
+        "date": "",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "205e5731-98ef-4e3f-891f-dbf590111a86",
+          "title": "Golden Hit Collection - 1976",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/3c08a08c-aba9-4873-9771-601f0e0d861e?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "3c08a08c-aba9-4873-9771-601f0e0d861e",
+    "title": "Blockbuster",
+    "length": 185440,
+    "disambiguation": "",
+    "isrcs": [
+      "GBARL7300002"
+    ],
+    "first_release_date": "2009-05-29",
+    "artist_credit": [
+      {
+        "name": "The Sweet",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "09e76425-e096-48dd-9d2e-90345d5dfc5e",
+        "status": "Official",
+        "title": "Super Rock Hits",
+        "date": "2009-05-29",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dbb6827-df38-46b3-b6ff-85c156d7d6aa",
+          "title": "Super Rock Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

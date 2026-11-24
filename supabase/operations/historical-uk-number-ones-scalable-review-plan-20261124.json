@@ -8,10 +8,10 @@
   "snapshot_sha256": "0dbc96dca56f595e2473f6c33f36852755620e020e1776818a29440f998a9d53",
   "records": [
     {
-      "operation_key": "historical-uk-number-ones-v5-row-2510-7e31c36480fb",
+      "operation_key": "historical-uk-number-ones-v5-row-2510-222a977a35ec",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "7e31c36480fba620a54d87147bd242b1a2d733c9f8ebb123e8f455379a89a25e",
+      "manifest_sha256": "222a977a35ec4d15103fd9c5a7a736ca3189f53b040c4eaae0cda29179c2251a",
       "preconditions": {
         "row_fingerprint": "57bd1128b9aabdab9c8a7acd8ec00a08277c69992e1f67d6f11eb0b718d521f3",
         "collection_key": "uk-number-ones",
@@ -52,15 +52,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:7e31c36480fba620a54d87147bd242b1a2d733c9f8ebb123e8f455379a89a25e",
+        "approval_token_scope": "rollback:222a977a35ec4d15103fd9c5a7a736ca3189f53b040c4eaae0cda29179c2251a",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-2501-10b0a227a9b6",
+      "operation_key": "historical-uk-number-ones-v5-row-2501-7ab181454e28",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "10b0a227a9b66a5f9e178e296fc9c26c0d84854fbf5386d7992e250f6000a0d7",
+      "manifest_sha256": "7ab181454e28a275737712aed9fc553d6b3107120acefdd15593a10a34ce5230",
       "preconditions": {
         "row_fingerprint": "f6d054475934350e3852a68e09ce947ba295b150b248dc637092910c0c1ed80a",
         "collection_key": "uk-number-ones",
@@ -101,15 +101,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:10b0a227a9b66a5f9e178e296fc9c26c0d84854fbf5386d7992e250f6000a0d7",
+        "approval_token_scope": "rollback:7ab181454e28a275737712aed9fc553d6b3107120acefdd15593a10a34ce5230",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-2507-8d594dba5608",
+      "operation_key": "historical-uk-number-ones-v5-row-2507-a5e504921027",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "8d594dba560859afd79507946ac477a29178573622056a49ae4fdcf5da169542",
+      "manifest_sha256": "a5e5049210277ac749e7e914a25e245bf147b5dd39cee72c5c51b2235621a506",
       "preconditions": {
         "row_fingerprint": "081e46c3fba1895c47e3d5afc24c757375e65764f34afe78e119c617d7bb82c6",
         "collection_key": "uk-number-ones",
@@ -150,15 +150,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:8d594dba560859afd79507946ac477a29178573622056a49ae4fdcf5da169542",
+        "approval_token_scope": "rollback:a5e5049210277ac749e7e914a25e245bf147b5dd39cee72c5c51b2235621a506",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-2439-47d9a731fcca",
+      "operation_key": "historical-uk-number-ones-v5-row-2439-db62db2344ea",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "47d9a731fcca4c1affc5e648e753ecb4e176f7d6f901cf3b546a4c92a6a20ef5",
+      "manifest_sha256": "db62db2344ea8a2af07efd671cd6c60d5e30821ea53b551441c33a34677e53e6",
       "preconditions": {
         "row_fingerprint": "df0a570be1ac9c3e9e57aa2eca0899c6159994e0e3c4c090bead5be97301c9e3",
         "collection_key": "uk-number-ones",
@@ -199,15 +199,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:47d9a731fcca4c1affc5e648e753ecb4e176f7d6f901cf3b546a4c92a6a20ef5",
+        "approval_token_scope": "rollback:db62db2344ea8a2af07efd671cd6c60d5e30821ea53b551441c33a34677e53e6",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1999-9338a59a3e15",
+      "operation_key": "historical-uk-number-ones-v5-row-1999-6944da2ddf69",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "9338a59a3e150788d633933968a8298300a91734a9f860a3b13a05db995b6304",
+      "manifest_sha256": "6944da2ddf69160e1345a4369a5eae0d76e7675d21a108655419777915d338fb",
       "preconditions": {
         "row_fingerprint": "f731f619d0b77eb3796fec8ff964c274b1016ed45c0b5a64ae6af8dbd5e94d0e",
         "collection_key": "uk-number-ones",
@@ -248,15 +248,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:9338a59a3e150788d633933968a8298300a91734a9f860a3b13a05db995b6304",
+        "approval_token_scope": "rollback:6944da2ddf69160e1345a4369a5eae0d76e7675d21a108655419777915d338fb",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1985-b634e1f88e5b",
+      "operation_key": "historical-uk-number-ones-v5-row-1985-24086635c6d6",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "b634e1f88e5bf5a786537a8ad3a8b3b779f2804d26f368d14923b4d757c0d99b",
+      "manifest_sha256": "24086635c6d61f36ccf2f768ab2a706265a492f2379a9481ac7ac5d96aea4c7d",
       "preconditions": {
         "row_fingerprint": "563d9163f035ffeb48bd443b006e0b450c8520e5cff38022aade36333a3eb5c2",
         "collection_key": "uk-number-ones",
@@ -297,15 +297,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:b634e1f88e5bf5a786537a8ad3a8b3b779f2804d26f368d14923b4d757c0d99b",
+        "approval_token_scope": "rollback:24086635c6d61f36ccf2f768ab2a706265a492f2379a9481ac7ac5d96aea4c7d",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1987-e11ba7f18bea",
+      "operation_key": "historical-uk-number-ones-v5-row-1987-7495386d785e",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "e11ba7f18beafeca221937144ff68ece2f494f38a6c389ca519bce1a400d6da5",
+      "manifest_sha256": "7495386d785eccc5f857d57c8feadd911bb5e559ead00117114a3ba3d0e83ad4",
       "preconditions": {
         "row_fingerprint": "fc8ce344353906bfc93da93b9df458376b659d771adcf89f536e96a44416b3d6",
         "collection_key": "uk-number-ones",
@@ -346,15 +346,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:e11ba7f18beafeca221937144ff68ece2f494f38a6c389ca519bce1a400d6da5",
+        "approval_token_scope": "rollback:7495386d785eccc5f857d57c8feadd911bb5e559ead00117114a3ba3d0e83ad4",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1928-88bb32368051",
+      "operation_key": "historical-uk-number-ones-v5-row-1928-97129f14d373",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "88bb323680510394749b6f93c8056a15207ebc433a803117929902da967379fe",
+      "manifest_sha256": "97129f14d373eb36c712cfa8784fbe278e9932301f7f9971dc90eb9f3f4c77d0",
       "preconditions": {
         "row_fingerprint": "e5bcaf39bc79c48a1d2bd13457037b609ac3812e32bb1a0ccae3c53b0a8e697d",
         "collection_key": "uk-number-ones",
@@ -395,15 +395,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:88bb323680510394749b6f93c8056a15207ebc433a803117929902da967379fe",
+        "approval_token_scope": "rollback:97129f14d373eb36c712cfa8784fbe278e9932301f7f9971dc90eb9f3f4c77d0",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1934-414ce87ddc95",
+      "operation_key": "historical-uk-number-ones-v5-row-1934-57078ed1df0b",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "414ce87ddc95c80481975804d8d04700c897e0b4b2a8ef9f1965d5eb793c29d8",
+      "manifest_sha256": "57078ed1df0b615405762a1b99fcf1421ad3018cc251dc593463ef6adcbdad9c",
       "preconditions": {
         "row_fingerprint": "4eb8c89b521a14c4793a82c510c592b60b223b781055ab078e7c42cc068ccb06",
         "collection_key": "uk-number-ones",
@@ -444,15 +444,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:414ce87ddc95c80481975804d8d04700c897e0b4b2a8ef9f1965d5eb793c29d8",
+        "approval_token_scope": "rollback:57078ed1df0b615405762a1b99fcf1421ad3018cc251dc593463ef6adcbdad9c",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1943-ef67da2ad5d9",
+      "operation_key": "historical-uk-number-ones-v5-row-1943-e04d6b74069c",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "ef67da2ad5d95d49954d2f331559b2900e9803f419e484d4a23410267db7f285",
+      "manifest_sha256": "e04d6b74069cd47a77a4901b4b8cb3bf917e2c85007c59b4cb88438757eb5bf8",
       "preconditions": {
         "row_fingerprint": "c3cd30d4760cbec46973d85d889770e87945bb5f04d3709b705f8b904047a60b",
         "collection_key": "uk-number-ones",
@@ -493,15 +493,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:ef67da2ad5d95d49954d2f331559b2900e9803f419e484d4a23410267db7f285",
+        "approval_token_scope": "rollback:e04d6b74069cd47a77a4901b4b8cb3bf917e2c85007c59b4cb88438757eb5bf8",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1950-e9be953b01e1",
+      "operation_key": "historical-uk-number-ones-v5-row-1950-5b4cbcad92b1",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "e9be953b01e1177c703ccc8c733728bf378a8e423fb6c1053a3bc3dec221d73c",
+      "manifest_sha256": "5b4cbcad92b1dfc6a456ccb2bea07617251e4f22c5918b209cf9bbe36351b6af",
       "preconditions": {
         "row_fingerprint": "145d8b977e988b5679cbed5dc71e73058c65c86cdc2a34aee94a168d59b349af",
         "collection_key": "uk-number-ones",
@@ -542,15 +542,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:e9be953b01e1177c703ccc8c733728bf378a8e423fb6c1053a3bc3dec221d73c",
+        "approval_token_scope": "rollback:5b4cbcad92b1dfc6a456ccb2bea07617251e4f22c5918b209cf9bbe36351b6af",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1951-59eeaf686ef7",
+      "operation_key": "historical-uk-number-ones-v5-row-1951-8c6a6a0359ca",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "59eeaf686ef788937a690f92d77fcc37ad711a2ddd438ac827825ebaaff6426d",
+      "manifest_sha256": "8c6a6a0359ca0125fab1e96d077de412ef835ced9a62363c8ee2880e6a19c7b1",
       "preconditions": {
         "row_fingerprint": "dbb2d25dbee8a3e489362ef52b4cd2254e904ee5016f95342d32482b222d67b6",
         "collection_key": "uk-number-ones",
@@ -591,15 +591,64 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:59eeaf686ef788937a690f92d77fcc37ad711a2ddd438ac827825ebaaff6426d",
+        "approval_token_scope": "rollback:8c6a6a0359ca0125fab1e96d077de412ef835ced9a62363c8ee2880e6a19c7b1",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1907-494402952ff1",
+      "operation_key": "historical-uk-number-ones-v5-row-1899-45c7c0024abb",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "494402952ff1e2fe7198c726726c6a59064757ebd402ae4a3cb4d08f10bae0f8",
+      "manifest_sha256": "45c7c0024abb2f8f9468fa9b3ec07afad2b360a6d2386c7c1bd2c02dda30fbda",
+      "preconditions": {
+        "row_fingerprint": "c3615498619db1a6150759a4f5b6c7f3dd5f3eaa94fd8b210f88bb5b72d9bcab",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2013:1219:will i am britney spears:scream shout",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "35ae1532-0e44-4b80-b31b-e9a157c2e277",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1899,
+        "action": "import_verified",
+        "placeholder_canonical_id": "35ae1532-0e44-4b80-b31b-e9a157c2e277",
+        "recording_mbid": "ff657e64-51ff-47b9-a8c7-ed3666a78bd6",
+        "release_mbid": "3df59ec7-6574-4ffa-9d96-2fad3be976d0",
+        "release_group_mbid": "9dc491dc-96ae-4aa3-ae5d-1cd695496fae",
+        "track_position": 4,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "safety_contract": {
+        "isolated_transaction": true,
+        "advisory_locks": true,
+        "abort_on_stale_state": true,
+        "preserve_all_ratings": true,
+        "prevent_duplicate_recording_and_release": true,
+        "immutable_private_audit": true,
+        "verify_before_commit": true,
+        "separate_digest_bound_rollback": true,
+        "resume_from_immutable_audit": true
+      },
+      "audit": {
+        "required": true,
+        "append_only": true,
+        "captures_before_and_after": true
+      },
+      "rollback": {
+        "required": true,
+        "approval_token_scope": "rollback:45c7c0024abb2f8f9468fa9b3ec07afad2b360a6d2386c7c1bd2c02dda30fbda",
+        "restores_exact_snapshot": true
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1907-761327ed2dab",
+      "status": "ready_for_independent_review",
+      "approval_state": "not_approved",
+      "manifest_sha256": "761327ed2dab3dced4dfb051becc3d7b3f24aa35992c83a18abd860046d7fde1",
       "preconditions": {
         "row_fingerprint": "cbf9a9ca7d7d14f69d56089f9e14052107f2fe9fdaf54fb1bb71c05a281e408e",
         "collection_key": "uk-number-ones",
@@ -640,15 +689,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:494402952ff1e2fe7198c726726c6a59064757ebd402ae4a3cb4d08f10bae0f8",
+        "approval_token_scope": "rollback:761327ed2dab3dced4dfb051becc3d7b3f24aa35992c83a18abd860046d7fde1",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1909-704fa214e739",
+      "operation_key": "historical-uk-number-ones-v5-row-1909-36e50099a021",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "704fa214e73967228cdfb771fb7d5302c4238b46b085520f2faf19788bca73b5",
+      "manifest_sha256": "36e50099a0218d6f17c84423d50f95bd2c2ed42d9f5350fa974936a7e7afe173",
       "preconditions": {
         "row_fingerprint": "75e4fd7bde2691a4dba57c1fc808c9c9df6f72cb17cf85a380242723155aeba5",
         "collection_key": "uk-number-ones",
@@ -689,15 +738,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:704fa214e73967228cdfb771fb7d5302c4238b46b085520f2faf19788bca73b5",
+        "approval_token_scope": "rollback:36e50099a0218d6f17c84423d50f95bd2c2ed42d9f5350fa974936a7e7afe173",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1917-796fbd386124",
+      "operation_key": "historical-uk-number-ones-v5-row-1917-8fc6859a2ae9",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "796fbd38612432c54c51deffd5a2aa6a21a535e3edce2b7225c245e2fef2b3f7",
+      "manifest_sha256": "8fc6859a2ae9a715a87f5b82f78e8d5003bcc86127b6d221107465f63f26fbd7",
       "preconditions": {
         "row_fingerprint": "8e06977f81592dfe74fd28aeaf16306c4699c95ca6144975b88b60e8905198ed",
         "collection_key": "uk-number-ones",
@@ -738,15 +787,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:796fbd38612432c54c51deffd5a2aa6a21a535e3edce2b7225c245e2fef2b3f7",
+        "approval_token_scope": "rollback:8fc6859a2ae9a715a87f5b82f78e8d5003bcc86127b6d221107465f63f26fbd7",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1923-9f5e721a62dd",
+      "operation_key": "historical-uk-number-ones-v5-row-1923-909024b5487b",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "9f5e721a62dd160a721af8b5faac8f0baa967285fee2e1d94726266e5b1583d8",
+      "manifest_sha256": "909024b5487b4ae7f3bd72acf107f182c2bfe2e1015896aea88882a1b7ceecbe",
       "preconditions": {
         "row_fingerprint": "fa24e44ef52208600e68343ffa40394f3dbc982938e55b5681b75441058dc2ff",
         "collection_key": "uk-number-ones",
@@ -787,15 +836,64 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:9f5e721a62dd160a721af8b5faac8f0baa967285fee2e1d94726266e5b1583d8",
+        "approval_token_scope": "rollback:909024b5487b4ae7f3bd72acf107f182c2bfe2e1015896aea88882a1b7ceecbe",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1880-18a7216075ae",
+      "operation_key": "historical-uk-number-ones-v5-row-1868-ffafbfc17bd3",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "18a7216075ae68f0cae142706f560990e5f1ad5219812c6c79923585bb6ccde4",
+      "manifest_sha256": "ffafbfc17bd39344f3761ad0b2820c159233b5242e7900002a5c0dd665a39a28",
+      "preconditions": {
+        "row_fingerprint": "3cbf4a92174dce39bee97f9ea0923bf5b235c91466e86190c78ca04d6a159e8e",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1187:david guetta sia:titanium",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "fcad58a3-78e9-4cf1-b342-381c316e34a5",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1868,
+        "action": "import_verified",
+        "placeholder_canonical_id": "fcad58a3-78e9-4cf1-b342-381c316e34a5",
+        "recording_mbid": "0069c0f7-9274-4b4b-a10e-110b90a4bcc0",
+        "release_mbid": "05b8c34d-e064-45cd-87e5-b870b7a6a8c3",
+        "release_group_mbid": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+        "track_position": 12,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "safety_contract": {
+        "isolated_transaction": true,
+        "advisory_locks": true,
+        "abort_on_stale_state": true,
+        "preserve_all_ratings": true,
+        "prevent_duplicate_recording_and_release": true,
+        "immutable_private_audit": true,
+        "verify_before_commit": true,
+        "separate_digest_bound_rollback": true,
+        "resume_from_immutable_audit": true
+      },
+      "audit": {
+        "required": true,
+        "append_only": true,
+        "captures_before_and_after": true
+      },
+      "rollback": {
+        "required": true,
+        "approval_token_scope": "rollback:ffafbfc17bd39344f3761ad0b2820c159233b5242e7900002a5c0dd665a39a28",
+        "restores_exact_snapshot": true
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1880-18d2b3b82c69",
+      "status": "ready_for_independent_review",
+      "approval_state": "not_approved",
+      "manifest_sha256": "18d2b3b82c69da1187ca46ac9a7340ffec5ab4569652135ff95cbab6e2175468",
       "preconditions": {
         "row_fingerprint": "47d1a8374645d282e561bfe5fc95bd449b9ad486f6d92a3c56b2ad4484fe43b2",
         "collection_key": "uk-number-ones",
@@ -836,15 +934,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:18a7216075ae68f0cae142706f560990e5f1ad5219812c6c79923585bb6ccde4",
+        "approval_token_scope": "rollback:18d2b3b82c69da1187ca46ac9a7340ffec5ab4569652135ff95cbab6e2175468",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1892-98523e72a60f",
+      "operation_key": "historical-uk-number-ones-v5-row-1892-db50c03d73f0",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "98523e72a60f8d0268155ecdcbbd24c678ca015aee4d9705843f55242ad2d561",
+      "manifest_sha256": "db50c03d73f055123fe8241797d10fce1733bbea93e28fc564c1018a4490ccc4",
       "preconditions": {
         "row_fingerprint": "1f4c01f6274dc28209c5a1317254125c830aed3067194df6c8e8d65e21fc2fba",
         "collection_key": "uk-number-ones",
@@ -885,15 +983,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:98523e72a60f8d0268155ecdcbbd24c678ca015aee4d9705843f55242ad2d561",
+        "approval_token_scope": "rollback:db50c03d73f055123fe8241797d10fce1733bbea93e28fc564c1018a4490ccc4",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1894-2322da6bf849",
+      "operation_key": "historical-uk-number-ones-v5-row-1894-bfe045cbf5c6",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "2322da6bf84991a274a24d3c11d0323e4fcb3cfdee5cfa2f9fc6dc61fb83ede2",
+      "manifest_sha256": "bfe045cbf5c6dd7ab029a331ef9d89e7ed86361e638da5c03de4b0abf234008a",
       "preconditions": {
         "row_fingerprint": "c867cfc59f8ed93b0d88f0d25bb892d4bb31ae9b19a939c49d2bce69ef475c1f",
         "collection_key": "uk-number-ones",
@@ -934,15 +1032,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:2322da6bf84991a274a24d3c11d0323e4fcb3cfdee5cfa2f9fc6dc61fb83ede2",
+        "approval_token_scope": "rollback:bfe045cbf5c6dd7ab029a331ef9d89e7ed86361e638da5c03de4b0abf234008a",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1895-e9eeffbe01fa",
+      "operation_key": "historical-uk-number-ones-v5-row-1895-7e799959e37e",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "e9eeffbe01fa33778f9cc7f22ac9673fd93b856007060cc0050e8e24aa859806",
+      "manifest_sha256": "7e799959e37ef743ea019e1f9c5cac14f92a4ff91eb88d441a0adb2f09c837fe",
       "preconditions": {
         "row_fingerprint": "af57c8732fcaa1d4a379bb9be7149cf3b35201101403a5d247f50cf7fb1fdea0",
         "collection_key": "uk-number-ones",
@@ -983,15 +1081,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:e9eeffbe01fa33778f9cc7f22ac9673fd93b856007060cc0050e8e24aa859806",
+        "approval_token_scope": "rollback:7e799959e37ef743ea019e1f9c5cac14f92a4ff91eb88d441a0adb2f09c837fe",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1896-3eff5282e1d1",
+      "operation_key": "historical-uk-number-ones-v5-row-1896-33f005776066",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "3eff5282e1d1620feaaf5b33bec733713f2516cc603d9107999dd37c5e2e6a65",
+      "manifest_sha256": "33f00577606681d2dd2f0e9e302b4f160f4188f01ff3b21b177f4775e88d71d2",
       "preconditions": {
         "row_fingerprint": "b487a173eafaf5915da855821d09adefda8ce6e514ea8b7fa2222a82144174a8",
         "collection_key": "uk-number-ones",
@@ -1032,15 +1130,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:3eff5282e1d1620feaaf5b33bec733713f2516cc603d9107999dd37c5e2e6a65",
+        "approval_token_scope": "rollback:33f00577606681d2dd2f0e9e302b4f160f4188f01ff3b21b177f4775e88d71d2",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1897-76b8ee18ce8b",
+      "operation_key": "historical-uk-number-ones-v5-row-1897-10b7abde027d",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "76b8ee18ce8bb5987536465551b98245bf1253f26c2d66b27c9727d474bf3c53",
+      "manifest_sha256": "10b7abde027d5466e9d70e11e799b7f9d6c0a02dcd6cd7f312c605f5d3be0b41",
       "preconditions": {
         "row_fingerprint": "6faa91a50405b418f5e12eed638bb81ef359f8073d1d4ac48b1d8e95b85caf01",
         "collection_key": "uk-number-ones",
@@ -1081,15 +1179,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:76b8ee18ce8bb5987536465551b98245bf1253f26c2d66b27c9727d474bf3c53",
+        "approval_token_scope": "rollback:10b7abde027d5466e9d70e11e799b7f9d6c0a02dcd6cd7f312c605f5d3be0b41",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1839-bbb8c6a3d361",
+      "operation_key": "historical-uk-number-ones-v5-row-1839-cfafa1ebcda4",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "bbb8c6a3d361afc65352b47d62ee81822bb80ee0e7662688b71979443320981d",
+      "manifest_sha256": "cfafa1ebcda41287dd319d8e1e9a031ae75f4b38a8b4d7e52c38f551b82f8684",
       "preconditions": {
         "row_fingerprint": "836bc19b7ad84ed69f71f1baf859babe9bde3d883d8b498a6bf63e01ad0b798f",
         "collection_key": "uk-number-ones",
@@ -1130,15 +1228,64 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:bbb8c6a3d361afc65352b47d62ee81822bb80ee0e7662688b71979443320981d",
+        "approval_token_scope": "rollback:cfafa1ebcda41287dd319d8e1e9a031ae75f4b38a8b4d7e52c38f551b82f8684",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1845-df33f7010f5b",
+      "operation_key": "historical-uk-number-ones-v5-row-1844-cea9109aee81",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "df33f7010f5b4e3df56449ac1bc7c02307305b79b962a7e6dc84a3da95a02590",
+      "manifest_sha256": "cea9109aee81450fa6adb63832c9e86f6949c27bfa731b942730c00d49f4dc51",
+      "preconditions": {
+        "row_fingerprint": "54252c47e33c487ee18912b10ede75aba7cfc027c434285d98c5d0e89ae3f2de",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1160:lmfao lauren bennett and goonrock:party rock anthem",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "a6299893-1f1c-4ee1-8141-531bba196a60",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1844,
+        "action": "import_verified",
+        "placeholder_canonical_id": "a6299893-1f1c-4ee1-8141-531bba196a60",
+        "recording_mbid": "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+        "release_mbid": "4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c",
+        "release_group_mbid": "3be839a3-1d35-4846-aa64-9d1532648799",
+        "track_position": 3,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "safety_contract": {
+        "isolated_transaction": true,
+        "advisory_locks": true,
+        "abort_on_stale_state": true,
+        "preserve_all_ratings": true,
+        "prevent_duplicate_recording_and_release": true,
+        "immutable_private_audit": true,
+        "verify_before_commit": true,
+        "separate_digest_bound_rollback": true,
+        "resume_from_immutable_audit": true
+      },
+      "audit": {
+        "required": true,
+        "append_only": true,
+        "captures_before_and_after": true
+      },
+      "rollback": {
+        "required": true,
+        "approval_token_scope": "rollback:cea9109aee81450fa6adb63832c9e86f6949c27bfa731b942730c00d49f4dc51",
+        "restores_exact_snapshot": true
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1845-46aaa5d49bff",
+      "status": "ready_for_independent_review",
+      "approval_state": "not_approved",
+      "manifest_sha256": "46aaa5d49bff90e7d3718e2d100e2cced9bca51e3d53cbfa594dc33126c713cb",
       "preconditions": {
         "row_fingerprint": "c95618377c02c1ed16bfc1ba797d151438517285aca47a66a691fc070634b58d",
         "collection_key": "uk-number-ones",
@@ -1179,15 +1326,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:df33f7010f5b4e3df56449ac1bc7c02307305b79b962a7e6dc84a3da95a02590",
+        "approval_token_scope": "rollback:46aaa5d49bff90e7d3718e2d100e2cced9bca51e3d53cbfa594dc33126c713cb",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1854-c32475c81b8a",
+      "operation_key": "historical-uk-number-ones-v5-row-1854-fecdb915c37d",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "c32475c81b8a5bbfa1862e38b2f9afa7b2bef1ebef096f1e592bdb90f6363741",
+      "manifest_sha256": "fecdb915c37dd3a4515982e97f502e0fc187d7ce9801ed3b595aa8069b5db0d5",
       "preconditions": {
         "row_fingerprint": "0ce487d3101417c2f7535b5d6d2ef50142fd0fbb8713de5b54c435ff87cea37d",
         "collection_key": "uk-number-ones",
@@ -1228,15 +1375,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:c32475c81b8a5bbfa1862e38b2f9afa7b2bef1ebef096f1e592bdb90f6363741",
+        "approval_token_scope": "rollback:fecdb915c37dd3a4515982e97f502e0fc187d7ce9801ed3b595aa8069b5db0d5",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1860-9e36ecfc9d24",
+      "operation_key": "historical-uk-number-ones-v5-row-1860-5edbc44e1b8a",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "9e36ecfc9d24eecc66187d4a3687cc5de60e058b4a216267f071fc2f5f1b7957",
+      "manifest_sha256": "5edbc44e1b8a0f3e9e0f69b2fc5bf7d179eaf31e07566085b94f6ef26f9dbfd6",
       "preconditions": {
         "row_fingerprint": "ad348fb56b70130f9d372861cce6a8f887c4d866022d0b740ea02ec20044145a",
         "collection_key": "uk-number-ones",
@@ -1277,15 +1424,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:9e36ecfc9d24eecc66187d4a3687cc5de60e058b4a216267f071fc2f5f1b7957",
+        "approval_token_scope": "rollback:5edbc44e1b8a0f3e9e0f69b2fc5bf7d179eaf31e07566085b94f6ef26f9dbfd6",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1862-0e76f7c05e5a",
+      "operation_key": "historical-uk-number-ones-v5-row-1862-a3ea7e5bce03",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "0e76f7c05e5a7936d98c05f2d2739bd72bf3b7035d5517aa591bcbb37d3f3620",
+      "manifest_sha256": "a3ea7e5bce03f3ba7862342cf4affec666ab0c95d47ef60ec9a0aaafa1f9d551",
       "preconditions": {
         "row_fingerprint": "078d998df0c8d39403869661380bbe0323e6a0870987c5cb38425cb86c4bf60b",
         "collection_key": "uk-number-ones",
@@ -1326,15 +1473,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:0e76f7c05e5a7936d98c05f2d2739bd72bf3b7035d5517aa591bcbb37d3f3620",
+        "approval_token_scope": "rollback:a3ea7e5bce03f3ba7862342cf4affec666ab0c95d47ef60ec9a0aaafa1f9d551",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1863-4adcab3ea608",
+      "operation_key": "historical-uk-number-ones-v5-row-1863-94e627fd03cf",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "4adcab3ea608bbb261f87d0ed2ab32040594096d67c13f1aad16f3423f5071c6",
+      "manifest_sha256": "94e627fd03cf19373621dbc4d034e9b2d284acb9a8a6cfe8cde00459cbf52474",
       "preconditions": {
         "row_fingerprint": "001b0eeb91f411a68a7a939bc66d4648ee03c6f24d263307836eb5d985ec738d",
         "collection_key": "uk-number-ones",
@@ -1375,15 +1522,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:4adcab3ea608bbb261f87d0ed2ab32040594096d67c13f1aad16f3423f5071c6",
+        "approval_token_scope": "rollback:94e627fd03cf19373621dbc4d034e9b2d284acb9a8a6cfe8cde00459cbf52474",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1811-7b2aa7669357",
+      "operation_key": "historical-uk-number-ones-v5-row-1811-dca84bcdcc29",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "7b2aa7669357e9bef0f7c8bd64da8b18f2c508cd0e3dce0726a6f8799dd92e2e",
+      "manifest_sha256": "dca84bcdcc29bcab37337ca66a2645ddbf5abe8ab4daf648609b7e974545e601",
       "preconditions": {
         "row_fingerprint": "a94b1cecd328c9d7a246d64e4913a8067259b4b7e056583539f7319909e3fd77",
         "collection_key": "uk-number-ones",
@@ -1424,15 +1571,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:7b2aa7669357e9bef0f7c8bd64da8b18f2c508cd0e3dce0726a6f8799dd92e2e",
+        "approval_token_scope": "rollback:dca84bcdcc29bcab37337ca66a2645ddbf5abe8ab4daf648609b7e974545e601",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1812-6144139467f5",
+      "operation_key": "historical-uk-number-ones-v5-row-1812-7374970de9da",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "6144139467f57d52a8c029b1b7d4d8963bceb05ef9097b6eb487019a773bf17f",
+      "manifest_sha256": "7374970de9dad100e606be76e3b4f6d652acdb3d27076531e1d982dea04dd71a",
       "preconditions": {
         "row_fingerprint": "29621706c2524d3974e3c1075936569cefeb8b43ee8dad77e2c4351a8ecce597",
         "collection_key": "uk-number-ones",
@@ -1473,15 +1620,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:6144139467f57d52a8c029b1b7d4d8963bceb05ef9097b6eb487019a773bf17f",
+        "approval_token_scope": "rollback:7374970de9dad100e606be76e3b4f6d652acdb3d27076531e1d982dea04dd71a",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1813-78c409908bb0",
+      "operation_key": "historical-uk-number-ones-v5-row-1813-af59e2be5ecc",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "78c409908bb05406427be27a0a301a9488f669ac1650a0bceb07be2375936be3",
+      "manifest_sha256": "af59e2be5ecce34ca4fdf933541c3f61b426c9957ffb6cfeba1bc23b45a4a096",
       "preconditions": {
         "row_fingerprint": "0f5c1f18147a58ddd19d32bb5818c87c374deca973ad45ba9d4c5f12636b9c63",
         "collection_key": "uk-number-ones",
@@ -1522,15 +1669,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:78c409908bb05406427be27a0a301a9488f669ac1650a0bceb07be2375936be3",
+        "approval_token_scope": "rollback:af59e2be5ecce34ca4fdf933541c3f61b426c9957ffb6cfeba1bc23b45a4a096",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1820-4429187633f6",
+      "operation_key": "historical-uk-number-ones-v5-row-1820-4a2dc0ea3297",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "4429187633f69c1622ed30678e1a1b10da5d3f7f6d187794534c074206e2aa79",
+      "manifest_sha256": "4a2dc0ea3297b25e88539b7ab8c470f453fe1c907f6dc2c6af9b7c7f793483c5",
       "preconditions": {
         "row_fingerprint": "4085d930e53c438d3ed88696f8268f16f3f5aba38e5e85f04b5b25ea9c828711",
         "collection_key": "uk-number-ones",
@@ -1571,15 +1718,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:4429187633f69c1622ed30678e1a1b10da5d3f7f6d187794534c074206e2aa79",
+        "approval_token_scope": "rollback:4a2dc0ea3297b25e88539b7ab8c470f453fe1c907f6dc2c6af9b7c7f793483c5",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1542-dd39302b5e8b",
+      "operation_key": "historical-uk-number-ones-v5-row-1542-473ea24465d1",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "dd39302b5e8bcb4b6907bdb2e395cb2bc2ab4ac50017985213882751d08901b2",
+      "manifest_sha256": "473ea24465d198ca664a20be2d796f1ae2ac7c3fcedd38244ca388d443c89a1b",
       "preconditions": {
         "row_fingerprint": "12769f002ef65e242991616b9f2b044c125334f60cc9197ab46a72170bb880d9",
         "collection_key": "uk-number-ones",
@@ -1620,15 +1767,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:dd39302b5e8bcb4b6907bdb2e395cb2bc2ab4ac50017985213882751d08901b2",
+        "approval_token_scope": "rollback:473ea24465d198ca664a20be2d796f1ae2ac7c3fcedd38244ca388d443c89a1b",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1558-d1d7b47a06d3",
+      "operation_key": "historical-uk-number-ones-v5-row-1558-5704352c6f11",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "d1d7b47a06d31f86f3d246df484feb88abba24b8c00dc301ae48f5f2025673ff",
+      "manifest_sha256": "5704352c6f11170e0b4c96dcd5749684e9a041409b52ee1df54cbc219d8a88fd",
       "preconditions": {
         "row_fingerprint": "be1bb935aa5aae6274885fa167960f4aca85dc3d951db6f9b6f6ce24f4856715",
         "collection_key": "uk-number-ones",
@@ -1669,15 +1816,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:d1d7b47a06d31f86f3d246df484feb88abba24b8c00dc301ae48f5f2025673ff",
+        "approval_token_scope": "rollback:5704352c6f11170e0b4c96dcd5749684e9a041409b52ee1df54cbc219d8a88fd",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1529-7add826ed9a8",
+      "operation_key": "historical-uk-number-ones-v5-row-1529-14f0b697a2bc",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "7add826ed9a8c32c1ddefb0663685869d4b8179ffad7ec94afd36de696c8f316",
+      "manifest_sha256": "14f0b697a2bc1f222ce713ccd48a928b76c9e2ac1ad2b04168963be77477f108",
       "preconditions": {
         "row_fingerprint": "3c9868c161e711ebdec50f1946aaa605944b5da4f24a487dd2a7376963ebc37f",
         "collection_key": "uk-number-ones",
@@ -1718,15 +1865,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:7add826ed9a8c32c1ddefb0663685869d4b8179ffad7ec94afd36de696c8f316",
+        "approval_token_scope": "rollback:14f0b697a2bc1f222ce713ccd48a928b76c9e2ac1ad2b04168963be77477f108",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1534-05dd1c995f26",
+      "operation_key": "historical-uk-number-ones-v5-row-1534-6c31b7b802a0",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "05dd1c995f26941083b0e239dcbcf6a7d9e863d9ad99890e306cd394b1f0678c",
+      "manifest_sha256": "6c31b7b802a0adff2ae906a3b3770ce94cfd691e7f2f7f0c2910135613fef6da",
       "preconditions": {
         "row_fingerprint": "53e82afce8fd56cd5f341453b3531064bacc995084a965a51d52165536356cc3",
         "collection_key": "uk-number-ones",
@@ -1767,15 +1914,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:05dd1c995f26941083b0e239dcbcf6a7d9e863d9ad99890e306cd394b1f0678c",
+        "approval_token_scope": "rollback:6c31b7b802a0adff2ae906a3b3770ce94cfd691e7f2f7f0c2910135613fef6da",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1538-3b7aefb6445c",
+      "operation_key": "historical-uk-number-ones-v5-row-1538-8aeb603ea422",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "3b7aefb6445cf991e9f02530108a888569c40c0ffde2110349d1031c1e831358",
+      "manifest_sha256": "8aeb603ea4223b84602c18a035d0f0f3b8902e7d2b3404095e65001937642879",
       "preconditions": {
         "row_fingerprint": "ec434b6662bc5ba718fcaf4ba4e7b0788cee96a082fadc1ddfe9748276b94c54",
         "collection_key": "uk-number-ones",
@@ -1816,15 +1963,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:3b7aefb6445cf991e9f02530108a888569c40c0ffde2110349d1031c1e831358",
+        "approval_token_scope": "rollback:8aeb603ea4223b84602c18a035d0f0f3b8902e7d2b3404095e65001937642879",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1502-05f34f3f910d",
+      "operation_key": "historical-uk-number-ones-v5-row-1502-47d2b5abf2d1",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "05f34f3f910d49d8ef42c1cd152e9a12021d54186622b50c4a57920f55341fd2",
+      "manifest_sha256": "47d2b5abf2d182dc88bbb03e9ca0ae22c3b25254ac5d563a9280c7b44281bf90",
       "preconditions": {
         "row_fingerprint": "b009baf1f20a72ba1ee6a76b30ac5870b4f177949f36c5566890624085d6e10a",
         "collection_key": "uk-number-ones",
@@ -1865,15 +2012,64 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:05f34f3f910d49d8ef42c1cd152e9a12021d54186622b50c4a57920f55341fd2",
+        "approval_token_scope": "rollback:47d2b5abf2d182dc88bbb03e9ca0ae22c3b25254ac5d563a9280c7b44281bf90",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1461-4857c414f358",
+      "operation_key": "historical-uk-number-ones-v5-row-1482-7e064f530be4",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "4857c414f358909d908d64e1c1ffbc7f689473eaccb936c638f2822eb22393aa",
+      "manifest_sha256": "7e064f530be40038161f3d734b6523effb826fe1eefbd40cc41f355109289c0c",
+      "preconditions": {
+        "row_fingerprint": "22088ddee319249d5792e8f09477ead550fb947b22d470ca18c327dd973a1841",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2005:1010:akon:lonely",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "61a5d71d-d11f-4131-8b5b-75d73bb7a9db",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1482,
+        "action": "import_verified",
+        "placeholder_canonical_id": "61a5d71d-d11f-4131-8b5b-75d73bb7a9db",
+        "recording_mbid": "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+        "release_mbid": "f26960ab-a238-4cbe-938e-6199ee9dcbcc",
+        "release_group_mbid": "4531b2ce-ffc3-4ac8-898e-6026be69950b",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "safety_contract": {
+        "isolated_transaction": true,
+        "advisory_locks": true,
+        "abort_on_stale_state": true,
+        "preserve_all_ratings": true,
+        "prevent_duplicate_recording_and_release": true,
+        "immutable_private_audit": true,
+        "verify_before_commit": true,
+        "separate_digest_bound_rollback": true,
+        "resume_from_immutable_audit": true
+      },
+      "audit": {
+        "required": true,
+        "append_only": true,
+        "captures_before_and_after": true
+      },
+      "rollback": {
+        "required": true,
+        "approval_token_scope": "rollback:7e064f530be40038161f3d734b6523effb826fe1eefbd40cc41f355109289c0c",
+        "restores_exact_snapshot": true
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1461-77295392e323",
+      "status": "ready_for_independent_review",
+      "approval_state": "not_approved",
+      "manifest_sha256": "77295392e3232d4283367a4cb18e3e1a534f2eb1679632d8815003cf4cfc7714",
       "preconditions": {
         "row_fingerprint": "1b893586ec894912dc4b6aaa74612efba61300e3bf037895d29a55f8b3abcdac",
         "collection_key": "uk-number-ones",
@@ -1914,15 +2110,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:4857c414f358909d908d64e1c1ffbc7f689473eaccb936c638f2822eb22393aa",
+        "approval_token_scope": "rollback:77295392e3232d4283367a4cb18e3e1a534f2eb1679632d8815003cf4cfc7714",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1466-2cd192b13940",
+      "operation_key": "historical-uk-number-ones-v5-row-1466-b7026073d7a8",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "2cd192b13940cc18217c3dc15859412fe11ab31fefeb6938478db9c38008f997",
+      "manifest_sha256": "b7026073d7a835ba66695de4b3d0a65616ca30025977fb82da7692397fd2c117",
       "preconditions": {
         "row_fingerprint": "bf2e0877ebf6215c97a4fc53b9ca46d3b297debec5a76d660ec6c37d312d6145",
         "collection_key": "uk-number-ones",
@@ -1963,15 +2159,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:2cd192b13940cc18217c3dc15859412fe11ab31fefeb6938478db9c38008f997",
+        "approval_token_scope": "rollback:b7026073d7a835ba66695de4b3d0a65616ca30025977fb82da7692397fd2c117",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1403-025dcfc7830c",
+      "operation_key": "historical-uk-number-ones-v5-row-1403-cd47bcca7b3b",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "025dcfc7830c09d9967820be5543b43d892fdd2fa1d050424696a0da086b34cf",
+      "manifest_sha256": "cd47bcca7b3beb9d76ce7edf6442f16df04b50be25aab9d9d2d8baa1ef8e3366",
       "preconditions": {
         "row_fingerprint": "52c99f48d0fb323ab0766c48339f33e047901f5c9ff8e81bc666f66fb7a9463b",
         "collection_key": "uk-number-ones",
@@ -2012,15 +2208,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:025dcfc7830c09d9967820be5543b43d892fdd2fa1d050424696a0da086b34cf",
+        "approval_token_scope": "rollback:cd47bcca7b3beb9d76ce7edf6442f16df04b50be25aab9d9d2d8baa1ef8e3366",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1407-02d6af4437ba",
+      "operation_key": "historical-uk-number-ones-v5-row-1407-270690974635",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "02d6af4437ba4b67d3d2b2b957ba9fb14f6d8fd3457d63d22338321ceba8a85d",
+      "manifest_sha256": "270690974635778b8799f91dc7ba8e05ac3704d382b5fc8ad5f86db50d01a28f",
       "preconditions": {
         "row_fingerprint": "b076ffc5526b011fe3cdcb03123c7837aaf5149889ffdb9d0d7fc19af065245f",
         "collection_key": "uk-number-ones",
@@ -2061,15 +2257,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:02d6af4437ba4b67d3d2b2b957ba9fb14f6d8fd3457d63d22338321ceba8a85d",
+        "approval_token_scope": "rollback:270690974635778b8799f91dc7ba8e05ac3704d382b5fc8ad5f86db50d01a28f",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1408-77ca0e31608e",
+      "operation_key": "historical-uk-number-ones-v5-row-1408-79934189f503",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "77ca0e31608e356c2b762398732f491458b9fcbae3d1739ad728942a398e5e42",
+      "manifest_sha256": "79934189f5033147f3869a916b03d69c8bc3f6b947acb2247832a4eb0b0f78cb",
       "preconditions": {
         "row_fingerprint": "13b3661ff536ae33c506b5251625865522353e5fdb9f425a9fd45a33ec95a5cc",
         "collection_key": "uk-number-ones",
@@ -2110,15 +2306,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:77ca0e31608e356c2b762398732f491458b9fcbae3d1739ad728942a398e5e42",
+        "approval_token_scope": "rollback:79934189f5033147f3869a916b03d69c8bc3f6b947acb2247832a4eb0b0f78cb",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1352-46834ae724b5",
+      "operation_key": "historical-uk-number-ones-v5-row-1352-e58b6847d6c2",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "46834ae724b55adce1e62adc52fbe2eef346b5930f1779c1a7679f09fb8dc583",
+      "manifest_sha256": "e58b6847d6c203a627ad921f73e70666709ad3d3764d9ff9ca6e093b51c7b2c9",
       "preconditions": {
         "row_fingerprint": "211a1aab2c0bc9f89cc2411b0173eefd22fd6c8529a0ecf8166edd55edc946a0",
         "collection_key": "uk-number-ones",
@@ -2159,15 +2355,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:46834ae724b55adce1e62adc52fbe2eef346b5930f1779c1a7679f09fb8dc583",
+        "approval_token_scope": "rollback:e58b6847d6c203a627ad921f73e70666709ad3d3764d9ff9ca6e093b51c7b2c9",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1364-bfe726516358",
+      "operation_key": "historical-uk-number-ones-v5-row-1364-6c9e707fd41a",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "bfe7265163581e275bbbba86cb885f49337f80306a94866d94c6d774052b9d59",
+      "manifest_sha256": "6c9e707fd41a565da9233bbcbc4abdfd9eab40015a5234303b9784aac6659fd6",
       "preconditions": {
         "row_fingerprint": "3e507eb1a5313caf796cd70b0310f047ca7a5bc289c379b1195090e435925832",
         "collection_key": "uk-number-ones",
@@ -2208,15 +2404,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:bfe7265163581e275bbbba86cb885f49337f80306a94866d94c6d774052b9d59",
+        "approval_token_scope": "rollback:6c9e707fd41a565da9233bbcbc4abdfd9eab40015a5234303b9784aac6659fd6",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-153-56a1ce2b045a",
+      "operation_key": "historical-uk-number-ones-v5-row-153-8f4a86637e11",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "56a1ce2b045a773f44679f94cc386d15b91753a4579a40c67692eef850e58c4b",
+      "manifest_sha256": "8f4a86637e11582eb414ddefcfacddf9d2152b8fdf44d354bf9a3ac602c34182",
       "preconditions": {
         "row_fingerprint": "7a08f163ddeee30f76b103c427044b9363ecee53094ce7ebd62f5d8afd2ebe09",
         "collection_key": "uk-number-ones",
@@ -2257,15 +2453,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:56a1ce2b045a773f44679f94cc386d15b91753a4579a40c67692eef850e58c4b",
+        "approval_token_scope": "rollback:8f4a86637e11582eb414ddefcfacddf9d2152b8fdf44d354bf9a3ac602c34182",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-118-709708999002",
+      "operation_key": "historical-uk-number-ones-v5-row-118-bd23121cdd44",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "709708999002aa5252418f78059cb45c61e688eda57e8a5ea71cbaf6a0adccf9",
+      "manifest_sha256": "bd23121cdd44badc23eb3b6e8a2bd60f1cd13dc4a31e6a7fe55a4404d5c95a78",
       "preconditions": {
         "row_fingerprint": "9461fe91d95c2e01a9318ece4ad228ff2f3db1ee07df05265d7be5f591affef7",
         "collection_key": "uk-number-ones",
@@ -2306,64 +2502,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:709708999002aa5252418f78059cb45c61e688eda57e8a5ea71cbaf6a0adccf9",
+        "approval_token_scope": "rollback:bd23121cdd44badc23eb3b6e8a2bd60f1cd13dc4a31e6a7fe55a4404d5c95a78",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-90-6162931d28ba",
+      "operation_key": "historical-uk-number-ones-v5-row-25-488112fd7a7f",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "6162931d28ba3d4268e715465a665708a80206d267828069857ae77576e230b4",
-      "preconditions": {
-        "row_fingerprint": "d3d3455efc42867de214702adf6022aff4d10743b9100d3c3ddb7e8d667bd28a",
-        "collection_key": "uk-number-ones",
-        "source_entry_key": "1996:733:babylon zoo:spaceman",
-        "match_status": "unresolved",
-        "song_id": null,
-        "canonical_song_id": "4840f98f-b1c0-4ba9-819e-9e7a929f9424",
-        "canonical_rating_rows": 0,
-        "historical_rating_rows": 0,
-        "song_occurrences": 0
-      },
-      "mutation_payload": {
-        "chart_row_id": 90,
-        "action": "import_verified",
-        "placeholder_canonical_id": "4840f98f-b1c0-4ba9-819e-9e7a929f9424",
-        "recording_mbid": "b2d1dadc-b2a8-4870-b0b2-9cf026dbbb72",
-        "release_mbid": "2733229c-16f1-4700-85f7-ef5143da1802",
-        "release_group_mbid": "8f25dad8-0200-3fc3-8115-f538bfb7e3db",
-        "track_position": 2,
-        "existing_song_id": null,
-        "reuse_album_id": null
-      },
-      "safety_contract": {
-        "isolated_transaction": true,
-        "advisory_locks": true,
-        "abort_on_stale_state": true,
-        "preserve_all_ratings": true,
-        "prevent_duplicate_recording_and_release": true,
-        "immutable_private_audit": true,
-        "verify_before_commit": true,
-        "separate_digest_bound_rollback": true,
-        "resume_from_immutable_audit": true
-      },
-      "audit": {
-        "required": true,
-        "append_only": true,
-        "captures_before_and_after": true
-      },
-      "rollback": {
-        "required": true,
-        "approval_token_scope": "rollback:6162931d28ba3d4268e715465a665708a80206d267828069857ae77576e230b4",
-        "restores_exact_snapshot": true
-      }
-    },
-    {
-      "operation_key": "historical-uk-number-ones-v5-row-25-3968740eb561",
-      "status": "ready_for_independent_review",
-      "approval_state": "not_approved",
-      "manifest_sha256": "3968740eb5610b1d5276469964065e097b462ecffb8bdc3b297153dc4c856d80",
+      "manifest_sha256": "488112fd7a7fdeb56595661b28bd4f5ddecdf342c4c5f6e07dc66a3294660e51",
       "preconditions": {
         "row_fingerprint": "728c1e7ab4b4f66c85e637adf9fef04688cc8536500681a0ad9c669175347625",
         "collection_key": "uk-number-ones",
@@ -2404,15 +2551,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:3968740eb5610b1d5276469964065e097b462ecffb8bdc3b297153dc4c856d80",
+        "approval_token_scope": "rollback:488112fd7a7fdeb56595661b28bd4f5ddecdf342c4c5f6e07dc66a3294660e51",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-505-f8b6d733b2bc",
+      "operation_key": "historical-uk-number-ones-v5-row-505-f91094773f6d",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "f8b6d733b2bcbb446d32be2ebe2e8b43e790395c01bc687995e12554956d307d",
+      "manifest_sha256": "f91094773f6d18f7af5f089b9d23281f737e16d96c53b8efb06e6cc1f8c448c0",
       "preconditions": {
         "row_fingerprint": "c64c116f9e65b6e9941f8fa93592fd5560a0d8ea4a4b4a37e8d6738c5f5bdab9",
         "collection_key": "uk-number-ones",
@@ -2453,15 +2600,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:f8b6d733b2bcbb446d32be2ebe2e8b43e790395c01bc687995e12554956d307d",
+        "approval_token_scope": "rollback:f91094773f6d18f7af5f089b9d23281f737e16d96c53b8efb06e6cc1f8c448c0",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-508-4e88ae1e665b",
+      "operation_key": "historical-uk-number-ones-v5-row-508-4d894078b828",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "4e88ae1e665b6666507485e70694c50f1b3dbf275134e38f56d0e2dd0535d07b",
+      "manifest_sha256": "4d894078b828d16f0f14e7ef82df51f3274bcdb3389c34ffd28d4cd0f8b75c06",
       "preconditions": {
         "row_fingerprint": "57a57e08ff7d0e71765f8cc29eefbb1ba9fb508b88f9f1078c7ef5095c7cbc4c",
         "collection_key": "uk-number-ones",
@@ -2502,15 +2649,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:4e88ae1e665b6666507485e70694c50f1b3dbf275134e38f56d0e2dd0535d07b",
+        "approval_token_scope": "rollback:4d894078b828d16f0f14e7ef82df51f3274bcdb3389c34ffd28d4cd0f8b75c06",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-482-0788f4dec3f9",
+      "operation_key": "historical-uk-number-ones-v5-row-482-c06c22460691",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "0788f4dec3f9dcd8f1d23f0f0cd57075076a86cb28e1a956872ad0612a8ae728",
+      "manifest_sha256": "c06c22460691d4e80cf73ba24bfbcf4b57a028a5da82151417bed3639c8bf3f2",
       "preconditions": {
         "row_fingerprint": "583523a0445de6f3a14ecc6bf86fc02f018dd42e7fb7cb0f3151f82bb947ab24",
         "collection_key": "uk-number-ones",
@@ -2551,15 +2698,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:0788f4dec3f9dcd8f1d23f0f0cd57075076a86cb28e1a956872ad0612a8ae728",
+        "approval_token_scope": "rollback:c06c22460691d4e80cf73ba24bfbcf4b57a028a5da82151417bed3639c8bf3f2",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-492-42c37566d907",
+      "operation_key": "historical-uk-number-ones-v5-row-492-9fb50a229278",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "42c37566d907f448c514c97f36ca1b1c36604b33565978d63bb3cd3a8dcdef9d",
+      "manifest_sha256": "9fb50a22927854062c74e3f6414233cb8f02dff4a16e6fd81b09044a42228c95",
       "preconditions": {
         "row_fingerprint": "7f404a59d3bf8e919d5710ae62d63460b54cefc4a1494b2c4d5ea2ab767e8403",
         "collection_key": "uk-number-ones",
@@ -2600,15 +2747,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:42c37566d907f448c514c97f36ca1b1c36604b33565978d63bb3cd3a8dcdef9d",
+        "approval_token_scope": "rollback:9fb50a22927854062c74e3f6414233cb8f02dff4a16e6fd81b09044a42228c95",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-452-f8526517a213",
+      "operation_key": "historical-uk-number-ones-v5-row-452-8c1b178ad1e6",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "f8526517a213197860d29d80a3f45b7b7ed9dcd0610cced402c4d5cb62b65733",
+      "manifest_sha256": "8c1b178ad1e6d398e6640c0a30a0fe43a274e40cf8f8600fc6cc96560a44b51f",
       "preconditions": {
         "row_fingerprint": "4987aa0a125eb8fb0461b7f0a99953b29e0e8199a549ee6a07f31fbedb041350",
         "collection_key": "uk-number-ones",
@@ -2649,15 +2796,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:f8526517a213197860d29d80a3f45b7b7ed9dcd0610cced402c4d5cb62b65733",
+        "approval_token_scope": "rollback:8c1b178ad1e6d398e6640c0a30a0fe43a274e40cf8f8600fc6cc96560a44b51f",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-412-6a4c72cf8f08",
+      "operation_key": "historical-uk-number-ones-v5-row-412-8d448d8e8518",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "6a4c72cf8f08790a7c54838cc50c5a209b6e7f8023370a4b324d555739003141",
+      "manifest_sha256": "8d448d8e85182972ae15f6ed26ce5f6de5f92c9fb8b8db5c10359d42480c239c",
       "preconditions": {
         "row_fingerprint": "66db1970623443cde887560bf3a81421c0ed86a9ef7c01074681557b8f8ebda9",
         "collection_key": "uk-number-ones",
@@ -2698,15 +2845,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:6a4c72cf8f08790a7c54838cc50c5a209b6e7f8023370a4b324d555739003141",
+        "approval_token_scope": "rollback:8d448d8e85182972ae15f6ed26ce5f6de5f92c9fb8b8db5c10359d42480c239c",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-415-23ba4d44e872",
+      "operation_key": "historical-uk-number-ones-v5-row-415-3a4d9c488c06",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "23ba4d44e8724efc78498a7c5d43b9bddaa12a979b083cd88c0065a1fd4ea1b7",
+      "manifest_sha256": "3a4d9c488c062b5a5d86c5b493973c53cb8671d13e7fe75c071eef5da953cc7f",
       "preconditions": {
         "row_fingerprint": "b013e902dc4effcc17146fff2b1475659bfec1046adfe6ef1b5a3edeefb32c7c",
         "collection_key": "uk-number-ones",
@@ -2747,15 +2894,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:23ba4d44e8724efc78498a7c5d43b9bddaa12a979b083cd88c0065a1fd4ea1b7",
+        "approval_token_scope": "rollback:3a4d9c488c062b5a5d86c5b493973c53cb8671d13e7fe75c071eef5da953cc7f",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-813-ed57a95d5357",
+      "operation_key": "historical-uk-number-ones-v5-row-813-fa7352e73f84",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "ed57a95d53570c262c4e7553f08c649cff00c9d11a39c9b093dd9628aba54955",
+      "manifest_sha256": "fa7352e73f842e470f7b2dda7c33c3c328ddbcfcba51ecd9f4bfaa0f11f6d86b",
       "preconditions": {
         "row_fingerprint": "4a093b43751bdbe02a1be6029398271ce75605869fc51c5ebffb8535294bf713",
         "collection_key": "uk-number-ones",
@@ -2796,15 +2943,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:ed57a95d53570c262c4e7553f08c649cff00c9d11a39c9b093dd9628aba54955",
+        "approval_token_scope": "rollback:fa7352e73f842e470f7b2dda7c33c3c328ddbcfcba51ecd9f4bfaa0f11f6d86b",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-823-ee00e6df70f4",
+      "operation_key": "historical-uk-number-ones-v5-row-823-6e56dce2692b",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "ee00e6df70f497810680933371826cbabf540ca54d28ce0e78537334de381dff",
+      "manifest_sha256": "6e56dce2692bb5d6e7c87d8c35940ffdb1925f3dd324c9de21f70757164c9a23",
       "preconditions": {
         "row_fingerprint": "bdf66e0522ed24b08212f08a30a8adf36064693e5d971482dccb1fb0a1543ed7",
         "collection_key": "uk-number-ones",
@@ -2845,15 +2992,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:ee00e6df70f497810680933371826cbabf540ca54d28ce0e78537334de381dff",
+        "approval_token_scope": "rollback:6e56dce2692bb5d6e7c87d8c35940ffdb1925f3dd324c9de21f70757164c9a23",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-805-a55bf02d5434",
+      "operation_key": "historical-uk-number-ones-v5-row-805-5b2fe14ba513",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "a55bf02d54342b42bb2ff07368b2572364e905ce4953b80fd8beab40664cf12d",
+      "manifest_sha256": "5b2fe14ba51301fafbdb9567039f42723e611c783be90acb74950c1ed34d2480",
       "preconditions": {
         "row_fingerprint": "e87c4bbda7c305fb4443a814dc32bcc710158227dd93e37e269b9fdedec032a3",
         "collection_key": "uk-number-ones",
@@ -2894,15 +3041,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:a55bf02d54342b42bb2ff07368b2572364e905ce4953b80fd8beab40664cf12d",
+        "approval_token_scope": "rollback:5b2fe14ba51301fafbdb9567039f42723e611c783be90acb74950c1ed34d2480",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-808-0a38afe5926e",
+      "operation_key": "historical-uk-number-ones-v5-row-808-75fe5cc6bf85",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "0a38afe5926e04ebbc836fba801069ebda8d5b96bfdb23cf54f098f6642c43ba",
+      "manifest_sha256": "75fe5cc6bf85872f1cb63f1545b860be004b9488bd19152fd370da2d2f0c27b2",
       "preconditions": {
         "row_fingerprint": "78b42ec9ac386633202ff3ff98795310682ceb549e8b47a21370b514e489d921",
         "collection_key": "uk-number-ones",
@@ -2943,15 +3090,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:0a38afe5926e04ebbc836fba801069ebda8d5b96bfdb23cf54f098f6642c43ba",
+        "approval_token_scope": "rollback:75fe5cc6bf85872f1cb63f1545b860be004b9488bd19152fd370da2d2f0c27b2",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-809-bc17bdbd5543",
+      "operation_key": "historical-uk-number-ones-v5-row-809-39b27197a346",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "bc17bdbd5543652bee5f2fac0580a87eb347e372580ac78ab3518c9d3e74b843",
+      "manifest_sha256": "39b27197a34623c008888dc7e027bb041670c272c54ad3f7b9666ffa1f70de13",
       "preconditions": {
         "row_fingerprint": "d248732e47340cc16e892c87bf07cd11e6bc667a45121e0e8b0ac11bc67fa349",
         "collection_key": "uk-number-ones",
@@ -2992,15 +3139,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:bc17bdbd5543652bee5f2fac0580a87eb347e372580ac78ab3518c9d3e74b843",
+        "approval_token_scope": "rollback:39b27197a34623c008888dc7e027bb041670c272c54ad3f7b9666ffa1f70de13",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-793-1d7dacefe5ba",
+      "operation_key": "historical-uk-number-ones-v5-row-793-dec9d310c6fc",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "1d7dacefe5ba085a26c7aa05fc5334e02904e00f13283ed40fe1fb3001a08bb1",
+      "manifest_sha256": "dec9d310c6fcd48abbd4067b30b3f0ea7fae80624b742aa142d08aaaabb69b41",
       "preconditions": {
         "row_fingerprint": "c0f2bd3320314a644422a84ed3fb86baa62e25b99339338dabddd9c95192a135",
         "collection_key": "uk-number-ones",
@@ -3041,15 +3188,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:1d7dacefe5ba085a26c7aa05fc5334e02904e00f13283ed40fe1fb3001a08bb1",
+        "approval_token_scope": "rollback:dec9d310c6fcd48abbd4067b30b3f0ea7fae80624b742aa142d08aaaabb69b41",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-736-1044123ed053",
+      "operation_key": "historical-uk-number-ones-v5-row-736-d16237b64e60",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "1044123ed053e9a83453b8e29fa86055601af153b33adfee08a2f2a7c8d53db8",
+      "manifest_sha256": "d16237b64e60ef9b422c9345296c943c38e8f436ee30bfe398989565af6d8bf8",
       "preconditions": {
         "row_fingerprint": "4fabc19cff6ee2fd1f4eeba26702b4d9e340ac271e3ff326d0ad084e3ce01005",
         "collection_key": "uk-number-ones",
@@ -3090,15 +3237,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:1044123ed053e9a83453b8e29fa86055601af153b33adfee08a2f2a7c8d53db8",
+        "approval_token_scope": "rollback:d16237b64e60ef9b422c9345296c943c38e8f436ee30bfe398989565af6d8bf8",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1152-d39913c72121",
+      "operation_key": "historical-uk-number-ones-v5-row-1152-e8d50c96cbf6",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "d39913c7212158ee0e1d0b883f0f278f58e1028c300ec81cd26a5d7cbcb65470",
+      "manifest_sha256": "e8d50c96cbf6a1651ad6feab3ad1c7b3504069b23410022f0ef0f98b0a269d4b",
       "preconditions": {
         "row_fingerprint": "083cfa1c99d20a1b1cc9f89cf57472ee9cbf4308b1772ba5c4ca797974b1e074",
         "collection_key": "uk-number-ones",
@@ -3139,15 +3286,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:d39913c7212158ee0e1d0b883f0f278f58e1028c300ec81cd26a5d7cbcb65470",
+        "approval_token_scope": "rollback:e8d50c96cbf6a1651ad6feab3ad1c7b3504069b23410022f0ef0f98b0a269d4b",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1155-bb90872f74b4",
+      "operation_key": "historical-uk-number-ones-v5-row-1155-9c0ef855a753",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "bb90872f74b4ac54db21d947f15309426efc443829a63bf8f8d97f39d38df6fd",
+      "manifest_sha256": "9c0ef855a75369259b59ba0524d697436f7e5c3d79a0adbef98ddd520eca8da7",
       "preconditions": {
         "row_fingerprint": "ea58176dd1cb218f8c55f43ed7bc62332d743f4200faca4917f4fea5a58751f6",
         "collection_key": "uk-number-ones",
@@ -3188,15 +3335,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:bb90872f74b4ac54db21d947f15309426efc443829a63bf8f8d97f39d38df6fd",
+        "approval_token_scope": "rollback:9c0ef855a75369259b59ba0524d697436f7e5c3d79a0adbef98ddd520eca8da7",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1162-a9b2dee46ceb",
+      "operation_key": "historical-uk-number-ones-v5-row-1162-e5e9cfe5db14",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "a9b2dee46ceb04ae2e9a921fcf18f6da443a54239d2bef4b0618d079f51f8ad2",
+      "manifest_sha256": "e5e9cfe5db14589007e2a329a4ab89715a0f79bfdebe8e5438bed8f65a87c013",
       "preconditions": {
         "row_fingerprint": "bbcc2191f17bed3836f83734701dc2e1b373557d6e6302919fd6c3966dc3f7bc",
         "collection_key": "uk-number-ones",
@@ -3237,15 +3384,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:a9b2dee46ceb04ae2e9a921fcf18f6da443a54239d2bef4b0618d079f51f8ad2",
+        "approval_token_scope": "rollback:e5e9cfe5db14589007e2a329a4ab89715a0f79bfdebe8e5438bed8f65a87c013",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1137-4672d8a6d519",
+      "operation_key": "historical-uk-number-ones-v5-row-1137-52376d5474b1",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "4672d8a6d519688dcfe861f9c1d8735dbbb6792eb760775aa724764bab7cde6e",
+      "manifest_sha256": "52376d5474b13d3cfd3dd6407025543031d44b2c7eb4bbc8cd31e11ac16dbfb9",
       "preconditions": {
         "row_fingerprint": "1e8358eebb12d82afcef358ebbe700416b58ac7690359a02f6f08020a3308548",
         "collection_key": "uk-number-ones",
@@ -3286,15 +3433,15 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:4672d8a6d519688dcfe861f9c1d8735dbbb6792eb760775aa724764bab7cde6e",
+        "approval_token_scope": "rollback:52376d5474b13d3cfd3dd6407025543031d44b2c7eb4bbc8cd31e11ac16dbfb9",
         "restores_exact_snapshot": true
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1086-8a50215b125f",
+      "operation_key": "historical-uk-number-ones-v5-row-1086-49549f378afa",
       "status": "ready_for_independent_review",
       "approval_state": "not_approved",
-      "manifest_sha256": "8a50215b125fedddfdc271526de0db4dee6668552ef8bbba216b8d8a21680687",
+      "manifest_sha256": "49549f378afade186fd5fa4182b40f9f821376c5e0aec8d72ec93829523c5435",
       "preconditions": {
         "row_fingerprint": "2bbddb6ea43f1b9e3c293209052a8bfdf0068c8a9edffd8e31684c8ce694ff4e",
         "collection_key": "uk-number-ones",
@@ -3335,10 +3482,10 @@
       },
       "rollback": {
         "required": true,
-        "approval_token_scope": "rollback:8a50215b125fedddfdc271526de0db4dee6668552ef8bbba216b8d8a21680687",
+        "approval_token_scope": "rollback:49549f378afade186fd5fa4182b40f9f821376c5e0aec8d72ec93829523c5435",
         "restores_exact_snapshot": true
       }
     }
   ],
-  "plan_sha256": "185fd010d9e0813af1603d8e9f1007482f7d3284f1e102e64e0fce7261a95977"
+  "plan_sha256": "1aaedc07f4e1eee95e3cebb763648c547c6e58debb160d3155073cdf2db14cc0"
 }

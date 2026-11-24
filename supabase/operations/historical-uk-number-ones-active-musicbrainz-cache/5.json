@@ -4693,5 +4693,770 @@
         ]
       }
     ]
+  },
+  "https://musicbrainz.org/ws/2/recording/d018b6a8-1796-4682-ba5a-5362c53d7fe5?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "d018b6a8-1796-4682-ba5a-5362c53d7fe5",
+    "title": "7 Years",
+    "length": 238000,
+    "disambiguation": "",
+    "isrcs": [
+      "USWB11506516"
+    ],
+    "first_release_date": "2025-11-14",
+    "artist_credit": [
+      {
+        "name": "Lukas Graham",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "0d68aec6-a36f-4881-82ba-e3dda3b7032d",
+        "status": "Official",
+        "title": "THE 10's",
+        "date": "2025-11-14",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d09a1d94-e2fd-4316-afc1-cd9e2364b05e",
+          "title": "THE 10's",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/22dc4dfc-b888-4671-a384-6dce536837de?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "22dc4dfc-b888-4671-a384-6dce536837de",
+    "title": "It's My Birthday",
+    "length": 252600,
+    "disambiguation": "",
+    "isrcs": [
+      "USUM71406587"
+    ],
+    "first_release_date": "2014",
+    "artist_credit": [
+      {
+        "name": "will.i.am",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Cody Wise",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "09053012-019f-43a1-94a8-b2975669b964",
+        "status": "Official",
+        "title": "MegaHits 2014 - Die Dritte",
+        "date": "2014",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b11a09c4-d2c9-4b67-a1f8-ecd816ad4745",
+          "title": "Megahits 2014: Die Dritte",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "18f7db6c-7eec-4790-a77a-b69c0d5d5d60",
+        "status": "Official",
+        "title": "Megahits 2014: Die Dritte",
+        "date": "2014",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b11a09c4-d2c9-4b67-a1f8-ecd816ad4745",
+          "title": "Megahits 2014: Die Dritte",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/782d0ebc-b7ec-484c-abf2-988677f89e12?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "782d0ebc-b7ec-484c-abf2-988677f89e12",
+    "title": "Red Red Wine",
+    "length": 320600,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAA0300255",
+      "GBAAA0900868",
+      "GBAAA8300041",
+      "GBDDH8300002",
+      "USSM19920612"
+    ],
+    "first_release_date": "1983-08-08",
+    "artist_credit": [
+      {
+        "name": "UB40",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "b7d0dffc-5399-4e02-b5a9-1e0ed4f7233d",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1983-08-08",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd1ee46e-4784-4ac8-9b43-e1a1613eff47",
+          "title": "Red Red Wine",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c330cb8e-597c-400c-ab4d-28b6910c6687",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1983-08",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd1ee46e-4784-4ac8-9b43-e1a1613eff47",
+          "title": "Red Red Wine",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2251f967-3182-3bcb-9e4d-ee6518cdfe62",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1983",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "71b3983c-2714-43f7-9f93-5291a240df06",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1983",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "66b75e5d-aa23-4956-94d0-d9b3548e5d8c",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1984-09-12",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "69b5b213-bb76-448c-b6a3-8995db566939",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1985",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd1ee46e-4784-4ac8-9b43-e1a1613eff47",
+          "title": "Red Red Wine",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3c64e9b9-2290-4c96-b86a-34f8c009caee",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1988-12-16",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "10b15ad6-7726-31b2-ae88-23568041b5c9",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1988",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "857c6369-8caf-4b97-af88-b412ced53c4c",
+        "status": "Official",
+        "title": "25 jaar Top 40 hits, deel 5: ’81–’84",
+        "date": "1989",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5f9c13c-6d63-4a51-a031-6f0656a361a5",
+          "title": "25 jaar Top 40 hits, deel 5: ’81–’84",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "aa81f797-fe36-4d46-917b-94f6a91b51d3",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1989",
+        "country": "US",
+        "disambiguation": "BMG club edition",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3cf6179a-744b-430d-9531-cd150470798e",
+        "status": "Official",
+        "title": "Red Red Wine",
+        "date": "1989",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b8d496ef-b312-45cf-8e78-4404cf3b81f1",
+          "title": "Red Red Wine",
+          "primary_type": "EP",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "57548b2d-d578-42f3-8ba6-60dc21e3048e",
+        "status": "Official",
+        "title": "Hit History, Volume 29: 1983",
+        "date": "1990",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "30f00767-44f8-302a-9eb6-f30593ec4014",
+          "title": "Hit History, Volume 29: 1983",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "785f2371-a1f0-4f86-b50c-57e7442111b5",
+        "status": "Official",
+        "title": "Labour of Love, Parts I + II",
+        "date": "1991",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "655f72c5-2499-4a8e-ac6c-ac1890b0e1ab",
+          "title": "Labour of Love, Parts I + II",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "45a4c2dd-1133-4b86-85a5-e41677416c77",
+        "status": "Official",
+        "title": "The Best of 1980–1990, Vol. V",
+        "date": "1992-03-02",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "135b08d2-b593-3744-8ac3-41837912b672",
+          "title": "The Best of 1980–1990, Vol- V",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ec2a30b9-92a1-46ed-be0c-ae9b4c62a51a",
+        "status": "Official",
+        "title": "Dance Classics DJ Service, Volume 2",
+        "date": "1993",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2ff01f5e-f57c-37ab-b5f5-0e81ade37a67",
+          "title": "Dance Classics DJ Service, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ccc35d85-34eb-3c3b-a6e1-b6eb891f8310",
+        "status": "Official",
+        "title": "Labour of Love / Labour of Love II",
+        "date": "1994",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "655f72c5-2499-4a8e-ac6c-ac1890b0e1ab",
+          "title": "Labour of Love, Parts I + II",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "840c1f95-77b8-42b5-9625-b718abee12cd",
+        "status": "Official",
+        "title": "Labour of Love / Labour of Love II",
+        "date": "1994",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "655f72c5-2499-4a8e-ac6c-ac1890b0e1ab",
+          "title": "Labour of Love, Parts I + II",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ab57f1b9-9ae5-45b2-943f-69fe9369178a",
+        "status": "Official",
+        "title": "Labour of Love, Parts I + II",
+        "date": "1994",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "655f72c5-2499-4a8e-ac6c-ac1890b0e1ab",
+          "title": "Labour of Love, Parts I + II",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d4927bba-f6ad-3a66-8312-74897ee48333",
+        "status": "Official",
+        "title": "Labour of Love",
+        "date": "1997-03-11",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f1363399-2ab5-3b0c-83ee-f973230a8591",
+          "title": "Labour of Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "06c6bc08-07ce-4e42-aa46-bc83996675a4",
+        "status": "Official",
+        "title": "Reggae Party",
+        "date": "1999-07-27",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5f10b700-0c38-370f-98a8-33131014c716",
+          "title": "Reggae Party",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "587c1f7e-73c8-4b2e-9d2a-d05a40fc828e",
+        "status": "Official",
+        "title": "Frosh Two",
+        "date": "1999-08-24",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c1aee0af-25b3-39cf-a685-af8d6a27e5a9",
+          "title": "Frosh Two",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a2204f7d-5c04-4cff-be29-3f89df03d9ce",
+        "status": "Official",
+        "title": "Bringing Out the Dead: Music From the Motion Picture",
+        "date": "1999-10-19",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d45fee6c-55d7-3907-855a-a17184394fc5",
+          "title": "Bringing Out the Dead: Music From the Motion Picture",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "e1f092ee-627c-40b7-beb3-5742b4a63796",
+        "status": "Official",
+        "title": "Fantastiske 80’ere",
+        "date": "1999",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a39f2383-1811-3890-8048-7f337b0e7d59",
+          "title": "Fantastiske 80’ere",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c2fec026-24c2-499f-9930-978b64daa33f",
+        "status": "Official",
+        "title": "Hey Man: I Like Reggae",
+        "date": "1999",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dcd28bc4-98e3-3d36-88a8-3559da99a1ab",
+          "title": "Hey Man - I Like Reggae",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9b668664-78f7-411a-bfd8-781136fac10b",
+        "status": "Official",
+        "title": "Ö3 Greatest Hits, Volume 11",
+        "date": "2000-06-30",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9e93171a-727f-49e7-a425-acacfc1db3a4",
+          "title": "Ö3 Greatest Hits, Volume 11",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/101c5da7-dd71-4e23-9324-89cb6bed5717?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "101c5da7-dd71-4e23-9324-89cb6bed5717",
+    "status": "Official",
+    "title": "Eye of the Tiger",
+    "date": "1982-06",
+    "country": "US",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Survivor",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "9554c59d-afff-3ea2-b732-19a459ea0d1b",
+      "title": "Eye of the Tiger",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A1",
+            "title": "Eye of the Tiger",
+            "length": 245000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "25da6d6f-5960-4176-b7c5-885b0b9edfcf",
+              "title": "Eye of the Tiger",
+              "length": 245000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "A2",
+            "title": "Feels Like Love",
+            "length": 247000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a363c9a2-f306-4b60-b198-bf9e9c812f1c",
+              "title": "Feels Like Love",
+              "length": 249146,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "A3",
+            "title": "Hesitation Dance",
+            "length": 231000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "5b3f8449-19c1-42ed-a17d-7b03a1a19da6",
+              "title": "Hesitation Dance",
+              "length": 232640,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "A4",
+            "title": "The One That Really Matters",
+            "length": 211000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "2a468df2-f470-4285-bbf7-9851a199deda",
+              "title": "The One That Really Matters",
+              "length": 212293,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "A5",
+            "title": "I’m Not That Man Anymore",
+            "length": 287000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "74371b4a-ad15-4a76-8608-91a8b4ac97ab",
+              "title": "I’m Not That Man Anymore",
+              "length": 289040,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "B1",
+            "title": "Children of the Night",
+            "length": 285000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "655ef848-1c4c-40aa-957b-126704b49b1a",
+              "title": "Children of the Night",
+              "length": 285213,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "B2",
+            "title": "Ever Since the World Began",
+            "length": 225000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1e5faa90-e0f1-4925-bbb0-39d749387c63",
+              "title": "Ever Since the World Began",
+              "length": 225000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "B3",
+            "title": "American Heartbeat",
+            "length": 249000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "f55c1436-21dc-4643-96e8-cb6b32629081",
+              "title": "American Heartbeat",
+              "length": 251000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "B4",
+            "title": "Silver Girl",
+            "length": 292000,
+            "artist_credit": [
+              {
+                "name": "Survivor",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "15fededc-d13e-4042-b3cb-504c8e698c59",
+              "title": "Silver Girl",
+              "length": 293600,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Survivor",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/d8dec018-29f0-431f-9661-a97bb5e420e9?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "d8dec018-29f0-431f-9661-a97bb5e420e9",
+    "title": "Where Do You Go To (My Lovely)",
+    "length": 284706,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE6900097"
+    ],
+    "first_release_date": "2024-06-28",
+    "artist_credit": [
+      {
+        "name": "Peter Sarstedt",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "cf1dfe28-45e1-4422-83ee-b154ad7d1d52",
+        "status": "Official",
+        "title": "60s Essential Hits",
+        "date": "2024-06-28",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5198dd95-7b13-43d1-9b0b-8b876677ec8c",
+          "title": "60s Essential Hits",
+          "primary_type": "",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
   }
 }

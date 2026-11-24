@@ -76,6 +76,52 @@ test("cached exact Official Charts, ISRC, recording and release evidence qualifi
   assert.equal(result.evidence.release_mbid, releaseId);
   assert.equal(result.evidence.action, "safe_import");
   assert.equal(result.evidence.release_track_count, 1);
+  assert.equal(result.evidence.recording_selection.basis, "single_exact_title_artist_recording");
+});
+
+test("nearest-year proximity never resolves two independently release-validated recordings", async () => {
+  const fixture = fixtures();
+  const altRecordingId = "22222222-2222-4222-8222-222222222222";
+  const altReleaseId = "33333333-3333-4333-8333-333333333333";
+  const isrcUrl = "https://musicbrainz.org/ws/2/isrc/GBAHS1700199?inc=artist-credits+releases&fmt=json";
+  fixture.values[isrcUrl].recordings[0].first_release_date = "1990-01-01";
+  fixture.values[isrcUrl].recordings.push({ id: altRecordingId, title: "Symphony", length: 212733,
+    disambiguation: "", first_release_date: "2017-03-17", artist_credit: credit });
+  fixture.values[`https://musicbrainz.org/ws/2/recording/${altRecordingId}?inc=isrcs+artist-credits+releases+release-groups&fmt=json`] = {
+    id: altRecordingId, title: "Symphony", length: 212733, disambiguation: "", isrcs: ["GBAHS1700199"], artist_credit: credit,
+    releases: [{ id: altReleaseId, status: "Official", title: "Symphony", date: "2017-03-17", country: "GB", disambiguation: "",
+      release_group: { id: groupId, title: "Symphony", primary_type: "Single", secondary_types: [] } }]
+  };
+  fixture.values[`https://musicbrainz.org/ws/2/release/${altReleaseId}?inc=recordings+artist-credits+release-groups&fmt=json`] = {
+    id: altReleaseId, status: "Official", title: "Symphony", date: "2017-03-17", country: "GB", disambiguation: "", artist_credit: credit,
+    release_group: { id: groupId, title: "Symphony", primary_type: "Single", secondary_types: [] },
+    media: [{ position: 1, tracks: [{ position: 1, number: "1", title: "Symphony", length: 212733, artist_credit: credit,
+      recording: { id: altRecordingId, title: "Symphony", length: 212733, disambiguation: "", artist_credit: credit } }] }]
+  };
+  const cache = new MemoryCache(fixture.values);
+  const fetcher = new EvidenceFetcher({ officialCache: cache, musicbrainzCache: cache, officialIntervalMs: 0, musicbrainzIntervalMs: 0,
+    fetchImpl: async () => { throw new Error("network must not be used"); } });
+  const result = await retrieveEntryEvidence(entry(), fetcher, {}, { url: fixture.officialUrl, catalogue_number: "GBAHS1700199" });
+  assert.equal(result.reason, "musicbrainz_isrc_has_multiple_exact_release_recordings");
+  assert.deepEqual(new Set(result.candidates), new Set([recordingId, altRecordingId]));
+});
+
+test("multiple ISRC recordings qualify only when exact-release evidence identifies one recording", async () => {
+  const fixture = fixtures();
+  const altRecordingId = "22222222-2222-4222-8222-222222222222";
+  const isrcUrl = "https://musicbrainz.org/ws/2/isrc/GBAHS1700199?inc=artist-credits+releases&fmt=json";
+  fixture.values[isrcUrl].recordings.push({ id: altRecordingId, title: "Symphony", length: 212733,
+    disambiguation: "", first_release_date: "2017-03-17", artist_credit: credit });
+  fixture.values[`https://musicbrainz.org/ws/2/recording/${altRecordingId}?inc=isrcs+artist-credits+releases+release-groups&fmt=json`] = {
+    id: altRecordingId, title: "Symphony", length: 212733, disambiguation: "", isrcs: ["GBAHS1700199"], artist_credit: credit, releases: []
+  };
+  const cache = new MemoryCache(fixture.values);
+  const fetcher = new EvidenceFetcher({ officialCache: cache, musicbrainzCache: cache, officialIntervalMs: 0, musicbrainzIntervalMs: 0,
+    fetchImpl: async () => { throw new Error("network must not be used"); } });
+  const result = await retrieveEntryEvidence(entry(), fetcher, {}, { url: fixture.officialUrl, catalogue_number: "GBAHS1700199" });
+  assert.equal(result.evidence.recording_mbid, recordingId);
+  assert.equal(result.evidence.recording_selection.basis, "unique_exact_release_evidence");
+  assert.equal(result.evidence.recording_selection.rejected_recording_candidates.length, 1);
 });
 
 test("ratings remain outside evidence qualification and catalogue collisions become existing links", async () => {
@@ -90,9 +136,10 @@ test("ratings remain outside evidence qualification and catalogue collisions bec
 
 test("a changed exclusion registry invalidates completed checkpoints", () => {
   const previous = { final: true, row_fingerprint: "row-digest" };
-  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a"), true);
-  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-b"), false);
-  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a", true), false);
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a", 3, 3), true);
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-b", 3, 3), false);
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a", 2, 3), false);
+  assert.equal(reusableCheckpoint(previous, "row-digest", "registry-a", "registry-a", 3, 3, true), false);
 });
 
 test("multiple ISRCs, wrong stored ISRCs and duplicate release occurrences fail closed", async () => {
