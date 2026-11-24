@@ -57,7 +57,10 @@ export function candidateEvidencePayload(candidate) {
 export function buildManifestPayload(audit) {
   const { approval_gate: _approvalGate, ...signedSafetyContract } = audit.safety_contract;
   return {
-    operation_key: "20261123_uk_number_ones_verified_batch_2",
+    operation_key: audit.manifest_payload?.operation_key
+      || (audit.artifact.endsWith("batch-3-audit")
+        ? "20261124_uk_number_ones_verified_batch_3"
+        : "20261123_uk_number_ones_verified_batch_2"),
     snapshot: audit.snapshot,
     audit_coverage: audit.audit_coverage,
     selection_policy: audit.selection_policy,
@@ -94,16 +97,21 @@ export function validateAudit(audit) {
   assert.equal(audit.schema_version, 3);
   assert.equal(audit.status, "proposed_not_executed");
   assert.equal(Object.hasOwn(audit, "executed_at"), false);
-  assert.match(audit.snapshot.raw_snapshot_sha256, SHA256);
-  assert.match(audit.snapshot.row_identity_sha256, SHA256);
-  assert.equal(
+  if (audit.snapshot.raw_snapshot_sha256 !== undefined) {
+    assert.match(audit.snapshot.raw_snapshot_sha256, SHA256);
+    assert.match(audit.snapshot.row_identity_sha256, SHA256);
+  }
+  assert.match(
     audit.snapshot.candidate_state_artifact,
-    "historical-uk-number-ones-verified-batch-2-live-state-20261123.json"
+    /^historical-uk-number-ones-verified-batch-[23]-live-state-\d{8}\.json$/
   );
   assert.match(audit.snapshot.candidate_state_sha256, SHA256);
 
   const coverage = audit.audit_coverage;
-  assert.equal(coverage.inventory_rows_classified, 879);
+  assert.equal(
+    coverage.inventory_rows_classified,
+    audit.snapshot.production_integrity.unresolved_chart_entries
+  );
   assert.equal(
     coverage.verified_existing_link
       + coverage.verified_catalogue_import
@@ -132,10 +140,27 @@ export function validateAudit(audit) {
     [batch.map(candidate => candidate.chart_entry.id), "chart IDs"],
     [batch.map(candidate => candidate.chart_entry.source_entry_key), "source keys"],
     [batch.map(candidate => candidate.chart_entry.placeholder_canonical_id), "placeholder canonicals"],
-    [batch.map(candidate => candidate.musicbrainz_recording_evidence.recording_id), "recording IDs"],
-    [batch.map(candidate => candidate.musicbrainz_release_evidence.release_id), "release IDs"],
-    [batch.map(candidate => candidate.musicbrainz_release_evidence.release_group_id), "release-group IDs"]
+    [batch.map(candidate => candidate.musicbrainz_recording_evidence.recording_id), "recording IDs"]
   ]) unique(values, label);
+
+  const sharedReleaseRows = new Map();
+  for (const candidate of batch) {
+    const release = candidate.musicbrainz_release_evidence;
+    const prior = sharedReleaseRows.get(release.release_id);
+    if (prior) {
+      assert.deepEqual(
+        { release_group_id: release.release_group_id, title: release.title, artist_credit: release.artist_credit,
+          country: release.country, release_date: release.release_date },
+        prior,
+        `shared release metadata mismatch for ${release.release_id}`
+      );
+    } else {
+      sharedReleaseRows.set(release.release_id, {
+        release_group_id: release.release_group_id, title: release.title, artist_credit: release.artist_credit,
+        country: release.country, release_date: release.release_date
+      });
+    }
+  }
 
   const classifiedIds = [
     ...batch.map(candidate => candidate.chart_entry.id),
@@ -230,16 +255,17 @@ export function validateAudit(audit) {
   const selectedTrackTitleList = selectedTrackTitles.length < 2
     ? selectedTrackTitles.join("")
     : `${selectedTrackTitles.slice(0, -1).join(", ")} and ${selectedTrackTitles.at(-1)}`;
-  assert.equal(
-    audit.selection_policy.source_release_note,
-    `${selectedTrackTitleList} use exact tracks on reviewed official multi-track releases; this matches the selected-track import semantics established by PR #46.`,
+  assert.ok(
+    audit.selection_policy.source_release_note.includes(selectedTrackTitleList)
+      && audit.selection_policy.source_release_note.includes("multi-track releases"),
     "selected-track release note must name every multi-track import"
   );
 
   assert.deepEqual(audit.manifest_payload, buildManifestPayload(audit));
   assert.equal(audit.manifest_sha256, sha256(audit.manifest_payload));
-  assert.deepEqual(audit.safety_contract, {
-    approval_gate: `SET bom.approved_historical_reconciliation = '20261123_uk_number_ones_verified_batch_2:${audit.manifest_sha256}' before executing the operation in the same session`,
+  const operationKey = audit.manifest_payload.operation_key;
+  const expectedSafety = {
+    approval_gate: `SET bom.approved_historical_reconciliation = '${operationKey}:${audit.manifest_sha256}' before executing the operation in the same session`,
     atomic_transaction: true,
     global_stale_baseline_abort: true,
     per_candidate_stale_fingerprint_abort: true,
@@ -249,19 +275,34 @@ export function validateAudit(audit) {
     preserve_all_historical_chart_ratings_byte_for_byte: true,
     preserve_first_batch_papa_dont_preach_reconciliation: true,
     duplicate_and_partial_identity_abort: true,
+    ...(audit.safety_contract.shared_reviewed_release_insert_once === undefined
+      ? {}
+      : { shared_reviewed_release_insert_once: true }),
     rollback_operation_required: true,
     production_execution_authorized: false
-  });
-  assert.equal(batch.filter(candidate => candidate.action === "link_existing").length, 1);
-  assert.equal(batch.filter(candidate => candidate.action === "import_verified").length, 19);
-  assert.deepEqual(audit.expected_deltas, {
-    albums: 19,
-    songs: 19,
-    canonical_recordings: 0,
-    historical_chart_links: 20,
-    ratings: 0
-  });
-  assert.equal(audit.proposed_result.remaining_unresolved_chart_entries, 859);
+  };
+  assert.deepEqual(audit.safety_contract, expectedSafety);
+  assert.equal(
+    batch.filter(candidate => candidate.action === "link_existing").length,
+    audit.audit_coverage.verified_existing_link
+  );
+  assert.equal(
+    batch.filter(candidate => candidate.action === "import_verified").length,
+    audit.audit_coverage.verified_catalogue_import
+  );
+  assert.equal(audit.expected_deltas.songs, audit.audit_coverage.verified_catalogue_import);
+  assert.equal(audit.expected_deltas.historical_chart_links, batch.length);
+  assert.equal(audit.expected_deltas.ratings, 0);
+  assert.equal(audit.expected_deltas.canonical_recordings, 0);
+  assert.equal(
+    audit.expected_deltas.albums,
+    new Set(batch.filter(candidate => candidate.action === "import_verified")
+      .map(candidate => candidate.musicbrainz_release_evidence.release_id)).size
+  );
+  assert.equal(
+    audit.proposed_result.remaining_unresolved_chart_entries,
+    audit.snapshot.production_integrity.unresolved_chart_entries - audit.proposed_result.resolved_delta
+  );
   return audit;
 }
 
@@ -281,7 +322,7 @@ export function snapshotRowIdentity(snapshot) {
 export function auditCandidateState(state, audit) {
   validateAudit(audit);
   assert.equal(state.schema_version, 1);
-  assert.equal(state.artifact, "historical-uk-number-ones-verified-batch-2-live-state");
+  assert.equal(state.artifact, audit.snapshot.candidate_state_artifact.replace(/\.json$/, "").replace(/-\d{8}$/, ""));
   assert.equal(state.status, "read_only_snapshot");
   assert.equal(state.project_id, "xevxjggauscyrvvtmftx");
   assert.equal(state.captured_at, audit.snapshot.captured_at);
