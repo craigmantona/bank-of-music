@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-11-24",
+  "recordings": {
+    "2eab2264-5b01-4454-b66c-3eeb46d37e0c": { "song_id": 11047 },
+    "0810268f-2e52-4f89-86be-42762ea3f6d4": { "song_id": 14589 },
+    "2a330498-8fe8-45e1-8536-dc0679fd7a37": { "song_id": 20717 },
+    "bfdcfb41-167c-4f5b-b163-bde83bbf69ac": { "song_id": 8858 }
+  },
+  "releases": {},
+  "release_groups": {
+    "e5495719-b3ad-3eea-a533-fb70af43c23d": { "album_id": 1112 },
+    "7a82779e-f14c-4eab-a3d9-07801e95e9c0": { "album_id": 1959 }
+  }
+}

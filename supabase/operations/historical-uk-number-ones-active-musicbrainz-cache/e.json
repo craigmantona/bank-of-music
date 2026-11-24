@@ -1,0 +1,6591 @@
+{
+  "https://musicbrainz.org/ws/2/isrc/GBAHS1300498?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAHS1300498",
+    "recordings": [
+      {
+        "id": "78a8d975-1257-4fc4-a634-50f89a62de47",
+        "title": "Rather Be",
+        "length": 227735,
+        "disambiguation": "",
+        "first_release_date": "2014-01-17",
+        "artist_credit": [
+          {
+            "name": "Clean Bandit",
+            "joinphrase": " feat. "
+          },
+          {
+            "name": "Jess Glynne",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "70e74165-ed19-4408-952e-5dd3b6e6c978",
+        "title": "Rather Be Rather Be (Jack Patterson & Wez Clarke remix)",
+        "length": 227000,
+        "disambiguation": "",
+        "first_release_date": "2023-03-15",
+        "artist_credit": [
+          {
+            "name": "Clean Bandit",
+            "joinphrase": " & "
+          },
+          {
+            "name": "Jess Glynne",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/9a339179-6d01-49ca-ac66-2e246fbd5323?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "9a339179-6d01-49ca-ac66-2e246fbd5323",
+    "title": "La La La",
+    "length": 220000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAA1300148"
+    ],
+    "first_release_date": "2013-01-01",
+    "artist_credit": [
+      {
+        "name": "Naughty Boy",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Sam Smith",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "5714b481-ae79-4563-a4b9-d7e3e8cbb33d",
+        "status": "Official",
+        "title": "La La La",
+        "date": "2013-01-01",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0f334341-2d37-4860-9fa1-ce664c91f89b",
+          "title": "La La La",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6e0c7b09-f813-4b31-b5c5-15ab7338848d",
+        "status": "Official",
+        "title": "La La La",
+        "date": "2013-05-17",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0f334341-2d37-4860-9fa1-ce664c91f89b",
+          "title": "La La La",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1d0947b8-c14b-4373-936a-97c602113ef0",
+        "status": "Promotion",
+        "title": "La La La",
+        "date": "2013-05",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0f334341-2d37-4860-9fa1-ce664c91f89b",
+          "title": "La La La",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7ed65710-22b8-4229-99ab-da08b992807e",
+        "status": "Official",
+        "title": "Absolute Summer Hits 2013",
+        "date": "2013-06-19",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a96b8ae2-606e-43df-b1a8-0b2355c15666",
+          "title": "Absolute Summer Hits 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3a10a2d5-4c57-4a1c-b1fd-f5aa857bef41",
+        "status": "Official",
+        "title": "Radio 538: Hitzone 66",
+        "date": "2013-06-28",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "56e2e78f-45b9-476e-afc6-23647a8c915b",
+          "title": "Radio 538: Hitzone 66",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cb541855-c1ab-4669-9042-bf103ff08307",
+        "status": "Official",
+        "title": "Clubland 23",
+        "date": "2013-07-03",
+        "country": "IE",
+        "disambiguation": "unmixed",
+        "release_group": {
+          "id": "48383b26-6a44-48ec-aec9-035902bcfa85",
+          "title": "Clubland 23",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "DJ-mix"
+          ]
+        }
+      },
+      {
+        "id": "73329e7e-4c0c-4503-89fa-0e15e5a54933",
+        "status": "Official",
+        "title": "The Dome: Summer 2013",
+        "date": "2013-07-12",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fa8ab24c-8c99-4222-bd90-5a6d83267d2e",
+          "title": "The Dome: Summer 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "933fdeb0-ac41-40fe-b869-ef81a41802ab",
+        "status": "Official",
+        "title": "Hit Mania estate 2013",
+        "date": "2013-07-16",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd36c76e-b44a-42fa-941e-c6d21e4cf92b",
+          "title": "Hit Mania estate 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "80e24870-0310-4b2c-9702-73de4c95eb2f",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 85",
+        "date": "2013-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2117a947-593c-4e05-8dad-2014c3d802e9",
+          "title": "Now That’s What I Call Music! 85",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8ffaa46d-20d9-40b4-9565-e8ecc2787867",
+        "status": "Official",
+        "title": "Black Summer Party: Best Of, Vol. 10",
+        "date": "2013-07-23",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4172027a-9696-4bf7-b921-dcedf010959d",
+          "title": "Black Summer Party: Best Of, Vol. 10",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "38dfd397-fad6-441d-9770-d58fe0e6a543",
+        "status": "Official",
+        "title": "Bravo Hits 82",
+        "date": "2013-07-26",
+        "country": "CH",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9d9db95e-9363-443f-91c0-54ea17ae9b2d",
+          "title": "Bravo Hits 82",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "44af927b-2748-4b6f-8414-a562d0092f24",
+        "status": "Official",
+        "title": "Bravo Hits 82",
+        "date": "2013-07-26",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9d9db95e-9363-443f-91c0-54ea17ae9b2d",
+          "title": "Bravo Hits 82",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "04aba653-ccd1-4dbd-b63a-e9103aa4ca2f",
+        "status": "Official",
+        "title": "Club Summer 2013",
+        "date": "2013-08-06",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3d878a02-42d5-4d2b-b760-2a51b054e963",
+          "title": "Club Summer 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b08b4b38-ce10-48e5-b373-08237620d579",
+        "status": "Official",
+        "title": "Eska Summer City 2013",
+        "date": "2013-08-06",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a1ec363-3636-4154-96ae-5adb70d9a5da",
+          "title": "Eska Summer City 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "df7dff07-e1ec-4ee8-9319-d21aa651eb5b",
+        "status": "Official",
+        "title": "NRJ EXTRAVADANCE 2013",
+        "date": "2013-08-09",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dca44714-b445-4305-b622-eb17770fa197",
+          "title": "NRJ EXTRAVADANCE 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "04d02447-746d-47dc-a98e-9fcd2a02a79c",
+        "status": "Official",
+        "title": "Summer Beats 2013",
+        "date": "2013-08-12",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f3425d87-54c6-43cf-a9d1-ed21ce3723b1",
+          "title": "Summer Beats 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "af9e930b-484b-4a2c-806d-fee4f66e4c00",
+        "status": "Official",
+        "title": "Hotel Cabana",
+        "date": "2013-08-26",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2d0cea34-e009-47f9-b1ea-977cbb776280",
+          "title": "Hotel Cabana",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3736106a-9623-460e-8c5e-c61a9ae61014",
+        "status": "Official",
+        "title": "Hotel Cabana",
+        "date": "2013-08-26",
+        "country": "GB",
+        "disambiguation": "deluxe version",
+        "release_group": {
+          "id": "2d0cea34-e009-47f9-b1ea-977cbb776280",
+          "title": "Hotel Cabana",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "40836da9-3700-4815-b2bd-e889cac5de4e",
+        "status": "Official",
+        "title": "NRJ Hits 2013, Volume 2",
+        "date": "2013-08-26",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "315cec62-3585-475e-ab80-ad0594c5b06a",
+          "title": "NRJ Hits 2013, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e097ff15-8fda-4276-9521-56cef3d6b94a",
+        "status": "Official",
+        "title": "Absolute Music 73",
+        "date": "2013-08-28",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9bad144c-48fe-4dca-b23a-5e08731b7432",
+          "title": "Absolute Music 73",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "692e8405-9a05-445e-95ad-084ba0a023ea",
+        "status": "Official",
+        "title": "MNM UrbaNice 2013.2",
+        "date": "2013-08-30",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19635a99-1354-4df1-bc9b-ff663ac1f9f9",
+          "title": "MNM UrbaNice 2013.2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "feaac578-a320-4bcc-9463-206180fd0b34",
+        "status": "Official",
+        "title": "The Dome, Volume 67",
+        "date": "2013-08-30",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "abb6fee8-a993-4ebe-bd05-ead31b0e0113",
+          "title": "The Dome, Volume 67",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "446e668c-b1f9-4da3-9f00-bd25c03334f4",
+        "status": "Official",
+        "title": "Bravo Black Hits, Vol. 29",
+        "date": "2013-09-06",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b7354e20-6cef-4c07-89db-04b0c202fbdf",
+          "title": "Bravo Black Hits, Vol. 29",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e0132af3-db2e-4f5c-a45d-a132175bab0c",
+        "status": "Official",
+        "title": "Ö3 Greatest Hits 63",
+        "date": "2013-09-13",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "608abaa3-9f45-41a2-bff3-09f92a3f7465",
+          "title": "Ö3 Greatest Hits 63",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "316ac261-61e2-460e-80fc-8e6c7c6f5d58",
+        "status": "Official",
+        "title": "So Fresh: The Hits of Spring 2013",
+        "date": "2013-09-13",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c41f3ce3-64f7-477d-9768-2bb81710c5aa",
+          "title": "So Fresh: The Hits of Spring 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/98473e2e-6521-4ce9-932c-f1be22ce844d?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "98473e2e-6521-4ce9-932c-f1be22ce844d",
+    "status": "Official",
+    "title": "Get Lucky",
+    "date": "2013-07-16",
+    "country": "XW",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Daft Punk",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Pharrell Williams",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "9b7ce16c-8310-4cc5-aad5-09893a5a8297",
+      "title": "Get Lucky",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A1",
+            "title": "Get Lucky (Daft Punk remix)",
+            "length": 631000,
+            "artist_credit": [
+              {
+                "name": "Daft Punk",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Pharrell Williams",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "aea7d8d7-91db-4de7-91ac-63545e29530b",
+              "title": "Get Lucky (Daft Punk remix)",
+              "length": 632693,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Daft Punk",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Pharrell Williams",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Nile Rodgers",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B1",
+            "title": "Get Lucky (album version)",
+            "length": 367000,
+            "artist_credit": [
+              {
+                "name": "Daft Punk",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Pharrell Williams",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "833f00e1-781f-4edd-90e4-e52712618862",
+              "title": "Get Lucky",
+              "length": 369000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Daft Punk",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Pharrell Williams",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Nile Rodgers",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "B2",
+            "title": "Get Lucky (radio edit)",
+            "length": 248000,
+            "artist_credit": [
+              {
+                "name": "Daft Punk",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Pharrell Williams",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "744787e9-444c-4494-a544-7640dafc0e9d",
+              "title": "Get Lucky",
+              "length": 248000,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Daft Punk",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Pharrell Williams",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/24647d10-f3a8-4a03-bed9-b6f1846dc4d4?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "24647d10-f3a8-4a03-bed9-b6f1846dc4d4",
+    "title": "Talk Dirty",
+    "length": 177653,
+    "disambiguation": "explicit",
+    "isrcs": [
+      "USWB11302648"
+    ],
+    "first_release_date": "2013-08-02",
+    "artist_credit": [
+      {
+        "name": "Jason Derulo",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "2 Chainz",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "e65412d5-353e-4c05-a8a9-8c930f09d517",
+        "status": "Official",
+        "title": "Talk Dirty",
+        "date": "2013-08-02",
+        "country": "NZ",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "4346c9aa-f850-47b0-9ad8-f5c397b98759",
+          "title": "Talk Dirty",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "dee0c688-8573-4bee-91a3-7f94af6a388e",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2013-09-10",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3d6de9c4-2928-4d95-a987-169d2f11f2fd",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2013-09-20",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9d194fc9-0f03-4388-8746-418c2b86f5ed",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2013-09-20",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "23a0f694-327f-486f-b7d6-186d7ed16e58",
+        "status": "Official",
+        "title": "Energy NRJ: Hit Music Only! Best of 2013, Volume 2",
+        "date": "2013-10-17",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "35689ef9-56f2-4e8e-b93a-cf97930142a8",
+          "title": "Energy NRJ: Hit Music Only! Best of 2013, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a8d4c259-e032-4b3e-9634-7a6cfb313719",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2013-10-20",
+        "country": "XW",
+        "disambiguation": "deluxe version",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "74fd689e-b1e9-42d8-9c45-8f6fabc7d5d7",
+        "status": "Official",
+        "title": "Absolute Music 74",
+        "date": "2013-11-27",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0c38d1fb-1c13-4d04-897f-9bbcaa9751de",
+          "title": "Absolute Music 74",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "739dac34-128b-483f-a1d3-91eebeee084e",
+        "status": "Official",
+        "title": "MNM Big Hits Best of 2013",
+        "date": "2013-12-09",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "01b0106a-fe9f-4f67-912f-ef8b806d0966",
+          "title": "MNM Big Hits Best of 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0831a6b9-d11e-43bf-8e24-ae66c94b9677",
+        "status": "Official",
+        "title": "Après Ski-Hits 2014 XXL",
+        "date": "2013-12-13",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "85d87eae-b937-4b91-b0ea-6aca90ee0c80",
+          "title": "Après Ski-Hits 2014 XXL",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f70460f8-100c-47e4-a33b-bb4ba756d4ae",
+        "status": "Official",
+        "title": "NRJ Hits 2014",
+        "date": "2013-12-27",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4b11c2d0-b900-49d6-acc5-a104f8cfdeb1",
+          "title": "NRJ Hits 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d9ec70ec-d02e-4d2f-a0ae-c79895706521",
+        "status": "Official",
+        "title": "Maximum Hit Music Best of 2013",
+        "date": "2013",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5899c636-db55-435c-b4bd-e4c903712bb7",
+          "title": "Maximum Hit Music Best of 2013",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "11d0ede6-31f8-40e8-a747-dfd055505bb3",
+        "status": "Official",
+        "title": "NRJ Music Awards 15th Edition",
+        "date": "2013",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e508b5f8-2971-4467-8b6a-59290742817f",
+          "title": "NRJ Music Awards 15TH Edition",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "22e1c79e-8d63-45e1-a889-e45672688aba",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2013",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b26294fa-b28c-4406-9ae4-02b7d4ca817e",
+        "status": "Official",
+        "title": "NRJ 200% Hits 2014",
+        "date": "2014-02-03",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5171ac95-89d1-45d6-ae79-8b3a318541e7",
+          "title": "NRJ 200% Hits 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6e749ee3-7eb2-46c1-8867-f59ef63e7632",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2014-04-14",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "66ab9d34-baed-442d-a150-d6053de5cbe5",
+        "status": "Official",
+        "title": "Talk Dirty",
+        "date": "2014-04-15",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f8ec097b-b724-4fa5-aea6-b4e165aa8071",
+        "status": "Official",
+        "title": "Talk Dirty",
+        "date": "2014-04-15",
+        "country": "US",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4935a25b-3862-4a0b-bd3b-d948df9f86d4",
+        "status": "Official",
+        "title": "Talk Dirty",
+        "date": "2014-04-15",
+        "country": "US",
+        "disambiguation": "Target exclusive edition",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e0a2b421-5796-479e-a2e7-3cac006a2f09",
+        "status": "Official",
+        "title": "Tattoos",
+        "date": "2014",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+          "title": "Tattoos",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "626baa2f-cb5d-4b23-8d26-dcb81760783e",
+        "status": "Official",
+        "title": "Platinum Hits",
+        "date": "2016",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a4c21ca9-7b9f-4362-ad38-399b5223a92d",
+          "title": "Platinum Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8e758d9a-1f2e-46e5-b632-66401efde8ea",
+        "status": "Official",
+        "title": "100 Greatest Number Ones",
+        "date": "2020-02-07",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "182416df-693c-4628-8b43-719c4361ddb4",
+          "title": "100 Greatest Number Ones",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6d203409-8ea0-4f7b-b9e8-eb259965e2b2",
+        "status": "Official",
+        "title": "ENERGY Party Hits 2020",
+        "date": "2020-02-07",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "53f031be-d745-457c-9271-a9668fd526c7",
+          "title": "ENERGY Party Hits 2020",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "435b1d2c-a83f-4e22-bf02-7763af5b702c",
+        "status": "Official",
+        "title": "Smash Hits No.1s",
+        "date": "2020-07-17",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "868ce439-374c-4911-8835-a24539f83e5f",
+          "title": "Smash Hits No.1s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7096e372-aa86-4672-a297-5227db8f6934",
+        "status": "Official",
+        "title": "Goldeneye: Soundtrack Classics",
+        "date": "2022-02-04",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "39427601-4196-444f-86f0-d2b395610824",
+          "title": "Goldeneye: Soundtrack Classics",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a655458a-b64b-47f3-bf73-e1c4eb866f9c",
+        "status": "Official",
+        "title": "Pop Essentials 2010s",
+        "date": "2025-11-05",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "41075d51-140b-4eef-aeeb-bffcfde4c3ac",
+          "title": "Pop Essentials 2010s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/f15a2368-7133-4896-8ad8-568f4293730f?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "f15a2368-7133-4896-8ad8-568f4293730f",
+    "status": "Official",
+    "title": "Impossible",
+    "date": "2012-12-12",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "James Arthur",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "7a82779e-f14c-4eab-a3d9-07801e95e9c0",
+      "title": "Impossible",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Impossible",
+            "length": 210186,
+            "artist_credit": [
+              {
+                "name": "James Arthur",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "2a330498-8fe8-45e1-8536-dc0679fd7a37",
+              "title": "Impossible",
+              "length": 208760,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "James Arthur",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Sexy and I Know It",
+            "length": 143413,
+            "artist_credit": [
+              {
+                "name": "James Arthur",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8ff52dc1-b21a-4e15-bdf8-0a975181cdbf",
+              "title": "Sexy and I Know It (X Factor Performance)",
+              "length": 146000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "James Arthur",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Sweet Dreams",
+            "length": 142386,
+            "artist_credit": [
+              {
+                "name": "James Arthur",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "fe4e9ad5-ac24-4654-a0ba-e9c05e340b22",
+              "title": "Sweet Dreams (X Factor Performance)",
+              "length": 147000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "James Arthur",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Hometown Glory",
+            "length": 138133,
+            "artist_credit": [
+              {
+                "name": "James Arthur",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "aaa88acd-85bb-4d3b-b9d5-cee6ce6f20d2",
+              "title": "Hometown Glory (X Factor Performance)",
+              "length": 138560,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "James Arthur",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/f3af8160-e4e1-4ee7-91a3-3658c5d79d26?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "f3af8160-e4e1-4ee7-91a3-3658c5d79d26",
+    "title": "Dance With Me Tonight",
+    "length": 203000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBARL1101197"
+    ],
+    "first_release_date": "2011-11-25",
+    "artist_credit": [
+      {
+        "name": "Olly Murs",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "cc26dd0c-4484-40a2-9283-6e6cc2b0a612",
+        "status": "Official",
+        "title": "In Case You Didn’t Know",
+        "date": "2011-11-25",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e40d4ca4-2aa8-4478-8ce6-5497d607649b",
+        "status": "Official",
+        "title": "In Case You Didn’t Know",
+        "date": "2011-11-25",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "29de6179-df3f-49a1-b538-57ade279bdc5",
+        "status": "Official",
+        "title": "In Case You Didn’t Know",
+        "date": "2011-11-28",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8be6a967-d904-4581-9fe0-c9d6db49223e",
+        "status": "Official",
+        "title": "In Case You Didn’t Know",
+        "date": "2011",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1273cc6a-46da-4b4b-97d6-0c654208d668",
+        "status": "Official",
+        "title": "In Case You Didn’t Know",
+        "date": "2011",
+        "country": "GB",
+        "disambiguation": "Limited edition",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "227de073-1e6e-404e-8e46-4d9e773e156c",
+        "status": "Official",
+        "title": "In Case You Didn’t Know",
+        "date": "2011",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a8230cda-1cd8-414f-97e6-7be478269dde",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 81",
+        "date": "2012-04-02",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4440d2e9-8f1b-4154-9927-d37a65c2d7ae",
+          "title": "Now That’s What I Call Music! 81",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c0a24c6a-cdb7-426e-ac3e-24fd37015c90",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 81",
+        "date": "2012-04-02",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4440d2e9-8f1b-4154-9927-d37a65c2d7ae",
+          "title": "Now That’s What I Call Music! 81",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cb1a3554-ecb2-424f-8ead-8b509379b9a0",
+        "status": "Official",
+        "title": "Now That’s What I Call a Number One",
+        "date": "2012-07-07",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ff90066f-b09d-4209-ab43-85f2cae9bfef",
+          "title": "NOW That's What I Call a No.1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "feff289b-73bf-4405-92c8-6e96729d0969",
+        "status": "Official",
+        "title": "NOW That's What I Call a No.1",
+        "date": "2012-07-09",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ff90066f-b09d-4209-ab43-85f2cae9bfef",
+          "title": "NOW That's What I Call a No.1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "95adb666-075e-474c-9d49-95b892d0a3e1",
+        "status": "Official",
+        "title": "Pop Jr: Big Songs for Little People",
+        "date": "2012-08-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "420616e1-7911-44ff-b560-5da38d5fc063",
+          "title": "Pop Jr: Big Songs for Little People",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6e351447-1454-4bb7-b100-ead54379abbc",
+        "status": "Promotion",
+        "title": "In Case You Didn’t Know",
+        "date": "2012-09",
+        "country": "US",
+        "disambiguation": "Promotional Only - Not for Sale",
+        "release_group": {
+          "id": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+          "title": "In Case You Didn’t Know",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d67cad2a-7776-4917-84d0-1472936adc4d",
+        "status": "Official",
+        "title": "The Dome, Volume 64",
+        "date": "2012-11-30",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9d3eb2d8-c294-4d5e-a45d-c76e13b3436b",
+          "title": "The Dome, Volume 64",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d8dc875c-2d4a-47bc-afd3-3680896cfee5",
+        "status": "Official",
+        "title": "Just Great Songs 2012",
+        "date": "2012",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ef2e8241-22eb-4136-a34b-039e84f44525",
+          "title": "Just Great Songs 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4d1e9626-2ac5-4e25-abd6-6f322df28bfd",
+        "status": "Official",
+        "title": "The Biggest BBQ Album 6",
+        "date": "2012",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4bd45c5f-9a7d-40c4-9b78-411d73d57750",
+          "title": "The Biggest BBQ Album 6",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "96e7db2d-0788-474e-8899-eb1222e6701d",
+        "status": "Official",
+        "title": "Live, Love, Laugh",
+        "date": "2013-02-25",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cacaa54d-0524-4adf-8236-d141b636bfd4",
+          "title": "Live, Love, Laugh",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8937e7ac-cd9f-4c72-9c1f-d14b9a2bafcb",
+        "status": "Official",
+        "title": "Right Place Right Time",
+        "date": "2013-04-16",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "25af0293-cd5c-4e47-b684-d31b06dd8656",
+          "title": "Right Place Right Time",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4901183f-aa03-4ec7-be5b-a307f4e7f9e4",
+        "status": "Official",
+        "title": "Right Place Right Time",
+        "date": "2013-04-16",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "25af0293-cd5c-4e47-b684-d31b06dd8656",
+          "title": "Right Place Right Time",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f6cbe32a-8d6e-42cf-90c3-ce07fe470420",
+        "status": "Official",
+        "title": "Right Place Right Time",
+        "date": "2013-04-16",
+        "country": "CA",
+        "disambiguation": "deluxe edition",
+        "release_group": {
+          "id": "25af0293-cd5c-4e47-b684-d31b06dd8656",
+          "title": "Right Place Right Time",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "53814ab2-8d41-450c-9c7b-1b6865582317",
+        "status": "Official",
+        "title": "Now That’s What I Call 21st Century",
+        "date": "2014-04-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a86e931-41e8-4dfd-9201-106a3ea75d8f",
+          "title": "Now That’s What I Call 21st Century",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "687a19e3-b37d-45c5-952d-ad4fef7ca5e7",
+        "status": "Official",
+        "title": "Now That’s What I Call Summer",
+        "date": "2014-06-23",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "36a62bb9-eb3d-4d81-a355-77a297607554",
+          "title": "Now That’s What I Call Summer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9e819a25-4600-48ba-b295-8424b20fc021",
+        "status": "Official",
+        "title": "Pure… Dance Party",
+        "date": "2014-09-01",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fa16774f-9980-4709-8230-0978b5d4ce40",
+          "title": "Pure… Dance Party",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8b2bfedd-33e3-4d4b-a31f-06d2a27343b3",
+        "status": "Official",
+        "title": "The X Factor Songbook",
+        "date": "2014-11-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "df8acc6a-6e39-4d06-b5a2-69746290d221",
+          "title": "The X Factor Songbook",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c8da73c0-a06e-49fd-a34c-825441c93b05",
+        "status": "Official",
+        "title": "Now That’s What I Call a Party",
+        "date": "2014-12-01",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cccc3140-7fc1-47fa-aefa-e606e31092c3",
+          "title": "Now That’s What I Call a Party",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e9959fae-3766-4607-bc5d-626af5defcdb",
+        "status": "Official",
+        "title": "Gentlemen of Swing Nr.2",
+        "date": "2014",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6e2224d3-411d-4a58-bd5d-fea90a82077e",
+          "title": "Gentlemen of Swing Nr.2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBUM71110865?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBUM71110865",
+    "recordings": [
+      {
+        "id": "b666c6cd-f044-4455-bc62-d2af0f3ec489",
+        "title": "Wherever You Are",
+        "length": 170000,
+        "disambiguation": "",
+        "first_release_date": "2011-12-15",
+        "artist_credit": [
+          {
+            "name": "The Military Wives Choir",
+            "joinphrase": ", "
+          },
+          {
+            "name": "Gareth Malone",
+            "joinphrase": " & the "
+          },
+          {
+            "name": "London Metropolitan Orchestra",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "1dfb9a97-bfa1-457f-ad8d-924c704c0387",
+        "title": "Wherever You Are",
+        "length": 171586,
+        "disambiguation": "",
+        "first_release_date": "2012-03-05",
+        "artist_credit": [
+          {
+            "name": "Military Wives",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "0b52d4d8-239e-43fe-8731-1535d7357c20",
+        "title": "Mealor: Wherever You Are",
+        "length": 171000,
+        "disambiguation": "",
+        "first_release_date": "2026-04-17",
+        "artist_credit": [
+          {
+            "name": "Military Wives",
+            "joinphrase": ", "
+          },
+          {
+            "name": "Gareth Malone",
+            "joinphrase": " & "
+          },
+          {
+            "name": "London Metropolitan Orchestra",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/44e88237-bdb1-4176-9687-714f0d9f6f76?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "44e88237-bdb1-4176-9687-714f0d9f6f76",
+    "title": "California Gurls",
+    "length": 235000,
+    "disambiguation": "",
+    "isrcs": [
+      "USCA21001135",
+      "USCA21001182",
+      "USCA21001767"
+    ],
+    "first_release_date": "2010-05-07",
+    "artist_credit": [
+      {
+        "name": "Katy Perry",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Snoop Dogg",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "d31913c1-1db0-48f5-9382-05b33d98f943",
+        "status": "Promotion",
+        "title": "California Gurls",
+        "date": "2010-05-07",
+        "country": "CO",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "46cad503-4235-4077-9b84-a6cc0615f637",
+        "status": "Withdrawn",
+        "title": "California Gurls",
+        "date": "2010-05-07",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "66a764f1-da11-4d6c-86db-a01b788dd9bd",
+        "status": "Promotion",
+        "title": "California Gurls",
+        "date": "2010-06-01",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9edd1053-59f1-3bcd-a146-dc3803d23c30",
+        "status": "Official",
+        "title": "California Gurls",
+        "date": "2010-06-01",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7b6a0680-75b8-45e0-98d1-a05fd593137b",
+        "status": "Official",
+        "title": "California Gurls",
+        "date": "2010-06-11",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9ea3a30e-ebf0-47ad-9532-1b3fa3db9905",
+        "status": "Official",
+        "title": "California Gurls",
+        "date": "2010-06-18",
+        "country": "BS",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3eb2865a-67e3-3817-add6-485c40c6ceff",
+        "status": "Official",
+        "title": "California Gurls",
+        "date": "2010-06-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "28a8efeb-5a9e-4f7d-8c99-9b393053346d",
+          "title": "California Gurls",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "21da2e66-6f51-4db7-8511-a5fe877a1e4c",
+        "status": "Official",
+        "title": "Best of 2010: Die Zweite",
+        "date": "2010-07-01",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "48d61d27-f666-4c55-b189-e14ccf5aba85",
+          "title": "Best of 2010: Die Zweite",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "99cb80cc-32c1-4eb2-8d93-f212ab5393f4",
+        "status": "Official",
+        "title": "Hits July 10",
+        "date": "2010-07-01",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "10d6e2f3-16d0-48cf-9936-75e292c5e060",
+          "title": "Hits July 10",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a2a8a444-fd42-4a08-908f-557d36cdc267",
+        "status": "Official",
+        "title": "100% Top 40",
+        "date": "2010-07-02",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "202eb38d-eb19-4d7e-a07f-73803bfdd349",
+          "title": "100% Top 40",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d559db9d-5fe4-47ee-aaf6-c3fb5c3c65ee",
+        "status": "Official",
+        "title": "Radio 538: Hitzone 54",
+        "date": "2010-07-09",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e677a7c8-c4e8-445e-acc3-9e35351f59cd",
+          "title": "Radio 538: Hitzone 54",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f163d6a5-5870-4e56-bd79-a26b0359f337",
+        "status": "Official",
+        "title": "Club Anthems 2010",
+        "date": "2010-07-12",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d45162c7-0cee-4477-ac51-62e689086b14",
+          "title": "Club Anthems 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a6d9508f-509e-3371-9b31-b98c064dafa6",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 76",
+        "date": "2010-07-19",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bcbc32d6-e7a4-42e3-b1fc-0731cb36db54",
+          "title": "Now That’s What I Call Music! 76",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5bbe21f6-3309-4e5c-b375-53365d98c3d6",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 76",
+        "date": "2010-07-19",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bcbc32d6-e7a4-42e3-b1fc-0731cb36db54",
+          "title": "Now That’s What I Call Music! 76",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ad48e45c-770d-469f-868f-31acc5a687bb",
+        "status": "Official",
+        "title": "Bravo Hits 70",
+        "date": "2010-07-30",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "11646ba9-9c5c-4038-8a92-37b079c0a81e",
+          "title": "Bravo Hits 70",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c9ed209e-bb91-4a59-9068-ef1d51e469d5",
+        "status": "Official",
+        "title": "Bravo Hits 70",
+        "date": "2010-07-30",
+        "country": "CH",
+        "disambiguation": "",
+        "release_group": {
+          "id": "11646ba9-9c5c-4038-8a92-37b079c0a81e",
+          "title": "Bravo Hits 70",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9b3e0566-844f-4b2c-b9a4-5acff33a9d51",
+        "status": "Promotion",
+        "title": "DJ.Andi Promotion 07/2010",
+        "date": "2010-07",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "399660d5-9700-4e33-b17e-7af216ffe7c3",
+          "title": "DJ.Andi Promotion 07/2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "406f7b27-8ce5-4c4b-ae6a-332d4d873048",
+        "status": "Official",
+        "title": "NRJ Extrava Dance 2010",
+        "date": "2010-08-02",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d8fb0bc3-7389-4c16-b9cc-15f8678f39df",
+          "title": "NRJ Extrava Dance 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f2f72075-f56d-4569-bfca-1742e16eb994",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "CA",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3b74b057-73fd-47d6-acde-132f89983eb7",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "CA",
+        "disambiguation": "deluxe, clean",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "957a64fb-74dd-4836-84af-c881409e9eea",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "US",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8b5e89a7-b768-4a62-99f5-2c759898cb95",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "XE",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d610e36f-aae9-4703-9a9b-355c9e8de6c7",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "US",
+        "disambiguation": "Amazon exlusive",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "be663c92-4012-41e7-a982-90091facb8c5",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2a666025-eb7c-3cc2-bd76-4fbd80487395",
+        "status": "Official",
+        "title": "Teenage Dream",
+        "date": "2010-08-24",
+        "country": "US",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+          "title": "Teenage Dream",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/2a666025-eb7c-3cc2-bd76-4fbd80487395?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "2a666025-eb7c-3cc2-bd76-4fbd80487395",
+    "status": "Official",
+    "title": "Teenage Dream",
+    "date": "2010-08-24",
+    "country": "US",
+    "disambiguation": "explicit",
+    "artist_credit": [
+      {
+        "name": "Katy Perry",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+      "title": "Teenage Dream",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Teenage Dream",
+            "length": 227773,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8cf81f4a-05fd-4688-bb8c-eb59df2026a0",
+              "title": "Teenage Dream",
+              "length": 227773,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Last Friday Night (T.G.I.F.)",
+            "length": 230733,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a2b6d3f6-2ab5-4522-9a40-e589fb8f6e02",
+              "title": "Last Friday Night (T.G.I.F.)",
+              "length": 230733,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "California Gurls",
+            "length": 235666,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Snoop Dogg",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "44e88237-bdb1-4176-9687-714f0d9f6f76",
+              "title": "California Gurls",
+              "length": 235000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Snoop Dogg",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Firework",
+            "length": 228226,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9846e3f4-7bb9-49be-8e91-837a5ee5cefb",
+              "title": "Firework",
+              "length": 227960,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "Peacock",
+            "length": 231933,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c2061d87-585b-4fdd-91cc-38c23dc0c894",
+              "title": "Peacock",
+              "length": 231933,
+              "disambiguation": "explicit",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "Circle the Drain",
+            "length": 272906,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "538c8908-382a-4be5-8ad3-02c4600cc3c6",
+              "title": "Circle the Drain",
+              "length": 272906,
+              "disambiguation": "explicit",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "The One That Got Away",
+            "length": 227333,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "2d6f51c6-afc5-457e-9c58-689679c08d30",
+              "title": "The One That Got Away",
+              "length": 227333,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "8",
+            "title": "E.T.",
+            "length": 206933,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a0ad9828-ff96-42d0-b7a5-d0e85ec001c2",
+              "title": "E.T.",
+              "length": 206373,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "9",
+            "title": "Who Am I Living For?",
+            "length": 248533,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "182defde-f578-4f62-87f7-cb02468ff560",
+              "title": "Who Am I Living For?",
+              "length": 248533,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 10,
+            "number": "10",
+            "title": "Pearl",
+            "length": 248066,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "72d0365f-b0e1-425a-8639-5d4c26816d83",
+              "title": "Pearl",
+              "length": 247626,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 11,
+            "number": "11",
+            "title": "Hummingbird Heartbeat",
+            "length": 212280,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ccf72769-880d-4416-a619-ceca7337e81d",
+              "title": "Hummingbird Heartbeat",
+              "length": 212280,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 12,
+            "number": "12",
+            "title": "Not Like the Movies",
+            "length": 241333,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d75a05d3-203b-4dfb-97ef-9bbbc8a96fc4",
+              "title": "Not Like the Movies",
+              "length": 241333,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 13,
+            "number": "13",
+            "title": "California Gurls (Passion Pit remix)",
+            "length": 312040,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Snoop Dogg",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c87e69bd-b4a7-4859-a967-61ed58a8d1db",
+              "title": "California Gurls (Passion Pit remix)",
+              "length": 312040,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Snoop Dogg",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 14,
+            "number": "14",
+            "title": "Teenage Dream (Kaskade club mix)",
+            "length": 387973,
+            "artist_credit": [
+              {
+                "name": "Katy Perry",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "3a736eca-78e3-4727-b12c-d4ab583ca3e1",
+              "title": "Teenage Dream (Kaskade club remix)",
+              "length": 387973,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Katy Perry",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/0810268f-2e52-4f89-86be-42762ea3f6d4?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "0810268f-2e52-4f89-86be-42762ea3f6d4",
+    "title": "Just Dance",
+    "length": 241933,
+    "disambiguation": "",
+    "isrcs": [
+      "USUM70807646"
+    ],
+    "first_release_date": "2008-04-08",
+    "artist_credit": [
+      {
+        "name": "Lady Gaga",
+        "joinphrase": " featuring "
+      },
+      {
+        "name": "Colby O’Donis",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "15d56974-f350-4355-8694-f5b0fb4ae8ee",
+        "status": "Official",
+        "title": "Just Dance: The Remixes",
+        "date": "2008-04-08",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b494d0e3-a86b-496b-bfe2-3b4a6a11ee39",
+          "title": "Just Dance: The Remixes",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Remix"
+          ]
+        }
+      },
+      {
+        "id": "31a0c7b6-12a3-4872-a80d-086b185f5ac7",
+        "status": "Official",
+        "title": "Just Dance: The Remixes",
+        "date": "2008-06-13",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b494d0e3-a86b-496b-bfe2-3b4a6a11ee39",
+          "title": "Just Dance: The Remixes",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Remix"
+          ]
+        }
+      },
+      {
+        "id": "3b54718a-97c6-4cfd-b6f6-4b971502e51a",
+        "status": "Official",
+        "title": "Just Dance (The Remixes)",
+        "date": "2008-06-17",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
+          "title": "Just Dance",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6ed2539e-b083-41b3-ba82-09e58b66baa8",
+        "status": "Official",
+        "title": "Just Dance: The Remixes",
+        "date": "2008-06-17",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b494d0e3-a86b-496b-bfe2-3b4a6a11ee39",
+          "title": "Just Dance: The Remixes",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Remix"
+          ]
+        }
+      },
+      {
+        "id": "2536689d-b453-4c1b-baa3-84bd97a57d4c",
+        "status": "Official",
+        "title": "Just Dance",
+        "date": "2008-07-15",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
+          "title": "Just Dance",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8d2711f7-dbdc-46ce-88e0-f2923ca530b3",
+        "status": "Official",
+        "title": "Just Dance",
+        "date": "2008-08-15",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
+          "title": "Just Dance",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "785d7c67-a920-4cee-a871-8cd9896eb8aa",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-08-19",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "343179a6-00be-4f9e-8f3e-5095c1b5b0ac",
+        "status": "Official",
+        "title": "Just Dance",
+        "date": "2008-08-25",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
+          "title": "Just Dance",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d5329fb6-da05-4c72-bdeb-07a9e6af3fa9",
+        "status": "Promotion",
+        "title": "The Fame",
+        "date": "2008-08-29",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "566f6b52-6004-4f4a-9844-ef4de4d99cef",
+        "status": "Official",
+        "title": "Absolute Music 58",
+        "date": "2008-09-03",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0b23c0f3-7e01-345d-8491-f4051acf0901",
+          "title": "Absolute Music 58",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7bbc5aca-5220-4a50-a791-d5eac13fccac",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "CO",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "42e3ad5f-e3ee-4f9f-9974-56cfc676978f",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "UA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ae8b31ee-5075-4a10-bf07-1eea3479bd36",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "MX",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2c6820c2-9046-4adf-856f-f742cdde0a37",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "SG",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "053a9be4-5c11-4735-9071-b4c142cd14ee",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "SG",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ffcdf8ac-7afa-4e0a-ae95-794e72810c76",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "SG",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "944f9572-e7de-4305-9e60-013a9fcff090",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "MY",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "683931f2-f170-4f17-9320-e03c7a9d6823",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "UA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "218f8fac-fdd4-47b6-9057-6890208860fd",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-06",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8a690d21-d57e-4437-9322-dd3894a6991c",
+        "status": "Official",
+        "title": "Just Dance",
+        "date": "2008-09-08",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
+          "title": "Just Dance",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "08e3a70b-7a49-4216-aaf4-805de1d8329d",
+        "status": "Promotion",
+        "title": "Promo Only: Mainstream Radio, October 2008",
+        "date": "2008-09-30",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5e002e95-f3b9-304a-a2fa-47036855416b",
+          "title": "Promo Only: Mainstream Radio, October 2008",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d8fcc0aa-af8d-4b4a-b08d-b6caba452336",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09-30",
+        "country": "RU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8a88b05d-0441-3f33-b22b-21dbd3b3a548",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2c30f67c-4eb2-4616-bd6d-e8ab84cc5469",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "73cee89b-76c0-48af-b073-df72075d73b7",
+        "status": "Official",
+        "title": "The Fame",
+        "date": "2008-09",
+        "country": "ID",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+          "title": "The Fame",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBARL0400787?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBARL0400787",
+    "recordings": [
+      {
+        "id": "46a5194c-302c-468a-884a-83476e2045f2",
+        "title": "These Words (Bimbo Jones remix)",
+        "length": 417946,
+        "disambiguation": "",
+        "first_release_date": "2004-08-16",
+        "artist_credit": [
+          {
+            "name": "Natasha Bedingfield",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBBBN0400963?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBBBN0400963",
+    "recordings": [
+      {
+        "id": "86043d41-1a01-445b-bb31-7b640cf4fe0f",
+        "title": "Before You Leave",
+        "length": 224466,
+        "disambiguation": "",
+        "first_release_date": "2004-12-03",
+        "artist_credit": [
+          {
+            "name": "Kurt Nilsen",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "c89f602e-487e-4479-985f-159de528b3d2",
+        "title": "Real to Me",
+        "length": 224920,
+        "disambiguation": "",
+        "first_release_date": "2004-09-20",
+        "artist_credit": [
+          {
+            "name": "Brian McFadden",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/74ef9d9e-298b-460a-8730-5222f4eb2374?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "74ef9d9e-298b-460a-8730-5222f4eb2374",
+    "status": "Official",
+    "title": "Irish Son",
+    "date": "2004-11-29",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Brian McFadden",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "833cfc0b-d1c7-3389-a832-cf79ec118c5c",
+      "title": "Irish Son",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Irish Son",
+            "length": 262520,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "5cef6e7c-4e94-4afb-a90f-092befc220c7",
+              "title": "Irish Son",
+              "length": 260000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Real to Me",
+            "length": 225706,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c89f602e-487e-4479-985f-159de528b3d2",
+              "title": "Real to Me",
+              "length": 224920,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Demons",
+            "length": 237626,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "adcd02e5-4368-47f6-8e7c-cac953faffdb",
+              "title": "Demons",
+              "length": 235000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Lose Lose Situation",
+            "length": 208520,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "814024a2-4380-4f7c-9158-0bb9c10fb779",
+              "title": "Lose Lose Situation",
+              "length": 205000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "He's No Hero",
+            "length": 233266,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "e50f5d96-7697-430d-a3ee-844184bd88ce",
+              "title": "He's No Hero",
+              "length": 230000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "Sorry Love Daddy",
+            "length": 236813,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "563f0ceb-ad2f-4802-b8dc-7148157a2fe9",
+              "title": "Sorry Love Daddy",
+              "length": 234000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "Pull Myself Away",
+            "length": 206973,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8da30410-d897-4894-b5d8-f1ab6efb8fca",
+              "title": "Pull Myself Away",
+              "length": 204000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "8",
+            "title": "Be True to Your Woman",
+            "length": 228626,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ec7b3b3a-faa4-499f-8657-325069dc76e0",
+              "title": "Be True to Your Woman",
+              "length": 226000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "9",
+            "title": "Walking Disaster",
+            "length": 204493,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8e50b6cf-1be9-4a4c-b5e0-ec050df34888",
+              "title": "Walking Disaster",
+              "length": 201000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 10,
+            "number": "10",
+            "title": "Walking Into Walls",
+            "length": 227960,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "90a0efc8-5f71-4e7b-b60a-817ace7e68a9",
+              "title": "Walking Into Walls",
+              "length": 225000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 11,
+            "number": "11",
+            "title": "Almost Here",
+            "length": 229826,
+            "artist_credit": [
+              {
+                "name": "Brian McFadden",
+                "joinphrase": " (duet with "
+              },
+              {
+                "name": "Delta Goodrem",
+                "joinphrase": ")"
+              }
+            ],
+            "recording": {
+              "id": "350a61ea-fc73-46eb-8064-fc54fc643a1f",
+              "title": "Almost Here",
+              "length": 227706,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Delta Goodrem",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Brian McFadden",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/c59ee855-c988-442b-922b-61e029b6aee0?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "c59ee855-c988-442b-922b-61e029b6aee0",
+    "title": "If Tomorrow Never Comes",
+    "length": 215000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAKW0201024"
+    ],
+    "first_release_date": "2002-05-06",
+    "artist_credit": [
+      {
+        "name": "Ronan Keating",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "77dcc4a7-4a32-4ca1-893a-58ad368d27d8",
+        "status": "Official",
+        "title": "If Tomorrow Never Comes",
+        "date": "2002-05-06",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "153c016c-8e72-31c3-9a8f-6fc7d0197246",
+          "title": "If Tomorrow Never Comes",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "60b67ac5-c984-308a-8da9-c29aa712096c",
+        "status": "Official",
+        "title": "Bravo Hits 37",
+        "date": "2002-05-17",
+        "country": "CH",
+        "disambiguation": "Swiss edition",
+        "release_group": {
+          "id": "d7357b29-ac7e-3149-b141-e40d8fe27753",
+          "title": "Bravo Hits 37",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7c7c1e56-6795-45b1-bcf1-56ae2e9ab659",
+        "status": "Official",
+        "title": "Bravo Hits 37",
+        "date": "2002-05-17",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d7357b29-ac7e-3149-b141-e40d8fe27753",
+          "title": "Bravo Hits 37",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "789a6c31-6a45-3140-af66-94c996fa9219",
+        "status": "Official",
+        "title": "Bravo Hits 37",
+        "date": "2002-05-17",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d7357b29-ac7e-3149-b141-e40d8fe27753",
+          "title": "Bravo Hits 37",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "13c1289d-26b5-4217-aa85-dadca2753514",
+        "status": "Official",
+        "title": "Destination",
+        "date": "2002-05-20",
+        "country": "GB",
+        "disambiguation": "special edition",
+        "release_group": {
+          "id": "90597ea1-53ca-3282-a5f4-f2da8e3a7c6f",
+          "title": "Destination",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "11e6333f-77c1-4e90-b383-f5dcc7f077eb",
+        "status": "Official",
+        "title": "If Tomorrow Never Comes",
+        "date": "2002-06-05",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "153c016c-8e72-31c3-9a8f-6fc7d0197246",
+          "title": "If Tomorrow Never Comes",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a89c94aa-56b3-47da-a601-f531958cd00c",
+        "status": "Official",
+        "title": "Emotions",
+        "date": "2002-06-10",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5e1b7f96-6ec8-3439-b3fb-5a83f607359f",
+          "title": "Emotions",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "fc007f0e-c820-4651-b65a-470b5b356889",
+        "status": "Official",
+        "title": "Megahits 2002: Die Zweite",
+        "date": "2002-07-15",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c58ba34a-d662-4ad2-aeb7-1685aa807f4b",
+          "title": "Megahits 2002: Die Zweite",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1a2f9eda-a06b-4ed7-93c1-c35368adae09",
+        "status": "Official",
+        "title": "TMF Hitzone 20",
+        "date": "2002-07-17",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3497161b-0439-305b-9024-18d547972c76",
+          "title": "TMF Hitzone 20",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f7b63e22-0bdd-4387-9181-c3a602d549a3",
+        "status": "Official",
+        "title": "Now That's What I Call Music! 52",
+        "date": "2002-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "221b3b15-136e-45a9-9a47-ccd5ca9de5ec",
+          "title": "Now That's What I Call Music! 52",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "885ba9c1-edd1-3d97-907c-9fc402fda7f1",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 52",
+        "date": "2002-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "00e1b9a2-fbc0-332a-9fc5-62da6221f326",
+          "title": "Now That’s What I Call Music! 52",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ac3381e7-0668-45d5-9aff-f629590dea30",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 52",
+        "date": "2002-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "00e1b9a2-fbc0-332a-9fc5-62da6221f326",
+          "title": "Now That’s What I Call Music! 52",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f4483ff3-8001-4c69-96e2-ec224c767402",
+        "status": "Official",
+        "title": "Kuschelrock 16",
+        "date": "2002-09-30",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "76d21e93-00e1-37d1-afb8-df1dce101be1",
+          "title": "Kuschelrock 16",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f6db6e55-48d7-4c4e-bf04-a0eb17d14506",
+        "status": "Official",
+        "title": "New Woman: The Autumn Collection",
+        "date": "2002-09-30",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a6333871-9ee6-37e5-9dee-b5ab2ff01b78",
+          "title": "New Woman: The Autumn Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "697bc653-39a1-44d9-bf19-e26c71bf19ec",
+        "status": "Official",
+        "title": "Kuschelrock 16",
+        "date": "2002-10-01",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "76d21e93-00e1-37d1-afb8-df1dce101be1",
+          "title": "Kuschelrock 16",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e8d79c2d-7ea0-4648-87c3-02da8d62fbb1",
+        "status": "Official",
+        "title": "Yorin Hitzone: Best of 2002",
+        "date": "2002-11-22",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "53a69e22-2f46-3f6b-9c0d-249758721130",
+          "title": "Yorin Hitzone: Best of 2002",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "97192bd8-bcf9-42d8-9444-7a679eb88b25",
+        "status": "Official",
+        "title": "Bravo: The Hits 2002, Part 2",
+        "date": "2002-11-25",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "440d5350-374a-3676-9e1d-fb15cf683864",
+          "title": "Bravo: The Hits 2002, Part 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "223ea139-0f37-4783-bf9d-0a9ab709c295",
+        "status": "Official",
+        "title": "Bravo: The Hits 2002, Part 2",
+        "date": "2002-11-25",
+        "country": "CH",
+        "disambiguation": "Swiss Edition",
+        "release_group": {
+          "id": "440d5350-374a-3676-9e1d-fb15cf683864",
+          "title": "Bravo: The Hits 2002, Part 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8bbb4224-bdf5-4b1a-8430-7966ef64e0f9",
+        "status": "Official",
+        "title": "39º Festivalbar 2002: Compilation rossa",
+        "date": "2002",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd0468af-41df-344c-96fe-5b36d65f45f1",
+          "title": "39º Festivalbar 2002: Compilation rossa",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d7800b8e-9339-4ccc-9cc6-578ea925de0a",
+        "status": "Official",
+        "title": "Celtic Myst 5",
+        "date": "2002",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fe1eebec-0e7d-3ccc-b139-c2b8000e763e",
+          "title": "Celtic Myst 5",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bcd152ec-3f57-48f0-a91a-e53779976883",
+        "status": "Official",
+        "title": "Destination",
+        "date": "2002",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "90597ea1-53ca-3282-a5f4-f2da8e3a7c6f",
+          "title": "Destination",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "89944e92-ad9c-48e3-aaac-a3413c985a1e",
+        "status": "Official",
+        "title": "Destination",
+        "date": "2002",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "90597ea1-53ca-3282-a5f4-f2da8e3a7c6f",
+          "title": "Destination",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "220948c2-9b4a-4b14-9f71-908c72b187e9",
+        "status": "Official",
+        "title": "Destination",
+        "date": "2002",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "90597ea1-53ca-3282-a5f4-f2da8e3a7c6f",
+          "title": "Destination",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "03bfc617-682b-4ab7-a055-35a3fea243a9",
+        "status": "Official",
+        "title": "Destination",
+        "date": "2002",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "90597ea1-53ca-3282-a5f4-f2da8e3a7c6f",
+          "title": "Destination",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e9f6f692-1889-4f8f-82e0-b3ef6e37f3ec",
+        "status": "Official",
+        "title": "Destination",
+        "date": "2002",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "90597ea1-53ca-3282-a5f4-f2da8e3a7c6f",
+          "title": "Destination",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/af475572-1df9-47a7-8f87-9bfb0a284fe0?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "af475572-1df9-47a7-8f87-9bfb0a284fe0",
+    "status": "Official",
+    "title": "Maria",
+    "date": "1999",
+    "country": "XE",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Blondie",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "eee7e620-c062-3084-b79d-63cf7ace19ed",
+      "title": "Maria",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Maria (radio edit)",
+            "length": 252000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1f04d857-4147-4ccd-b1d8-c67fb2fb73c8",
+              "title": "Maria",
+              "length": 249182,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Maria (Talvin Singh rhythmic remix)",
+            "length": 447000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "99acdcca-4cc4-4376-900b-808846ea6cd8",
+              "title": "Maria (Talvin Singh rhythmic remix)",
+              "length": 447000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Maria (Soul Solution remix/radio edit)",
+            "length": 248000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "19927727-487c-49a2-a8d7-48f2008dde2c",
+              "title": "Maria (Soul Solution remix radio edit)",
+              "length": 248000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Maria (album version)",
+            "length": 292000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "57e001f5-ae95-4e9a-9da2-85de74985c40",
+              "title": "Maria",
+              "length": 291200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/4e3afdfb-0805-45ee-ad45-3a86dce12c62?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "4e3afdfb-0805-45ee-ad45-3a86dce12c62",
+    "title": "The Millennium Prayer",
+    "length": 280680,
+    "disambiguation": "",
+    "isrcs": [
+      "GBCZ59900015",
+      "GBGKG1000006"
+    ],
+    "first_release_date": "1999-11-15",
+    "artist_credit": [
+      {
+        "name": "Cliff Richard",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "ea4d10b6-0023-44a3-b415-0a591632fcc6",
+        "status": "Official",
+        "title": "The Millennium Prayer",
+        "date": "1999-11-15",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d88baece-ef7a-3682-b1b1-68705ae3aa58",
+          "title": "The Millennium Prayer",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ddc6bd88-9546-4061-b117-c416b85040eb",
+        "status": "Promotion",
+        "title": "Radioactivity Volume 00-01",
+        "date": "2000-01",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5d9bb405-b499-4ddd-b8a0-123368eaa4e4",
+          "title": "Radioactivity Volume 00-01",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "96e1737f-504f-4bac-ba38-1e840d6415a4",
+        "status": "Bootleg",
+        "title": "Double Serious Hits 2000 Volume 1",
+        "date": "2000",
+        "country": "NL",
+        "disambiguation": "unofficial release",
+        "release_group": {
+          "id": "558b18a4-00dd-4c54-bbea-f80f736749c0",
+          "title": "Double Serious Hits 2000 Volume 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b64f06e0-73e7-4591-8251-223645410f9f",
+        "status": "Official",
+        "title": "The Whole Story: His Greatest Hits",
+        "date": "2000",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7b820318-b181-365b-a465-48eed6e24761",
+          "title": "The Whole Story: His Greatest Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b7a895e7-47b0-42dc-8746-919ddb134f6a",
+        "status": "Official",
+        "title": "Cliff Richard: The Singles Collection",
+        "date": "2002-08-12",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4674d707-97ac-3716-a37b-0c971323e5a9",
+          "title": "The Singles Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7dfcc7e2-ea0c-4ccc-baf3-43a88db3ef10",
+        "status": "Official",
+        "title": "The Singles Collection",
+        "date": "2002-08-12",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4674d707-97ac-3716-a37b-0c971323e5a9",
+          "title": "The Singles Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b3e70675-fdf1-4aa5-ba25-172a3ac078d8",
+        "status": "Official",
+        "title": "Cliff at Christmas",
+        "date": "2003-12-02",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3ad34a85-840f-36d7-842b-7df7bf3b7f7a",
+          "title": "Cliff at Christmas",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "306652c3-a1dd-4ae1-bb10-606f9c73f119",
+        "status": "Official",
+        "title": "Merry Xmas!",
+        "date": "2010-11-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64e81c86-df5e-4ab8-8490-a088118093ab",
+          "title": "Merry Xmas!",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1a4be51f-4d51-4837-911e-4964469da750",
+        "status": "Official",
+        "title": "Merry Xmas!",
+        "date": "2011-11-18",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64e81c86-df5e-4ab8-8490-a088118093ab",
+          "title": "Merry Xmas!",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9acb837d-14d9-46d4-a187-5c13bd8af9ad",
+        "status": "Promotion",
+        "title": "Christmas With Cliff",
+        "date": "2011-11-19",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "49241788-f282-4b37-9b6b-8d394ec9b9c7",
+          "title": "Christmas With Cliff",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6b18398f-b95a-4495-8874-315fe0ee78ac",
+        "status": "Official",
+        "title": "Cliff at Christmas",
+        "date": "",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3ad34a85-840f-36d7-842b-7df7bf3b7f7a",
+          "title": "Cliff at Christmas",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/083c39e7-0c69-4cf8-ac89-af8be163073d?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "083c39e7-0c69-4cf8-ac89-af8be163073d",
+    "status": "Official",
+    "title": "I Believe I Can Fly",
+    "date": "1997-01-27",
+    "country": "",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "R. Kelly",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "e04d8238-53bb-47a2-b2e2-0a863ef8adbb",
+      "title": "I Believe I Can Fly",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "I Believe I Can Fly (radio edit)",
+            "length": 285800,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "36a4fafa-d2c8-4c5f-9ca1-2ec3fb83e3f0",
+              "title": "I Believe I Can Fly",
+              "length": 283872,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "I Believe I Can Fly (LP version)",
+            "length": 322466,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a6685ec6-2a43-42ee-901d-8b498e3ba868",
+              "title": "I Believe I Can Fly",
+              "length": 321386,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "I Believe I Can Fly (instrumental)",
+            "length": 322026,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "04f6e7af-ab3c-4142-ba48-d4c5445a2770",
+              "title": "I Believe I Can Fly (instrumental)",
+              "length": 322026,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Religious Love",
+            "length": 251266,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1ae0c2aa-45a1-4791-89e5-da1799f9f19d",
+              "title": "Religious Love",
+              "length": 251466,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBARL9300050?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBARL9300050",
+    "recordings": [
+      {
+        "id": "593770e3-e572-4bb1-a7ad-ee0006301084",
+        "title": "Relight My Fire",
+        "length": 250226,
+        "disambiguation": "",
+        "first_release_date": "1993-10-04",
+        "artist_credit": [
+          {
+            "name": "Take That",
+            "joinphrase": " feat. "
+          },
+          {
+            "name": "Lulu",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "afd5e25f-7324-4c1b-b998-ca29e111d8ab",
+        "title": "Relight My Fire",
+        "length": 251653,
+        "disambiguation": "",
+        "first_release_date": "1997",
+        "artist_credit": [
+          {
+            "name": "Take That",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/c4e4946b-b3a8-4997-ad2c-8f6d48ad3808?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "c4e4946b-b3a8-4997-ad2c-8f6d48ad3808",
+    "status": "Official",
+    "title": "Everything Changes",
+    "date": "1993-10-11",
+    "country": "XE",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Take That",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "ee15ae7d-7040-3c51-a6e2-d865eca299bc",
+      "title": "Everything Changes",
+      "primary_type": "Album",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Everything Changes",
+            "length": 215000,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "aec6156a-a65b-4e05-b3bc-9bd270b6fad3",
+              "title": "Everything Changes",
+              "length": 215000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Pray",
+            "length": 223893,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "afeec4a6-6f81-4564-bf0c-246068b0de84",
+              "title": "Pray",
+              "length": 223946,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Wasting My Time",
+            "length": 225666,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "32c5d4d6-5685-4386-ad58-c17507d01bf2",
+              "title": "Wasting My Time",
+              "length": 225346,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Relight My Fire",
+            "length": 252973,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "593770e3-e572-4bb1-a7ad-ee0006301084",
+              "title": "Relight My Fire",
+              "length": 250226,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Lulu",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "Love Ain’t Here Anymore",
+            "length": 237666,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d95cfd5a-5639-46ce-af24-c65fd3e5b2b6",
+              "title": "Love Ain’t Here Anymore",
+              "length": 236000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "If This Is Love",
+            "length": 236960,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a430b072-d6f7-4ac5-9d01-591078da26b6",
+              "title": "If This Is Love",
+              "length": 236813,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "Whatever You Do to Me",
+            "length": 224706,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "325f9e05-2e30-4115-bbf3-791ce30d5e8c",
+              "title": "Whatever You Do to Me",
+              "length": 224453,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 8,
+            "number": "8",
+            "title": "Meaning of Love",
+            "length": 227333,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "2f3979aa-fd91-429d-9db0-729b0d47388c",
+              "title": "Meaning of Love",
+              "length": 226986,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 9,
+            "number": "9",
+            "title": "Why Can’t I Wake Up With You?",
+            "length": 217826,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "6324e270-d8fc-429b-8d24-d7989268c17b",
+              "title": "Why Can’t I Wake Up With You?",
+              "length": 218000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 10,
+            "number": "10",
+            "title": "You Are the One",
+            "length": 228466,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "335d087c-dfbe-4bd4-8f28-2dcda7a1da5a",
+              "title": "You Are the One",
+              "length": 227053,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 11,
+            "number": "11",
+            "title": "Another Crack in My Heart",
+            "length": 253866,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "825e1930-df8f-491a-84bd-c9cc6c54cd47",
+              "title": "Another Crack in My Heart",
+              "length": 253000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 12,
+            "number": "12",
+            "title": "Broken Your Heart",
+            "length": 228266,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "29732688-0d60-4107-a722-0b011dcfbc03",
+              "title": "Broken Your Heart",
+              "length": 228000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 13,
+            "number": "13",
+            "title": "Babe",
+            "length": 291800,
+            "artist_credit": [
+              {
+                "name": "Take That",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4f4ca9ce-46a1-458a-a5d4-2865549f2b7f",
+              "title": "Babe",
+              "length": 293000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Take That",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/8f3471b5-7e6a-48da-86a9-c1c07a0f47ae?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae",
+    "title": "Never Gonna Give You Up",
+    "length": 212946,
+    "disambiguation": "",
+    "isrcs": [
+      "GB5KW2103369",
+      "GB5KW2202504",
+      "GBARL0401372",
+      "GBARL0600786",
+      "GBARL0600789",
+      "GBARL8700052",
+      "GBARL9300135",
+      "USAT21601138"
+    ],
+    "first_release_date": "1987-07-27",
+    "artist_credit": [
+      {
+        "name": "Rick Astley",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "dbb9ee96-4b20-42a3-a326-5b250a22c5f9",
+        "status": "Official",
+        "title": "Never Gonna Give You Up",
+        "date": "1987-07-27",
+        "country": "GB",
+        "disambiguation": "7\" vinyl single",
+        "release_group": {
+          "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+          "title": "Never Gonna Give You Up",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "bece6fac-5c84-48ce-a12d-c2f6fe4335ec",
+        "status": "Official",
+        "title": "Never Gonna Give You Up",
+        "date": "1987-07-27",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+          "title": "Never Gonna Give You Up",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "dc919562-19c7-42c8-961c-7ed5520f00bb",
+        "status": "Official",
+        "title": "Never Gonna Give You Up",
+        "date": "1987-07-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+          "title": "Never Gonna Give You Up",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "58a1c084-332d-4012-86af-88b0cf8e47a7",
+        "status": "Official",
+        "title": "Never Gonna Give You Up",
+        "date": "1987-07-27",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+          "title": "Never Gonna Give You Up",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7171f94c-7307-4ca7-a2db-a5e4be09cdac",
+        "status": "Official",
+        "title": "Never Gonna Give You Up",
+        "date": "1987-07-27",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+          "title": "Never Gonna Give You Up",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "bf9e91ea-8029-4a04-a26a-224e00a83266",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987-10-01",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "addcaa26-8b7b-4c70-88fa-e19d3cf2ffb7",
+        "status": "Official",
+        "title": "Absolute Music 3",
+        "date": "1987-10-05",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b610229f-6894-3407-99a6-bb39a635b45b",
+          "title": "Absolute Music 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "caf23f7f-806e-4225-8c0c-b032c5e51715",
+        "status": "Official",
+        "title": "The Hit Factory: The Best of Stock Aitken Waterman",
+        "date": "1987-10-12",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8094e219-abeb-3564-8113-b30b04f3f1b9",
+          "title": "The Hit Factory: The Best of Stock Aitken Waterman",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "537468aa-cc90-3f4c-966f-99dc05eaee12",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987-12-08",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "358b6f4a-fdfb-48c9-a340-48b1e67241c1",
+        "status": "Official",
+        "title": "¡Boom! 3 (El disco de los exitos)",
+        "date": "1987",
+        "country": "ES",
+        "disambiguation": "",
+        "release_group": {
+          "id": "beb25ce4-6609-4df6-98a1-76a19ff2321f",
+          "title": "¡Boom! 3 (El disco de los exitos)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "536cf019-cdf4-41b9-9d69-4953b970da4d",
+        "status": "Official",
+        "title": "Club Top 13 International: November / Dezember 1987",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0df9bdb5-8e84-427a-a1f5-694e9cf84e1f",
+          "title": "Club Top 13 International: November / Dezember 1987",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f6b5a31d-2728-43f1-a8b6-a51a69ad5c80",
+        "status": "Official",
+        "title": "Formel Eins: Space Hits",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "31415287-e2cf-44e9-9daa-ef31c0fa40a3",
+          "title": "Formel Eins: Space Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5ab56156-bc94-4ae8-a68c-1ecce96ffc4c",
+        "status": "Official",
+        "title": "Het beste uit de Top 40 van ’t jaar ’87",
+        "date": "1987",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0e1ae863-9451-475a-8d45-4962c8ebb89e",
+          "title": "Het beste uit de Top 40 van ’t jaar ’87",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "34a55532-7d54-4974-b10d-146a66c07878",
+        "status": "Official",
+        "title": "Hit Connection 87",
+        "date": "1987",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "376d5ea0-2b2b-494c-8c8b-61aeecfc428e",
+          "title": "Hit Connection 87",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a13b789c-95ae-48da-93c3-b015532c1cac",
+        "status": "Official",
+        "title": "Hit Factory: Hits Made by Stock Aitken Waterman",
+        "date": "1987",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "66a06263-cb8e-4caf-bad7-51d86b5a61bf",
+          "title": "Hit Factory: Hits Made by Stock Aitken Waterman",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "17a5a854-be72-4a96-a8ab-1999b88232d1",
+        "status": "Official",
+        "title": "Hits '87: Die internationalen Superhits",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "70beb341-bc9f-3995-b11e-24a143e879ea",
+          "title": "Hits '87: Die internationalen Superhits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c6ff7243-a317-4e99-9ce2-a8a9a3a29ef2",
+        "status": "Official",
+        "title": "Never Gonna Give You Up",
+        "date": "1987",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+          "title": "Never Gonna Give You Up",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f618590f-90ee-4784-850a-cbc229a742b8",
+        "status": "Official",
+        "title": "The Hit Factory: The Best of Stock Aitken Waterman",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8094e219-abeb-3564-8113-b30b04f3f1b9",
+          "title": "The Hit Factory: The Best of Stock Aitken Waterman",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1b7d620f-40d6-464c-a5b5-4398e5acdcd8",
+        "status": "Official",
+        "title": "The Hits Album 7",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e0d90705-7ed4-428e-8a1b-0ab1cdabfb1d",
+          "title": "The Hits Album 7",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a72ba2b2-2553-3d23-ad4d-ca031ad1f5f2",
+        "status": "Official",
+        "title": "The Hits Album 7",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e0d90705-7ed4-428e-8a1b-0ab1cdabfb1d",
+          "title": "The Hits Album 7",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "30d0a7ef-1c36-4fcb-96da-c258b165ba60",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f37d7f2e-6bdf-4af9-af61-26072ca8efea",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "dda9c114-cc2b-40b3-8894-764e5c8538eb",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "befdcdfe-cc73-309f-ae9f-a55e68b9cdeb",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "38ca0db0-404d-460c-8229-540ec37380e2",
+        "status": "Official",
+        "title": "Whenever You Need Somebody",
+        "date": "1987",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "082c6aff-a7cc-36e0-a960-35a578ecd937",
+          "title": "Whenever You Need Somebody",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/dbb9ee96-4b20-42a3-a326-5b250a22c5f9?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "dbb9ee96-4b20-42a3-a326-5b250a22c5f9",
+    "status": "Official",
+    "title": "Never Gonna Give You Up",
+    "date": "1987-07-27",
+    "country": "GB",
+    "disambiguation": "7\" vinyl single",
+    "artist_credit": [
+      {
+        "name": "Rick Astley",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+      "title": "Never Gonna Give You Up",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Never Gonna Give You Up",
+            "length": 214000,
+            "artist_credit": [
+              {
+                "name": "Rick Astley",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae",
+              "title": "Never Gonna Give You Up",
+              "length": 212946,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rick Astley",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBBBM8402006?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBBBM8402006",
+    "recordings": [
+      {
+        "id": "9a8f6c80-8ed6-40a6-b3d1-5c97866f191c",
+        "title": "Careless Whisper",
+        "length": 303000,
+        "disambiguation": "",
+        "first_release_date": "1999-12",
+        "artist_credit": [
+          {
+            "name": "George Michael",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "7313c159-ee3b-4f16-b46c-81f7982b91db",
+        "title": "Careless Whisper",
+        "length": 301479,
+        "disambiguation": "single edit",
+        "first_release_date": "1984-07-24",
+        "artist_credit": [
+          {
+            "name": "George Michael",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/f980fc14-e29b-481d-ad3a-5ed9b4ab6340?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "f980fc14-e29b-481d-ad3a-5ed9b4ab6340",
+    "title": "Billie Jean",
+    "length": 294000,
+    "disambiguation": "album / single version",
+    "isrcs": [
+      "USSM18200001",
+      "USSM18200612",
+      "USSM19902991"
+    ],
+    "first_release_date": "1982-11-30",
+    "artist_credit": [
+      {
+        "name": "Michael Jackson",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "f716ef2d-3ef9-4c85-9fcc-cbbc9f61f947",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11-30",
+        "country": "XW",
+        "disambiguation": "24bit/176.4kHz",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "39898f04-c6a6-45c7-a785-31b4143dd7e1",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11-30",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "da0cca22-ddb1-4b5b-8021-cae686c37675",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11-30",
+        "country": "XE",
+        "disambiguation": "no \"co-produced\" line on the back cover",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "897b7802-6317-492f-8da1-d94e3bf9cba9",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11-30",
+        "country": "CA",
+        "disambiguation": "club edition",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8e056ddb-b62b-46b5-a7c7-a3a590fb4fc2",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11-30",
+        "country": "XW",
+        "disambiguation": "Digital download",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d57c1641-f9e7-4a40-b6d9-e156e3230137",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11-30",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "56e11eb9-a1a2-46e1-8919-dea0dadd21f9",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-11",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "959272f9-97ae-4179-aebe-950eef64ed93",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982-12-01",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "747647c7-f8da-451e-9d79-f7fa1b198db2",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "XE",
+        "disambiguation": "club edition",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "49f5be6a-a73f-4a85-87dd-a14ea240a726",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "884e8b9a-bcab-4f04-bf9c-ae7af9ae4ce6",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7a92f51e-4e24-4e7f-b1fd-96c1c6360459",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "JP",
+        "disambiguation": "Japan",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "680da302-ccde-453d-8f55-639421540d86",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f7f5c684-faf2-4b1d-abaf-5343c00e8fa3",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "dae0ea2b-86e1-4d78-8d56-95b7fd77114f",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "JP",
+        "disambiguation": "Master Sound DM Digital Mastering",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ba72c286-9eb2-4d24-949e-39a50419383a",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "XE",
+        "disambiguation": "sticker in cover",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9c4c939e-5697-44d3-b2f2-b04226cf15f8",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "US",
+        "disambiguation": "half-speed mastered",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0881a2b7-2be3-4dfd-94f0-b186069802bd",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "fc7cc7d9-7173-4db7-8d46-2b20a8953429",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "JP",
+        "disambiguation": "repress",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6bc658fc-c2ad-38ec-a829-0cf8ffef53d8",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a62f918b-b62c-49df-b430-1f699302546b",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "ES",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "359c3b04-6354-42fa-8438-11393b1e46a3",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1982",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "196971df-a7b6-3cdb-8e59-f43967cd29bf",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1983-06-06",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "98b81ca7-4278-406c-acdd-a00e4f44e489",
+        "status": "Official",
+        "title": "9 Singles Pack",
+        "date": "1983",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aab6218c-5a42-4962-b470-972f2288fde2",
+          "title": "9 Singles Pack",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "78d8e119-9967-4040-9756-5e27363d4279",
+        "status": "Official",
+        "title": "Thriller",
+        "date": "1983",
+        "country": "JP",
+        "disambiguation": "Japanese Gold Disc",
+        "release_group": {
+          "id": "f32fab67-77dd-3937-addc-9062e28e4c37",
+          "title": "Thriller",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBF088200872?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBF088200872",
+    "recordings": [
+      {
+        "id": "8e3077e4-786c-4697-858d-7da41d23cdf2",
+        "title": "Come On Eileen",
+        "length": 244573,
+        "disambiguation": "UK 7″ single version",
+        "first_release_date": "1982-07",
+        "artist_credit": [
+          {
+            "name": "Dexys Midnight Runners",
+            "joinphrase": " & "
+          },
+          {
+            "name": "The Emerald Express",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "13961c92-961b-4ba3-9b63-c05bf9bc28eb",
+        "title": "Come On Eileen",
+        "length": 208000,
+        "disambiguation": "single edit",
+        "first_release_date": "1986",
+        "artist_credit": [
+          {
+            "name": "Dexys Midnight Runners",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/ef4c6855-949e-4e22-b41e-8e0a2d372d5f?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "ef4c6855-949e-4e22-b41e-8e0a2d372d5f",
+    "title": "Tainted Love",
+    "length": 159296,
+    "disambiguation": "",
+    "isrcs": [
+      "GBF088100001",
+      "GBF088100017",
+      "GBF088100120",
+      "GBFO88100017",
+      "GBUM72304240"
+    ],
+    "first_release_date": "1981-07",
+    "artist_credit": [
+      {
+        "name": "Soft Cell",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "10259d63-2f2e-4ee4-8c9e-47b98b33d201",
+        "status": "Official",
+        "title": "Tainted Love",
+        "date": "1981-07",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "086eb917-ca60-31b1-8011-22b0a4fdba7b",
+          "title": "Tainted Love",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c3367d3a-2f6c-48d1-95c5-c1ee7a49c479",
+        "status": "Official",
+        "title": "Non‐Stop Erotic Cabaret",
+        "date": "1981-11-23",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "80bf6608-cad9-4589-bbc7-8ad3461949e4",
+        "status": "Official",
+        "title": "Non-Stop Erotic Cabaret",
+        "date": "1981-12",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "84b058bd-2a65-45e0-b9c1-8e599696f30b",
+        "status": "Official",
+        "title": "Non-Stop Erotic Cabaret",
+        "date": "1981-12",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "81296490-0df4-40b1-9b26-cec628fca0f8",
+        "status": "Official",
+        "title": "Alle 13 Goed!",
+        "date": "1981",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d7da88af-dfc7-4d95-b2c6-b23d74d3563e",
+          "title": "Alle 13 Goed!",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5754942c-c8de-4bcd-b692-64a055c1b28c",
+        "status": "Official",
+        "title": "High Life: Original Top‐Hits ungekürzt Winter ’81",
+        "date": "1981",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9debfbcd-c875-4247-9b52-0b01e87e3159",
+          "title": "High Life: Winter ’81",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1a89410c-6c87-4fce-8e70-7c69ab2159a3",
+        "status": "Official",
+        "title": "Monster Tracks",
+        "date": "1981",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5d528cee-58c1-46d4-9450-73792309e599",
+          "title": "Monster Tracks",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "afc832ee-78e4-498c-9e3d-68c6de020cb6",
+        "status": "Official",
+        "title": "Non-Stop Erotic Cabaret",
+        "date": "1981",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "457497c5-bc84-4530-ab60-a72bfcd95973",
+        "status": "Official",
+        "title": "Non‐Stop Erotic Cabaret",
+        "date": "1981",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5863d981-d0c4-4346-85a3-f62fd2b5a5ea",
+        "status": "Official",
+        "title": "Tainted Love",
+        "date": "1981",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "086eb917-ca60-31b1-8011-22b0a4fdba7b",
+          "title": "Tainted Love",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d6b8a78d-5460-4e4d-8c74-28248732958e",
+        "status": "Official",
+        "title": "Wired, Vol. 2",
+        "date": "1982",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "53de333c-1a02-45de-b111-49ed8bb0e3cf",
+          "title": "Wired, Vol. 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8dbfff3f-0661-473c-8611-dfba00ca983a",
+        "status": "Official",
+        "title": "Non‐Stop Erotic Cabaret",
+        "date": "1984-07-13",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1b2a52dd-2bde-4661-8345-e6af2ca4e3fa",
+        "status": "Official",
+        "title": "The Singles",
+        "date": "1986",
+        "country": "XE",
+        "disambiguation": "made in West Germany",
+        "release_group": {
+          "id": "9e75e067-dc67-357d-96a8-e0a17270b259",
+          "title": "The Singles",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ef09b6a9-db6a-4fcb-870d-d944a39f84b9",
+        "status": "Official",
+        "title": "The Singles",
+        "date": "1986",
+        "country": "GB",
+        "disambiguation": "made in Germany",
+        "release_group": {
+          "id": "9e75e067-dc67-357d-96a8-e0a17270b259",
+          "title": "The Singles",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8217defe-c9f9-49ca-bf85-556f2aa6ccf6",
+        "status": "Official",
+        "title": "The Singles",
+        "date": "1986",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9e75e067-dc67-357d-96a8-e0a17270b259",
+          "title": "The Singles",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d1088136-8441-40ec-b84d-aae716f12c77",
+        "status": "Official",
+        "title": "Trax The Music Album",
+        "date": "1986",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "70b8fa35-6391-44ea-a1a3-1f45a7e4139f",
+          "title": "Trax The Music Album",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ad681fee-7806-414d-adb1-f7114031011d",
+        "status": "Official",
+        "title": "Hit Come Back · The Original Oldies · Vol. 1 · 16 No. 1 Single Hits 1965 to 1981 · Original Recordings",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7546c1b7-fb38-4f7c-8de7-6c1a937d9fe8",
+          "title": "Hit Come Back · The Original Oldies · Vol. 1 · 16 No. 1 Single Hits 1965 to 1981 · Original Recordings",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1acaa870-6e0c-4b6e-9e91-fdec4e5ea4b1",
+        "status": "Official",
+        "title": "Non-Stop Erotic Cabaret",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e5bc1607-7947-3044-8558-6b4eae334c51",
+          "title": "Non‐Stop Erotic Cabaret",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "50c13929-79de-4985-ba88-61a1a1ea4475",
+        "status": "Official",
+        "title": "CD‐Festival: Highlights of the Seventies",
+        "date": "1988",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bdc92841-ae8e-47f9-8b0c-3aad4cf74a1c",
+          "title": "CD‐Festival: Highlights of the Seventies",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "05ae16ee-0140-45dd-a16c-78ba42da4b78",
+        "status": "Official",
+        "title": "Dance Decade",
+        "date": "1989",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d1e67a8c-9b47-4788-90ea-766d5fdb930a",
+          "title": "Dance Decade",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f9e75805-e383-4574-935e-debf6dc917da",
+        "status": "Official",
+        "title": "Closed Collection Vol. 1",
+        "date": "1990",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f9950e3a-d102-4f61-927e-21aa55f95cb4",
+          "title": "Closed Collection Vol. 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9aa0ca1e-8604-481a-85ea-b402a9d3a59a",
+        "status": "Promotion",
+        "title": "Phonogram News 5/91",
+        "date": "1991",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ee2bcb0e-76ef-3fd0-9729-fcf2123cd0e2",
+          "title": "Phonogram News 5/91",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "36a3034f-8110-44da-8368-6271853cab7a",
+        "status": "Official",
+        "title": "Pop & Wave, Volume 1: The Hits of the 80's",
+        "date": "1992-03-10",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0035f6eb-058c-3298-87a5-fbe9cc69e296",
+          "title": "Pop & Wave, Volume 1: The Hits of the 80's",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7e0c5522-0741-4969-8544-6c8f7e856ec1",
+        "status": "Official",
+        "title": "Rock of the 80’s, Volume 2",
+        "date": "1992-10-01",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "10f3a0f0-611c-3a23-bd47-31a493244e67",
+          "title": "Rock of the 80’s, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b95c4780-a6e6-41c6-8fab-4f5c1f3822f2",
+        "status": "Official",
+        "title": "New Romantic Classics",
+        "date": "1992-10-19",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "241ca6df-d5cc-314f-859f-2a72512f6854",
+          "title": "New Romantic Classics",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/f8718dab-55ea-4d45-9d62-23eb69d55e69?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "f8718dab-55ea-4d45-9d62-23eb69d55e69",
+    "title": "When I Need You",
+    "length": 249960,
+    "disambiguation": "",
+    "isrcs": [
+      "AUWA01000198",
+      "AUWA01000610",
+      "CAAB80900437",
+      "GBBLG7600258",
+      "USRH10301218"
+    ],
+    "first_release_date": "1976",
+    "artist_credit": [
+      {
+        "name": "Leo Sayer",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "332cfb92-9aef-45a2-9f2d-91a500b5cde5",
+        "status": "Official",
+        "title": "Endless Flight",
+        "date": "1976",
+        "country": "IE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "271971b7-f897-38a5-8e8b-21fc9cb19ea3",
+          "title": "Endless Flight",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "37cd3065-da7a-3ef1-9dc2-012620b9c091",
+        "status": "Official",
+        "title": "Endless Flight",
+        "date": "1976",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "271971b7-f897-38a5-8e8b-21fc9cb19ea3",
+          "title": "Endless Flight",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "beb75d25-53c3-43c5-a983-44673ccdc47b",
+        "status": "Promotion",
+        "title": "Special D.J. Copy",
+        "date": "1978",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ee706852-7d4c-4a0f-a9ee-ce08859efcab",
+          "title": "Special D.J. Copy",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "08f1ba8e-a6b0-41e2-a8df-534fa1b5ef37",
+        "status": "Official",
+        "title": "The Very Best Of",
+        "date": "1979-08",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d94fbde2-df88-4811-af7b-92a63ee43686",
+          "title": "The Very Best Of",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "eaa1c3a7-871f-4d02-a9fe-f42a4992b0cb",
+        "status": "Official",
+        "title": "Поет Лео Сейер",
+        "date": "1979",
+        "country": "SU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4804e0fa-f904-3e10-9eac-5ec608e73090",
+          "title": "The Very Best of Leo Sayer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c1bc435b-94b8-4116-aae6-cfd80ab068a2",
+        "status": "Official",
+        "title": "Поет Лео Сейер",
+        "date": "1980",
+        "country": "SU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b813598b-c29b-458e-ad10-1b49040a098f",
+          "title": "Поет Лео Сейер",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "04da3a19-58fa-455a-b68b-bea59416ec0a",
+        "status": "Pseudo-Release",
+        "title": "Leo Sayer",
+        "date": "1983",
+        "country": "SU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b813598b-c29b-458e-ad10-1b49040a098f",
+          "title": "Поет Лео Сейер",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8f2a80e1-0deb-4937-8adf-2561e0a58972",
+        "status": "Official",
+        "title": "Поет Лео Сейер",
+        "date": "1983",
+        "country": "SU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b813598b-c29b-458e-ad10-1b49040a098f",
+          "title": "Поет Лео Сейер",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "01438e57-6bf0-4e00-81f6-b4fa856aa0cf",
+        "status": "Official",
+        "title": "Golden Love Songs, Volume 2",
+        "date": "1986-07",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "823acfdf-cbf9-3f63-89cd-d1d3bbc2b026",
+          "title": "Golden Love Songs, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a9fab59b-05b6-4c43-ab95-d1faa3d6b037",
+        "status": "Official",
+        "title": "The Very Best of Leo Sayer",
+        "date": "1986",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4804e0fa-f904-3e10-9eac-5ec608e73090",
+          "title": "The Very Best of Leo Sayer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "fcfa9692-9fbf-40a9-95a9-8133656efafe",
+        "status": "Official",
+        "title": "When I Need You / You Make Me Feel Like Dancing",
+        "date": "1987-02",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "335b890a-4d5e-46f6-bd1e-8d5c34821325",
+          "title": "When I Need You / You Make Me Feel Like Dancing",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "88be051a-3b4c-4daf-96bf-bb2c285699cc",
+        "status": "Official",
+        "title": "Golden Love Songs, Volume 2: Move Closer",
+        "date": "1987",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "823acfdf-cbf9-3f63-89cd-d1d3bbc2b026",
+          "title": "Golden Love Songs, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e7558461-166f-4dd7-be0b-698acec76073",
+        "status": "Official",
+        "title": "Secret Love",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "afb2ce7d-9aff-3c4a-b97c-ad969d24bcd8",
+          "title": "Secret Love",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "eb467cab-df58-47a1-9923-7fbf47d9be78",
+        "status": "Official",
+        "title": "25 Years of Rock ’n’ Roll: 1977: 20 of the Year’s Greatest Tracks",
+        "date": "1988",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "62d1537f-cdcf-3e3f-a9e6-66c645e801d2",
+          "title": "25 Years of Rock ’n’ Roll: 1977: 20 of the Year’s Greatest Tracks",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6fd77020-b656-4274-99f2-c7f7febda0e4",
+        "status": "Official",
+        "title": "Kuschelrock 3",
+        "date": "1989-10-12",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ecb31666-11e1-3aa2-95f5-b46c9c685aaa",
+          "title": "Kuschelrock 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "298d66d4-a05c-49c2-998c-61b99d348b95",
+        "status": "Official",
+        "title": "Easy‐Listening Hits of the ’60s & ’70s",
+        "date": "1989",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e34c47a7-76c4-35a3-83d2-080581cb40b2",
+          "title": "Easy‐Listening Hits of the ’60s & ’70s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "088311df-5113-4835-8df8-4d32dd9b04be",
+        "status": "Official",
+        "title": "Kuschelrock 3",
+        "date": "1989",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ecb31666-11e1-3aa2-95f5-b46c9c685aaa",
+          "title": "Kuschelrock 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c03f134d-0e0f-4d93-8995-b36ba7af255d",
+        "status": "Official",
+        "title": "Kuschelrock 3",
+        "date": "1989",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ecb31666-11e1-3aa2-95f5-b46c9c685aaa",
+          "title": "Kuschelrock 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8ab5f0d2-348a-4c21-a9d9-153214b83431",
+        "status": "Official",
+        "title": "Shades of Love",
+        "date": "1989",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "85c1f183-5831-4f4f-8870-f216430cfc6c",
+          "title": "Shades of Love",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "baf98a36-a2a1-4a59-9dd9-e1ce5afb1466",
+        "status": "Official",
+        "title": "The Love Collection, Volume I",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aab02873-4b2f-344a-b5e6-a72638f10929",
+          "title": "The Love Collection, Volume I",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7efc06a0-6fb0-44e9-96ac-bed2c9b2617d",
+        "status": "Official",
+        "title": "Hit History, Volume 23: 1977",
+        "date": "1990-07",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "96cd4697-19e0-34a3-981f-d8ed6035bb21",
+          "title": "Hit History, Volume 23: 1977",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "176d258b-3de8-4972-ae1f-311d4762ca0d",
+        "status": "Official",
+        "title": "Get It, Volume 1: Die Besten Songs aus der RTL Plus-Werbung",
+        "date": "1990",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e7161f4a-3c8a-4e69-ab2a-be9f70141eb0",
+          "title": "Get It, Volume 1: Die Besten Songs aus der RTL Plus-Werbung",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2453e6b6-0aee-4ddf-8750-26452b66f15d",
+        "status": "Official",
+        "title": "Great Romantic Hits of the 70s and 80s",
+        "date": "1990",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "56643975-2ff9-4eb4-ae72-0f90924d6094",
+          "title": "Great Romantic Hits of the 70s and 80s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9ca64d42-267b-3bff-8f7e-e277ac6d93a3",
+        "status": "Official",
+        "title": "Knuffelrock 1",
+        "date": "1990",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b01b2a17-dc90-33e8-a820-0a35eecf16b6",
+          "title": "Knuffelrock 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "96302b7e-aa19-40e5-9ab3-4b99def0628a",
+        "status": "Official",
+        "title": "Mehr Ohrwürmer",
+        "date": "1990",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d72ab61f-8ce2-407d-9e4f-15c12a5bfef2",
+          "title": "Mehr Ohrwürmer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/488eacf5-1175-4001-be2e-c10194d767a9?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "488eacf5-1175-4001-be2e-c10194d767a9",
+    "title": "Albatross",
+    "length": 189120,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBBN6800001",
+      "GBBBN6800041",
+      "USSM16801086"
+    ],
+    "first_release_date": "1968-12",
+    "artist_credit": [
+      {
+        "name": "Fleetwood Mac",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "6ff68089-869a-4190-ac5c-880a2cf995dc",
+        "status": "Official",
+        "title": "English Rose",
+        "date": "1968-12",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "52738bb8-951b-3d51-8e21-3b9951e9f898",
+          "title": "English Rose",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a485ef59-fa07-47d3-830c-b90cc5ffec12",
+        "status": "Official",
+        "title": "Albatross / Jigsaw Puzzle Blues",
+        "date": "1968",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "873b1bde-d4b9-4e77-9dbc-f23175284921",
+          "title": "Albatross / Jigsaw Puzzle Blues",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3b23570b-b7fe-442b-8a60-cae65da001df",
+        "status": "Official",
+        "title": "The Pious Bird of Good Omen",
+        "date": "1969-08-15",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b796abec-2f4e-304c-a73a-6f308404a499",
+          "title": "The Pious Bird of Good Omen",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e6dd0ac2-8aa2-4447-9748-30bf8f8ffae5",
+        "status": "Promotion",
+        "title": "Albatross / Jigsaw Puzzle Blues / Merry Go Round / Hellhound on My Trail",
+        "date": "1969",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d350005e-e318-4430-a05b-48b2ed793713",
+          "title": "Albatross / Jigsaw Puzzle Blues / Merry Go Round / Hellhound on My Trail",
+          "primary_type": "EP",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "54374b21-0ccc-4554-978f-ead93038935f",
+        "status": "Official",
+        "title": "The Best of Fleetwood Mac",
+        "date": "1969",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "20328c16-1b75-4979-b954-018127fbb3d8",
+          "title": "The Best of Fleetwood Mac",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "73124b18-a507-4346-99fb-fcdaf9b7aa1c",
+        "status": "Official",
+        "title": "Greatest Hits",
+        "date": "1971-11",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8808041f-3e82-36d1-a62c-212496daa321",
+          "title": "Greatest Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2856ba81-4150-44f5-aa4a-80dbaf594179",
+        "status": "Official",
+        "title": "Black Magic Woman",
+        "date": "1971",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "169d6881-22c6-4261-9706-ccf5cafc8296",
+          "title": "Black Magic Woman",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6a65c66d-bfc0-3e70-b3ef-2b0f15787cf6",
+        "status": "Official",
+        "title": "English Rose",
+        "date": "1971",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "52738bb8-951b-3d51-8e21-3b9951e9f898",
+          "title": "English Rose",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5d429dbc-5387-447c-8f4d-7323d027bedf",
+        "status": "Official",
+        "title": "Albatross / Need Your Love So Bad",
+        "date": "1972",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5a9b813e-eb47-4dd8-9515-1bcdea1b3947",
+          "title": "Albatross / Need Your Love So Bad",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0fc4bf32-8aff-39ac-9fe3-1ae4e7034483",
+        "status": "Official",
+        "title": "Vintage Years",
+        "date": "1975",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d6f943b9-8cf8-3e52-bfaf-2e4126cdaaac",
+          "title": "Vintage Years",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1f049fdb-f845-4ddb-9f28-e15753b772d1",
+        "status": "Official",
+        "title": "Albatross",
+        "date": "1977",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "55d8ffaa-9aa5-3699-a659-f345f2163e2e",
+          "title": "Albatross",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4af38bb5-3221-40b8-bb6b-0a79bdb6ce66",
+        "status": "Official",
+        "title": "Vintage Years",
+        "date": "1977",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d6f943b9-8cf8-3e52-bfaf-2e4126cdaaac",
+          "title": "Vintage Years",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "89ab9e1f-db36-4510-baa7-dce12be55595",
+        "status": "Official",
+        "title": "Man of the World",
+        "date": "1978",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0d27a93b-e07f-3ffb-93a1-72f090054ce6",
+          "title": "Man of the World",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "13655548-20e1-4380-9dbf-fc0badebe06d",
+        "status": "Official",
+        "title": "Fleetwood Mac",
+        "date": "1979",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "008c5c5b-af44-45c2-82e0-e7f474eaf016",
+          "title": "Fleetwood Mac",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e4b180ca-818c-4509-9124-91627b4264b0",
+        "status": "Official",
+        "title": "Albatross (Original Instrumental-Hits)",
+        "date": "1981",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1ac08859-7e78-4000-8f4b-1c6809c8552e",
+          "title": "Albatross (Original Instrumental-Hits)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8351ee5a-91e3-42a1-b6b1-35d5e79dee76",
+        "status": "Official",
+        "title": "Best of Pop Music",
+        "date": "1981",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8c948581-59c6-4875-9d3f-d8edabe6cb4f",
+          "title": "Best of Pop Music",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "465d5c40-a435-4537-8934-c76cb480bc1b",
+        "status": "Official",
+        "title": "Das waren Hits",
+        "date": "1982",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3b42a07c-d50b-4a8b-a857-ebc98a051037",
+          "title": "Das waren Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a8d977b5-b474-478d-8172-f052060af449",
+        "status": "Official",
+        "title": "Hits of the Screaming Sixties: 14 Original No One U.S. Hits",
+        "date": "1982",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5f358069-fbe9-4300-9e54-f426f8a2a475",
+          "title": "Hits of the Screaming Sixties: 14 Original No One U.S. Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7641cd0d-f510-463e-8e16-aefcc44f062d",
+        "status": "Official",
+        "title": "Vintage Years",
+        "date": "1982",
+        "country": "YU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d6f943b9-8cf8-3e52-bfaf-2e4126cdaaac",
+          "title": "Vintage Years",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e1ea5cd4-9b8f-4a4f-8eb1-a85c746e7854",
+        "status": "Official",
+        "title": "Sunny Afternoon",
+        "date": "1983",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1e9c3290-3929-40b5-bda1-8bdd417aa4f5",
+          "title": "Sunny Afternoon",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "70e283bf-552c-42e6-964c-5e134d644fbb",
+        "status": "Official",
+        "title": "Albatross / Man of the World",
+        "date": "1984-07",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fcd147ca-5a86-45fe-a993-ab3f3addacce",
+          "title": "Albatross / Man of the World",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4a5e9197-00f0-47b5-812e-54e48f056e3f",
+        "status": "Official",
+        "title": "Remember the 60’s, Volume 4",
+        "date": "1984",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d15df988-2f32-4470-aa77-86c5ec98716f",
+          "title": "Remember the 60’s, Volume 4",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3e0d097b-15a1-4bc6-8ef3-cd48e415309c",
+        "status": "Official",
+        "title": "Hit Memories 1966–1976",
+        "date": "1985",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e97f5eb0-3852-4dc0-bd89-5ad53aa4d460",
+          "title": "Hit Memories 1966–1976",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "08fc4c03-0b68-4596-8cec-021209b54595",
+        "status": "Official",
+        "title": "The Number One Collection",
+        "date": "1986",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9b5ae5b1-5520-48f1-9e06-c61298623868",
+          "title": "The Number One Collection",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "65f22f58-460b-4a6f-a57d-8b36526a340c",
+        "status": "Official",
+        "title": "Stereoplay, CD 25: Yesterday’s",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6e16991d-d2f7-3c2c-8c71-4c387b6d3c5e",
+          "title": "Stereoplay, CD 25: Yesterday’s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/60ff378c-ca99-4957-8ce0-2a035b6095ee?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "60ff378c-ca99-4957-8ce0-2a035b6095ee",
+    "status": "Official",
+    "title": "When You Say Nothing at All",
+    "date": "1999",
+    "country": "AU",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Ronan Keating",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "565c70ad-825e-3212-8680-5a6de68cb16e",
+      "title": "When You Say Nothing at All",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "When You Say Nothing at All",
+            "length": 253133,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "bb1a2564-9748-4aea-aa9e-a7d4ce634050",
+              "title": "When You Say Nothing at All",
+              "length": 245946,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "This Is Your Song",
+            "length": 226960,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "196b25be-e3db-4681-800d-5e82fadcc575",
+              "title": "This Is Your Song",
+              "length": 225533,
+              "disambiguation": "1999 version",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "When You Say Nothing at All (acoustic version)",
+            "length": 211173,
+            "artist_credit": [
+              {
+                "name": "Ronan Keating",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8c1966f8-fb89-46e0-9a33-aa840c646def",
+              "title": "When You Say Nothing at All (acoustic version)",
+              "length": 211173,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ronan Keating",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/2c63359c-1b1b-44db-a4f2-977620cf15cb?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "2c63359c-1b1b-44db-a4f2-977620cf15cb",
+    "title": "Lonely This Christmas",
+    "length": 213133,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE7400041"
+    ],
+    "first_release_date": "1998",
+    "artist_credit": [
+      {
+        "name": "Mud",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "02c1ded2-4437-4b32-815e-e9f8b9d91b1b",
+        "status": "Official",
+        "title": "The Sounds Of Christmas",
+        "date": "1998",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "cdc94de8-7e09-4f92-9866-16f28cbf5e1b",
+          "title": "The Sounds Of Christmas",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "afd8d3b1-0b80-44ed-a2c2-d324ca986b94",
+        "status": "Official",
+        "title": "Goldene Weihnachtshits: Die Neue",
+        "date": "2021-11-05",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dc11263e-eed9-4b30-98ed-e9e1a85f3d5f",
+          "title": "Goldene Weihnachtshits: Die Neue",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/45beaff1-36ce-4771-9be6-44fe68c2e86e?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "45beaff1-36ce-4771-9be6-44fe68c2e86e",
+    "title": "Lonely This Christmas",
+    "length": 213160,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAYE7400041"
+    ],
+    "first_release_date": "2026-11-08",
+    "artist_credit": [
+      {
+        "name": "Mud",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "7085ec99-58be-405a-9378-291fb2996d56",
+        "status": "Official",
+        "title": "Christmas Gold",
+        "date": "2026-11-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c16f1f44-d1f9-4d38-8f1a-4c386aac8abd",
+          "title": "Christmas Gold",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  }
+}

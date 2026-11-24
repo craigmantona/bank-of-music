@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "policy": "fail_closed_until_exact_evidence_is_independently_approved",
+  "entries": [
+    {
+      "chart_row_id": 45,
+      "source_entry_key": "1993:685:2 unlimited:no limit",
+      "title": "No Limit",
+      "artist": "2 Unlimited",
+      "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording",
+      "documentation_sources": ["historical-uk-number-ones-authoritative-chart-evidence.json", "historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 107,
+      "source_entry_key": "1996:751:the prodigy:breathe",
+      "title": "Breathe",
+      "artist": "The Prodigy",
+      "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["4f063cd8-1c74-4ef1-8d68-236123ef6438"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1418,
+      "source_entry_key": "2002:939:nelly kelly rowland:dilemma",
+      "title": "Dilemma",
+      "artist": "Nelly featuring Kelly Rowland",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["f8f6017d-9d25-4b85-8318-05548cba94a1"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1467,
+      "source_entry_key": "2004:991:eric prydz:call on me",
+      "title": "Call on Me",
+      "artist": "Eric Prydz",
+      "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version",
+      "documentation_sources": ["historical-uk-number-ones-authoritative-chart-evidence.json", "historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1522,
+      "source_entry_key": "2007:1062:sean kingston:beautiful girls",
+      "title": "Beautiful Girls",
+      "artist": "Sean Kingston",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["47e69f86-0f49-4803-b936-1384048c1644"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1545,
+      "source_entry_key": "2009:1090:flo rida kesha:right round",
+      "title": "Right Round",
+      "artist": "Flo Rida featuring Kesha",
+      "reason_code": "official_charts_catalogue_conflicts_with_stored_evidence",
+      "documentation_sources": ["historical-uk-number-ones-authoritative-chart-evidence.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1913,
+      "source_entry_key": "2013:1234:avicii:wake me up",
+      "title": "Wake Me Up",
+      "artist": "Avicii",
+      "reason_code": "isrc_maps_multiple_recording_versions",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["b437fbda-9c32-4078-afa2-1afb98ff0d74"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1959,
+      "source_entry_key": "2014:1281:gareth malone s all star choir:wake me up",
+      "title": "Wake Me Up",
+      "artist": "Gareth Malone's All Star Choir",
+      "reason_code": "stored_isrc_belongs_to_different_artist_version",
+      "documentation_sources": ["historical-uk-number-ones-authoritative-chart-evidence.json", "historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1968,
+      "source_entry_key": "2015:1290:wiz khalifa charlie puth:see you again",
+      "title": "See You Again",
+      "artist": "Wiz Khalifa featuring Charlie Puth",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["c6cf4924-75b7-40b3-8d66-f50ff8aec30e"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1979,
+      "source_entry_key": "2015:1302:sigala:easy love",
+      "title": "Easy Love",
+      "artist": "Sigala",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 1996,
+      "source_entry_key": "2017:1321:clean bandit zara larsson:symphony",
+      "title": "Symphony",
+      "artist": "Clean Bandit featuring Zara Larsson",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["072fc090-5b35-4ae7-9976-cb785fd0983a"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 2006,
+      "source_entry_key": "2017:1332:ed sheeran:perfect",
+      "title": "Perfect",
+      "artist": "Ed Sheeran",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-3-audit-20261124.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 2013,
+      "source_entry_key": "2018:1339:jess glynne:i ll be there",
+      "title": "I'll Be There",
+      "artist": "Jess Glynne",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-3-audit-20261124.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "blocked_recording_mbids": ["b1953e74-8a8f-4c4c-97fb-c3f9268e2ef5"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 2014,
+      "source_entry_key": "2018:1340:clean bandit demi lovato:solo",
+      "title": "Solo",
+      "artist": "Clean Bandit featuring Demi Lovato",
+      "reason_code": "isrc_maps_multiple_recordings",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-3-audit-20261124.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    },
+    {
+      "chart_row_id": 2491,
+      "source_entry_key": "2024:1427:eminem:houdini",
+      "title": "Houdini",
+      "artist": "Eminem",
+      "reason_code": "isrc_maps_music_video_not_audio_single",
+      "documentation_sources": ["historical-uk-number-ones-verified-batch-2-audit-20261123.json", "historical-uk-number-ones-verified-batch-4-audit-20261124.json"],
+      "approved_overrides": []
+    }
+  ]
+}

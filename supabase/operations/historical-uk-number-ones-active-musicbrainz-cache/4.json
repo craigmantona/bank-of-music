@@ -1,0 +1,3387 @@
+{
+  "https://musicbrainz.org/ws/2/release/5e7b42d5-8562-4266-81ca-0a9cd4f732f7?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "5e7b42d5-8562-4266-81ca-0a9cd4f732f7",
+    "status": "Official",
+    "title": "River",
+    "date": "2019-11-14",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Ellie Goulding",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "e2de6096-a48b-4ac3-97c2-5b396966792d",
+      "title": "River",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "River",
+            "length": 246000,
+            "artist_credit": [
+              {
+                "name": "Ellie Goulding",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b1dcd614-1bca-4c23-b92a-2ea4c6d8dc9e",
+              "title": "River",
+              "length": 246000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Ellie Goulding",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBAHS1800322?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAHS1800322",
+    "recordings": [
+      {
+        "id": "2ad1f106-d4a7-456b-bdd5-55128bb971f7",
+        "title": "I’ll Be There",
+        "length": 194386,
+        "disambiguation": "",
+        "first_release_date": "2023-11-04",
+        "artist_credit": [
+          {
+            "name": "Jess Glynne",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "b1953e74-8a8f-4c4c-97fb-c3f9268e2ef5",
+        "title": "I’ll Be There",
+        "length": 194386,
+        "disambiguation": "",
+        "first_release_date": "2018-05-04",
+        "artist_credit": [
+          {
+            "name": "Jess Glynne",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "a50175f8-d759-48e1-b7ed-39f71a246d72",
+        "title": "I’ll Be There",
+        "length": 194386,
+        "disambiguation": "",
+        "first_release_date": "2021-03-26",
+        "artist_credit": [
+          {
+            "name": "Jess Glynne",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/31b385a1-8d23-4ff6-b17e-8c038cc8b3af?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "31b385a1-8d23-4ff6-b17e-8c038cc8b3af",
+    "title": "Bridge Over Troubled Water",
+    "length": 233000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBHMU1700038"
+    ],
+    "first_release_date": "2017-06-21",
+    "artist_credit": [
+      {
+        "name": "Artists for Grenfell",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "ccf8d048-d167-4985-8fdf-04b3bc53fd2a",
+        "status": "Official",
+        "title": "Bridge Over Troubled Water",
+        "date": "2017-06-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e893ac23-7ef2-47af-8538-99d2c0f078bf",
+          "title": "Bridge Over Troubled Water",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f5258b9c-ff46-4433-b59f-20427bd1cfcc",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 97",
+        "date": "2017-07-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7ce36630-7888-4eaa-81b9-2775ed398d87",
+          "title": "Now That’s What I Call Music! 97",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d6371705-ad6b-4c4d-9459-79e55647250e",
+        "status": "Official",
+        "title": "The No.1 DJ Collection: 2010s (Digital Collection)",
+        "date": "",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f93fb971-6bfc-48f9-9a63-daa9a47cdb53",
+          "title": "The No.1 DJ Collection: 2010s (Digital Collection)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "dca47df2-e780-495d-a5d9-8d35b42aae38",
+        "status": "Official",
+        "title": "The No.1 DJ Collection: 2010s, Volume 12",
+        "date": "",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bd92749f-8143-4f0a-8eb6-448c4feda9fb",
+          "title": "The No.1 DJ Collection: 2010s, Volume 12",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/8efe2cd3-2adc-4abf-b06c-536208ca71fa?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "8efe2cd3-2adc-4abf-b06c-536208ca71fa",
+    "title": "Stitches",
+    "length": 206880,
+    "disambiguation": "",
+    "isrcs": [
+      "USUM71500658",
+      "USUM71507045"
+    ],
+    "first_release_date": "2015-04-14",
+    "artist_credit": [
+      {
+        "name": "Shawn Mendes",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "4f49bcac-a96f-4395-a357-661986ae3fbe",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "11e96560-2c87-449f-93fe-8ca75f5afd8e",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "785fc47b-fd1f-4b80-b86f-5763f151a141",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "CA",
+        "disambiguation": "HMV Canada exclusive deluxe",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3bf0a4eb-03a6-4c77-856f-ace34c6dc9e2",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c6d73adf-e6c2-4c88-ae2c-d86e2b2d7d3c",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d2266b80-486c-431a-ba49-bb3af930a2a5",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "AR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "543e2d3f-9a71-48c1-a4ed-fe3f67b4fec3",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "XW",
+        "disambiguation": "deluxe",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "416472cd-7084-4672-a051-9cb1cc48a4da",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1c7eb05e-1a6f-4b49-9556-5882e57ecda6",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "",
+        "disambiguation": "deluxe",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2832bab7-a776-4e8d-82ee-dfe3000c2391",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7deb8b33-6f9f-43c6-9d75-7493423a186e",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04-14",
+        "country": "XW",
+        "disambiguation": "deluxe",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2dd35cca-5963-4095-b4c7-b909907e861a",
+        "status": "Promotion",
+        "title": "Stitches",
+        "date": "2015-04-27",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67e6a8a9-6f45-416c-9bd2-d381ba2d7c78",
+          "title": "Stitches",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "93256271-343f-489e-af60-70c651522d09",
+        "status": "Official",
+        "title": "Handwritten",
+        "date": "2015-04",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "47810e9f-d876-459e-bf55-241e18425bfa",
+        "status": "Official",
+        "title": "Promo Only: Mainstream Radio, June 2015",
+        "date": "2015-06",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3bd4c1a0-87de-4dbd-a34b-a2ed814f1eba",
+          "title": "Promo Only: Mainstream Radio, June 2015",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "97630bfc-aea0-45be-ae8c-6353e4e757d2",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 56",
+        "date": "2015-10-30",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2c4d2690-301e-443b-8cf1-954c75f64757",
+          "title": "Now That’s What I Call Music! 56",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8bc9371f-d192-40aa-a817-bc89d93430dd",
+        "status": "Official",
+        "title": "Radio 538 Hitzone: Best of 2015",
+        "date": "2015-11-13",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a01917b4-12e1-4c21-bc0d-5b6736e713c0",
+          "title": "Radio 538 Hitzone: Best of 2015",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d7588c96-dac7-4b3c-9f0c-028c20f0b64a",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-19",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6f7c4e7a-008a-4e61-b426-11446eb77f0e",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-20",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "bfd7c7b4-8284-4a50-8440-a2323b78de7d",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-20",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "06c805db-0b43-401c-b5cd-c3fc42fe29b5",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-20",
+        "country": "US",
+        "disambiguation": "Target exclusive",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a00aa5b9-479f-4f8a-8710-dff5860d8245",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-20",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ac5df23c-439c-41c1-97dc-e9f3cd4c2882",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-20",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "384d156d-f1c5-4fa6-97cc-73be74a6c75c",
+        "status": "Official",
+        "title": "Handwritten (Revisited)",
+        "date": "2015-11-20",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+          "title": "Handwritten",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f5ad9992-aff3-4c82-8066-87e3435a765b",
+        "status": "Official",
+        "title": "Toggo Music 41",
+        "date": "2015-11-20",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "05441d04-6568-4cdf-9384-1050db52e9f0",
+          "title": "Toggo Music 41",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a07d45cf-2e68-4965-93d8-8ece7ba2c027",
+        "status": "Official",
+        "title": "So Fresh: Hits of Summer 2016 + Best of 2015",
+        "date": "2015-11-27",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "872062cb-f2ab-4d16-8dd6-4f628f7da3ff",
+          "title": "So Fresh: Hits of Summer 2016 + Best of 2015",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/70398ecd-1b0f-4c34-a1ed-10cb9286c6a8?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "70398ecd-1b0f-4c34-a1ed-10cb9286c6a8",
+    "title": "I Got U",
+    "length": 285205,
+    "disambiguation": "",
+    "isrcs": [
+      "GBUM71308955"
+    ],
+    "first_release_date": "2014-01-01",
+    "artist_credit": [
+      {
+        "name": "Duke Dumont",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Jax Jones",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "b2a9e340-1919-417b-8af9-1c8270aeb7df",
+        "status": "Official",
+        "title": "I Got U",
+        "date": "2014-01-01",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2cec0beb-84cb-4688-bd34-8f35025002d9",
+          "title": "I Got U",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f5aa6ef1-bc05-47bf-954c-046ab97ab782",
+        "status": "Official",
+        "title": "I Got U",
+        "date": "2014-01-13",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2cec0beb-84cb-4688-bd34-8f35025002d9",
+          "title": "I Got U",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b5396e57-7bc9-4cb0-be4c-e44f0711a847",
+        "status": "Official",
+        "title": "Runtastic Music: Running, Vol. 1",
+        "date": "2014-04-18",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e8e5ed8b-f95a-4a4e-a6c5-1eb15af1d582",
+          "title": "Runtastic Music: Running, Vol. 1",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1c5ee79e-40b7-4525-a6d7-6f712d150a08",
+        "status": "Promotion",
+        "title": "Mastermix: Pro Disc 166",
+        "date": "2014-04",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "165754a2-be55-4f91-b7ab-95e404be0ba8",
+          "title": "Mastermix: Pro Disc 166",
+          "primary_type": "Album",
+          "secondary_types": [
+            "DJ-mix"
+          ]
+        }
+      },
+      {
+        "id": "67a2d5e8-9551-4cd5-9ed9-e9edfa9a79a7",
+        "status": "Official",
+        "title": "Serious Beats 78",
+        "date": "2014-05-30",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "212b1b99-7df4-4021-9e45-2730209e6501",
+          "title": "Serious Beats 78",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4ed6ec4d-9983-4904-bd26-88bbae67f1e5",
+        "status": "Official",
+        "title": "Serious Beats 78",
+        "date": "2014-06-02",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "212b1b99-7df4-4021-9e45-2730209e6501",
+          "title": "Serious Beats 78",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "41c135cd-1580-4546-9696-7bfdac6ce658",
+        "status": "Official",
+        "title": "Megahits Sommer 2014",
+        "date": "2014-06-20",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "011a2b0a-08b9-43d5-9354-d1aa3f7aea54",
+          "title": "Megahits Sommer 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9bda1638-5810-4577-8e57-79177e721b99",
+        "status": "Official",
+        "title": "EP1",
+        "date": "2014-09-16",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d856d63d-bf2d-4b01-882c-5993a043b419",
+          "title": "EP1",
+          "primary_type": "EP",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7b68b6d5-c687-4855-8595-c4e350e1d9ad",
+        "status": "Bootleg",
+        "title": "Forza Horizon 2",
+        "date": "2014-09-30",
+        "country": "XW",
+        "disambiguation": "gamerip",
+        "release_group": {
+          "id": "41c94d2e-c045-47ee-b8de-6acefbc53993",
+          "title": "Forza Horizon 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "075c05e0-e1cc-49d9-9f94-9da0c739333c",
+        "status": "Official",
+        "title": "Fun Radio: Dancefloor Anthology",
+        "date": "2014-11-10",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8f76717e-5f10-4aa7-96ab-394f6dcb6449",
+          "title": "Fun Radio: Dancefloor Anthology",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "14a404de-c7af-4fb1-9127-73c964417b4f",
+        "status": "Official",
+        "title": "Fetenhits: Silvester 2014",
+        "date": "2014-11-21",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9e4afc2f-264d-4cc0-b33b-686ce949fdb1",
+          "title": "Fetenhits: Silvester 2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b496e49b-1efe-434a-96f1-95dccf8b66e2",
+        "status": "Official",
+        "title": "Pure Deep House 3: The Very Best of House & Garage",
+        "date": "2014-12-22",
+        "country": "IE",
+        "disambiguation": "unmixed + mixes",
+        "release_group": {
+          "id": "da1d6832-fffd-4d8d-b3f7-45bb9853e5dc",
+          "title": "Pure Deep House 3: The Very Best of House & Garage",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "DJ-mix"
+          ]
+        }
+      },
+      {
+        "id": "8cdf6b08-1cc4-42ef-bf1d-54f02bd02f59",
+        "status": "Official",
+        "title": "Chartboxx 4/2014",
+        "date": "2014",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d6ae0d59-fa73-4da8-9474-0c92045ad0d0",
+          "title": "Chartboxx 4/2014",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "44ba96a8-2b68-4ee5-b6af-30271bf775d3",
+        "status": "Official",
+        "title": "Mastermix Classic Cuts, Volume 147: Deep House",
+        "date": "2014",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7dc5094e-5a77-49da-aebd-0c53f93facc4",
+          "title": "Mastermix Classic Cuts, Volume 147: Deep House",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c945a5e1-078e-464b-967e-f6aefd941e2a",
+        "status": "Official",
+        "title": "Ultimate Club Anthems",
+        "date": "2014",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3355fb60-4f00-4bbe-b240-ce5f37756c3f",
+          "title": "Ultimate Club Anthems",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7804b633-c4d5-4403-9d1f-8d8f1145b275",
+        "status": "Official",
+        "title": "Sunset Soul",
+        "date": "2015-08-21",
+        "country": "XW",
+        "disambiguation": "unmixed",
+        "release_group": {
+          "id": "ce25b510-9af4-4313-8a32-1dc515714147",
+          "title": "Sunset Soul",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "011505e1-9dfe-49fd-8639-6cb11f65e1b6",
+        "status": "Official",
+        "title": "The Sound of Wireless",
+        "date": "2015",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d26fd373-fe09-404d-a4fb-f700bcf5e7f7",
+          "title": "The Sound of Wireless",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "67e1715a-509a-4d66-8b7e-5a08a485ed5f",
+        "status": "Official",
+        "title": "I Love Summer",
+        "date": "2016-06-17",
+        "country": "GB",
+        "disambiguation": "unmixed tracks",
+        "release_group": {
+          "id": "f19aab63-d2ea-4722-8785-2b8a641b2182",
+          "title": "I Love Summer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "DJ-mix"
+          ]
+        }
+      },
+      {
+        "id": "50e73d94-3d63-48da-a551-6af4d8d7041f",
+        "status": "Official",
+        "title": "I Took a Pill in Ibiza",
+        "date": "2016-07-22",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4327734d-29b7-4c2b-b8ba-17ca72f7a9bb",
+          "title": "I Took a Pill in Ibiza",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ff70a31a-4d94-4ac1-8fee-b666dab0dfb5",
+        "status": "Official",
+        "title": "Pacha Ibiza Classics: Best of 20 Years",
+        "date": "2017",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5ead9488-a258-45ab-b867-3edd1e6df05c",
+          "title": "Pacha Ibiza Classics: Best of 20 Years",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f5786898-a750-41fa-9047-62c7fcccb702",
+        "status": "Official",
+        "title": "Viva Summer",
+        "date": "2018-06-15",
+        "country": "IE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "adf1a724-8233-48ec-a9b4-ba3183b52cb3",
+          "title": "Viva Summer: The Hottest Latino Pop Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bfec7d02-8052-4af5-9a25-86e9c2086738",
+        "status": "Official",
+        "title": "Viva Summer: The Hottest Latino Pop Hits",
+        "date": "2018-06-15",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "adf1a724-8233-48ec-a9b4-ba3183b52cb3",
+          "title": "Viva Summer: The Hottest Latino Pop Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3b5432c6-fedd-4528-a8d6-06b0e8c5f47e",
+        "status": "Official",
+        "title": "101 Hits: Long Hot Summer",
+        "date": "2018-08-10",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e4419f4c-558f-4f52-b0bc-ad3e83ac952f",
+          "title": "101 Hits: Long Hot Summer",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "57023fef-5d32-47bc-bf0f-72d3764ffe18",
+        "status": "Official",
+        "title": "Workout 2019",
+        "date": "2019-08-09",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2a8ae7bd-1180-4c3a-9145-9eef37a2c6cf",
+          "title": "Workout 2019",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "de8e5b90-5504-47f0-8d82-c4bd433bbc70",
+        "status": "Official",
+        "title": "Pure House Anthems",
+        "date": "2019-11-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "14bc750f-69d4-45e1-9d27-420097ae7b8c",
+          "title": "Pure House Anthems",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GB28K1400016?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GB28K1400016",
+    "recordings": [
+      {
+        "id": "61471e9b-8de4-4834-b12d-f6cf6713b124",
+        "title": "Lovers on the Sun",
+        "length": 203520,
+        "disambiguation": "part of “The Only Way Is Essex: Dance Anthems” DJ-mix",
+        "first_release_date": "2014-??-13",
+        "artist_credit": [
+          {
+            "name": "David Guetta",
+            "joinphrase": " feat. "
+          },
+          {
+            "name": "Sam Martin",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "a4b95583-262e-4599-bd98-9415cd2010ce",
+        "title": "Lovers on the Sun",
+        "length": 203000,
+        "disambiguation": "album",
+        "first_release_date": "2014-06-30",
+        "artist_credit": [
+          {
+            "name": "David Guetta",
+            "joinphrase": " feat. "
+          },
+          {
+            "name": "Sam Martin",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/12b86859-ac48-4b8a-850b-0755adc88d8a?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "12b86859-ac48-4b8a-850b-0755adc88d8a",
+    "status": "Official",
+    "title": "Get Lucky",
+    "date": "2013-06-28",
+    "country": "XE",
+    "disambiguation": "made in the EU",
+    "artist_credit": [
+      {
+        "name": "Daft Punk",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Pharrell Williams",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "9b7ce16c-8310-4cc5-aad5-09893a5a8297",
+      "title": "Get Lucky",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Get Lucky",
+            "length": 367000,
+            "artist_credit": [
+              {
+                "name": "Daft Punk",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Pharrell Williams",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "833f00e1-781f-4edd-90e4-e52712618862",
+              "title": "Get Lucky",
+              "length": 369000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Daft Punk",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Pharrell Williams",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Nile Rodgers",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Get Lucky (radio edit)",
+            "length": 248000,
+            "artist_credit": [
+              {
+                "name": "Daft Punk",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Pharrell Williams",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "744787e9-444c-4494-a544-7640dafc0e9d",
+              "title": "Get Lucky",
+              "length": 248000,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Daft Punk",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Pharrell Williams",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/7672ac66-398b-45e8-af78-b78c0788c41c?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "7672ac66-398b-45e8-af78-b78c0788c41c",
+    "status": "Official",
+    "title": "Somewhere Only We Know",
+    "date": "2013-11-10",
+    "country": "XW",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Lily Allen",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "1bbda3a3-959f-4420-a9ae-e229ec519436",
+      "title": "Somewhere Only We Know",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Somewhere Only We Know",
+            "length": 208000,
+            "artist_credit": [
+              {
+                "name": "Lily Allen",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b89531ad-2ef0-4ced-8552-7465b57a1c34",
+              "title": "Somewhere Only We Know",
+              "length": 208154,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Lily Allen",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/bcd54ab6-9552-44cd-a09d-d46a8a374c35?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "bcd54ab6-9552-44cd-a09d-d46a8a374c35",
+    "title": "Payphone",
+    "length": 231640,
+    "disambiguation": "explicit",
+    "isrcs": [
+      "USUM71203347"
+    ],
+    "first_release_date": "2012-04-17",
+    "artist_credit": [
+      {
+        "name": "Maroon 5",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Wiz Khalifa",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "aa431756-a157-4126-a576-77f85e82fa12",
+        "status": "Official",
+        "title": "Payphone",
+        "date": "2012-04-17",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8216c4a7-7295-4f6f-b0a5-5153bf41467b",
+          "title": "Payphone",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "91bfc2bb-b5f1-4e14-91ea-bbd141b5ea96",
+        "status": "Official",
+        "title": "Payphone",
+        "date": "2012-04-17",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8216c4a7-7295-4f6f-b0a5-5153bf41467b",
+          "title": "Payphone",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "69bd5975-d35a-41b4-a274-bd666e56e340",
+        "status": "Official",
+        "title": "So Fresh: The Hits of Winter 2012",
+        "date": "2012-06-15",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c1fe06d7-d958-466e-9c9a-bdbd183904e7",
+          "title": "So Fresh: The Hits of Winter 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "74ea9329-ed93-4d95-bee2-8543f78bfada",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-20",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "49694f0c-77e8-4d80-86b6-3f6a491fcc04",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-20",
+        "country": "CA",
+        "disambiguation": "deluxe edition, explicit",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f9aaa857-7567-4dc1-afca-086601e1db95",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-25",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "16b4835a-0f40-44c3-8f57-703f08a0623e",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-25",
+        "country": "XW",
+        "disambiguation": "Deluxe Version",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c870093e-5d68-4842-a663-291701678229",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "US",
+        "disambiguation": "iTunes bonus tracks",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0701383f-2289-4ee6-8e9e-90e0a731e989",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "US",
+        "disambiguation": "Deluxe, Explicit",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b398c154-5e47-439f-b283-6b1aced5ac5c",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "433666a3-683c-46fa-80f6-2fc869bac7f9",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "US",
+        "disambiguation": "explicit lyrics",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3fbf5706-9a22-4ce8-90c3-4d3559583537",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "CA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d715cffb-769b-4241-ae3d-ae590139f1f2",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "80d285d1-c1e3-4f17-a82a-018bbcb9ab93",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06-26",
+        "country": "US",
+        "disambiguation": "Deluxe, Explicit",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "63dba509-4939-49ae-846d-9ba894c803bb",
+        "status": "Official",
+        "title": "Striscia la compilation Summer 2012",
+        "date": "2012-06-29",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33242139-111a-4250-8308-90145de16312",
+          "title": "Striscia la compilation Summer 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a59eac1d-c402-4f5e-baca-f1dd31cfa357",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-06",
+        "country": "NZ",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e37ce4a9-2d60-4437-b563-521302cbb497",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-07-17",
+        "country": "US",
+        "disambiguation": "Deluxe Version",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "bcc11023-c3e1-46c9-99a7-9394889ef631",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-07-17",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1081ab15-7ff5-47d9-8dfa-487bd74a20f0",
+        "status": "Official",
+        "title": "Beach Party 2012",
+        "date": "2012-07-21",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "79273039-6200-4d5c-90fd-dc70e74f909e",
+          "title": "Beach Party 2012",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "baeeee2b-ae2b-40dd-a74c-d0b4997c920c",
+        "status": "Official",
+        "title": "Bravo Hits 78",
+        "date": "2012-07-27",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "59d5f40e-f287-43c3-99b8-65c641fad6db",
+          "title": "Bravo Hits 78",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "91c4eb83-524d-42bd-8140-316b686b1afb",
+        "status": "Official",
+        "title": "Bravo Hits 78",
+        "date": "2012-07-27",
+        "country": "CH",
+        "disambiguation": "",
+        "release_group": {
+          "id": "59d5f40e-f287-43c3-99b8-65c641fad6db",
+          "title": "Bravo Hits 78",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9d5955c2-4de7-4124-a659-f7d05f986e7b",
+        "status": "Official",
+        "title": "Bravo Hits 78",
+        "date": "2012-07-27",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "59d5f40e-f287-43c3-99b8-65c641fad6db",
+          "title": "Bravo Hits 78",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9d6e5207-aaf8-46d7-858e-3e94b26f1a1b",
+        "status": "Official",
+        "title": "NRJ Extravadance 2012, Volume 2",
+        "date": "2012-07-30",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3f65f9f7-7b64-44f6-a73a-0c28ae0ee7f8",
+          "title": "NRJ Extravadance 2012, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "14570387-5d62-410a-9603-af6cef8a2788",
+        "status": "Official",
+        "title": "Overexposed",
+        "date": "2012-08-14",
+        "country": "KR",
+        "disambiguation": "deluxe version",
+        "release_group": {
+          "id": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+          "title": "Overexposed",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2a006468-1bec-47f4-8c33-21fc3085028b",
+        "status": "Official",
+        "title": "Festivalitis",
+        "date": "2012-08-17",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2f6e00dd-57e6-4b1b-b30d-a32f17f061c0",
+          "title": "Festivalitis",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/USAT21001269?inc=artist-credits+releases&fmt=json": {
+    "isrc": "USAT21001269",
+    "recordings": [
+      {
+        "id": "4658bb93-57c4-4710-86f1-b87869f5781b",
+        "title": "Just the Way You Are",
+        "length": 220586,
+        "disambiguation": "",
+        "first_release_date": "2010-07-20",
+        "artist_credit": [
+          {
+            "name": "Bruno Mars",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "05401478-af04-4e33-8535-2118ad10df9e",
+        "title": "Just the Way You Are",
+        "length": 220000,
+        "disambiguation": "",
+        "first_release_date": "2025-10-03",
+        "artist_credit": [
+          {
+            "name": "Bruno Mars",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "4ec3dd26-cedb-4332-8ff4-b641a88190d8",
+        "title": "Just the Way You Are",
+        "length": 220000,
+        "disambiguation": "",
+        "first_release_date": "2025-10-03",
+        "artist_credit": [
+          {
+            "name": "Bruno Mars",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBAAN0400700?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAAN0400700",
+    "recordings": [
+      {
+        "id": "8a568837-3afd-418c-a262-9de6db07a925",
+        "title": "Vertigo",
+        "length": 193573,
+        "disambiguation": "",
+        "first_release_date": "2005-01-10",
+        "artist_credit": [
+          {
+            "name": "U2",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/USUR10200370?inc=artist-credits+releases&fmt=json": {
+    "isrc": "USUR10200370",
+    "recordings": [
+      {
+        "id": "cebd5dec-ba34-45d1-b3e9-e5dd6e4bc1b6",
+        "title": "Dilemma",
+        "length": 268520,
+        "disambiguation": "",
+        "first_release_date": "2003-12-01",
+        "artist_credit": [
+          {
+            "name": "Nelly",
+            "joinphrase": " feat. "
+          },
+          {
+            "name": "Kelly Rowland",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "f8f6017d-9d25-4b85-8318-05548cba94a1",
+        "title": "Dilemma",
+        "length": 289640,
+        "disambiguation": "explicit",
+        "first_release_date": "2002-06-24",
+        "artist_credit": [
+          {
+            "name": "Nelly",
+            "joinphrase": " featuring "
+          },
+          {
+            "name": "Kelly Rowland",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBAHK9600239?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAHK9600239",
+    "recordings": [
+      {
+        "id": "a6685ec6-2a43-42ee-901d-8b498e3ba868",
+        "title": "I Believe I Can Fly",
+        "length": 321386,
+        "disambiguation": "",
+        "first_release_date": "1996-11-12",
+        "artist_credit": [
+          {
+            "name": "R. Kelly",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/fab2ce33-bb3d-460b-8252-ff1a96542a9f?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "fab2ce33-bb3d-460b-8252-ff1a96542a9f",
+    "status": "Official",
+    "title": "I Believe I Can Fly",
+    "date": "1997-03-17",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "R. Kelly",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "e04d8238-53bb-47a2-b2e2-0a863ef8adbb",
+      "title": "I Believe I Can Fly",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "I Believe I Can Fly (radio edit)",
+            "length": 285800,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "36a4fafa-d2c8-4c5f-9ca1-2ec3fb83e3f0",
+              "title": "I Believe I Can Fly",
+              "length": 283872,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "I Believe I Can Fly (LP version)",
+            "length": 322466,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "a6685ec6-2a43-42ee-901d-8b498e3ba868",
+              "title": "I Believe I Can Fly",
+              "length": 321386,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "I Believe I Can Fly (instrumental)",
+            "length": 322026,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "04f6e7af-ab3c-4142-ba48-d4c5445a2770",
+              "title": "I Believe I Can Fly (instrumental)",
+              "length": 322026,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Religious Love",
+            "length": 251266,
+            "artist_credit": [
+              {
+                "name": "R. Kelly",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1ae0c2aa-45a1-4791-89e5-da1799f9f19d",
+              "title": "Religious Love",
+              "length": 251466,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "R. Kelly",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/c38f3b27-841b-4b88-8e76-448242443bd9?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "c38f3b27-841b-4b88-8e76-448242443bd9",
+    "status": "Official",
+    "title": "Barbie Girl (CD I)",
+    "date": "1997-10-13",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Aqua",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+      "title": "Barbie Girl",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Barbie Girl (radio edit)",
+            "length": 196000,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "5268ded7-3c3c-465b-805f-cb14e407ec2d",
+              "title": "Barbie Girl",
+              "length": 195506,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Barbie Girl (extended version)",
+            "length": 314000,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9354d266-7fbe-402b-b778-5e88919f7456",
+              "title": "Barbie Girl (extended version)",
+              "length": 315933,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Barbie Girl (Perky Park club mix)",
+            "length": 373000,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "6bace406-48c0-4848-b495-c16f7a643ea0",
+              "title": "Barbie Girl (Perky Park club mix)",
+              "length": 374866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Barbie Girl (Spike’s Anatomically Correct dub)",
+            "length": 475000,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b291cd94-b0c8-4158-99fb-dc7824effa2b",
+              "title": "Barbie Girl (Spike’s Anatomically Correct dub)",
+              "length": 475800,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/3e6920a8-0a0b-427e-bab5-57b11b252233?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "3e6920a8-0a0b-427e-bab5-57b11b252233",
+    "status": "Official",
+    "title": "Barbie Girl",
+    "date": "1997-09-02",
+    "country": "US",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Aqua",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+      "title": "Barbie Girl",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Barbie Girl (radio edit)",
+            "length": 198533,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "5268ded7-3c3c-465b-805f-cb14e407ec2d",
+              "title": "Barbie Girl",
+              "length": 195506,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Barbie Girl (Spike’s Plastic mix)",
+            "length": 527426,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "dd7cfc9b-766b-4182-acbe-e0fab225a452",
+              "title": "Barbie Girl (Spike’s Plastic mix)",
+              "length": 527426,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Barbie Girl (Spike’s Anatomically Correct dub)",
+            "length": 479973,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b291cd94-b0c8-4158-99fb-dc7824effa2b",
+              "title": "Barbie Girl (Spike’s Anatomically Correct dub)",
+              "length": 475800,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Barbie Girl (extended version)",
+            "length": 314760,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9354d266-7fbe-402b-b778-5e88919f7456",
+              "title": "Barbie Girl (extended version)",
+              "length": 315933,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/6e911bc1-7318-4379-ad84-e57fca8fe872?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "6e911bc1-7318-4379-ad84-e57fca8fe872",
+    "status": "Official",
+    "title": "Barbie Girl",
+    "date": "1997-09-01",
+    "country": "XE",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Aqua",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+      "title": "Barbie Girl",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Barbie Girl (radio edit)",
+            "length": 198466,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "5268ded7-3c3c-465b-805f-cb14e407ec2d",
+              "title": "Barbie Girl",
+              "length": 195506,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Barbie Girl (extended version)",
+            "length": 316240,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "9354d266-7fbe-402b-b778-5e88919f7456",
+              "title": "Barbie Girl (extended version)",
+              "length": 315933,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Barbie Girl (Perky Park club mix)",
+            "length": 374866,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "6bace406-48c0-4848-b495-c16f7a643ea0",
+              "title": "Barbie Girl (Perky Park club mix)",
+              "length": 374866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Barbie Girl (Spike’s Anatomically Correct dub)",
+            "length": 476426,
+            "artist_credit": [
+              {
+                "name": "Aqua",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b291cd94-b0c8-4158-99fb-dc7824effa2b",
+              "title": "Barbie Girl (Spike’s Anatomically Correct dub)",
+              "length": 475800,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Aqua",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBAHT0200668?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAHT0200668",
+    "recordings": [
+      {
+        "id": "3b02c681-ac29-4452-a0ce-50707c993577",
+        "title": "Return of the Mack (C & J Street mix)",
+        "length": 213093,
+        "disambiguation": "",
+        "first_release_date": "2021-01-22",
+        "artist_credit": [
+          {
+            "name": "Mark Morrison",
+            "joinphrase": " & "
+          },
+          {
+            "name": "Cutfather & Joe",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "074c0960-ac66-4c4c-8945-f735cf88ef3b",
+        "title": "Return of Mack (C&J Street remix)",
+        "length": 210000,
+        "disambiguation": "",
+        "first_release_date": "2017",
+        "artist_credit": [
+          {
+            "name": "Mark Morrison",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "b338ab79-cd19-442d-a5a3-c2086db87e96",
+        "title": "Return of the Mack (C & J radio edit)",
+        "length": 212000,
+        "disambiguation": "",
+        "first_release_date": "1996-03-04",
+        "artist_credit": [
+          {
+            "name": "Mark Morrison",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "b75f46fc-ccb7-4851-a570-1267d5371582",
+        "title": "Return of the Mack",
+        "length": 213000,
+        "disambiguation": "",
+        "first_release_date": "2020-02-21",
+        "artist_credit": [
+          {
+            "name": "Mark Morrison",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/6ac93614-4674-4366-b787-4ad9a39064d7?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "6ac93614-4674-4366-b787-4ad9a39064d7",
+    "title": "Nothing’s Gonna Stop Us Now",
+    "length": 269000,
+    "disambiguation": "",
+    "isrcs": [
+      "USRC18702968",
+      "USRC19101841"
+    ],
+    "first_release_date": "1987-01-30",
+    "artist_credit": [
+      {
+        "name": "Starship",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "7ef7f802-8146-48bb-9e13-183c7420f719",
+        "status": "Official",
+        "title": "Nothing's Gonna Stop Us Now",
+        "date": "1987-01-30",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0ead855b-c017-4403-9f45-8e633d3a8ef8",
+          "title": "Nothing’s Gonna Stop Us Now / Layin’ It on the Line",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ede7f958-fbc8-4e1b-ac86-9c4ae2563d57",
+        "status": "Official",
+        "title": "Nothing’s Gonna Stop Us Now",
+        "date": "1987-03",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0ead855b-c017-4403-9f45-8e633d3a8ef8",
+          "title": "Nothing’s Gonna Stop Us Now / Layin’ It on the Line",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "847bf4a5-29a1-4d6e-ba6e-2c769e85e570",
+        "status": "Official",
+        "title": "No Protection",
+        "date": "1987-07-13",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3e943d0c-ab07-31cb-82ff-f4058e41e179",
+          "title": "No Protection",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5ab56156-bc94-4ae8-a68c-1ecce96ffc4c",
+        "status": "Official",
+        "title": "Het beste uit de Top 40 van ’t jaar ’87",
+        "date": "1987",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0e1ae863-9451-475a-8d45-4962c8ebb89e",
+          "title": "Het beste uit de Top 40 van ’t jaar ’87",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bfd63861-632d-4255-9c00-594d4927ae3a",
+        "status": "Official",
+        "title": "No Protection",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3e943d0c-ab07-31cb-82ff-f4058e41e179",
+          "title": "No Protection",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "46c82b49-c4ee-4dbd-97e9-7839fba5a92b",
+        "status": "Official",
+        "title": "No Protection",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3e943d0c-ab07-31cb-82ff-f4058e41e179",
+          "title": "No Protection",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "434c6457-2b74-4eba-9125-4942228794a3",
+        "status": "Official",
+        "title": "No Protection",
+        "date": "1987",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3e943d0c-ab07-31cb-82ff-f4058e41e179",
+          "title": "No Protection",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "632a2e60-3809-4d75-bdc9-19710f7a9d01",
+        "status": "Official",
+        "title": "No Protection",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "made in Japan",
+        "release_group": {
+          "id": "3e943d0c-ab07-31cb-82ff-f4058e41e179",
+          "title": "No Protection",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4927955d-0ce0-46c3-b20c-718825179b37",
+        "status": "Official",
+        "title": "No Protection",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3e943d0c-ab07-31cb-82ff-f4058e41e179",
+          "title": "No Protection",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2fcdb86b-19f9-45e1-b76e-42e4358b2872",
+        "status": "Official",
+        "title": "Nothing’s Gonna Stop Us Now",
+        "date": "1987",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0ead855b-c017-4403-9f45-8e633d3a8ef8",
+          "title": "Nothing’s Gonna Stop Us Now / Layin’ It on the Line",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "186bbaf8-38a7-48f4-86a7-5b4032d923b3",
+        "status": "Official",
+        "title": "Nothing’s Gonna Stop Us Now / Layin’ It on the Line",
+        "date": "1987",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0ead855b-c017-4403-9f45-8e633d3a8ef8",
+          "title": "Nothing’s Gonna Stop Us Now / Layin’ It on the Line",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "46e51a7c-e232-410a-a438-0b83c2f9b371",
+        "status": "Official",
+        "title": "The Hits Album 6",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "95ebfeb1-290f-352c-a212-8dd7a37e0b14",
+          "title": "The Hits Album 6",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1813896a-dcc4-468b-9aa9-d1bd4255cbd3",
+        "status": "Official",
+        "title": "The Hits Album 6",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "95ebfeb1-290f-352c-a212-8dd7a37e0b14",
+          "title": "The Hits Album 6",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c302f657-8bf9-437f-b44c-8769cd9537dd",
+        "status": "Official",
+        "title": "The Hits Tape 6",
+        "date": "1987",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "95ebfeb1-290f-352c-a212-8dd7a37e0b14",
+          "title": "The Hits Album 6",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8903d483-9c7e-4f27-82f0-565fe1eaeea9",
+        "status": "Official",
+        "title": "Love Songs",
+        "date": "1988",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c10ab90b-04d2-3910-bda1-3d6f2193a04a",
+          "title": "Love Songs",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "502a5fd7-d5d7-44df-8da3-131eb5656168",
+        "status": "Official",
+        "title": "Love Songs",
+        "date": "1988",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c10ab90b-04d2-3910-bda1-3d6f2193a04a",
+          "title": "Love Songs",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "aec0f64e-c5fb-4e6d-928e-853030b478d3",
+        "status": "Official",
+        "title": "Cadillac Style: Nineteen Hundred Ninety",
+        "date": "1989",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7710c541-7c2c-4736-ac1a-8ec0cf9290d5",
+          "title": "Cadillac Style: Nineteen Hundred Ninety",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4e605e3a-a2d0-36a1-a101-b647bc89eb48",
+        "status": "Official",
+        "title": "Precious Metal",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2e8f1531-e04b-3015-b3a7-55cd48bd10a0",
+          "title": "Precious Metal",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "88ce49cb-37b8-3c53-81a7-775ae61d99c4",
+        "status": "Official",
+        "title": "Precious Metal",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2e8f1531-e04b-3015-b3a7-55cd48bd10a0",
+          "title": "Precious Metal",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a019df89-8419-42f5-a1cc-33c3f9f4ce28",
+        "status": "Official",
+        "title": "Precious Metal",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "2e8f1531-e04b-3015-b3a7-55cd48bd10a0",
+          "title": "Precious Metal",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "78c7ebab-65ad-4060-b392-f0a75b049d6c",
+        "status": "Official",
+        "title": "Soft Rock",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "72570474-307c-4266-bb12-5a2c2645a28a",
+          "title": "Soft Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cd6cbe42-1757-477d-b6d3-250e7c45d109",
+        "status": "Official",
+        "title": "The Greatest Hits of the 80s",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "231dd215-5e8d-367b-82f0-c34012e7c89d",
+          "title": "The Greatest Hits of the 80s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b49d6020-e820-4d2e-9ab2-4fc1b14c6e4e",
+        "status": "Official",
+        "title": "The Greatest Hits of the Eighties",
+        "date": "1989",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "231dd215-5e8d-367b-82f0-c34012e7c89d",
+          "title": "The Greatest Hits of the 80s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a0c217d7-019d-404c-96bf-ddd8aefcf8ef",
+        "status": "Official",
+        "title": "30 Years of Number 1s, Volume 11: 1983-1986",
+        "date": "1990",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "13f96c78-ffc0-3fdb-926d-acf6cc7ef5af",
+          "title": "30 Years of Number 1s, Volume 11: 1983-1986",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e33d3122-bfd5-41c8-8cb4-c897797ca3d2",
+        "status": "Official",
+        "title": "Love Time, 3",
+        "date": "1990",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "23ccf714-2d22-4c7b-a5bc-6c536a800990",
+          "title": "Love Time, 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBBBM8602005?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBBBM8602005",
+    "recordings": [
+      {
+        "id": "dba5b89a-970a-4b5d-bd1c-d494f37452e3",
+        "title": "A Different Corner",
+        "length": 241000,
+        "disambiguation": "",
+        "first_release_date": "1986-04-02",
+        "artist_credit": [
+          {
+            "name": "George Michael",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/USSM19801613?inc=artist-credits+releases&fmt=json": {
+    "isrc": "USSM19801613",
+    "recordings": [
+      {
+        "id": "f45c5a92-c668-4070-a078-4f11c397b8c2",
+        "title": "Take My Breath Away",
+        "length": 252386,
+        "disambiguation": "",
+        "first_release_date": "1986-05-07",
+        "artist_credit": [
+          {
+            "name": "Berlin",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/f45c5a92-c668-4070-a078-4f11c397b8c2?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "f45c5a92-c668-4070-a078-4f11c397b8c2",
+    "title": "Take My Breath Away",
+    "length": 252386,
+    "disambiguation": "",
+    "isrcs": [
+      "USSM18600569",
+      "USSM19801613",
+      "USSM19900414",
+      "USSM19904146"
+    ],
+    "first_release_date": "1986-05-07",
+    "artist_credit": [
+      {
+        "name": "Berlin",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "17964ccc-ec63-4a8b-9f0f-6166b71d070e",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986-05-07",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "754a9639-5714-48cd-95c3-b7a9a588710c",
+        "status": "Official",
+        "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+        "date": "1986-10",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "73eae75b-cd2f-4e2c-be82-a095a1586d8c",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "44e5c631-334d-4352-b512-e581a02417a6",
+        "status": "Official",
+        "title": "Count Three & Pray",
+        "date": "1986-11-18",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aced2c4e-ef55-39ae-aaef-38681192c5d7",
+          "title": "Count Three & Pray",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ed9b3d94-ab2f-39f1-b0d4-3ffcc3d0d522",
+        "status": "Official",
+        "title": "Count Three & Pray",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aced2c4e-ef55-39ae-aaef-38681192c5d7",
+          "title": "Count Three & Pray",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "d0b299e2-b3fb-4f02-af14-f25f72009e2c",
+        "status": "Official",
+        "title": "Count Three & Pray",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aced2c4e-ef55-39ae-aaef-38681192c5d7",
+          "title": "Count Three & Pray",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6cacffb0-46d4-43a9-87e9-d4121227f757",
+        "status": "Official",
+        "title": "Count Three & Pray",
+        "date": "1986",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aced2c4e-ef55-39ae-aaef-38681192c5d7",
+          "title": "Count Three & Pray",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6281811f-4b97-421b-9647-a834f626fb2d",
+        "status": "Official",
+        "title": "Count Three & Pray",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "aced2c4e-ef55-39ae-aaef-38681192c5d7",
+          "title": "Count Three & Pray",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f39c5469-0fef-4891-809b-82e97913f028",
+        "status": "Official",
+        "title": "Ronny’s Pop Show: 24 Super Chart Hits",
+        "date": "1986",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "24a5afce-9ef4-4481-80bb-c60d84066302",
+          "title": "Ronny’s Pop Show: 24 Super Chart Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "99edbb75-3842-4802-a624-32d812ff138c",
+        "status": "Official",
+        "title": "Summer ’87",
+        "date": "1986",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "519a48da-faf1-4285-abb8-af4400336984",
+          "title": "Summer ’87",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a5b76849-0458-4790-8fd2-511248177681",
+        "status": "Official",
+        "title": "Take My Breath Away",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "73eae75b-cd2f-4e2c-be82-a095a1586d8c",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "f9b5e798-1e37-4441-8ee7-b7cb35b7e789",
+        "status": "Official",
+        "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+        "date": "1986",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "73eae75b-cd2f-4e2c-be82-a095a1586d8c",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "810ebe77-1ea1-467e-a0e6-db1e78550985",
+        "status": "Official",
+        "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+        "date": "1986",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "73eae75b-cd2f-4e2c-be82-a095a1586d8c",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "1d9a50c5-d99c-4e3e-a00b-c4d84798e27e",
+        "status": "Official",
+        "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+        "date": "1986",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "73eae75b-cd2f-4e2c-be82-a095a1586d8c",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”)",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "498cdb02-76db-4fa4-ae08-46525d07da80",
+        "status": "Official",
+        "title": "Take My Breath Away (Love Theme From “Top Gun”) / Danger Zone",
+        "date": "1986",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "40a41777-bd3a-4909-acdf-03a780188db9",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”) / Danger Zone",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "960ba6d4-7ecf-475c-8a1c-6fe126a28409",
+        "status": "Official",
+        "title": "Take My Breath Away / Danger Zone",
+        "date": "1986",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "40a41777-bd3a-4909-acdf-03a780188db9",
+          "title": "Take My Breath Away (Love Theme From “Top Gun”) / Danger Zone",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "3f4b367c-6c41-4579-ad4d-72bacfc02ce8",
+        "status": "Official",
+        "title": "Take My Breath Away / Mighty Wings",
+        "date": "1986",
+        "country": "EC",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5e5cd16e-e3fa-4175-993a-ee9abac419f7",
+          "title": "Take My Breath Away / Mighty Wings",
+          "primary_type": "Single",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "66d7c1a7-91e8-463f-b635-11b7df10ec11",
+        "status": "Bootleg",
+        "title": "Top Gun: Complete Original Motion Picture Score",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "4a952f29-bc0e-48a3-a6ec-f8260aaede90",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "Carrollton pressing",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "386e1bd4-4149-496a-9e27-e054869690b2",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "CA",
+        "disambiguation": "Club Edition",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "c5b91693-3bda-43f2-96b1-41c9489acf50",
+        "status": "Bootleg",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ea44a36b-95c0-4848-b0ae-cf95f983eec4",
+          "title": "Top Gun: Music From the Motion Picture",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "680ac041-684b-42b0-bc7f-756d4e1312e6",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "fa27abc9-9918-489c-908b-89c060239bf2",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "made in Japan",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "30573dd3-aea3-4e71-851c-566d0e99015f",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "906e21b5-2101-30be-941c-026c2b3e4af3",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      },
+      {
+        "id": "722803ba-949b-4d4e-99d5-3d2198f74305",
+        "status": "Official",
+        "title": "Top Gun: Original Motion Picture Soundtrack",
+        "date": "1986",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f99cc09c-c080-46d5-90ed-60511d941c51",
+          "title": "Top Gun: Original Motion Picture Soundtrack",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "Soundtrack"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/AUSM08100002?inc=artist-credits+releases&fmt=json": {
+    "isrc": "AUSM08100002",
+    "recordings": [
+      {
+        "id": "78c2a211-1c63-48f1-ad20-28b70eb98491",
+        "title": "Down Under",
+        "length": 221760,
+        "disambiguation": "",
+        "first_release_date": "1981-11-09",
+        "artist_credit": [
+          {
+            "name": "Men at Work",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "8ac43c1e-f34a-4f2a-b41c-e4c769016305",
+        "title": "Down Under",
+        "length": 205720,
+        "disambiguation": "",
+        "first_release_date": "1981",
+        "artist_credit": [
+          {
+            "name": "Men at Work",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/f50edec0-5dfb-4715-a4be-53b0f032f76a?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "f50edec0-5dfb-4715-a4be-53b0f032f76a",
+    "status": "Official",
+    "title": "If You Leave Me Now",
+    "date": "1976-07",
+    "country": "US",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Chicago",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "6d53aba8-8707-3659-b6ff-9a6757379520",
+      "title": "If You Leave Me Now",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "If You Leave Me Now",
+            "length": 233000,
+            "artist_credit": [
+              {
+                "name": "Chicago",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "7e42ec62-b028-4de4-b0cc-63874bfae34c",
+              "title": "If You Leave Me Now",
+              "length": 235240,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Chicago",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Together Again",
+            "length": 227000,
+            "artist_credit": [
+              {
+                "name": "Chicago",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "8f31787d-2d5f-4ea2-848a-f1a3807eb96a",
+              "title": "Together Again",
+              "length": 233200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Chicago",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/USMC17503920?inc=artist-credits+releases&fmt=json": {
+    "isrc": "USMC17503920",
+    "recordings": [
+      {
+        "id": "b7005dad-f361-41d4-a54d-803cc457a7dd",
+        "title": "You're the First, the Last, My Everything",
+        "length": 161000,
+        "disambiguation": "",
+        "first_release_date": "1975-04",
+        "artist_credit": [
+          {
+            "name": "Brenda Lee",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBAYE7400041?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAYE7400041",
+    "recordings": [
+      {
+        "id": "2c63359c-1b1b-44db-a4f2-977620cf15cb",
+        "title": "Lonely This Christmas",
+        "length": 213133,
+        "disambiguation": "",
+        "first_release_date": "1998",
+        "artist_credit": [
+          {
+            "name": "Mud",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "238fe0f9-5eb5-4742-bcb2-a75dc4a32d84",
+        "title": "Lonely This Christmas",
+        "length": 213746,
+        "disambiguation": "",
+        "first_release_date": "1974-11",
+        "artist_credit": [
+          {
+            "name": "Mud",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "45beaff1-36ce-4771-9be6-44fe68c2e86e",
+        "title": "Lonely This Christmas",
+        "length": 213160,
+        "disambiguation": "",
+        "first_release_date": "2026-11-08",
+        "artist_credit": [
+          {
+            "name": "Mud",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBF076520010?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBF076520010",
+    "recordings": [
+      {
+        "id": "ae81e0fa-1636-46ce-a899-6a7d2e744c84",
+        "title": "It’s Not Unusual",
+        "length": 120240,
+        "disambiguation": "",
+        "first_release_date": "1965-01",
+        "artist_credit": [
+          {
+            "name": "Tom Jones",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/ecc86000-29fd-4c2b-91ef-570501106cce?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "ecc86000-29fd-4c2b-91ef-570501106cce",
+    "status": "Official",
+    "title": "Spaceman",
+    "date": "1995",
+    "country": "US",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Babylon Zoo",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "febc7c6b-413a-3769-8abd-f136d552b87e",
+      "title": "Spaceman",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Spaceman (radio edit)",
+            "length": 249000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d96495c5-7406-4e18-ba76-6c70af484cf5",
+              "title": "Spaceman",
+              "length": 241320,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Metal Vision",
+            "length": 232000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1a718633-dbd4-4e01-8ac2-87f331c3bad0",
+              "title": "Metal Vision",
+              "length": 230866,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Blue Nude",
+            "length": 134000,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "4673c53b-db4c-4d13-9231-77db71ef220c",
+              "title": "Blue Nude",
+              "length": 132266,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Spaceman (the 5th dimension)",
+            "length": 310200,
+            "artist_credit": [
+              {
+                "name": "Babylon Zoo",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ba9ce204-643b-4b3f-8f1f-ca87f2abe529",
+              "title": "Spaceman (The 5th Dimension)",
+              "length": 310200,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Babylon Zoo",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

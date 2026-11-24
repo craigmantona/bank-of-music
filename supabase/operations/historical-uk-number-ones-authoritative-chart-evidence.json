@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-11-24T00:00:00.000Z",
+  "source": "Official Charts song pages",
+  "entries": {
+    "1996": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/clean-bandit-ft-zara-larsson-symphony/",
+      "catalogue_number": "GBAHS1700199",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "1968": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/wiz-khalifa-ft-charlie-puth-see-you-again/",
+      "catalogue_number": "USAT21500313",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "1979": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/sigala-easy-love/",
+      "catalogue_number": "GBCEN1500481",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "1913": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/avicii-wake-me-up/",
+      "catalogue_number": "SEUM71301326",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "1959": {
+      "status": "identity_conflict",
+      "url": "https://www.officialcharts.com/songs/gareth-malones-all-star-choir-wake-me-up/",
+      "catalogue_number": "GBUM71405821",
+      "notes": "Stored source ISRC belongs to Avicii's recording and conflicts with the named Gareth Malone recording."
+    },
+    "1545": {
+      "status": "identity_conflict",
+      "url": "https://www.officialcharts.com/songs/flo-rida-ft-kesha-right-round/",
+      "catalogue_number": "MIUCT4740",
+      "notes": "Official Charts catalogue value conflicts with the stored source hint; do not auto-match."
+    },
+    "1522": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/sean-kingston-beautiful-girls/",
+      "catalogue_number": "USSM10701781",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "1467": {
+      "status": "identity_conflict",
+      "url": "https://www.officialcharts.com/songs/eric-prydz-call-on-me/",
+      "catalogue_number": "GBCEN0400133",
+      "notes": "Official Charts ISRC conflicts with the stored source hint GBCEN0400130."
+    },
+    "1437": {
+      "status": "non_isrc_catalogue",
+      "url": "https://www.officialcharts.com/songs/blu-cantrell-ft-sean-paul-breathe-0/",
+      "catalogue_number": "82876545722",
+      "notes": "Official Charts exposes a physical catalogue number, not an ISRC; independent recording evidence remains incomplete."
+    },
+    "1418": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/nelly-ft-kelly-rowland-dilemma/",
+      "catalogue_number": "USUR10200370",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "180": {
+      "status": "non_isrc_catalogue",
+      "url": "https://www.officialcharts.com/songs/atb-9pm-till-i-come-0/",
+      "catalogue_number": "DED579805190",
+      "notes": "Official Charts exposes a physical catalogue number, not an ISRC; independent recording evidence remains incomplete."
+    },
+    "191": {
+      "status": "non_isrc_catalogue",
+      "url": "https://www.officialcharts.com/songs/geri-halliwell-lift-me-up/",
+      "catalogue_number": "CDEM554",
+      "notes": "Official Charts exposes a physical catalogue number, not an ISRC; independent recording evidence remains incomplete."
+    },
+    "107": {
+      "status": "chart_identity_only",
+      "url": "https://www.officialcharts.com/songs/prodigy-breathe/",
+      "catalogue_number": "GBBKS9700074",
+      "notes": "Official Charts identity and ISRC agree; MusicBrainz recording and exact official-release track evidence remain required."
+    },
+    "45": {
+      "status": "identity_conflict",
+      "url": "https://www.officialcharts.com/songs/2-unlimited-no-limit/",
+      "catalogue_number": "NLI749200030",
+      "notes": "Official Charts exposes a different ISRC from the stored source hint BEAA19305003."
+    }
+  }
+}
