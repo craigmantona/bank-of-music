@@ -1,0 +1,3399 @@
+{
+  "https://musicbrainz.org/ws/2/recording/ff554e54-309b-40db-b564-0837b78d8516?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "ff554e54-309b-40db-b564-0837b78d8516",
+    "title": "Raindance",
+    "length": 219743,
+    "disambiguation": "",
+    "isrcs": [
+      "GBUM72506029",
+      "GBUV72600013"
+    ],
+    "first_release_date": "2025-10-24",
+    "artist_credit": [
+      {
+        "name": "Dave",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Tems",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "fcfc37b7-183d-4d02-af46-1c0d15845a15",
+        "status": "Official",
+        "title": "The Boy Who Played the Harp",
+        "date": "2025-10-24",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "294a95df-6261-4f19-bbd1-0057baf0bd4d",
+          "title": "The Boy Who Played the Harp",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "21a413eb-1756-4093-a7a6-a547926171fe",
+        "status": "Official",
+        "title": "The Boy Who Played the Harp",
+        "date": "2025-10-24",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "294a95df-6261-4f19-bbd1-0057baf0bd4d",
+          "title": "The Boy Who Played the Harp",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "013ef7ec-2da8-4fa6-8e68-ebfa6af72f95",
+        "status": "Official",
+        "title": "The Boy Who Played the Harp",
+        "date": "2025-10-24",
+        "country": "",
+        "disambiguation": "24-Bit/48 kHz",
+        "release_group": {
+          "id": "294a95df-6261-4f19-bbd1-0057baf0bd4d",
+          "title": "The Boy Who Played the Harp",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2004f952-58d6-4f8e-8b4e-ee61f3e13f11",
+        "status": "Official",
+        "title": "The Boy Who Played the Harp",
+        "date": "2025-10-24",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "294a95df-6261-4f19-bbd1-0057baf0bd4d",
+          "title": "The Boy Who Played the Harp",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "13b0dfb8-ebf8-40c6-9679-90ae684f9a63",
+        "status": "Official",
+        "title": "Raindance",
+        "date": "2026-01-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1712331b-1f32-4bb7-80e7-b827c840ff91",
+          "title": "Raindance",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0482bd92-f135-4a2e-b66e-b53758de67a0",
+        "status": "Official",
+        "title": "Sommerhits 2026",
+        "date": "2026-05-08",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5cc469b2-0c3e-48ad-b7c9-e1ce46042213",
+          "title": "Sommerhits 2026",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "688adea1-886d-4343-9fd4-d8ac8542b431",
+        "status": "Official",
+        "title": "Vacation 2026",
+        "date": "2026-05-09",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a98987d0-3937-42dc-ac91-373b392ec543",
+          "title": "Vacation 2026",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "6ea72c2b-b77a-4948-81d6-7e6f8b51be45",
+        "status": "Official",
+        "title": "Dance/Electro Hits",
+        "date": "2026-05-22",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "332498dd-dff2-481d-a8e4-a970e6172834",
+          "title": "Dance/Electro Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b4e5380b-7755-4bc8-baec-03f890eca296",
+        "status": "Official",
+        "title": "what i imagined music at the club would be like when i was 8",
+        "date": "2026-05-22",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "11c9fd23-9d58-4418-8754-1b3f0bd38857",
+          "title": "what i imagined music at the club would be like when i was 8",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ab30f481-09d5-4cd2-b6f5-e699566dfcc9",
+        "status": "Official",
+        "title": "Sommerfest",
+        "date": "2026-06-05",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3de9ba9a-308e-467d-aea0-2456a3eff66d",
+          "title": "Sommerfest",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "62a4b09b-e56d-4684-9ef7-516ce44db724",
+        "status": "Official",
+        "title": "100% Pop",
+        "date": "2026-07-15",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a37f51b8-c4bd-4ac3-b2f4-d4d8d9252189",
+          "title": "100% Pop",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "85ddd336-25b7-4148-b0f6-3f03ddc38912",
+        "status": "Official",
+        "title": "Sunday Vibes Weekend Chill",
+        "date": "2026-07-17",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "c53987a7-7966-4f3e-a005-5f4d259a9f58",
+          "title": "Sunday Vibes Weekend Chill",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "46b65b31-0eb4-4ed0-b922-48401574cac7",
+        "status": "Official",
+        "title": "Die besten Songs 2026",
+        "date": "2026-08-07",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a6b8b65c-0ff9-4de7-8ced-27ddbfdb0651",
+          "title": "Die besten Songs 2026",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ffd140e2-464d-49da-b27d-64c25a0b0bc5",
+        "status": "Official",
+        "title": "Back to School 2026",
+        "date": "2026-08-14",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1e96ac57-33b9-42cd-8a5b-200b457e508e",
+          "title": "Back to School 2026",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/DEUM72504276?inc=artist-credits+releases&fmt=json": {
+    "isrc": "DEUM72504276",
+    "recordings": [
+      {
+        "id": "949385ab-a15d-4805-bfbe-beddd4ae4cc4",
+        "title": "Survive",
+        "length": 225000,
+        "disambiguation": "",
+        "first_release_date": "2025-06-27",
+        "artist_credit": [
+          {
+            "name": "Lewis Capaldi",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/0a68d693-7f67-418b-bd5c-5cc9337ab332?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "0a68d693-7f67-418b-bd5c-5cc9337ab332",
+    "title": "I Took A Pill In Ibiza",
+    "length": 280800,
+    "disambiguation": "",
+    "isrcs": [
+      "USUM71503636"
+    ],
+    "first_release_date": "2021-02-05",
+    "artist_credit": [
+      {
+        "name": "Mike Posner",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "1c0f9806-4f66-438c-a225-020fc4b24d1b",
+        "status": "Official",
+        "title": "Chillax",
+        "date": "2021-02-05",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "34152b6b-92ef-46c1-b7a9-9c55cc10283c",
+          "title": "Chillax",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/1eec2bb4-a241-4321-a433-4819b132a449?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "1eec2bb4-a241-4321-a433-4819b132a449",
+    "status": "Official",
+    "title": "Waiting All Night",
+    "date": "2013-04-14",
+    "country": "XW",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Rudimental",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "cbb81f42-2336-41f2-9df4-02af8710de61",
+      "title": "Waiting All Night",
+      "primary_type": "EP",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Waiting All Night",
+            "length": 292587,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Ella Eyre",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "b3e47ce7-875d-427a-9d7f-e113aeb22b23",
+              "title": "Waiting All Night",
+              "length": 292586,
+              "disambiguation": "album version",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Ella Eyre",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Baby",
+            "length": 240000,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "MNEK",
+                "joinphrase": " & "
+              },
+              {
+                "name": "Sinéad Harnett",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "f1d4662b-e275-48cc-b77f-7c90ee86a4ef",
+              "title": "Baby",
+              "length": 240226,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "MNEK",
+                  "joinphrase": " & "
+                },
+                {
+                  "name": "Sinéad Harnett",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Right Here (Andy C remix)",
+            "length": 271000,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "7d15aba4-5733-4eb7-998e-f6462f3fc3e3",
+              "title": "Right Here (Andy C remix)",
+              "length": 271000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 4,
+            "number": "4",
+            "title": "Hell Could Freeze (Skream remix)",
+            "length": 268005,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "44d37ef9-a82c-43e3-abe7-e1a92df510d0",
+              "title": "Hell Could Freeze (Skream remix)",
+              "length": 391000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Angel Haze",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 5,
+            "number": "5",
+            "title": "Waiting All Night (Kidnap Kid remix)",
+            "length": 391031,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "13c5bd93-bf21-4628-9513-3cd5b8f64610",
+              "title": "Waiting All Night (Kidnap Kid remix)",
+              "length": 268000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Ella Eyre",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 6,
+            "number": "6",
+            "title": "Waiting All Night (Clean Bandit remix)",
+            "length": 303606,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "254a99d5-e3ec-46dd-a2f8-b3837610fc56",
+              "title": "Waiting All Night (Clean Bandit remix)",
+              "length": 237000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Ella Eyre",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 7,
+            "number": "7",
+            "title": "Waiting All Night (Lee Foss remix)",
+            "length": 237488,
+            "artist_credit": [
+              {
+                "name": "Rudimental",
+                "joinphrase": " feat. "
+              },
+              {
+                "name": "Ella Eyre",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "7c80418a-d10a-4690-a101-298348904fca",
+              "title": "Waiting All Night (Lee Foss remix)",
+              "length": 237488,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Rudimental",
+                  "joinphrase": " feat. "
+                },
+                {
+                  "name": "Ella Eyre",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBARL1100728?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBARL1100728",
+    "recordings": [
+      {
+        "id": "51fe96c7-0fe0-49be-bd22-4906b8c3d327",
+        "title": "Heart Skips a Beat",
+        "length": 202000,
+        "disambiguation": "",
+        "first_release_date": "2011-08-21",
+        "artist_credit": [
+          {
+            "name": "Olly Murs",
+            "joinphrase": " feat. "
+          },
+          {
+            "name": "Rizzle Kicks",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/8bef9c82-26f9-49ab-ae14-1da303e73abf?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "8bef9c82-26f9-49ab-ae14-1da303e73abf",
+    "title": "Sexy Chick",
+    "length": 193973,
+    "disambiguation": "clean",
+    "isrcs": [
+      "FRZID0900930"
+    ],
+    "first_release_date": "2009-08-24",
+    "artist_credit": [
+      {
+        "name": "David Guetta",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Akon",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "654f2d99-f151-4387-9b58-dc791cdf1b1e",
+        "status": "Official",
+        "title": "One Love",
+        "date": "2009-08-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1fd6e5d5-564c-4924-ae01-b4677c50d866",
+          "title": "One Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "aebc5b11-7857-4184-ba51-5b3fcdc44c99",
+        "status": "Official",
+        "title": "One Love",
+        "date": "2009-08-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1fd6e5d5-564c-4924-ae01-b4677c50d866",
+          "title": "One Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8477a0ec-59bc-4614-ab1f-52e983553dc7",
+        "status": "Official",
+        "title": "Sexy Bitch",
+        "date": "2009-08",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a237f8e-29fb-4d7f-aa89-1e9dc6d69209",
+          "title": "Sexy Bitch",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "eb348981-8b6f-471a-a7ef-787011afd083",
+        "status": "Official",
+        "title": "Sexy Chick",
+        "date": "2009-09-13",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a237f8e-29fb-4d7f-aa89-1e9dc6d69209",
+          "title": "Sexy Bitch",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "89d556a6-26fd-4063-b17f-b7dd4f30ec4f",
+        "status": "Promotion",
+        "title": "Promo Only: Mainstream Radio, October 2009",
+        "date": "2009-09-17",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1fe73938-ab48-44cb-877a-7a8457639fb6",
+          "title": "Promo Only: Mainstream Radio, October 2009",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f58a22db-fcc5-4c81-9e8f-c6c8569e9f19",
+        "status": "Official",
+        "title": "Now Dance Anthems",
+        "date": "2009-09-21",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9fb87f3a-7bcf-41bd-981f-40bae9690709",
+          "title": "Now Dance Anthems",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2ead0a1d-a785-41f7-82f9-b93b20d301d6",
+        "status": "Promotion",
+        "title": "Promo Only: Dance Radio, September 2009",
+        "date": "2009-09",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "59044a43-7db0-49ea-8274-9601cba60157",
+          "title": "Promo Only: Dance Radio, September 2009",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "079a2c8c-232b-496e-ad17-093a987a5079",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 32",
+        "date": "2009-11-03",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "63ccddca-608c-4700-9d08-1b2348e1ff0a",
+          "title": "Now That’s What I Call Music! 32",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "39a10d35-44d2-33cd-941e-9f5164ae95e4",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 74",
+        "date": "2009-11-23",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d5d887f5-c36e-46d9-b1f6-b6e493727f58",
+          "title": "Now That’s What I Call Music! 74",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5609b06b-e5b1-4804-bc2c-ac389e82567c",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 74",
+        "date": "2009-11-23",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d5d887f5-c36e-46d9-b1f6-b6e493727f58",
+          "title": "Now That’s What I Call Music! 74",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c8bb219f-3455-47c5-a6ed-58feccd82553",
+        "status": "Official",
+        "title": "NOW: The Hits of Summer 2010",
+        "date": "2009-12-06",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "613f0276-0003-40e3-9af6-e09e7858277d",
+          "title": "NOW: The Hits of Summer 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ec531eea-42be-4f81-bd75-c71fb81c45b0",
+        "status": "Official",
+        "title": "NOW the Hits of Summer 2010",
+        "date": "2009-12-15",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "613f0276-0003-40e3-9af6-e09e7858277d",
+          "title": "NOW: The Hits of Summer 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f70b81ba-3d13-4d21-896c-d59e2dd06ea0",
+        "status": "Official",
+        "title": "Absolute Dance Winter 2010",
+        "date": "2009-12-30",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "fd289ccd-5fd8-40fc-abae-089246f86239",
+          "title": "Absolute Dance Winter 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cbd3bd93-6cfb-49dd-a783-252c8eda4074",
+        "status": "Official",
+        "title": "Freedom",
+        "date": "2009",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ea2687ed-ae65-30ec-b475-bfc7a3d6be7b",
+          "title": "Freedom",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f2e6a6d0-d2e9-454c-bba7-3a911f8104d8",
+        "status": "Promotion",
+        "title": "Sexy Bitch",
+        "date": "2009",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a237f8e-29fb-4d7f-aa89-1e9dc6d69209",
+          "title": "Sexy Bitch",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9518fd85-fe70-4acd-b1ea-d5cee50a005d",
+        "status": "Promotion",
+        "title": "Sexy Bitch",
+        "date": "2009",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a237f8e-29fb-4d7f-aa89-1e9dc6d69209",
+          "title": "Sexy Bitch",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c50ba044-47cb-49d9-bf95-7f3563a5e8f4",
+        "status": "Official",
+        "title": "Brit Awards With Mastercard 2010",
+        "date": "2010-02-08",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "08d40b2b-c7e6-4f69-8785-ce1b488fe5f8",
+          "title": "Brit Awards With Mastercard 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "67b72f2b-0730-4cfd-9ac2-2fc0e8948fcf",
+        "status": "Official",
+        "title": "Floorfillers: Party Anthems 2010",
+        "date": "2010-07-20",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e29ce6d4-3685-43ff-b35f-cdce3e0bc092",
+          "title": "Floorfillers: Party Anthems 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "fc0d3b97-d789-432a-9405-c6108342b6fb",
+        "status": "Official",
+        "title": "Happy Songs",
+        "date": "2010-08-16",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "15ede0ed-c390-468e-8405-ec080a7f9a9e",
+          "title": "Happy Songs",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0e10db7a-00c0-4e13-b08d-bf7018860cd6",
+        "status": "Official",
+        "title": "The Very Best of Now Dance 2010",
+        "date": "2010-10-18",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9d49efab-30bf-4072-b7b5-18e34ec4ae0c",
+          "title": "The Very Best of Now Dance 2010",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "17f5bf78-4276-41ef-a7b3-7075f2dae9c0",
+        "status": "Official",
+        "title": "The Love Junkie 3",
+        "date": "2011",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "84c024b6-dee1-4d5e-a1dc-5ba1ca4a95b5",
+          "title": "The Love Junkie 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e3d6043e-24b8-4c5a-b3d0-960096d615ba",
+        "status": "Official",
+        "title": "Clubbing Like It’s the 2000s",
+        "date": "2025-04-30",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "4c145ef5-9a6d-4de1-9efc-7a87f3605761",
+          "title": "Clubbing Like It’s the 2000s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "eb7f24c2-1aca-4df1-a666-3eb63cd30b4c",
+        "status": "Official",
+        "title": "One Love",
+        "date": "",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1fd6e5d5-564c-4924-ae01-b4677c50d866",
+          "title": "One Love",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "21d41a8a-8124-49f6-85d7-ed91faa6bb5f",
+        "status": "Official",
+        "title": "The No.1 DJ Collection: 2000's, Volume 14",
+        "date": "",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3a66e483-efda-4204-bd00-d89a1dc7a26d",
+          "title": "The No.1 DJ Collection: 2000's, Volume 14",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "67942f35-5e22-4708-a9e8-222d19534a7f",
+        "status": "Official",
+        "title": "The No.1 DJ Collection: 2000s (Digital Collection)",
+        "date": "",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ce01f030-ffc3-4cd0-8bdf-e8296c160de8",
+          "title": "The No.1 DJ Collection: 2000s (Digital Collection)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/192333bd-5f71-4d0e-9356-f4bf2ff848c5?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "192333bd-5f71-4d0e-9356-f4bf2ff848c5",
+    "title": "American Boy",
+    "length": 284733,
+    "disambiguation": "",
+    "isrcs": [
+      "USAT20706210",
+      "USAT20706215"
+    ],
+    "first_release_date": "2007",
+    "artist_credit": [
+      {
+        "name": "Estelle",
+        "joinphrase": " feat. "
+      },
+      {
+        "name": "Kanye West",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "223f2eb2-b825-4ddb-afe5-a4ff5a48f9bc",
+        "status": "Official",
+        "title": "American Boy",
+        "date": "2007",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7c558d29-37a8-4c87-b17a-5b5c5cf5c760",
+        "status": "Promotion",
+        "title": "American Boy",
+        "date": "2007",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "ddad86c7-727b-4cc5-b39f-7deb186e7610",
+        "status": "Official",
+        "title": "American Boy",
+        "date": "2008-01-29",
+        "country": "US",
+        "disambiguation": "explicit",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a3a8ca88-cec4-487d-8d4d-03948f1ce895",
+        "status": "Official",
+        "title": "American Boy",
+        "date": "2008-03-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "de8d51d8-7019-4fe3-9eb4-3c16bda8557f",
+        "status": "Official",
+        "title": "American Boy",
+        "date": "2008-03-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "bd75dbdf-e5e1-4f2b-9cdd-00c3656fc65d",
+        "status": "Official",
+        "title": "American Boy",
+        "date": "2008-03-24",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "861e041e-684f-4b25-b0f3-c1441b9d6fd6",
+        "status": "Official",
+        "title": "Shine",
+        "date": "2008-03-28",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bf316f49-8819-3dd6-b5a8-ddaa96df0dea",
+          "title": "Shine",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4925fbe1-b122-4838-a3a9-47fff5f7fcea",
+        "status": "Official",
+        "title": "Shine",
+        "date": "2008-03-31",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bf316f49-8819-3dd6-b5a8-ddaa96df0dea",
+          "title": "Shine",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5e44e0c9-092b-4ccc-8369-7b8a48dcabcf",
+        "status": null,
+        "title": "Shine",
+        "date": "2008-03-31",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bf316f49-8819-3dd6-b5a8-ddaa96df0dea",
+          "title": "Shine",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b28a5079-5abd-46c4-93c0-9ee29d766f9c",
+        "status": "Official",
+        "title": "Shine",
+        "date": "2008-04-29",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bf316f49-8819-3dd6-b5a8-ddaa96df0dea",
+          "title": "Shine",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5a7570ec-8604-4308-b59d-908d2665f9b1",
+        "status": "Official",
+        "title": "Shine",
+        "date": "2008-06-25",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bf316f49-8819-3dd6-b5a8-ddaa96df0dea",
+          "title": "Shine",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "20933c42-2775-4793-9b7d-28573d5050bd",
+        "status": "Official",
+        "title": "Shine",
+        "date": "2008-07-01",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bf316f49-8819-3dd6-b5a8-ddaa96df0dea",
+          "title": "Shine",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "783367d4-804e-46c4-b4eb-02bd9f3ad9bb",
+        "status": "Official",
+        "title": "Music Box, Volume 2",
+        "date": "2008-09-02",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e4bb2dc9-b30e-3840-95f2-9abaf2c7c8d0",
+          "title": "Music Box, Volume 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "da392491-c95b-45b7-b360-23576b437b55",
+        "status": null,
+        "title": "American Boy",
+        "date": "2008",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "cd6df60b-8082-40f5-ae91-6cd91630b220",
+        "status": "Promotion",
+        "title": "American Boy",
+        "date": "2008",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "0bdeeae9-1f7e-4ff1-be63-6ed4dd284b0d",
+        "status": "Promotion",
+        "title": "American Boy",
+        "date": "2008",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+          "title": "American Boy",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8ff80d99-c352-4fd9-bf66-652db57f19a4",
+        "status": "Official",
+        "title": "Atlantic Records: The Time Capsule",
+        "date": "2009-11-17",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "abf618f9-8d9f-41a6-bba7-534f4d3cb7a8",
+          "title": "Atlantic Records: The Time Capsule",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ffecba22-5525-4810-adef-62ad4f201bfe",
+        "status": "Official",
+        "title": "Het beste uit de Qmusic Millennium Top 1000: 2000–2009",
+        "date": "2009",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "521f7bdf-9422-4428-84c1-41fe3965dc8a",
+          "title": "Het beste uit de Qmusic Millennium Top 1000: 2000–2009",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7429be4a-7100-4dd7-8019-d9bb0cfe6077",
+        "status": "Official",
+        "title": "Throwback: House Party",
+        "date": "2019-12-06",
+        "country": "IE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b8d74e1a-adc3-4221-9278-86d24d98d778",
+          "title": "Throwback: House Party",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation",
+            "DJ-mix"
+          ]
+        }
+      },
+      {
+        "id": "309e5a46-2d8f-4a48-bc43-065bba8ee459",
+        "status": "Official",
+        "title": "Méga 2000",
+        "date": "2020-06-18",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64b4a0fd-3131-4369-97fd-c83a27672849",
+          "title": "Méga 2000",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c2836b90-abff-4fb7-bce6-88b829ed66d3",
+        "status": "Official",
+        "title": "RFM années 2000",
+        "date": "2020-12-04",
+        "country": "AD",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8af3ce13-1e0a-4108-8cae-47f4de1f72b6",
+          "title": "RFM années 2000",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7b0703fa-6390-4b1d-a980-a15541b78f5d",
+        "status": "Official",
+        "title": "RFM années 2000",
+        "date": "2020-12-04",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "8af3ce13-1e0a-4108-8cae-47f4de1f72b6",
+          "title": "RFM années 2000",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/8a568837-3afd-418c-a262-9de6db07a925?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "8a568837-3afd-418c-a262-9de6db07a925",
+    "title": "Vertigo",
+    "length": 193573,
+    "disambiguation": "",
+    "isrcs": [
+      "GBAAN0400700"
+    ],
+    "first_release_date": "2005-01-10",
+    "artist_credit": [
+      {
+        "name": "U2",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "eca09dfe-b80f-4093-9a75-128fb9e3e2bb",
+        "status": "Official",
+        "title": "NRJ Music Awards 2005",
+        "date": "2005-01-10",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3ff21e9c-9954-35c7-b2c2-38f032baeb3a",
+          "title": "NRJ Music Awards 2005",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "039cedb1-d320-3c3b-801c-b9e370ecf70f",
+        "status": "Official",
+        "title": "NRJ Music Awards 2005",
+        "date": "2005-01-10",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3ff21e9c-9954-35c7-b2c2-38f032baeb3a",
+          "title": "NRJ Music Awards 2005",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c46642d1-f3d5-4c66-bcaa-0d66f8626824",
+        "status": "Official",
+        "title": "NRJ Music Awards 2005",
+        "date": "2005",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3ff21e9c-9954-35c7-b2c2-38f032baeb3a",
+          "title": "NRJ Music Awards 2005",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/a3e3e340-8a08-4fa6-926d-009c8aa191e2?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "a3e3e340-8a08-4fa6-926d-009c8aa191e2",
+    "title": "Just a Little",
+    "length": 234213,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBLK0200083",
+      "GBSGJ1301093",
+      "USCHR1355070"
+    ],
+    "first_release_date": "2002-01-01",
+    "artist_credit": [
+      {
+        "name": "Liberty X",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "6039662d-a1ae-4fba-9499-56f6387c12ca",
+        "status": "Official",
+        "title": "Thinking It Over",
+        "date": "2002-01-01",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "75e5bb26-861a-343a-95a4-a5bdac231f3b",
+          "title": "Thinking It Over",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e102b3dd-29b9-4f95-af9d-884952675620",
+        "status": "Official",
+        "title": "Smash Hits: Let's Party",
+        "date": "2002-02-09",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "76731a20-e0a1-35a8-9a82-c2a15e5459e1",
+          "title": "Smash Hits: Let's Party",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "27cb3deb-cc51-4560-8a32-f296458ece4c",
+        "status": "Official",
+        "title": "Just a Little",
+        "date": "2002-05-13",
+        "country": "GB",
+        "disambiguation": "CD1",
+        "release_group": {
+          "id": "64073db7-dce3-3cc9-8f15-bc5d229b3bc8",
+          "title": "Just a Little",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c2876080-6f52-4fff-9326-69d65a5249b3",
+        "status": "Official",
+        "title": "Just a Little",
+        "date": "2002-05-13",
+        "country": "XW",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64073db7-dce3-3cc9-8f15-bc5d229b3bc8",
+          "title": "Just a Little",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3447c003-0b5d-34a2-bf89-23a1b8c7ba43",
+        "status": "Official",
+        "title": "Thinking It Over",
+        "date": "2002-05-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "75e5bb26-861a-343a-95a4-a5bdac231f3b",
+          "title": "Thinking It Over",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2fcac363-523e-4e04-af77-c13e3f70080d",
+        "status": "Official",
+        "title": "Smash Hits: Summer 2002",
+        "date": "2002-06-03",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "36ca12b7-505c-37df-9f4e-a074abecbfb8",
+          "title": "Smash Hits: Summer 2002",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "4f0aaf8d-b5af-47cb-bee0-0d84bbd1e204",
+        "status": "Official",
+        "title": "Just a Little (Sexy)",
+        "date": "2002-07-10",
+        "country": "FR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "64073db7-dce3-3cc9-8f15-bc5d229b3bc8",
+          "title": "Just a Little",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "f7b63e22-0bdd-4387-9181-c3a602d549a3",
+        "status": "Official",
+        "title": "Now That's What I Call Music! 52",
+        "date": "2002-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "221b3b15-136e-45a9-9a47-ccd5ca9de5ec",
+          "title": "Now That's What I Call Music! 52",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "885ba9c1-edd1-3d97-907c-9fc402fda7f1",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 52",
+        "date": "2002-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "00e1b9a2-fbc0-332a-9fc5-62da6221f326",
+          "title": "Now That’s What I Call Music! 52",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ac3381e7-0668-45d5-9aff-f629590dea30",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 52",
+        "date": "2002-07-22",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "00e1b9a2-fbc0-332a-9fc5-62da6221f326",
+          "title": "Now That’s What I Call Music! 52",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e251b56f-c0ba-4896-be2f-bf9e3d4816cf",
+        "status": "Official",
+        "title": "Hits 53",
+        "date": "2002-07-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b57c9c30-5ba8-36b0-948c-c3985020eb3f",
+          "title": "Hits 53",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1f07eeb2-8dae-4854-9760-1503a7ca557f",
+        "status": "Official",
+        "title": "Absolute Music 40",
+        "date": "2002-08-19",
+        "country": "SE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9c31d9c2-e767-3748-ace3-2c2d7681fd18",
+          "title": "Absolute Music 40",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0a63030d-cc5d-431d-9f8f-0073fbaabbb2",
+        "status": "Official",
+        "title": "Kiss Hitlist Summer 2002",
+        "date": "2002-08-19",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f68ba678-b161-3a01-aef7-c0ea3303d5f9",
+          "title": "Kiss Hitlist Summer 2002",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e6f9f026-7889-49c7-9e47-ad6e6b391fcd",
+        "status": "Promotion",
+        "title": "Radioactivity 02-08",
+        "date": "2002-08",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "884f13e6-1806-4173-adc1-128c763c4aa1",
+          "title": "Radioactivity 02-08",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "76622785-5f07-40b8-b872-f02960604b84",
+        "status": "Official",
+        "title": "Fox Kids Hits 5",
+        "date": "2002-10-04",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "6480709a-6509-3713-9082-4467ac9082c8",
+          "title": "Fox Kids Hits 5",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "66780edb-10f3-4fed-8960-0923e7dda733",
+        "status": "Official",
+        "title": "Bad Girls",
+        "date": "2002-10-07",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "31943c63-861f-3bb4-a85f-511ec1017914",
+          "title": "Bad Girls",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a0754985-a289-4192-b572-230af29d7faa",
+        "status": "Official",
+        "title": "Bravo Hits 39",
+        "date": "2002-10-18",
+        "country": "CH",
+        "disambiguation": "Swiss edition",
+        "release_group": {
+          "id": "d14e1398-ee74-38a4-b247-1fd1b60a0d29",
+          "title": "Bravo Hits 39",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "df831b66-df83-4b2c-bcf7-0de9eb6e0149",
+        "status": "Official",
+        "title": "Bravo Hits 39",
+        "date": "2002-10-18",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d14e1398-ee74-38a4-b247-1fd1b60a0d29",
+          "title": "Bravo Hits 39",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8bbb4224-bdf5-4b1a-8430-7966ef64e0f9",
+        "status": "Official",
+        "title": "39º Festivalbar 2002: Compilation rossa",
+        "date": "2002",
+        "country": "IT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "dd0468af-41df-344c-96fe-5b36d65f45f1",
+          "title": "39º Festivalbar 2002: Compilation rossa",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "148464ad-aa5b-479b-ba65-f4b7cd4c8aec",
+        "status": "Official",
+        "title": "95.8 FM’s Party in the Park for the Prince’s Trust. 2002 the Album of the Event",
+        "date": "2002",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "93a1cbbf-4427-490e-8e9b-56978acfee3d",
+          "title": "95.8 FM’s Party in the Park for the Prince’s Trust. 2002 the Album of the Event",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d352b2f1-521d-4e05-863b-ebdf2a8471cb",
+        "status": "Official",
+        "title": "Bravo Hits 39",
+        "date": "2002",
+        "country": "DE",
+        "disambiguation": "club edition",
+        "release_group": {
+          "id": "d14e1398-ee74-38a4-b247-1fd1b60a0d29",
+          "title": "Bravo Hits 39",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2dbce6bb-32de-4f19-8475-d56058cc0729",
+        "status": "Official",
+        "title": "Bravo Hits 39",
+        "date": "2002",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d14e1398-ee74-38a4-b247-1fd1b60a0d29",
+          "title": "Bravo Hits 39",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "22bb25d7-2aff-406e-aa0a-40a686f511c5",
+        "status": "Official",
+        "title": "Chartboxx Winter Extra 2002",
+        "date": "2002",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a1744cba-6305-4ba5-8406-7bfe69cb46c1",
+          "title": "Chartboxx Winter Extra 2002",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e2259169-a5d0-4a97-a1b4-598025463cd0",
+        "status": null,
+        "title": "Dance Party 2002",
+        "date": "2002",
+        "country": "FI",
+        "disambiguation": "",
+        "release_group": {
+          "id": "1c3398ca-2a35-42fd-8742-9b42fa43ef1d",
+          "title": "Dance Party 2002",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a1c5505c-383a-4bff-b3bb-c3c6d4cf955a",
+        "status": "Official",
+        "title": "Dance Train 2002, Volume 3: Club Edition",
+        "date": "2002",
+        "country": "BE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b8432c46-f122-3d22-b702-92f88fa2f1e9",
+          "title": "Dance Train 2002, Volume 3: Club Edition",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/0bbe5e38-7629-4734-a2fc-2204f9514414?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "0bbe5e38-7629-4734-a2fc-2204f9514414",
+    "status": "Official",
+    "title": "Beautiful Day",
+    "date": "2000-10-09",
+    "country": "GB",
+    "disambiguation": "CD1",
+    "artist_credit": [
+      {
+        "name": "U2",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "b5e845f9-cd59-340d-afb8-ca07bb43652f",
+      "title": "Beautiful Day",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Beautiful Day",
+            "length": 249093,
+            "artist_credit": [
+              {
+                "name": "U2",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "809e8321-9e38-4ebf-b467-1cb6d85f5076",
+              "title": "Beautiful Day",
+              "length": 247400,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "U2",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Summer Rain",
+            "length": 248400,
+            "artist_credit": [
+              {
+                "name": "U2",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "0dd0b5d8-70be-4f95-b4b3-250b7e92679f",
+              "title": "Summer Rain",
+              "length": 248226,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "U2",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "Always",
+            "length": 226600,
+            "artist_credit": [
+              {
+                "name": "U2",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "fbb68b08-b256-4fe1-a715-88c79d229a86",
+              "title": "Always",
+              "length": 228000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "U2",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/036d9cb8-8e5b-411f-9166-93ebd4f96d93?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "036d9cb8-8e5b-411f-9166-93ebd4f96d93",
+    "status": "Official",
+    "title": "Maria",
+    "date": "1998",
+    "country": "",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Blondie",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "eee7e620-c062-3084-b79d-63cf7ace19ed",
+      "title": "Maria",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "1",
+            "title": "Maria (radio edit)",
+            "length": 249000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "1f04d857-4147-4ccd-b1d8-c67fb2fb73c8",
+              "title": "Maria",
+              "length": 249182,
+              "disambiguation": "radio edit",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "2",
+            "title": "Screaming Skin (live)",
+            "length": 365000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "c8d6d7ce-a723-41f5-b2b2-814b2b2e92a0",
+              "title": "Screaming Skin (live)",
+              "length": 365000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 3,
+            "number": "3",
+            "title": "In the Flesh (live)",
+            "length": 176000,
+            "artist_credit": [
+              {
+                "name": "Blondie",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ce871c38-ea5a-4676-ae7b-da067289e813",
+              "title": "In the Flesh (live)",
+              "length": 176000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Blondie",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/5268ded7-3c3c-465b-805f-cb14e407ec2d?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "5268ded7-3c3c-465b-805f-cb14e407ec2d",
+    "title": "Barbie Girl",
+    "length": 195506,
+    "disambiguation": "radio edit",
+    "isrcs": [
+      "DED129700280",
+      "DKBKA9700403"
+    ],
+    "first_release_date": "1997-05-14",
+    "artist_credit": [
+      {
+        "name": "Aqua",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "df96511b-6611-4910-b390-1ab9645eb24b",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-05-14",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7ffac968-4c13-49ce-b53d-120ac02d1064",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997-05-21",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "69e76572-b5aa-4386-b7d9-27f3f407fd30",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-06",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6dd88f79-645b-4511-b033-f7445f3858b0",
+        "status": "Promotion",
+        "title": "Promo Only: Mainstream Radio, August 1997",
+        "date": "1997-07",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "763da9d1-b84d-3adc-873a-cdb583f0713b",
+          "title": "Promo Only: Mainstream Radio, August 1997",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "c4dd8182-a7a3-4d16-8a12-8597352276c0",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-08-19",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6e911bc1-7318-4379-ad84-e57fca8fe872",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-09-01",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "4f8312d5-2cbe-4350-bcef-5ab4d5f99a76",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-09-02",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3e6920a8-0a0b-427e-bab5-57b11b252233",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-09-02",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "3739274c-81bb-328c-a6e3-73d51e0e6d8b",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997-09-09",
+        "country": "US",
+        "disambiguation": "BMG club edition",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "6faa4168-52d1-4375-8b67-2b143a370a75",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997-09-09",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "75473fd7-fe59-4677-9b96-5648f5b406e3",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997-09-09",
+        "country": "XE",
+        "disambiguation": "limited Christmas edition",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "12080aa6-2aaf-49b3-a377-84a0d2802150",
+        "status": "Official",
+        "title": "Barbie Girl",
+        "date": "1997-10-13",
+        "country": "GB",
+        "disambiguation": "CD2",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c38f3b27-841b-4b88-8e76-448242443bd9",
+        "status": "Official",
+        "title": "Barbie Girl (CD I)",
+        "date": "1997-10-13",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "33d83c7d-280e-3ca6-98ff-4e473b4252e8",
+          "title": "Barbie Girl",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "33255b30-d5db-33af-8a05-5873a2445426",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997-10-27",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "e7e903dd-fcea-40f0-8845-257490a54122",
+        "status": "Promotion",
+        "title": "Radioactivity Volume 97-10",
+        "date": "1997-10",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ccb5d122-f535-4748-9181-3da02c569d14",
+          "title": "Radioactivity Volume 97-10",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d780aada-b94e-49d7-b1c3-fa085e5ac169",
+        "status": "Bootleg",
+        "title": "The Braun MTV Eurochart ’97, Volume 10",
+        "date": "1997-10",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7331b13c-bd76-48a1-a790-1db7cffc3e6b",
+          "title": "The Braun MTV Eurochart ’97, Volume 10",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "92fcac49-895a-462d-95c4-f324cdaaddc9",
+        "status": "Official",
+        "title": "The Greatest Hits of 1997",
+        "date": "1997-11-03",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67b2ff2a-38e9-32d0-84a0-85ac98cb16b4",
+          "title": "The Greatest Hits of 1997",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "bd2a7d71-93aa-488b-bbd1-c0bc24f80e12",
+        "status": "Official",
+        "title": "Just the Best, Vol. 14",
+        "date": "1997-11-24",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "220b4e88-1789-3818-a248-78ffd4d880d1",
+          "title": "Just the Best, Vol. 14",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b89d2815-fec5-483f-a2c4-35b6e1781734",
+        "status": "Official",
+        "title": "The Dome, Volume 4",
+        "date": "1997-12-01",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b00e7486-cfab-3a03-9cf0-b1d3ec1b72d6",
+          "title": "The Dome, Volume 4",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e27e1a1a-71c8-47e9-8824-27069d47b038",
+        "status": "Official",
+        "title": "The Dome, Volume 4",
+        "date": "1997-12-15",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "b00e7486-cfab-3a03-9cf0-b1d3ec1b72d6",
+          "title": "The Dome, Volume 4",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7e7aaff4-ec14-4c1a-b083-028006542df8",
+        "status": "Official",
+        "title": "100% Hits of ’97",
+        "date": "1997",
+        "country": "ZA",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a070a2e5-cdc5-418b-92e5-bdd671208e57",
+          "title": "100% Hits of ’97",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9208b925-0d7e-46f1-a797-26c916b02acd",
+        "status": "Official",
+        "title": "Absolute Music 20",
+        "date": "1997",
+        "country": "NO",
+        "disambiguation": "",
+        "release_group": {
+          "id": "41b0d39c-3230-3b97-960f-1a55df9340a7",
+          "title": "Absolute Music 20",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "64bdeafa-94a1-4f73-b149-223fefbf7382",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997",
+        "country": "AU",
+        "disambiguation": "Special Picture Disc CD with Bonus Tracks",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "b525cf2e-130d-415e-b562-fef2a6dfa52b",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "5796a892-eef9-42c2-9cbe-394605a23e83",
+        "status": "Official",
+        "title": "Aquarium",
+        "date": "1997",
+        "country": "AR",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67d4ee24-800d-3d6b-8116-3315f3be10e2",
+          "title": "Aquarium",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/GBAYK9100001?inc=artist-credits+releases&fmt=json": {
+    "isrc": "GBAYK9100001",
+    "recordings": [
+      {
+        "id": "2555962d-16d6-4aa2-bfc8-352e66f08213",
+        "title": "The One and Only",
+        "length": 221733,
+        "disambiguation": "",
+        "first_release_date": "1991-07",
+        "artist_credit": [
+          {
+            "name": "Chesney Hawkes",
+            "joinphrase": ""
+          }
+        ]
+      },
+      {
+        "id": "2a6f2d59-97ba-480c-a00d-f805dacd543b",
+        "title": "The One and Only",
+        "length": 221267,
+        "disambiguation": "",
+        "first_release_date": "2026-01-30",
+        "artist_credit": [
+          {
+            "name": "Chesney Hawkes",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/US25T0511671?inc=artist-credits+releases&fmt=json": {
+    "isrc": "US25T0511671",
+    "recordings": [
+      {
+        "id": "94f5e5cc-d1de-454c-b50f-8d2e4b28f22a",
+        "title": "We Are the World",
+        "length": 427000,
+        "disambiguation": "We Are the World album version",
+        "first_release_date": "1985",
+        "artist_credit": [
+          {
+            "name": "USA for Africa",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/isrc/USWB19903035?inc=artist-credits+releases&fmt=json": {
+    "isrc": "USWB19903035",
+    "recordings": [
+      {
+        "id": "585eb446-e94c-40b3-84d6-7b4500991ced",
+        "title": "Into the Groove",
+        "length": 285000,
+        "disambiguation": "single edit",
+        "first_release_date": "1987",
+        "artist_credit": [
+          {
+            "name": "Madonna",
+            "joinphrase": ""
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/9a92cf56-b8bb-4ea9-ac95-8c33b41b76bc?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "9a92cf56-b8bb-4ea9-ac95-8c33b41b76bc",
+    "status": "Official",
+    "title": "True",
+    "date": "1983",
+    "country": "GB",
+    "disambiguation": "",
+    "artist_credit": [
+      {
+        "name": "Spandau Ballet",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "f38de188-3c27-4c80-8b4c-7c4bace5f5d9",
+      "title": "True",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "True",
+            "length": 340000,
+            "artist_credit": [
+              {
+                "name": "Spandau Ballet",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "2d020c74-7790-4bbc-ae9d-3ecb3282cc63",
+              "title": "True",
+              "length": 332000,
+              "disambiguation": "single version",
+              "artist_credit": [
+                {
+                  "name": "Spandau Ballet",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Lifeline (edited remix for USA)",
+            "length": 219000,
+            "artist_credit": [
+              {
+                "name": "Spandau Ballet",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "35520652-dba6-4aa1-88c9-12da731dbaf0",
+              "title": "Lifeline (edited remix)",
+              "length": 217000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Spandau Ballet",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/d1e69e14-ade5-4519-92fb-601bd1f5e262?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "d1e69e14-ade5-4519-92fb-601bd1f5e262",
+    "title": "Under the Moon of Love",
+    "length": 191000,
+    "disambiguation": "",
+    "isrcs": [
+      "GBBPJ9800694"
+    ],
+    "first_release_date": "1976",
+    "artist_credit": [
+      {
+        "name": "Showaddywaddy",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "b50ec2ec-4273-4993-9606-efcfababa8da",
+        "status": "Official",
+        "title": "Under the Moon of Love",
+        "date": "1976",
+        "country": "DE",
+        "disambiguation": "Teldec pressing, black labels",
+        "release_group": {
+          "id": "70662df1-c9f4-442f-881a-8bb301e44e5f",
+          "title": "Under the Moon of Love",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "a6eaa6a6-b6e6-42c3-9585-239492933970",
+        "status": "Official",
+        "title": "Super Oldies",
+        "date": "1988",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3035921e-e17d-36ab-83d1-2789c56c2830",
+          "title": "Super Oldies",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "8f4f1440-9b8e-492a-bbd6-c8d1a2ad8065",
+        "status": "Official",
+        "title": "The Very Best of Showaddywaddy",
+        "date": "1990",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7f4ebfe7-54a3-3a63-a0b9-3b4f3f3161c0",
+          "title": "The Very Best of Showaddywaddy",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "198bdd24-77d3-4fba-915c-a9adf8305b20",
+        "status": "Official",
+        "title": "25 Steps to the Top (The Ultimate Hits Collection)",
+        "date": "1991",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ca3d54f0-4af1-302c-bd20-40f91d7f33d4",
+          "title": "25 Steps to the Top (The Ultimate Hits Collection)",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d959404f-fd9a-41c3-ba8e-0139d705bb98",
+        "status": "Official",
+        "title": "20 Greatest Hits",
+        "date": "1992-06",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "67b2dbc8-d2be-3322-bd7d-26df3e430fd4",
+          "title": "20 Greatest Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "e564aa26-6470-4e51-8d4a-db4bec7c7ce9",
+        "status": "Official",
+        "title": "Blockbuster! The Sensational 70’s",
+        "date": "1992",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "0c9f9441-2d8f-3f6d-998b-abdd693abf93",
+          "title": "Blockbuster! The Sensational 70’s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "71fac1f2-d589-44d2-a08c-c3270ff07404",
+        "status": "Official",
+        "title": "Let’s Have a Party, Runde 2",
+        "date": "1992",
+        "country": "NL",
+        "disambiguation": "",
+        "release_group": {
+          "id": "45424764-2b1e-4d94-9b15-4bf6c5ffb173",
+          "title": "Let’s Have a Party, Runde 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1df9c2fa-4332-443e-ba13-9ffca81a7711",
+        "status": "Official",
+        "title": "Million Sellers 13: The Seventies",
+        "date": "1992",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "37a50553-b926-4388-be69-6b158d47ac14",
+          "title": "Million Sellers 13: The Seventies",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "85967f37-10c6-46f0-8bde-3bd67fc908ed",
+        "status": "Official",
+        "title": "Club 70: The Dancing Years 2",
+        "date": "1993",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "9e22503b-514f-4d13-97ea-5379a97fe9ba",
+          "title": "Club 70: The Dancing Years 2",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2b0e3d36-6ce5-4493-8bbe-afe104975fac",
+        "status": "Official",
+        "title": "Glam Rock",
+        "date": "1993",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7f248060-04f5-3427-a787-cf0bcb76f6c7",
+          "title": "Glam Rock",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "71874199-950a-44fa-bb92-ff655f931c02",
+        "status": "Official",
+        "title": "Under the Moon of Love",
+        "date": "1993",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ec24d9a0-b9e6-3b77-8349-62a1917fe490",
+          "title": "Under the Moon of Love",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1663d0f1-f50b-4bd7-8b24-4563398cf02e",
+        "status": "Official",
+        "title": "Under the Moon of Love (disc 1)",
+        "date": "1993",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "ec24d9a0-b9e6-3b77-8349-62a1917fe490",
+          "title": "Under the Moon of Love",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "22bf357f-e65a-4456-901e-5cd61e66b4df",
+        "status": "Official",
+        "title": "Dumm gelaufen! 32 rattenscharfe Party Hits",
+        "date": "1994",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "db354db7-1339-3e33-b3dc-cde77f5605a0",
+          "title": "Dumm gelaufen! 32 rattenscharfe Party Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5df7b389-1796-4b06-8057-72ebeb742cea",
+        "status": "Official",
+        "title": "Very Best of the 70’s, Volume III",
+        "date": "1994",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d9dd12ef-d565-3810-823f-20597e44ee5e",
+          "title": "Very Best of the 70’s, Volume III",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9ecf16c2-a0a3-4371-8a53-0c2a89f442ae",
+        "status": "Promotion",
+        "title": "Happy mit Engel II",
+        "date": "1995",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "7a993925-dc91-444f-b847-f17c6189c114",
+          "title": "Happy mit Engel II",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "f424bf21-4697-498b-937a-059ba0351a7e",
+        "status": null,
+        "title": "The Very Best Of",
+        "date": "1996",
+        "country": "",
+        "disambiguation": "",
+        "release_group": {
+          "id": "580d2106-163b-4bfa-ba50-0ab06c1b1b77",
+          "title": "The Very Best Of",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "d2773202-be93-4039-84a6-21ebd51efb53",
+        "status": "Official",
+        "title": "Blockbusters! The 70’s - Glam and Glitter",
+        "date": "1997",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5cd09afb-f3a9-3186-825b-d0e438820946",
+          "title": "Blockbusters! The 70’s - Glam and Glitter",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7dfff78e-23cf-4313-99fd-24aeb6fc7aff",
+        "status": "Official",
+        "title": "25 Steps to the Top",
+        "date": "1999-01-11",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "72b26665-cad3-4d7b-bef7-f1c12d131329",
+          "title": "25 Steps to the Top",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "17580282-0ae3-45a3-9c2c-6ffbcd7e7d42",
+        "status": "Official",
+        "title": "Disco Highlights der 70er und 80er",
+        "date": "1999",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "03845167-9274-34c0-95f8-c5e49c261218",
+          "title": "Disco Highlights der 70er und 80er",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "cf3af8f0-b841-4b1c-a29f-31abc3b1f18f",
+        "status": "Official",
+        "title": "Hey Rock ’n’ Roll: The Very Best of Showaddywaddy",
+        "date": "1999",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5417b627-1370-3d45-af26-de6753817484",
+          "title": "Hey Rock ’n’ Roll: The Very Best of Showaddywaddy",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "3d300407-4c28-4874-b117-42ffbe0fa106",
+        "status": "Official",
+        "title": "The Very Best of Showaddywaddy",
+        "date": "1999",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3d39e2ed-3ec3-3da4-97a0-ceb505f1f173",
+          "title": "The Very Best of Showaddywaddy",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "0018a5ae-ac14-48dc-9aa0-c518fd5be7e4",
+        "status": "Official",
+        "title": "Best of the Seventies",
+        "date": "2000-10-16",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "f88cbdc2-22c7-32c2-b23c-024b76fa7863",
+          "title": "Best of the Seventies",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "7d8b6b92-a481-44d9-bb79-187f6781107c",
+        "status": "Official",
+        "title": "50 Years of No. 1 Hits",
+        "date": "2002",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "bc00d738-effd-4ea7-99ac-83d435e58b1d",
+          "title": "50 Years of No. 1 Hits",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "40426e77-5c49-40e5-a980-71872fe20f1c",
+        "status": "Official",
+        "title": "Best of the 70’s",
+        "date": "2002",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e7bb5afd-1848-425f-a5f9-67b991fd90b8",
+          "title": "Best of the 70’s",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b6cde401-88cb-4bbc-b14b-fbca59d3dfd6",
+        "status": "Official",
+        "title": "Super 70's",
+        "date": "2003-03-17",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "10519971-51af-3188-8bfd-b9f69a1f0224",
+          "title": "Super 70's",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/release/b50ec2ec-4273-4993-9606-efcfababa8da?inc=recordings+artist-credits+release-groups&fmt=json": {
+    "id": "b50ec2ec-4273-4993-9606-efcfababa8da",
+    "status": "Official",
+    "title": "Under the Moon of Love",
+    "date": "1976",
+    "country": "DE",
+    "disambiguation": "Teldec pressing, black labels",
+    "artist_credit": [
+      {
+        "name": "Showaddywaddy",
+        "joinphrase": ""
+      }
+    ],
+    "release_group": {
+      "id": "70662df1-c9f4-442f-881a-8bb301e44e5f",
+      "title": "Under the Moon of Love",
+      "primary_type": "Single",
+      "secondary_types": []
+    },
+    "media": [
+      {
+        "position": 1,
+        "tracks": [
+          {
+            "position": 1,
+            "number": "A",
+            "title": "Under the Moon of Love",
+            "length": 195000,
+            "artist_credit": [
+              {
+                "name": "Showaddywaddy",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "d1e69e14-ade5-4519-92fb-601bd1f5e262",
+              "title": "Under the Moon of Love",
+              "length": 191000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Showaddywaddy",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": 2,
+            "number": "B",
+            "title": "Lookin’ Back",
+            "length": 208000,
+            "artist_credit": [
+              {
+                "name": "Showaddywaddy",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "id": "ca13e9c4-4918-4c90-97ee-0b8112dbe980",
+              "title": "Lookin’ Back",
+              "length": 209000,
+              "disambiguation": "",
+              "artist_credit": [
+                {
+                  "name": "Showaddywaddy",
+                  "joinphrase": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "https://musicbrainz.org/ws/2/recording/6f379c0e-82a9-450c-8bc4-5cbae9182866?inc=isrcs+artist-credits+releases+release-groups&fmt=json": {
+    "id": "6f379c0e-82a9-450c-8bc4-5cbae9182866",
+    "title": "Sailing",
+    "length": 278000,
+    "disambiguation": "",
+    "isrcs": [
+      "USWB10000780",
+      "USWB10001976",
+      "USWB10806962",
+      "USWB10900503"
+    ],
+    "first_release_date": "1975-09",
+    "artist_credit": [
+      {
+        "name": "Rod Stewart",
+        "joinphrase": ""
+      }
+    ],
+    "releases": [
+      {
+        "id": "d85384c7-7c90-4201-a769-a0b669b2f3bf",
+        "status": "Official",
+        "title": "Sailing",
+        "date": "1975-09",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "d3b2a0f5-fa3d-4b8d-b348-fe542096b6be",
+          "title": "Sailing",
+          "primary_type": "Single",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "45025567-a579-4dcc-bf62-f087738c9963",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1975",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "c3c5cc61-b7b4-42ef-81f3-196c02ad387b",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1975",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7a532f9a-49b7-485b-8684-88c3787fa1a9",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1977",
+        "country": "DK",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "2fd518b8-f705-4b90-ace3-768e0a6b81cf",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1977",
+        "country": "GB",
+        "disambiguation": "blue vinyl",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "1454163d-ee80-4728-82ab-e87dae8dced5",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1981",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "8ce5f0d7-c8c1-3685-a94e-9a501b63d354",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1984-09-13",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "7361e98b-da27-4e4b-8ad6-e40661866a32",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "1984",
+        "country": "XE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "90cee48b-e496-40c6-a250-1f0173a73349",
+        "status": "Official",
+        "title": "Storyteller",
+        "date": "1989-10-23",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "2bcf7946-9a6b-4f3e-ba7b-95a40ff9fc28",
+        "status": "Official",
+        "title": "Storyteller: The Complete Anthology: 1964 - 1990",
+        "date": "1989-10-23",
+        "country": "CA",
+        "disambiguation": "Box printed in the USA. Discs manufactured in Canada.",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "af59dbf0-6453-4fe1-8024-7c8b0c87ca7e",
+        "status": "Official",
+        "title": "Storyteller: The Complete Anthology: 1964 - 1990",
+        "date": "1989-10-23",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1f6b0004-cd7a-4423-9694-6a4d2c1ca46c",
+        "status": "Official",
+        "title": "Storyteller - The Complete Anthology: 1964-1990",
+        "date": "1989-11",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "64d53150-9db9-4d17-abd1-ab596e24dbb2",
+        "status": "Official",
+        "title": "Storyteller",
+        "date": "1989",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "46d84578-5b73-48b8-b443-a41806f2e677",
+        "status": "Official",
+        "title": "Storyteller: The Complete Anthology",
+        "date": "1989",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "1ab7c3cb-7fa7-427b-96de-9b173829d540",
+        "status": "Official",
+        "title": "Storyteller: The Complete Anthology",
+        "date": "1989",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "3dafc059-41aa-396b-9b45-14808a344e31",
+          "title": "Storyteller",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "a60f8685-d892-4da4-bafc-3cf7c3c301fe",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "2000-09-29",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "027e498b-7865-44dd-9a84-f97fc246b372",
+        "status": "Official",
+        "title": "Atlantic Crossing",
+        "date": "2000",
+        "country": "XE",
+        "disambiguation": "remastered",
+        "release_group": {
+          "id": "86b4f6df-d9f3-36c9-84bc-72df785d16f6",
+          "title": "Atlantic Crossing",
+          "primary_type": "Album",
+          "secondary_types": []
+        }
+      },
+      {
+        "id": "9d714ff1-cf06-46c4-b924-d52b80781c69",
+        "status": "Official",
+        "title": "The Story So Far: The Very Best of Rod Stewart",
+        "date": "2001-11-26",
+        "country": "US",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a4e3a3f7-0843-376d-8198-51f387a1e0a6",
+          "title": "The Story So Far: The Very Best of Rod Stewart",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "52972b07-97fb-4b86-9cfb-58a518595af0",
+        "status": "Official",
+        "title": "The Story So Far: The Very Best of Rod Stewart",
+        "date": "2001",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a4e3a3f7-0843-376d-8198-51f387a1e0a6",
+          "title": "The Story So Far: The Very Best of Rod Stewart",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "15d01195-4f54-370d-be38-d3eb1a2bff6e",
+        "status": "Official",
+        "title": "The Story So Far: The Very Best of Rod Stewart",
+        "date": "2001",
+        "country": "DE",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a4e3a3f7-0843-376d-8198-51f387a1e0a6",
+          "title": "The Story So Far: The Very Best of Rod Stewart",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "ef0edec5-6bc4-4be2-a6f9-e3e4af8a5ebd",
+        "status": null,
+        "title": "The Story So Far: The Very Best Of Rod Stewart",
+        "date": "2001",
+        "country": "TH",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a4e3a3f7-0843-376d-8198-51f387a1e0a6",
+          "title": "The Story So Far: The Very Best of Rod Stewart",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "348c09d1-a99e-45fa-a22a-f9d6eb38d8fb",
+        "status": "Official",
+        "title": "Ö3 Greatest Hits, Volume 18",
+        "date": "2002-06-24",
+        "country": "AT",
+        "disambiguation": "",
+        "release_group": {
+          "id": "e1c4b971-dc99-4cbc-8398-9af539b90baf",
+          "title": "Ö3 Greatest Hits, Volume 18",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "5a05ebf1-2a61-4816-811c-aae6765c314c",
+        "status": "Official",
+        "title": "Love Lights 3",
+        "date": "2002-09-11",
+        "country": "JP",
+        "disambiguation": "",
+        "release_group": {
+          "id": "5fecb451-9dd3-4dfa-8cc3-429c1a2d5c73",
+          "title": "Love Lights 3",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "b9f19584-826c-436c-b948-f4de90ddaa0f",
+        "status": "Official",
+        "title": "The Story So Far: The Very Best of Rod Stewart",
+        "date": "2003-10-27",
+        "country": "GB",
+        "disambiguation": "",
+        "release_group": {
+          "id": "a4e3a3f7-0843-376d-8198-51f387a1e0a6",
+          "title": "The Story So Far: The Very Best of Rod Stewart",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      },
+      {
+        "id": "9dd8f150-e60c-475f-b20b-759a07e4b37e",
+        "status": "Official",
+        "title": "Rock Ballads",
+        "date": "2004-06-28",
+        "country": "AU",
+        "disambiguation": "",
+        "release_group": {
+          "id": "62209fba-8a76-3947-bf80-dd1d9086e6fd",
+          "title": "Rock Ballads",
+          "primary_type": "Album",
+          "secondary_types": [
+            "Compilation"
+          ]
+        }
+      }
+    ]
+  }
+}

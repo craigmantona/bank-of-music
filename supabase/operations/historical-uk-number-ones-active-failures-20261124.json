@@ -1,0 +1,5854 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-24T14:03:11.677Z",
+  "failures": [
+    {
+      "chart_row_id": 2512,
+      "chart_year": 2026,
+      "title": "Rein Me In",
+      "artist": "Sam Fender and Olivia Dean",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2500,
+      "chart_year": 2025,
+      "title": "Ordinary",
+      "artist": "Alex Warren",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2502,
+      "chart_year": 2025,
+      "title": "Dior",
+      "artist": "MK featuring Chrystal",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2504,
+      "chart_year": 2025,
+      "title": "Golden",
+      "artist": "Huntrix/Ejae/Audrey Nuna/Rei Ami & KPop Demon Hunters Cast",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2505,
+      "chart_year": 2025,
+      "title": "The Subway",
+      "artist": "Chappell Roan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2491,
+      "chart_year": 2024,
+      "title": "Houdini",
+      "artist": "Eminem",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 2492,
+      "chart_year": 2024,
+      "title": "Please Please Please",
+      "artist": "rowspan=\"3\" |Sabrina Carpenter",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2476,
+      "chart_year": 2023,
+      "title": "Flowers",
+      "artist": "Miley Cyrus",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2484,
+      "chart_year": 2023,
+      "title": "Is It Over Now?",
+      "artist": "Taylor Swift",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2485,
+      "chart_year": 2023,
+      "title": "Now and Then",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2486,
+      "chart_year": 2023,
+      "title": "Lovin on Me",
+      "artist": "Jack Harlow",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2465,
+      "chart_year": 2022,
+      "title": "Merry Christmas",
+      "artist": "Ed Sheeran and Elton John",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2467,
+      "chart_year": 2022,
+      "title": "We Don't Talk About Bruno",
+      "artist": "Carolina Gaitán, Mauro Castillo, Adassa, Rhenzy Feliz, Diane Guerrero and Stephanie Beatriz",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2470,
+      "chart_year": 2022,
+      "title": "B.O.T.A. (Baddest of Them All)",
+      "artist": "Eliza Rose and Interplanetary Criminal",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2472,
+      "chart_year": 2022,
+      "title": "Unholy",
+      "artist": "Sam Smith and Kim Petras",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 2473,
+      "chart_year": 2022,
+      "title": "Anti-Hero",
+      "artist": "Taylor Swift",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2459,
+      "chart_year": 2021,
+      "title": "Body",
+      "artist": "Tion Wayne and Russ Millions",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2463,
+      "chart_year": 2021,
+      "title": "Merry Christmas",
+      "artist": "Ed Sheeran and Elton John",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2464,
+      "chart_year": 2021,
+      "title": "Sausage Rolls for Everyone",
+      "artist": "LadBaby featuring Ed Sheeran and Elton John",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2444,
+      "chart_year": 2020,
+      "title": "You'll Never Walk Alone",
+      "artist": "Michael Ball, Captain Tom Moore and the NHS Voices of Care Choir",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2445,
+      "chart_year": 2020,
+      "title": "Times Like These",
+      "artist": "BBC Radio 1's Live Lounge Allstars",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2449,
+      "chart_year": 2020,
+      "title": "Savage Love (Laxed – Siren Beat)",
+      "artist": "Jawsh 685 and Jason Derulo",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 2453,
+      "chart_year": 2020,
+      "title": "Lemonade",
+      "artist": "Internet Money featuring Gunna, Don Toliver and Nav",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2025,
+      "chart_year": 2019,
+      "title": "7 Rings",
+      "artist": "rowspan=\"3\"|Ariana Grande",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2028,
+      "chart_year": 2019,
+      "title": "Señorita",
+      "artist": "Shawn Mendes and Camila Cabello",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2009,
+      "chart_year": 2018,
+      "title": "These Days",
+      "artist": "Rudimental featuring Jess Glynne, Macklemore and Dan Caplen",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2014,
+      "chart_year": 2018,
+      "title": "Solo",
+      "artist": "Clean Bandit featuring Demi Lovato",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1997,
+      "chart_year": 2017,
+      "title": "I'm the One",
+      "artist": "DJ Khaled featuring Justin Bieber, Quavo, Chance the Rapper and Lil Wayne",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2006,
+      "chart_year": 2017,
+      "title": "Perfect",
+      "artist": "Ed Sheeran",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1988,
+      "chart_year": 2016,
+      "title": "I Took a Pill in Ibiza",
+      "artist": "Mike Posner",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1990,
+      "chart_year": 2016,
+      "title": "Cold Water",
+      "artist": "Major Lazer featuring Justin Bieber and MØ",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1965,
+      "chart_year": 2015,
+      "title": "King",
+      "artist": "Years & Years",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1972,
+      "chart_year": 2015,
+      "title": "Are You with Me",
+      "artist": "Lost Frequencies",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1973,
+      "chart_year": 2015,
+      "title": "House Every Weekend",
+      "artist": "David Zowie",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1979,
+      "chart_year": 2015,
+      "title": "Easy Love",
+      "artist": "Sigala",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1981,
+      "chart_year": 2015,
+      "title": "Turn the Music Louder (Rumble)",
+      "artist": "KDA featuring Tinie Tempah and Katy B",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 1982,
+      "chart_year": 2015,
+      "title": "Sorry",
+      "artist": "rowspan=\"2\"|Justin Bieber",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1983,
+      "chart_year": 2015,
+      "title": "A Bridge over You",
+      "artist": "The Lewisham and Greenwich NHS Choir",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1927,
+      "chart_year": 2014,
+      "title": "Timber",
+      "artist": "Pitbull featuring Kesha",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1930,
+      "chart_year": 2014,
+      "title": "My Love",
+      "artist": "Route 94 featuring Jess Glynne",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1931,
+      "chart_year": 2014,
+      "title": "Tsunami (Jump)",
+      "artist": "Dvbbs and Borgeous featuring Tinie Tempah",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 1932,
+      "chart_year": 2014,
+      "title": "I Got U",
+      "artist": "Duke Dumont featuring Jax Jones",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 1936,
+      "chart_year": 2014,
+      "title": "Hideaway",
+      "artist": "Kiesza",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1937,
+      "chart_year": 2014,
+      "title": "Waves",
+      "artist": "Mr Probz",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1942,
+      "chart_year": 2014,
+      "title": "Sing",
+      "artist": "Ed Sheeran",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1946,
+      "chart_year": 2014,
+      "title": "It's My Birthday",
+      "artist": "will.i.am featuring Cody Wise",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 1948,
+      "chart_year": 2014,
+      "title": "Crazy Stupid Love",
+      "artist": "Cheryl featuring Tinie Tempah",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1952,
+      "chart_year": 2014,
+      "title": "Prayer in C",
+      "artist": "Lilly Wood and Robin Schulz",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1953,
+      "chart_year": 2014,
+      "title": "Blame",
+      "artist": "Calvin Harris featuring John Newman",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1955,
+      "chart_year": 2014,
+      "title": "Bang Bang",
+      "artist": "Jessie J, Ariana Grande and Nicki Minaj",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1959,
+      "chart_year": 2014,
+      "title": "Wake Me Up",
+      "artist": "Gareth Malone's All Star Choir",
+      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "final": true
+    },
+    {
+      "chart_row_id": 1960,
+      "chart_year": 2014,
+      "title": "Do They Know It's Christmas?",
+      "artist": "Band Aid 30",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1899,
+      "chart_year": 2013,
+      "title": "Scream & Shout",
+      "artist": "will.i.am featuring Britney Spears",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 1900,
+      "chart_year": 2013,
+      "title": "Get Up (Rattle)",
+      "artist": "Bingo Players featuring Far East Movement",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1901,
+      "chart_year": 2013,
+      "title": "Thrift Shop",
+      "artist": "Macklemore & Ryan Lewis featuring Wanz",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1902,
+      "chart_year": 2013,
+      "title": "I Could Be the One",
+      "artist": "Avicii vs. Nicky Romero",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1905,
+      "chart_year": 2013,
+      "title": "Let's Get Ready to Rhumble",
+      "artist": "PJ & Duncan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1906,
+      "chart_year": 2013,
+      "title": "Need U (100%)",
+      "artist": "Duke Dumont featuring A*M*E",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1908,
+      "chart_year": 2013,
+      "title": "Get Lucky",
+      "artist": "Daft Punk featuring Pharrell Williams",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 1910,
+      "chart_year": 2013,
+      "title": "Blurred Lines",
+      "artist": "Robin Thicke featuring T.I. and Pharrell",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1911,
+      "chart_year": 2013,
+      "title": "I Love It",
+      "artist": "Icona Pop featuring Charli XCX",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1912,
+      "chart_year": 2013,
+      "title": "Love Me Again",
+      "artist": "John Newman",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1915,
+      "chart_year": 2013,
+      "title": "Burn",
+      "artist": "Ellie Goulding",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1924,
+      "chart_year": 2013,
+      "title": "Under Control",
+      "artist": "Calvin Harris and Alesso featuring Hurts",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1865,
+      "chart_year": 2012,
+      "title": "Good Feeling",
+      "artist": "Flo Rida",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1867,
+      "chart_year": 2012,
+      "title": "Twilight",
+      "artist": "Cover Drive",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1868,
+      "chart_year": 2012,
+      "title": "Titanium",
+      "artist": "David Guetta featuring Sia",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1870,
+      "chart_year": 2012,
+      "title": "Hot Right Now",
+      "artist": "DJ Fresh featuring Rita Ora",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1875,
+      "chart_year": 2012,
+      "title": "RIP",
+      "artist": "Rita Ora featuring Tinie Tempah",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1877,
+      "chart_year": 2012,
+      "title": "Feel the Love",
+      "artist": "Rudimental featuring John Newman",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1878,
+      "chart_year": 2012,
+      "title": "Sing",
+      "artist": "Gary Barlow and the Commonwealth Band",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1881,
+      "chart_year": 2012,
+      "title": "This Is Love",
+      "artist": "will.i.am featuring Eva Simons",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1882,
+      "chart_year": 2012,
+      "title": "Spectrum (Say My Name)",
+      "artist": "Florence and the Machine",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1883,
+      "chart_year": 2012,
+      "title": "Heatwave",
+      "artist": "Wiley featuring Ms D",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1885,
+      "chart_year": 2012,
+      "title": "Bom Bom",
+      "artist": "Sam and the Womp",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1888,
+      "chart_year": 2012,
+      "title": "Hall of Fame",
+      "artist": "The Script featuring will.i.am",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1889,
+      "chart_year": 2012,
+      "title": "Gangnam Style",
+      "artist": "Psy",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1890,
+      "chart_year": 2012,
+      "title": "Don't You Worry Child",
+      "artist": "Swedish House Mafia featuring John Martin",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1891,
+      "chart_year": 2012,
+      "title": "Sweet Nothing",
+      "artist": "Calvin Harris featuring Florence Welch",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1893,
+      "chart_year": 2012,
+      "title": "Candy",
+      "artist": "Robbie Williams",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1840,
+      "chart_year": 2011,
+      "title": "We R Who We R",
+      "artist": "Kesha",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1841,
+      "chart_year": 2011,
+      "title": "Price Tag",
+      "artist": "Jessie J featuring B.o.B",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1843,
+      "chart_year": 2011,
+      "title": "On the Floor",
+      "artist": "Jennifer Lopez featuring Pitbull",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1844,
+      "chart_year": 2011,
+      "title": "Party Rock Anthem",
+      "artist": "LMFAO featuring Lauren Bennett and GoonRock",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 1848,
+      "chart_year": 2011,
+      "title": "Louder",
+      "artist": "DJ Fresh featuring Sian Evans",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1852,
+      "chart_year": 2011,
+      "title": "Promises",
+      "artist": "Nero",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1853,
+      "chart_year": 2011,
+      "title": "Don't Go",
+      "artist": "Wretch 32 featuring Josh Kumra",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1857,
+      "chart_year": 2011,
+      "title": "No Regrets",
+      "artist": "Dappy",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1859,
+      "chart_year": 2011,
+      "title": "We Found Love",
+      "artist": "Rihanna featuring Calvin Harris",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1861,
+      "chart_year": 2011,
+      "title": "Wishing on a Star",
+      "artist": "The X Factor Finalists 2011 featuring JLS and One Direction",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1864,
+      "chart_year": 2011,
+      "title": "Wherever You Are",
+      "artist": "Military Wives with Gareth Malone",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1808,
+      "chart_year": 2010,
+      "title": "Fireflies",
+      "artist": "Owl City",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1809,
+      "chart_year": 2010,
+      "title": "Everybody Hurts",
+      "artist": "Helping Haiti",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1810,
+      "chart_year": 2010,
+      "title": "In My Head",
+      "artist": "Jason Derulo",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1815,
+      "chart_year": 2010,
+      "title": "Good Times",
+      "artist": "Roll Deep",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1816,
+      "chart_year": 2010,
+      "title": "Nothin' on You",
+      "artist": "B.o.B featuring Bruno Mars",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1817,
+      "chart_year": 2010,
+      "title": "Dirtee Disco",
+      "artist": "Dizzee Rascal",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1818,
+      "chart_year": 2010,
+      "title": "Gettin' Over You",
+      "artist": "David Guetta and Chris Willis featuring Fergie and LMFAO",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1819,
+      "chart_year": 2010,
+      "title": "Shout",
+      "artist": "Shout for England featuring Dizzee Rascal and James Corden",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1822,
+      "chart_year": 2010,
+      "title": "Airplanes",
+      "artist": "B.o.B featuring Hayley Williams",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1823,
+      "chart_year": 2010,
+      "title": "We No Speak Americano",
+      "artist": "Yolanda Be Cool and DCUP",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1826,
+      "chart_year": 2010,
+      "title": "Club Can't Handle Me",
+      "artist": "Flo Rida featuring David Guetta",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1827,
+      "chart_year": 2010,
+      "title": "Green Light",
+      "artist": "Roll Deep",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1828,
+      "chart_year": 2010,
+      "title": "Dynamite",
+      "artist": "Taio Cruz",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1830,
+      "chart_year": 2010,
+      "title": "Start Without You",
+      "artist": "Alexandra Burke featuring Laza Morgan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1831,
+      "chart_year": 2010,
+      "title": "Just the Way You Are (Amazing)",
+      "artist": "Bruno Mars",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1832,
+      "chart_year": 2010,
+      "title": "Written in the Stars",
+      "artist": "Tinie Tempah featuring Eric Turner",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1833,
+      "chart_year": 2010,
+      "title": "Forget You",
+      "artist": "CeeLo Green",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1543,
+      "chart_year": 2009,
+      "title": "The Fear",
+      "artist": "Lily Allen",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1545,
+      "chart_year": 2009,
+      "title": "Right Round",
+      "artist": "Flo Rida featuring Kesha",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1546,
+      "chart_year": 2009,
+      "title": "(Barry) Islands in the Stream",
+      "artist": "Vanessa Jenkins and Bryn West featuring Tom Jones and Robin Gibb",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1547,
+      "chart_year": 2009,
+      "title": "I'm Not Alone",
+      "artist": "Calvin Harris",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1550,
+      "chart_year": 2009,
+      "title": "Bonkers",
+      "artist": "Dizzee Rascal featuring Armand Van Helden",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1557,
+      "chart_year": 2009,
+      "title": "Never Leave You",
+      "artist": "Tinchy Stryder featuring Amelle Berrabah",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1559,
+      "chart_year": 2009,
+      "title": "Holiday",
+      "artist": "Dizzee Rascal featuring Chrome",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1560,
+      "chart_year": 2009,
+      "title": "Run This Town",
+      "artist": "Jay-Z featuring Rihanna and Kanye West",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1563,
+      "chart_year": 2009,
+      "title": "Oopsy Daisy",
+      "artist": "Chipmunk",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1564,
+      "chart_year": 2009,
+      "title": "Bad Boys",
+      "artist": "Alexandra Burke featuring Flo Rida",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1568,
+      "chart_year": 2009,
+      "title": "You Are Not Alone",
+      "artist": "The X Factor Finalists 2009",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1570,
+      "chart_year": 2009,
+      "title": "Killing in the Name",
+      "artist": "Rage Against the Machine",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1527,
+      "chart_year": 2008,
+      "title": "Now You're Gone",
+      "artist": "Basshunter featuring DJ Mental Theo's Bazzheadz",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1530,
+      "chart_year": 2008,
+      "title": "4 Minutes",
+      "artist": "Madonna featuring Justin Timberlake",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1531,
+      "chart_year": 2008,
+      "title": "That's Not My Name",
+      "artist": "The Ting Tings",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1532,
+      "chart_year": 2008,
+      "title": "Take a Bow",
+      "artist": "Rihanna",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1533,
+      "chart_year": 2008,
+      "title": "Singin' in the Rain",
+      "artist": "Mint Royale",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1535,
+      "chart_year": 2008,
+      "title": "Dance wiv Me",
+      "artist": "Dizzee Rascal featuring Calvin Harris and Chrome",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1537,
+      "chart_year": 2008,
+      "title": "So What",
+      "artist": "Pink",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1539,
+      "chart_year": 2008,
+      "title": "Hero",
+      "artist": "The X Factor Finalists 2008",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1540,
+      "chart_year": 2008,
+      "title": "Run",
+      "artist": "Leona Lewis",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1513,
+      "chart_year": 2007,
+      "title": "Grace Kelly",
+      "artist": "Mika",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1515,
+      "chart_year": 2007,
+      "title": "Walk This Way",
+      "artist": "Sugababes vs. Girls Aloud",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1516,
+      "chart_year": 2007,
+      "title": "I'm Gonna Be (500 Miles)",
+      "artist": "The Proclaimers featuring Brian Potter and Andy Pipkin",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1517,
+      "chart_year": 2007,
+      "title": "Give It to Me",
+      "artist": "Timbaland featuring Nelly Furtado and Justin Timberlake",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1520,
+      "chart_year": 2007,
+      "title": "The Way I Are",
+      "artist": "Timbaland featuring Keri Hilson",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1521,
+      "chart_year": 2007,
+      "title": "With Every Heartbeat",
+      "artist": "Robyn with Kleerup",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1525,
+      "chart_year": 2007,
+      "title": "What a Wonderful World",
+      "artist": "Katie Melua and Eva Cassidy",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1494,
+      "chart_year": 2006,
+      "title": "Nasty Girl",
+      "artist": "The Notorious B.I.G. featuring Diddy, Nelly, Jagged Edge and Avery Storm",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1495,
+      "chart_year": 2006,
+      "title": "Thunder in My Heart Again",
+      "artist": "Meck featuring Leo Sayer",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1496,
+      "chart_year": 2006,
+      "title": "Sorry",
+      "artist": "Madonna",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1497,
+      "chart_year": 2006,
+      "title": "It's Chico Time",
+      "artist": "Chico",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1500,
+      "chart_year": 2006,
+      "title": "Crazy",
+      "artist": "Gnarls Barkley",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1503,
+      "chart_year": 2006,
+      "title": "Hips Don't Lie",
+      "artist": "Shakira featuring Wyclef Jean",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1504,
+      "chart_year": 2006,
+      "title": "Smile",
+      "artist": "Lily Allen",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1505,
+      "chart_year": 2006,
+      "title": "Déjà Vu",
+      "artist": "Beyoncé featuring Jay-Z",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1506,
+      "chart_year": 2006,
+      "title": "America",
+      "artist": "Razorlight",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1509,
+      "chart_year": 2006,
+      "title": "Put Your Hands Up for Detroit",
+      "artist": "Fedde Le Grand",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1510,
+      "chart_year": 2006,
+      "title": "The Rose",
+      "artist": "Westlife",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1511,
+      "chart_year": 2006,
+      "title": "Smack That",
+      "artist": "Akon featuring Eminem",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1473,
+      "chart_year": 2005,
+      "title": "Against All Odds",
+      "artist": "Steve Brookstein",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1474,
+      "chart_year": 2005,
+      "title": "Jailhouse Rock\" (reissue)",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1475,
+      "chart_year": 2005,
+      "title": "Goodies",
+      "artist": "Ciara featuring Petey Pablo",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1476,
+      "chart_year": 2005,
+      "title": "It's Now or Never\" (reissue)",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1478,
+      "chart_year": 2005,
+      "title": "Get Right",
+      "artist": "Jennifer Lopez",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1479,
+      "chart_year": 2005,
+      "title": "Over and Over",
+      "artist": "Nelly featuring Tim McGraw",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1481,
+      "chart_year": 2005,
+      "title": "(Is This the Way to) Amarillo",
+      "artist": "Tony Christie featuring Peter Kay",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1482,
+      "chart_year": 2005,
+      "title": "Lonely",
+      "artist": "Akon",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1483,
+      "chart_year": 2005,
+      "title": "Axel F",
+      "artist": "Crazy Frog",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1484,
+      "chart_year": 2005,
+      "title": "Ghetto Gospel",
+      "artist": "2Pac featuring Elton John",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1485,
+      "chart_year": 2005,
+      "title": "I'll Be OK",
+      "artist": "McFly",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1487,
+      "chart_year": 2005,
+      "title": "Don't Cha",
+      "artist": "The Pussycat Dolls featuring Busta Rhymes",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1492,
+      "chart_year": 2005,
+      "title": "JCB",
+      "artist": "Nizlopi",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1449,
+      "chart_year": 2004,
+      "title": "Take Me to the Clouds Above",
+      "artist": "LMC vs. U2",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1450,
+      "chart_year": 2004,
+      "title": "With a Little Help from My Friends",
+      "artist": "Sam & Mark",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1451,
+      "chart_year": 2004,
+      "title": "Who's David?",
+      "artist": "Busted",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1452,
+      "chart_year": 2004,
+      "title": "Mysterious Girl",
+      "artist": "Peter Andre featuring Bubbler Ranx",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1454,
+      "chart_year": 2004,
+      "title": "Cha Cha Slide",
+      "artist": "DJ Casper",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1455,
+      "chart_year": 2004,
+      "title": "Yeah!",
+      "artist": "Usher featuring Lil Jon and Ludacris",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1457,
+      "chart_year": 2004,
+      "title": "Fuck It (I Don't Want You Back)",
+      "artist": "Eamon",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1458,
+      "chart_year": 2004,
+      "title": "F.U.R.B. (Fuck You Right Back)",
+      "artist": "Frankee",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1459,
+      "chart_year": 2004,
+      "title": "I Don't Wanna Know",
+      "artist": "Mario Winans featuring Enya and P. Diddy",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1460,
+      "chart_year": 2004,
+      "title": "Everytime",
+      "artist": "Britney Spears",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1462,
+      "chart_year": 2004,
+      "title": "Burn",
+      "artist": "Usher",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1463,
+      "chart_year": 2004,
+      "title": "Lola's Theme",
+      "artist": "The Shapeshifters",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1464,
+      "chart_year": 2004,
+      "title": "Baby Cakes",
+      "artist": "3 of a Kind",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1465,
+      "chart_year": 2004,
+      "title": "These Words",
+      "artist": "Natasha Bedingfield",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1467,
+      "chart_year": 2004,
+      "title": "Call on Me",
+      "artist": "Eric Prydz",
+      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "final": true
+    },
+    {
+      "chart_row_id": 1468,
+      "chart_year": 2004,
+      "title": "Radio",
+      "artist": "Robbie Williams",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1469,
+      "chart_year": 2004,
+      "title": "Wonderful",
+      "artist": "Ja Rule featuring R. Kelly and Ashanti",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1470,
+      "chart_year": 2004,
+      "title": "Vertigo",
+      "artist": "U2",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1428,
+      "chart_year": 2003,
+      "title": "Beautiful",
+      "artist": "Christina Aguilera",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1429,
+      "chart_year": 2003,
+      "title": "Spirit in the Sky",
+      "artist": "Gareth Gates featuring The Kumars",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1430,
+      "chart_year": 2003,
+      "title": "Make Luv",
+      "artist": "Room 5 featuring Oliver Cheatham",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1431,
+      "chart_year": 2003,
+      "title": "You Said No",
+      "artist": "Busted",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1432,
+      "chart_year": 2003,
+      "title": "Loneliness",
+      "artist": "Tomcraft",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1433,
+      "chart_year": 2003,
+      "title": "Ignition",
+      "artist": "R. Kelly",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1435,
+      "chart_year": 2003,
+      "title": "Crazy in Love",
+      "artist": "Beyoncé featuring Jay-Z",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1437,
+      "chart_year": 2003,
+      "title": "Breathe",
+      "artist": "Blu Cantrell featuring Sean Paul",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1439,
+      "chart_year": 2003,
+      "title": "Where Is the Love?",
+      "artist": "The Black Eyed Peas",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1441,
+      "chart_year": 2003,
+      "title": "Be Faithful",
+      "artist": "Fatman Scoop featuring the Crooklyn Clan",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 1443,
+      "chart_year": 2003,
+      "title": "Crashed the Wedding",
+      "artist": "| Busted",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 1444,
+      "chart_year": 2003,
+      "title": "Mandy",
+      "artist": "Westlife",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1445,
+      "chart_year": 2003,
+      "title": "Leave Right Now",
+      "artist": "Will Young",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1447,
+      "chart_year": 2003,
+      "title": "Mad World",
+      "artist": "Michael Andrews featuring Gary Jules",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1399,
+      "chart_year": 2002,
+      "title": "Gotta Get Thru This",
+      "artist": "Daniel Bedingfield",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1400,
+      "chart_year": 2002,
+      "title": "More Than a Woman",
+      "artist": "Aaliyah",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1401,
+      "chart_year": 2002,
+      "title": "My Sweet Lord\" (reissue)",
+      "artist": "George Harrison",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1402,
+      "chart_year": 2002,
+      "title": "Hero",
+      "artist": "Enrique Iglesias",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1409,
+      "chart_year": 2002,
+      "title": "Light My Fire",
+      "artist": "Will Young",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1410,
+      "chart_year": 2002,
+      "title": "A Little Less Conversation",
+      "artist": "Elvis vs. JXL",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1411,
+      "chart_year": 2002,
+      "title": "Anyone of Us (Stupid Mistake)",
+      "artist": "Gareth Gates",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1413,
+      "chart_year": 2002,
+      "title": "Round Round",
+      "artist": "Sugababes",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1414,
+      "chart_year": 2002,
+      "title": "Crossroads",
+      "artist": "Blazin' Squad",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1415,
+      "chart_year": 2002,
+      "title": "The Tide Is High (Get the Feeling)",
+      "artist": "Atomic Kitten",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1416,
+      "chart_year": 2002,
+      "title": "Just Like a Pill",
+      "artist": "Pink",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1417,
+      "chart_year": 2002,
+      "title": "The Ketchup Song",
+      "artist": "Las Ketchup",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1419,
+      "chart_year": 2002,
+      "title": "Heaven",
+      "artist": "DJ Sammy and Yanou featuring Do",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1421,
+      "chart_year": 2002,
+      "title": "Dirrty",
+      "artist": "Christina Aguilera featuring Redman",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1424,
+      "chart_year": 2002,
+      "title": "Sorry Seems to Be the Hardest Word",
+      "artist": "Blue featuring Elton John",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1371,
+      "chart_year": 2001,
+      "title": "Touch Me",
+      "artist": "Rui da Silva featuring Cassandra",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1373,
+      "chart_year": 2001,
+      "title": "Rollin",
+      "artist": "Limp Bizkit",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1375,
+      "chart_year": 2001,
+      "title": "It Wasn't Me",
+      "artist": "Shaggy featuring RikRok",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1376,
+      "chart_year": 2001,
+      "title": "Uptown Girl",
+      "artist": "Westlife",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1378,
+      "chart_year": 2001,
+      "title": "What Took You So Long?",
+      "artist": "Emma Bunton",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1380,
+      "chart_year": 2001,
+      "title": "It's Raining Men",
+      "artist": "Geri Halliwell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1381,
+      "chart_year": 2001,
+      "title": "Do You Really Like It?",
+      "artist": "DJ Pied Piper and the Masters of Ceremonies",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1382,
+      "chart_year": 2001,
+      "title": "Angel",
+      "artist": "Shaggy featuring Rayvon",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1383,
+      "chart_year": 2001,
+      "title": "Lady Marmalade",
+      "artist": "Christina Aguilera, Lil' Kim, Mýa and Pink",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1384,
+      "chart_year": 2001,
+      "title": "The Way to Your Love",
+      "artist": "Hear'Say",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1385,
+      "chart_year": 2001,
+      "title": "Another Chance",
+      "artist": "Roger Sanchez",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1386,
+      "chart_year": 2001,
+      "title": "Eternal Flame",
+      "artist": "Atomic Kitten",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1387,
+      "chart_year": 2001,
+      "title": "21 Seconds",
+      "artist": "So Solid Crew",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1388,
+      "chart_year": 2001,
+      "title": "Let's Dance",
+      "artist": "Five",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 1389,
+      "chart_year": 2001,
+      "title": "Too Close",
+      "artist": "Blue",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1390,
+      "chart_year": 2001,
+      "title": "Mambo No. 5",
+      "artist": "Bob the Builder",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1393,
+      "chart_year": 2001,
+      "title": "Because I Got High",
+      "artist": "Afroman",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1394,
+      "chart_year": 2001,
+      "title": "Queen of My Heart",
+      "artist": "Westlife",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1397,
+      "chart_year": 2001,
+      "title": "Gotta Get Thru This",
+      "artist": "Daniel Bedingfield",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1338,
+      "chart_year": 2000,
+      "title": "Rise",
+      "artist": "Gabrielle",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1340,
+      "chart_year": 2000,
+      "title": "American Pie",
+      "artist": "Madonna",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1341,
+      "chart_year": 2000,
+      "title": "Don't Give Up",
+      "artist": "Chicane featuring Bryan Adams",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1342,
+      "chart_year": 2000,
+      "title": "Bag It Up",
+      "artist": "Geri Halliwell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1344,
+      "chart_year": 2000,
+      "title": "Fill Me In",
+      "artist": "Craig David",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1348,
+      "chart_year": 2000,
+      "title": "Don't Call Me Baby",
+      "artist": "Madison Avenue",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1349,
+      "chart_year": 2000,
+      "title": "Day & Night",
+      "artist": "Billie Piper",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1350,
+      "chart_year": 2000,
+      "title": "It Feels So Good",
+      "artist": "Sonique",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1351,
+      "chart_year": 2000,
+      "title": "You See the Trouble with Me",
+      "artist": "Black Legend",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1355,
+      "chart_year": 2000,
+      "title": "We Will Rock You",
+      "artist": "Five and Queen",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1356,
+      "chart_year": 2000,
+      "title": "7 Days",
+      "artist": "Craig David",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1358,
+      "chart_year": 2000,
+      "title": "I Turn to You",
+      "artist": "Melanie C",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1359,
+      "chart_year": 2000,
+      "title": "Groovejet (If This Ain't Love)",
+      "artist": "Spiller featuring Sophie Ellis-Bextor",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1361,
+      "chart_year": 2000,
+      "title": "Take On Me",
+      "artist": "A1",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1363,
+      "chart_year": 2000,
+      "title": "Against All Odds",
+      "artist": "Mariah Carey featuring Westlife",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1365,
+      "chart_year": 2000,
+      "title": "Stomp",
+      "artist": "Steps",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1366,
+      "chart_year": 2000,
+      "title": "My Love",
+      "artist": "Westlife",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1369,
+      "chart_year": 2000,
+      "title": "Never Had a Dream Come True",
+      "artist": "S Club 7",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 161,
+      "chart_year": 1999,
+      "title": "Chocolate Salty Balls (P.S. I Love You)",
+      "artist": "Chef",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 164,
+      "chart_year": 1999,
+      "title": "Pretty Fly (for a White Guy)",
+      "artist": "The Offspring",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 165,
+      "chart_year": 1999,
+      "title": "You Don't Know Me",
+      "artist": "Armand van Helden featuring Duane Harden",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 166,
+      "chart_year": 1999,
+      "title": "Maria",
+      "artist": "Blondie",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 167,
+      "chart_year": 1999,
+      "title": "Fly Away",
+      "artist": "Lenny Kravitz",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 169,
+      "chart_year": 1999,
+      "title": "When the Going Gets Tough",
+      "artist": "Boyzone",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 170,
+      "chart_year": 1999,
+      "title": "Blame It on the Weatherman",
+      "artist": "B*Witched",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 171,
+      "chart_year": 1999,
+      "title": "Flat Beat",
+      "artist": "Mr. Oizo",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 172,
+      "chart_year": 1999,
+      "title": "Perfect Moment",
+      "artist": "Martine McCutcheon",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 176,
+      "chart_year": 1999,
+      "title": "Sweet like Chocolate",
+      "artist": "Shanks & Bigfoot",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 177,
+      "chart_year": 1999,
+      "title": "Everybody's Free (To Wear Sunscreen)",
+      "artist": "Baz Luhrmann",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 178,
+      "chart_year": 1999,
+      "title": "Bring It All Back",
+      "artist": "S Club 7",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 179,
+      "chart_year": 1999,
+      "title": "Boom, Boom, Boom, Boom!!",
+      "artist": "Vengaboys",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 180,
+      "chart_year": 1999,
+      "title": "9 PM (Till I Come)",
+      "artist": "ATB",
+      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "final": true
+    },
+    {
+      "chart_row_id": 181,
+      "chart_year": 1999,
+      "title": "Livin' la Vida Loca",
+      "artist": "Ricky Martin",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 182,
+      "chart_year": 1999,
+      "title": "When You Say Nothing at All",
+      "artist": "Ronan Keating",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 184,
+      "chart_year": 1999,
+      "title": "Mi Chico Latino",
+      "artist": "Geri Halliwell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 186,
+      "chart_year": 1999,
+      "title": "We're Going to Ibiza!",
+      "artist": "Vengaboys",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 187,
+      "chart_year": 1999,
+      "title": "Blue (Da Ba Dee)",
+      "artist": "Eiffel 65",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 188,
+      "chart_year": 1999,
+      "title": "Genie in a Bottle",
+      "artist": "Christina Aguilera",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 190,
+      "chart_year": 1999,
+      "title": "Keep on Movin",
+      "artist": "Five",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 191,
+      "chart_year": 1999,
+      "title": "Lift Me Up",
+      "artist": "Geri Halliwell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 192,
+      "chart_year": 1999,
+      "title": "King of My Castle",
+      "artist": "Wamdue Project",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 193,
+      "chart_year": 1999,
+      "title": "The Millennium Prayer",
+      "artist": "Cliff Richard",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 140,
+      "chart_year": 1998,
+      "title": "It's Like That",
+      "artist": "Run-DMC vs. Jason Nevins",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 141,
+      "chart_year": 1998,
+      "title": "All That I Need",
+      "artist": "Boyzone",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 143,
+      "chart_year": 1998,
+      "title": "Feel It",
+      "artist": "The Tamperer featuring Maya",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 145,
+      "chart_year": 1998,
+      "title": "3 Lions '98",
+      "artist": "Baddiel, Skinner and The Lightning Seeds",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 146,
+      "chart_year": 1998,
+      "title": "Because We Want To",
+      "artist": "Billie",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 147,
+      "chart_year": 1998,
+      "title": "Freak Me",
+      "artist": "Another Level",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 148,
+      "chart_year": 1998,
+      "title": "Deeper Underground",
+      "artist": "Jamiroquai",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 154,
+      "chart_year": 1998,
+      "title": "I Want You Back",
+      "artist": "Melanie B featuring Missy Elliott",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 156,
+      "chart_year": 1998,
+      "title": "Girlfriend",
+      "artist": "Billie",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 157,
+      "chart_year": 1998,
+      "title": "Gym and Tonic",
+      "artist": "Spacedust",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 158,
+      "chart_year": 1998,
+      "title": "Believe",
+      "artist": "Cher",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 111,
+      "chart_year": 1997,
+      "title": "Professional Widow (It's Got to Be Big)",
+      "artist": "Tori Amos",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 121,
+      "chart_year": 1997,
+      "title": "You're Not Alone",
+      "artist": "Olive",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 123,
+      "chart_year": 1997,
+      "title": "MMMBop",
+      "artist": "Hanson",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 124,
+      "chart_year": 1997,
+      "title": "I'll Be Missing You",
+      "artist": "Puff Daddy and Faith Evans featuring 112",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 129,
+      "chart_year": 1997,
+      "title": "Barbie Girl",
+      "artist": "Aqua",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 130,
+      "chart_year": 1997,
+      "title": "Perfect Day",
+      "artist": "Various artists",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 131,
+      "chart_year": 1997,
+      "title": "Teletubbies say \"Eh-oh!",
+      "artist": "Teletubbies",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 93,
+      "chart_year": 1996,
+      "title": "Firestarter",
+      "artist": "The Prodigy",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 94,
+      "chart_year": 1996,
+      "title": "Return of the Mack",
+      "artist": "Mark Morrison",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 99,
+      "chart_year": 1996,
+      "title": "Forever Love",
+      "artist": "Gary Barlow",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 101,
+      "chart_year": 1996,
+      "title": "Flava",
+      "artist": "Peter Andre",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 108,
+      "chart_year": 1996,
+      "title": "I Feel You",
+      "artist": "Peter Andre",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 76,
+      "chart_year": 1995,
+      "title": "Love Can Build a Bridge",
+      "artist": "Cher, Chrissie Hynde and Neneh Cherry with Eric Clapton",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 77,
+      "chart_year": 1995,
+      "title": "Don't Stop (Wiggle Wiggle)",
+      "artist": "The Outhere Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 80,
+      "chart_year": 1995,
+      "title": "Dreamer",
+      "artist": "Livin' Joy",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 81,
+      "chart_year": 1995,
+      "title": "Boom Boom Boom",
+      "artist": "The Outhere Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 84,
+      "chart_year": 1995,
+      "title": "You Are Not Alone",
+      "artist": "Michael Jackson",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 87,
+      "chart_year": 1995,
+      "title": "Gangsta's Paradise",
+      "artist": "Coolio featuring L.V.",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 59,
+      "chart_year": 1994,
+      "title": "Twist and Shout",
+      "artist": "Chaka Demus & Pliers featuring Jack Radics and Taxi Gang",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 65,
+      "chart_year": 1994,
+      "title": "The Real Thing",
+      "artist": "Tony Di Bart",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 66,
+      "chart_year": 1994,
+      "title": "Inside",
+      "artist": "Stiltskin",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 67,
+      "chart_year": 1994,
+      "title": "Come On You Reds",
+      "artist": "Manchester United F.C.",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 69,
+      "chart_year": 1994,
+      "title": "Saturday Night",
+      "artist": "Whigfield",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 71,
+      "chart_year": 1994,
+      "title": "Baby Come Back",
+      "artist": "Pato Banton featuring Ali and Robin Campbell",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 72,
+      "chart_year": 1994,
+      "title": "Let Me Be Your Fantasy",
+      "artist": "Baby D",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 73,
+      "chart_year": 1994,
+      "title": "Stay Another Day",
+      "artist": "East 17",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 45,
+      "chart_year": 1993,
+      "title": "No Limit",
+      "artist": "2 Unlimited",
+      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "final": true
+    },
+    {
+      "chart_row_id": 47,
+      "chart_year": 1993,
+      "title": "Young at Heart",
+      "artist": "The Bluebells",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 48,
+      "chart_year": 1993,
+      "title": "All That She Wants",
+      "artist": "Ace of Base",
+      "reason": "official_charts_isrc_conflicts_with_stored_evidence",
+      "final": true
+    },
+    {
+      "chart_row_id": 49,
+      "chart_year": 1993,
+      "title": "(I Can't Help) Falling in Love With You",
+      "artist": "UB40",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 50,
+      "chart_year": 1993,
+      "title": "Dreams",
+      "artist": "Gabrielle",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 52,
+      "chart_year": 1993,
+      "title": "Living on My Own",
+      "artist": "Freddie Mercury",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 53,
+      "chart_year": 1993,
+      "title": "Mr. Vain",
+      "artist": "Culture Beat",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 55,
+      "chart_year": 1993,
+      "title": "Relight My Fire",
+      "artist": "Take That featuring Lulu",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 35,
+      "chart_year": 1992,
+      "title": "Stay",
+      "artist": "Shakespears Sister",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 36,
+      "chart_year": 1992,
+      "title": "Deeply Dippy",
+      "artist": "Right Said Fred",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 37,
+      "chart_year": 1992,
+      "title": "Please Don't Go",
+      "artist": "KWS",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 40,
+      "chart_year": 1992,
+      "title": "Ebeneezer Goode",
+      "artist": "The Shamen",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 41,
+      "chart_year": 1992,
+      "title": "Sleeping Satellite",
+      "artist": "Tasmin Archer",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 42,
+      "chart_year": 1992,
+      "title": "End of the Road",
+      "artist": "Boyz II Men",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 43,
+      "chart_year": 1992,
+      "title": "Would I Lie to You?",
+      "artist": "Charles & Eddie",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 19,
+      "chart_year": 1991,
+      "title": "Sadness (Part I)",
+      "artist": "Enigma",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 21,
+      "chart_year": 1991,
+      "title": "3 a.m. Eternal",
+      "artist": "The KLF",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 22,
+      "chart_year": 1991,
+      "title": "Do the Bartman",
+      "artist": "The Simpsons",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 23,
+      "chart_year": 1991,
+      "title": "Should I Stay or Should I Go",
+      "artist": "The Clash",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 24,
+      "chart_year": 1991,
+      "title": "The Stonk",
+      "artist": "Hale and Pace and the Stonkers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 27,
+      "chart_year": 1991,
+      "title": "I Wanna Sex You Up",
+      "artist": "Color Me Badd",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 31,
+      "chart_year": 1991,
+      "title": "Dizzy",
+      "artist": "Vic Reeves and The Wonder Stuff",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 33,
+      "chart_year": 1991,
+      "title": "Don't Let the Sun Go Down on Me",
+      "artist": "George Michael and Elton John",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 4,
+      "chart_year": 1990,
+      "title": "Nothing Compares 2 U",
+      "artist": "Sinéad O'Connor",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 5,
+      "chart_year": 1990,
+      "title": "Dub Be Good to Me",
+      "artist": "Beats International",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 7,
+      "chart_year": 1990,
+      "title": "Vogue",
+      "artist": "Madonna",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 8,
+      "chart_year": 1990,
+      "title": "Killer",
+      "artist": "Adamski",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 9,
+      "chart_year": 1990,
+      "title": "World in Motion",
+      "artist": "New Order",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 10,
+      "chart_year": 1990,
+      "title": "Turtle Power",
+      "artist": "Partners in Kryme",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 11,
+      "chart_year": 1990,
+      "title": "Itsy Bitsy Teenie Weenie Yellow Polka Dot Bikini",
+      "artist": "Bombalurina",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 12,
+      "chart_year": 1990,
+      "title": "The Joker",
+      "artist": "Steve Miller Band",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 15,
+      "chart_year": 1990,
+      "title": "Unchained Melody",
+      "artist": "The Righteous Brothers",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 16,
+      "chart_year": 1990,
+      "title": "Ice Ice Baby",
+      "artist": "Vanilla Ice",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 17,
+      "chart_year": 1990,
+      "title": "Saviour's Day",
+      "artist": "Cliff Richard",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 527,
+      "chart_year": 1989,
+      "title": "Especially for You",
+      "artist": "Kylie Minogue and Jason Donovan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 528,
+      "chart_year": 1989,
+      "title": "Something's Gotten Hold of My Heart",
+      "artist": "Marc Almond featuring Gene Pitney",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 529,
+      "chart_year": 1989,
+      "title": "Belfast Child",
+      "artist": "Simple Minds",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 530,
+      "chart_year": 1989,
+      "title": "Too Many Broken Hearts",
+      "artist": "Jason Donovan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 531,
+      "chart_year": 1989,
+      "title": "Like a Prayer",
+      "artist": "Madonna",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 532,
+      "chart_year": 1989,
+      "title": "Eternal Flame",
+      "artist": "The Bangles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 533,
+      "chart_year": 1989,
+      "title": "Hand on Your Heart",
+      "artist": "Kylie Minogue",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 534,
+      "chart_year": 1989,
+      "title": "Ferry 'Cross the Mersey",
+      "artist": "The Christians, Holly Johnson, Paul McCartney, Gerry Marsden and Stock Aitken Waterman",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 536,
+      "chart_year": 1989,
+      "title": "Back to Life (However Do You Want Me)",
+      "artist": "Soul II Soul",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 540,
+      "chart_year": 1989,
+      "title": "That's What I Like",
+      "artist": "Jive Bunny and the Mastermixers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 541,
+      "chart_year": 1989,
+      "title": "All Around the World",
+      "artist": "Lisa Stansfield",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 542,
+      "chart_year": 1989,
+      "title": "You Got It (The Right Stuff)",
+      "artist": "New Kids on the Block",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 543,
+      "chart_year": 1989,
+      "title": "Let's Party",
+      "artist": "Jive Bunny and the Mastermixers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 515,
+      "chart_year": 1988,
+      "title": "Theme from S'Express",
+      "artist": "S'Express",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 516,
+      "chart_year": 1988,
+      "title": "Perfect",
+      "artist": "Fairground Attraction",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 517,
+      "chart_year": 1988,
+      "title": "Doctorin' the Tardis",
+      "artist": "The Timelords",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 519,
+      "chart_year": 1988,
+      "title": "Nothing's Gonna Change My Love for You",
+      "artist": "Glenn Medeiros",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 520,
+      "chart_year": 1988,
+      "title": "The Only Way Is Up",
+      "artist": "Yazz and the Plastic Population",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 521,
+      "chart_year": 1988,
+      "title": "A Groovy Kind of Love",
+      "artist": "Phil Collins",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 522,
+      "chart_year": 1988,
+      "title": "He Ain't Heavy, He's My Brother",
+      "artist": "The Hollies",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 523,
+      "chart_year": 1988,
+      "title": "One Moment in Time",
+      "artist": "Whitney Houston",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 525,
+      "chart_year": 1988,
+      "title": "First Time",
+      "artist": "Robin Beck",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 526,
+      "chart_year": 1988,
+      "title": "Mistletoe and Wine",
+      "artist": "Cliff Richard",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 497,
+      "chart_year": 1987,
+      "title": "I Knew You Were Waiting (For Me)",
+      "artist": "Aretha Franklin and George Michael",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 500,
+      "chart_year": 1987,
+      "title": "Respectable",
+      "artist": "Mel and Kim",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 501,
+      "chart_year": 1987,
+      "title": "Let It Be",
+      "artist": "Ferry Aid",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 504,
+      "chart_year": 1987,
+      "title": "Star Trekkin",
+      "artist": "The Firm",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 506,
+      "chart_year": 1987,
+      "title": "La Bamba",
+      "artist": "Los Lobos",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 507,
+      "chart_year": 1987,
+      "title": "I Just Can't Stop Loving You",
+      "artist": "Michael Jackson and Siedah Garrett",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 509,
+      "chart_year": 1987,
+      "title": "Pump Up the Volume",
+      "artist": "MARRS",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 511,
+      "chart_year": 1987,
+      "title": "Always on My Mind",
+      "artist": "Pet Shop Boys",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 479,
+      "chart_year": 1986,
+      "title": "When the Going Gets Tough, the Tough Get Going",
+      "artist": "Billy Ocean",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 480,
+      "chart_year": 1986,
+      "title": "Chain Reaction",
+      "artist": "Diana Ross",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 481,
+      "chart_year": 1986,
+      "title": "Living Doll",
+      "artist": "Cliff Richard and the Young Ones featuring Hank Marvin",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 485,
+      "chart_year": 1986,
+      "title": "Spirit in the Sky",
+      "artist": "Doctor and the Medics",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 488,
+      "chart_year": 1986,
+      "title": "I Want to Wake Up with You",
+      "artist": "Boris Gardiner",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 489,
+      "chart_year": 1986,
+      "title": "Don't Leave Me This Way",
+      "artist": "The Communards with Sarah Jane Morris",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 491,
+      "chart_year": 1986,
+      "title": "Every Loser Wins",
+      "artist": "Nick Berry",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 493,
+      "chart_year": 1986,
+      "title": "The Final Countdown",
+      "artist": "Europe",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 495,
+      "chart_year": 1986,
+      "title": "Reet Petite",
+      "artist": "Jackie Wilson",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 464,
+      "chart_year": 1985,
+      "title": "I Know Him So Well",
+      "artist": "Elaine Paige and Barbara Dickson",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 466,
+      "chart_year": 1985,
+      "title": "Easy Lover",
+      "artist": "Philip Bailey and Phil Collins",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 469,
+      "chart_year": 1985,
+      "title": "19",
+      "artist": "Paul Hardcastle",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 470,
+      "chart_year": 1985,
+      "title": "You'll Never Walk Alone",
+      "artist": "The Crowd",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 471,
+      "chart_year": 1985,
+      "title": "Frankie",
+      "artist": "Sister Sledge",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 472,
+      "chart_year": 1985,
+      "title": "Into the Groove",
+      "artist": "Madonna",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 473,
+      "chart_year": 1985,
+      "title": "I Got You Babe",
+      "artist": "UB40 and Chrissie Hynde",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 474,
+      "chart_year": 1985,
+      "title": "Dancing in the Street",
+      "artist": "David Bowie and Mick Jagger",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 475,
+      "chart_year": 1985,
+      "title": "If I Was",
+      "artist": "Midge Ure",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 476,
+      "chart_year": 1985,
+      "title": "The Power of Love",
+      "artist": "Jennifer Rush",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 477,
+      "chart_year": 1985,
+      "title": "A Good Heart",
+      "artist": "Feargal Sharkey",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 453,
+      "chart_year": 1984,
+      "title": "Relax",
+      "artist": "Frankie Goes to Hollywood",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 454,
+      "chart_year": 1984,
+      "title": "99 Red Balloons",
+      "artist": "Nena",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 455,
+      "chart_year": 1984,
+      "title": "The Reflex",
+      "artist": "Duran Duran",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 456,
+      "chart_year": 1984,
+      "title": "Two Tribes",
+      "artist": "Frankie Goes to Hollywood",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 459,
+      "chart_year": 1984,
+      "title": "I Feel for You",
+      "artist": "Chaka Khan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 460,
+      "chart_year": 1984,
+      "title": "I Should Have Known Better",
+      "artist": "Jim Diamond",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 461,
+      "chart_year": 1984,
+      "title": "The Power of Love",
+      "artist": "Frankie Goes to Hollywood",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 439,
+      "chart_year": 1983,
+      "title": "Down Under",
+      "artist": "Men at Work",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 442,
+      "chart_year": 1983,
+      "title": "Total Eclipse of the Heart",
+      "artist": "Bonnie Tyler",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 444,
+      "chart_year": 1983,
+      "title": "Let's Dance",
+      "artist": "David Bowie",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 448,
+      "chart_year": 1983,
+      "title": "Wherever I Lay My Hat (That's My Home)",
+      "artist": "Paul Young",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 449,
+      "chart_year": 1983,
+      "title": "Give It Up",
+      "artist": "KC and the Sunshine Band",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 450,
+      "chart_year": 1983,
+      "title": "Red Red Wine",
+      "artist": "UB40",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 421,
+      "chart_year": 1982,
+      "title": "Oh Julie",
+      "artist": "Shakin' Stevens",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 422,
+      "chart_year": 1982,
+      "title": "The Lion Sleeps Tonight",
+      "artist": "Tight Fit",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 425,
+      "chart_year": 1982,
+      "title": "Ebony and Ivory",
+      "artist": "Paul McCartney and Stevie Wonder",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 429,
+      "chart_year": 1982,
+      "title": "I've Never Been to Me",
+      "artist": "Charlene",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 431,
+      "chart_year": 1982,
+      "title": "Fame",
+      "artist": "Irene Cara",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 432,
+      "chart_year": 1982,
+      "title": "Come On Eileen",
+      "artist": "Dexys Midnight Runners",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 433,
+      "chart_year": 1982,
+      "title": "Eye of the Tiger",
+      "artist": "Survivor",
+      "reason": "musicbrainz_isrc_has_multiple_exact_recordings",
+      "final": true
+    },
+    {
+      "chart_row_id": 435,
+      "chart_year": 1982,
+      "title": "Do You Really Want to Hurt Me",
+      "artist": "Culture Club",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 405,
+      "chart_year": 1981,
+      "title": "Woman",
+      "artist": "John Lennon",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 406,
+      "chart_year": 1981,
+      "title": "Shaddap You Face",
+      "artist": "Joe Dolce Music Theatre",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 407,
+      "chart_year": 1981,
+      "title": "Jealous Guy",
+      "artist": "Roxy Music",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 409,
+      "chart_year": 1981,
+      "title": "Making Your Mind Up",
+      "artist": "Bucks Fizz",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 411,
+      "chart_year": 1981,
+      "title": "One Day In Your Life",
+      "artist": "Michael Jackson",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 413,
+      "chart_year": 1981,
+      "title": "Green Door",
+      "artist": "Shakin' Stevens",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 417,
+      "chart_year": 1981,
+      "title": "Under Pressure",
+      "artist": "Queen and David Bowie",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 418,
+      "chart_year": 1981,
+      "title": "Begin the Beguine (Volver a Empezar)",
+      "artist": "Julio Iglesias",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 390,
+      "chart_year": 1980,
+      "title": "Together We Are Beautiful",
+      "artist": "Fern Kinney",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 391,
+      "chart_year": 1980,
+      "title": "Working My Way Back to You – Forgive Me Girl",
+      "artist": "The Detroit Spinners",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 395,
+      "chart_year": 1980,
+      "title": "Theme from M*A*S*H (Suicide is Painless)",
+      "artist": "The Mash",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 396,
+      "chart_year": 1980,
+      "title": "Crying",
+      "artist": "Don McLean",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 397,
+      "chart_year": 1980,
+      "title": "Xanadu",
+      "artist": "Olivia Newton-John and Electric Light Orchestra",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 399,
+      "chart_year": 1980,
+      "title": "Ashes to Ashes",
+      "artist": "David Bowie",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 401,
+      "chart_year": 1980,
+      "title": "Feels Like I'm in Love",
+      "artist": "Kelly Marie",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 403,
+      "chart_year": 1980,
+      "title": "(Just Like) Starting Over",
+      "artist": "John Lennon",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 838,
+      "chart_year": 1979,
+      "title": "I Will Survive",
+      "artist": "Gloria Gaynor",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 839,
+      "chart_year": 1979,
+      "title": "Bright Eyes",
+      "artist": "Art Garfunkel",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 840,
+      "chart_year": 1979,
+      "title": "Ring My Bell",
+      "artist": "Anita Ward",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 842,
+      "chart_year": 1979,
+      "title": "I Don't Like Mondays",
+      "artist": "The Boomtown Rats",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 843,
+      "chart_year": 1979,
+      "title": "We Don't Talk Anymore",
+      "artist": "Cliff Richard",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 845,
+      "chart_year": 1979,
+      "title": "Message in a Bottle",
+      "artist": "The Police",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 846,
+      "chart_year": 1979,
+      "title": "Video Killed the Radio Star",
+      "artist": "The Buggles",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 825,
+      "chart_year": 1978,
+      "title": "Uptown Top Ranking",
+      "artist": "Althea & Donna",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 826,
+      "chart_year": 1978,
+      "title": "Figaro",
+      "artist": "Brotherhood of Man",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 827,
+      "chart_year": 1978,
+      "title": "Matchstalk Men & Matchstalk Cats & Dogs",
+      "artist": "Brian and Michael",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 828,
+      "chart_year": 1978,
+      "title": "Night Fever",
+      "artist": "Bee Gees",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 829,
+      "chart_year": 1978,
+      "title": "You're the One That I Want",
+      "artist": "John Travolta and Olivia Newton-John",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 830,
+      "chart_year": 1978,
+      "title": "Three Times a Lady",
+      "artist": "Commodores",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 831,
+      "chart_year": 1978,
+      "title": "Dreadlock Holiday",
+      "artist": "10cc",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 832,
+      "chart_year": 1978,
+      "title": "Summer Nights",
+      "artist": "John Travolta and Olivia Newton-John",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 835,
+      "chart_year": 1978,
+      "title": "Mary's Boy Child – Oh My Lord",
+      "artist": "Boney M.",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 814,
+      "chart_year": 1977,
+      "title": "Chanson D'Amour",
+      "artist": "The Manhattan Transfer",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 815,
+      "chart_year": 1977,
+      "title": "Free",
+      "artist": "Deniece Williams",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 816,
+      "chart_year": 1977,
+      "title": "Lucille",
+      "artist": "Kenny Rogers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 817,
+      "chart_year": 1977,
+      "title": "Show You the Way to Go",
+      "artist": "The Jacksons",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 818,
+      "chart_year": 1977,
+      "title": "So You Win Again",
+      "artist": "Hot Chocolate",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 819,
+      "chart_year": 1977,
+      "title": "I Feel Love",
+      "artist": "Donna Summer",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 800,
+      "chart_year": 1976,
+      "title": "I Love to Love (But My Baby Loves to Dance)",
+      "artist": "Tina Charles",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 801,
+      "chart_year": 1976,
+      "title": "Save Your Kisses for Me",
+      "artist": "Brotherhood of Man",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 802,
+      "chart_year": 1976,
+      "title": "Fernando",
+      "artist": "ABBA",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 803,
+      "chart_year": 1976,
+      "title": "No Charge",
+      "artist": "J. J. Barrie",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 804,
+      "chart_year": 1976,
+      "title": "Combine Harvester",
+      "artist": "The Wurzels",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 806,
+      "chart_year": 1976,
+      "title": "Don't Go Breaking My Heart",
+      "artist": "Elton John and Kiki Dee",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 810,
+      "chart_year": 1976,
+      "title": "When a Child Is Born (Soleado)",
+      "artist": "Johnny Mathis",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 779,
+      "chart_year": 1975,
+      "title": "Down Down",
+      "artist": "Status Quo",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 780,
+      "chart_year": 1975,
+      "title": "Ms Grace",
+      "artist": "The Tymes",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 781,
+      "chart_year": 1975,
+      "title": "January",
+      "artist": "Pilot",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 782,
+      "chart_year": 1975,
+      "title": "Make Me Smile (Come Up and See Me)",
+      "artist": "Steve Harley & Cockney Rebel",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 783,
+      "chart_year": 1975,
+      "title": "If",
+      "artist": "Telly Savalas",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 784,
+      "chart_year": 1975,
+      "title": "Bye Bye Baby",
+      "artist": "Bay City Rollers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 787,
+      "chart_year": 1975,
+      "title": "Whispering Grass",
+      "artist": "Windsor Davies and Don Estelle",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 788,
+      "chart_year": 1975,
+      "title": "I'm Not in Love",
+      "artist": "10cc",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 790,
+      "chart_year": 1975,
+      "title": "Give a Little Love",
+      "artist": "Bay City Rollers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 792,
+      "chart_year": 1975,
+      "title": "Can't Give You Anything (But My Love)",
+      "artist": "The Stylistics",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 794,
+      "chart_year": 1975,
+      "title": "Hold Me Close",
+      "artist": "David Essex",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 795,
+      "chart_year": 1975,
+      "title": "I Only Have Eyes for You",
+      "artist": "Art Garfunkel",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 796,
+      "chart_year": 1975,
+      "title": "D.I.V.O.R.C.E.",
+      "artist": "Billy Connolly",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 797,
+      "chart_year": 1975,
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 758,
+      "chart_year": 1974,
+      "title": "You Won't Find Another Fool Like Me",
+      "artist": "The New Seekers",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 759,
+      "chart_year": 1974,
+      "title": "Tiger Feet",
+      "artist": "Mud",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 765,
+      "chart_year": 1974,
+      "title": "Sugar Baby Love",
+      "artist": "The Rubettes",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 768,
+      "chart_year": 1974,
+      "title": "She",
+      "artist": "Charles Aznavour",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 769,
+      "chart_year": 1974,
+      "title": "Rock Your Baby",
+      "artist": "George McCrae",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 770,
+      "chart_year": 1974,
+      "title": "When Will I See You Again",
+      "artist": "The Three Degrees",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 772,
+      "chart_year": 1974,
+      "title": "Kung Fu Fighting",
+      "artist": "Carl Douglas",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 774,
+      "chart_year": 1974,
+      "title": "Sad Sweet Dreamer",
+      "artist": "Sweet Sensation",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 777,
+      "chart_year": 1974,
+      "title": "You're the First, the Last, My Everything",
+      "artist": "Barry White",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 778,
+      "chart_year": 1974,
+      "title": "Lonely This Christmas",
+      "artist": "Mud",
+      "reason": "exact_release_track_identity_mismatch",
+      "final": true
+    },
+    {
+      "chart_row_id": 743,
+      "chart_year": 1973,
+      "title": "Blockbuster!",
+      "artist": "The Sweet",
+      "reason": "musicbrainz_no_contemporary_official_release",
+      "final": true
+    },
+    {
+      "chart_row_id": 744,
+      "chart_year": 1973,
+      "title": "The Twelfth of Never",
+      "artist": "Donny Osmond",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 745,
+      "chart_year": 1973,
+      "title": "Get Down",
+      "artist": "Gilbert O'Sullivan",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 747,
+      "chart_year": 1973,
+      "title": "See My Baby Jive",
+      "artist": "Wizzard",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 749,
+      "chart_year": 1973,
+      "title": "Rubber Bullets",
+      "artist": "10cc",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 751,
+      "chart_year": 1973,
+      "title": "Welcome Home",
+      "artist": "Peters and Lee",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 752,
+      "chart_year": 1973,
+      "title": "I'm the Leader of the Gang (I Am)",
+      "artist": "Gary Glitter",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 753,
+      "chart_year": 1973,
+      "title": "Young Love",
+      "artist": "Donny Osmond",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 754,
+      "chart_year": 1973,
+      "title": "Angel Fingers",
+      "artist": "Wizzard",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 730,
+      "chart_year": 1972,
+      "title": "Son of My Father",
+      "artist": "Chicory Tip",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 731,
+      "chart_year": 1972,
+      "title": "Without You",
+      "artist": "Nilsson",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 732,
+      "chart_year": 1972,
+      "title": "Amazing Grace",
+      "artist": "Royal Scots Dragoon Guards",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 734,
+      "chart_year": 1972,
+      "title": "Take Me Bak 'Ome",
+      "artist": "Slade",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 737,
+      "chart_year": 1972,
+      "title": "You Wear It Well",
+      "artist": "Rod Stewart",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 738,
+      "chart_year": 1972,
+      "title": "How Can I Be Sure",
+      "artist": "David Cassidy",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 739,
+      "chart_year": 1972,
+      "title": "Mouldy Old Dough",
+      "artist": "Lieutenant Pigeon",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 740,
+      "chart_year": 1972,
+      "title": "Clair",
+      "artist": "Gilbert O'Sullivan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 741,
+      "chart_year": 1972,
+      "title": "My Ding-a-Ling",
+      "artist": "Chuck Berry",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 742,
+      "chart_year": 1972,
+      "title": "Long Haired Lover from Liverpool",
+      "artist": "Little Jimmy Osmond",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 717,
+      "chart_year": 1971,
+      "title": "Grandad",
+      "artist": "Clive Dunn",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 718,
+      "chart_year": 1971,
+      "title": "My Sweet Lord",
+      "artist": "George Harrison",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 719,
+      "chart_year": 1971,
+      "title": "Baby Jump",
+      "artist": "Mungo Jerry",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 720,
+      "chart_year": 1971,
+      "title": "Hot Love",
+      "artist": "T. Rex",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 721,
+      "chart_year": 1971,
+      "title": "Double Barrel",
+      "artist": "Dave and Ansell Collins",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 722,
+      "chart_year": 1971,
+      "title": "Knock Three Times",
+      "artist": "Dawn",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 724,
+      "chart_year": 1971,
+      "title": "Get It On",
+      "artist": "T. Rex",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 725,
+      "chart_year": 1971,
+      "title": "I'm Still Waiting",
+      "artist": "Diana Ross",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 703,
+      "chart_year": 1970,
+      "title": "Two Little Boys",
+      "artist": "Rolf Harris",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 705,
+      "chart_year": 1970,
+      "title": "Wand'rin' Star",
+      "artist": "Lee Marvin",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 706,
+      "chart_year": 1970,
+      "title": "Bridge over Troubled Water",
+      "artist": "Simon & Garfunkel",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 707,
+      "chart_year": 1970,
+      "title": "All Kinds of Everything",
+      "artist": "Dana",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 709,
+      "chart_year": 1970,
+      "title": "Back Home",
+      "artist": "England World Cup Squad",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 711,
+      "chart_year": 1970,
+      "title": "In the Summertime",
+      "artist": "Mungo Jerry",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 712,
+      "chart_year": 1970,
+      "title": "The Wonder of You",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 713,
+      "chart_year": 1970,
+      "title": "The Tears of a Clown",
+      "artist": "Smokey Robinson and the Miracles",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 715,
+      "chart_year": 1970,
+      "title": "Woodstock",
+      "artist": "Matthews Southern Comfort",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1150,
+      "chart_year": 1969,
+      "title": "Ob-La-Di, Ob-La-Da",
+      "artist": "Marmalade",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1151,
+      "chart_year": 1969,
+      "title": "Lily the Pink",
+      "artist": "The Scaffold",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1153,
+      "chart_year": 1969,
+      "title": "Blackberry Way",
+      "artist": "The Move",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1156,
+      "chart_year": 1969,
+      "title": "I Heard It Through the Grapevine",
+      "artist": "Marvin Gaye",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1157,
+      "chart_year": 1969,
+      "title": "Israelites",
+      "artist": "Desmond Dekker and the Aces",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1158,
+      "chart_year": 1969,
+      "title": "Get Back",
+      "artist": "The Beatles with Billy Preston",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1159,
+      "chart_year": 1969,
+      "title": "Dizzy",
+      "artist": "Tommy Roe",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1160,
+      "chart_year": 1969,
+      "title": "The Ballad of John and Yoko",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1161,
+      "chart_year": 1969,
+      "title": "Something in the Air",
+      "artist": "Thunderclap Newman",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1163,
+      "chart_year": 1969,
+      "title": "In the Year 2525",
+      "artist": "Zager and Evans",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1164,
+      "chart_year": 1969,
+      "title": "Je t'aime... moi non plus",
+      "artist": "Jane Birkin and Serge Gainsbourg",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1165,
+      "chart_year": 1969,
+      "title": "I'll Never Fall in Love Again",
+      "artist": "Bobbie Gentry",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1166,
+      "chart_year": 1969,
+      "title": "Sugar, Sugar",
+      "artist": "The Archies",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1167,
+      "chart_year": 1969,
+      "title": "Two Little Boys",
+      "artist": "Rolf Harris",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1131,
+      "chart_year": 1968,
+      "title": "Everlasting Love",
+      "artist": "Love Affair",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1132,
+      "chart_year": 1968,
+      "title": "Mighty Quinn",
+      "artist": "Manfred Mann",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1135,
+      "chart_year": 1968,
+      "title": "Lady Madonna",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1136,
+      "chart_year": 1968,
+      "title": "Congratulations",
+      "artist": "Cliff Richard",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1138,
+      "chart_year": 1968,
+      "title": "Young Girl",
+      "artist": "Gary Puckett and the Union Gap",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1139,
+      "chart_year": 1968,
+      "title": "Jumpin' Jack Flash",
+      "artist": "The Rolling Stones",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1140,
+      "chart_year": 1968,
+      "title": "Baby, Come Back",
+      "artist": "The Equals",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1143,
+      "chart_year": 1968,
+      "title": "Fire",
+      "artist": "The Crazy World of Arthur Brown",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1144,
+      "chart_year": 1968,
+      "title": "Do It Again",
+      "artist": "The Beach Boys",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1145,
+      "chart_year": 1968,
+      "title": "I've Gotta Get a Message to You",
+      "artist": "Bee Gees",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1146,
+      "chart_year": 1968,
+      "title": "Hey Jude",
+      "artist": "The Beatles",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1147,
+      "chart_year": 1968,
+      "title": "Those Were the Days",
+      "artist": "Mary Hopkin",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1148,
+      "chart_year": 1968,
+      "title": "The Good, the Bad and the Ugly",
+      "artist": "Hugo Montenegro",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1149,
+      "chart_year": 1968,
+      "title": "Lily the Pink",
+      "artist": "The Scaffold",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1118,
+      "chart_year": 1967,
+      "title": "I'm a Believer",
+      "artist": "The Monkees",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1119,
+      "chart_year": 1967,
+      "title": "This Is My Song",
+      "artist": "Petula Clark",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1120,
+      "chart_year": 1967,
+      "title": "Somethin' Stupid",
+      "artist": "Frank and Nancy Sinatra",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1121,
+      "chart_year": 1967,
+      "title": "Puppet on a String",
+      "artist": "Sandie Shaw",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1122,
+      "chart_year": 1967,
+      "title": "Silence Is Golden",
+      "artist": "The Tremeloes",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1123,
+      "chart_year": 1967,
+      "title": "A Whiter Shade of Pale",
+      "artist": "Procol Harum",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1124,
+      "chart_year": 1967,
+      "title": "All You Need Is Love",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1127,
+      "chart_year": 1967,
+      "title": "Baby Now That I've Found You",
+      "artist": "The Foundations",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1129,
+      "chart_year": 1967,
+      "title": "Hello, Goodbye",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1100,
+      "chart_year": 1966,
+      "title": "Keep On Running",
+      "artist": "The Spencer Davis Group",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1101,
+      "chart_year": 1966,
+      "title": "Michelle",
+      "artist": "The Overlanders",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1102,
+      "chart_year": 1966,
+      "title": "These Boots Are Made for Walkin",
+      "artist": "Nancy Sinatra",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1103,
+      "chart_year": 1966,
+      "title": "The Sun Ain't Gonna Shine Anymore",
+      "artist": "The Walker Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1107,
+      "chart_year": 1966,
+      "title": "Paint It Black",
+      "artist": "The Rolling Stones",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1109,
+      "chart_year": 1966,
+      "title": "Paperback Writer",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1110,
+      "chart_year": 1966,
+      "title": "Get Away",
+      "artist": "Georgie Fame and the Blue Flames",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1111,
+      "chart_year": 1966,
+      "title": "Out of Time",
+      "artist": "Chris Farlowe",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1113,
+      "chart_year": 1966,
+      "title": "All or Nothing",
+      "artist": "Small Faces",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1114,
+      "chart_year": 1966,
+      "title": "Distant Drums",
+      "artist": "Jim Reeves",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1115,
+      "chart_year": 1966,
+      "title": "Reach Out I'll Be There",
+      "artist": "Four Tops",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1117,
+      "chart_year": 1966,
+      "title": "Green, Green Grass of Home",
+      "artist": "Tom Jones",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1081,
+      "chart_year": 1965,
+      "title": "Yeh, Yeh",
+      "artist": "Georgie Fame and the Blue Flames",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1082,
+      "chart_year": 1965,
+      "title": "Go Now",
+      "artist": "The Moody Blues",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1083,
+      "chart_year": 1965,
+      "title": "You've Lost That Lovin' Feelin",
+      "artist": "The Righteous Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1085,
+      "chart_year": 1965,
+      "title": "I'll Never Find Another You",
+      "artist": "The Seekers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1087,
+      "chart_year": 1965,
+      "title": "The Last Time",
+      "artist": "The Rolling Stones",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1089,
+      "chart_year": 1965,
+      "title": "The Minute You're Gone",
+      "artist": "Cliff Richard",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1090,
+      "chart_year": 1965,
+      "title": "King of the Road",
+      "artist": "Roger Miller",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1091,
+      "chart_year": 1965,
+      "title": "Where Are You Now",
+      "artist": "Jackie Trent",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1092,
+      "chart_year": 1965,
+      "title": "Long Live Love",
+      "artist": "Sandie Shaw",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1093,
+      "chart_year": 1965,
+      "title": "Crying in the Chapel",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1094,
+      "chart_year": 1965,
+      "title": "I'm Alive",
+      "artist": "The Hollies",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1095,
+      "chart_year": 1965,
+      "title": "I Got You Babe",
+      "artist": "Sonny & Cher",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1097,
+      "chart_year": 1965,
+      "title": "Make It Easy on Yourself",
+      "artist": "The Walker Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1098,
+      "chart_year": 1965,
+      "title": "Tears",
+      "artist": "Ken Dodd",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1061,
+      "chart_year": 1964,
+      "title": "Needles and Pins",
+      "artist": "The Searchers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1062,
+      "chart_year": 1964,
+      "title": "Diane",
+      "artist": "The Bachelors",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1063,
+      "chart_year": 1964,
+      "title": "Anyone Who Had a Heart",
+      "artist": "Cilla Black",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1064,
+      "chart_year": 1964,
+      "title": "Little Children",
+      "artist": "Billy J. Kramer and the Dakotas",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1065,
+      "chart_year": 1964,
+      "title": "Can't Buy Me Love",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1066,
+      "chart_year": 1964,
+      "title": "A World Without Love",
+      "artist": "Peter and Gordon",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1068,
+      "chart_year": 1964,
+      "title": "Juliet",
+      "artist": "The Four Pennies",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1069,
+      "chart_year": 1964,
+      "title": "You're My World",
+      "artist": "Cilla Black",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1070,
+      "chart_year": 1964,
+      "title": "It's Over",
+      "artist": "Roy Orbison",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1071,
+      "chart_year": 1964,
+      "title": "A Hard Day's Night",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1072,
+      "chart_year": 1964,
+      "title": "Do Wah Diddy Diddy",
+      "artist": "Manfred Mann",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1074,
+      "chart_year": 1964,
+      "title": "You Really Got Me",
+      "artist": "The Kinks",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1076,
+      "chart_year": 1964,
+      "title": "Oh, Pretty Woman",
+      "artist": "Roy Orbison",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1077,
+      "chart_year": 1964,
+      "title": "(There's) Always Something There to Remind Me",
+      "artist": "Sandie Shaw",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1078,
+      "chart_year": 1964,
+      "title": "Baby Love",
+      "artist": "The Supremes",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1079,
+      "chart_year": 1964,
+      "title": "Little Red Rooster",
+      "artist": "The Rolling Stones",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1080,
+      "chart_year": 1964,
+      "title": "I Feel Fine",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1044,
+      "chart_year": 1963,
+      "title": "Dance On!",
+      "artist": "The Shadows",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1045,
+      "chart_year": 1963,
+      "title": "Diamonds",
+      "artist": "Jet Harris and Tony Meehan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1046,
+      "chart_year": 1963,
+      "title": "The Wayward Wind",
+      "artist": "Frank Ifield",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1047,
+      "chart_year": 1963,
+      "title": "Summer Holiday",
+      "artist": "Cliff Richard and the Shadows",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1050,
+      "chart_year": 1963,
+      "title": "From Me to You",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1051,
+      "chart_year": 1963,
+      "title": "I Like It",
+      "artist": "Gerry and the Pacemakers",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1052,
+      "chart_year": 1963,
+      "title": "Confessin",
+      "artist": "Frank Ifield",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1053,
+      "chart_year": 1963,
+      "title": "(You're the) Devil in Disguise",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1054,
+      "chart_year": 1963,
+      "title": "Sweets for My Sweet",
+      "artist": "The Searchers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1055,
+      "chart_year": 1963,
+      "title": "Bad to Me",
+      "artist": "Billy J. Kramer and the Dakotas",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1056,
+      "chart_year": 1963,
+      "title": "She Loves You",
+      "artist": "The Beatles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1057,
+      "chart_year": 1963,
+      "title": "Do You Love Me",
+      "artist": "Brian Poole and the Tremeloes",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1058,
+      "chart_year": 1963,
+      "title": "You'll Never Walk Alone",
+      "artist": "Gerry and the Pacemakers",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1059,
+      "chart_year": 1963,
+      "title": "I Want to Hold Your Hand",
+      "artist": "The Beatles",
+      "reason": "musicbrainz_isrc_has_no_exact_title_artist_recording",
+      "final": true
+    },
+    {
+      "chart_row_id": 1034,
+      "chart_year": 1962,
+      "title": "Wonderful Land",
+      "artist": "The Shadows",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1035,
+      "chart_year": 1962,
+      "title": "Nut Rocker",
+      "artist": "B. Bumble and the Stingers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1036,
+      "chart_year": 1962,
+      "title": "Good Luck Charm",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1037,
+      "chart_year": 1962,
+      "title": "Come Outside",
+      "artist": "Mike Sarne with Wendy Richard",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1038,
+      "chart_year": 1962,
+      "title": "I Can't Stop Loving You",
+      "artist": "Ray Charles",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1039,
+      "chart_year": 1962,
+      "title": "I Remember You",
+      "artist": "Frank Ifield",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1040,
+      "chart_year": 1962,
+      "title": "She's Not You",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1041,
+      "chart_year": 1962,
+      "title": "Telstar",
+      "artist": "The Tornados",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1042,
+      "chart_year": 1962,
+      "title": "Lovesick Blues",
+      "artist": "Frank Ifield",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1016,
+      "chart_year": 1961,
+      "title": "Poetry in Motion",
+      "artist": "Johnny Tillotson",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1017,
+      "chart_year": 1961,
+      "title": "Are You Lonesome Tonight?",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1018,
+      "chart_year": 1961,
+      "title": "Sailor",
+      "artist": "Petula Clark",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1019,
+      "chart_year": 1961,
+      "title": "Wooden Heart",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1020,
+      "chart_year": 1961,
+      "title": "Blue Moon",
+      "artist": "The Marcels",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1021,
+      "chart_year": 1961,
+      "title": "On the Rebound",
+      "artist": "Floyd Cramer",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1022,
+      "chart_year": 1961,
+      "title": "You're Driving Me Crazy",
+      "artist": "The Temperance Seven",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1023,
+      "chart_year": 1961,
+      "title": "Surrender",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1024,
+      "chart_year": 1961,
+      "title": "Runaway",
+      "artist": "Del Shannon",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1025,
+      "chart_year": 1961,
+      "title": "Temptation",
+      "artist": "The Everly Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1026,
+      "chart_year": 1961,
+      "title": "Well I Ask You",
+      "artist": "Eden Kane",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1027,
+      "chart_year": 1961,
+      "title": "You Don't Know",
+      "artist": "Helen Shapiro",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1029,
+      "chart_year": 1961,
+      "title": "Kon-Tiki",
+      "artist": "The Shadows",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1030,
+      "chart_year": 1961,
+      "title": "Michael",
+      "artist": "The Highwaymen",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1031,
+      "chart_year": 1961,
+      "title": "Walkin' Back to Happiness",
+      "artist": "Helen Shapiro",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1033,
+      "chart_year": 1961,
+      "title": "Moon River",
+      "artist": "Danny Williams",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 999,
+      "chart_year": 1960,
+      "title": "What Do You Want to Make Those Eyes at Me For?",
+      "artist": "Emile Ford and the Checkmates",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1001,
+      "chart_year": 1960,
+      "title": "Why",
+      "artist": "Anthony Newley",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1002,
+      "chart_year": 1960,
+      "title": "Poor Me",
+      "artist": "Adam Faith",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1004,
+      "chart_year": 1960,
+      "title": "My Old Man's a Dustman",
+      "artist": "Lonnie Donegan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1005,
+      "chart_year": 1960,
+      "title": "Do You Mind?",
+      "artist": "Anthony Newley",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1006,
+      "chart_year": 1960,
+      "title": "Cathy's Clown",
+      "artist": "The Everly Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1007,
+      "chart_year": 1960,
+      "title": "Three Steps to Heaven",
+      "artist": "Eddie Cochran",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1009,
+      "chart_year": 1960,
+      "title": "Please Don't Tease",
+      "artist": "Cliff Richard and the Shadows",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 1010,
+      "chart_year": 1960,
+      "title": "Shakin' All Over",
+      "artist": "Johnny Kidd and the Pirates",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1011,
+      "chart_year": 1960,
+      "title": "Apache",
+      "artist": "The Shadows",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1012,
+      "chart_year": 1960,
+      "title": "Tell Laura I Love Her",
+      "artist": "Ricky Valance",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1013,
+      "chart_year": 1960,
+      "title": "Only the Lonely",
+      "artist": "Roy Orbison",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 1014,
+      "chart_year": 1960,
+      "title": "It's Now or Never",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_multiple_exact_title_artist_pages",
+      "final": true
+    },
+    {
+      "chart_row_id": 1015,
+      "chart_year": 1960,
+      "title": "I Love You",
+      "artist": "Cliff Richard and the Shadows",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2337,
+      "chart_year": 1959,
+      "title": "As I Love You",
+      "artist": "Shirley Bassey",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2338,
+      "chart_year": 1959,
+      "title": "Smoke Gets in Your Eyes",
+      "artist": "The Platters",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2339,
+      "chart_year": 1959,
+      "title": "Side Saddle",
+      "artist": "Russ Conway",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2340,
+      "chart_year": 1959,
+      "title": "It Doesn't Matter Anymore",
+      "artist": "Buddy Holly",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2341,
+      "chart_year": 1959,
+      "title": "Roulette",
+      "artist": "Russ Conway",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2342,
+      "chart_year": 1959,
+      "title": "Dream Lover",
+      "artist": "Bobby Darin",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2343,
+      "chart_year": 1959,
+      "title": "Living Doll",
+      "artist": "Cliff Richard and the Drifters",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2344,
+      "chart_year": 1959,
+      "title": "Only Sixteen",
+      "artist": "Craig Douglas",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2345,
+      "chart_year": 1959,
+      "title": "Here Comes Summer",
+      "artist": "Jerry Keller",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2346,
+      "chart_year": 1959,
+      "title": "Mack the Knife",
+      "artist": "Bobby Darin",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2347,
+      "chart_year": 1959,
+      "title": "Travellin' Light",
+      "artist": "Cliff Richard and the Shadows",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2348,
+      "chart_year": 1959,
+      "title": "What Do You Want?",
+      "artist": "Adam Faith",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2349,
+      "chart_year": 1959,
+      "title": "What Do You Want to Make Those Eyes at Me For?",
+      "artist": "Emile Ford and the Checkmates",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2325,
+      "chart_year": 1958,
+      "title": "Great Balls of Fire",
+      "artist": "Jerry Lee Lewis",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2327,
+      "chart_year": 1958,
+      "title": "The Story of My Life",
+      "artist": "Michael Holliday",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2328,
+      "chart_year": 1958,
+      "title": "Magic Moments",
+      "artist": "Perry Como",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2330,
+      "chart_year": 1958,
+      "title": "Who's Sorry Now",
+      "artist": "Connie Francis",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2331,
+      "chart_year": 1958,
+      "title": "On the Street Where You Live",
+      "artist": "Vic Damone",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2332,
+      "chart_year": 1958,
+      "title": "When",
+      "artist": "The Kalin Twins",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2333,
+      "chart_year": 1958,
+      "title": "It's All in the Game",
+      "artist": "Tommy Edwards",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2335,
+      "chart_year": 1958,
+      "title": "It's Only Make Believe",
+      "artist": "Conway Twitty",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2313,
+      "chart_year": 1957,
+      "title": "Singing the Blues",
+      "artist": "Guy Mitchell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2314,
+      "chart_year": 1957,
+      "title": "Singing the Blues",
+      "artist": "Tommy Steele",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2315,
+      "chart_year": 1957,
+      "title": "The Garden of Eden",
+      "artist": "Frankie Vaughan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2316,
+      "chart_year": 1957,
+      "title": "Young Love",
+      "artist": "Tab Hunter",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2318,
+      "chart_year": 1957,
+      "title": "Rock-a-Billy",
+      "artist": "Guy Mitchell",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2319,
+      "chart_year": 1957,
+      "title": "Butterfly",
+      "artist": "Andy Williams",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2320,
+      "chart_year": 1957,
+      "title": "Yes Tonight Josephine",
+      "artist": "Johnnie Ray",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2321,
+      "chart_year": 1957,
+      "title": "All Shook Up",
+      "artist": "Elvis Presley",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2322,
+      "chart_year": 1957,
+      "title": "Diana",
+      "artist": "Paul Anka",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2323,
+      "chart_year": 1957,
+      "title": "That'll Be the Day",
+      "artist": "The Crickets",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2324,
+      "chart_year": 1957,
+      "title": "Mary's Boy Child",
+      "artist": "Harry Belafonte",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2300,
+      "chart_year": 1956,
+      "title": "Rock Around the Clock",
+      "artist": "Bill Haley & His Comets",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2301,
+      "chart_year": 1956,
+      "title": "Sixteen Tons",
+      "artist": "Tennessee Ernie Ford",
+      "reason": "musicbrainz_isrc_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2302,
+      "chart_year": 1956,
+      "title": "Memories Are Made of This",
+      "artist": "Dean Martin",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2303,
+      "chart_year": 1956,
+      "title": "It's Almost Tomorrow",
+      "artist": "The Dream Weavers",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2304,
+      "chart_year": 1956,
+      "title": "Rock and Roll Waltz",
+      "artist": "Kay Starr",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2305,
+      "chart_year": 1956,
+      "title": "The Poor People of Paris",
+      "artist": "Winifred Atwell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2306,
+      "chart_year": 1956,
+      "title": "No Other Love",
+      "artist": "Ronnie Hilton",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2307,
+      "chart_year": 1956,
+      "title": "I'll Be Home",
+      "artist": "Pat Boone",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2308,
+      "chart_year": 1956,
+      "title": "Why Do Fools Fall in Love",
+      "artist": "The Teenagers featuring Frankie Lymon",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2309,
+      "chart_year": 1956,
+      "title": "Whatever Will Be, Will Be (Que Sera, Sera)",
+      "artist": "Doris Day",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2310,
+      "chart_year": 1956,
+      "title": "Lay Down Your Arms",
+      "artist": "Anne Shelton",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2311,
+      "chart_year": 1956,
+      "title": "A Woman in Love",
+      "artist": "Frankie Laine",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2312,
+      "chart_year": 1956,
+      "title": "Just Walking in the Rain",
+      "artist": "Johnnie Ray",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2287,
+      "chart_year": 1955,
+      "title": "Mambo Italiano",
+      "artist": "Rosemary Clooney",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2288,
+      "chart_year": 1955,
+      "title": "Softly, Softly",
+      "artist": "Ruby Murray",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2289,
+      "chart_year": 1955,
+      "title": "Give Me Your Word",
+      "artist": "Tennessee Ernie Ford",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2290,
+      "chart_year": 1955,
+      "title": "Cherry Pink (and Apple Blossom White)",
+      "artist": "Pérez Prado and his Orchestra",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2291,
+      "chart_year": 1955,
+      "title": "Stranger in Paradise",
+      "artist": "Tony Bennett",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2293,
+      "chart_year": 1955,
+      "title": "Unchained Melody",
+      "artist": "Jimmy Young",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2294,
+      "chart_year": 1955,
+      "title": "Dreamboat",
+      "artist": "Alma Cogan",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2295,
+      "chart_year": 1955,
+      "title": "Rose Marie",
+      "artist": "Slim Whitman",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2296,
+      "chart_year": 1955,
+      "title": "The Man from Laramie",
+      "artist": "Jimmy Young",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2297,
+      "chart_year": 1955,
+      "title": "Hernando's Hideaway",
+      "artist": "The Johnston Brothers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2298,
+      "chart_year": 1955,
+      "title": "Rock Around the Clock",
+      "artist": "Bill Haley & His Comets",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2299,
+      "chart_year": 1955,
+      "title": "Christmas Alphabet",
+      "artist": "Dickie Valentine",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2277,
+      "chart_year": 1954,
+      "title": "I See the Moon",
+      "artist": "The Stargazers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2278,
+      "chart_year": 1954,
+      "title": "Secret Love",
+      "artist": "Doris Day",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2279,
+      "chart_year": 1954,
+      "title": "Such a Night",
+      "artist": "Johnnie Ray",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2280,
+      "chart_year": 1954,
+      "title": "Cara Mia",
+      "artist": "David Whitfield with Mantovani and his Orchestra",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2281,
+      "chart_year": 1954,
+      "title": "Little Things Mean a Lot",
+      "artist": "Kitty Kallen",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2282,
+      "chart_year": 1954,
+      "title": "Three Coins in the Fountain",
+      "artist": "Frank Sinatra",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2283,
+      "chart_year": 1954,
+      "title": "Hold My Hand",
+      "artist": "Don Cornell",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2284,
+      "chart_year": 1954,
+      "title": "My Son, My Son",
+      "artist": "Vera Lynn",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2285,
+      "chart_year": 1954,
+      "title": "This Ole House",
+      "artist": "Rosemary Clooney",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2286,
+      "chart_year": 1954,
+      "title": "Let's Have Another Party",
+      "artist": "Winifred Atwell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2262,
+      "chart_year": 1953,
+      "title": "You Belong to Me",
+      "artist": "Jo Stafford",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2263,
+      "chart_year": 1953,
+      "title": "Comes A-Long A-Love",
+      "artist": "Kay Starr",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2264,
+      "chart_year": 1953,
+      "title": "Outside of Heaven",
+      "artist": "Eddie Fisher",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2265,
+      "chart_year": 1953,
+      "title": "Don't Let the Stars Get in Your Eyes",
+      "artist": "Perry Como",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2266,
+      "chart_year": 1953,
+      "title": "She Wears Red Feathers",
+      "artist": "Guy Mitchell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2267,
+      "chart_year": 1953,
+      "title": "Broken Wings",
+      "artist": "The Stargazers",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2268,
+      "chart_year": 1953,
+      "title": "(How Much Is) That Doggie in the Window?",
+      "artist": "Lita Roza",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2269,
+      "chart_year": 1953,
+      "title": "I Believe",
+      "artist": "Frankie Laine",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2270,
+      "chart_year": 1953,
+      "title": "I'm Walking Behind You",
+      "artist": "Eddie Fisher with Sally Sweetland",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2271,
+      "chart_year": 1953,
+      "title": "The Song from Moulin Rouge",
+      "artist": "Mantovani",
+      "reason": "official_charts_exact_title_artist_not_found",
+      "final": true
+    },
+    {
+      "chart_row_id": 2272,
+      "chart_year": 1953,
+      "title": "Look at That Girl",
+      "artist": "Guy Mitchell",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2273,
+      "chart_year": 1953,
+      "title": "Hey Joe",
+      "artist": "Frankie Laine",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2274,
+      "chart_year": 1953,
+      "title": "Answer Me",
+      "artist": "David Whitfield",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    },
+    {
+      "chart_row_id": 2275,
+      "chart_year": 1953,
+      "title": "Answer Me",
+      "artist": "Frankie Laine",
+      "reason": "official_charts_page_has_no_isrc",
+      "final": true
+    }
+  ]
+}

@@ -26,7 +26,8 @@ const evidence = (overrides = {}) => ({
   musicbrainz_release_url: "https://musicbrainz.org/release/11111111-1111-4111-8111-111111111113",
   release_group_mbid: "11111111-1111-4111-8111-111111111114", release_status: "Official",
   track_position: 1, track_recording_mbid: "11111111-1111-4111-8111-111111111112",
-  release_recording_occurrences: 1, release_track_count: 1, version_notes: "Original studio recording; no remix, live or cover indicators.",
+  release_recording_occurrences: 1, release_track_count: 1, duration_ms: 212000,
+  version_notes: "Original studio recording; no remix, live or cover indicators.",
   risk_notes: "Single-track official release.", ...overrides
 });
 
@@ -128,21 +129,33 @@ test("the command rejects every write mode before reading inputs", () => {
   }
 });
 
-test("the committed read-only scan reports every one of the 819 live unresolved rows exactly once", async () => {
+test("the committed active scan reports and safely classifies every one of the 819 live rows exactly once", async () => {
   const load = async name => JSON.parse(await readFile(new URL(`../supabase/operations/${name}`, import.meta.url), "utf8"));
   const snapshot = await load("historical-uk-number-ones-reconciliation-scan-live-state-20261124.json");
   const report = await load("historical-uk-number-ones-scalable-scan-report-20261124.json");
   const summary = await load("historical-uk-number-ones-scalable-scan-summary-20261124.json");
   const plan = await load("historical-uk-number-ones-scalable-review-plan-20261124.json");
+  const activeEvidence = await load("historical-uk-number-ones-active-verified-evidence-20261124.json");
+  const activeFailures = await load("historical-uk-number-ones-active-failures-20261124.json");
+  const activeState = await load("historical-uk-number-ones-active-evidence-state-20261124.json");
   assert.equal(snapshot.read_only, true);
   assert.equal(snapshot.rows.length, 819);
   assert.equal(report.read_only, true);
   assert.equal(report.results.length, 819);
   assert.equal(new Set(report.results.map(result => result.chart_row_id)).size, 819);
-  assert.ok(report.results.every(result => result.category === "UNRESOLVED" && result.reason));
-  assert.equal(summary.verified_total, 0);
-  assert.equal(summary.unresolved, 819);
+  assert.ok(report.results.every(result => result.category === "UNRESOLVED" ? Boolean(result.reason) :
+    ["VERIFIED_EXISTING", "VERIFIED_IMPORT"].includes(result.category) && Boolean(result.evidence)));
+  assert.equal(Object.keys(activeEvidence.entries).length, 88);
+  assert.equal(activeFailures.failures.length, 731);
+  assert.equal(Object.keys(activeState.results).length, 819);
+  assert.ok(Object.values(activeState.results).every(result => result.final === true));
+  assert.equal(summary.verified_existing, 3);
+  assert.equal(summary.verified_imports, 72);
+  assert.equal(summary.verified_total, 75);
+  assert.equal(summary.unresolved, 744);
   assert.equal(summary.prior_evidence_rows_reused, 576);
   assert.equal(plan.production_authorized, false);
-  assert.equal(plan.records.length, 0);
+  assert.equal(plan.records.length, 75);
+  assert.ok(plan.records.every(record => record.preconditions.canonical_rating_rows === 0 &&
+    record.preconditions.historical_rating_rows === 0 && record.safety_contract.preserve_all_ratings === true));
 });

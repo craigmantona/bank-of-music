@@ -83,6 +83,7 @@ export function validateIndependentEvidence(row, evidence) {
   if (evidence?.track_recording_mbid?.toLowerCase() !== String(evidence?.recording_mbid || "").toLowerCase()) failures.push("release_track_recording_mismatch");
   if (evidence?.release_recording_occurrences !== 1) failures.push("release_track_not_unique");
   if (!Number.isInteger(evidence?.release_track_count) || evidence.release_track_count < 1) failures.push("release_track_count_missing");
+  if (!Number.isInteger(evidence?.duration_ms) || evidence.duration_ms < 30000) failures.push("exact_track_duration_missing_or_invalid");
   if (evidence?.release_track_count > 1 && !String(evidence?.risk_notes || "").match(/selected[- ]track/i)) failures.push("selected_track_risk_not_disclosed");
   if (!String(evidence?.version_notes || "").trim()) failures.push("version_risk_not_disclosed");
   if (!["existing_recording", "safe_import"].includes(evidence?.action)) failures.push("unsupported_action");
@@ -154,7 +155,8 @@ export function buildReviewPlan(scan, snapshot) {
       chart_row_id: row.chart_row_id, action: row.category === "VERIFIED_EXISTING" ? "link_existing" : "import_verified",
       placeholder_canonical_id: row.placeholder_canonical_id, recording_mbid: row.evidence.recording_mbid,
       release_mbid: row.evidence.release_mbid, release_group_mbid: row.evidence.release_group_mbid,
-      track_position: row.evidence.track_position, existing_song_id: row.evidence.existing_song_id || null
+      track_position: row.evidence.track_position, existing_song_id: row.evidence.existing_song_id || null,
+      reuse_album_id: row.evidence.reuse_album_id || null
     };
     const manifestSha256 = digest({ evidence: row.evidence, mutation_payload: mutationPayload, row_fingerprint: row.row_fingerprint });
     return {
