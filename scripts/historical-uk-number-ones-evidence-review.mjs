@@ -58,9 +58,11 @@ export function buildManifestPayload(audit) {
   const { approval_gate: _approvalGate, ...signedSafetyContract } = audit.safety_contract;
   return {
     operation_key: audit.manifest_payload?.operation_key
-      || (audit.artifact.endsWith("batch-3-audit")
-        ? "20261124_uk_number_ones_verified_batch_3"
-        : "20261123_uk_number_ones_verified_batch_2"),
+      || (audit.artifact.endsWith("batch-4-audit")
+        ? "20261124_uk_number_ones_verified_batch_4"
+        : audit.artifact.endsWith("batch-3-audit")
+          ? "20261124_uk_number_ones_verified_batch_3"
+          : "20261123_uk_number_ones_verified_batch_2"),
     snapshot: audit.snapshot,
     audit_coverage: audit.audit_coverage,
     selection_policy: audit.selection_policy,
@@ -103,7 +105,7 @@ export function validateAudit(audit) {
   }
   assert.match(
     audit.snapshot.candidate_state_artifact,
-    /^historical-uk-number-ones-verified-batch-[23]-live-state-\d{8}\.json$/
+    /^historical-uk-number-ones-verified-batch-[234]-live-state-\d{8}\.json$/
   );
   assert.match(audit.snapshot.candidate_state_sha256, SHA256);
 
@@ -224,11 +226,22 @@ export function validateAudit(audit) {
       assert.equal(candidate.action, "import_verified");
       assert.equal(candidate.classification, "verified_catalogue_import");
       assert.equal(candidate.target.song_id, null);
-      assert.equal(candidate.target.album_id, null);
+      assert.ok(
+        candidate.target.album_id === null
+          || (Number.isSafeInteger(candidate.target.album_id) && candidate.target.album_id > 0),
+        `reviewed album target is invalid for chart entry ${chart.id}`
+      );
       assert.equal(candidate.target.canonical_id, chart.placeholder_canonical_id);
       assert.equal(candidate.target.stored_title, chart.title);
       assert.equal(candidate.target.stored_artist, chart.artist);
       assert.equal(candidate.target.duration_ms, release.track_duration_ms);
+      if (candidate.target.album_id !== null) {
+        assert.match(
+          candidate.risk_notes.join(" "),
+          /already exists in BOM and must be reused exactly/,
+          `reviewed existing album disclosure missing for chart entry ${chart.id}`
+        );
+      }
     }
   }
 
@@ -278,6 +291,9 @@ export function validateAudit(audit) {
     ...(audit.safety_contract.shared_reviewed_release_insert_once === undefined
       ? {}
       : { shared_reviewed_release_insert_once: true }),
+    ...(audit.safety_contract.reviewed_existing_album_reuse === undefined
+      ? {}
+      : { reviewed_existing_album_reuse: true }),
     rollback_operation_required: true,
     production_execution_authorized: false
   };
@@ -297,6 +313,7 @@ export function validateAudit(audit) {
   assert.equal(
     audit.expected_deltas.albums,
     new Set(batch.filter(candidate => candidate.action === "import_verified")
+      .filter(candidate => candidate.target.album_id === null)
       .map(candidate => candidate.musicbrainz_release_evidence.release_id)).size
   );
   assert.equal(
@@ -360,16 +377,36 @@ export function auditCandidateState(state, audit) {
       musicbrainz_recording_id: null
     });
 
-    const expectedCollisionCount = candidate.action === "link_existing" ? 1 : 0;
+    const expectedRecordingCollisionCount = candidate.action === "link_existing" ? 1 : 0;
+    const expectedAlbumCollisionCount =
+      candidate.action === "link_existing" || candidate.target.album_id !== null ? 1 : 0;
     assert.deepEqual(captured.catalogue_collision, {
-      song_recording_rows: expectedCollisionCount,
-      canonical_recording_rows: expectedCollisionCount,
-      album_release_rows: expectedCollisionCount,
-      album_release_group_rows: expectedCollisionCount
+      song_recording_rows: expectedRecordingCollisionCount,
+      canonical_recording_rows: expectedRecordingCollisionCount,
+      album_release_rows: expectedAlbumCollisionCount,
+      album_release_group_rows: expectedAlbumCollisionCount
     });
 
     if (candidate.action === "import_verified") {
-      assert.equal(captured.existing_target, null);
+      if (candidate.target.album_id === null) {
+        assert.equal(captured.existing_target, null);
+      } else {
+        assert.deepEqual(captured.existing_target, {
+          album: {
+            id: candidate.target.album_id,
+            title: candidate.musicbrainz_release_evidence.title,
+            artist: candidate.musicbrainz_release_evidence.artist_credit,
+            is_deleted: false,
+            external_id: candidate.musicbrainz_release_evidence.release_id,
+            release_date: candidate.musicbrainz_release_evidence.release_date,
+            external_source: "musicbrainz",
+            canonical_release_date: candidate.musicbrainz_release_evidence.release_date,
+            musicbrainz_release_id: candidate.musicbrainz_release_evidence.release_id,
+            canonical_release_country: candidate.musicbrainz_release_evidence.country,
+            musicbrainz_release_group_id: candidate.musicbrainz_release_evidence.release_group_id
+          }
+        });
+      }
       continue;
     }
 
