@@ -1,0 +1,2708 @@
+{
+  "schema_version": 3,
+  "artifact": "historical-uk-number-ones-verified-batch-4-audit",
+  "status": "proposed_not_executed",
+  "snapshot": {
+    "captured_at": "2026-11-24T12:14:07.912562+00:00",
+    "candidate_state_artifact": "historical-uk-number-ones-verified-batch-4-live-state-20261124.json",
+    "candidate_state_sha256": "9d88f14ba691d5af8b77f5b9c28cadb12fa8b0c6f5b6008a6497cd7a3c3faceb",
+    "production_integrity": {
+      "songs": 16201,
+      "albums": 1769,
+      "song_rating_sum": 13454,
+      "song_rating_rows": 1747,
+      "total_chart_entries": 1298,
+      "canonical_recordings": 17095,
+      "historical_rating_sum": 43,
+      "historical_rating_rows": 5,
+      "resolved_chart_entries": 459,
+      "invalid_song_rating_rows": 0,
+      "unresolved_chart_entries": 839,
+      "duplicate_recording_mbids": 0,
+      "prior_operation_audit_rows": 40,
+      "first_batch_rating_reconciliation_audit_rows": 1
+    }
+  },
+  "audit_coverage": {
+    "inventory_rows_classified": 839,
+    "verified_existing_link": 2,
+    "verified_catalogue_import": 18,
+    "explicit_ambiguous_or_version_conflict": 14,
+    "insufficient_authoritative_evidence": 805,
+    "reviewed_but_not_selected": 32,
+    "remaining_inventory_without_a_complete_evidence_chain": 787,
+    "method": "The prior 839-row unresolved inventory and latest verified research report were reused. Only the 20 previously verified exact Official Charts ISRC, MusicBrainz recording and official release-track chains were promoted; no title or artist force matching was used."
+  },
+  "selection_policy": {
+    "batch_size": 20,
+    "min_batch_size": 20,
+    "max_batch_size": 25,
+    "ordering": "previously verified batch order",
+    "force_matching_prohibited": true,
+    "all_candidates_unrated": true,
+    "source_release_note": "I'm Good (Blue), I Don't Care, Funky Friday, Don't Be So Hard on Yourself, Not Letting Go, I Don't Care and What About Us use exact tracks on reviewed official multi-track releases; only those selected tracks are imported.",
+    "selected_track_import_chart_entry_ids": [
+      2471,
+      2027,
+      2020,
+      1976,
+      1971,
+      1958,
+      1904
+    ]
+  },
+  "proposed_batch": [
+    {
+      "batch_order": 1,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2471,
+        "title": "I'm Good (Blue)",
+        "artist": "David Guetta and Bebe Rexha",
+        "chart_year": 2022,
+        "source_revision": "1380580667",
+        "source_entry_key": "2022:1402:david guetta and bebe rexha:i m good blue",
+        "placeholder_canonical_id": "ff9d71bd-8e31-497f-a6b8-e18b1915c60b"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "b01c9966588baefacfe810827fabb126946defa2de9a688560ec3a1f2611899d",
+        "canonical_metadata_sha256": "bd1ef851098084ee7bfd9a4386f94a96e73bd0c6aa146fd577d3ea710e70aea9"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "ff9d71bd-8e31-497f-a6b8-e18b1915c60b",
+        "album_id": null,
+        "stored_title": "I'm Good (Blue)",
+        "stored_artist": "David Guetta and Bebe Rexha",
+        "track_position": 1,
+        "duration_ms": 175000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/david-guetta-ft-bebe-rexha-im-good-blue/",
+        "catalogue_number": "UKWLG2200055",
+        "raw_sha256": "4b4cf7f1b8c6ce7920fb187a8e3c6dec955f3811c17fa75cd98ec3a27edeee85"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/UKWLG2200055?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "b13e23f73da3e9e3a51f926891d96d33ac9dc9a8f532e856f96cba4f0bce1cd2",
+        "recording_id": "1b884d1d-7a61-4ce8-a5f9-188c671b0a8c",
+        "title": "I’m Good (Blue)",
+        "artist_credit": "David Guetta & Bebe Rexha",
+        "duration_ms": 175238,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/7bd6c1eb-0f60-4176-bd4b-afe82b0ca2f2",
+        "release_id": "7bd6c1eb-0f60-4176-bd4b-afe82b0ca2f2",
+        "release_group_id": "a6d4ae2c-99d1-4ff4-872e-adf2cd3fb20a",
+        "status": "Official",
+        "title": "I’m Good (Blue)",
+        "artist_credit": "David Guetta & Bebe Rexha",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2022-08-26",
+        "matching_track_count": 1,
+        "release_track_count": 2,
+        "track_position": 1,
+        "track_duration_ms": 175000,
+        "track_recording_id": "1b884d1d-7a61-4ce8-a5f9-188c671b0a8c",
+        "track_isrc": "UKWLG2200055",
+        "raw_sha256": "30923d6be71516a885794a1ca22b3bd8c4098986193e1f71909c22c3adc2733c"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "Only the exact original 2022 recording identified by ISRC UKWLG2200055 is approved; remixes, edits and covers must not be substituted."
+      ],
+      "evidence_sha256": "465d78ad675cce1358e5cd9750c445712fe58f10a374b734606ca2d361ad3881"
+    },
+    {
+      "batch_order": 2,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2457,
+        "title": "Wellerman",
+        "artist": "Nathan Evans, 220 Kid and Billen Ted",
+        "chart_year": 2021,
+        "source_revision": "1380580667",
+        "source_entry_key": "2021:1384:nathan evans 220 kid and billen ted:wellerman",
+        "placeholder_canonical_id": "18befaf2-5da5-453a-877f-e0c1b1344eb7"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "071f3a764d17e7030653ae2351eb5c1ebd7befadd980a78f4bdac02ad943a0a6",
+        "canonical_metadata_sha256": "92dabc2fcfe5737a5978af0020832854617f7261f878711dd99f481da79e86c7"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "18befaf2-5da5-453a-877f-e0c1b1344eb7",
+        "album_id": null,
+        "stored_title": "Wellerman",
+        "stored_artist": "Nathan Evans, 220 Kid and Billen Ted",
+        "track_position": 1,
+        "duration_ms": 155333
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/nathan-evans220kidbillen-ted-wellerman/",
+        "catalogue_number": "GBUM72100297",
+        "raw_sha256": "e5529c1f8b3c91ef2cd2c0eb9b5c434e979c4bf2a536e9ebd815f056d6c04dee"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM72100297?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "d533bfd439f8ded23431f232a393adfb8969bffd37e0da7238306537e1d0170b",
+        "recording_id": "222a7f31-8528-4a25-8b81-9eda131dfce3",
+        "title": "Wellerman",
+        "artist_credit": "Nathan Evans",
+        "duration_ms": 155000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/49d15a4d-6416-44dc-b067-afbb1d6c3eeb",
+        "release_id": "49d15a4d-6416-44dc-b067-afbb1d6c3eeb",
+        "release_group_id": "d0c97374-83de-466d-b4dc-5a70bc5aa545",
+        "status": "Official",
+        "title": "Wellerman (Sea Shanty)",
+        "artist_credit": "Nathan Evans",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2021-01-21",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 155333,
+        "track_recording_id": "222a7f31-8528-4a25-8b81-9eda131dfce3",
+        "track_isrc": "GBUM72100297",
+        "raw_sha256": "76bf7954a27cc619b48dc706607c4e46496214b7ce7031f89f3510499d7bc894"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The Official Charts remix credit is broader than MusicBrainz's recording artist credit; exact ISRC GBUM72100297 anchors the approved 220 Kid and Billen Ted chart version."
+      ],
+      "evidence_sha256": "c704f8f814a0bb3dd11546cfc4b0b7f1a25827773e98b5c22775a39e51959fe9"
+    },
+    {
+      "batch_order": 3,
+      "classification": "verified_existing_link",
+      "action": "link_existing",
+      "chart_entry": {
+        "id": 2440,
+        "title": "Own It",
+        "artist": "Stormzy featuring Ed Sheeran and Burna Boy",
+        "chart_year": 2020,
+        "source_revision": "1380580667",
+        "source_entry_key": "2020:1362:stormzy ed sheeran and burna boy:own it",
+        "placeholder_canonical_id": "9cd5d426-9235-4ddf-8ac3-1097500fcc3d"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "source_metadata_sha256": "ef2e705ac93d8cc1d149423292136a4fd3e7bcddd3e5ca35f04e850ddc6f249e",
+        "canonical_metadata_sha256": "23b38a11831d31369069705cf5c9b2d22588a1ee43e9d32f513522d0ff0b104b"
+      },
+      "target": {
+        "song_id": 10659,
+        "canonical_id": "9a20a82e-dc30-48ed-8bee-254056b26be4",
+        "album_id": 785,
+        "stored_title": "Own It",
+        "stored_artist": "Stormzy",
+        "track_position": 11,
+        "duration_ms": null
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/stormzyed-sheeranburna-boy-own-it/",
+        "catalogue_number": "GBAHS1901369",
+        "raw_sha256": "812b33573fd8ef487f6921fb20f2d0655dbf6f9dbe347e1f6f208dc6c27a3787"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS1901369?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "beabb8d5a16e6590164a6666d5557d059183950c96edaf2c11e5929c857bbb58",
+        "recording_id": "a4b1cc66-8e3d-47a2-8200-8a9193c033ca",
+        "title": "Own It",
+        "artist_credit": "Stormzy feat. Ed Sheeran & Burna Boy",
+        "duration_ms": 216693,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/c3d1350b-8662-42d6-acce-057ba0e516d0",
+        "release_id": "c3d1350b-8662-42d6-acce-057ba0e516d0",
+        "release_group_id": "691220b3-ae1a-4666-a5b2-e020e3dbf6f8",
+        "status": "Official",
+        "title": "Heavy Is the Head",
+        "artist_credit": "Stormzy",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2019-12-13",
+        "matching_track_count": 1,
+        "release_track_count": 16,
+        "track_position": 11,
+        "track_duration_ms": 216693,
+        "track_recording_id": "a4b1cc66-8e3d-47a2-8200-8a9193c033ca",
+        "track_isrc": "GBAHS1901369",
+        "raw_sha256": "cba6ae351a8c9de9060b095a40715a95e83cdc4696e361e0f84d54d3d21fdb98"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The exact existing BOM recording and Heavy Is the Head track are reused; no duplicate recording, canonical identity, song or album may be created."
+      ],
+      "evidence_sha256": "f58f535eb926a2bcee6fd02bcdfac38c4b94b761746dcd74a23b30a2d8f7f5d4"
+    },
+    {
+      "batch_order": 4,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2027,
+        "title": "I Don't Care",
+        "artist": "Ed Sheeran and Justin Bieber",
+        "chart_year": 2019,
+        "source_revision": "1356457366",
+        "source_entry_key": "2019:1355:ed sheeran and justin bieber:i don t care",
+        "placeholder_canonical_id": "8bba7253-2132-49e7-8623-01a6e6d2e8a8"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "86fcb9a48e7881e83ca5a88c59f0b0546497b0c41e6225fe4588c2e7b06b2cd4",
+        "canonical_metadata_sha256": "a81c0d3f79a54db475868d3ce612b06f67e683e264bb695af1d1ffa2be6acefd"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "8bba7253-2132-49e7-8623-01a6e6d2e8a8",
+        "album_id": 1937,
+        "stored_title": "I Don't Care",
+        "stored_artist": "Ed Sheeran and Justin Bieber",
+        "track_position": 6,
+        "duration_ms": 219947
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/ed-sheeran-justin-bieber-i-dont-care-0/",
+        "catalogue_number": "GBAHS1900673",
+        "raw_sha256": "f1cc8b29409ffdacbfde649e7c66ffebd64fe10d73b59d1e830bc4536f65281e"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS1900673?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "5e03f46225224afd2b0f128c55021a48890a7cc75a4ee1fe8ca6df8cd3a3028b",
+        "recording_id": "09fe14ca-7734-4fa0-9365-8159d236d7af",
+        "title": "I Don’t Care",
+        "artist_credit": "Ed Sheeran & Justin Bieber",
+        "duration_ms": 219947,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_id": "466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_group_id": "852e109b-d04d-4bc2-a4b0-f0d1817480ec",
+        "status": "Official",
+        "title": "No.6 Collaborations Project",
+        "artist_credit": "Ed Sheeran",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2019-07-12",
+        "matching_track_count": 1,
+        "release_track_count": 15,
+        "track_position": 6,
+        "track_duration_ms": 219947,
+        "track_recording_id": "09fe14ca-7734-4fa0-9365-8159d236d7af",
+        "track_isrc": "GBAHS1900673",
+        "raw_sha256": "90088e2ac92fc295b2f2621b52706ea3f99851393ffe13a9ff85507a8585989c"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The reviewed No.6 Collaborations Project album already exists in BOM and must be reused exactly; only the verified track is inserted."
+      ],
+      "evidence_sha256": "bf35b7708aec634d1862a2733a442d054474596674ccbb6129fad659c0816912"
+    },
+    {
+      "batch_order": 5,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2012,
+        "title": "One Kiss",
+        "artist": "Calvin Harris and Dua Lipa",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1338:calvin harris and dua lipa:one kiss",
+        "placeholder_canonical_id": "17eb7192-e52d-4837-96ff-5fdd8fba877c"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "1932695d10f917d0544e1663405f4d1dd54e836da10518f54deb4b4ef164791e",
+        "canonical_metadata_sha256": "0c89db1970c2cdc4c99f2c3d1a6be7a33cf5739854f7549cd399a3445903011d"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "17eb7192-e52d-4837-96ff-5fdd8fba877c",
+        "album_id": null,
+        "stored_title": "One Kiss",
+        "stored_artist": "Calvin Harris and Dua Lipa",
+        "track_position": 1,
+        "duration_ms": 214847
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/calvin-harrisdua-lipa-one-kiss/",
+        "catalogue_number": "GBARL1800368",
+        "raw_sha256": "faf6609c02ed7c7c01ab697c100b309e1a7040eb2bce7bfd19749665cc8a42a6"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBARL1800368?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "ee4e3487981ff066639c5efed259138ef3e40c007d4e9e2759634dd82e4618d7",
+        "recording_id": "1f215b13-829c-4077-9098-e287d1d87f50",
+        "title": "One Kiss",
+        "artist_credit": "Calvin Harris & Dua Lipa",
+        "duration_ms": 214000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/c80adc92-c63c-4f3e-8bb8-f9a3992631dc",
+        "release_id": "c80adc92-c63c-4f3e-8bb8-f9a3992631dc",
+        "release_group_id": "83a4bd1f-b5c3-4604-9132-38c1d1d75583",
+        "status": "Official",
+        "title": "One Kiss",
+        "artist_credit": "Calvin Harris & Dua Lipa",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2018-04-06",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 214847,
+        "track_recording_id": "1f215b13-829c-4077-9098-e287d1d87f50",
+        "track_isrc": "GBARL1800368",
+        "raw_sha256": "b822a3691e1c03500cfcf15ef24dcf95197a1085bbff5df1625afca94cb7caf6"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "2d543d452d8e574ecc6733179c9899587501ba9910a699542ff8ce2af270ded2"
+    },
+    {
+      "batch_order": 6,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2010,
+        "title": "Freaky Friday",
+        "artist": "Lil Dicky featuring Chris Brown",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1336:lil dicky chris brown:freaky friday",
+        "placeholder_canonical_id": "8a5babf9-0b9e-42da-940e-fceb5bf01fae"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "ff61360f49a5f83641755d448b20b8792ad3b589ee477b7823388602b88da05c",
+        "canonical_metadata_sha256": "55cd2fe4d0fe71bbb13555fcc62bf14ae23694f349b054db09763a989e23f623"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "8a5babf9-0b9e-42da-940e-fceb5bf01fae",
+        "album_id": null,
+        "stored_title": "Freaky Friday",
+        "stored_artist": "Lil Dicky featuring Chris Brown",
+        "track_position": 1,
+        "duration_ms": 217000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/lil-dicky-ft-chris-brown-freaky-friday/",
+        "catalogue_number": "QMRSZ1800283",
+        "raw_sha256": "71d8055457831e82ddaf8cc9f00c4ea76aeae3522c5539d0088e7ce7afd14470"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/QMRSZ1800283?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "d2a8da2dc497982262a1eefcd2e2056206397c8cf018de01a9e193f6fb601fff",
+        "recording_id": "b6292db6-80ae-45ca-a6fd-d16274f1924d",
+        "title": "Freaky Friday",
+        "artist_credit": "Lil Dicky ft. Chris Brown",
+        "duration_ms": 213969,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/4520b84c-e481-4e4d-be23-66d70f3b9e58",
+        "release_id": "4520b84c-e481-4e4d-be23-66d70f3b9e58",
+        "release_group_id": "df299403-8408-4a4d-a480-84632e83996f",
+        "status": "Official",
+        "title": "Freaky Friday",
+        "artist_credit": "Lil Dicky ft. Chris Brown",
+        "primary_type": "Single",
+        "country": "DZ",
+        "release_date": "2018-03-15",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 217000,
+        "track_recording_id": "b6292db6-80ae-45ca-a6fd-d16274f1924d",
+        "track_isrc": "QMRSZ1800283",
+        "raw_sha256": "318b7e379f1090ccf33a689aad72f670fd97d1b85389b1226a67e10033a95ad6"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "MusicBrainz release country DZ is anomalous; identity is anchored by exact Official Charts ISRC QMRSZ1800283 and the unique reviewed recording."
+      ],
+      "evidence_sha256": "e625c8a27c5f58f699e778f1860248ca809751b43e8ef1c0395388fc102af1ae"
+    },
+    {
+      "batch_order": 7,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2005,
+        "title": "Havana",
+        "artist": "Camila Cabello featuring Young Thug",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1331:camila cabello young thug:havana",
+        "placeholder_canonical_id": "174e3794-dec7-4b31-9cf0-d172ec00b2c3"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "dff03231b81c40ea62e42daee4d7ee28313f9d2d1f074440dc24fcdd02175797",
+        "canonical_metadata_sha256": "9e7e5ab0e73762a75c78a1610e01104517f235378a69dd3b2833ee637e86bd9e"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "174e3794-dec7-4b31-9cf0-d172ec00b2c3",
+        "album_id": null,
+        "stored_title": "Havana",
+        "stored_artist": "Camila Cabello featuring Young Thug",
+        "track_position": 1,
+        "duration_ms": 216000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/camila-cabello-ft-young-thug-havana/",
+        "catalogue_number": "USSM11706905",
+        "raw_sha256": "1b1001340276844314167a4fdafc8ae386795862a1f725930db03072ed92ce9a"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USSM11706905?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "d87db67b64aeebbe7caef094b15755cbea57d7c22145014e35a154221b606a52",
+        "recording_id": "d782a964-71fe-4adb-af01-cd7769c32ae8",
+        "title": "Havana",
+        "artist_credit": "Camila Cabello feat. Young Thug",
+        "duration_ms": 216000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/24e2beed-3137-4cbd-a755-a39277544b6f",
+        "release_id": "24e2beed-3137-4cbd-a755-a39277544b6f",
+        "release_group_id": "f6024c95-e01b-41be-abfb-3401a8ae5317",
+        "status": "Official",
+        "title": "Havana",
+        "artist_credit": "Camila Cabello feat. Young Thug",
+        "primary_type": "Single",
+        "country": "XE",
+        "release_date": "2017-08-05",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 216000,
+        "track_recording_id": "d782a964-71fe-4adb-af01-cd7769c32ae8",
+        "track_isrc": "USSM11706905",
+        "raw_sha256": "845e99e5e50ae14c2ca24b8ca81fa5147bfaa5a88f30a881b9ceca1da6784cc5"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "2e96e379b0ec27ee1da29e78a0ce5b795160e80c78d82176aaa2ae48bb583c31"
+    },
+    {
+      "batch_order": 8,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2000,
+        "title": "Wild Thoughts",
+        "artist": "DJ Khaled featuring Rihanna and Bryson Tiller",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1325:dj khaled rihanna and bryson tiller:wild thoughts",
+        "placeholder_canonical_id": "a3233390-e221-478a-ad48-d54532e56030"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "5c9b23d7c658a60b5c494694c8ea5e2eaa2078c7845e1ab35061e19645297bbd",
+        "canonical_metadata_sha256": "13710b6a55582850b3f5e79e5705b9c20f141b5334cc4105077d960816863abf"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "a3233390-e221-478a-ad48-d54532e56030",
+        "album_id": null,
+        "stored_title": "Wild Thoughts",
+        "stored_artist": "DJ Khaled featuring Rihanna and Bryson Tiller",
+        "track_position": 1,
+        "duration_ms": 205000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/dj-khaled-ft-rihannatiller-wild-thoughts/",
+        "catalogue_number": "USSM11705088",
+        "raw_sha256": "21f173e15eec5d71a728602bca3517754fc532b5fa56a4a50fc89388ee5be6fa"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USSM11705088?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "e9b2faee0f71bd297ff5370d2c20f95729912e917f131ba654feb9ae1831d3de",
+        "recording_id": "a494c1f9-42e7-4806-a755-d75c8e68b46a",
+        "title": "Wild Thoughts",
+        "artist_credit": "DJ Khaled feat. Rihanna & Bryson Tiller",
+        "duration_ms": 204173,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/f6a9f98a-0ee8-407e-bf0c-2b0f04bb1747",
+        "release_id": "f6a9f98a-0ee8-407e-bf0c-2b0f04bb1747",
+        "release_group_id": "e1564afe-9605-4951-b2b6-3b6944f4d150",
+        "status": "Official",
+        "title": "Wild Thoughts",
+        "artist_credit": "DJ Khaled feat. Rihanna & Bryson Tiller",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2017-06-16",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 205000,
+        "track_recording_id": "a494c1f9-42e7-4806-a755-d75c8e68b46a",
+        "track_isrc": "USSM11705088",
+        "raw_sha256": "37b4dbfb76c9bff6a5312fb81f73e9f7f525b88d4da5196275e735331e84e8d7"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The exact explicit recording is approved; clean or alternate edits must not be substituted."
+      ],
+      "evidence_sha256": "54b69b0bbdc6d68215699afd4fafbbcd423dc54c32ca58c41ff1adb208aa868c"
+    },
+    {
+      "batch_order": 9,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2020,
+        "title": "Funky Friday",
+        "artist": "Dave featuring Fredo",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1345:dave fredo:funky friday",
+        "placeholder_canonical_id": "36bf0807-cef8-4805-bfca-ea7d8e5e3a71"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "b31335a49f40299f2192f8350e0e8e4a3474ba1be9b6ee0e08f22d45256f55e9",
+        "canonical_metadata_sha256": "22549d68ac979f75e697149c5e157576b9f161fbb35e2a65d64ceb47787f0823"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "36bf0807-cef8-4805-bfca-ea7d8e5e3a71",
+        "album_id": null,
+        "stored_title": "Funky Friday",
+        "stored_artist": "Dave featuring Fredo",
+        "track_position": 18,
+        "duration_ms": 182741
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/dave-ft-fredo-funky-friday/",
+        "catalogue_number": "GBUM71806264",
+        "raw_sha256": "21ea288421791d5839e8c13434802d231925631e287a392671b736a9436573e7"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM71806264?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "dea9633a438d08f71c61c207609ab371503018c74fa18fdae6d381b927e0b221",
+        "recording_id": "cca59973-96a0-4615-949f-9539fe816ff2",
+        "title": "Funky Friday",
+        "artist_credit": "Dave & Fredo",
+        "duration_ms": 182741,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/13af491b-bbcb-48fa-ab50-24df2227fe81",
+        "release_id": "13af491b-bbcb-48fa-ab50-24df2227fe81",
+        "release_group_id": "6315c22e-5e26-4476-8324-f497a58376ef",
+        "status": "Official",
+        "title": "Rap Kings, Vol. 7",
+        "artist_credit": "Various Artists",
+        "primary_type": "Album",
+        "country": null,
+        "release_date": "2023-04-15",
+        "matching_track_count": 1,
+        "release_track_count": 26,
+        "track_position": 18,
+        "track_duration_ms": 182741,
+        "track_recording_id": "cca59973-96a0-4615-949f-9539fe816ff2",
+        "track_isrc": "GBUM71806264",
+        "raw_sha256": "cca7d1357fc30e28261bd28d1fe42a4564b76ea0882609692fa9dd923a4c9cf2"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The reviewed official release is a later 26-track compilation because the contemporary single release lacks track-level evidence; exact ISRC GBUM71806264 anchors the approved recording."
+      ],
+      "evidence_sha256": "e471cc9a6d825db9ec074baa84dbe50aac29b5314eba668dfc9f1917e6d282f4"
+    },
+    {
+      "batch_order": 10,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2001,
+        "title": "Feels",
+        "artist": "Calvin Harris featuring Pharrell Williams, Katy Perry and Big Sean",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1326:calvin harris pharrell williams katy perry and big sean:feels",
+        "placeholder_canonical_id": "9d76abc4-8c21-4c05-9ffe-767ed152e530"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "9f6f1c4b0cdaf8239883f9091fa001343a891b8af0a70ab1c7b0d07b4bc7e74d",
+        "canonical_metadata_sha256": "b98d8a02b67caa8a3746516809efdb67d107d7c120e911e7d5f6744c89631316"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "9d76abc4-8c21-4c05-9ffe-767ed152e530",
+        "album_id": null,
+        "stored_title": "Feels",
+        "stored_artist": "Calvin Harris featuring Pharrell Williams, Katy Perry and Big Sean",
+        "track_position": 1,
+        "duration_ms": 223000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/harrispharrellperrybig-sean-feels/",
+        "catalogue_number": "GBARL1700772",
+        "raw_sha256": "6a6f0d44bb5fe43260cfce947240fd82bb88e6b0192e5be86bd0e68f70a18141"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBARL1700772?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "244610def7470f0e59f174349fba40e96af88eefa085de6ca7a297203f2b2ae3",
+        "recording_id": "df933ba2-3377-4ab4-a648-36c7d3fc1679",
+        "title": "Feels",
+        "artist_credit": "Calvin Harris feat. Pharrell Williams, Katy Perry & Big Sean",
+        "duration_ms": 223407,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/e6688ae8-55b7-424b-b570-4e26ade1d60e",
+        "release_id": "e6688ae8-55b7-424b-b570-4e26ade1d60e",
+        "release_group_id": "41902d54-1f05-43f0-8cc7-47c1b0b0e323",
+        "status": "Official",
+        "title": "Feels",
+        "artist_credit": "Calvin Harris feat. Pharrell Williams, Katy Perry & Big Sean",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2017-06-16",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 223000,
+        "track_recording_id": "df933ba2-3377-4ab4-a648-36c7d3fc1679",
+        "track_isrc": "GBARL1700772",
+        "raw_sha256": "19a1523c546cc0bd6aad58f9610951e88811b1a490dd2f8212b628dac965a695"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The exact explicit recording is approved; clean or alternate edits must not be substituted."
+      ],
+      "evidence_sha256": "947d046623d0fde3b40bff1264ab6d0e4e1ea75883b7890da569b2707061e9d2"
+    },
+    {
+      "batch_order": 11,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 2018,
+        "title": "Eastside",
+        "artist": "Benny Blanco, Halsey and Khalid",
+        "chart_year": 2018,
+        "source_revision": "1356457366",
+        "source_entry_key": "2018:1343:benny blanco halsey and khalid:eastside",
+        "placeholder_canonical_id": "93431b31-3aef-4728-8fdc-792dc2b85f68"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "e650587fbca919252e47664c99c941cadf4a1bf93ae4ad811152c69c2ad8f7ee",
+        "canonical_metadata_sha256": "58e0b047e8ebe4945f6b002d04764d09860630bd654bc6aeb06a194f55472b7b"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "93431b31-3aef-4728-8fdc-792dc2b85f68",
+        "album_id": null,
+        "stored_title": "Eastside",
+        "stored_artist": "Benny Blanco, Halsey and Khalid",
+        "track_position": 1,
+        "duration_ms": 173799
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/benny-blancohalseykhalid-eastside/",
+        "catalogue_number": "USUM71809132",
+        "raw_sha256": "d9aca47b81b81ebd34e5a66adb36912e8649ea6049ffef7ce659597927766a7a"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71809132?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "74438d97a750b8ad47d1088b7b989ec5ef3ba34ddd772f1930077682aee8017f",
+        "recording_id": "787087cb-cb94-442d-98dd-2eddc59f1f84",
+        "title": "Eastside",
+        "artist_credit": "benny blanco, Halsey & Khalid",
+        "duration_ms": 173000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/dd66d80f-7f9b-4bec-b850-dded86131861",
+        "release_id": "dd66d80f-7f9b-4bec-b850-dded86131861",
+        "release_group_id": "7551c31e-8324-473a-9402-6b05e5f88e66",
+        "status": "Official",
+        "title": "Eastside",
+        "artist_credit": "benny blanco with Halsey & Khalid",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2018-07-12",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 173799,
+        "track_recording_id": "787087cb-cb94-442d-98dd-2eddc59f1f84",
+        "track_isrc": "USUM71809132",
+        "raw_sha256": "06d8adcc3591b11bd5c7eaf298908d6e609bdefb645c34d1b851e0e6a3b48a4d"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "a8c693b34c4a84211b5bceea393fb9c924b7240844c16a17d90a37c475642911"
+    },
+    {
+      "batch_order": 12,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1998,
+        "title": "Despacito",
+        "artist": "Luis Fonsi and Daddy Yankee featuring Justin Bieber",
+        "chart_year": 2017,
+        "source_revision": "1356457366",
+        "source_entry_key": "2017:1323:luis fonsi and daddy yankee justin bieber:despacito",
+        "placeholder_canonical_id": "15f1e58b-da5c-4493-8d63-3dedff6bc292"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "94de081a554009364cb33b2c49cc4c4fe9c9fc491c1252511ff32e2e96f0b7db",
+        "canonical_metadata_sha256": "22f091319b7039c6178267c8643d0a1f53940a75bfc2742e7dde53e592e083ed"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "15f1e58b-da5c-4493-8d63-3dedff6bc292",
+        "album_id": null,
+        "stored_title": "Despacito",
+        "stored_artist": "Luis Fonsi and Daddy Yankee featuring Justin Bieber",
+        "track_position": 1,
+        "duration_ms": 228827
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/luis-fonsidaddy-yankeebieber-despacito-remix/",
+        "catalogue_number": "USUM71703825",
+        "raw_sha256": "a09af5062e7ec47a428aa6bf9ee7816ff59f5f6cdcd7439b535afb2b1029285c"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71703825?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "193d91dfb339cd56aa29e1068cc44c97e431d06fa9123a98253aa4d8117b3369",
+        "recording_id": "9ba26ca8-9dbc-4136-8541-2b25bcc6df1e",
+        "title": "Despacito (remix)",
+        "artist_credit": "Luis Fonsi & Daddy Yankee feat. Justin Bieber",
+        "duration_ms": 230000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/8810fe3d-a154-45f4-b692-75a3c4904371",
+        "release_id": "8810fe3d-a154-45f4-b692-75a3c4904371",
+        "release_group_id": "acfcac55-0848-407f-957b-aafd91fb56db",
+        "status": "Official",
+        "title": "Despacito (remix)",
+        "artist_credit": "Luis Fonsi & Daddy Yankee feat. Justin Bieber",
+        "primary_type": "Single",
+        "country": "ES",
+        "release_date": "2017-04-17",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 228827,
+        "track_recording_id": "9ba26ca8-9dbc-4136-8541-2b25bcc6df1e",
+        "track_isrc": "USUM71703825",
+        "raw_sha256": "129cbc65b4fe6bbbbf198bf50bd4632d349234d2e065f22c24f0608f28efaf4f"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Only the Justin Bieber remix identified by ISRC USUM71703825 is approved; the original Spanish recording and other versions must not be substituted."
+      ],
+      "evidence_sha256": "3cf15312fb88e86dfe77e8619e55cc15a48b1ba467dfae08c6115b54927ace73"
+    },
+    {
+      "batch_order": 13,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1994,
+        "title": "Rockabye",
+        "artist": "Clean Bandit featuring Sean Paul and Anne-Marie",
+        "chart_year": 2016,
+        "source_revision": "1356457366",
+        "source_entry_key": "2016:1318:clean bandit sean paul and anne marie:rockabye",
+        "placeholder_canonical_id": "3be0ba0f-8131-4012-adf2-c5f08a558413"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "01e6ee60b59cd553b673412d5081fdb4e6bbfcd4c978bf239e1a9f12d3428066",
+        "canonical_metadata_sha256": "86b22acadefc43bc818e38c77f160bc8a9af3b607446396c902723128b0d356e"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "3be0ba0f-8131-4012-adf2-c5f08a558413",
+        "album_id": null,
+        "stored_title": "Rockabye",
+        "stored_artist": "Clean Bandit featuring Sean Paul and Anne-Marie",
+        "track_position": 1,
+        "duration_ms": 251088
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/clean-bandit-rockabye/",
+        "catalogue_number": "GBAHS1600363",
+        "raw_sha256": "a0cfa393a5a3a259115b74b7fa749ff0d1273185ba83fa36716fa50f839f811d"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS1600363?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "195c60cf1b098759b0a8abcc83b39e6618047f217360f1092616346b5d755795",
+        "recording_id": "13f7ba19-553d-444a-81c1-e7fea9739bc9",
+        "title": "Rockabye",
+        "artist_credit": "Clean Bandit feat. Sean Paul & Anne‐Marie",
+        "duration_ms": 250456,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/8b13961c-89ba-4eb6-a5cc-f36d4a17f7a3",
+        "release_id": "8b13961c-89ba-4eb6-a5cc-f36d4a17f7a3",
+        "release_group_id": "4d437564-f5e0-41d0-9dea-375aef8f1fca",
+        "status": "Official",
+        "title": "Rockabye",
+        "artist_credit": "Clean Bandit feat. Sean Paul & Anne‐Marie",
+        "primary_type": "Single",
+        "country": "XW",
+        "release_date": "2016-10-21",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 251088,
+        "track_recording_id": "13f7ba19-553d-444a-81c1-e7fea9739bc9",
+        "track_isrc": "GBAHS1600363",
+        "raw_sha256": "0504228bd798f51cf5f77e8df0917b97a7f09d20215b8bcb7fc196eeefe7c527"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [],
+      "evidence_sha256": "03f06b898593811cdd517c49ba492ed7cc8a755a2b094591caa22d1ba370226e"
+    },
+    {
+      "batch_order": 14,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1976,
+        "title": "Don't Be So Hard on Yourself",
+        "artist": "Jess Glynne",
+        "chart_year": 2015,
+        "source_revision": "1356457366",
+        "source_entry_key": "2015:1299:jess glynne:don t be so hard on yourself",
+        "placeholder_canonical_id": "1224dbe4-f11f-4e87-a211-5115b0615087"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "ce50898183b200f9dc6547578abb75c5146d2d848a0b8871df403ea97af54417",
+        "canonical_metadata_sha256": "2aa4bd1c12df0a3a62df074f439725dd4f645ea7a088785da91df99a60e719f0"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "1224dbe4-f11f-4e87-a211-5115b0615087",
+        "album_id": null,
+        "stored_title": "Don't Be So Hard on Yourself",
+        "stored_artist": "Jess Glynne",
+        "track_position": 7,
+        "duration_ms": 212000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/jess-glynne-dont-be-so-hard-on-yourself/",
+        "catalogue_number": "GBAHS1500227",
+        "raw_sha256": "ee538a3548c77e3fb6a8f605e5a1b94b7d81f73a53b09b91955735521d96f8e8"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBAHS1500227?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "31e1ff7ade381f5932955ec9cda39c7810fe7fd986e1b63e82129555a587fe51",
+        "recording_id": "7841b7b2-a643-4793-8fc5-ba8d9af9ed39",
+        "title": "Don’t Be So Hard on Yourself",
+        "artist_credit": "Jess Glynne",
+        "duration_ms": 211510,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/854c2a63-6253-435a-b1f4-e85574512627",
+        "release_id": "854c2a63-6253-435a-b1f4-e85574512627",
+        "release_group_id": "824500c5-eccf-4163-b159-e1413d7544e5",
+        "status": "Official",
+        "title": "I Cry When I Laugh",
+        "artist_credit": "Jess Glynne",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2015-07-31",
+        "matching_track_count": 1,
+        "release_track_count": 14,
+        "track_position": 7,
+        "track_duration_ms": 212000,
+        "track_recording_id": "7841b7b2-a643-4793-8fc5-ba8d9af9ed39",
+        "track_isrc": "GBAHS1500227",
+        "raw_sha256": "32c7b3bfcf28fd53714ce78fb2cc34b54fa021c05dbed6f2a4c7ae00a8ba3042"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ],
+      "evidence_sha256": "f4e84e3c04be41d20dc3ade1bebdca189041397fde49bc7702cfb6e5db96c629"
+    },
+    {
+      "batch_order": 15,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1971,
+        "title": "Not Letting Go",
+        "artist": "Tinie Tempah featuring Jess Glynne",
+        "chart_year": 2015,
+        "source_revision": "1356457366",
+        "source_entry_key": "2015:1293:tinie tempah jess glynne:not letting go",
+        "placeholder_canonical_id": "9e2a0b6b-221b-4c37-93cd-156f9bf2848c"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "9bbd89f03f5905e5d55ef8476093d73bf6ec04f22a28b0640d2c004733052175",
+        "canonical_metadata_sha256": "16e3fbd6b76a8c3b21210f04c74ec14d6738875bf63b6b653bc6d60678a8e092"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "9e2a0b6b-221b-4c37-93cd-156f9bf2848c",
+        "album_id": null,
+        "stored_title": "Not Letting Go",
+        "stored_artist": "Tinie Tempah featuring Jess Glynne",
+        "track_position": 6,
+        "duration_ms": 229960
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/tinie-tempah-ft-jess-glynne-not-letting-go/",
+        "catalogue_number": "GB7TP1500001",
+        "raw_sha256": "2611623fff0a4c167f6ab42e131cdf1c694f8f6c946269f1becac9211ab64e04"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GB7TP1500001?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "3bf0070cfab15a31fc56f0d9ec2504e6039ae95fad8e8bbd00994bf06f93cba5",
+        "recording_id": "81b909de-adab-4e15-ad0f-1707ac70973e",
+        "title": "Not Letting Go",
+        "artist_credit": "Tinie Tempah feat. Jess Glynne",
+        "duration_ms": 229373,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/4b4d909f-c226-4e6c-aa96-0250fdeb2898",
+        "release_id": "4b4d909f-c226-4e6c-aa96-0250fdeb2898",
+        "release_group_id": "86a53816-ddd7-43f3-9a78-fccd891cdcae",
+        "status": "Official",
+        "title": "Now That’s What I Call Music! 91",
+        "artist_credit": "Various Artists",
+        "primary_type": "Album",
+        "country": "GB",
+        "release_date": "2015-07-24",
+        "matching_track_count": 1,
+        "release_track_count": 44,
+        "track_position": 6,
+        "track_duration_ms": 229960,
+        "track_recording_id": "81b909de-adab-4e15-ad0f-1707ac70973e",
+        "track_isrc": "GB7TP1500001",
+        "raw_sha256": "0d54041b455494200cc263ed990f0304ad89bf3c475d2ed777057b049d5009ab"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The reviewed source is the exact ISRC track on an official 44-track compilation; only that verified track is imported."
+      ],
+      "evidence_sha256": "3fe6df36a1c5e21ea986a506a33f99f14038785dc8f5dcf91942e2fdcc077485"
+    },
+    {
+      "batch_order": 16,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1966,
+        "title": "Lay Me Down",
+        "artist": "Sam Smith featuring John Legend",
+        "chart_year": 2015,
+        "source_revision": "1356457366",
+        "source_entry_key": "2015:1288:sam smith john legend:lay me down",
+        "placeholder_canonical_id": "92f39cc9-c8fe-49a2-b9d7-bb1c5f195c3a"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "092bd93203260f9c0c4e1a9bc58144acd069a063a6f91b20626edd73d12b03a6",
+        "canonical_metadata_sha256": "998d20b70ac27a35d7b892efd0dff7cd40734a34d564f9730eba7c0ae96ca8a4"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "92f39cc9-c8fe-49a2-b9d7-bb1c5f195c3a",
+        "album_id": null,
+        "stored_title": "Lay Me Down",
+        "stored_artist": "Sam Smith featuring John Legend",
+        "track_position": 1,
+        "duration_ms": 219663
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/sam-smith-ft-john-legend-lay-me-down/",
+        "catalogue_number": "GBUM71500850",
+        "raw_sha256": "45fcbe58e1245a1608a9f11569bec81052ad8fe31597cb5ae2827b76b11e45c0"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM71500850?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "fa64934ed8692fced15a5682687be31d105b3cc59af683386c9c8ab73974adbe",
+        "recording_id": "f10de69c-04f2-47f1-9277-fb387a70e2fe",
+        "title": "Lay Me Down",
+        "artist_credit": "Sam Smith feat. John Legend",
+        "duration_ms": 219000,
+        "disambiguation": "Red Nose Day 2015"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/239fc754-7608-4a04-bbd2-6f139c5ae80a",
+        "release_id": "239fc754-7608-4a04-bbd2-6f139c5ae80a",
+        "release_group_id": "02435390-0779-41dc-b564-0cc479dad8b1",
+        "status": "Official",
+        "title": "Lay Me Down",
+        "artist_credit": "Sam Smith feat. John Legend",
+        "primary_type": "Single",
+        "country": "GB",
+        "release_date": "2015-03-09",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 219663,
+        "track_recording_id": "f10de69c-04f2-47f1-9277-fb387a70e2fe",
+        "track_isrc": "GBUM71500850",
+        "raw_sha256": "d834b6094bc510776f9366da3e25ca04db458b6a6bc1889627b1a640a37370c2"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The approved recording is the Red Nose Day duet with John Legend; Sam Smith's solo recording must not be substituted."
+      ],
+      "evidence_sha256": "2f5df9dada45e707e1bfa04ca4790f211d64e40200b21ad688617a51fbfd42a4"
+    },
+    {
+      "batch_order": 17,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1958,
+        "title": "I Don't Care",
+        "artist": "Cheryl",
+        "chart_year": 2014,
+        "source_revision": "1356457366",
+        "source_entry_key": "2014:1280:cheryl:i don t care",
+        "placeholder_canonical_id": "b7176179-db56-4918-868e-f11b7dd4f7af"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "e0a310d89f352e762cbedf3a97c576558abe3b33ea799e0d6fb43d4fcee64378",
+        "canonical_metadata_sha256": "d38d552b33ba073cbe22b20436b368bf26bef95d804409ef90e56971a77d5bfb"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "b7176179-db56-4918-868e-f11b7dd4f7af",
+        "album_id": null,
+        "stored_title": "I Don't Care",
+        "stored_artist": "Cheryl",
+        "track_position": 6,
+        "duration_ms": 240000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/cheryl-i-dont-care-0/",
+        "catalogue_number": "GBUM71404141",
+        "raw_sha256": "c43eca3703be47e5bc9e3c337fe37984e75210744b5d718019928f341bbf881c"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM71404141?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "ed55912b3fe41f561054d311fa3c07a147449b1515d494b36413faa863d2d5f6",
+        "recording_id": "dd373cce-00b6-4a89-a5af-5bd893f3bf61",
+        "title": "I Don’t Care",
+        "artist_credit": "Cheryl",
+        "duration_ms": 240000,
+        "disambiguation": "explicit"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/945e9f23-2eb8-4379-bdbc-75f7d0ecb321",
+        "release_id": "945e9f23-2eb8-4379-bdbc-75f7d0ecb321",
+        "release_group_id": "f79ab584-81c9-4537-a13b-5b1db6bb7960",
+        "status": "Official",
+        "title": "Only Human",
+        "artist_credit": "Cheryl",
+        "primary_type": "Album",
+        "country": "IE",
+        "release_date": "2014-11-07",
+        "matching_track_count": 1,
+        "release_track_count": 15,
+        "track_position": 6,
+        "track_duration_ms": 240000,
+        "track_recording_id": "dd373cce-00b6-4a89-a5af-5bd893f3bf61",
+        "track_isrc": "GBUM71404141",
+        "raw_sha256": "9085b24a4256ba4c37c1ea1dbb97900796784cb38d54255efbfaa65a6ad38c1d"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+      ],
+      "evidence_sha256": "fe20335f39aebfdfd6d5808d6e0aa72b366f304e4f19f46a3cbc992773ece89c"
+    },
+    {
+      "batch_order": 18,
+      "classification": "verified_existing_link",
+      "action": "link_existing",
+      "chart_entry": {
+        "id": 1920,
+        "title": "The Monster",
+        "artist": "Eminem featuring Rihanna",
+        "chart_year": 2013,
+        "source_revision": "1356457366",
+        "source_entry_key": "2013:1242:eminem rihanna:the monster",
+        "placeholder_canonical_id": "8873a13f-6e48-4583-9edb-93679893e8c1"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "0816ffa4119c7b3d9209e61fc9a405fabbfb4cd7a3ae4e64625988ba49ab8de5",
+        "canonical_metadata_sha256": "45163bb2790588ac0c5495a8d8c62c2e5a54f5247aae8925b59be153d0bedab9"
+      },
+      "target": {
+        "song_id": 8738,
+        "canonical_id": "06c26627-a1d1-4cdc-8b8f-dd736be80179",
+        "album_id": 631,
+        "stored_title": "The Monster",
+        "stored_artist": "Eminem",
+        "track_position": 12,
+        "duration_ms": null
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/eminem-ft-rihanna-the-monster/",
+        "catalogue_number": "USUM71314064",
+        "raw_sha256": "815f8fe2cb92cf55dcbe4926f648742246c2ab56bf202e8f4073f5e001499a51"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/USUM71314064?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "5b723131b565b017ef94f95ee369b76ac12410fecba465ecbc133dd4dda0159b",
+        "recording_id": "c975930e-c69c-4685-a214-b544b8f1fd5d",
+        "title": "The Monster",
+        "artist_credit": "Eminem feat. Rihanna",
+        "duration_ms": 250186,
+        "disambiguation": "clean"
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/b1deba13-ada0-4901-af50-1d721085a2b6",
+        "release_id": "b1deba13-ada0-4901-af50-1d721085a2b6",
+        "release_group_id": "b1fdc9cc-8680-44da-abab-59edca6b2ad3",
+        "status": "Official",
+        "title": "The Marshall Mathers LP 2",
+        "artist_credit": "Eminem",
+        "primary_type": "Album",
+        "country": "US",
+        "release_date": "2013-11-05",
+        "matching_track_count": 1,
+        "release_track_count": 21,
+        "track_position": 12,
+        "track_duration_ms": 250000,
+        "track_recording_id": "c975930e-c69c-4685-a214-b544b8f1fd5d",
+        "track_isrc": "USUM71314064",
+        "raw_sha256": "4c88513e4ee50eefb5fad74681e724f0b8d940a5e1e5a042f658a552a89e4167"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "The exact existing BOM clean recording on The Marshall Mathers LP 2 is reused; explicit or alternate versions and duplicate identities must not be substituted."
+      ],
+      "evidence_sha256": "d302fde807ec3a3766e68e05ad0b9bb065c1c4f948c17e80aeff7df493df7216"
+    },
+    {
+      "batch_order": 19,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1898,
+        "title": "Impossible",
+        "artist": "James Arthur",
+        "chart_year": 2013,
+        "source_revision": "1356457366",
+        "source_entry_key": "2013:re-2013-01-05:james arthur:impossible",
+        "placeholder_canonical_id": "a2153a06-761e-4d10-adf7-343e3861eadf"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "4638fe7708d616645eae8bf7abc2cb0bbb3e468b5b65e744c801703fe8062491",
+        "canonical_metadata_sha256": "d5d6e19933abb6bdc701777a0b1cddf4de9d0aec265e7b0fb330211dc4325509"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "a2153a06-761e-4d10-adf7-343e3861eadf",
+        "album_id": null,
+        "stored_title": "Impossible",
+        "stored_artist": "James Arthur",
+        "track_position": 1,
+        "duration_ms": 209000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/james-arthur-impossible/",
+        "catalogue_number": "GBHMU1200535",
+        "raw_sha256": "625e6742261d302268cecaacf716bd04131d8e1828b7e7aaf33323330835e72d"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBHMU1200535?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "a2e378e1413b28e5c2a3ef3319d5fe04c880a84f8fdfe69e8ca70af06bb3afbc",
+        "recording_id": "2a330498-8fe8-45e1-8536-dc0679fd7a37",
+        "title": "Impossible",
+        "artist_credit": "James Arthur",
+        "duration_ms": 208760,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/310faf82-005c-4497-b000-c3abc647713c",
+        "release_id": "310faf82-005c-4497-b000-c3abc647713c",
+        "release_group_id": "7a82779e-f14c-4eab-a3d9-07801e95e9c0",
+        "status": "Official",
+        "title": "Impossible",
+        "artist_credit": "James Arthur",
+        "primary_type": "Single",
+        "country": "GB",
+        "release_date": "2012-12-10",
+        "matching_track_count": 1,
+        "release_track_count": 1,
+        "track_position": 1,
+        "track_duration_ms": 209000,
+        "track_recording_id": "2a330498-8fe8-45e1-8536-dc0679fd7a37",
+        "track_isrc": "GBHMU1200535",
+        "raw_sha256": "17bc0ecc826a52a46906660758bc5712a6c924915f39c2d4d24d86d5e58e1706"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Only the James Arthur recording identified by ISRC GBHMU1200535 is approved; the Shontelle original and other versions must not be substituted."
+      ],
+      "evidence_sha256": "d7ea025688310d1f9b8a4784ab7799bef38a665de444ca3efeca8adf4544a48c"
+    },
+    {
+      "batch_order": 20,
+      "classification": "verified_catalogue_import",
+      "action": "import_verified",
+      "chart_entry": {
+        "id": 1904,
+        "title": "What About Us",
+        "artist": "The Saturdays featuring Sean Paul",
+        "chart_year": 2013,
+        "source_revision": "1356457366",
+        "source_entry_key": "2013:1225:the saturdays sean paul:what about us",
+        "placeholder_canonical_id": "3bf4ff67-478b-41af-ae3d-b172c5286ef3"
+      },
+      "stale_state_fingerprint": {
+        "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "source_metadata_sha256": "3a20e600d921482449ca7098c5c7ac1bde86df8047d16a7a9bdd0ce30c0887cd",
+        "canonical_metadata_sha256": "0297e554f8b9679eb97197883a2e8699eaa6ab8f9cb86b737bcbd78c8dc4d807"
+      },
+      "target": {
+        "song_id": null,
+        "canonical_id": "3bf4ff67-478b-41af-ae3d-b172c5286ef3",
+        "album_id": null,
+        "stored_title": "What About Us",
+        "stored_artist": "The Saturdays featuring Sean Paul",
+        "track_position": 1,
+        "duration_ms": 220000
+      },
+      "official_charts_evidence": {
+        "url": "https://www.officialcharts.com/songs/saturdays-ft-sean-paul-what-about-us/",
+        "catalogue_number": "GBUM71206116",
+        "raw_sha256": "75394f9a52ab8d12fe4d0a22eae69a2d626dbf918fffa778cec91915c01ebac8"
+      },
+      "musicbrainz_recording_evidence": {
+        "isrc_lookup_url": "https://musicbrainz.org/ws/2/isrc/GBUM71206116?inc=artist-credits&fmt=json",
+        "isrc_lookup_count": 1,
+        "isrc_lookup_raw_sha256": "c48aa5a1e6b38ba624bcc77703c01eb159d1c693ce7c82ee9fbe79d43f3e3b62",
+        "recording_id": "c838dd68-684d-4423-aa17-d859c036c7f5",
+        "title": "What About Us",
+        "artist_credit": "The Saturdays feat. Sean Paul",
+        "duration_ms": 221000,
+        "disambiguation": ""
+      },
+      "musicbrainz_release_evidence": {
+        "url": "https://musicbrainz.org/release/3d33b628-b295-41d8-b5b1-308f44ae027a",
+        "release_id": "3d33b628-b295-41d8-b5b1-308f44ae027a",
+        "release_group_id": "89468c3e-b7d6-40e3-b06b-425e739be9be",
+        "status": "Official",
+        "title": "What About Us",
+        "artist_credit": "The Saturdays",
+        "primary_type": "Single",
+        "country": "GB",
+        "release_date": "2013-03-15",
+        "matching_track_count": 1,
+        "release_track_count": 4,
+        "track_position": 1,
+        "track_duration_ms": 220000,
+        "track_recording_id": "c838dd68-684d-4423-aa17-d859c036c7f5",
+        "track_isrc": "GBUM71206116",
+        "raw_sha256": "e653181401c52242b81e17fd45bda8af8491b85bf0cb71a612666c0ef8aeafe8"
+      },
+      "rating_state": {
+        "placeholder_canonical_rows": 0,
+        "historical_chart_entry_rows": 0,
+        "operation_policy": "abort_if_any_rating_appears"
+      },
+      "risk_notes": [
+        "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+        "The approved recording is the Sean Paul version identified by ISRC GBUM71206116; solo or alternate versions must not be substituted."
+      ],
+      "evidence_sha256": "2cb8a4db32b944952939cb21232104fb85ddf81f9e43bdabdcb687a9d72bc1b4"
+    }
+  ],
+  "rejected_version_leads": [
+    {
+      "chart_entry_id": 1996,
+      "title": "Symphony",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1979,
+      "title": "Easy Love",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1968,
+      "title": "See You Again",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1959,
+      "title": "Wake Me Up (Gareth Malone's All Star Choir)",
+      "reason_code": "stored_isrc_belongs_to_different_artist_version"
+    },
+    {
+      "chart_entry_id": 1913,
+      "title": "Wake Me Up (Avicii)",
+      "reason_code": "isrc_maps_multiple_recording_versions"
+    },
+    {
+      "chart_entry_id": 1522,
+      "title": "Beautiful Girls",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 1467,
+      "title": "Call on Me",
+      "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version"
+    },
+    {
+      "chart_entry_id": 1418,
+      "title": "Dilemma",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 107,
+      "title": "Breathe",
+      "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge"
+    },
+    {
+      "chart_entry_id": 45,
+      "title": "No Limit",
+      "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording"
+    },
+    {
+      "chart_entry_id": 2491,
+      "title": "Houdini",
+      "reason_code": "isrc_maps_music_video_not_audio_single"
+    },
+    {
+      "chart_entry_id": 2013,
+      "title": "I'll Be There",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 2006,
+      "title": "Perfect",
+      "reason_code": "isrc_maps_multiple_recordings"
+    },
+    {
+      "chart_entry_id": 2014,
+      "title": "Solo",
+      "reason_code": "isrc_maps_multiple_recordings"
+    }
+  ],
+  "reviewed_incomplete_leads": [
+    {
+      "chart_entry_id": 2485,
+      "title": "Now and Then",
+      "reason_code": "official_charts_page_has_no_catalogue_identifier"
+    },
+    {
+      "chart_entry_id": 1545,
+      "title": "Right Round",
+      "reason_code": "official_charts_catalogue_value_is_not_the_stored_isrc"
+    },
+    {
+      "chart_entry_id": 1437,
+      "title": "Breathe (Blu Cantrell)",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 191,
+      "title": "Lift Me Up",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 180,
+      "title": "9 PM (Till I Come)",
+      "reason_code": "official_charts_song_page_not_found"
+    },
+    {
+      "chart_entry_id": 167,
+      "title": "Fly Away",
+      "reason_code": "official_charts_catalogue_value_does_not_bridge_to_stored_isrc"
+    },
+    {
+      "chart_entry_id": 41,
+      "title": "Sleeping Satellite",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 541,
+      "title": "All Around the World",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 531,
+      "title": "Like a Prayer",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 425,
+      "title": "Ebony and Ivory",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 845,
+      "title": "Message in a Bottle",
+      "reason_code": "physical_catalogue_number_without_isrc_bridge"
+    },
+    {
+      "chart_entry_id": 2505,
+      "title": "The Subway",
+      "reason_code": "official_charts_catalogue_value_is_not_an_isrc"
+    },
+    {
+      "chart_entry_id": 2501,
+      "title": "Survive",
+      "reason_code": "release_level_verification_not_completed"
+    },
+    {
+      "chart_entry_id": 2500,
+      "title": "Ordinary",
+      "reason_code": "musicbrainz_isrc_lookup_unavailable"
+    },
+    {
+      "chart_entry_id": 2486,
+      "title": "Lovin on Me",
+      "reason_code": "musicbrainz_isrc_lookup_unavailable"
+    },
+    {
+      "chart_entry_id": 2476,
+      "title": "Flowers",
+      "reason_code": "official_charts_page_has_no_catalogue_identifier"
+    },
+    {
+      "chart_entry_id": 2473,
+      "title": "Anti-Hero",
+      "reason_code": "release_level_verification_not_completed"
+    },
+    {
+      "chart_entry_id": 2459,
+      "title": "Body",
+      "reason_code": "official_isrc_absent_from_musicbrainz"
+    }
+  ],
+  "expected_deltas": {
+    "albums": 17,
+    "songs": 18,
+    "canonical_recordings": 0,
+    "historical_chart_links": 20,
+    "ratings": 0
+  },
+  "proposed_result": {
+    "resolved_delta": 20,
+    "resolved_chart_entries": 479,
+    "remaining_unresolved_chart_entries": 819
+  },
+  "safety_contract": {
+    "approval_gate": "SET bom.approved_historical_reconciliation = '20261124_uk_number_ones_verified_batch_4:4d007752747f406a72b2090b4a9362218e7bef3457a30a981247445ea655da83' before executing the operation in the same session",
+    "atomic_transaction": true,
+    "global_stale_baseline_abort": true,
+    "per_candidate_stale_fingerprint_abort": true,
+    "deterministic_advisory_lock_order": true,
+    "immutable_private_operation_evidence": true,
+    "preserve_all_song_ratings_byte_for_byte": true,
+    "preserve_all_historical_chart_ratings_byte_for_byte": true,
+    "preserve_first_batch_papa_dont_preach_reconciliation": true,
+    "duplicate_and_partial_identity_abort": true,
+    "shared_reviewed_release_insert_once": true,
+    "reviewed_existing_album_reuse": true,
+    "rollback_operation_required": true,
+    "production_execution_authorized": false
+  },
+  "manifest_payload": {
+    "operation_key": "20261124_uk_number_ones_verified_batch_4",
+    "snapshot": {
+      "captured_at": "2026-11-24T12:14:07.912562+00:00",
+      "candidate_state_artifact": "historical-uk-number-ones-verified-batch-4-live-state-20261124.json",
+      "candidate_state_sha256": "9d88f14ba691d5af8b77f5b9c28cadb12fa8b0c6f5b6008a6497cd7a3c3faceb",
+      "production_integrity": {
+        "songs": 16201,
+        "albums": 1769,
+        "song_rating_sum": 13454,
+        "song_rating_rows": 1747,
+        "total_chart_entries": 1298,
+        "canonical_recordings": 17095,
+        "historical_rating_sum": 43,
+        "historical_rating_rows": 5,
+        "resolved_chart_entries": 459,
+        "invalid_song_rating_rows": 0,
+        "unresolved_chart_entries": 839,
+        "duplicate_recording_mbids": 0,
+        "prior_operation_audit_rows": 40,
+        "first_batch_rating_reconciliation_audit_rows": 1
+      }
+    },
+    "audit_coverage": {
+      "inventory_rows_classified": 839,
+      "verified_existing_link": 2,
+      "verified_catalogue_import": 18,
+      "explicit_ambiguous_or_version_conflict": 14,
+      "insufficient_authoritative_evidence": 805,
+      "reviewed_but_not_selected": 32,
+      "remaining_inventory_without_a_complete_evidence_chain": 787,
+      "method": "The prior 839-row unresolved inventory and latest verified research report were reused. Only the 20 previously verified exact Official Charts ISRC, MusicBrainz recording and official release-track chains were promoted; no title or artist force matching was used."
+    },
+    "selection_policy": {
+      "batch_size": 20,
+      "min_batch_size": 20,
+      "max_batch_size": 25,
+      "ordering": "previously verified batch order",
+      "force_matching_prohibited": true,
+      "all_candidates_unrated": true,
+      "source_release_note": "I'm Good (Blue), I Don't Care, Funky Friday, Don't Be So Hard on Yourself, Not Letting Go, I Don't Care and What About Us use exact tracks on reviewed official multi-track releases; only those selected tracks are imported.",
+      "selected_track_import_chart_entry_ids": [
+        2471,
+        2027,
+        2020,
+        1976,
+        1971,
+        1958,
+        1904
+      ]
+    },
+    "candidates": [
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2471,
+          "title": "I'm Good (Blue)",
+          "artist": "David Guetta and Bebe Rexha",
+          "chart_year": 2022,
+          "source_revision": "1380580667",
+          "source_entry_key": "2022:1402:david guetta and bebe rexha:i m good blue",
+          "placeholder_canonical_id": "ff9d71bd-8e31-497f-a6b8-e18b1915c60b"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "b01c9966588baefacfe810827fabb126946defa2de9a688560ec3a1f2611899d",
+          "canonical_metadata_sha256": "bd1ef851098084ee7bfd9a4386f94a96e73bd0c6aa146fd577d3ea710e70aea9"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "ff9d71bd-8e31-497f-a6b8-e18b1915c60b",
+          "album_id": null,
+          "stored_title": "I'm Good (Blue)",
+          "stored_artist": "David Guetta and Bebe Rexha",
+          "track_position": 1,
+          "duration_ms": 175000
+        },
+        "isrc": "UKWLG2200055",
+        "recording_id": "1b884d1d-7a61-4ce8-a5f9-188c671b0a8c",
+        "release_id": "7bd6c1eb-0f60-4176-bd4b-afe82b0ca2f2",
+        "release_group_id": "a6d4ae2c-99d1-4ff4-872e-adf2cd3fb20a",
+        "album_title": "I’m Good (Blue)",
+        "album_artist": "David Guetta & Bebe Rexha",
+        "release_date": "2022-08-26",
+        "country": "XW",
+        "release_track_count": 2,
+        "evidence_sha256": "465d78ad675cce1358e5cd9750c445712fe58f10a374b734606ca2d361ad3881",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "Only the exact original 2022 recording identified by ISRC UKWLG2200055 is approved; remixes, edits and covers must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2457,
+          "title": "Wellerman",
+          "artist": "Nathan Evans, 220 Kid and Billen Ted",
+          "chart_year": 2021,
+          "source_revision": "1380580667",
+          "source_entry_key": "2021:1384:nathan evans 220 kid and billen ted:wellerman",
+          "placeholder_canonical_id": "18befaf2-5da5-453a-877f-e0c1b1344eb7"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "071f3a764d17e7030653ae2351eb5c1ebd7befadd980a78f4bdac02ad943a0a6",
+          "canonical_metadata_sha256": "92dabc2fcfe5737a5978af0020832854617f7261f878711dd99f481da79e86c7"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "18befaf2-5da5-453a-877f-e0c1b1344eb7",
+          "album_id": null,
+          "stored_title": "Wellerman",
+          "stored_artist": "Nathan Evans, 220 Kid and Billen Ted",
+          "track_position": 1,
+          "duration_ms": 155333
+        },
+        "isrc": "GBUM72100297",
+        "recording_id": "222a7f31-8528-4a25-8b81-9eda131dfce3",
+        "release_id": "49d15a4d-6416-44dc-b067-afbb1d6c3eeb",
+        "release_group_id": "d0c97374-83de-466d-b4dc-5a70bc5aa545",
+        "album_title": "Wellerman (Sea Shanty)",
+        "album_artist": "Nathan Evans",
+        "release_date": "2021-01-21",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "c704f8f814a0bb3dd11546cfc4b0b7f1a25827773e98b5c22775a39e51959fe9",
+        "risk_notes": [
+          "The Official Charts remix credit is broader than MusicBrainz's recording artist credit; exact ISRC GBUM72100297 anchors the approved 220 Kid and Billen Ted chart version."
+        ]
+      },
+      {
+        "action": "link_existing",
+        "chart_entry": {
+          "id": 2440,
+          "title": "Own It",
+          "artist": "Stormzy featuring Ed Sheeran and Burna Boy",
+          "chart_year": 2020,
+          "source_revision": "1380580667",
+          "source_entry_key": "2020:1362:stormzy ed sheeran and burna boy:own it",
+          "placeholder_canonical_id": "9cd5d426-9235-4ddf-8ac3-1097500fcc3d"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00",
+          "source_metadata_sha256": "ef2e705ac93d8cc1d149423292136a4fd3e7bcddd3e5ca35f04e850ddc6f249e",
+          "canonical_metadata_sha256": "23b38a11831d31369069705cf5c9b2d22588a1ee43e9d32f513522d0ff0b104b"
+        },
+        "target": {
+          "song_id": 10659,
+          "canonical_id": "9a20a82e-dc30-48ed-8bee-254056b26be4",
+          "album_id": 785,
+          "stored_title": "Own It",
+          "stored_artist": "Stormzy",
+          "track_position": 11,
+          "duration_ms": null
+        },
+        "isrc": "GBAHS1901369",
+        "recording_id": "a4b1cc66-8e3d-47a2-8200-8a9193c033ca",
+        "release_id": "c3d1350b-8662-42d6-acce-057ba0e516d0",
+        "release_group_id": "691220b3-ae1a-4666-a5b2-e020e3dbf6f8",
+        "album_title": "Heavy Is the Head",
+        "album_artist": "Stormzy",
+        "release_date": "2019-12-13",
+        "country": "GB",
+        "release_track_count": 16,
+        "evidence_sha256": "f58f535eb926a2bcee6fd02bcdfac38c4b94b761746dcd74a23b30a2d8f7f5d4",
+        "risk_notes": [
+          "The exact existing BOM recording and Heavy Is the Head track are reused; no duplicate recording, canonical identity, song or album may be created."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2027,
+          "title": "I Don't Care",
+          "artist": "Ed Sheeran and Justin Bieber",
+          "chart_year": 2019,
+          "source_revision": "1356457366",
+          "source_entry_key": "2019:1355:ed sheeran and justin bieber:i don t care",
+          "placeholder_canonical_id": "8bba7253-2132-49e7-8623-01a6e6d2e8a8"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "86fcb9a48e7881e83ca5a88c59f0b0546497b0c41e6225fe4588c2e7b06b2cd4",
+          "canonical_metadata_sha256": "a81c0d3f79a54db475868d3ce612b06f67e683e264bb695af1d1ffa2be6acefd"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "8bba7253-2132-49e7-8623-01a6e6d2e8a8",
+          "album_id": 1937,
+          "stored_title": "I Don't Care",
+          "stored_artist": "Ed Sheeran and Justin Bieber",
+          "track_position": 6,
+          "duration_ms": 219947
+        },
+        "isrc": "GBAHS1900673",
+        "recording_id": "09fe14ca-7734-4fa0-9365-8159d236d7af",
+        "release_id": "466d1739-d323-4128-8e80-a8b147b4e2e5",
+        "release_group_id": "852e109b-d04d-4bc2-a4b0-f0d1817480ec",
+        "album_title": "No.6 Collaborations Project",
+        "album_artist": "Ed Sheeran",
+        "release_date": "2019-07-12",
+        "country": "GB",
+        "release_track_count": 15,
+        "evidence_sha256": "bf35b7708aec634d1862a2733a442d054474596674ccbb6129fad659c0816912",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The reviewed No.6 Collaborations Project album already exists in BOM and must be reused exactly; only the verified track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2012,
+          "title": "One Kiss",
+          "artist": "Calvin Harris and Dua Lipa",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1338:calvin harris and dua lipa:one kiss",
+          "placeholder_canonical_id": "17eb7192-e52d-4837-96ff-5fdd8fba877c"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "1932695d10f917d0544e1663405f4d1dd54e836da10518f54deb4b4ef164791e",
+          "canonical_metadata_sha256": "0c89db1970c2cdc4c99f2c3d1a6be7a33cf5739854f7549cd399a3445903011d"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "17eb7192-e52d-4837-96ff-5fdd8fba877c",
+          "album_id": null,
+          "stored_title": "One Kiss",
+          "stored_artist": "Calvin Harris and Dua Lipa",
+          "track_position": 1,
+          "duration_ms": 214847
+        },
+        "isrc": "GBARL1800368",
+        "recording_id": "1f215b13-829c-4077-9098-e287d1d87f50",
+        "release_id": "c80adc92-c63c-4f3e-8bb8-f9a3992631dc",
+        "release_group_id": "83a4bd1f-b5c3-4604-9132-38c1d1d75583",
+        "album_title": "One Kiss",
+        "album_artist": "Calvin Harris & Dua Lipa",
+        "release_date": "2018-04-06",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "2d543d452d8e574ecc6733179c9899587501ba9910a699542ff8ce2af270ded2",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2010,
+          "title": "Freaky Friday",
+          "artist": "Lil Dicky featuring Chris Brown",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1336:lil dicky chris brown:freaky friday",
+          "placeholder_canonical_id": "8a5babf9-0b9e-42da-940e-fceb5bf01fae"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "ff61360f49a5f83641755d448b20b8792ad3b589ee477b7823388602b88da05c",
+          "canonical_metadata_sha256": "55cd2fe4d0fe71bbb13555fcc62bf14ae23694f349b054db09763a989e23f623"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "8a5babf9-0b9e-42da-940e-fceb5bf01fae",
+          "album_id": null,
+          "stored_title": "Freaky Friday",
+          "stored_artist": "Lil Dicky featuring Chris Brown",
+          "track_position": 1,
+          "duration_ms": 217000
+        },
+        "isrc": "QMRSZ1800283",
+        "recording_id": "b6292db6-80ae-45ca-a6fd-d16274f1924d",
+        "release_id": "4520b84c-e481-4e4d-be23-66d70f3b9e58",
+        "release_group_id": "df299403-8408-4a4d-a480-84632e83996f",
+        "album_title": "Freaky Friday",
+        "album_artist": "Lil Dicky ft. Chris Brown",
+        "release_date": "2018-03-15",
+        "country": "DZ",
+        "release_track_count": 1,
+        "evidence_sha256": "e625c8a27c5f58f699e778f1860248ca809751b43e8ef1c0395388fc102af1ae",
+        "risk_notes": [
+          "MusicBrainz release country DZ is anomalous; identity is anchored by exact Official Charts ISRC QMRSZ1800283 and the unique reviewed recording."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2005,
+          "title": "Havana",
+          "artist": "Camila Cabello featuring Young Thug",
+          "chart_year": 2017,
+          "source_revision": "1356457366",
+          "source_entry_key": "2017:1331:camila cabello young thug:havana",
+          "placeholder_canonical_id": "174e3794-dec7-4b31-9cf0-d172ec00b2c3"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "dff03231b81c40ea62e42daee4d7ee28313f9d2d1f074440dc24fcdd02175797",
+          "canonical_metadata_sha256": "9e7e5ab0e73762a75c78a1610e01104517f235378a69dd3b2833ee637e86bd9e"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "174e3794-dec7-4b31-9cf0-d172ec00b2c3",
+          "album_id": null,
+          "stored_title": "Havana",
+          "stored_artist": "Camila Cabello featuring Young Thug",
+          "track_position": 1,
+          "duration_ms": 216000
+        },
+        "isrc": "USSM11706905",
+        "recording_id": "d782a964-71fe-4adb-af01-cd7769c32ae8",
+        "release_id": "24e2beed-3137-4cbd-a755-a39277544b6f",
+        "release_group_id": "f6024c95-e01b-41be-abfb-3401a8ae5317",
+        "album_title": "Havana",
+        "album_artist": "Camila Cabello feat. Young Thug",
+        "release_date": "2017-08-05",
+        "country": "XE",
+        "release_track_count": 1,
+        "evidence_sha256": "2e96e379b0ec27ee1da29e78a0ce5b795160e80c78d82176aaa2ae48bb583c31",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2000,
+          "title": "Wild Thoughts",
+          "artist": "DJ Khaled featuring Rihanna and Bryson Tiller",
+          "chart_year": 2017,
+          "source_revision": "1356457366",
+          "source_entry_key": "2017:1325:dj khaled rihanna and bryson tiller:wild thoughts",
+          "placeholder_canonical_id": "a3233390-e221-478a-ad48-d54532e56030"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "5c9b23d7c658a60b5c494694c8ea5e2eaa2078c7845e1ab35061e19645297bbd",
+          "canonical_metadata_sha256": "13710b6a55582850b3f5e79e5705b9c20f141b5334cc4105077d960816863abf"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "a3233390-e221-478a-ad48-d54532e56030",
+          "album_id": null,
+          "stored_title": "Wild Thoughts",
+          "stored_artist": "DJ Khaled featuring Rihanna and Bryson Tiller",
+          "track_position": 1,
+          "duration_ms": 205000
+        },
+        "isrc": "USSM11705088",
+        "recording_id": "a494c1f9-42e7-4806-a755-d75c8e68b46a",
+        "release_id": "f6a9f98a-0ee8-407e-bf0c-2b0f04bb1747",
+        "release_group_id": "e1564afe-9605-4951-b2b6-3b6944f4d150",
+        "album_title": "Wild Thoughts",
+        "album_artist": "DJ Khaled feat. Rihanna & Bryson Tiller",
+        "release_date": "2017-06-16",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "54b69b0bbdc6d68215699afd4fafbbcd423dc54c32ca58c41ff1adb208aa868c",
+        "risk_notes": [
+          "The exact explicit recording is approved; clean or alternate edits must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2020,
+          "title": "Funky Friday",
+          "artist": "Dave featuring Fredo",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1345:dave fredo:funky friday",
+          "placeholder_canonical_id": "36bf0807-cef8-4805-bfca-ea7d8e5e3a71"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "b31335a49f40299f2192f8350e0e8e4a3474ba1be9b6ee0e08f22d45256f55e9",
+          "canonical_metadata_sha256": "22549d68ac979f75e697149c5e157576b9f161fbb35e2a65d64ceb47787f0823"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "36bf0807-cef8-4805-bfca-ea7d8e5e3a71",
+          "album_id": null,
+          "stored_title": "Funky Friday",
+          "stored_artist": "Dave featuring Fredo",
+          "track_position": 18,
+          "duration_ms": 182741
+        },
+        "isrc": "GBUM71806264",
+        "recording_id": "cca59973-96a0-4615-949f-9539fe816ff2",
+        "release_id": "13af491b-bbcb-48fa-ab50-24df2227fe81",
+        "release_group_id": "6315c22e-5e26-4476-8324-f497a58376ef",
+        "album_title": "Rap Kings, Vol. 7",
+        "album_artist": "Various Artists",
+        "release_date": "2023-04-15",
+        "country": null,
+        "release_track_count": 26,
+        "evidence_sha256": "e471cc9a6d825db9ec074baa84dbe50aac29b5314eba668dfc9f1917e6d282f4",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The reviewed official release is a later 26-track compilation because the contemporary single release lacks track-level evidence; exact ISRC GBUM71806264 anchors the approved recording."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2001,
+          "title": "Feels",
+          "artist": "Calvin Harris featuring Pharrell Williams, Katy Perry and Big Sean",
+          "chart_year": 2017,
+          "source_revision": "1356457366",
+          "source_entry_key": "2017:1326:calvin harris pharrell williams katy perry and big sean:feels",
+          "placeholder_canonical_id": "9d76abc4-8c21-4c05-9ffe-767ed152e530"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "9f6f1c4b0cdaf8239883f9091fa001343a891b8af0a70ab1c7b0d07b4bc7e74d",
+          "canonical_metadata_sha256": "b98d8a02b67caa8a3746516809efdb67d107d7c120e911e7d5f6744c89631316"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "9d76abc4-8c21-4c05-9ffe-767ed152e530",
+          "album_id": null,
+          "stored_title": "Feels",
+          "stored_artist": "Calvin Harris featuring Pharrell Williams, Katy Perry and Big Sean",
+          "track_position": 1,
+          "duration_ms": 223000
+        },
+        "isrc": "GBARL1700772",
+        "recording_id": "df933ba2-3377-4ab4-a648-36c7d3fc1679",
+        "release_id": "e6688ae8-55b7-424b-b570-4e26ade1d60e",
+        "release_group_id": "41902d54-1f05-43f0-8cc7-47c1b0b0e323",
+        "album_title": "Feels",
+        "album_artist": "Calvin Harris feat. Pharrell Williams, Katy Perry & Big Sean",
+        "release_date": "2017-06-16",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "947d046623d0fde3b40bff1264ab6d0e4e1ea75883b7890da569b2707061e9d2",
+        "risk_notes": [
+          "The exact explicit recording is approved; clean or alternate edits must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 2018,
+          "title": "Eastside",
+          "artist": "Benny Blanco, Halsey and Khalid",
+          "chart_year": 2018,
+          "source_revision": "1356457366",
+          "source_entry_key": "2018:1343:benny blanco halsey and khalid:eastside",
+          "placeholder_canonical_id": "93431b31-3aef-4728-8fdc-792dc2b85f68"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "e650587fbca919252e47664c99c941cadf4a1bf93ae4ad811152c69c2ad8f7ee",
+          "canonical_metadata_sha256": "58e0b047e8ebe4945f6b002d04764d09860630bd654bc6aeb06a194f55472b7b"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "93431b31-3aef-4728-8fdc-792dc2b85f68",
+          "album_id": null,
+          "stored_title": "Eastside",
+          "stored_artist": "Benny Blanco, Halsey and Khalid",
+          "track_position": 1,
+          "duration_ms": 173799
+        },
+        "isrc": "USUM71809132",
+        "recording_id": "787087cb-cb94-442d-98dd-2eddc59f1f84",
+        "release_id": "dd66d80f-7f9b-4bec-b850-dded86131861",
+        "release_group_id": "7551c31e-8324-473a-9402-6b05e5f88e66",
+        "album_title": "Eastside",
+        "album_artist": "benny blanco with Halsey & Khalid",
+        "release_date": "2018-07-12",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "a8c693b34c4a84211b5bceea393fb9c924b7240844c16a17d90a37c475642911",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1998,
+          "title": "Despacito",
+          "artist": "Luis Fonsi and Daddy Yankee featuring Justin Bieber",
+          "chart_year": 2017,
+          "source_revision": "1356457366",
+          "source_entry_key": "2017:1323:luis fonsi and daddy yankee justin bieber:despacito",
+          "placeholder_canonical_id": "15f1e58b-da5c-4493-8d63-3dedff6bc292"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "94de081a554009364cb33b2c49cc4c4fe9c9fc491c1252511ff32e2e96f0b7db",
+          "canonical_metadata_sha256": "22f091319b7039c6178267c8643d0a1f53940a75bfc2742e7dde53e592e083ed"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "15f1e58b-da5c-4493-8d63-3dedff6bc292",
+          "album_id": null,
+          "stored_title": "Despacito",
+          "stored_artist": "Luis Fonsi and Daddy Yankee featuring Justin Bieber",
+          "track_position": 1,
+          "duration_ms": 228827
+        },
+        "isrc": "USUM71703825",
+        "recording_id": "9ba26ca8-9dbc-4136-8541-2b25bcc6df1e",
+        "release_id": "8810fe3d-a154-45f4-b692-75a3c4904371",
+        "release_group_id": "acfcac55-0848-407f-957b-aafd91fb56db",
+        "album_title": "Despacito (remix)",
+        "album_artist": "Luis Fonsi & Daddy Yankee feat. Justin Bieber",
+        "release_date": "2017-04-17",
+        "country": "ES",
+        "release_track_count": 1,
+        "evidence_sha256": "3cf15312fb88e86dfe77e8619e55cc15a48b1ba467dfae08c6115b54927ace73",
+        "risk_notes": [
+          "Only the Justin Bieber remix identified by ISRC USUM71703825 is approved; the original Spanish recording and other versions must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1994,
+          "title": "Rockabye",
+          "artist": "Clean Bandit featuring Sean Paul and Anne-Marie",
+          "chart_year": 2016,
+          "source_revision": "1356457366",
+          "source_entry_key": "2016:1318:clean bandit sean paul and anne marie:rockabye",
+          "placeholder_canonical_id": "3be0ba0f-8131-4012-adf2-c5f08a558413"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "01e6ee60b59cd553b673412d5081fdb4e6bbfcd4c978bf239e1a9f12d3428066",
+          "canonical_metadata_sha256": "86b22acadefc43bc818e38c77f160bc8a9af3b607446396c902723128b0d356e"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "3be0ba0f-8131-4012-adf2-c5f08a558413",
+          "album_id": null,
+          "stored_title": "Rockabye",
+          "stored_artist": "Clean Bandit featuring Sean Paul and Anne-Marie",
+          "track_position": 1,
+          "duration_ms": 251088
+        },
+        "isrc": "GBAHS1600363",
+        "recording_id": "13f7ba19-553d-444a-81c1-e7fea9739bc9",
+        "release_id": "8b13961c-89ba-4eb6-a5cc-f36d4a17f7a3",
+        "release_group_id": "4d437564-f5e0-41d0-9dea-375aef8f1fca",
+        "album_title": "Rockabye",
+        "album_artist": "Clean Bandit feat. Sean Paul & Anne‐Marie",
+        "release_date": "2016-10-21",
+        "country": "XW",
+        "release_track_count": 1,
+        "evidence_sha256": "03f06b898593811cdd517c49ba492ed7cc8a755a2b094591caa22d1ba370226e",
+        "risk_notes": []
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1976,
+          "title": "Don't Be So Hard on Yourself",
+          "artist": "Jess Glynne",
+          "chart_year": 2015,
+          "source_revision": "1356457366",
+          "source_entry_key": "2015:1299:jess glynne:don t be so hard on yourself",
+          "placeholder_canonical_id": "1224dbe4-f11f-4e87-a211-5115b0615087"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "ce50898183b200f9dc6547578abb75c5146d2d848a0b8871df403ea97af54417",
+          "canonical_metadata_sha256": "2aa4bd1c12df0a3a62df074f439725dd4f645ea7a088785da91df99a60e719f0"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "1224dbe4-f11f-4e87-a211-5115b0615087",
+          "album_id": null,
+          "stored_title": "Don't Be So Hard on Yourself",
+          "stored_artist": "Jess Glynne",
+          "track_position": 7,
+          "duration_ms": 212000
+        },
+        "isrc": "GBAHS1500227",
+        "recording_id": "7841b7b2-a643-4793-8fc5-ba8d9af9ed39",
+        "release_id": "854c2a63-6253-435a-b1f4-e85574512627",
+        "release_group_id": "824500c5-eccf-4163-b159-e1413d7544e5",
+        "album_title": "I Cry When I Laugh",
+        "album_artist": "Jess Glynne",
+        "release_date": "2015-07-31",
+        "country": "GB",
+        "release_track_count": 14,
+        "evidence_sha256": "f4e84e3c04be41d20dc3ade1bebdca189041397fde49bc7702cfb6e5db96c629",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1971,
+          "title": "Not Letting Go",
+          "artist": "Tinie Tempah featuring Jess Glynne",
+          "chart_year": 2015,
+          "source_revision": "1356457366",
+          "source_entry_key": "2015:1293:tinie tempah jess glynne:not letting go",
+          "placeholder_canonical_id": "9e2a0b6b-221b-4c37-93cd-156f9bf2848c"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "9bbd89f03f5905e5d55ef8476093d73bf6ec04f22a28b0640d2c004733052175",
+          "canonical_metadata_sha256": "16e3fbd6b76a8c3b21210f04c74ec14d6738875bf63b6b653bc6d60678a8e092"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "9e2a0b6b-221b-4c37-93cd-156f9bf2848c",
+          "album_id": null,
+          "stored_title": "Not Letting Go",
+          "stored_artist": "Tinie Tempah featuring Jess Glynne",
+          "track_position": 6,
+          "duration_ms": 229960
+        },
+        "isrc": "GB7TP1500001",
+        "recording_id": "81b909de-adab-4e15-ad0f-1707ac70973e",
+        "release_id": "4b4d909f-c226-4e6c-aa96-0250fdeb2898",
+        "release_group_id": "86a53816-ddd7-43f3-9a78-fccd891cdcae",
+        "album_title": "Now That’s What I Call Music! 91",
+        "album_artist": "Various Artists",
+        "release_date": "2015-07-24",
+        "country": "GB",
+        "release_track_count": 44,
+        "evidence_sha256": "3fe6df36a1c5e21ea986a506a33f99f14038785dc8f5dcf91942e2fdcc077485",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The reviewed source is the exact ISRC track on an official 44-track compilation; only that verified track is imported."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1966,
+          "title": "Lay Me Down",
+          "artist": "Sam Smith featuring John Legend",
+          "chart_year": 2015,
+          "source_revision": "1356457366",
+          "source_entry_key": "2015:1288:sam smith john legend:lay me down",
+          "placeholder_canonical_id": "92f39cc9-c8fe-49a2-b9d7-bb1c5f195c3a"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "092bd93203260f9c0c4e1a9bc58144acd069a063a6f91b20626edd73d12b03a6",
+          "canonical_metadata_sha256": "998d20b70ac27a35d7b892efd0dff7cd40734a34d564f9730eba7c0ae96ca8a4"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "92f39cc9-c8fe-49a2-b9d7-bb1c5f195c3a",
+          "album_id": null,
+          "stored_title": "Lay Me Down",
+          "stored_artist": "Sam Smith featuring John Legend",
+          "track_position": 1,
+          "duration_ms": 219663
+        },
+        "isrc": "GBUM71500850",
+        "recording_id": "f10de69c-04f2-47f1-9277-fb387a70e2fe",
+        "release_id": "239fc754-7608-4a04-bbd2-6f139c5ae80a",
+        "release_group_id": "02435390-0779-41dc-b564-0cc479dad8b1",
+        "album_title": "Lay Me Down",
+        "album_artist": "Sam Smith feat. John Legend",
+        "release_date": "2015-03-09",
+        "country": "GB",
+        "release_track_count": 1,
+        "evidence_sha256": "2f5df9dada45e707e1bfa04ca4790f211d64e40200b21ad688617a51fbfd42a4",
+        "risk_notes": [
+          "The approved recording is the Red Nose Day duet with John Legend; Sam Smith's solo recording must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1958,
+          "title": "I Don't Care",
+          "artist": "Cheryl",
+          "chart_year": 2014,
+          "source_revision": "1356457366",
+          "source_entry_key": "2014:1280:cheryl:i don t care",
+          "placeholder_canonical_id": "b7176179-db56-4918-868e-f11b7dd4f7af"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "e0a310d89f352e762cbedf3a97c576558abe3b33ea799e0d6fb43d4fcee64378",
+          "canonical_metadata_sha256": "d38d552b33ba073cbe22b20436b368bf26bef95d804409ef90e56971a77d5bfb"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "b7176179-db56-4918-868e-f11b7dd4f7af",
+          "album_id": null,
+          "stored_title": "I Don't Care",
+          "stored_artist": "Cheryl",
+          "track_position": 6,
+          "duration_ms": 240000
+        },
+        "isrc": "GBUM71404141",
+        "recording_id": "dd373cce-00b6-4a89-a5af-5bd893f3bf61",
+        "release_id": "945e9f23-2eb8-4379-bdbc-75f7d0ecb321",
+        "release_group_id": "f79ab584-81c9-4537-a13b-5b1db6bb7960",
+        "album_title": "Only Human",
+        "album_artist": "Cheryl",
+        "release_date": "2014-11-07",
+        "country": "IE",
+        "release_track_count": 15,
+        "evidence_sha256": "fe20335f39aebfdfd6d5808d6e0aa72b366f304e4f19f46a3cbc992773ece89c",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted."
+        ]
+      },
+      {
+        "action": "link_existing",
+        "chart_entry": {
+          "id": 1920,
+          "title": "The Monster",
+          "artist": "Eminem featuring Rihanna",
+          "chart_year": 2013,
+          "source_revision": "1356457366",
+          "source_entry_key": "2013:1242:eminem rihanna:the monster",
+          "placeholder_canonical_id": "8873a13f-6e48-4583-9edb-93679893e8c1"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "0816ffa4119c7b3d9209e61fc9a405fabbfb4cd7a3ae4e64625988ba49ab8de5",
+          "canonical_metadata_sha256": "45163bb2790588ac0c5495a8d8c62c2e5a54f5247aae8925b59be153d0bedab9"
+        },
+        "target": {
+          "song_id": 8738,
+          "canonical_id": "06c26627-a1d1-4cdc-8b8f-dd736be80179",
+          "album_id": 631,
+          "stored_title": "The Monster",
+          "stored_artist": "Eminem",
+          "track_position": 12,
+          "duration_ms": null
+        },
+        "isrc": "USUM71314064",
+        "recording_id": "c975930e-c69c-4685-a214-b544b8f1fd5d",
+        "release_id": "b1deba13-ada0-4901-af50-1d721085a2b6",
+        "release_group_id": "b1fdc9cc-8680-44da-abab-59edca6b2ad3",
+        "album_title": "The Marshall Mathers LP 2",
+        "album_artist": "Eminem",
+        "release_date": "2013-11-05",
+        "country": "US",
+        "release_track_count": 21,
+        "evidence_sha256": "d302fde807ec3a3766e68e05ad0b9bb065c1c4f948c17e80aeff7df493df7216",
+        "risk_notes": [
+          "The exact existing BOM clean recording on The Marshall Mathers LP 2 is reused; explicit or alternate versions and duplicate identities must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1898,
+          "title": "Impossible",
+          "artist": "James Arthur",
+          "chart_year": 2013,
+          "source_revision": "1356457366",
+          "source_entry_key": "2013:re-2013-01-05:james arthur:impossible",
+          "placeholder_canonical_id": "a2153a06-761e-4d10-adf7-343e3861eadf"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "4638fe7708d616645eae8bf7abc2cb0bbb3e468b5b65e744c801703fe8062491",
+          "canonical_metadata_sha256": "d5d6e19933abb6bdc701777a0b1cddf4de9d0aec265e7b0fb330211dc4325509"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "a2153a06-761e-4d10-adf7-343e3861eadf",
+          "album_id": null,
+          "stored_title": "Impossible",
+          "stored_artist": "James Arthur",
+          "track_position": 1,
+          "duration_ms": 209000
+        },
+        "isrc": "GBHMU1200535",
+        "recording_id": "2a330498-8fe8-45e1-8536-dc0679fd7a37",
+        "release_id": "310faf82-005c-4497-b000-c3abc647713c",
+        "release_group_id": "7a82779e-f14c-4eab-a3d9-07801e95e9c0",
+        "album_title": "Impossible",
+        "album_artist": "James Arthur",
+        "release_date": "2012-12-10",
+        "country": "GB",
+        "release_track_count": 1,
+        "evidence_sha256": "d7ea025688310d1f9b8a4784ab7799bef38a665de444ca3efeca8adf4544a48c",
+        "risk_notes": [
+          "Only the James Arthur recording identified by ISRC GBHMU1200535 is approved; the Shontelle original and other versions must not be substituted."
+        ]
+      },
+      {
+        "action": "import_verified",
+        "chart_entry": {
+          "id": 1904,
+          "title": "What About Us",
+          "artist": "The Saturdays featuring Sean Paul",
+          "chart_year": 2013,
+          "source_revision": "1356457366",
+          "source_entry_key": "2013:1225:the saturdays sean paul:what about us",
+          "placeholder_canonical_id": "3bf4ff67-478b-41af-ae3d-b172c5286ef3"
+        },
+        "stale_state_fingerprint": {
+          "chart_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00",
+          "source_metadata_sha256": "3a20e600d921482449ca7098c5c7ac1bde86df8047d16a7a9bdd0ce30c0887cd",
+          "canonical_metadata_sha256": "0297e554f8b9679eb97197883a2e8699eaa6ab8f9cb86b737bcbd78c8dc4d807"
+        },
+        "target": {
+          "song_id": null,
+          "canonical_id": "3bf4ff67-478b-41af-ae3d-b172c5286ef3",
+          "album_id": null,
+          "stored_title": "What About Us",
+          "stored_artist": "The Saturdays featuring Sean Paul",
+          "track_position": 1,
+          "duration_ms": 220000
+        },
+        "isrc": "GBUM71206116",
+        "recording_id": "c838dd68-684d-4423-aa17-d859c036c7f5",
+        "release_id": "3d33b628-b295-41d8-b5b1-308f44ae027a",
+        "release_group_id": "89468c3e-b7d6-40e3-b06b-425e739be9be",
+        "album_title": "What About Us",
+        "album_artist": "The Saturdays",
+        "release_date": "2013-03-15",
+        "country": "GB",
+        "release_track_count": 4,
+        "evidence_sha256": "2cb8a4db32b944952939cb21232104fb85ddf81f9e43bdabdcb687a9d72bc1b4",
+        "risk_notes": [
+          "Selected-track import from a reviewed multi-track official release; only the verified chart track is inserted.",
+          "The approved recording is the Sean Paul version identified by ISRC GBUM71206116; solo or alternate versions must not be substituted."
+        ]
+      }
+    ],
+    "rejected_version_leads": [
+      {
+        "chart_entry_id": 1996,
+        "title": "Symphony",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1979,
+        "title": "Easy Love",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1968,
+        "title": "See You Again",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1959,
+        "title": "Wake Me Up (Gareth Malone's All Star Choir)",
+        "reason_code": "stored_isrc_belongs_to_different_artist_version"
+      },
+      {
+        "chart_entry_id": 1913,
+        "title": "Wake Me Up (Avicii)",
+        "reason_code": "isrc_maps_multiple_recording_versions"
+      },
+      {
+        "chart_entry_id": 1522,
+        "title": "Beautiful Girls",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 1467,
+        "title": "Call on Me",
+        "reason_code": "official_isrc_maps_filterheadz_remix_not_chart_version"
+      },
+      {
+        "chart_entry_id": 1418,
+        "title": "Dilemma",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 107,
+        "title": "Breathe",
+        "reason_code": "album_version_postdates_number_one_without_contemporaneous_bridge"
+      },
+      {
+        "chart_entry_id": 45,
+        "title": "No Limit",
+        "reason_code": "contemporary_uk_single_uses_different_radio_edit_recording"
+      },
+      {
+        "chart_entry_id": 2491,
+        "title": "Houdini",
+        "reason_code": "isrc_maps_music_video_not_audio_single"
+      },
+      {
+        "chart_entry_id": 2013,
+        "title": "I'll Be There",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 2006,
+        "title": "Perfect",
+        "reason_code": "isrc_maps_multiple_recordings"
+      },
+      {
+        "chart_entry_id": 2014,
+        "title": "Solo",
+        "reason_code": "isrc_maps_multiple_recordings"
+      }
+    ],
+    "reviewed_incomplete_leads": [
+      {
+        "chart_entry_id": 2485,
+        "title": "Now and Then",
+        "reason_code": "official_charts_page_has_no_catalogue_identifier"
+      },
+      {
+        "chart_entry_id": 1545,
+        "title": "Right Round",
+        "reason_code": "official_charts_catalogue_value_is_not_the_stored_isrc"
+      },
+      {
+        "chart_entry_id": 1437,
+        "title": "Breathe (Blu Cantrell)",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 191,
+        "title": "Lift Me Up",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 180,
+        "title": "9 PM (Till I Come)",
+        "reason_code": "official_charts_song_page_not_found"
+      },
+      {
+        "chart_entry_id": 167,
+        "title": "Fly Away",
+        "reason_code": "official_charts_catalogue_value_does_not_bridge_to_stored_isrc"
+      },
+      {
+        "chart_entry_id": 41,
+        "title": "Sleeping Satellite",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 541,
+        "title": "All Around the World",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 531,
+        "title": "Like a Prayer",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 425,
+        "title": "Ebony and Ivory",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 845,
+        "title": "Message in a Bottle",
+        "reason_code": "physical_catalogue_number_without_isrc_bridge"
+      },
+      {
+        "chart_entry_id": 2505,
+        "title": "The Subway",
+        "reason_code": "official_charts_catalogue_value_is_not_an_isrc"
+      },
+      {
+        "chart_entry_id": 2501,
+        "title": "Survive",
+        "reason_code": "release_level_verification_not_completed"
+      },
+      {
+        "chart_entry_id": 2500,
+        "title": "Ordinary",
+        "reason_code": "musicbrainz_isrc_lookup_unavailable"
+      },
+      {
+        "chart_entry_id": 2486,
+        "title": "Lovin on Me",
+        "reason_code": "musicbrainz_isrc_lookup_unavailable"
+      },
+      {
+        "chart_entry_id": 2476,
+        "title": "Flowers",
+        "reason_code": "official_charts_page_has_no_catalogue_identifier"
+      },
+      {
+        "chart_entry_id": 2473,
+        "title": "Anti-Hero",
+        "reason_code": "release_level_verification_not_completed"
+      },
+      {
+        "chart_entry_id": 2459,
+        "title": "Body",
+        "reason_code": "official_isrc_absent_from_musicbrainz"
+      }
+    ],
+    "expected_deltas": {
+      "albums": 17,
+      "songs": 18,
+      "canonical_recordings": 0,
+      "historical_chart_links": 20,
+      "ratings": 0
+    },
+    "proposed_result": {
+      "resolved_delta": 20,
+      "resolved_chart_entries": 479,
+      "remaining_unresolved_chart_entries": 819
+    },
+    "safety_contract": {
+      "atomic_transaction": true,
+      "global_stale_baseline_abort": true,
+      "per_candidate_stale_fingerprint_abort": true,
+      "deterministic_advisory_lock_order": true,
+      "immutable_private_operation_evidence": true,
+      "preserve_all_song_ratings_byte_for_byte": true,
+      "preserve_all_historical_chart_ratings_byte_for_byte": true,
+      "preserve_first_batch_papa_dont_preach_reconciliation": true,
+      "duplicate_and_partial_identity_abort": true,
+      "shared_reviewed_release_insert_once": true,
+      "reviewed_existing_album_reuse": true,
+      "rollback_operation_required": true,
+      "production_execution_authorized": false
+    }
+  },
+  "manifest_sha256": "4d007752747f406a72b2090b4a9362218e7bef3457a30a981247445ea655da83"
+}
