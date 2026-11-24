@@ -47,6 +47,7 @@ begin
     raise exception 'rollback approval token missing or does not bind the reviewed bundle and record';
   end if;
   if v_executor_key <> '20261124_uk_number_ones_scalable_executor_v1'
+     or v_input->>'execution_transport' <> 'direct-postgres-psql-v1'
      or v_record_key is null or v_manifest !~ '^[0-9a-f]{64}$' then
     raise exception 'rollback executor envelope shape failed';
   end if;
