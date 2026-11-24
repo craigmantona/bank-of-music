@@ -1,0 +1,3160 @@
+{
+  "schema_version": 1,
+  "operation_key": "20261124_uk_number_ones_scalable_executor_v1",
+  "production_authorized": false,
+  "approval_state": "awaiting_separate_independent_review",
+  "source_plan_sha256": "1aaedc07f4e1eee95e3cebb763648c547c6e58debb160d3155073cdf2db14cc0",
+  "source_snapshot_sha256": "0dbc96dca56f595e2473f6c33f36852755620e020e1776818a29440f998a9d53",
+  "expected_live_baseline": {
+    "songs": 16219,
+    "albums": 1786,
+    "song_rating_sum": 13454,
+    "song_rating_rows": 1747,
+    "total_chart_entries": 1298,
+    "canonical_recordings": 17095,
+    "historical_rating_sum": 43,
+    "historical_rating_rows": 5,
+    "resolved_chart_entries": 479,
+    "unresolved_chart_entries": 819,
+    "duplicate_recording_mbids": 0,
+    "prior_operation_audit_rows": 60
+  },
+  "execution_contract": {
+    "max_in_flight": 1,
+    "one_transaction_per_record": true,
+    "continue_after_record_failure": true,
+    "stale_state_abort_per_record": true,
+    "preserve_all_ratings": true,
+    "duplicate_prevention": true,
+    "append_only_private_apply_and_rollback_audit": true,
+    "approval_file_required": true,
+    "exact_bundle_and_record_digest_binding": true
+  },
+  "records": [
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-2510-222a977a35ec",
+      "manifest_sha256": "222a977a35ec4d15103fd9c5a7a736ca3189f53b040c4eaae0cda29179c2251a",
+      "evidence_sha256": "1e99248089c8a64afd8b60904686396480bd6a6cfa9c760e3a26745af9e5805d",
+      "preconditions": {
+        "row_fingerprint": "57bd1128b9aabdab9c8a7acd8ec00a08277c69992e1f67d6f11eb0b718d521f3",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2026:1449:dave and tems:raindance",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "be056aaa-cfec-428c-9e5a-e9c858fb1e0f",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 2510,
+        "action": "import_verified",
+        "placeholder_canonical_id": "be056aaa-cfec-428c-9e5a-e9c858fb1e0f",
+        "recording_mbid": "ff554e54-309b-40db-b564-0837b78d8516",
+        "release_mbid": "013ef7ec-2da8-4fa6-8e68-ebfa6af72f95",
+        "release_group_mbid": "294a95df-6261-4f19-bbd1-0057baf0bd4d",
+        "track_position": 5,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2026,
+        "title": "Raindance",
+        "artist": "Dave and Tems",
+        "updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBUM72506029",
+        "release_title": "The Boy Who Played the Harp",
+        "release_artist": "Dave",
+        "release_date": "2025-10-24",
+        "release_country": null,
+        "duration_ms": 221000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 5 only from a 10-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-2501-7ab181454e28",
+      "manifest_sha256": "7ab181454e28a275737712aed9fc553d6b3107120acefdd15593a10a34ce5230",
+      "evidence_sha256": "bfe1ce3dbceb803f59520285ccfa4e773ee9ef7ab9451132d3f81727e59c1607",
+      "preconditions": {
+        "row_fingerprint": "f6d054475934350e3852a68e09ce947ba295b150b248dc637092910c0c1ed80a",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2025:1439:lewis capaldi:survive",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "a703a4a8-cde4-439a-a230-aa33cc90e125",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 2501,
+        "action": "import_verified",
+        "placeholder_canonical_id": "a703a4a8-cde4-439a-a230-aa33cc90e125",
+        "recording_mbid": "949385ab-a15d-4805-bfbe-beddd4ae4cc4",
+        "release_mbid": "6815e992-caba-48e1-8770-f192de8001bb",
+        "release_group_mbid": "bf0ed204-5cd6-4caa-a9b9-39faebcde41c",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2025,
+        "title": "Survive",
+        "artist": "Lewis Capaldi",
+        "updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "DEUM72504276",
+        "release_title": "Survive",
+        "release_artist": "Lewis Capaldi",
+        "release_date": "2025-06-27",
+        "release_country": null,
+        "duration_ms": 225212,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-2507-a5e504921027",
+      "manifest_sha256": "a5e5049210277ac749e7e914a25e245bf147b5dd39cee72c5c51b2235621a506",
+      "evidence_sha256": "55f5bb20b71db92f393500fa1e80b0d7d556a4fabe69b3fb5b7c5846377b7681",
+      "preconditions": {
+        "row_fingerprint": "081e46c3fba1895c47e3d5afc24c757375e65764f34afe78e119c617d7bb82c6",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2025:1446:kylie minogue:xmas",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "1a83ce70-8359-4e0b-91cf-3211b291041d",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 2507,
+        "action": "import_verified",
+        "placeholder_canonical_id": "1a83ce70-8359-4e0b-91cf-3211b291041d",
+        "recording_mbid": "9cc1e4e4-8da0-4faa-9335-ae59ea4040bf",
+        "release_mbid": "625d0b3f-f0b9-4ea8-9173-65f0c4dbe8ca",
+        "release_group_mbid": "237af528-1f11-44ee-a470-6ba9768f5bca",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2025,
+        "title": "XMAS",
+        "artist": "Kylie Minogue",
+        "updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYE2501070",
+        "release_title": "XMAS",
+        "release_artist": "Kylie Minogue",
+        "release_date": "2025-12-12",
+        "release_country": "GB",
+        "duration_ms": 196000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-2439-db62db2344ea",
+      "manifest_sha256": "db62db2344ea8a2af07efd671cd6c60d5e30821ea53b551441c33a34677e53e6",
+      "evidence_sha256": "8c5a62a40821f5f1eb62480b9335efb6cc49b4cf80c7786c473b73531a75517c",
+      "preconditions": {
+        "row_fingerprint": "df0a570be1ac9c3e9e57aa2eca0899c6159994e0e3c4c090bead5be97301c9e3",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2020:1361:ellie goulding:river",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "dffdcd92-9395-4198-b12f-0b59a325db95",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 2439,
+        "action": "import_verified",
+        "placeholder_canonical_id": "dffdcd92-9395-4198-b12f-0b59a325db95",
+        "recording_mbid": "b1dcd614-1bca-4c23-b92a-2ea4c6d8dc9e",
+        "release_mbid": "5e7b42d5-8562-4266-81ca-0a9cd4f732f7",
+        "release_group_mbid": "e2de6096-a48b-4ac3-97c2-5b396966792d",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2020,
+        "title": "River",
+        "artist": "Ellie Goulding",
+        "updated_at": "2026-10-23T14:53:07.351303+00:00",
+        "canonical_updated_at": "2026-10-23T14:53:07.351303+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBUM71905731",
+        "release_title": "River",
+        "release_artist": "Ellie Goulding",
+        "release_date": "2019-11-14",
+        "release_country": "GB",
+        "duration_ms": 246000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1999-6944da2ddf69",
+      "manifest_sha256": "6944da2ddf69160e1345a4369a5eae0d76e7675d21a108655419777915d338fb",
+      "evidence_sha256": "750e6d06c4cd41602735f1d7b90f40640e3735fa48ab1a953a62c92844a2dbd3",
+      "preconditions": {
+        "row_fingerprint": "f731f619d0b77eb3796fec8ff964c274b1016ed45c0b5a64ae6af8dbd5e94d0e",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2017:1324:artists for grenfell:bridge over troubled water",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "f8880b77-38fc-4ba3-8235-7a0fd65648d2",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1999,
+        "action": "import_verified",
+        "placeholder_canonical_id": "f8880b77-38fc-4ba3-8235-7a0fd65648d2",
+        "recording_mbid": "31b385a1-8d23-4ff6-b17e-8c038cc8b3af",
+        "release_mbid": "ccf8d048-d167-4985-8fdf-04b3bc53fd2a",
+        "release_group_mbid": "e893ac23-7ef2-47af-8538-99d2c0f078bf",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2017,
+        "title": "Bridge over Troubled Water",
+        "artist": "Artists for Grenfell",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBHMU1700038",
+        "release_title": "Bridge Over Troubled Water",
+        "release_artist": "Artists for Grenfell",
+        "release_date": "2017-06-21",
+        "release_country": "GB",
+        "duration_ms": 233000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1985-24086635c6d6",
+      "manifest_sha256": "24086635c6d61f36ccf2f768ab2a706265a492f2379a9481ac7ac5d96aea4c7d",
+      "evidence_sha256": "bf2bb57eb51de02836b8a98a31755032ada554d06c861ae143825e192184cf8e",
+      "preconditions": {
+        "row_fingerprint": "563d9163f035ffeb48bd443b006e0b450c8520e5cff38022aade36333a3eb5c2",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2016:1309:shawn mendes:stitches",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "8df5c83a-f557-40b9-97d8-8a361a0108c1",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1985,
+        "action": "import_verified",
+        "placeholder_canonical_id": "8df5c83a-f557-40b9-97d8-8a361a0108c1",
+        "recording_mbid": "8efe2cd3-2adc-4abf-b06c-536208ca71fa",
+        "release_mbid": "384d156d-f1c5-4fa6-97cc-73be74a6c75c",
+        "release_group_mbid": "d0efb4c9-0578-49e7-bb3f-c64f98871009",
+        "track_position": 2,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2016,
+        "title": "Stitches",
+        "artist": "Shawn Mendes",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM71500658",
+        "release_title": "Handwritten (Revisited)",
+        "release_artist": "Shawn Mendes",
+        "release_date": "2015-11-20",
+        "release_country": "XW",
+        "duration_ms": 207000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 2 only from a 16-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1987-7495386d785e",
+      "manifest_sha256": "7495386d785eccc5f857d57c8feadd911bb5e559ead00117114a3ba3d0e83ad4",
+      "evidence_sha256": "00b830e63c73fc21496ce6e06e541cfb6a84d6e397d7a8e1103b58acc2a83959",
+      "preconditions": {
+        "row_fingerprint": "fc8ce344353906bfc93da93b9df458376b659d771adcf89f536e96a44416b3d6",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2016:1311:lukas graham:7 years",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "8fe4c89e-38d8-4486-b9f5-247bad68fa8d",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1987,
+        "action": "import_verified",
+        "placeholder_canonical_id": "8fe4c89e-38d8-4486-b9f5-247bad68fa8d",
+        "recording_mbid": "87e36ab4-6914-44ab-b740-7abb37678040",
+        "release_mbid": "0914ce72-5cff-431a-b93e-c6368715ba05",
+        "release_group_mbid": "0198c1e1-d8eb-4cd2-a7c6-65127ef77142",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2016,
+        "title": "7 Years",
+        "artist": "Lukas Graham",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USWB11506516",
+        "release_title": "Lukas Graham",
+        "release_artist": "Lukas Graham",
+        "release_date": "2016-04-01",
+        "release_country": "XW",
+        "duration_ms": 238000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 11-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1928-97129f14d373",
+      "manifest_sha256": "97129f14d373eb36c712cfa8784fbe278e9932301f7f9971dc90eb9f3f4c77d0",
+      "evidence_sha256": "2a2b41d56139fb1fb4fb08ee4f4141d8c08b423be182a43a4d68033ee897f34a",
+      "preconditions": {
+        "row_fingerprint": "e5bcaf39bc79c48a1d2bd13457037b609ac3812e32bb1a0ccae3c53b0a8e697d",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2014:1250:clean bandit jess glynne:rather be",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "74ecba43-1f53-45bc-8586-a83b0d39272a",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1928,
+        "action": "import_verified",
+        "placeholder_canonical_id": "74ecba43-1f53-45bc-8586-a83b0d39272a",
+        "recording_mbid": "78a8d975-1257-4fc4-a634-50f89a62de47",
+        "release_mbid": "61cb7f9a-682a-4cf2-ade0-08f0466723dc",
+        "release_group_mbid": "fd56d63d-144f-4f31-b69c-7ccb3e5a76c3",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2014,
+        "title": "Rather Be",
+        "artist": "Clean Bandit featuring Jess Glynne",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAHS1300498",
+        "release_title": "Rather Be",
+        "release_artist": "Clean Bandit feat. Jess Glynne",
+        "release_date": "2014-01-17",
+        "release_country": null,
+        "duration_ms": 227833,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1934-57078ed1df0b",
+      "manifest_sha256": "57078ed1df0b615405762a1b99fcf1421ad3018cc251dc593463ef6adcbdad9c",
+      "evidence_sha256": "ef4e7598b5fc2ee837eade88e60515581af615ca3496d115062f5172fe336ed3",
+      "preconditions": {
+        "row_fingerprint": "4eb8c89b521a14c4793a82c510c592b60b223b781055ab078e7c42cc068ccb06",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2014:1256:aloe blacc:the man",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "71b308b6-da01-4ade-933d-71c6ec0b6fcd",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1934,
+        "action": "import_verified",
+        "placeholder_canonical_id": "71b308b6-da01-4ade-933d-71c6ec0b6fcd",
+        "recording_mbid": "c68948a7-d8ef-409c-adf8-bcf2afeb656f",
+        "release_mbid": "a5f17c6e-e44a-488f-aa09-6b2cb53a11fc",
+        "release_group_mbid": "66b59c18-343b-41f2-b4eb-f0276ed33a70",
+        "track_position": 2,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2014,
+        "title": "The Man",
+        "artist": "Aloe Blacc",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM71312880",
+        "release_title": "Lift Your Spirit (Deluxe Edition)",
+        "release_artist": "Aloe Blacc",
+        "release_date": "2013-10-25",
+        "release_country": "XW",
+        "duration_ms": 255892,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 2 only from a 16-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1943-e04d6b74069c",
+      "manifest_sha256": "e04d6b74069cd47a77a4901b4b8cb3bf917e2c85007c59b4cb88438757eb5bf8",
+      "evidence_sha256": "aa740f074efe60641847a2bec2f01a3c3587690dd5808f92c8fe0b85865d1b2c",
+      "preconditions": {
+        "row_fingerprint": "c3cd30d4760cbec46973d85d889770e87945bb5f04d3709b705f8b904047a60b",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2014:1265:ella henderson:ghost",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "caf14539-4b36-4837-a7df-a629f79f4b07",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1943,
+        "action": "import_verified",
+        "placeholder_canonical_id": "caf14539-4b36-4837-a7df-a629f79f4b07",
+        "recording_mbid": "859678f6-cc24-4dfa-9ad5-09b38bc72461",
+        "release_mbid": "9e86b4b8-db73-4ab2-962a-f96d40b2e778",
+        "release_group_mbid": "2fb88996-312b-44a7-b333-a5064019fbde",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2014,
+        "title": "Ghost",
+        "artist": "Ella Henderson",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBHMU1400029",
+        "release_title": "Ghost",
+        "release_artist": "Ella Henderson",
+        "release_date": "2014-06-06",
+        "release_country": "XW",
+        "duration_ms": 216106,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1950-5b4cbcad92b1",
+      "manifest_sha256": "5b4cbcad92b1dfc6a456ccb2bea07617251e4f22c5918b209cf9bbe36351b6af",
+      "evidence_sha256": "406acddcfedf4ac146e6ecbde2f71fb92f13267e82e22a9a026fa5a71710960a",
+      "preconditions": {
+        "row_fingerprint": "145d8b977e988b5679cbed5dc71e73058c65c86cdc2a34aee94a168d59b349af",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2014:1272:nico vinz:am i wrong",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "dffc382d-0020-44da-a418-efe279d67c66",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1950,
+        "action": "import_verified",
+        "placeholder_canonical_id": "dffc382d-0020-44da-a418-efe279d67c66",
+        "recording_mbid": "5e58bc59-aa38-43ca-9740-fa79533679b3",
+        "release_mbid": "3cefee18-a738-40f2-978d-4e1bd72ac86a",
+        "release_group_mbid": "0bcc17ac-b5c2-4322-aa49-be4c20b3d5a4",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2014,
+        "title": "Am I Wrong",
+        "artist": "Nico & Vinz",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USWB11304681",
+        "release_title": "Am I Wrong",
+        "release_artist": "Nico & Vinz",
+        "release_date": "2014-02-21",
+        "release_country": null,
+        "duration_ms": 248960,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1951-8c6a6a0359ca",
+      "manifest_sha256": "8c6a6a0359ca0125fab1e96d077de412ef835ced9a62363c8ee2880e6a19c7b1",
+      "evidence_sha256": "51cc8588e0f393459fa58cbce606cb9a6ee1d2da96aefcc02243d361ec79ae76",
+      "preconditions": {
+        "row_fingerprint": "dbb2d25dbee8a3e489362ef52b4cd2254e904ee5016f95342d32482b222d67b6",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2014:1273:david guetta sam martin:lovers on the sun",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "0c16402b-ad7b-4a22-a135-3aea4ecefbdb",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1951,
+        "action": "import_verified",
+        "placeholder_canonical_id": "0c16402b-ad7b-4a22-a135-3aea4ecefbdb",
+        "recording_mbid": "a4b95583-262e-4599-bd98-9415cd2010ce",
+        "release_mbid": "9d7f0e5c-d80d-4e5b-ad3e-7c3b098ceadd",
+        "release_group_mbid": "57115279-ee5f-4f7e-a484-148f55fa09ad",
+        "track_position": 4,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2014,
+        "title": "Lovers on the Sun",
+        "artist": "David Guetta featuring Sam Martin",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GB28K1400016",
+        "release_title": "Listen",
+        "release_artist": "David Guetta",
+        "release_date": "2014-11-21",
+        "release_country": "XW",
+        "duration_ms": 203520,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 4 only from a 18-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1899-45c7c0024abb",
+      "manifest_sha256": "45c7c0024abb2f8f9468fa9b3ec07afad2b360a6d2386c7c1bd2c02dda30fbda",
+      "evidence_sha256": "e885614bbaf63ed99fcde8b1c77242afe1bdb1113af4b31ce13013cd51e72fc0",
+      "preconditions": {
+        "row_fingerprint": "c3615498619db1a6150759a4f5b6c7f3dd5f3eaa94fd8b210f88bb5b72d9bcab",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2013:1219:will i am britney spears:scream shout",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "35ae1532-0e44-4b80-b31b-e9a157c2e277",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1899,
+        "action": "import_verified",
+        "placeholder_canonical_id": "35ae1532-0e44-4b80-b31b-e9a157c2e277",
+        "recording_mbid": "ff657e64-51ff-47b9-a8c7-ed3666a78bd6",
+        "release_mbid": "3df59ec7-6574-4ffa-9d96-2fad3be976d0",
+        "release_group_mbid": "9dc491dc-96ae-4aa3-ae5d-1cd695496fae",
+        "track_position": 4,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2013,
+        "title": "Scream & Shout",
+        "artist": "will.i.am featuring Britney Spears",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM71215597",
+        "release_title": "#willpower",
+        "release_artist": "will.i.am",
+        "release_date": "2013-01-01",
+        "release_country": null,
+        "duration_ms": 252266,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 4 only from a 15-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1907-761327ed2dab",
+      "manifest_sha256": "761327ed2dab3dced4dfb051becc3d7b3f24aa35992c83a18abd860046d7fde1",
+      "evidence_sha256": "6c9e1f8bfea9bd7809c18a584d8f475a5a03a457152b4fb8473202cfb0298619",
+      "preconditions": {
+        "row_fingerprint": "cbf9a9ca7d7d14f69d56089f9e14052107f2fe9fdaf54fb1bb71c05a281e408e",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2013:1228:rudimental ella eyre:waiting all night",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "b00781f0-d419-4c0b-a4d0-98e44edf6f1d",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1907,
+        "action": "import_verified",
+        "placeholder_canonical_id": "b00781f0-d419-4c0b-a4d0-98e44edf6f1d",
+        "recording_mbid": "b3e47ce7-875d-427a-9d7f-e113aeb22b23",
+        "release_mbid": "1eec2bb4-a241-4321-a433-4819b132a449",
+        "release_group_mbid": "cbb81f42-2336-41f2-9df4-02af8710de61",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2013,
+        "title": "Waiting All Night",
+        "artist": "Rudimental featuring Ella Eyre",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAHS1200493",
+        "release_title": "Waiting All Night",
+        "release_artist": "Rudimental",
+        "release_date": "2013-04-14",
+        "release_country": "XW",
+        "duration_ms": 292587,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 7-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1909-36e50099a021",
+      "manifest_sha256": "36e50099a0218d6f17c84423d50f95bd2c2ed42d9f5350fa974936a7e7afe173",
+      "evidence_sha256": "d0d55d13428e8de6cacf42d5ebd9d5e8beca7362042fd3d39e2b07b3736a37fd",
+      "preconditions": {
+        "row_fingerprint": "75e4fd7bde2691a4dba57c1fc808c9c9df6f72cb17cf85a380242723155aeba5",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2013:1230:naughty boy sam smith:la la la",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "5e516f07-a2d1-495b-b342-a07788419738",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1909,
+        "action": "import_verified",
+        "placeholder_canonical_id": "5e516f07-a2d1-495b-b342-a07788419738",
+        "recording_mbid": "9a339179-6d01-49ca-ac66-2e246fbd5323",
+        "release_mbid": "5714b481-ae79-4563-a4b9-d7e3e8cbb33d",
+        "release_group_mbid": "0f334341-2d37-4860-9fa1-ce664c91f89b",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2013,
+        "title": "La La La",
+        "artist": "Naughty Boy featuring Sam Smith",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAAA1300148",
+        "release_title": "La La La",
+        "release_artist": "Naughty Boy & Sam Smith",
+        "release_date": "2013-01-01",
+        "release_country": null,
+        "duration_ms": 220779,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 5-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1917-8fc6859a2ae9",
+      "manifest_sha256": "8fc6859a2ae9a715a87f5b82f78e8d5003bcc86127b6d221107465f63f26fbd7",
+      "evidence_sha256": "0fd016320743e8dc651d804148698924b89b5dfdc04adda1cd326b0cbab05f38",
+      "preconditions": {
+        "row_fingerprint": "8e06977f81592dfe74fd28aeaf16306c4699c95ca6144975b88b60e8905198ed",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2013:1238:jason derulo 2 chainz:talk dirty",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "7a80f073-26b6-4858-9106-c5090be0d5a4",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1917,
+        "action": "import_verified",
+        "placeholder_canonical_id": "7a80f073-26b6-4858-9106-c5090be0d5a4",
+        "recording_mbid": "24647d10-f3a8-4a03-bed9-b6f1846dc4d4",
+        "release_mbid": "a8d4c259-e032-4b3e-9634-7a6cfb313719",
+        "release_group_mbid": "d441ada0-2715-4f98-9a8b-c1a6f8bbd07c",
+        "track_position": 2,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2013,
+        "title": "Talk Dirty",
+        "artist": "Jason Derulo featuring 2 Chainz",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USWB11302648",
+        "release_title": "Tattoos",
+        "release_artist": "Jason Derulo",
+        "release_date": "2013-10-20",
+        "release_country": "XW",
+        "duration_ms": 177898,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 2 only from a 14-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1923-909024b5487b",
+      "manifest_sha256": "909024b5487b4ae7f3bd72acf107f182c2bfe2e1015896aea88882a1b7ceecbe",
+      "evidence_sha256": "2d3ec1ffd6c815a9f2e052e2ca3b3076accdeffd3cd67be9d8e8e05bc60b40e5",
+      "preconditions": {
+        "row_fingerprint": "fa24e44ef52208600e68343ffa40394f3dbc982938e55b5681b75441058dc2ff",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2013:1245:lily allen:somewhere only we know",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "86ae920d-41c3-47b3-a600-8352d1402a1d",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1923,
+        "action": "import_verified",
+        "placeholder_canonical_id": "86ae920d-41c3-47b3-a600-8352d1402a1d",
+        "recording_mbid": "b89531ad-2ef0-4ced-8552-7465b57a1c34",
+        "release_mbid": "7672ac66-398b-45e8-af78-b78c0788c41c",
+        "release_group_mbid": "1bbda3a3-959f-4420-a9ae-e229ec519436",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2013,
+        "title": "Somewhere Only We Know",
+        "artist": "Lily Allen",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYE1301770",
+        "release_title": "Somewhere Only We Know",
+        "release_artist": "Lily Allen",
+        "release_date": "2013-11-10",
+        "release_country": "XW",
+        "duration_ms": 208000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1868-ffafbfc17bd3",
+      "manifest_sha256": "ffafbfc17bd39344f3761ad0b2820c159233b5242e7900002a5c0dd665a39a28",
+      "evidence_sha256": "57f7c427546de4d0d7643e2ba777a5d0ce642702d6340363cb31bca367405869",
+      "preconditions": {
+        "row_fingerprint": "3cbf4a92174dce39bee97f9ea0923bf5b235c91466e86190c78ca04d6a159e8e",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1187:david guetta sia:titanium",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "fcad58a3-78e9-4cf1-b342-381c316e34a5",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1868,
+        "action": "import_verified",
+        "placeholder_canonical_id": "fcad58a3-78e9-4cf1-b342-381c316e34a5",
+        "recording_mbid": "0069c0f7-9274-4b4b-a10e-110b90a4bcc0",
+        "release_mbid": "05b8c34d-e064-45cd-87e5-b870b7a6a8c3",
+        "release_group_mbid": "a2709bdb-e16e-4f71-b1aa-cc68119fb782",
+        "track_position": 12,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "Titanium",
+        "artist": "David Guetta featuring Sia",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GB28K1100036",
+        "release_title": "Nothing but the Beat",
+        "release_artist": "David Guetta",
+        "release_date": "2011-08-29",
+        "release_country": "GB",
+        "duration_ms": 245120,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 12 only from a 22-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1880-18d2b3b82c69",
+      "manifest_sha256": "18d2b3b82c69da1187ca46ac9a7340ffec5ab4569652135ff95cbab6e2175468",
+      "evidence_sha256": "872d5b79d92946db3a3448b8d853bf51ac18f2d360bd8d87632aaa97a63d54ec",
+      "preconditions": {
+        "row_fingerprint": "47d1a8374645d282e561bfe5fc95bd449b9ad486f6d92a3c56b2ad4484fe43b2",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1199:maroon 5 wiz khalifa:payphone",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "c11859f8-9e4d-4918-8191-1085c78c7bde",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1880,
+        "action": "import_verified",
+        "placeholder_canonical_id": "c11859f8-9e4d-4918-8191-1085c78c7bde",
+        "recording_mbid": "bcd54ab6-9552-44cd-a09d-d46a8a374c35",
+        "release_mbid": "16b4835a-0f40-44c3-8f57-703f08a0623e",
+        "release_group_mbid": "ed3c55b6-e49d-4d4e-a338-62b823b1e2d4",
+        "track_position": 2,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "Payphone",
+        "artist": "Maroon 5 featuring Wiz Khalifa",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM71203347",
+        "release_title": "Overexposed",
+        "release_artist": "Maroon 5",
+        "release_date": "2012-06-25",
+        "release_country": "XW",
+        "duration_ms": 232000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 2 only from a 21-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1892-db50c03d73f0",
+      "manifest_sha256": "db50c03d73f055123fe8241797d10fce1733bbea93e28fc564c1018a4490ccc4",
+      "evidence_sha256": "5aa78cce30abff8d3dd3c4cc47c776a7766def6b97f6b40b775218cd2ce090c7",
+      "preconditions": {
+        "row_fingerprint": "1f4c01f6274dc28209c5a1317254125c830aed3067194df6c8e8d65e21fc2fba",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1212:labrinth emeli sande:beneath your beautiful",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "3fde9bb9-56ef-424f-87dc-71816f800348",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1892,
+        "action": "import_verified",
+        "placeholder_canonical_id": "3fde9bb9-56ef-424f-87dc-71816f800348",
+        "recording_mbid": "d232ad4e-b26b-4224-a475-cb4c4f8dc22a",
+        "release_mbid": "9c201d89-f1e0-4362-a767-ce8c4cbb1351",
+        "release_group_mbid": "62966e25-b64d-4009-8baa-30362dfdd507",
+        "track_position": 18,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "Beneath Your Beautiful",
+        "artist": "Labrinth featuring Emeli Sandé",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBHMU1200008",
+        "release_title": "Our Version of Events (special edition)",
+        "release_artist": "Emeli Sandé",
+        "release_date": "2012-10-22",
+        "release_country": "GB",
+        "duration_ms": 273906,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 18 only from a 19-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1894-bfe045cbf5c6",
+      "manifest_sha256": "bfe045cbf5c6dd7ab029a331ef9d89e7ed86361e638da5c03de4b0abf234008a",
+      "evidence_sha256": "b28b506c5ec4875d1ced5c8a10ba4cf7fd190158c93a2e40c12d6cdf97e1e73a",
+      "preconditions": {
+        "row_fingerprint": "c867cfc59f8ed93b0d88f0d25bb892d4bb31ae9b19a939c49d2bce69ef475c1f",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1215:olly murs flo rida:troublemaker",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "620c2224-fb30-4147-abb1-c019c5e07498",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1894,
+        "action": "import_verified",
+        "placeholder_canonical_id": "620c2224-fb30-4147-abb1-c019c5e07498",
+        "recording_mbid": "27c81996-a8a8-4b44-8322-b46cc9e59377",
+        "release_mbid": "15e32574-2f95-4642-9414-86a2cf4fe9ed",
+        "release_group_mbid": "725d644a-d73e-4dd3-a3f1-b524e13e7062",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "Troublemaker",
+        "artist": "Olly Murs featuring Flo Rida",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBARL1201891",
+        "release_title": "Troublemaker",
+        "release_artist": "Olly Murs feat. Flo Rida",
+        "release_date": "2012-10-15",
+        "release_country": "NL",
+        "duration_ms": 187000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1895-7e799959e37e",
+      "manifest_sha256": "7e799959e37ef743ea019e1f9c5cac14f92a4ff91eb88d441a0adb2f09c837fe",
+      "evidence_sha256": "a3ee89a0b6a86170e16788a89da3e8c3cd1882bd1c4cdf9e49b8f65d8b5060f6",
+      "preconditions": {
+        "row_fingerprint": "af57c8732fcaa1d4a379bb9be7149cf3b35201101403a5d247f50cf7fb1fdea0",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1216:gabrielle aplin:the power of love",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "4f0a9b4f-e1eb-4fc7-ba55-eab38dbd9e82",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1895,
+        "action": "import_verified",
+        "placeholder_canonical_id": "4f0a9b4f-e1eb-4fc7-ba55-eab38dbd9e82",
+        "recording_mbid": "2bfe7235-20c4-4feb-a067-01850062a71f",
+        "release_mbid": "bf31b586-3c93-4edf-ad55-07141eb43185",
+        "release_group_mbid": "0cd3cd6e-1840-44ba-81c5-e09500613eec",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "The Power of Love",
+        "artist": "Gabrielle Aplin",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYE1202354",
+        "release_title": "The Power of Love",
+        "release_artist": "Gabrielle Aplin",
+        "release_date": "2012-11-10",
+        "release_country": "GB",
+        "duration_ms": 245000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1896-33f005776066",
+      "manifest_sha256": "33f00577606681d2dd2f0e9e302b4f160f4188f01ff3b21b177f4775e88d71d2",
+      "evidence_sha256": "bccd9ca8c591a506f701e4b5e2f0cf5a98c5141310fbecec967e51a15804c483",
+      "preconditions": {
+        "row_fingerprint": "b487a173eafaf5915da855821d09adefda8ce6e514ea8b7fa2222a82144174a8",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1217:james arthur:impossible",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "7626d9d7-987d-4534-83df-ed452b05d43e",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1896,
+        "action": "link_existing",
+        "placeholder_canonical_id": "7626d9d7-987d-4534-83df-ed452b05d43e",
+        "recording_mbid": "2a330498-8fe8-45e1-8536-dc0679fd7a37",
+        "release_mbid": "f15a2368-7133-4896-8ad8-568f4293730f",
+        "release_group_mbid": "7a82779e-f14c-4eab-a3d9-07801e95e9c0",
+        "track_position": 1,
+        "existing_song_id": 20717,
+        "reuse_album_id": 1959
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "Impossible",
+        "artist": "James Arthur",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBHMU1200535",
+        "release_title": "Impossible",
+        "release_artist": "James Arthur",
+        "release_date": "2012-12-12",
+        "release_country": "GB",
+        "duration_ms": 210186,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1897-10b7abde027d",
+      "manifest_sha256": "10b7abde027d5466e9d70e11e799b7f9d6c0a02dcd6cd7f312c605f5d3be0b41",
+      "evidence_sha256": "55924f2f622a1ff0d62fe73fa993adc044bdb890a69624422eee1178155f2f02",
+      "preconditions": {
+        "row_fingerprint": "6faa91a50405b418f5e12eed638bb81ef359f8073d1d4ac48b1d8e95b85caf01",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2012:1218:the justice collective:he ain t heavy he s my brother",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "a03c1746-4d37-4663-b2fc-7c5b87397cdd",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1897,
+        "action": "import_verified",
+        "placeholder_canonical_id": "a03c1746-4d37-4663-b2fc-7c5b87397cdd",
+        "recording_mbid": "54a0b7c4-26b4-43fe-af7c-717e70ba3d68",
+        "release_mbid": "2ebaad21-9df8-45d6-a792-ea0e8839f1a3",
+        "release_group_mbid": "ea03ff99-9fb9-4847-b4e1-5a80f0ebc7b6",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2012,
+        "title": "He Ain't Heavy, He's My Brother",
+        "artist": "The Justice Collective",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GB2H71200207",
+        "release_title": "He Ain’t Heavy, He’s My Brother",
+        "release_artist": "The Justice Collective",
+        "release_date": "2012-12-17",
+        "release_country": "GB",
+        "duration_ms": 276253,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1839-cfafa1ebcda4",
+      "manifest_sha256": "cfafa1ebcda41287dd319d8e1e9a031ae75f4b38a8b4d7e52c38f551b82f8684",
+      "evidence_sha256": "8ea785691cc091fcc6b1af43c6592ab8768941a0bab9bf6ac9b04f8b09a75002",
+      "preconditions": {
+        "row_fingerprint": "836bc19b7ad84ed69f71f1baf859babe9bde3d883d8b498a6bf63e01ad0b798f",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1153:rihanna drake:what s my name",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "225386d8-230a-4e86-b017-f46d2c7305c4",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1839,
+        "action": "link_existing",
+        "placeholder_canonical_id": "225386d8-230a-4e86-b017-f46d2c7305c4",
+        "recording_mbid": "2eab2264-5b01-4454-b66c-3eeb46d37e0c",
+        "release_mbid": "7d259e57-93e1-4a43-852b-5d9ad5b8d57f",
+        "release_group_mbid": "b0c7edba-40d5-48b7-87cf-5c477c2b61be",
+        "track_position": 1,
+        "existing_song_id": 11047,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "What's My Name?",
+        "artist": "Rihanna featuring Drake",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM71025031",
+        "release_title": "What’s My Name?",
+        "release_artist": "Rihanna feat. Drake",
+        "release_date": "2011-01-21",
+        "release_country": "AT",
+        "duration_ms": 265000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1844-cea9109aee81",
+      "manifest_sha256": "cea9109aee81450fa6adb63832c9e86f6949c27bfa731b942730c00d49f4dc51",
+      "evidence_sha256": "061d345b01c4b4762c001b948a71b68c6dedb6774f144568915fcf7eb4469998",
+      "preconditions": {
+        "row_fingerprint": "54252c47e33c487ee18912b10ede75aba7cfc027c434285d98c5d0e89ae3f2de",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1160:lmfao lauren bennett and goonrock:party rock anthem",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "a6299893-1f1c-4ee1-8141-531bba196a60",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1844,
+        "action": "import_verified",
+        "placeholder_canonical_id": "a6299893-1f1c-4ee1-8141-531bba196a60",
+        "recording_mbid": "7c5b6609-0e04-4ea4-a871-513301db8c9a",
+        "release_mbid": "4f07d44e-6e3d-43c1-be8d-d834f9b6cd0c",
+        "release_group_mbid": "3be839a3-1d35-4846-aa64-9d1532648799",
+        "track_position": 3,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "Party Rock Anthem",
+        "artist": "LMFAO featuring Lauren Bennett and GoonRock",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM71100061",
+        "release_title": "Sorry for Party Rocking",
+        "release_artist": "LMFAO",
+        "release_date": "2011-06-24",
+        "release_country": "AU",
+        "duration_ms": 262146,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 3 only from a 16-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1845-46aaa5d49bff",
+      "manifest_sha256": "46aaa5d49bff90e7d3718e2d100e2cced9bca51e3d53cbfa594dc33126c713cb",
+      "evidence_sha256": "796c9060ab29edf9d49351fabea83afa109ddf5268b1e2b1a234af6e98e0b897",
+      "preconditions": {
+        "row_fingerprint": "c95618377c02c1ed16bfc1ba797d151438517285aca47a66a691fc070634b58d",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1162:pitbull ne yo afrojack and nayer:give me everything",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "ead7925d-948d-43f6-b74d-09d51227e094",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1845,
+        "action": "import_verified",
+        "placeholder_canonical_id": "ead7925d-948d-43f6-b74d-09d51227e094",
+        "recording_mbid": "748b6681-c103-4a6f-bb8f-769e620d2121",
+        "release_mbid": "5f2f9156-4511-488b-8add-85b65f396b37",
+        "release_group_mbid": "d6a5e156-735a-4d03-a307-16661de4214c",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "Give Me Everything",
+        "artist": "Pitbull featuring Ne-Yo, Afrojack and Nayer",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USJAY1100032",
+        "release_title": "Give Me Everything",
+        "release_artist": "Pitbull feat. Ne‐Yo, Afrojack & Nayer",
+        "release_date": "2011-06-08",
+        "release_country": null,
+        "duration_ms": 256000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1854-fecdb915c37d",
+      "manifest_sha256": "fecdb915c37dd3a4515982e97f502e0fc187d7ce9801ed3b595aa8069b5db0d5",
+      "evidence_sha256": "a6e9f9aa4b7f46508c02a1aef357393e19d20a6e33d1cf5834655a14f449f467",
+      "preconditions": {
+        "row_fingerprint": "0ce487d3101417c2f7535b5d6d2ef50142fd0fbb8713de5b54c435ff87cea37d",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1171:olly murs rizzle kicks:heart skips a beat",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "84585cbc-551a-4335-abff-d805151d7053",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1854,
+        "action": "import_verified",
+        "placeholder_canonical_id": "84585cbc-551a-4335-abff-d805151d7053",
+        "recording_mbid": "51fe96c7-0fe0-49be-bd22-4906b8c3d327",
+        "release_mbid": "29de6179-df3f-49a1-b538-57ade279bdc5",
+        "release_group_mbid": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "Heart Skips a Beat",
+        "artist": "Olly Murs featuring Rizzle Kicks",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBARL1100728",
+        "release_title": "In Case You Didn’t Know",
+        "release_artist": "Olly Murs",
+        "release_date": "2011-11-28",
+        "release_country": "GB",
+        "duration_ms": 203400,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 13-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1860-5edbc44e1b8a",
+      "manifest_sha256": "5edbc44e1b8a0f3e9e0f69b2fc5bf7d179eaf31e07566085b94f6ef26f9dbfd6",
+      "evidence_sha256": "1d85ffdbb946ec606beed14a95e2aa68a178868cd512ca18c4f2739b063504ad",
+      "preconditions": {
+        "row_fingerprint": "ad348fb56b70130f9d372861cce6a8f887c4d866022d0b740ea02ec20044145a",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1178:professor green emeli sande:read all about it",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "1bd2ba1f-7cc8-4421-a15c-5fa15c57150a",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1860,
+        "action": "import_verified",
+        "placeholder_canonical_id": "1bd2ba1f-7cc8-4421-a15c-5fa15c57150a",
+        "recording_mbid": "0404d8b1-1394-45ca-8fd9-e738a7c7b839",
+        "release_mbid": "f17aa309-fe73-4f81-ae30-2125c653753b",
+        "release_group_mbid": "1b456acc-323a-4e67-a831-9bf65bebf519",
+        "track_position": 3,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "Read All About It",
+        "artist": "Professor Green featuring Emeli Sandé",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAAA1100291",
+        "release_title": "At Your Inconvenience",
+        "release_artist": "Professor Green",
+        "release_date": "2011-10-28",
+        "release_country": "XW",
+        "duration_ms": 235000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 3 only from a 18-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1862-a3ea7e5bce03",
+      "manifest_sha256": "a3ea7e5bce03f3ba7862342cf4affec666ab0c95d47ef60ec9a0aaafa1f9d551",
+      "evidence_sha256": "e005e315419b3ce2946a6e8598e13abed44aebba88c4db193c6b1a00e72a4f08",
+      "preconditions": {
+        "row_fingerprint": "078d998df0c8d39403869661380bbe0323e6a0870987c5cb38425cb86c4bf60b",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1180:olly murs:dance with me tonight",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "3d92817b-03f5-4c91-9028-a2a4a68ff53d",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1862,
+        "action": "import_verified",
+        "placeholder_canonical_id": "3d92817b-03f5-4c91-9028-a2a4a68ff53d",
+        "recording_mbid": "f3af8160-e4e1-4ee7-91a3-3658c5d79d26",
+        "release_mbid": "29de6179-df3f-49a1-b538-57ade279bdc5",
+        "release_group_mbid": "a88dee6b-acb8-4b9d-8368-f77ee7f66b6d",
+        "track_position": 3,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "Dance with Me Tonight",
+        "artist": "Olly Murs",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBARL1101197",
+        "release_title": "In Case You Didn’t Know",
+        "release_artist": "Olly Murs",
+        "release_date": "2011-11-28",
+        "release_country": "GB",
+        "duration_ms": 203013,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 3 only from a 13-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1863-94e627fd03cf",
+      "manifest_sha256": "94e627fd03cf19373621dbc4d034e9b2d284acb9a8a6cfe8cde00459cbf52474",
+      "evidence_sha256": "a29b8dec1a0c7d238d2698113888c083d1ce49077eee1f4364cceb47b61e456d",
+      "preconditions": {
+        "row_fingerprint": "001b0eeb91f411a68a7a939bc66d4648ee03c6f24d263307836eb5d985ec738d",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2011:1181:little mix:cannonball",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "e89a7ea2-b645-4f6b-8d4f-81e3d2a6f7b9",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1863,
+        "action": "import_verified",
+        "placeholder_canonical_id": "e89a7ea2-b645-4f6b-8d4f-81e3d2a6f7b9",
+        "recording_mbid": "d056a318-4272-458c-be4d-47ead34c3d8d",
+        "release_mbid": "71f724d9-a7bc-4854-ac74-daff9cb07ac8",
+        "release_group_mbid": "652e000d-67e4-4cf5-bd29-b77940a73f0c",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2011,
+        "title": "Cannonball",
+        "artist": "Little Mix",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBHMU1100366",
+        "release_title": "Cannonball",
+        "release_artist": "Little Mix",
+        "release_date": "2011-12-14",
+        "release_country": "GB",
+        "duration_ms": 207386,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1811-dca84bcdcc29",
+      "manifest_sha256": "dca84bcdcc29bcab37337ca66a2645ddbf5abe8ab4daf648609b7e974545e601",
+      "evidence_sha256": "3053db3df88b8a81dd938ee00e26842d27b5f6036627315fc75169d46adde85a",
+      "preconditions": {
+        "row_fingerprint": "a94b1cecd328c9d7a246d64e4913a8067259b4b7e056583539f7319909e3fd77",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2010:1123:tinie tempah:pass out",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "1f0c0999-42a2-4e55-97fc-ca45fe649836",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1811,
+        "action": "import_verified",
+        "placeholder_canonical_id": "1f0c0999-42a2-4e55-97fc-ca45fe649836",
+        "recording_mbid": "4dd140f2-8546-48a6-8000-eb16fb98ff05",
+        "release_mbid": "09042bb7-a4c9-442a-b441-042722175aa5",
+        "release_group_mbid": "9bb613ab-51dc-43ab-80ae-bb0c8f622d21",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2010,
+        "title": "Pass Out",
+        "artist": "Tinie Tempah",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GB7TP0900005",
+        "release_title": "StreetDance: Music From & Inspired by the Motion Picture",
+        "release_artist": "Various Artists",
+        "release_date": "2010-05-24",
+        "release_country": "GB",
+        "duration_ms": 238013,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 18-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1812-7374970de9da",
+      "manifest_sha256": "7374970de9dad100e606be76e3b4f6d652acdb3d27076531e1d982dea04dd71a",
+      "evidence_sha256": "a182d95fd0b5b78643d71a1a32e181eef477c076b4f67fc7f9fe7938772b4f80",
+      "preconditions": {
+        "row_fingerprint": "29621706c2524d3974e3c1075936569cefeb8b43ee8dad77e2c4351a8ecce597",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2010:1124:lady gaga beyonce:telephone",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "ef58cbfc-0f81-4cce-9fe0-43c65488e75e",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1812,
+        "action": "import_verified",
+        "placeholder_canonical_id": "ef58cbfc-0f81-4cce-9fe0-43c65488e75e",
+        "recording_mbid": "fa8fb8c8-c3a8-4978-ae7c-c121c57c7f8f",
+        "release_mbid": "556e7f31-d1d7-32f5-9b67-ed6ecca9e077",
+        "release_group_mbid": "e5495719-b3ad-3eea-a533-fb70af43c23d",
+        "track_position": 6,
+        "existing_song_id": null,
+        "reuse_album_id": 1112
+      },
+      "chart": {
+        "chart_year": 2010,
+        "title": "Telephone",
+        "artist": "Lady Gaga featuring Beyoncé",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM70905541",
+        "release_title": "The Fame Monster",
+        "release_artist": "Lady Gaga",
+        "release_date": "2009-11-18",
+        "release_country": "GB",
+        "duration_ms": 220933,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 6 only from a 24-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1813-af59e2be5ecc",
+      "manifest_sha256": "af59e2be5ecce34ca4fdf933541c3f61b426c9957ffb6cfeba1bc23b45a4a096",
+      "evidence_sha256": "e78e513bce56146d325ace141cd685db1abc20aa619b355d47482fc17641fff9",
+      "preconditions": {
+        "row_fingerprint": "0f5c1f18147a58ddd19d32bb5818c87c374deca973ad45ba9d4c5f12636b9c63",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2010:1126:usher will i am:omg",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "602686f0-bbea-4792-8157-4863d29a2095",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1813,
+        "action": "import_verified",
+        "placeholder_canonical_id": "602686f0-bbea-4792-8157-4863d29a2095",
+        "recording_mbid": "8bb81269-6443-438c-a567-21a5e1b40607",
+        "release_mbid": "d02a02ca-04e4-4b40-b408-5a48f1078eb9",
+        "release_group_mbid": "e66efebb-21bb-4ec0-89d0-ff452bf1069f",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2010,
+        "title": "OMG",
+        "artist": "Usher featuring will.i.am",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USLF20900103",
+        "release_title": "OMG",
+        "release_artist": "Usher feat. will.i.am",
+        "release_date": "2010-03-12",
+        "release_country": "GB",
+        "duration_ms": 269000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1820-4a2dc0ea3297",
+      "manifest_sha256": "4a2dc0ea3297b25e88539b7ab8c470f453fe1c907f6dc2c6af9b7c7f793483c5",
+      "evidence_sha256": "923a41a2d0856fea8d59019c5fbb1af7faa175d330e5bbcb1b6148798219b377",
+      "preconditions": {
+        "row_fingerprint": "4085d930e53c438d3ed88696f8268f16f3f5aba38e5e85f04b5b25ea9c828711",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2010:1133:katy perry snoop dogg:california gurls",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "9b8fc2ff-961d-4f54-ab80-1154effac747",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1820,
+        "action": "import_verified",
+        "placeholder_canonical_id": "9b8fc2ff-961d-4f54-ab80-1154effac747",
+        "recording_mbid": "44e88237-bdb1-4176-9687-714f0d9f6f76",
+        "release_mbid": "2a666025-eb7c-3cc2-bd76-4fbd80487395",
+        "release_group_mbid": "e6f683c9-fc85-412c-a352-d6e411fc2603",
+        "track_position": 3,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2010,
+        "title": "California Gurls",
+        "artist": "Katy Perry featuring Snoop Dogg",
+        "updated_at": "2026-10-23T13:28:00.017997+00:00",
+        "canonical_updated_at": "2026-10-23T13:28:00.017997+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USCA21001135",
+        "release_title": "Teenage Dream",
+        "release_artist": "Katy Perry",
+        "release_date": "2010-08-24",
+        "release_country": "US",
+        "duration_ms": 235666,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 3 only from a 14-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1542-473ea24465d1",
+      "manifest_sha256": "473ea24465d198ca664a20be2d796f1ae2ac7c3fcedd38244ca388d443c89a1b",
+      "evidence_sha256": "714ace2f9547742b7fedbe5c7628ffaa1bd769925133abee6331f5c3f63a88e2",
+      "preconditions": {
+        "row_fingerprint": "12769f002ef65e242991616b9f2b044c125334f60cc9197ab46a72170bb880d9",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2009:1087:lady gaga colby o donis:just dance",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "83324a9a-a3a3-4177-91f1-34975801514d",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1542,
+        "action": "link_existing",
+        "placeholder_canonical_id": "83324a9a-a3a3-4177-91f1-34975801514d",
+        "recording_mbid": "0810268f-2e52-4f89-86be-42762ea3f6d4",
+        "release_mbid": "343179a6-00be-4f9e-8f3e-5095c1b5b0ac",
+        "release_group_mbid": "e6c495af-96ff-3162-9a0a-a6f815ef1bd6",
+        "track_position": 1,
+        "existing_song_id": 14589,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2009,
+        "title": "Just Dance",
+        "artist": "Lady Gaga featuring Colby O'Donis",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM70807646",
+        "release_title": "Just Dance",
+        "release_artist": "Lady Gaga featuring Colby O’Donis",
+        "release_date": "2008-08-25",
+        "release_country": null,
+        "duration_ms": 242333,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1558-5704352c6f11",
+      "manifest_sha256": "5704352c6f11170e0b4c96dcd5749684e9a041409b52ee1df54cbc219d8a88fd",
+      "evidence_sha256": "93cae913710615c630456fb3adf01c51ffa00bd9f54b96ee085d1a924d210baa",
+      "preconditions": {
+        "row_fingerprint": "be1bb935aa5aae6274885fa167960f4aca85dc3d951db6f9b6f6ce24f4856715",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2009:1104:david guetta akon:sexy chick",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "ff58968b-a0e2-4809-8f2d-6347ac71de05",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1558,
+        "action": "import_verified",
+        "placeholder_canonical_id": "ff58968b-a0e2-4809-8f2d-6347ac71de05",
+        "recording_mbid": "8bef9c82-26f9-49ab-ae14-1da303e73abf",
+        "release_mbid": "eb348981-8b6f-471a-a7ef-787011afd083",
+        "release_group_mbid": "7a237f8e-29fb-4d7f-aa89-1e9dc6d69209",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2009,
+        "title": "Sexy Chick",
+        "artist": "David Guetta featuring Akon",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "FRZID0900930",
+        "release_title": "Sexy Chick",
+        "release_artist": "David Guetta feat. Akon",
+        "release_date": "2009-09-13",
+        "release_country": null,
+        "duration_ms": 194347,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 7-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1529-14f0b697a2bc",
+      "manifest_sha256": "14f0b697a2bc1f222ce713ccd48a928b76c9e2ac1ad2b04168963be77477f108",
+      "evidence_sha256": "9c4f10db5c1da06839007287350621a04a9392da1ccb0ac026892f24fc7e4d8c",
+      "preconditions": {
+        "row_fingerprint": "3c9868c161e711ebdec50f1946aaa605944b5da4f24a487dd2a7376963ebc37f",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2008:1069:estelle kanye west:american boy",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "84991d57-43ec-4b2d-9b85-0c9e27148608",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1529,
+        "action": "import_verified",
+        "placeholder_canonical_id": "84991d57-43ec-4b2d-9b85-0c9e27148608",
+        "recording_mbid": "192333bd-5f71-4d0e-9356-f4bf2ff848c5",
+        "release_mbid": "a3a8ca88-cec4-487d-8d4d-03948f1ce895",
+        "release_group_mbid": "201ca8a2-c471-3400-930c-fb7d77ad6d68",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2008,
+        "title": "American Boy",
+        "artist": "Estelle featuring Kanye West",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USAT20706210",
+        "release_title": "American Boy",
+        "release_artist": "Estelle feat. Kanye West",
+        "release_date": "2008-03-24",
+        "release_country": "GB",
+        "duration_ms": 285000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1534-6c31b7b802a0",
+      "manifest_sha256": "6c31b7b802a0adff2ae906a3b3770ce94cfd691e7f2f7f0c2910135613fef6da",
+      "evidence_sha256": "bcd105702f8816f83f41b9365f0a5cccd75b8650739e4a339df7f298093e9993",
+      "preconditions": {
+        "row_fingerprint": "53e82afce8fd56cd5f341453b3531064bacc995084a965a51d52165536356cc3",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2008:1075:ne yo:closer",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "9a87482c-c71f-44f4-8fef-f96ae7a47a18",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1534,
+        "action": "import_verified",
+        "placeholder_canonical_id": "9a87482c-c71f-44f4-8fef-f96ae7a47a18",
+        "recording_mbid": "34bb4161-8c39-4fad-8a75-32733b1bb732",
+        "release_mbid": "ac136c18-1b85-4450-8e80-4ad0254f0ffb",
+        "release_group_mbid": "7d52f198-e65e-3057-b132-5d3d09403c97",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2008,
+        "title": "Closer",
+        "artist": "Ne-Yo",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM70809378",
+        "release_title": "Closer",
+        "release_artist": "Ne‐Yo",
+        "release_date": "2008-07-04",
+        "release_country": "DE",
+        "duration_ms": 237000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1538-8aeb603ea422",
+      "manifest_sha256": "8aeb603ea4223b84602c18a035d0f0f3b8902e7d2b3404095e65001937642879",
+      "evidence_sha256": "0228cab5e1c72ecfc45612b3ed596454826562c81ead77ce191c0ea08040f26c",
+      "preconditions": {
+        "row_fingerprint": "ec434b6662bc5ba718fcaf4ba4e7b0788cee96a082fadc1ddfe9748276b94c54",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2008:1081:girls aloud:the promise",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "11265cdb-752b-4636-a184-ab49d82b716f",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1538,
+        "action": "import_verified",
+        "placeholder_canonical_id": "11265cdb-752b-4636-a184-ab49d82b716f",
+        "recording_mbid": "b896292e-ea21-41c0-92d6-81f4bcb7fe58",
+        "release_mbid": "4119ef19-db4b-45c7-a517-5dad057caaea",
+        "release_group_mbid": "683668a4-3130-3445-b5c2-63ce67ae579a",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2008,
+        "title": "The Promise",
+        "artist": "Girls Aloud",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBUM70814501",
+        "release_title": "The Promise",
+        "release_artist": "Girls Aloud",
+        "release_date": "2008-10-20",
+        "release_country": "GB",
+        "duration_ms": 223000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1502-47d2b5abf2d1",
+      "manifest_sha256": "47d2b5abf2d182dc88bbb03e9ca0ae22c3b25254ac5d563a9280c7b44281bf90",
+      "evidence_sha256": "b620faf15eea92a83c9368647641ff807defd875839943d0114a75b8e1dad7d3",
+      "preconditions": {
+        "row_fingerprint": "b009baf1f20a72ba1ee6a76b30ac5870b4f177949f36c5566890624085d6e10a",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2006:1035:nelly furtado:maneater",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "cfe8557b-190c-49b1-b4ec-4a767e37a575",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1502,
+        "action": "import_verified",
+        "placeholder_canonical_id": "cfe8557b-190c-49b1-b4ec-4a767e37a575",
+        "recording_mbid": "61c6c68c-d630-46d4-bdbf-57ba4e3af784",
+        "release_mbid": "00ea8bd1-9618-4e0d-9944-b94a9f46fb4f",
+        "release_group_mbid": "7a15a88e-faab-3159-8253-7ad5c1b05589",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2006,
+        "title": "Maneater",
+        "artist": "Nelly Furtado",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUM70602359",
+        "release_title": "Maneater",
+        "release_artist": "Nelly Furtado",
+        "release_date": "2006-06-05",
+        "release_country": "GB",
+        "duration_ms": 198880,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1482-7e064f530be4",
+      "manifest_sha256": "7e064f530be40038161f3d734b6523effb826fe1eefbd40cc41f355109289c0c",
+      "evidence_sha256": "9703885aa698ca2da8147e001920995c3d5e25fbecdb95ec5f332b68f8f1d1b1",
+      "preconditions": {
+        "row_fingerprint": "22088ddee319249d5792e8f09477ead550fb947b22d470ca18c327dd973a1841",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2005:1010:akon:lonely",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "61a5d71d-d11f-4131-8b5b-75d73bb7a9db",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1482,
+        "action": "import_verified",
+        "placeholder_canonical_id": "61a5d71d-d11f-4131-8b5b-75d73bb7a9db",
+        "recording_mbid": "1f6a1148-ffe8-4e96-b9f5-2e6701af6573",
+        "release_mbid": "f26960ab-a238-4cbe-938e-6199ee9dcbcc",
+        "release_group_mbid": "4531b2ce-ffc3-4ac8-898e-6026be69950b",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2005,
+        "title": "Lonely",
+        "artist": "Akon",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USUR10400235",
+        "release_title": "Lonely",
+        "release_artist": "Akon",
+        "release_date": "2005-05-02",
+        "release_country": "XE",
+        "duration_ms": 237200,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1461-77295392e323",
+      "manifest_sha256": "77295392e3232d4283367a4cb18e3e1a534f2eb1679632d8815003cf4cfc7714",
+      "evidence_sha256": "1b70d2c6a62b7c3a876fa28a716c350abb44c597d0f320eafe7f523b45d197dc",
+      "preconditions": {
+        "row_fingerprint": "1b893586ec894912dc4b6aaa74612efba61300e3bf037895d29a55f8b3abcdac",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2004:982:mcfly:obviously",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "3f140c31-aa87-4ab6-93e3-761619b34596",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1461,
+        "action": "import_verified",
+        "placeholder_canonical_id": "3f140c31-aa87-4ab6-93e3-761619b34596",
+        "recording_mbid": "559b48c8-5544-43da-ada3-dd861a8c2fa5",
+        "release_mbid": "7c57dbaa-7fd1-4b76-a126-276893cfac04",
+        "release_group_mbid": "f84e39e5-2d38-3f87-93d5-e9232a9edbcd",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2004,
+        "title": "Obviously",
+        "artist": "McFly",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAAN0400236",
+        "release_title": "Obviously",
+        "release_artist": "McFly",
+        "release_date": "2004-06-21",
+        "release_country": "GB",
+        "duration_ms": 201480,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1466-b7026073d7a8",
+      "manifest_sha256": "b7026073d7a835ba66695de4b3d0a65616ca30025977fb82da7692397fd2c117",
+      "evidence_sha256": "cd3621e740be7f77857b2a99b3cf696ab5d6642ecf35aa601541264e8e092150",
+      "preconditions": {
+        "row_fingerprint": "bf2e0877ebf6215c97a4fc53b9ca46d3b297debec5a76d660ec6c37d312d6145",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2004:990:brian mcfadden:real to me",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "dbbf29c0-7aea-492a-847f-c5f68e9b9c74",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1466,
+        "action": "import_verified",
+        "placeholder_canonical_id": "dbbf29c0-7aea-492a-847f-c5f68e9b9c74",
+        "recording_mbid": "c89f602e-487e-4479-985f-159de528b3d2",
+        "release_mbid": "74ef9d9e-298b-460a-8730-5222f4eb2374",
+        "release_group_mbid": "833cfc0b-d1c7-3389-a832-cf79ec118c5c",
+        "track_position": 2,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2004,
+        "title": "Real to Me",
+        "artist": "Brian McFadden",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBBBN0400963",
+        "release_title": "Irish Son",
+        "release_artist": "Brian McFadden",
+        "release_date": "2004-11-29",
+        "release_country": "GB",
+        "duration_ms": 225706,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 2 only from a 11-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1403-cd47bcca7b3b",
+      "manifest_sha256": "cd47bcca7b3beb9d76ce7edf6442f16df04b50be25aab9d9d2d8baa1ef8e3366",
+      "evidence_sha256": "3bc7cd3eec4c703b210278ea7976f18ec95d4e3daf743ce3a4fe80880eef99cd",
+      "preconditions": {
+        "row_fingerprint": "52c99f48d0fb323ab0766c48339f33e047901f5c9ff8e81bc666f66fb7a9463b",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2002:920:westlife:world of our own",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "8f76f308-4f40-4e33-b8c5-fc4bd8014272",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1403,
+        "action": "import_verified",
+        "placeholder_canonical_id": "8f76f308-4f40-4e33-b8c5-fc4bd8014272",
+        "recording_mbid": "1734d7f8-1473-4914-8a3e-4e2fc705f3db",
+        "release_mbid": "c1ffc293-0ac6-4962-9ca0-2d5628b4ff25",
+        "release_group_mbid": "434650ae-8572-37ce-b4df-490700ce8931",
+        "track_position": 9,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2002,
+        "title": "World of Our Own",
+        "artist": "Westlife",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBARL0100292",
+        "release_title": "World of Our Own",
+        "release_artist": "Westlife",
+        "release_date": "2001-11-15",
+        "release_country": "GB",
+        "duration_ms": 212600,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 9 only from a 19-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1407-270690974635",
+      "manifest_sha256": "270690974635778b8799f91dc7ba8e05ac3704d382b5fc8ad5f86db50d01a28f",
+      "evidence_sha256": "dd92867ee7acdd716eb45a0f3172123fd8b51c732709b02549869a8835f09861",
+      "preconditions": {
+        "row_fingerprint": "b076ffc5526b011fe3cdcb03123c7837aaf5149889ffdb9d0d7fc19af065245f",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2002:926:ronan keating:if tomorrow never comes",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "2dcd6760-e1ed-4a4e-a31f-e5ed25cc39d5",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1407,
+        "action": "import_verified",
+        "placeholder_canonical_id": "2dcd6760-e1ed-4a4e-a31f-e5ed25cc39d5",
+        "recording_mbid": "c59ee855-c988-442b-922b-61e029b6aee0",
+        "release_mbid": "77dcc4a7-4a32-4ca1-893a-58ad368d27d8",
+        "release_group_mbid": "153c016c-8e72-31c3-9a8f-6fc7d0197246",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2002,
+        "title": "If Tomorrow Never Comes",
+        "artist": "Ronan Keating",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAKW0201024",
+        "release_title": "If Tomorrow Never Comes",
+        "release_artist": "Ronan Keating",
+        "release_date": "2002-05-06",
+        "release_country": "GB",
+        "duration_ms": 216000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1408-79934189f503",
+      "manifest_sha256": "79934189f5033147f3869a916b03d69c8bc3f6b947acb2247832a4eb0b0f78cb",
+      "evidence_sha256": "66c94006fc3ae0af3fdb2bb6f61435034ca558d8f5e857739ca616ad775ba3a9",
+      "preconditions": {
+        "row_fingerprint": "13b3661ff536ae33c506b5251625865522353e5fdb9f425a9fd45a33ec95a5cc",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2002:927:liberty x:just a little",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "2aa0050f-f311-488a-8025-daeea2179ab5",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1408,
+        "action": "import_verified",
+        "placeholder_canonical_id": "2aa0050f-f311-488a-8025-daeea2179ab5",
+        "recording_mbid": "a3e3e340-8a08-4fa6-926d-009c8aa191e2",
+        "release_mbid": "27cb3deb-cc51-4560-8a32-f296458ece4c",
+        "release_group_mbid": "64073db7-dce3-3cc9-8f15-bc5d229b3bc8",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2002,
+        "title": "Just a Little",
+        "artist": "Liberty X",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBBLK0200083",
+        "release_title": "Just a Little",
+        "release_artist": "Liberty X",
+        "release_date": "2002-05-13",
+        "release_country": "GB",
+        "duration_ms": 238013,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1352-e58b6847d6c2",
+      "manifest_sha256": "e58b6847d6c203a627ad921f73e70666709ad3d3764d9ff9ca6e093b51c7b2c9",
+      "evidence_sha256": "4df39c37a88e620b6c858cc8f21fc18a64ec3b5267c4012c106c5f8d96d8c8c1",
+      "preconditions": {
+        "row_fingerprint": "211a1aab2c0bc9f89cc2411b0173eefd22fd6c8529a0ecf8166edd55edc946a0",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2000:863:kylie minogue:spinning around",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "11e7c23b-d8ad-47d4-98ee-7a453776fe0b",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1352,
+        "action": "import_verified",
+        "placeholder_canonical_id": "11e7c23b-d8ad-47d4-98ee-7a453776fe0b",
+        "recording_mbid": "2096b403-6059-4149-9c86-51b6e463fe12",
+        "release_mbid": "2163712b-a94b-4665-a87d-8332f76895c7",
+        "release_group_mbid": "ef5a3c3a-8172-36ad-bc02-c20e6059a983",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2000,
+        "title": "Spinning Around",
+        "artist": "Kylie Minogue",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYE0000351",
+        "release_title": "Spinning Around",
+        "release_artist": "Kylie Minogue",
+        "release_date": "2000-06-19",
+        "release_country": "GB",
+        "duration_ms": 208693,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1364-6c9e707fd41a",
+      "manifest_sha256": "6c9e707fd41a565da9233bbcbc4abdfd9eab40015a5234303b9784aac6659fd6",
+      "evidence_sha256": "49877effb8b6efd2eccad354f33158f68addf29f9e8c00324e6d13b958604381",
+      "preconditions": {
+        "row_fingerprint": "3e507eb1a5313caf796cd70b0310f047ca7a5bc289c379b1195090e435925832",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "2000:877:u2:beautiful day",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "5c8832f1-fc1d-4aff-86ed-4fe7bb5de3be",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1364,
+        "action": "import_verified",
+        "placeholder_canonical_id": "5c8832f1-fc1d-4aff-86ed-4fe7bb5de3be",
+        "recording_mbid": "809e8321-9e38-4ebf-b467-1cb6d85f5076",
+        "release_mbid": "0bbe5e38-7629-4734-a2fc-2204f9514414",
+        "release_group_mbid": "b5e845f9-cd59-340d-afb8-ca07bb43652f",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 2000,
+        "title": "Beautiful Day",
+        "artist": "U2",
+        "updated_at": "2026-10-23T12:46:12.603787+00:00",
+        "canonical_updated_at": "2026-10-23T12:46:12.603787+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAAN0000196",
+        "release_title": "Beautiful Day",
+        "release_artist": "U2",
+        "release_date": "2000-10-09",
+        "release_country": "GB",
+        "duration_ms": 249093,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-153-8f4a86637e11",
+      "manifest_sha256": "8f4a86637e11582eb414ddefcfacddf9d2152b8fdf44d354bf9a3ac602c34182",
+      "evidence_sha256": "4429522ece3b7ffcc92ffd0a1dc52d7bf7c8a68e47365c8d07a31635fd25f2d8",
+      "preconditions": {
+        "row_fingerprint": "7a08f163ddeee30f76b103c427044b9363ecee53094ce7ebd62f5d8afd2ebe09",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1998:801:robbie williams:millennium",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "cc82066f-ba50-4013-a0e0-427ce2856c79",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 153,
+        "action": "import_verified",
+        "placeholder_canonical_id": "cc82066f-ba50-4013-a0e0-427ce2856c79",
+        "recording_mbid": "799efc4a-aae5-4b93-94a3-6d418ec7af0d",
+        "release_mbid": "60ab9aca-a2c1-434b-bdbe-a303dea797d9",
+        "release_group_mbid": "192bc8f6-f890-3a6f-9875-fde3f835bf1b",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1998,
+        "title": "Millennium",
+        "artist": "Robbie Williams",
+        "updated_at": "2026-10-22T21:14:09.678467+00:00",
+        "canonical_updated_at": "2026-10-22T21:13:31.605908+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYK9800003",
+        "release_title": "Millennium",
+        "release_artist": "Robbie Williams",
+        "release_date": "1998",
+        "release_country": "GB",
+        "duration_ms": 247333,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-118-bd23121cdd44",
+      "manifest_sha256": "bd23121cdd44badc23eb3b6e8a2bd60f1cd13dc4a31e6a7fe55a4404d5c95a78",
+      "evidence_sha256": "890587b4adad0b7262fc85dfae4ad12788a0772dda0f8d27c314dd935bc079cd",
+      "preconditions": {
+        "row_fingerprint": "9461fe91d95c2e01a9318ece4ad228ff2f3db1ee07df05265d7be5f591affef7",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1997:764:r kelly:i believe i can fly",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "60a071a2-60a6-44db-b582-6753349eee2a",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 118,
+        "action": "import_verified",
+        "placeholder_canonical_id": "60a071a2-60a6-44db-b582-6753349eee2a",
+        "recording_mbid": "a6685ec6-2a43-42ee-901d-8b498e3ba868",
+        "release_mbid": "996f5388-1727-43e9-8f7c-19f825aa8a25",
+        "release_group_mbid": "1f89240e-f941-3f71-a53c-8c2b346521e2",
+        "track_position": 4,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1997,
+        "title": "I Believe I Can Fly",
+        "artist": "R. Kelly",
+        "updated_at": "2026-10-22T21:14:09.678467+00:00",
+        "canonical_updated_at": "2026-10-22T21:13:31.605908+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAHK9600239",
+        "release_title": "Space Jam: Music From and Inspired by the Motion Picture",
+        "release_artist": "Various Artists",
+        "release_date": "1996-12-11",
+        "release_country": "JP",
+        "duration_ms": 322000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 4 only from a 14-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-25-488112fd7a7f",
+      "manifest_sha256": "488112fd7a7fdeb56595661b28bd4f5ddecdf342c4c5f6e07dc66a3294660e51",
+      "evidence_sha256": "ecf176adc16b08263829dd51c58218e246f5d0ee6ce3adf6bd25a1e4c47c3020",
+      "preconditions": {
+        "row_fingerprint": "728c1e7ab4b4f66c85e637adf9fef04688cc8536500681a0ad9c669175347625",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1991:663:chesney hawkes:the one and only",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "b9ddafbe-0852-4331-837f-a7b489284d01",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 25,
+        "action": "import_verified",
+        "placeholder_canonical_id": "b9ddafbe-0852-4331-837f-a7b489284d01",
+        "recording_mbid": "2555962d-16d6-4aa2-bfc8-352e66f08213",
+        "release_mbid": "ccf952a0-9999-4e3b-a7cd-21bffdb8a3eb",
+        "release_group_mbid": "7c5e9402-2e0e-35fb-855f-b3e408c192c7",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1991,
+        "title": "The One and Only",
+        "artist": "Chesney Hawkes",
+        "updated_at": "2026-10-22T21:14:09.678467+00:00",
+        "canonical_updated_at": "2026-10-22T21:13:31.605908+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYK9100001",
+        "release_title": "The One and Only",
+        "release_artist": "Chesney Hawkes",
+        "release_date": "1991",
+        "release_country": "GB",
+        "duration_ms": 222000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-505-f91094773f6d",
+      "manifest_sha256": "f91094773f6d18f7af5f089b9d23281f737e16d96c53b8efb06e6cc1f8c448c0",
+      "evidence_sha256": "7f75daf8608c8250ee5e4f5ebe6d8c393a6af3afb61514d03bb78fd9c80fef38",
+      "preconditions": {
+        "row_fingerprint": "c64c116f9e65b6e9941f8fa93592fd5560a0d8ea4a4b4a37e8d6738c5f5bdab9",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1987:594:madonna:who s that girl",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "99ec8f06-3fd0-46fb-bb01-381c53e3dcec",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 505,
+        "action": "import_verified",
+        "placeholder_canonical_id": "99ec8f06-3fd0-46fb-bb01-381c53e3dcec",
+        "recording_mbid": "80983228-4292-4f64-a7cf-92707f8e297f",
+        "release_mbid": "a020f4b6-4124-3835-9688-75173a76a1df",
+        "release_group_mbid": "a272f508-4ffa-3a55-87b6-d66c8e4ea9f3",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1987,
+        "title": "Who's That Girl",
+        "artist": "Madonna",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USWB10002766",
+        "release_title": "Who’s That Girl",
+        "release_artist": "Madonna",
+        "release_date": "1987-07-06",
+        "release_country": "GB",
+        "duration_ms": 238000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-508-4d894078b828",
+      "manifest_sha256": "4d894078b828d16f0f14e7ef82df51f3274bcdb3389c34ffd28d4cd0f8b75c06",
+      "evidence_sha256": "625e48a198365bedf096f13f9c69cef21a8782b7a323051a6ff55aef72ccfd26",
+      "preconditions": {
+        "row_fingerprint": "57a57e08ff7d0e71765f8cc29eefbb1ba9fb508b88f9f1078c7ef5095c7cbc4c",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1987:597:rick astley:never gonna give you up",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "1cb0e3e6-8e46-4e44-807b-513e3f2002cb",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 508,
+        "action": "import_verified",
+        "placeholder_canonical_id": "1cb0e3e6-8e46-4e44-807b-513e3f2002cb",
+        "recording_mbid": "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae",
+        "release_mbid": "dbb9ee96-4b20-42a3-a326-5b250a22c5f9",
+        "release_group_mbid": "19a8b6e5-f753-36c6-a3c6-189390d09935",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1987,
+        "title": "Never Gonna Give You Up",
+        "artist": "Rick Astley",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBARL9300135",
+        "release_title": "Never Gonna Give You Up",
+        "release_artist": "Rick Astley",
+        "release_date": "1987-07-27",
+        "release_country": "GB",
+        "duration_ms": 214000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Single-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-482-c06c22460691",
+      "manifest_sha256": "c06c22460691d4e80cf73ba24bfbcf4b57a028a5da82151417bed3639c8bf3f2",
+      "evidence_sha256": "183c4483412c808674ac3f81e304bf509c0d6f5706ca6cb738b6f3c3b74ccbf1",
+      "preconditions": {
+        "row_fingerprint": "583523a0445de6f3a14ecc6bf86fc02f018dd42e7fb7cb0f3151f82bb947ab24",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1986:568:george michael:a different corner",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "c7b3cf1d-be03-4851-9cfb-cea853a88ae0",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 482,
+        "action": "import_verified",
+        "placeholder_canonical_id": "c7b3cf1d-be03-4851-9cfb-cea853a88ae0",
+        "recording_mbid": "dba5b89a-970a-4b5d-bd1c-d494f37452e3",
+        "release_mbid": "59757dd5-4a6a-4df1-8a09-56fff9736023",
+        "release_group_mbid": "d132b012-fc10-4ade-81c7-259c087c70d5",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1986,
+        "title": "A Different Corner",
+        "artist": "George Michael",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBBBM8602005",
+        "release_title": "A Different Corner",
+        "release_artist": "George Michael",
+        "release_date": "1986-04-02",
+        "release_country": "GB",
+        "duration_ms": 237000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-492-9fb50a229278",
+      "manifest_sha256": "9fb50a22927854062c74e3f6414233cb8f02dff4a16e6fd81b09044a42228c95",
+      "evidence_sha256": "d5be83a2ef730477e9ca7c2c162c616572585bcd6eb3c9d34e32b1f2508606df",
+      "preconditions": {
+        "row_fingerprint": "7f404a59d3bf8e919d5710ae62d63460b54cefc4a1494b2c4d5ea2ab767e8403",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1986:579:berlin:take my breath away",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "f3cd7631-42d6-4aad-8a24-06bf370f5095",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 492,
+        "action": "import_verified",
+        "placeholder_canonical_id": "f3cd7631-42d6-4aad-8a24-06bf370f5095",
+        "recording_mbid": "f45c5a92-c668-4070-a078-4f11c397b8c2",
+        "release_mbid": "960ba6d4-7ecf-475c-8a1c-6fe126a28409",
+        "release_group_mbid": "40a41777-bd3a-4909-acdf-03a780188db9",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1986,
+        "title": "Take My Breath Away",
+        "artist": "Berlin",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USSM19801613",
+        "release_title": "Take My Breath Away / Danger Zone",
+        "release_artist": "Berlin / Kenny Loggins",
+        "release_date": "1986",
+        "release_country": "GB",
+        "duration_ms": 254826,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-452-8c1b178ad1e6",
+      "manifest_sha256": "8c1b178ad1e6d398e6640c0a30a0fe43a274e40cf8f8600fc6cc96560a44b51f",
+      "evidence_sha256": "c419adc8398d79fb2107ec2c04d42eee926cc0cbc08b10571bb5372a6b348f8b",
+      "preconditions": {
+        "row_fingerprint": "4987aa0a125eb8fb0461b7f0a99953b29e0e8199a549ee6a07f31fbedb041350",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1983:529:the flying pickets:only you",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "624c52cd-a264-4843-853f-c74754ba7133",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 452,
+        "action": "import_verified",
+        "placeholder_canonical_id": "624c52cd-a264-4843-853f-c74754ba7133",
+        "recording_mbid": "efc40ac6-d6fb-43ee-8af2-4c4f8a74a021",
+        "release_mbid": "32708988-192c-4d46-bb12-5c21c1ea9876",
+        "release_group_mbid": "290411c0-aeae-46a4-b9bd-5e8e6780db95",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1983,
+        "title": "Only You",
+        "artist": "The Flying Pickets",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAAA8300337",
+        "release_title": "Only You",
+        "release_artist": "The Flying Pickets",
+        "release_date": "1983-11",
+        "release_country": "GB",
+        "duration_ms": 203746,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-412-8d448d8e8518",
+      "manifest_sha256": "8d448d8e85182972ae15f6ed26ce5f6de5f92c9fb8b8db5c10359d42480c239c",
+      "evidence_sha256": "1114036114be1d3d8cf549b1c984c99751d94f6e88fef753d70a9d7619249caa",
+      "preconditions": {
+        "row_fingerprint": "66db1970623443cde887560bf3a81421c0ed86a9ef7c01074681557b8f8ebda9",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1981:482:the specials:ghost town",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "e592c281-b070-4ad9-8d49-eda06e4d7496",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 412,
+        "action": "import_verified",
+        "placeholder_canonical_id": "e592c281-b070-4ad9-8d49-eda06e4d7496",
+        "recording_mbid": "91a35dfb-f746-4a4d-a0a9-fe5f932f2923",
+        "release_mbid": "b80c9917-2c60-4e4f-b2ad-01c1864f8b5d",
+        "release_group_mbid": "697d3295-a39c-311a-b408-0568a7b1b1f9",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1981,
+        "title": "Ghost Town",
+        "artist": "The Specials",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYK8100051",
+        "release_title": "Ghost Town",
+        "release_artist": "The Specials",
+        "release_date": "1981-06-12",
+        "release_country": "GB",
+        "duration_ms": 220000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-415-3a4d9c488c06",
+      "manifest_sha256": "3a4d9c488c062b5a5d86c5b493973c53cb8671d13e7fe75c071eef5da953cc7f",
+      "evidence_sha256": "f4cf4bf1909a5a4f65f62131bc3c7e9114ac630267128026ef1ad68287dc9b1d",
+      "preconditions": {
+        "row_fingerprint": "b013e902dc4effcc17146fff2b1475659bfec1046adfe6ef1b5a3edeefb32c7c",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1981:485:soft cell:tainted love",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "ff911193-d5d5-4d67-85d2-c77f5360cf7a",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 415,
+        "action": "import_verified",
+        "placeholder_canonical_id": "ff911193-d5d5-4d67-85d2-c77f5360cf7a",
+        "recording_mbid": "ef4c6855-949e-4e22-b41e-8e0a2d372d5f",
+        "release_mbid": "5863d981-d0c4-4346-85a3-f62fd2b5a5ea",
+        "release_group_mbid": "086eb917-ca60-31b1-8011-22b0a4fdba7b",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1981,
+        "title": "Tainted Love",
+        "artist": "Soft Cell",
+        "updated_at": "2026-10-23T11:25:35.747524+00:00",
+        "canonical_updated_at": "2026-10-23T11:25:07.5864+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBF088100017",
+        "release_title": "Tainted Love",
+        "release_artist": "Soft Cell",
+        "release_date": "1981",
+        "release_country": "GB",
+        "duration_ms": 162000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-813-fa7352e73f84",
+      "manifest_sha256": "fa7352e73f842e470f7b2dda7c33c3c328ddbcfcba51ecd9f4bfaa0f11f6d86b",
+      "evidence_sha256": "9ac10374b779d6ee144f8f8e16d344ab5a620262e6f65479aabdab8294a3e967",
+      "preconditions": {
+        "row_fingerprint": "4a093b43751bdbe02a1be6029398271ce75605869fc51c5ebffb8535294bf713",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1977:401:leo sayer:when i need you",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "27cff7b0-3d3a-45f0-9f7e-34f04eb865da",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 813,
+        "action": "import_verified",
+        "placeholder_canonical_id": "27cff7b0-3d3a-45f0-9f7e-34f04eb865da",
+        "recording_mbid": "f8718dab-55ea-4d45-9d62-23eb69d55e69",
+        "release_mbid": "37cd3065-da7a-3ef1-9dc2-012620b9c091",
+        "release_group_mbid": "271971b7-f897-38a5-8e8b-21fc9cb19ea3",
+        "track_position": 4,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1977,
+        "title": "When I Need You",
+        "artist": "Leo Sayer",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBBLG7600258",
+        "release_title": "Endless Flight",
+        "release_artist": "Leo Sayer",
+        "release_date": "1976",
+        "release_country": "GB",
+        "duration_ms": 252026,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 4 only from a 10-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-823-6e56dce2692b",
+      "manifest_sha256": "6e56dce2692bb5d6e7c87d8c35940ffdb1925f3dd324c9de21f70757164c9a23",
+      "evidence_sha256": "978a8679ce101cd33bc860d468f4554c4f5f01357adaebbb77f4118cc000a798",
+      "preconditions": {
+        "row_fingerprint": "bdf66e0522ed24b08212f08a30a8adf36064693e5d971482dccb1fb0a1543ed7",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1977:413:david soul:silver lady",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "b97d0198-912a-49c3-b844-fb917630fa7e",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 823,
+        "action": "import_verified",
+        "placeholder_canonical_id": "b97d0198-912a-49c3-b844-fb917630fa7e",
+        "recording_mbid": "0d766d15-a6c3-42a1-809e-d068fe803103",
+        "release_mbid": "489d7c3a-c649-47cd-9519-aa9073bb5f6f",
+        "release_group_mbid": "b8f348f0-97e2-4cd9-864c-84d8b261c705",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1977,
+        "title": "Silver Lady",
+        "artist": "David Soul",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "NLG620401609",
+        "release_title": "Playing to an Audience of One",
+        "release_artist": "David Soul",
+        "release_date": "1977",
+        "release_country": "US",
+        "duration_ms": 223000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 11-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-805-5b2fe14ba513",
+      "manifest_sha256": "5b2fe14ba51301fafbdb9567039f42723e611c783be90acb74950c1ed34d2480",
+      "evidence_sha256": "6807ec90d14482668ff6a6fb8a36dae228c31913ca2edc3a50203d5b8080da39",
+      "preconditions": {
+        "row_fingerprint": "e87c4bbda7c305fb4443a814dc32bcc710158227dd93e37e269b9fdedec032a3",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1976:391:the real thing:you to me are everything",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "18c205fc-29a2-4973-a58b-5d15e574aed8",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 805,
+        "action": "import_verified",
+        "placeholder_canonical_id": "18c205fc-29a2-4973-a58b-5d15e574aed8",
+        "recording_mbid": "bec30aa1-a779-4c0d-90d0-67b5361b7763",
+        "release_mbid": "46eb5f67-f4f6-49d4-8cf6-6d0537855cda",
+        "release_group_mbid": "d14390cb-45cf-39c3-a523-ef22660318ea",
+        "track_position": 2,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1976,
+        "title": "You to Me Are Everything",
+        "artist": "The Real Thing",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAJE7600005",
+        "release_title": "Real Thing",
+        "release_artist": "Real Thing",
+        "release_date": "1976",
+        "release_country": "GB",
+        "duration_ms": 210000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 2 only from a 10-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-808-75fe5cc6bf85",
+      "manifest_sha256": "75fe5cc6bf85872f1cb63f1545b860be004b9488bd19152fd370da2d2f0c27b2",
+      "evidence_sha256": "cc563fd8dceea9966178c3437dcb1a640a71b52938ff772eadbc01c79c3fc46d",
+      "preconditions": {
+        "row_fingerprint": "78b42ec9ac386633202ff3ff98795310682ceb549e8b47a21370b514e489d921",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1976:396:chicago:if you leave me now",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "0a86f8d8-4549-48eb-884a-619edc14e7ac",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 808,
+        "action": "import_verified",
+        "placeholder_canonical_id": "0a86f8d8-4549-48eb-884a-619edc14e7ac",
+        "recording_mbid": "7e42ec62-b028-4de4-b0cc-63874bfae34c",
+        "release_mbid": "f50edec0-5dfb-4715-a4be-53b0f032f76a",
+        "release_group_mbid": "6d53aba8-8707-3659-b6ff-9a6757379520",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1976,
+        "title": "If You Leave Me Now",
+        "artist": "Chicago",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USRH10285535",
+        "release_title": "If You Leave Me Now",
+        "release_artist": "Chicago",
+        "release_date": "1976-07",
+        "release_country": "US",
+        "duration_ms": 233000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-809-39b27197a346",
+      "manifest_sha256": "39b27197a34623c008888dc7e027bb041670c272c54ad3f7b9666ffa1f70de13",
+      "evidence_sha256": "299bdba33c21062b58252d2115b664123a62e3d557af4d0c337fe8fad30b166e",
+      "preconditions": {
+        "row_fingerprint": "d248732e47340cc16e892c87bf07cd11e6bc667a45121e0e8b0ac11bc67fa349",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1976:397:showaddywaddy:under the moon of love",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "ae88a981-3f84-4bb3-95f9-82d3ef9a6d56",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 809,
+        "action": "import_verified",
+        "placeholder_canonical_id": "ae88a981-3f84-4bb3-95f9-82d3ef9a6d56",
+        "recording_mbid": "d1e69e14-ade5-4519-92fb-601bd1f5e262",
+        "release_mbid": "b50ec2ec-4273-4993-9606-efcfababa8da",
+        "release_group_mbid": "70662df1-c9f4-442f-881a-8bb301e44e5f",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1976,
+        "title": "Under the Moon of Love",
+        "artist": "Showaddywaddy",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBBPJ9800694",
+        "release_title": "Under the Moon of Love",
+        "release_artist": "Showaddywaddy",
+        "release_date": "1976",
+        "release_country": "DE",
+        "duration_ms": 195000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-793-dec9d310c6fc",
+      "manifest_sha256": "dec9d310c6fcd48abbd4067b30b3f0ea7fae80624b742aa142d08aaaabb69b41",
+      "evidence_sha256": "183797e1fab7c9ca01c488dd0aa287959a8244993cceb48ca12e2de3eec7f585",
+      "preconditions": {
+        "row_fingerprint": "c0f2bd3320314a644422a84ed3fb86baa62e25b99339338dabddd9c95192a135",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1975:377:rod stewart:sailing",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "c465afc9-1729-48d6-90d5-502670132167",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 793,
+        "action": "import_verified",
+        "placeholder_canonical_id": "c465afc9-1729-48d6-90d5-502670132167",
+        "recording_mbid": "6f379c0e-82a9-450c-8bc4-5cbae9182866",
+        "release_mbid": "d85384c7-7c90-4201-a769-a0b669b2f3bf",
+        "release_group_mbid": "d3b2a0f5-fa3d-4b8d-b348-fe542096b6be",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1975,
+        "title": "Sailing",
+        "artist": "Rod Stewart",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USWB10001976",
+        "release_title": "Sailing",
+        "release_artist": "Rod Stewart",
+        "release_date": "1975-09",
+        "release_country": "DE",
+        "duration_ms": 277000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-736-d16237b64e60",
+      "manifest_sha256": "d16237b64e60ef9b422c9345296c943c38e8f436ee30bfe398989565af6d8bf8",
+      "evidence_sha256": "2e99458fa299bf8147c903402f68101bb9bf8721dc51f0f6e2227ec09914b3bb",
+      "preconditions": {
+        "row_fingerprint": "4fabc19cff6ee2fd1f4eeba26702b4d9e340ac271e3ff326d0ad084e3ce01005",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1972:317:alice cooper:school s out",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "0d847a12-e5a1-4797-8e4b-3afb03c966ad",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 736,
+        "action": "import_verified",
+        "placeholder_canonical_id": "0d847a12-e5a1-4797-8e4b-3afb03c966ad",
+        "recording_mbid": "0395e870-aa32-468f-a4c0-372fcc6ebf18",
+        "release_mbid": "dea02478-5c6c-4b67-8308-3e469cfda8c1",
+        "release_group_mbid": "16571076-599b-4154-99f4-b22965e24d5c",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1972,
+        "title": "School's Out",
+        "artist": "Alice Cooper",
+        "updated_at": "2026-10-23T12:18:46.236163+00:00",
+        "canonical_updated_at": "2026-10-23T12:18:46.236163+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USWB19900782",
+        "release_title": "School’s Out / Gutter Cat",
+        "release_artist": "Alice Cooper",
+        "release_date": "1972-04-26",
+        "release_country": "US",
+        "duration_ms": 209000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1152-e8d50c96cbf6",
+      "manifest_sha256": "e8d50c96cbf6a1651ad6feab3ad1c7b3504069b23410022f0ef0f98b0a269d4b",
+      "evidence_sha256": "bd5833a2e6c666f32d20a77b207c8a3c856dc8403184f7faf1339cffd2fb3cde",
+      "preconditions": {
+        "row_fingerprint": "083cfa1c99d20a1b1cc9f89cf57472ee9cbf4308b1772ba5c4ca797974b1e074",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1969:264:fleetwood mac:albatross",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "6eb2092e-0921-4e8f-9f6c-946f05d3f5b7",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1152,
+        "action": "import_verified",
+        "placeholder_canonical_id": "6eb2092e-0921-4e8f-9f6c-946f05d3f5b7",
+        "recording_mbid": "488eacf5-1175-4001-be2e-c10194d767a9",
+        "release_mbid": "a485ef59-fa07-47d3-830c-b90cc5ffec12",
+        "release_group_mbid": "873b1bde-d4b9-4e77-9dbc-f23175284921",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1969,
+        "title": "Albatross",
+        "artist": "Fleetwood Mac",
+        "updated_at": "2026-10-23T12:38:53.525746+00:00",
+        "canonical_updated_at": "2026-10-23T12:38:53.525746+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBBBN6800001",
+        "release_title": "Albatross / Jigsaw Puzzle Blues",
+        "release_artist": "Fleetwood Mac",
+        "release_date": "1968",
+        "release_country": "GB",
+        "duration_ms": 188760,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1155-9c0ef855a753",
+      "manifest_sha256": "9c0ef855a75369259b59ba0524d697436f7e5c3d79a0adbef98ddd520eca8da7",
+      "evidence_sha256": "f3ae304a8b3b8a1f2f5671b2f5a2ed6d47ca4f7bdeb57325744b7d3cd025e26d",
+      "preconditions": {
+        "row_fingerprint": "ea58176dd1cb218f8c55f43ed7bc62332d743f4200faca4917f4fea5a58751f6",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1969:267:peter sarstedt:where do you go to my lovely",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "a1bf768b-8c8b-418e-a50f-33fb72a508d0",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1155,
+        "action": "import_verified",
+        "placeholder_canonical_id": "a1bf768b-8c8b-418e-a50f-33fb72a508d0",
+        "recording_mbid": "6442972c-2ae1-429e-9595-ae5a11a02e0d",
+        "release_mbid": "8cb5676d-bcd0-4d15-8107-b06998f0ee15",
+        "release_group_mbid": "514a0ae0-e0c5-47b2-a620-92c39443be54",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1969,
+        "title": "Where Do You Go To (My Lovely)?",
+        "artist": "Peter Sarstedt",
+        "updated_at": "2026-10-23T12:38:53.525746+00:00",
+        "canonical_updated_at": "2026-10-23T12:38:53.525746+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBAYE6900097",
+        "release_title": "Where Do You Go To (My Lovely) / Morning Mountain",
+        "release_artist": "Peter Sarstedt",
+        "release_date": "1969",
+        "release_country": "GB",
+        "duration_ms": 276000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1162-e5e9cfe5db14",
+      "manifest_sha256": "e5e9cfe5db14589007e2a329a4ab89715a0f79bfdebe8e5438bed8f65a87c013",
+      "evidence_sha256": "303f8cbf836fe11bdc3d99c42af500970a7c1481276ba704c6710737d55e6d0a",
+      "preconditions": {
+        "row_fingerprint": "bbcc2191f17bed3836f83734701dc2e1b373557d6e6302919fd6c3966dc3f7bc",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1969:274:the rolling stones:honky tonk women",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "e085e872-930b-494e-a063-a8d0a5747c18",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1162,
+        "action": "import_verified",
+        "placeholder_canonical_id": "e085e872-930b-494e-a063-a8d0a5747c18",
+        "recording_mbid": "c0b7b368-ad18-481f-9184-2d92fa5799df",
+        "release_mbid": "60ad15f3-a76d-42fe-b6d6-f2b01e13ce39",
+        "release_group_mbid": "c69cc44e-62fb-36e9-8216-32da804ed819",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1969,
+        "title": "Honky Tonk Women",
+        "artist": "The Rolling Stones",
+        "updated_at": "2026-10-23T12:38:53.525746+00:00",
+        "canonical_updated_at": "2026-10-23T12:38:53.525746+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USA176910010",
+        "release_title": "Honky Tonk Women / You Can't Always Get What You Want",
+        "release_artist": "The Rolling Stones",
+        "release_date": "1969-07-04",
+        "release_country": "GB",
+        "duration_ms": 187000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1137-52376d5474b1",
+      "manifest_sha256": "52376d5474b13d3cfd3dd6407025543031d44b2c7eb4bbc8cd31e11ac16dbfb9",
+      "evidence_sha256": "bd54cfb9d915b4eb4fd7b0fd159afe759393b024bef349a4ff47c25ca7d7d70e",
+      "preconditions": {
+        "row_fingerprint": "1e8358eebb12d82afcef358ebbe700416b58ac7690359a02f6f08020a3308548",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1968:249:louis armstrong:what a wonderful world",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "1edd642b-22f7-404f-aaa0-07f5c02aa580",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1137,
+        "action": "import_verified",
+        "placeholder_canonical_id": "1edd642b-22f7-404f-aaa0-07f5c02aa580",
+        "recording_mbid": "20655d93-c325-4825-9018-50fa1b54bf77",
+        "release_mbid": "943675f2-8583-3440-b7af-b52d570bd774",
+        "release_group_mbid": "25a31b6c-b064-4888-999f-d038eabe362f",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1968,
+        "title": "What a Wonderful World",
+        "artist": "Louis Armstrong",
+        "updated_at": "2026-10-23T12:38:53.525746+00:00",
+        "canonical_updated_at": "2026-10-23T12:38:53.525746+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "USMC16758823",
+        "release_title": "What a Wonderful World / Cabaret",
+        "release_artist": "Louis Armstrong",
+        "release_date": "1968-01-01",
+        "release_country": "GB",
+        "duration_ms": 141000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    },
+    {
+      "operation_key": "historical-uk-number-ones-v5-row-1086-49549f378afa",
+      "manifest_sha256": "49549f378afade186fd5fa4182b40f9f821376c5e0aec8d72ec93829523c5435",
+      "evidence_sha256": "eeec6219880199a8194c75bbd1d91baa1314a560a4307c4a272bb4395309b56b",
+      "preconditions": {
+        "row_fingerprint": "2bbddb6ea43f1b9e3c293209052a8bfdf0068c8a9edffd8e31684c8ce694ff4e",
+        "collection_key": "uk-number-ones",
+        "source_entry_key": "1965:189:tom jones:it s not unusual",
+        "match_status": "unresolved",
+        "song_id": null,
+        "canonical_song_id": "8f1d187a-ef6f-4ee4-8492-d096f84054a9",
+        "canonical_rating_rows": 0,
+        "historical_rating_rows": 0,
+        "song_occurrences": 0
+      },
+      "mutation_payload": {
+        "chart_row_id": 1086,
+        "action": "import_verified",
+        "placeholder_canonical_id": "8f1d187a-ef6f-4ee4-8492-d096f84054a9",
+        "recording_mbid": "ae81e0fa-1636-46ce-a899-6a7d2e744c84",
+        "release_mbid": "ccfc0f69-6072-48d1-b6d5-02fa493efb28",
+        "release_group_mbid": "038205d0-fd26-3d85-a4a0-257caba83be7",
+        "track_position": 1,
+        "existing_song_id": null,
+        "reuse_album_id": null
+      },
+      "chart": {
+        "chart_year": 1965,
+        "title": "It's Not Unusual",
+        "artist": "Tom Jones",
+        "updated_at": "2026-10-23T12:38:53.525746+00:00",
+        "canonical_updated_at": "2026-10-23T12:38:53.525746+00:00"
+      },
+      "evidence": {
+        "official_charts_isrc": "GBF076520010",
+        "release_title": "It’s Not Unusual / To Wait for Love",
+        "release_artist": "Tom Jones",
+        "release_date": "1965-01",
+        "release_country": "GB",
+        "duration_ms": 123000,
+        "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+      }
+    }
+  ],
+  "bundle_sha256": "b38f13269736fb5b237258322ee237acec94850e4afde4e2ce479b31c4822e44"
+}
