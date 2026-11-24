@@ -9,6 +9,7 @@ import {
 } from "./historical-uk-number-ones-reconciliation-workflow.mjs";
 
 const OPERATION_KEY = "20261124_uk_number_ones_scalable_executor_v1";
+const EXECUTION_TRANSPORT = "direct-postgres-psql-v1";
 const DEFAULTS = {
   snapshot: "supabase/operations/historical-uk-number-ones-reconciliation-scan-live-state-20261124.json",
   report: "supabase/operations/historical-uk-number-ones-scalable-scan-report-20261124.json",
@@ -97,6 +98,7 @@ export async function buildExecutorBundle(paths = DEFAULTS) {
     source_snapshot_sha256: plan.snapshot_sha256,
     expected_live_baseline: (await json(paths.snapshot)).production_integrity,
     execution_contract: {
+      required_transport: EXECUTION_TRANSPORT,
       max_in_flight: 1,
       one_transaction_per_record: true,
       continue_after_record_failure: true,
@@ -126,6 +128,7 @@ export function validateExecutorBundle(bundle) {
       record.preconditions?.historical_rating_rows !== 0 || record.preconditions?.song_occurrences !== 0)) failures.push("rating_or_occurrence_precondition_missing");
   if ((bundle?.records || []).some(record => !/^[0-9a-f]{64}$/.test(record.manifest_sha256 || "") ||
       !/^[0-9a-f]{64}$/.test(record.evidence_sha256 || ""))) failures.push("record_digest_invalid");
+  if (bundle?.execution_contract?.required_transport !== EXECUTION_TRANSPORT) failures.push("execution_transport_invalid");
   return failures;
 }
 
@@ -135,13 +138,19 @@ export function validateApproval(approval, bundle, mode = "apply") {
   if (approval?.operation_key !== bundle.operation_key) failures.push("approval_operation_mismatch");
   if (approval?.bundle_sha256 !== bundle.bundle_sha256) failures.push("approval_bundle_digest_mismatch");
   if (approval?.mode !== mode) failures.push("approval_mode_mismatch");
+  if (approval?.execution_transport !== bundle.execution_contract.required_transport) failures.push("approval_transport_mismatch");
   if (!String(approval?.approved_by || "").trim() || !String(approval?.approval_reference || "").trim() ||
       !Number.isFinite(Date.parse(approval?.approved_at || ""))) failures.push("approval_provenance_incomplete");
   return failures;
 }
 
 function recordEnvelope(bundle, record) {
-  const value = { bundle_sha256: bundle.bundle_sha256, executor_operation_key: bundle.operation_key, record };
+  const value = {
+    bundle_sha256: bundle.bundle_sha256,
+    executor_operation_key: bundle.operation_key,
+    execution_transport: bundle.execution_contract.required_transport,
+    record
+  };
   const raw = stableJson(value);
   return { raw, sha256: rawSha256(raw), base64: Buffer.from(raw).toString("base64") };
 }
@@ -199,7 +208,14 @@ async function main() {
     const child = spawnSync(process.env.BOM_PSQL_BIN || "psql", [databaseUrl, "-X", "--set", "ON_ERROR_STOP=1", "--set", `record_base64=${envelope.base64}`, "--file", sql], {
       encoding: "utf8", env: { ...process.env, PGOPTIONS: `${process.env.PGOPTIONS || ""} -c bom.approved_historical_reconciliation=${token}`.trim() }
     });
-    results.push({ operation_key: record.operation_key, status: child.status === 0 ? "succeeded" : "failed", error: child.status === 0 ? null : String(child.stderr || child.stdout).slice(-2000) });
+    const transportFailure = Boolean(child.error) || child.status === null;
+    results.push({
+      operation_key: record.operation_key,
+      status: child.status === 0 ? "succeeded" : "failed",
+      failure_scope: child.status === 0 ? null : transportFailure ? "systemic_transport" : "record_transaction",
+      error: child.status === 0 ? null : String(child.error?.message || child.stderr || child.stdout).slice(-2000)
+    });
+    if (transportFailure) break;
   }
   const resultPath = option("result");
   if (resultPath) await writeJson(resultPath, { schema_version: 1, mode, bundle_sha256: bundle.bundle_sha256, results });
