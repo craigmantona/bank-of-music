@@ -25,6 +25,7 @@ const evidence = (overrides = {}) => ({
   recording_isrcs: ["USAAA1500001"], release_mbid: "11111111-1111-4111-8111-111111111113",
   musicbrainz_release_url: "https://musicbrainz.org/release/11111111-1111-4111-8111-111111111113",
   release_group_mbid: "11111111-1111-4111-8111-111111111114", release_status: "Official",
+  release_date: "2015-01-01",
   track_position: 1, track_recording_mbid: "11111111-1111-4111-8111-111111111112",
   release_recording_occurrences: 1, release_track_count: 1, duration_ms: 212000,
   version_notes: "Original studio recording; no remix, live or cover indicators.",
@@ -60,6 +61,13 @@ test("selected-track imports require explicit risk disclosure", () => {
   const failures = validateIndependentEvidence(row(), evidence({ release_track_count: 4, risk_notes: "" }));
   assert.ok(failures.includes("selected_track_risk_not_disclosed"));
   assert.deepEqual(validateIndependentEvidence(row(), evidence({ release_track_count: 4, risk_notes: "Selected-track import: track 1 only from a four-track official release." })), []);
+});
+
+test("MusicBrainz partial release dates remain valid evidence without accepting malformed dates", () => {
+  assert.deepEqual(validateIndependentEvidence(row(), evidence({ release_date: "1991" })), []);
+  assert.deepEqual(validateIndependentEvidence(row(), evidence({ release_date: "1991-03" })), []);
+  assert.ok(validateIndependentEvidence(row(), evidence({ release_date: "1991-13" }))
+    .includes("release_date_missing_or_invalid"));
 });
 
 test("multiple ISRC recordings require exactly one independently release-validated identity", () => {
