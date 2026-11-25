@@ -4,6 +4,12 @@ begin;
 set local lock_timeout = '10s';
 set local statement_timeout = '30s';
 
+select pg_catalog.set_config(
+  'bom.approved_historical_reconciliation',
+  :'approval_token',
+  true
+);
+
 create temporary table bom_executor_input(raw_payload text not null, item jsonb not null) on commit drop;
 insert into bom_executor_input(raw_payload, item)
 select raw_payload, raw_payload::jsonb

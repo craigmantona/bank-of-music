@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { stableJson } from "../../scripts/historical-uk-number-ones-reconciliation-workflow.mjs";
+import { psqlArguments } from "../../scripts/historical-uk-number-ones-production-executor.mjs";
 
 const require = createRequire(process.env.CATALOGUE_TEST_PACKAGE || import.meta.url);
 const { PGlite } = require("@electric-sql/pglite");
@@ -10,6 +11,7 @@ const load = async url => readFile(new URL(url, import.meta.url), "utf8");
 const bundle = JSON.parse(await load("../operations/historical-uk-number-ones-scalable-executor-bundle-20261124.json"));
 const applySource = await load("../operations/20261124_apply_scalable_uk_number_ones_record.sql");
 const rollbackSource = await load("../operations/20261124_rollback_scalable_uk_number_ones_record.sql");
+const runnerSource = await load("../../scripts/historical-uk-number-ones-production-executor.mjs");
 const ZERO_SHA = "0".repeat(64);
 
 function operationSql(source, record, mode, baseline = {}, options = {}) {
@@ -19,9 +21,13 @@ function operationSql(source, record, mode, baseline = {}, options = {}) {
   if (transport !== undefined) input.execution_transport = transport;
   const raw = stableJson(input);
   const base64 = Buffer.from(raw).toString("base64");
-  return `set bom.approved_historical_reconciliation = '${mode}:${bundle.operation_key}:${bundle.bundle_sha256}:${ZERO_SHA}';\n${source
+  const expectedToken = `${mode}:${bundle.operation_key}:${bundle.bundle_sha256}:${ZERO_SHA}`;
+  const approvalToken = Object.hasOwn(options, "approvalToken") ? options.approvalToken : expectedToken;
+  const approvalSql = approvalToken == null ? "null" : `'${String(approvalToken).replaceAll("'", "''")}'`;
+  return source
     .replace(/^\\set ON_ERROR_STOP on\s*/m, "")
     .replace(":'record_base64'", `'${base64}'`)
+    .replace(":'approval_token'", approvalSql)
     .replace("479 + v_applied", "0 + v_applied")
     .replace("819 - v_applied", "1 - v_applied")
     .replace("<> 1298", "<> 1")
@@ -31,7 +37,7 @@ function operationSql(source, record, mode, baseline = {}, options = {}) {
     .replace("<> 1747", `<> ${baseline.ratingRows || 1}`)
     .replace("<> 13454", `<> ${baseline.ratingSum || 7}`)
     .replace("<> 5", "<> 1")
-    .replace("<> 43", "<> 6")}`;
+    .replace("<> 43", "<> 6");
 }
 
 async function fixture(record) {
@@ -93,6 +99,40 @@ async function fixture(record) {
   `);
   return db;
 }
+
+test("runner passes the digest-bound token explicitly and SQL scopes it to the record transaction", () => {
+  const args = psqlArguments("service=bom_musicdb", "/reviewed/apply.sql", { base64: "payload" }, "apply:operation:bundle:record");
+  assert.deepEqual(args, [
+    "service=bom_musicdb", "-X", "--set", "ON_ERROR_STOP=1",
+    "--set", "record_base64=payload",
+    "--set", "approval_token=apply:operation:bundle:record",
+    "--file", "/reviewed/apply.sql"
+  ]);
+  assert.doesNotMatch(runnerSource, /PGOPTIONS/);
+  for (const source of [applySource, rollbackSource]) {
+    assert.match(source, /begin;[\s\S]*set_config\(\s*'bom\.approved_historical_reconciliation',\s*:'approval_token',\s*true\s*\);/i);
+    assert.ok(source.indexOf("set_config(") < source.indexOf("create temporary table bom_executor_input"));
+  }
+});
+
+test("missing, NULL or incorrect explicit approval tokens fail before database changes", async () => {
+  const record = bundle.records.find(item => item.mutation_payload.action === "import_verified" && item.mutation_payload.reuse_album_id === null);
+  for (const approvalToken of [undefined, null, "apply:wrong:bundle:record"]) {
+    const db = await fixture(record);
+    try {
+      await assert.rejects(
+        db.exec(operationSql(applySource, record, "apply", {}, { approvalToken })),
+        /approval token missing or does not bind/
+      );
+      await db.exec("rollback");
+      assert.equal((await db.query("select count(*)::int count from public.songs")).rows[0].count, 0);
+      assert.equal((await db.query("select count(*)::int count from private.historical_chart_reconciliation_operation_audit")).rows[0].count, 0);
+      assert.equal((await db.query("select match_status from public.quick_rate_collection_tracks")).rows[0].match_status, "unresolved");
+    } finally {
+      await db.close();
+    }
+  }
+});
 
 test("missing or NULL execution transport fails closed before database changes", async () => {
   const record = bundle.records.find(item => item.mutation_payload.action === "import_verified" && item.mutation_payload.reuse_album_id === null);
