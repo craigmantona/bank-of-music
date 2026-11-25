@@ -62,7 +62,7 @@ async function fixture(record) {
       id bigint generated always as identity primary key, title text not null, artist text not null,
       album_id bigint references public.albums(id), track_position integer, external_source text,
       external_id text, canonical_song_id uuid references public.canonical_recordings(id),
-      duration_ms integer, is_deleted boolean default false
+      duration_ms integer, is_deleted boolean default false, unique(album_id, track_position)
     );
     create table public.quick_rate_collection_tracks (
       id bigint primary key, collection_key text not null, source_entry_key text not null,
@@ -176,6 +176,85 @@ test("a reviewed import applies once, preserves ratings and rolls back exactly",
     assert.equal((await db.query("select match_status from public.quick_rate_collection_tracks")).rows[0].match_status, "unresolved");
     assert.equal((await db.query("select count(*)::int count from private.historical_chart_reconciliation_operation_audit where event_kind='rollback'")).rows[0].count, 1);
     assert.deepEqual((await db.query("select * from public.song_ratings order by id")).rows, ratingsBefore);
+  } finally {
+    await db.close();
+  }
+});
+
+test("reviewed partial release dates preserve source precision without inventing a database date", async () => {
+  const record = bundle.records.find(item => item.mutation_payload.action === "import_verified" &&
+    item.mutation_payload.reuse_album_id === null && item.evidence.release_date.length < 10 &&
+    /(?:year|month) precision/i.test(item.evidence.risk_notes));
+  assert.ok(record);
+  const db = await fixture(record);
+  try {
+    await db.exec(operationSql(applySource, record, "apply"));
+    const album = (await db.query("select release_date, canonical_release_date from public.albums")).rows[0];
+    assert.deepEqual(album, { release_date: null, canonical_release_date: null });
+    assert.ok(record.evidence.release_date.length === 4 || record.evidence.release_date.length === 7);
+    await db.exec(operationSql(rollbackSource, record, "rollback"));
+    assert.equal((await db.query("select count(*)::int count from public.albums")).rows[0].count, 0);
+  } finally {
+    await db.close();
+  }
+});
+
+test("partial dates without reviewed disclosure and malformed dates fail before database changes", async () => {
+  const source = bundle.records.find(item => item.mutation_payload.action === "import_verified" &&
+    item.mutation_payload.reuse_album_id === null && item.evidence.release_date.length < 10 &&
+    /(?:year|month) precision/i.test(item.evidence.risk_notes));
+  assert.ok(source);
+  const cases = [
+    [structuredClone(source), /partial release date risk is not disclosed/],
+    [structuredClone(source), /reviewed release date shape failed/]
+  ];
+  cases[0][0].evidence.risk_notes = "Selected-track import only.";
+  cases[1][0].evidence.release_date = "1975-13";
+  for (const [record, expected] of cases) {
+    const db = await fixture(record);
+    try {
+      await assert.rejects(db.exec(operationSql(applySource, record, "apply")), expected);
+      await db.exec("rollback");
+      assert.equal((await db.query("select count(*)::int count from public.albums")).rows[0].count, 0);
+      assert.equal((await db.query("select count(*)::int count from public.songs")).rows[0].count, 0);
+      assert.equal((await db.query("select match_status from public.quick_rate_collection_tracks")).rows[0].match_status, "unresolved");
+      assert.equal((await db.query("select count(*)::int count from private.historical_chart_reconciliation_operation_audit")).rows[0].count, 0);
+    } finally {
+      await db.close();
+    }
+  }
+});
+
+test("an occupied reviewed album position fails without overwriting the existing track", async () => {
+  const record = bundle.records.find(item => item.mutation_payload.chart_row_id === 1812);
+  assert.ok(record?.mutation_payload.reuse_album_id);
+  const occupantCanonical = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
+  const db = await fixture(record);
+  try {
+    await db.exec(`
+      insert into public.canonical_recordings values ('${occupantCanonical}', 'Existing track', 'Lady Gaga',
+        '00000000-0000-4000-8000-000000000010', 'musicbrainz:00000000-0000-4000-8000-000000000010', '{}', timezone('utc', now()));
+      insert into public.albums(id, title, artist, external_source, external_id, musicbrainz_release_id,
+        musicbrainz_release_group_id, release_date, canonical_release_date, canonical_release_country,
+        catalogue_selection_version, is_deleted) overriding system value
+      values (${record.mutation_payload.reuse_album_id}, 'The Fame', 'Lady Gaga', 'musicbrainz',
+        '00000000-0000-4000-8000-000000000011', '00000000-0000-4000-8000-000000000011',
+        '${record.mutation_payload.release_group_mbid}', '2008-10-28', '2008-10-28', 'GB', 1, false);
+      insert into public.songs(title, artist, album_id, track_position, external_source, external_id,
+        canonical_song_id, duration_ms, is_deleted)
+      values ('Beautiful, Dirty, Rich', 'Lady Gaga', ${record.mutation_payload.reuse_album_id},
+        ${record.mutation_payload.track_position}, 'musicbrainz', '00000000-0000-4000-8000-000000000010',
+        '${occupantCanonical}', 172000, false);
+    `);
+    await assert.rejects(
+      db.exec(operationSql(applySource, record, "apply", { songs: 1, albums: 1, canonical: 2 })),
+      /reviewed album track position occupied/
+    );
+    await db.exec("rollback");
+    const occupant = (await db.query("select title, external_id from public.songs")).rows[0];
+    assert.deepEqual(occupant, { title: "Beautiful, Dirty, Rich", external_id: "00000000-0000-4000-8000-000000000010" });
+    assert.equal((await db.query("select match_status from public.quick_rate_collection_tracks")).rows[0].match_status, "unresolved");
+    assert.equal((await db.query("select count(*)::int count from private.historical_chart_reconciliation_operation_audit")).rows[0].count, 0);
   } finally {
     await db.close();
   }

@@ -7,6 +7,7 @@ import { normalise } from "./uk-number-ones-lib.mjs";
 
 const MBID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ISRC = /^[A-Z]{2}[A-Z0-9]{3}\d{7}$/;
+const RELEASE_DATE = /^\d{4}(?:-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12]\d|3[01]))?)?$/;
 const PROHIBITED = new Set(["--commit", "--execute", "--apply", "--production"]);
 const WRITE_ENV = ["BOM_DATABASE_URL", "DATABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
 
@@ -104,6 +105,8 @@ export function validateIndependentEvidence(row, evidence) {
   if (sourceIsrcs.length && !sourceIsrcs.includes(evidence?.official_charts_isrc)) failures.push("stored_isrc_conflicts_with_official_charts");
   if (row.musicbrainz_recording_id && row.musicbrainz_recording_id.toLowerCase() !== String(evidence?.recording_mbid || "").toLowerCase()) failures.push("stored_recording_mbid_conflict");
   if (evidence?.release_status !== "Official") failures.push("release_not_official");
+  const releaseDate = String(evidence?.release_date || "");
+  if (!RELEASE_DATE.test(releaseDate)) failures.push("release_date_missing_or_invalid");
   if (!Number.isInteger(evidence?.track_position) || evidence.track_position < 1) failures.push("exact_track_position_missing");
   if (evidence?.track_recording_mbid?.toLowerCase() !== String(evidence?.recording_mbid || "").toLowerCase()) failures.push("release_track_recording_mismatch");
   if (evidence?.release_recording_occurrences !== 1) failures.push("release_track_not_unique");

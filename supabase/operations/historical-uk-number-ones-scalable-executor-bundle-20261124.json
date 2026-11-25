@@ -3,7 +3,7 @@
   "operation_key": "20261124_uk_number_ones_scalable_executor_v1",
   "production_authorized": false,
   "approval_state": "awaiting_separate_independent_review",
-  "source_plan_sha256": "1aaedc07f4e1eee95e3cebb763648c547c6e58debb160d3155073cdf2db14cc0",
+  "source_plan_sha256": "e5afeadf507e5aaf512151c490f346a7df6d2adfb70dd532ff4c19d8a4e1b414",
   "source_snapshot_sha256": "0dbc96dca56f595e2473f6c33f36852755620e020e1776818a29440f998a9d53",
   "expected_live_baseline": {
     "songs": 16219,
@@ -2189,9 +2189,9 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-153-8f4a86637e11",
-      "manifest_sha256": "8f4a86637e11582eb414ddefcfacddf9d2152b8fdf44d354bf9a3ac602c34182",
-      "evidence_sha256": "4429522ece3b7ffcc92ffd0a1dc52d7bf7c8a68e47365c8d07a31635fd25f2d8",
+      "operation_key": "historical-uk-number-ones-v5-row-153-1fcf27b6c4a9",
+      "manifest_sha256": "1fcf27b6c4a9e087bf7cc00575186b8d02e5b628fcc5e73a538011606c9c741a",
+      "evidence_sha256": "ea2a28f4c48a98a26421f00fbc0a8bbf6a5e799da0ed82c313bee4080661d355",
       "preconditions": {
         "row_fingerprint": "7a08f163ddeee30f76b103c427044b9363ecee53094ce7ebd62f5d8afd2ebe09",
         "collection_key": "uk-number-ones",
@@ -2229,7 +2229,7 @@
         "release_country": "GB",
         "duration_ms": 247333,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 3-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 3-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
@@ -2277,9 +2277,9 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-25-488112fd7a7f",
-      "manifest_sha256": "488112fd7a7fdeb56595661b28bd4f5ddecdf342c4c5f6e07dc66a3294660e51",
-      "evidence_sha256": "ecf176adc16b08263829dd51c58218e246f5d0ee6ce3adf6bd25a1e4c47c3020",
+      "operation_key": "historical-uk-number-ones-v5-row-25-58be1625349a",
+      "manifest_sha256": "58be1625349a8ea2334d5e1fa68165757e3011d43a3ceb7a06a46ef3540a9b42",
+      "evidence_sha256": "c972dce0b67a44ea2ff84005250a5eafc19c8758e3c01037ebe3f3531e50d8dc",
       "preconditions": {
         "row_fingerprint": "728c1e7ab4b4f66c85e637adf9fef04688cc8536500681a0ad9c669175347625",
         "collection_key": "uk-number-ones",
@@ -2317,7 +2317,7 @@
         "release_country": "GB",
         "duration_ms": 222000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
@@ -2453,9 +2453,9 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-492-9fb50a229278",
-      "manifest_sha256": "9fb50a22927854062c74e3f6414233cb8f02dff4a16e6fd81b09044a42228c95",
-      "evidence_sha256": "d5be83a2ef730477e9ca7c2c162c616572585bcd6eb3c9d34e32b1f2508606df",
+      "operation_key": "historical-uk-number-ones-v5-row-492-a725880cebd4",
+      "manifest_sha256": "a725880cebd49388dc6da5e022a205e765695ebc1c47c206e5de018da7ff9435",
+      "evidence_sha256": "ebac75a152b5f791b217ffeaf0594b2de7c98cdda5b6f86043c6befa4fb4ff2f",
       "preconditions": {
         "row_fingerprint": "7f404a59d3bf8e919d5710ae62d63460b54cefc4a1494b2c4d5ea2ab767e8403",
         "collection_key": "uk-number-ones",
@@ -2493,13 +2493,13 @@
         "release_country": "GB",
         "duration_ms": 254826,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-452-8c1b178ad1e6",
-      "manifest_sha256": "8c1b178ad1e6d398e6640c0a30a0fe43a274e40cf8f8600fc6cc96560a44b51f",
-      "evidence_sha256": "c419adc8398d79fb2107ec2c04d42eee926cc0cbc08b10571bb5372a6b348f8b",
+      "operation_key": "historical-uk-number-ones-v5-row-452-f58e84bdf046",
+      "manifest_sha256": "f58e84bdf046ee9f70fbd8d18eb126c648316fad90ee65e3b9d8ff4c0ce41bbc",
+      "evidence_sha256": "6a9ff2c5dd5cdfa0bfa91676f685a12866e60773e7b21ef09356cd313b4238a4",
       "preconditions": {
         "row_fingerprint": "4987aa0a125eb8fb0461b7f0a99953b29e0e8199a549ee6a07f31fbedb041350",
         "collection_key": "uk-number-ones",
@@ -2537,7 +2537,7 @@
         "release_country": "GB",
         "duration_ms": 203746,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 4-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 4-track official release. MusicBrainz provides month precision only; BOM date columns remain NULL rather than inventing a day."
       }
     },
     {
@@ -2585,9 +2585,9 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-415-3a4d9c488c06",
-      "manifest_sha256": "3a4d9c488c062b5a5d86c5b493973c53cb8671d13e7fe75c071eef5da953cc7f",
-      "evidence_sha256": "f4cf4bf1909a5a4f65f62131bc3c7e9114ac630267128026ef1ad68287dc9b1d",
+      "operation_key": "historical-uk-number-ones-v5-row-415-61ecc946a21e",
+      "manifest_sha256": "61ecc946a21eb2b1e48c69dade6614c433c75c0fa52f74fcdee8987bda01e931",
+      "evidence_sha256": "8d71d8994e08492a0c34d138a728295e0a63cb0a511da5e8b83fdee0a71bd0ac",
       "preconditions": {
         "row_fingerprint": "b013e902dc4effcc17146fff2b1475659bfec1046adfe6ef1b5a3edeefb32c7c",
         "collection_key": "uk-number-ones",
@@ -2625,13 +2625,13 @@
         "release_country": "GB",
         "duration_ms": 162000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-813-fa7352e73f84",
-      "manifest_sha256": "fa7352e73f842e470f7b2dda7c33c3c328ddbcfcba51ecd9f4bfaa0f11f6d86b",
-      "evidence_sha256": "9ac10374b779d6ee144f8f8e16d344ab5a620262e6f65479aabdab8294a3e967",
+      "operation_key": "historical-uk-number-ones-v5-row-813-5bdf09a050e7",
+      "manifest_sha256": "5bdf09a050e7023ff499f2b0e9a6ef9e55791c6ca7fb04ca3a8af5d3b64ae322",
+      "evidence_sha256": "cb1655d76a539f33a775359add4864f63fb407845b30971fbb96d1c63da12ef0",
       "preconditions": {
         "row_fingerprint": "4a093b43751bdbe02a1be6029398271ce75605869fc51c5ebffb8535294bf713",
         "collection_key": "uk-number-ones",
@@ -2669,13 +2669,13 @@
         "release_country": "GB",
         "duration_ms": 252026,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 4 only from a 10-track official release."
+        "risk_notes": "Selected-track import: track 4 only from a 10-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-823-6e56dce2692b",
-      "manifest_sha256": "6e56dce2692bb5d6e7c87d8c35940ffdb1925f3dd324c9de21f70757164c9a23",
-      "evidence_sha256": "978a8679ce101cd33bc860d468f4554c4f5f01357adaebbb77f4118cc000a798",
+      "operation_key": "historical-uk-number-ones-v5-row-823-45e8a7c7b16c",
+      "manifest_sha256": "45e8a7c7b16c473ef1f35e8dc1b2bbe0b87740bac9cbca83912b06664857dc97",
+      "evidence_sha256": "766dd5038e88906bde586ac0aa9ae39256ef8dca0affcf7affcac3236c8fcdd4",
       "preconditions": {
         "row_fingerprint": "bdf66e0522ed24b08212f08a30a8adf36064693e5d971482dccb1fb0a1543ed7",
         "collection_key": "uk-number-ones",
@@ -2713,13 +2713,13 @@
         "release_country": "US",
         "duration_ms": 223000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 11-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 11-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-805-5b2fe14ba513",
-      "manifest_sha256": "5b2fe14ba51301fafbdb9567039f42723e611c783be90acb74950c1ed34d2480",
-      "evidence_sha256": "6807ec90d14482668ff6a6fb8a36dae228c31913ca2edc3a50203d5b8080da39",
+      "operation_key": "historical-uk-number-ones-v5-row-805-867e8be9d078",
+      "manifest_sha256": "867e8be9d078ff92dc1d0813908e268310bcec87838f3d71758c61d895fcff24",
+      "evidence_sha256": "9dd54b887e6a64b87e02dc62ad534c490f526a4df853af98782847d2e6421250",
       "preconditions": {
         "row_fingerprint": "e87c4bbda7c305fb4443a814dc32bcc710158227dd93e37e269b9fdedec032a3",
         "collection_key": "uk-number-ones",
@@ -2757,13 +2757,13 @@
         "release_country": "GB",
         "duration_ms": 210000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 2 only from a 10-track official release."
+        "risk_notes": "Selected-track import: track 2 only from a 10-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-808-75fe5cc6bf85",
-      "manifest_sha256": "75fe5cc6bf85872f1cb63f1545b860be004b9488bd19152fd370da2d2f0c27b2",
-      "evidence_sha256": "cc563fd8dceea9966178c3437dcb1a640a71b52938ff772eadbc01c79c3fc46d",
+      "operation_key": "historical-uk-number-ones-v5-row-808-c6132aa2b3ff",
+      "manifest_sha256": "c6132aa2b3ffa9297ea3cc10378fcffff5161bd2b23056c0b735054ba900eb37",
+      "evidence_sha256": "f264b251def5cce1f43edf7c8e88376cd6881ecf365ac4b5e89209733485a5ff",
       "preconditions": {
         "row_fingerprint": "78b42ec9ac386633202ff3ff98795310682ceb549e8b47a21370b514e489d921",
         "collection_key": "uk-number-ones",
@@ -2801,13 +2801,13 @@
         "release_country": "US",
         "duration_ms": 233000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides month precision only; BOM date columns remain NULL rather than inventing a day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-809-39b27197a346",
-      "manifest_sha256": "39b27197a34623c008888dc7e027bb041670c272c54ad3f7b9666ffa1f70de13",
-      "evidence_sha256": "299bdba33c21062b58252d2115b664123a62e3d557af4d0c337fe8fad30b166e",
+      "operation_key": "historical-uk-number-ones-v5-row-809-e39f3df9a0ef",
+      "manifest_sha256": "e39f3df9a0efcacfbb43a73e513e95d60853cc130ca78f5027fd64f008398aed",
+      "evidence_sha256": "d342f954edd0575ba21b547c4064e880b0523f05cd2c5fbaa595c6ac9a643421",
       "preconditions": {
         "row_fingerprint": "d248732e47340cc16e892c87bf07cd11e6bc667a45121e0e8b0ac11bc67fa349",
         "collection_key": "uk-number-ones",
@@ -2845,13 +2845,13 @@
         "release_country": "DE",
         "duration_ms": 195000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-793-dec9d310c6fc",
-      "manifest_sha256": "dec9d310c6fcd48abbd4067b30b3f0ea7fae80624b742aa142d08aaaabb69b41",
-      "evidence_sha256": "183797e1fab7c9ca01c488dd0aa287959a8244993cceb48ca12e2de3eec7f585",
+      "operation_key": "historical-uk-number-ones-v5-row-793-c6cb03f90f8a",
+      "manifest_sha256": "c6cb03f90f8a6f6cccc0067f2c2c28a46c25d03cb50d0d623d14d9f999286869",
+      "evidence_sha256": "e79d0b7065d146f280910486d0432a1d7e66bf66d8212656f9eb73657adc831f",
       "preconditions": {
         "row_fingerprint": "c0f2bd3320314a644422a84ed3fb86baa62e25b99339338dabddd9c95192a135",
         "collection_key": "uk-number-ones",
@@ -2889,7 +2889,7 @@
         "release_country": "DE",
         "duration_ms": 277000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides month precision only; BOM date columns remain NULL rather than inventing a day."
       }
     },
     {
@@ -2937,9 +2937,9 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1152-e8d50c96cbf6",
-      "manifest_sha256": "e8d50c96cbf6a1651ad6feab3ad1c7b3504069b23410022f0ef0f98b0a269d4b",
-      "evidence_sha256": "bd5833a2e6c666f32d20a77b207c8a3c856dc8403184f7faf1339cffd2fb3cde",
+      "operation_key": "historical-uk-number-ones-v5-row-1152-5d0e8528d2e8",
+      "manifest_sha256": "5d0e8528d2e802ce48734bc6f0f4b2f2d06847f2371368b4fd8a44d2de9aed88",
+      "evidence_sha256": "0580128d937aa9be5e319805509866b530c4bf31ca71d8591aeb2048e4a88988",
       "preconditions": {
         "row_fingerprint": "083cfa1c99d20a1b1cc9f89cf57472ee9cbf4308b1772ba5c4ca797974b1e074",
         "collection_key": "uk-number-ones",
@@ -2977,13 +2977,13 @@
         "release_country": "GB",
         "duration_ms": 188760,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1155-9c0ef855a753",
-      "manifest_sha256": "9c0ef855a75369259b59ba0524d697436f7e5c3d79a0adbef98ddd520eca8da7",
-      "evidence_sha256": "f3ae304a8b3b8a1f2f5671b2f5a2ed6d47ca4f7bdeb57325744b7d3cd025e26d",
+      "operation_key": "historical-uk-number-ones-v5-row-1155-3e7b498220d1",
+      "manifest_sha256": "3e7b498220d15d88cc34276ce960185c6f48a892484b394a083c062cdcd69fb4",
+      "evidence_sha256": "b22a819c646fb5995955e16795cf438f016236d02a9a70e59d440e70966a4957",
       "preconditions": {
         "row_fingerprint": "ea58176dd1cb218f8c55f43ed7bc62332d743f4200faca4917f4fea5a58751f6",
         "collection_key": "uk-number-ones",
@@ -3021,7 +3021,7 @@
         "release_country": "GB",
         "duration_ms": 276000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides year precision only; BOM date columns remain NULL rather than inventing a month or day."
       }
     },
     {
@@ -3113,9 +3113,9 @@
       }
     },
     {
-      "operation_key": "historical-uk-number-ones-v5-row-1086-49549f378afa",
-      "manifest_sha256": "49549f378afade186fd5fa4182b40f9f821376c5e0aec8d72ec93829523c5435",
-      "evidence_sha256": "eeec6219880199a8194c75bbd1d91baa1314a560a4307c4a272bb4395309b56b",
+      "operation_key": "historical-uk-number-ones-v5-row-1086-cbc400652e95",
+      "manifest_sha256": "cbc400652e9597cbad4a57575c643cfaa912a52c8dc74847af844497598ea524",
+      "evidence_sha256": "46600fd3770bfa4c95b67f5bb6d8367901f4659545c7fc30620d049463a9bddb",
       "preconditions": {
         "row_fingerprint": "2bbddb6ea43f1b9e3c293209052a8bfdf0068c8a9edffd8e31684c8ce694ff4e",
         "collection_key": "uk-number-ones",
@@ -3153,9 +3153,9 @@
         "release_country": "GB",
         "duration_ms": 123000,
         "version_notes": "Exact title, artist and ISRC; official MusicBrainz release track has no prohibited live, remix, cover or alternate-version markers.",
-        "risk_notes": "Selected-track import: track 1 only from a 2-track official release."
+        "risk_notes": "Selected-track import: track 1 only from a 2-track official release. MusicBrainz provides month precision only; BOM date columns remain NULL rather than inventing a day."
       }
     }
   ],
-  "bundle_sha256": "5fd0e1f870ae0776805c92f82a86b95aaf4dce1f9a6e82f63cca2a4455f5585f"
+  "bundle_sha256": "26eeccdf6f9069b686e0d9c8236132011324fff2a7abf2b8bc976074626112c1"
 }

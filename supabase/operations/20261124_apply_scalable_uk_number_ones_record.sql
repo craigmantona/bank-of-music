@@ -36,6 +36,8 @@ declare
   v_recording text;
   v_release text;
   v_release_group text;
+  v_release_date_text text;
+  v_release_date date;
   v_existing_song_id bigint;
   v_reuse_album_id bigint;
   v_target_song_id bigint;
@@ -83,13 +85,13 @@ begin
   v_recording := lower(v_record #>> '{mutation_payload,recording_mbid}');
   v_release := lower(v_record #>> '{mutation_payload,release_mbid}');
   v_release_group := lower(v_record #>> '{mutation_payload,release_group_mbid}');
+  v_release_date_text := v_record #>> '{evidence,release_date}';
   v_existing_song_id := nullif(v_record #>> '{mutation_payload,existing_song_id}', '')::bigint;
   v_reuse_album_id := nullif(v_record #>> '{mutation_payload,reuse_album_id}', '')::bigint;
   if v_action not in ('link_existing', 'import_verified') or v_chart_id is null or v_source_key is null
      or v_placeholder is null or v_recording is null or v_release is null or v_release_group is null then
     raise exception 'executor mutation payload shape failed';
   end if;
-
   if exists (
     select 1 from private.historical_chart_reconciliation_operation_audit
     where operation_key = v_record_key and event_kind = 'apply' and chart_entry_id = v_chart_id
@@ -102,6 +104,17 @@ begin
     where operation_key = v_record_key or chart_entry_id = v_chart_id
   ) then
     raise exception 'executor immutable audit conflict for %', v_record_key;
+  end if;
+  if v_release_date_text ~ '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$' then
+    v_release_date := v_release_date_text::date;
+  elsif v_release_date_text ~ '^\d{4}(-(0[1-9]|1[0-2]))?$' then
+    if coalesce(v_record #>> '{evidence,risk_notes}', '') !~* '(year|month) precision'
+       or coalesce(v_record #>> '{evidence,risk_notes}', '') !~* '(remain(s)? NULL|not invent)' then
+      raise exception 'executor partial release date risk is not disclosed for %', v_source_key;
+    end if;
+    v_release_date := null;
+  else
+    raise exception 'executor reviewed release date shape failed for %', v_source_key;
   end if;
 
   for v_lock in
@@ -211,9 +224,17 @@ begin
         canonical_release_country, catalogue_selection_version, is_deleted)
       values (v_record #>> '{evidence,release_title}', v_record #>> '{evidence,release_artist}', 'musicbrainz', v_release,
         v_release, v_release_group, 'https://coverartarchive.org/release-group/' || v_release_group || '/front-500',
-        nullif(v_record #>> '{evidence,release_date}', '')::date, nullif(v_record #>> '{evidence,release_date}', '')::date,
+        v_release_date, v_release_date,
         nullif(v_record #>> '{evidence,release_country}', ''), 1, false)
       returning id into v_target_album_id;
+    end if;
+    if exists (
+      select 1 from public.songs
+      where album_id = v_target_album_id
+        and track_position = (v_record #>> '{mutation_payload,track_position}')::integer
+        and is_deleted is not true
+    ) then
+      raise exception 'executor reviewed album track position occupied for %', v_source_key;
     end if;
     update public.canonical_recordings
     set musicbrainz_recording_id = v_recording, origin_key = 'musicbrainz:' || v_recording,
