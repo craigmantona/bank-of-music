@@ -65,7 +65,7 @@ test("reviewed SQL provides one transaction per record with stale, rating, dupli
     assert.match(sql, /bom_executor_song_ratings_before/);
     assert.match(sql, /bom_executor_historical_ratings_before/);
     assert.match(sql, /duplicate canonical/i);
-    assert.doesNotMatch(sql, /set_config\s*\(\s*['"]bom\.approved_historical_reconciliation/i);
+    assert.match(sql, /begin;[\s\S]*set_config\s*\(\s*['"]bom\.approved_historical_reconciliation['"],\s*:'approval_token',\s*true\s*\)/i);
   }
   assert.match(apply, /stale-state guard failed/);
   assert.match(apply, /duplicate recording identity/);
