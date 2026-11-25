@@ -155,6 +155,15 @@ function recordEnvelope(bundle, record) {
   return { raw, sha256: rawSha256(raw), base64: Buffer.from(raw).toString("base64") };
 }
 
+export function psqlArguments(databaseUrl, sql, envelope, approvalToken) {
+  return [
+    databaseUrl, "-X", "--set", "ON_ERROR_STOP=1",
+    "--set", `record_base64=${envelope.base64}`,
+    "--set", `approval_token=${approvalToken}`,
+    "--file", sql
+  ];
+}
+
 export function executionQueue(bundle, completedAudit = []) {
   const audited = new Map(completedAudit.map(row => [row.operation_key, row]));
   const pending = [], failures = [];
@@ -205,9 +214,11 @@ async function main() {
   for (const record of records) {
     const envelope = recordEnvelope(bundle, record);
     const token = `${mode}:${bundle.operation_key}:${bundle.bundle_sha256}:${envelope.sha256}`;
-    const child = spawnSync(process.env.BOM_PSQL_BIN || "psql", [databaseUrl, "-X", "--set", "ON_ERROR_STOP=1", "--set", `record_base64=${envelope.base64}`, "--file", sql], {
-      encoding: "utf8", env: { ...process.env, PGOPTIONS: `${process.env.PGOPTIONS || ""} -c bom.approved_historical_reconciliation=${token}`.trim() }
-    });
+    const child = spawnSync(
+      process.env.BOM_PSQL_BIN || "psql",
+      psqlArguments(databaseUrl, sql, envelope, token),
+      { encoding: "utf8", env: process.env }
+    );
     const transportFailure = Boolean(child.error) || child.status === null;
     results.push({
       operation_key: record.operation_key,
