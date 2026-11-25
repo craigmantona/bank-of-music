@@ -21,7 +21,7 @@ function helpers(flags = {}) {
   return window.BOMDiscoverHelpers;
 }
 
-test("Discover shows a lightweight three-game Coming Soon teaser above Quick Rate", () => {
+test("Discover keeps the lightweight three-game Coming Soon teaser after Quick Rate", () => {
   const teaser=helpers().gamesTeaser();
   for (const text of [
     "BOM GAMES · COMING SOON", "Think you know your music?",
@@ -29,14 +29,15 @@ test("Discover shows a lightweight three-game Coming Soon teaser above Quick Rat
     "60-Second Quickfire", "Daily BOM Challenge", "Rate more music. Help unlock the games."
   ]) assert.match(teaser,new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")));
   assert.match(teaser,/data-bom-action="quick-rate"/);
-  assert.match(discover,/\$\{gamesTeaser\(model\.authenticated\)\}\$\{model\.authenticated\?carousel\(\):""\}/);
+  assert.match(discover,/\$\{carousel\(\)\}\$\{model\.authenticated\?[\s\S]*?\$\{gamesTeaser\(model\.authenticated\)\}/);
   assert.doesNotMatch(teaser,/game-preview|daily-challenge|higher-lower|simulation|rpc|supabase/i);
 });
 
-test("the public teaser renders for guests without offering a protected Quick Rate action", () => {
+test("guests get the public Quick Rate carousel without a duplicate teaser action", () => {
   const guest=helpers().gamesTeaser(false);
   assert.match(guest,/Think you know your music\?/);
   assert.doesNotMatch(guest,/data-bom-action="quick-rate"/);
+  assert.match(discover,/\$\{carousel\(\)\}/);
   assert.match(discover,/gamesTeaser\(model\.authenticated\)/);
 });
 
@@ -66,7 +67,7 @@ test("teaser styling is responsive, accessible and cache-busted", () => {
   assert.match(css,/--bom-games-lime:#b9ff4b/);
   assert.match(css,/@media \(max-width: 900px\)[\s\S]*\.bom-games-teaser-list \{ grid-template-columns:1fr/);
   assert.match(css,/@media \(max-width: 600px\)[\s\S]*\.bom-games-teaser footer button \{ width:100%/);
-  assert.match(html,/bom-foundation\.css\?v=56/);
-  assert.match(html,/bom-discover\.js\?v=16/);
+  assert.match(html,/bom-foundation\.css\?v=57/);
+  assert.match(html,/bom-discover\.js\?v=17/);
   assert.match(helpers().gamesTeaser(),/aria-labelledby="bomGamesTeaserTitle"/);
 });

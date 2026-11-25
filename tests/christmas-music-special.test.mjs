@@ -80,6 +80,9 @@ test("Discover follows London month boundaries, year rollover and the emergency 
   assert.doesNotMatch(renderDiscover({ date: "2027-01-01T00:00:00Z" }).html, /data-bom-christmas-banner/);
   assert.match(renderDiscover({ date: "2027-12-01T00:00:00Z" }).html, /THE CHRISTMAS TOP 100/);
   assert.doesNotMatch(renderDiscover({ emergencyDisabled: true, date: "2026-12-12T12:00:00Z" }).html, /data-bom-christmas-banner/);
+  const december = renderDiscover({ date: "2026-12-12T12:00:00Z" }).html;
+  assert(december.indexOf("data-bom-discovery-carousel") < december.indexOf("data-bom-christmas-banner"));
+  assert.match(discover, /querySelector\("\.bom-v1-discovery-carousel"\)[\s\S]*?insertAdjacentHTML\("afterend", christmasBanner\(\)\)/);
 });
 
 test("London eligibility is independent of the device timezone", () => {

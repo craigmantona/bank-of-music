@@ -28,6 +28,15 @@ test("the approved navigation and account destinations are present", () => {
   assert.match(shell, /Connect Spotify/);
   assert.match(shell, /Spotify connected ✓/);
   assert.match(shell, /viewBox="0 0 24 24"/);
+  assert.match(shell, /bom-v1-account-button is-signin[^>]*aria-label="Sign in">Sign in/);
+  assert.match(shell, /accountButton\.textContent = state\.authenticated \? initials\(state\.displayName\) : "Sign in"/);
+  assert.match(shell, /if \(!bridge\(\)\?\.getState\(\)\?\.authenticated\)[\s\S]*?showAuthentication/);
+  assert.match(html, /class="card hidden" id="authCard"/);
+  assert.match(app, /initialPageParams\.has\("invitation"\) \|\| initialPageParams\.get\("ui"\) === "legacy"/);
+  assert.match(app, /showAuthentication: \(message\) => showAuthentication\(message\)/);
+  assert.match(app, /authCard\?\.classList\.remove\("hidden"\)/);
+  assert.match(html, /foundationScript\.addEventListener\("error", restoreAuthenticationFallback\)/);
+  assert.match(html, /if \(!document\.querySelector\("\.bom-v1-account-button"\)\)[\s\S]*?restoreAuthenticationFallback\(\)/);
 });
 
 test("the bridge delegates to existing functions", () => {
@@ -54,7 +63,7 @@ test("the presentation bridge and Discover helpers initialize outside section na
   assert.ok(discoverRenderStart > helperStart, "Discover should call an in-scope helper");
   assert.ok(readyEventStart > spotifyStateStart, "the bridge must not signal ready while later state is in its temporal dead zone");
   assert.ok(readyEventStart > initialDiscoverStart, "the bridge should signal ready after selecting the initial section");
-  assert.match(html, /app\.js\?v=198&autocomplete=2&search-autosave=1&listening-ui=6/);
+  assert.match(html, /app\.js\?v=199&autocomplete=2&search-autosave=1&listening-ui=6/);
 });
 
 test("the real Stage 1 Discover renderer can call its helper before any navigation", () => {

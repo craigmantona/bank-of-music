@@ -94,7 +94,7 @@ test("provisional summaries are batched and writes suppress duplicate interactio
   assert.match(app, /offset \+= 250/);
   assert.match(app, /p_chart_entry_ids: batch/);
   assert.match(discover, /historicalRatingPending/);
-  assert.match(discover, /if\(ratingButton&&historicalDetailItem&&canRateHistoricalEntry\(historicalDetailItem\)&&!historicalRatingPending\)/);
+  assert.match(discover, /if\(!historicalDetailItem\|\|!canRateHistoricalEntry\(historicalDetailItem\)\|\|historicalRatingPending\)return true/);
   assert.match(discover, /Saving…/);
   assert.match(discover, /result\?\.ok/);
 });

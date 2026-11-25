@@ -19,7 +19,7 @@ function ratingContext({ user = { id: "listener" }, rpc, getSession } = {}) {
     },
     Map, Set, Number, String, Promise
   };
-  vm.runInNewContext(`let currentUser=context.currentUser; const supabaseClient=context.supabaseClient;${app.slice(start, end)};context.load=loadHistoricalChartRatingSummaries;context.save=saveHistoricalChartEntryRating;`, { context, Map, Set, Number, String, Promise });
+  vm.runInNewContext(`let currentUser=context.currentUser; const supabaseClient=context.supabaseClient;${app.slice(start, end)};context.load=loadHistoricalChartRatingSummaries;context.save=saveHistoricalChartEntryRating;context.setUser=user=>{currentUser=user;};`, { context, Map, Set, Number, String, Promise });
   return context;
 }
 
@@ -35,6 +35,22 @@ test("summary loading batches once, caches results and preserves a personal zero
   assert.equal(first.get(12).personalRating, 0);
   assert.equal(first.get(12).communityAverage, 0);
   assert.equal(second.get(12).communityRatingCount, 1);
+});
+
+test("a late response from another viewer is discarded before it can enter the cache", async () => {
+  let resolveFirst;
+  let calls = 0;
+  const context = ratingContext({ rpc: async () => {
+    calls += 1;
+    if (calls === 1) return new Promise(resolve => { resolveFirst = resolve; });
+    return { data: [{ chart_entry_id: 12, community_average: 7, community_rating_count: 2, personal_rating: 9 }], error: null };
+  } });
+  const pending = context.load([12]);
+  context.setUser({ id: "second-listener" });
+  resolveFirst({ data: [{ chart_entry_id: 12, community_average: 7, community_rating_count: 2, personal_rating: 2 }], error: null });
+  const summaries = await pending;
+  assert.equal(calls, 2);
+  assert.equal(summaries.get(12).personalRating, 9);
 });
 
 test("successful writes refresh summaries only after persistence", async () => {

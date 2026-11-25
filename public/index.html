@@ -25,7 +25,7 @@
 
     var foundationStyles = document.createElement("link");
     foundationStyles.rel = "stylesheet";
-    foundationStyles.href = "bom-foundation.css?v=56&autocomplete=1";
+    foundationStyles.href = "bom-foundation.css?v=57&autocomplete=1";
     document.head.appendChild(foundationStyles);
 
   }
@@ -74,7 +74,7 @@
 </select>
    </nav>
  
-   <section class="card" id="authCard">
+   <section class="card hidden" id="authCard">
      <h2>Login / Sign up</h2>
 
      <div id="earlyAccessIntro" class="early-access-intro hidden">
@@ -627,13 +627,25 @@
   <script src="bom-apple-music-playlist.js?v=3"></script>
   <script src="artist-easter-eggs.js?v=1"></script>
   <script src="bom-email-announcements.js?v=2"></script>
-  <script src="app.js?v=198&autocomplete=2&search-autosave=1&listening-ui=6&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2"></script>
+  <script src="app.js?v=199&autocomplete=2&search-autosave=1&listening-ui=6&email-announcements=2&apple-playlists=2&amazon-music=1&soundiiz=2"></script>
   <script src="bom-admin-catalogue.js?v=10"></script>
 <script>
   if (new URLSearchParams(window.location.search).get("ui") !== "legacy") {
     var foundationScript = document.createElement("script");
-    foundationScript.src = "bom-foundation.js?v=11&autocomplete=2";
+    foundationScript.src = "bom-foundation.js?v=12&autocomplete=2";
+    function restoreAuthenticationFallback() {
+      if (window.BOMPresentationBridge?.showAuthentication) {
+        void window.BOMPresentationBridge.showAuthentication("Sign in or request access to continue.");
+      } else {
+        document.getElementById("authCard")?.classList.remove("hidden");
+      }
+    }
+    foundationScript.addEventListener("error", restoreAuthenticationFallback);
     foundationScript.addEventListener("load", function () {
+      if (!document.querySelector(".bom-v1-account-button")) {
+        restoreAuthenticationFallback();
+        return;
+      }
       var albumScript = document.createElement("script");
       albumScript.src = "bom-album.js?v=10";
       albumScript.addEventListener("load", function () {
@@ -641,7 +653,7 @@
         artistScript.src = "bom-artist.js?v=11";
         artistScript.addEventListener("load", function () {
           var discoverScript = document.createElement("script");
-          discoverScript.src = "bom-discover.js?v=16&history=10&bond=2&christmas=2";
+          discoverScript.src = "bom-discover.js?v=17&history=10&bond=2&christmas=2";
           discoverScript.addEventListener("load", function () {
             var chartsScript = document.createElement("script");
             chartsScript.src = "bom-charts.js?v=3";

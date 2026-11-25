@@ -72,14 +72,14 @@ function renderDiscover(enabled) {
   return window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
 }
 
-test("disabled flag produces no card, while activation inserts it above Quick Rate", () => {
+test("disabled flag produces no card, while activation keeps Bond after Quick Rate", () => {
   assert.doesNotMatch(renderDiscover(false), /data-bom-bond-banner/);
   const enabled = renderDiscover(true);
   assert.match(enabled, /A NEW BOND\.<br>THE LEGENDARY MUSIC\./);
   assert.match(enabled, /Robert Pattinson is the new 007\. Rate the iconic themes that made Bond legendary\./);
   assert.match(enabled, /RATE THE BOND THEMES/);
-  assert(enabled.indexOf("data-bom-bond-banner") < enabled.indexOf("data-bom-discovery-carousel"));
-  assert(enabled.indexOf("data-bom-bond-banner") < enabled.indexOf("Quick rate"));
+  assert(enabled.indexOf("data-bom-discovery-carousel") < enabled.indexOf("data-bom-bond-banner"));
+  assert(enabled.indexOf("Quick rate") < enabled.indexOf("data-bom-bond-banner"));
 });
 
 test("disabled Discover startup does not load Bond assets or make Bond data calls", () => {

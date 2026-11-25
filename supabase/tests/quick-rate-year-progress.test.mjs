@@ -13,6 +13,10 @@ const chronologyMigration = await readFile(
   new URL("../migrations/20261123120000_fix_uk_number_ones_chronology.sql", import.meta.url),
   "utf8"
 );
+const guestAccessMigration = await readFile(
+  new URL("../migrations/20261125120000_enable_guest_quick_rate_browsing.sql", import.meta.url),
+  "utf8"
+);
 
 const USER_ID = "11111111-1111-4111-8111-111111111111";
 const VERIFIED_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
@@ -129,6 +133,7 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
 
     await db.exec(progressMigration);
     await db.exec(chronologyMigration);
+    await db.exec(guestAccessMigration);
     const result = (await db.query(
       "select public.get_quick_rate_year('uk-number-ones', 2026) result"
     )).rows[0].result;
@@ -173,6 +178,25 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
       [1, 1, 0]
     );
 
+    await db.exec(`
+      grant select on public.albums, public.canonical_recordings, public.songs,
+        public.song_ratings, public.quick_rate_collection_tracks to anon;
+      grant usage on schema auth to anon;
+      grant execute on function auth.uid() to anon;
+      select set_config('request.jwt.claim.sub', '', false);
+      set role anon;
+    `);
+    const guestResult = (await db.query(
+      "select public.get_quick_rate_year('bom-tracks', 2026) result"
+    )).rows[0].result;
+    await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${USER_ID}', false);`);
+    assert.equal(Number(guestResult.overall_rated), 0);
+    assert(guestResult.entries.every((entry) => entry.personal_rating === null));
+    assert.deepEqual(
+      guestResult.entries.map((entry) => Number(entry.community_rating_count)),
+      [1, 1, 0]
+    );
+
     const ratingsAfter = (await db.query(`select
       id, user_id::text, song_id, canonical_song_id::text, rating::text
       from public.song_ratings order by id`
@@ -183,7 +207,7 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
       has_function_privilege('anon', 'public.get_quick_rate_year(text,integer)', 'execute') anon_execute,
       has_function_privilege('authenticated', 'public.get_quick_rate_year(text,integer)', 'execute') authenticated_execute`
     )).rows[0];
-    assert.deepEqual(privileges, { anon_execute: false, authenticated_execute: true });
+    assert.deepEqual(privileges, { anon_execute: true, authenticated_execute: true });
   } finally {
     await db.close();
   }

@@ -17,7 +17,7 @@
   const christmasEnabled = (now = new Date()) => window.BOM_CHRISTMAS_FEATURE?.isEligible?.(now) === true;
   const christmasBanner = () => christmasEnabled() ? `<section class="bom-christmas-banner" data-bom-christmas-banner aria-labelledby="bomChristmasBannerTitle"><div aria-hidden="true">✦</div><div><p>THE BANK OF MUSIC PRESENTS</p><h2 id="bomChristmasBannerTitle">THE CHRISTMAS TOP 100</h2><span>Festive favourites, ranked by the BOM community.</span></div><button type="button" data-bom-action="christmas-special">OPEN THE CHRISTMAS SPECIAL <span aria-hidden="true">→</span></button></section>` : "";
   const anniversaries = new Set([10,20,25,30,40,50]);
-  let data, loading, dataRefreshComplete = false, index = 0, timer = 0, numberOneTimer = 0, numberOneTransitionTimer = 0, numberOneIndex = 0, christmasSeasonTimer = 0, lastDiscoverModel = null, resumeAt = 0, historicalSelectionPending = false, historicalRatingPending = false, historicalDetailItem = null, historicalDetailToken = 0;
+  let data, loading, dataViewerKey = "", dataRefreshComplete = false, index = 0, timer = 0, numberOneTimer = 0, numberOneTransitionTimer = 0, numberOneIndex = 0, christmasSeasonTimer = 0, lastDiscoverModel = null, resumeAt = 0, historicalSelectionPending = false, historicalRatingPending = false, historicalDetailItem = null, historicalDetailToken = 0;
 
   function londonParts(value = new Date()) {
     const p = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone:"Europe/London", year:"numeric", month:"2-digit", day:"2-digit" }).formatToParts(value).map(x => [x.type,x.value]));
@@ -39,7 +39,8 @@
     const existing = root?.querySelector?.("[data-bom-christmas-banner]");
     const eligible = christmasEnabled();
     if (root && lastDiscoverModel?.authenticated && eligible && !existing) {
-      root.querySelector(".bom-v1-discover-intro")?.insertAdjacentHTML("afterend", christmasBanner());
+      (root.querySelector(".bom-v1-discovery-carousel") || root.querySelector(".bom-v1-discover-intro"))
+        ?.insertAdjacentHTML("afterend", christmasBanner());
     } else if (!eligible && existing) {
       existing.remove();
       document.getElementById("bomChristmasSpecial")?.close?.();
@@ -115,15 +116,20 @@
     return `<section class="bom-v1-discovery-carousel" data-bom-discovery-carousel aria-label="Discover music through the years" tabindex="0"><header><span><i aria-hidden="true">◉</i> Discover music through the years</span><div>${slides.map((_,i)=>`<button data-bom-carousel-go="${i}" aria-label="Show feature ${i+1}" aria-current="${i===index}"></button>`).join("")}</div></header><div class="bom-v1-discovery-viewport"><div class="bom-v1-discovery-track" style="--bom-slide:${index}">${slides.map((s,i)=>`<article class="bom-v1-discovery-slide${s[7]==="chart"?" is-chart":""}" aria-hidden="${i!==index}"${i!==index?" inert":""}>${s[7]==="chart"?`<div class="bom-v1-number-one-artwork" data-bom-number-one-artwork>${s[5]}</div>`:s[5]}<div class="bom-v1-discovery-content"><p class="bom-v1-discovery-label">${esc(s[0])}</p><h2${s[7]==="chart"?' data-bom-number-one-title':''}>${esc(s[1])}</h2><p class="bom-v1-discovery-copy"${s[7]==="chart"?' data-bom-number-one-copy':''}>${esc(s[2])}</p>${carouselActions(s,one)}${s[6]?`<ul class="bom-v1-discovery-features" aria-label="Quick Rate features">${s[6].map(feature=>`<li>${esc(feature)}</li>`).join("")}</ul>`:""}</div></article>`).join("")}</div><button class="bom-v1-discovery-next" data-bom-carousel-next aria-label="Next feature">→</button></div></section>`;
   }
   function render(model) {
+    syncHistoricalViewer();
     lastDiscoverModel = model;
     scheduleChristmasSeasonCheck();
     const groups=model.groups||[], general=model.general||[], has=groups.some(g=>g.albums.length)||general.length;
-    return `<article class="bom-v1-discover" data-bom-discover><header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>${model.authenticated?`${christmasBanner()}${bondBanner()}`:""}${gamesTeaser(model.authenticated)}${model.authenticated?carousel():""}${has?`${general.length?`<section class="bom-v1-discover-section"><header class="bom-v1-discover-section-heading"><div><h2>Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general,"Albums to rate next")}</section>`:""}${groups.map(g=>`<section class="bom-v1-discover-group"><header class="bom-v1-discover-group-heading"><p>Because you rated <strong>${esc(g.reason.title)}</strong> ${esc(g.reason.rating)} / 10</p></header>${albumRow(g.albums,`Recommendations because you rated ${g.reason.title}`)}</section>`).join("")}`:window.BOMUI.SectionState({title:model.authenticated?"Your next record is waiting.":"Sign in to make Discover yours.",message:"Search or rate music to start building recommendations.",actionLabel:"Search the collection",action:"discover-search"})}</article>`;
+    return `<article class="bom-v1-discover" data-bom-discover><header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Old favourites. New obsessions. Your next great record.</p></div><span>The Bank of Music<br>A life in records</span></header>${carousel()}${model.authenticated?`${christmasBanner()}${bondBanner()}`:""}${gamesTeaser(model.authenticated)}${has?`${general.length?`<section class="bom-v1-discover-section"><header class="bom-v1-discover-section-heading"><div><h2>Your next listen</h2><p>Records to make time for.</p></div></header>${albumRow(general,"Albums to rate next")}</section>`:""}${groups.map(g=>`<section class="bom-v1-discover-group"><header class="bom-v1-discover-group-heading"><p>Because you rated <strong>${esc(g.reason.title)}</strong> ${esc(g.reason.rating)} / 10</p></header>${albumRow(g.albums,`Recommendations because you rated ${g.reason.title}`)}</section>`).join("")}`:window.BOMUI.SectionState({title:model.authenticated?"Your next record is waiting.":"Sign in to make Discover yours.",message:"Search or rate music to start building recommendations.",actionLabel:"Search the collection",action:"discover-search"})}</article>`;
   }
   function history(type) {
     const albums=type==="released", rows=albums?releases(data?.albums):numberOnes(data?.numberOnes), groups=new Map();
     rows.forEach(row=>{const key=albums?row.year:Math.floor(row.chart_year/10)*10;groups.set(key,[...(groups.get(key)||[]),row]);});
     return `<article class="bom-v1-discover bom-v1-history"><button class="bom-v1-history-back" data-bom-action="history-back">← Back to Discover</button><header><p class="bom-v1-discover-eyebrow">Discover music through the years</p><h1>${albums?"Released This Week":"UK No.1s This Week"}</h1><p>${albums?"Verified original album releases matching this Monday–Sunday calendar week.":"Verified singles whose actual UK No.1 run covered this calendar week."}</p></header>${rows.length?[...groups].map(([key,items])=>`<section><h2>${albums?key:`${key}s`}</h2><div class="bom-v1-history-grid">${items.map(item=>historyCard(item,albums)).join("")}</div></section>`).join(""):`<div class="bom-v1-history-empty"><h2>No verified matches yet</h2><p>${albums?"BOM needs more complete MusicBrainz release-group first-release dates for this week.":"The existing UK No.1 evidence has no chart run covering this week."}</p></div>`}</article>`;
+  }
+  function historyLoadError(type) {
+    const action=type==="released"?"released-week":"number-ones-week";
+    return `<article class="bom-v1-discover bom-v1-history"><button class="bom-v1-history-back" data-bom-action="history-back">← Back to Discover</button>${window.BOMUI.SectionState({title:"Music history couldn’t load.",message:"Check your connection and try again.",actionLabel:"Try again",action})}</article>`;
   }
   function historyCard(item, albums) {
     const destination = albums ? item.id : item.resolvedSongId;
@@ -225,6 +231,7 @@
     return true;
   }
   function openHistoricalDetail(item,{origin="history",trigger=null}={}) {
+    syncHistoricalViewer();
     if(!item||historicalSelectionPending)return;
     historicalSelectionPending=true;
     if(openResolvedNumberOne(item,{origin,trigger})){historicalSelectionPending=false;return;}
@@ -233,7 +240,50 @@
     displayHistoricalDetail(item,{origin});
     historicalSelectionPending=false;
   }
-  function load() { if(!loading) loading=Promise.resolve(window.BOMPresentationBridge?.loadHistoricalDiscovery?.()).then(x=>data=x||{albums:[],numberOnes:[]}).catch(()=>data={albums:[],numberOnes:[]}); return loading; }
+  function historicalViewerKey() {
+    const state=window.BOMPresentationBridge?.getState?.();
+    return state?.viewerKey|| (state?.authenticated?"member":"guest");
+  }
+  function syncHistoricalViewer() {
+    const viewerKey=historicalViewerKey();
+    if(dataViewerKey===viewerKey)return viewerKey;
+    data=undefined;
+    loading=undefined;
+    dataRefreshComplete=false;
+    dataViewerKey=viewerKey;
+    numberOneIndex=0;
+    historicalDetailItem=null;
+    historicalDetailToken+=1;
+    historicalRatingPending=false;
+    return viewerKey;
+  }
+  function load() {
+    const viewerKey=syncHistoricalViewer();
+    if(data)return Promise.resolve(data);
+    if(!loading){
+      const request=Promise.resolve(window.BOMPresentationBridge?.loadHistoricalDiscovery?.()).then(result=>{
+        if(dataViewerKey!==viewerKey)return null;
+        data=result||{albums:[],numberOnes:[]};
+        return data;
+      }).catch(()=>null).finally(()=>{if(loading===request)loading=undefined;});
+      loading=request;
+    }
+    return loading;
+  }
+  function hydrateHistoricalCarousel(root) {
+    if(dataRefreshComplete)return;
+    void load().then(result=>{
+      if(!result||dataRefreshComplete)return;
+      const carousel=root?.matches?.("[data-bom-discovery-carousel]")?root:root?.querySelector?.("[data-bom-discovery-carousel]");
+      if(!carousel?.isConnected)return;
+      dataRefreshComplete=true;
+      window.BOMPresentationBridge?.rerenderDiscover?.();
+    });
+  }
+  function maybeHydrateHistoricalCarousel(root) {
+    const authenticated=lastDiscoverModel?.authenticated??window.BOMPresentationBridge?.getState?.().authenticated;
+    if(authenticated||index>0)hydrateHistoricalCarousel(root);
+  }
   function pauseCarousel() { clearTimeout(timer); clearTimeout(numberOneTimer); }
   function updateFeaturedNumberOne(root) {
     const entries=distinctNumberOnes(numberOnes(data?.numberOnes)), slide=root.querySelector(".bom-v1-discovery-slide.is-chart");
@@ -258,10 +308,55 @@
     numberOneTimer=setTimeout(()=>updateFeaturedNumberOne(root),10000);
   }
   function setCarousel(root) { root.querySelector(".bom-v1-discovery-track")?.style.setProperty("--bom-slide",index); root.querySelectorAll(".bom-v1-discovery-slide").forEach((x,i)=>{const inactive=i!==index;x.setAttribute("aria-hidden",inactive);x.toggleAttribute("inert",inactive);}); root.querySelectorAll("[data-bom-carousel-go]").forEach((x,i)=>x.setAttribute("aria-current",i===index)); }
-  function move(root,delta,manual=true){index=(index+delta+3)%3;if(manual)resumeAt=Date.now()+14000;setCarousel(root);activate(root);}
-  function activate(scope=document){pauseCarousel();const root=scope.querySelector?.("[data-bom-discovery-carousel]");if(!root)return;if(!root.dataset.ready){root.dataset.ready="1";let x=0;root.addEventListener("pointerdown",e=>{x=e.clientX;pauseCarousel();});root.addEventListener("pointerup",e=>{if(Math.abs(e.clientX-x)>45)move(root,e.clientX<x?1:-1);else activate(root.parentElement);});root.addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight"].includes(e.key)){e.preventDefault();move(root,e.key==="ArrowRight"?1:-1)}});root.addEventListener("mouseenter",pauseCarousel);root.addEventListener("focusin",pauseCarousel);root.addEventListener("mouseleave",()=>activate(root.parentElement));root.addEventListener("focusout",e=>{if(!root.contains(e.relatedTarget))activate(root.parentElement);});}if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&Date.now()>=resumeAt)timer=setTimeout(()=>move(root,1,false),7000);scheduleNumberOneRotation(root);}
-  function updateRowControls(root=document){if(!root.querySelector?.(".bom-v1-historical-detail"))setHistoricalDetailHeading(false);root.querySelectorAll?.(".bom-v1-discover-row-shell").forEach(s=>{const r=s.querySelector(".bom-v1-discover-row"),p=s.querySelector(".is-previous"),n=s.querySelector(".is-next"),o=r.scrollWidth>r.clientWidth+2;p.hidden=!o||r.scrollLeft<=2;n.hidden=!o||r.scrollLeft+r.clientWidth>=r.scrollWidth-2;});activate(root);void load().then(()=>{if(!dataRefreshComplete&&root.querySelector?.("[data-bom-discovery-carousel]")){dataRefreshComplete=true;window.BOMPresentationBridge?.refreshDiscover?.();}});}
-  document.addEventListener("click",e=>{const scroll=e.target.closest("[data-bom-discover-scroll]");if(scroll){document.getElementById(scroll.getAttribute("aria-controls"))?.scrollBy({left:+scroll.dataset.bomDiscoverScroll*500,behavior:"smooth"});return;}const car=e.target.closest("[data-bom-discovery-carousel]"),go=e.target.closest("[data-bom-carousel-go]");if(car&&go){index=+go.dataset.bomCarouselGo;resumeAt=Date.now()+14000;setCarousel(car);activate(car.parentElement);return;}if(car&&e.target.closest("[data-bom-carousel-next]")){move(car,1);return;}const featured=e.target.closest("[data-bom-featured-history-id]");if(featured){const item=distinctNumberOnes(numberOnes(data?.numberOnes)).find(row=>String(row.id)===featured.dataset.bomFeaturedHistoryId);if(item)openHistoricalDetail(item,{origin:"feature",trigger:featured});return;}const ratingButton=e.target.closest("[data-historical-rating-value],[data-historical-rating-clear]");if(ratingButton&&historicalDetailItem&&canRateHistoricalEntry(historicalDetailItem)&&!historicalRatingPending){const root=document.getElementById("recommendationsList"),isClear=ratingButton.hasAttribute("data-historical-rating-clear"),value=isClear?null:Number(ratingButton.dataset.historicalRatingValue),current=historicalDetailItem.provisionalRatingSummary?.personalRating;if(!isClear&&current!==null&&current!==undefined&&Number(current)===value)return;historicalRatingPending=true;updateHistoricalRatingPanel(historicalDetailItem,root,{pending:true});void window.BOMPresentationBridge?.saveHistoricalChartEntryRating?.(Number(historicalDetailItem.id),value).then(result=>{if(result?.ok){if(result.summary)historicalDetailItem.provisionalRatingSummary=result.summary;updateHistoricalRatingPanel(historicalDetailItem,root,{message:result.message||(isClear?"Rating cleared.":`Saved ${value} / 10.`)});}else updateHistoricalRatingPanel(historicalDetailItem,root,{message:result?.message||"Your rating could not be saved. Please try again."});}).catch(()=>updateHistoricalRatingPanel(historicalDetailItem,root,{message:"Your rating could not be saved. Please try again."})).finally(()=>{historicalRatingPending=false;});return;}const action=e.target.closest("[data-bom-action]")?.dataset.bomAction;if(action==="bond-special")void window.BOMPresentationBridge?.showBondSpecial?.();if(action==="quick-rate")window.BOMPresentationBridge?.showQuickRate();if(action==="browse-number-ones")window.BOMPresentationBridge?.showUKNumberOnes?.();if(action==="discover-search")window.BOMPresentationBridge?.showSearch();if(action==="history-back"||action==="discover-retry")window.BOMPresentationBridge?.refreshDiscover();if(action==="historical-detail-back"){window.history.back();return;}if(action==="released-week"||action==="number-ones-week")document.getElementById("recommendationsList").innerHTML=history(action==="released-week"?"released":"number");const a=e.target.closest(".bom-v1-history [data-album-id]");if(a)void window.BOMPresentationBridge?.openAlbumById(a.dataset.albumId);const t=e.target.closest(".bom-v1-history [data-track-id]");if(t?.dataset.trackId){const item=data?.numberOnes?.find(row=>String(row.id)===t.dataset.historyId);if(item)openHistoricalDetail(item,{origin:"history",trigger:t});else void window.BOMPresentationBridge?.openTrackById(t.dataset.trackId,t);return;}const historical=e.target.closest(".bom-v1-history [data-history-id]");if(historical){const item=data?.numberOnes?.find(row=>String(row.id)===historical.dataset.historyId);openHistoricalDetail(item);}});
+  function move(root,delta,manual=true){index=(index+delta+3)%3;if(manual)resumeAt=Date.now()+14000;setCarousel(root);maybeHydrateHistoricalCarousel(root);activate(root);}
+  function activate(scope=document){pauseCarousel();const root=scope.querySelector?.("[data-bom-discovery-carousel]");if(!root)return;if(!root.dataset.ready){root.dataset.ready="1";let x=0;root.addEventListener("pointerdown",e=>{x=e.clientX;pauseCarousel();});root.addEventListener("pointerup",e=>{if(Math.abs(e.clientX-x)>45)move(root,e.clientX<x?1:-1);else activate(root.parentElement);});root.addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight"].includes(e.key)){e.preventDefault();move(root,e.key==="ArrowRight"?1:-1)}});root.addEventListener("mouseenter",pauseCarousel);root.addEventListener("focusin",pauseCarousel);root.addEventListener("mouseleave",()=>activate(root.parentElement));root.addEventListener("focusout",e=>{if(!root.contains(e.relatedTarget))activate(root.parentElement);});}const authenticated=lastDiscoverModel?.authenticated??window.BOMPresentationBridge?.getState?.().authenticated;if(authenticated&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&Date.now()>=resumeAt)timer=setTimeout(()=>move(root,1,false),7000);scheduleNumberOneRotation(root);}
+  function handleHistoricalRatingClick(ratingButton) {
+    if(!ratingButton)return false;
+    if(!historicalDetailItem||!canRateHistoricalEntry(historicalDetailItem)||historicalRatingPending)return true;
+    const item=historicalDetailItem,viewerKey=historicalViewerKey(),detailToken=historicalDetailToken;
+    const root=document.getElementById("recommendationsList"),isClear=ratingButton.hasAttribute("data-historical-rating-clear"),value=isClear?null:Number(ratingButton.dataset.historicalRatingValue),current=item.provisionalRatingSummary?.personalRating;
+    if(!isClear&&current!==null&&current!==undefined&&Number(current)===value)return true;
+    const isCurrent=()=>historicalViewerKey()===viewerKey&&historicalDetailItem===item&&historicalDetailToken===detailToken;
+    historicalRatingPending=true;
+    updateHistoricalRatingPanel(item,root,{pending:true});
+    void Promise.resolve(window.BOMPresentationBridge?.saveHistoricalChartEntryRating?.(Number(item.id),value)).then(result=>{
+      if(!isCurrent())return;
+      if(result?.ok){if(result.summary)item.provisionalRatingSummary=result.summary;updateHistoricalRatingPanel(item,root,{message:result.message||(isClear?"Rating cleared.":`Saved ${value} / 10.`)});}
+      else updateHistoricalRatingPanel(item,root,{message:result?.message||"Your rating could not be saved. Please try again."});
+    }).catch(()=>{if(isCurrent())updateHistoricalRatingPanel(item,root,{message:"Your rating could not be saved. Please try again."});}).finally(()=>{if(isCurrent())historicalRatingPending=false;});
+    return true;
+  }
+  function updateRowControls(root=document){if(!root.querySelector?.(".bom-v1-historical-detail"))setHistoricalDetailHeading(false);root.querySelectorAll?.(".bom-v1-discover-row-shell").forEach(s=>{const r=s.querySelector(".bom-v1-discover-row"),p=s.querySelector(".is-previous"),n=s.querySelector(".is-next"),o=r.scrollWidth>r.clientWidth+2;p.hidden=!o||r.scrollLeft<=2;n.hidden=!o||r.scrollLeft+r.clientWidth>=r.scrollWidth-2;});activate(root);maybeHydrateHistoricalCarousel(root);}
+  document.addEventListener("click",e=>{
+    const scroll=e.target.closest("[data-bom-discover-scroll]");
+    if(scroll){document.getElementById(scroll.getAttribute("aria-controls"))?.scrollBy({left:+scroll.dataset.bomDiscoverScroll*500,behavior:"smooth"});return;}
+    const car=e.target.closest("[data-bom-discovery-carousel]"),go=e.target.closest("[data-bom-carousel-go]");
+    if(car&&go){index=+go.dataset.bomCarouselGo;resumeAt=Date.now()+14000;setCarousel(car);maybeHydrateHistoricalCarousel(car);activate(car.parentElement);return;}
+    if(car&&e.target.closest("[data-bom-carousel-next]")){move(car,1);return;}
+    const featured=e.target.closest("[data-bom-featured-history-id]");
+    if(featured){const item=distinctNumberOnes(numberOnes(data?.numberOnes)).find(row=>String(row.id)===featured.dataset.bomFeaturedHistoryId);if(item)openHistoricalDetail(item,{origin:"feature",trigger:featured});return;}
+    const ratingButton=e.target.closest("[data-historical-rating-value],[data-historical-rating-clear]");
+    if(handleHistoricalRatingClick(ratingButton))return;
+    const action=e.target.closest("[data-bom-action]")?.dataset.bomAction;
+    if(action==="bond-special"){void window.BOMPresentationBridge?.showBondSpecial?.();return;}
+    if(action==="quick-rate"){window.BOMPresentationBridge?.showQuickRate();return;}
+    if(action==="browse-number-ones"){window.BOMPresentationBridge?.showUKNumberOnes?.();return;}
+    if(action==="discover-search"){window.BOMPresentationBridge?.showSearch();return;}
+    if(action==="history-back"||action==="discover-retry"){window.BOMPresentationBridge?.refreshDiscover();return;}
+    if(action==="historical-detail-back"){window.history.back();return;}
+    if(action==="released-week"||action==="number-ones-week"){
+      const root=document.getElementById("recommendationsList"),type=action==="released-week"?"released":"number",viewerKey=historicalViewerKey();
+      if(root)root.innerHTML=skeleton();
+      void load().then(result=>{if(root&&historicalViewerKey()===viewerKey)root.innerHTML=result?history(type):historyLoadError(type);});
+      return;
+    }
+    const a=e.target.closest(".bom-v1-history [data-album-id]");
+    if(a)void window.BOMPresentationBridge?.openAlbumById(a.dataset.albumId);
+    const t=e.target.closest(".bom-v1-history [data-track-id]");
+    if(t?.dataset.trackId){const item=data?.numberOnes?.find(row=>String(row.id)===t.dataset.historyId);if(item)openHistoricalDetail(item,{origin:"history",trigger:t});else void window.BOMPresentationBridge?.openTrackById(t.dataset.trackId,t);return;}
+    const historical=e.target.closest(".bom-v1-history [data-history-id]");
+    if(historical){const item=data?.numberOnes?.find(row=>String(row.id)===historical.dataset.historyId);openHistoricalDetail(item);}
+  });
   document.addEventListener("keydown",e=>{const card=e.target.closest(".bom-v1-history-card,.bom-v1-music-card");if(card&&["Enter"," "].includes(e.key)){e.preventDefault();card.click();}});
   document.addEventListener("click", event => {
     const album = event.target.closest(".bom-v1-discover .bom-v1-music-card");
@@ -271,7 +366,35 @@
   }, true);
   document.addEventListener("click",e=>{const a=e.target.closest("[data-bom-discover-artist]");if(a){e.preventDefault();e.stopPropagation();void window.BOMPresentationBridge?.openArtist(a.dataset.bomDiscoverArtist);}},true);
   document.addEventListener("click",event=>{if(event.target.closest('[data-bom-action="christmas-special"]'))void window.BOMPresentationBridge?.showChristmasSpecial?.();},true);
-  window.addEventListener("popstate",event=>{if(event.state?.bomHistoricalDetail){const item=String(historicalDetailItem?.id)===String(event.state.historicalId)?historicalDetailItem:data?.numberOnes?.find(row=>String(row.id)===String(event.state.historicalId));if(item)displayHistoricalDetail(item,{origin:event.state.historicalOrigin||"history"});return;}if(!event.state?.bomHistoricalList)return;window.BOMPresentationBridge?.showSection?.("recommendationsSection");const root=document.getElementById("recommendationsList");root.innerHTML=history(event.state.bomHistoricalType||"number");window.requestAnimationFrame(()=>window.scrollTo({top:Number(event.state.scrollY||0),behavior:"auto"}));});
+  window.addEventListener("popstate",event=>{
+    if(event.state?.bomHistoricalDetail){
+      const viewerKey=syncHistoricalViewer(),historicalId=String(event.state.historicalId),origin=event.state.historicalOrigin||"history";
+      window.BOMPresentationBridge?.showSection?.("recommendationsSection");
+      const item=String(historicalDetailItem?.id)===historicalId?historicalDetailItem:data?.numberOnes?.find(row=>String(row.id)===historicalId);
+      if(item)displayHistoricalDetail(item,{origin});
+      else {
+        const root=document.getElementById("recommendationsList");
+        if(root)root.innerHTML=skeleton();
+        void load().then(result=>{
+          if(historicalViewerKey()!==viewerKey||!window.history.state?.bomHistoricalDetail||String(window.history.state.historicalId)!==historicalId)return;
+          const loadedItem=result?.numberOnes?.find(row=>String(row.id)===historicalId);
+          if(loadedItem)displayHistoricalDetail(loadedItem,{origin});
+          else if(root)root.innerHTML=historyLoadError("number");
+        });
+      }
+      return;
+    }
+    if(!event.state?.bomHistoricalList)return;
+    const viewerKey=syncHistoricalViewer(),type=event.state.bomHistoricalType||"number",scrollY=Number(event.state.scrollY||0);
+    window.BOMPresentationBridge?.showSection?.("recommendationsSection");
+    const root=document.getElementById("recommendationsList");
+    if(root)root.innerHTML=skeleton();
+    void load().then(result=>{
+      if(historicalViewerKey()!==viewerKey||!window.history.state?.bomHistoricalList||window.history.state.bomHistoricalType!==type)return;
+      if(root)root.innerHTML=result?history(type):historyLoadError(type);
+      window.requestAnimationFrame(()=>window.scrollTo({top:scrollY,behavior:"auto"}));
+    });
+  });
   const skeleton=()=>`<article class="bom-v1-discover" aria-busy="true"><header class="bom-v1-discover-intro"><div><p class="bom-v1-discover-eyebrow">Listen closely. Find something good.</p><h1>A world worth listening to.</h1><p>Finding records for you…</p></div></header></article>`;
   document.addEventListener("visibilitychange",()=>{if(document.hidden)pauseCarousel();else{syncChristmasSeason();activate(document);}});
   window.addEventListener("focus",syncChristmasSeason);
