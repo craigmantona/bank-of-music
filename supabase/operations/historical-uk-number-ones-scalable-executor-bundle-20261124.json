@@ -20,6 +20,7 @@
     "prior_operation_audit_rows": 60
   },
   "execution_contract": {
+    "required_transport": "direct-postgres-psql-v1",
     "max_in_flight": 1,
     "one_transaction_per_record": true,
     "continue_after_record_failure": true,
@@ -3156,5 +3157,5 @@
       }
     }
   ],
-  "bundle_sha256": "b38f13269736fb5b237258322ee237acec94850e4afde4e2ce479b31c4822e44"
+  "bundle_sha256": "5fd0e1f870ae0776805c92f82a86b95aaf4dce1f9a6e82f63cca2a4455f5585f"
 }

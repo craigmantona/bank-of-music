@@ -12,8 +12,12 @@ const applySource = await load("../operations/20261124_apply_scalable_uk_number_
 const rollbackSource = await load("../operations/20261124_rollback_scalable_uk_number_ones_record.sql");
 const ZERO_SHA = "0".repeat(64);
 
-function operationSql(source, record, mode, baseline = {}) {
-  const raw = stableJson({ bundle_sha256: bundle.bundle_sha256, executor_operation_key: bundle.operation_key, record });
+function operationSql(source, record, mode, baseline = {}, options = {}) {
+  const input = { bundle_sha256: bundle.bundle_sha256, executor_operation_key: bundle.operation_key, record };
+  const transport = Object.hasOwn(options, "executionTransport")
+    ? options.executionTransport : "direct-postgres-psql-v1";
+  if (transport !== undefined) input.execution_transport = transport;
+  const raw = stableJson(input);
   const base64 = Buffer.from(raw).toString("base64");
   return `set bom.approved_historical_reconciliation = '${mode}:${bundle.operation_key}:${bundle.bundle_sha256}:${ZERO_SHA}';\n${source
     .replace(/^\\set ON_ERROR_STOP on\s*/m, "")
@@ -89,6 +93,27 @@ async function fixture(record) {
   `);
   return db;
 }
+
+test("missing or NULL execution transport fails closed before database changes", async () => {
+  const record = bundle.records.find(item => item.mutation_payload.action === "import_verified" && item.mutation_payload.reuse_album_id === null);
+  for (const [source, mode] of [[applySource, "apply"], [rollbackSource, "rollback"]]) {
+    for (const executionTransport of [undefined, null]) {
+      const db = await fixture(record);
+      try {
+        await assert.rejects(
+          db.exec(operationSql(source, record, mode, {}, { executionTransport })),
+          /executor envelope shape failed/
+        );
+        await db.exec("rollback");
+        assert.equal((await db.query("select count(*)::int count from public.songs")).rows[0].count, 0);
+        assert.equal((await db.query("select count(*)::int count from private.historical_chart_reconciliation_operation_audit")).rows[0].count, 0);
+        assert.equal((await db.query("select match_status from public.quick_rate_collection_tracks")).rows[0].match_status, "unresolved");
+      } finally {
+        await db.close();
+      }
+    }
+  }
+});
 
 test("a reviewed import applies once, preserves ratings and rolls back exactly", async () => {
   const record = bundle.records.find(item => item.mutation_payload.action === "import_verified" && item.mutation_payload.reuse_album_id === null);
