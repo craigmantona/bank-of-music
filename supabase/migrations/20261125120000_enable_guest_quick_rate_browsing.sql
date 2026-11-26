@@ -1,4 +1,4 @@
-revoke all on function public.get_quick_rate_year(text, integer) from public;
+revoke all on function public.get_quick_rate_year(text, integer) from public, anon, authenticated;
 grant execute on function public.get_quick_rate_year(text, integer) to anon, authenticated;
 
 comment on function public.get_quick_rate_year(text, integer) is

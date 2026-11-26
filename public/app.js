@@ -13360,6 +13360,32 @@ function getQuickRateEntryRating(entry) {
     : entry?.song ? getYourSongRating(entry.song.id) : null;
 }
 
+function getQuickRateEntryTargetInput(entry) {
+  if (entry?.canonical_song_id) return `canonical-rating-${entry.canonical_song_id}`;
+  const songId = Number(entry?.song?.id);
+  return Number.isSafeInteger(songId) && songId > 0 ? `track-rating-${songId}` : "";
+}
+
+function getQuickRatePendingRatingResolution(pendingRating, entries, selectedFilter = "all") {
+  const targetInput = String(pendingRating?.targetInput || "");
+  const entryIdentity = String(pendingRating?.entryIdentity || "");
+  const targetEntry = (entries || []).find(entry =>
+    getQuickRateEntryTargetInput(entry) === targetInput
+      && (!entryIdentity || getQuickRateEntryIdentity(entry) === entryIdentity)
+  ) || null;
+  const storedRating = targetEntry ? getQuickRateEntryRating(targetEntry) : null;
+  const hasStoredRating = storedRating !== null && Number.isFinite(Number(storedRating));
+  return {
+    targetEntry,
+    targetInput,
+    entryIdentity: targetEntry ? getQuickRateEntryIdentity(targetEntry) : entryIdentity,
+    storedRating: hasStoredRating ? Number(storedRating) : null,
+    pendingRating: Number(pendingRating?.rating),
+    selectedFilter: hasStoredRating && selectedFilter === "unrated" ? "all" : selectedFilter,
+    requiresConfirmation: hasStoredRating
+  };
+}
+
 function getQuickRateProgress(entries, userId) {
   const rateable = entries.filter(entry => entry.status === "matched" && (entry.song || entry.canonical_song_id));
   const rateableIdentities = new Set(rateable.map(getQuickRateEntryIdentity));
@@ -13699,6 +13725,7 @@ const QUICK_RATE_PENDING_RATING_KEY = "bom.quick-rate.pending-rating.v1";
 const QUICK_RATE_PENDING_RATING_TTL_MS = 30 * 60 * 1000;
 let quickRatePendingRatingMemory = null;
 let quickRatePendingResumeId = "";
+let quickRatePendingResumePromise = null;
 
 function getQuickRateViewerKey() {
   return currentUser?.id ? `member:${currentUser.id}` : "guest";
@@ -13768,7 +13795,10 @@ function clearQuickRatePendingRating(expectedId = "") {
   const currentId = String(quickRatePendingRatingMemory?.id || "");
   if (expectedId && currentId && currentId !== expectedId) return false;
   quickRatePendingRatingMemory = null;
-  if (!expectedId || quickRatePendingResumeId === expectedId) quickRatePendingResumeId = "";
+  if (!expectedId || quickRatePendingResumeId === expectedId) {
+    quickRatePendingResumeId = "";
+    quickRatePendingResumePromise = null;
+  }
   try { window.sessionStorage?.removeItem(QUICK_RATE_PENDING_RATING_KEY); } catch { /* Storage is optional. */ }
   return true;
 }
@@ -13785,14 +13815,28 @@ async function resumePendingQuickRateRating() {
     pending = storeQuickRatePendingRating({ ...pending, claimedUserId: currentUser.id });
     if (!pending) return false;
   }
-  if (quickRatePendingResumeId === pending.id && document.getElementById("bomQuickRate")) return true;
+  if (quickRatePendingResumeId === pending.id) {
+    if (quickRatePendingResumePromise) return quickRatePendingResumePromise;
+    if (document.getElementById("bomQuickRate")) return true;
+  }
   quickRatePendingResumeId = pending.id;
-  showOnlySection("recommendationsSection");
-  await openQuickRate(
-    { ...pending.restoreState, pendingRating: pending },
-    { collectionHistoryOwned: Boolean(window.history.state?.bomQuickRateCollectionView) }
-  );
-  return true;
+  const resumePromise = (async () => {
+    showOnlySection("recommendationsSection");
+    await openQuickRate(
+      { ...pending.restoreState, pendingRating: pending },
+      { collectionHistoryOwned: Boolean(window.history.state?.bomQuickRateCollectionView) }
+    );
+    return true;
+  })();
+  quickRatePendingResumePromise = resumePromise;
+  try {
+    return await resumePromise;
+  } catch (error) {
+    if (quickRatePendingResumeId === pending.id) quickRatePendingResumeId = "";
+    throw error;
+  } finally {
+    if (quickRatePendingResumePromise === resumePromise) quickRatePendingResumePromise = null;
+  }
 }
 
 let quickRateHistoryRestore = null;
@@ -14040,6 +14084,7 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
   let restorePositionPending = Boolean(restoredState);
   let loadSequence = 0;
   let pendingRatingAttempted = false;
+  let pendingRatingReview = null;
   bindQuickRateCloseNavigation(dialog, { collectionHistoryOwned });
   dialog.showModal();
 
@@ -14117,6 +14162,10 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
           : buildCompactTrackRatingControl(song.id, rating)
             .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
         const identity = getQuickRateEntryIdentity(entry);
+        const targetInput = getQuickRateEntryTargetInput(entry);
+        const isPendingTarget = pendingRatingReview
+          && pendingRatingReview.targetInput === targetInput
+          && (!pendingRatingReview.entryIdentity || pendingRatingReview.entryIdentity === identity);
         const title = song ? song.title : recording?.title || entry.title;
         const artist = song ? song.artist : recording?.artist || entry.artist;
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
@@ -14155,11 +14204,16 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
             ? `<small class="bom-v1-quick-community">Community ${communityAverage.toFixed(1)} · ${communityCount} rating${communityCount === 1 ? "" : "s"}</small>`
             : `<small class="bom-v1-quick-community">No community ratings yet</small>`
           : "";
-        return `${sectionHeading}<article class="bom-v1-quick-row${expanded ? " is-expanded" : ""}" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
+        const pendingReview = isPendingTarget ? `<aside class="bom-v1-quick-pending-rating" data-quick-pending-rating role="status">
+          <div><strong>Rating ready to confirm</strong><span>Saved rating: ${pendingRatingReview.storedRating} / 10 · Pending selection: ${pendingRatingReview.pendingRating} / 10</span></div>
+          <div><button type="button" data-quick-confirm-pending="${escapeHtml(pendingRatingReview.id)}">${pendingRatingReview.storedRating === pendingRatingReview.pendingRating ? `Confirm ${pendingRatingReview.pendingRating} / 10` : `Use ${pendingRatingReview.pendingRating} / 10`}</button><button type="button" data-quick-amend-pending="${escapeHtml(pendingRatingReview.id)}">Choose another</button><button type="button" data-quick-keep-pending="${escapeHtml(pendingRatingReview.id)}">Keep ${pendingRatingReview.storedRating} / 10</button></div>
+        </aside>` : "";
+        return `${sectionHeading}<article class="bom-v1-quick-row${expanded ? " is-expanded" : ""}${isPendingTarget ? " has-pending-rating" : ""}" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
           <span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span>
           <div class="bom-v1-quick-thumb">${artwork || artistDestination?.imageUrl ? `<img src="${escapeHtml(artwork || artistDestination.imageUrl)}" alt="" loading="lazy" decoding="async" onerror="this.hidden=true">` : ""}<span aria-hidden="true">♪</span></div>
           <button type="button" class="bom-v1-quick-track" data-quick-expand aria-expanded="${expanded}" aria-label="${expanded ? "Collapse" : "Explore"} ${escapeHtml(title)} by ${escapeHtml(artist)}"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}${communityMeta}</button>
           <div class="bom-v1-quick-actions">${listen}<div class="bom-v1-quick-rating"><span class="bom-v1-quick-sr-only">Your rating${rating !== null ? `, ${rating} out of 10` : ""}</span>${control}</div></div>
+          ${pendingReview}
           ${discovery}
         </article>`;
       }).join("") : `<p class="bom-v1-quick-empty">${yearEntries.length ? `Everything rateable in ${selectedYear} has a rating.` : `No BOM catalogue tracks have an original release year of ${selectedYear}.`}</p>`}</div>${isNumberOnes ? '<p class="bom-v1-quick-source">Source: Wikimedia / Wikidata</p>' : ""}</section>`;
@@ -14194,6 +14248,20 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
       scrollTop: dialog.scrollTop,
       originIdentity: originIdentity || expandedIdentity
     };
+  }
+
+  function revealPendingQuickRateRating(review = pendingRatingReview) {
+    if (!review || !dialog.open) return;
+    window.requestAnimationFrame(() => {
+      if (!dialog.open || pendingRatingReview?.id !== review.id) return;
+      const row = [...card.querySelectorAll("[data-quick-identity]")].find(candidate =>
+        (!review.entryIdentity || candidate.dataset.quickIdentity === review.entryIdentity)
+          && candidate.querySelector(`[data-target-input="${CSS.escape(review.targetInput)}"]`)
+      );
+      if (!row) return;
+      row.scrollIntoView({ behavior: "smooth", block: "center" });
+      row.querySelector(`[data-quick-confirm-pending="${CSS.escape(review.id)}"]`)?.focus({ preventScroll: true });
+    });
   }
 
   dialog.saveRating = async (button) => {
@@ -14237,6 +14305,7 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
       const storedPendingRating = readQuickRatePendingRating();
       if (storedPendingRating?.targetInput === target) {
         clearQuickRatePendingRating(storedPendingRating.id);
+        if (pendingRatingReview?.id === storedPendingRating.id) pendingRatingReview = null;
       }
       if (!dialog.open || getQuickRateViewerKey() !== viewerKey) return true;
       if (previousRating === null && overallProgressOverride) {
@@ -14261,19 +14330,36 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
     if (!pendingRating || pendingRatingAttempted || !currentUser || getQuickRateViewerKey() !== viewerKey) return false;
     if (selectedCollection !== pendingRating.restoreState.selectedCollection || Number(selectedYear) !== Number(pendingRating.restoreState.selectedYear)) return false;
     pendingRatingAttempted = true;
+    const resolution = getQuickRatePendingRatingResolution(pendingRating, yearEntries, selectedFilter);
+    if (!resolution.targetEntry) {
+      status.textContent = "You’re signed in. Your pending rating is still saved; reload this year to try restoring it again.";
+      return false;
+    }
+    if (resolution.requiresConfirmation) {
+      selectedFilter = resolution.selectedFilter;
+      pendingRatingReview = {
+        id: pendingRating.id,
+        targetInput: resolution.targetInput,
+        entryIdentity: resolution.entryIdentity,
+        storedRating: resolution.storedRating,
+        pendingRating: resolution.pendingRating
+      };
+      render();
+      status.textContent = "Review your saved rating and pending selection before making a change.";
+      revealPendingQuickRateRating();
+      return false;
+    }
     const button = [...card.querySelectorAll("button[data-target-input][data-rating]")].find(candidate =>
-      candidate.dataset.targetInput === pendingRating.targetInput && Number(candidate.dataset.rating) === pendingRating.rating
+      candidate.dataset.targetInput === resolution.targetInput
+        && Number(candidate.dataset.rating) === resolution.pendingRating
+        && (!resolution.entryIdentity || candidate.closest("[data-quick-identity]")?.dataset.quickIdentity === resolution.entryIdentity)
     );
-    const rowIdentity = button?.closest("[data-quick-identity]")?.dataset.quickIdentity || "";
-    if (!button || (pendingRating.entryIdentity && rowIdentity !== pendingRating.entryIdentity)) {
-      clearQuickRatePendingRating(pendingRating.id);
-      status.textContent = "You’re signed in and your place is restored. Please choose the rating again.";
+    if (!button) {
+      status.textContent = "You’re signed in. Your pending rating is still saved; choose the year again to retry.";
       return false;
     }
     status.textContent = `Saving your ${pendingRating.rating} / 10 rating…`;
-    const saved = await dialog.saveRating(button);
-    if (saved) clearQuickRatePendingRating(pendingRating.id);
-    return saved;
+    return dialog.saveRating(button);
   }
 
   dialog.querySelector("[data-quick-collections]").addEventListener("click", event => {
@@ -14311,6 +14397,48 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
   });
 
   card.addEventListener("click", async event => {
+    const pendingAction = event.target.closest("[data-quick-confirm-pending], [data-quick-amend-pending], [data-quick-keep-pending]");
+    if (pendingAction) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const actionId = pendingAction.dataset.quickConfirmPending
+        || pendingAction.dataset.quickAmendPending
+        || pendingAction.dataset.quickKeepPending
+        || "";
+      const review = pendingRatingReview;
+      const storedPendingRating = readQuickRatePendingRating();
+      if (busy || !review || actionId !== review.id || storedPendingRating?.id !== review.id) return;
+      const row = pendingAction.closest("[data-quick-identity]");
+      if (!row || (review.entryIdentity && row.dataset.quickIdentity !== review.entryIdentity)) return;
+      if (pendingAction.matches("[data-quick-amend-pending]")) {
+        const control = [...row.querySelectorAll(".bom-v1-track-rating-control")].find(candidate =>
+          candidate.querySelector(`[data-target-input="${CSS.escape(review.targetInput)}"]`)
+        );
+        if (!control) return;
+        control.open = true;
+        control.querySelector(`[data-target-input="${CSS.escape(review.targetInput)}"][data-rating="${review.pendingRating}"]`)?.focus();
+        status.textContent = "Choose a rating to replace your saved score. Nothing changes until you select one.";
+        return;
+      }
+      if (pendingAction.matches("[data-quick-keep-pending]") || review.storedRating === review.pendingRating) {
+        clearQuickRatePendingRating(review.id);
+        pendingRatingReview = null;
+        render();
+        status.textContent = pendingAction.matches("[data-quick-keep-pending]")
+          ? `Kept your saved ${review.storedRating} / 10 rating.`
+          : `Confirmed your existing ${review.storedRating} / 10 rating.`;
+        return;
+      }
+      const ratingButton = [...row.querySelectorAll("button[data-target-input][data-rating]")].find(candidate =>
+        candidate.dataset.targetInput === review.targetInput && Number(candidate.dataset.rating) === review.pendingRating
+      );
+      if (!ratingButton) {
+        status.textContent = "Your pending selection is still saved. Choose another rating or try again.";
+        return;
+      }
+      await dialog.saveRating(ratingButton);
+      return;
+    }
     const historicalButton = event.target.closest("[data-quick-historical-id]");
     if (historicalButton) {
       const entry = yearEntries.find(row => String(row.id) === historicalButton.dataset.quickHistoricalId);
@@ -14408,6 +14536,12 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
     const clearButton = event.target.closest("[data-clear-track-rating]");
     const clearCanonicalButton = event.target.closest("[data-clear-canonical-rating]");
     if ((!clearButton && !clearCanonicalButton) || busy) return;
+    const clearRow = (clearButton || clearCanonicalButton).closest("[data-quick-identity]");
+    if (pendingRatingReview && clearRow
+      && (!pendingRatingReview.entryIdentity || clearRow.dataset.quickIdentity === pendingRatingReview.entryIdentity)) {
+      status.textContent = "Resolve the pending selection first: keep your saved rating or choose another score.";
+      return;
+    }
     event.preventDefault();
     event.stopImmediatePropagation();
     busy = true;

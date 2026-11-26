@@ -76,6 +76,153 @@ test('pending ratings preserve collection navigation and clear after a matching 
   assert.match(app, /function closeQuickRateForViewerTransition[\s\S]*?dialog\?\.open[\s\S]*?dialog\.close\(\)/);
 });
 
+test('returning members review saved and pending ratings while first-time targets keep the low-friction path', () => {
+  const ratings = new Map();
+  const context = vm.createContext({
+    getSongRatingIdentity: song => `song:${song.id}`,
+    getYourSongRating: songId => ratings.has(songId) ? ratings.get(songId) : null,
+    getYourCanonicalRecordingRating: canonicalId => ratings.has(canonicalId) ? ratings.get(canonicalId) : null
+  });
+  vm.runInContext(extract('function getQuickRateEntryIdentity', 'function getQuickRateProgress'), context);
+  const ratedEntry = { status: 'matched', canonical_song_id: 'canonical-1', song: { id: 7 } };
+  const unratedEntry = { status: 'matched', canonical_song_id: 'canonical-2', song: { id: 8 } };
+  ratings.set('canonical-1', 6);
+
+  const returning = context.getQuickRatePendingRatingResolution({
+    targetInput: 'canonical-rating-canonical-1', entryIdentity: 'canonical:canonical-1', rating: 8
+  }, [ratedEntry, unratedEntry], 'unrated');
+  assert.equal(returning.targetEntry, ratedEntry);
+  assert.equal(returning.storedRating, 6);
+  assert.equal(returning.pendingRating, 8);
+  assert.equal(returning.selectedFilter, 'all');
+  assert.equal(returning.requiresConfirmation, true);
+
+  const firstRating = context.getQuickRatePendingRatingResolution({
+    targetInput: 'canonical-rating-canonical-2', entryIdentity: 'canonical:canonical-2', rating: 9
+  }, [ratedEntry, unratedEntry], 'unrated');
+  assert.equal(firstRating.targetEntry, unratedEntry);
+  assert.equal(firstRating.storedRating, null);
+  assert.equal(firstRating.selectedFilter, 'unrated');
+  assert.equal(firstRating.requiresConfirmation, false);
+
+  const identityMismatch = context.getQuickRatePendingRatingResolution({
+    targetInput: 'canonical-rating-canonical-1', entryIdentity: 'canonical:different', rating: 8
+  }, [ratedEntry], 'unrated');
+  assert.equal(identityMismatch.targetEntry, null);
+});
+
+test('restored rated targets remain pending until an explicit confirm, amendment, or keep action', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /getQuickRatePendingRatingResolution\(pendingRating, yearEntries, selectedFilter\)/);
+  assert.match(quickRate, /resolution\.requiresConfirmation[\s\S]*?selectedFilter = resolution\.selectedFilter[\s\S]*?pendingRatingReview = \{[\s\S]*?storedRating: resolution\.storedRating[\s\S]*?pendingRating: resolution\.pendingRating[\s\S]*?render\(\)/);
+  assert.match(quickRate, /Saved rating: \$\{pendingRatingReview\.storedRating\} \/ 10 · Pending selection: \$\{pendingRatingReview\.pendingRating\} \/ 10/);
+  assert.match(quickRate, /data-quick-confirm-pending[\s\S]*?data-quick-amend-pending[\s\S]*?data-quick-keep-pending/);
+  assert.match(quickRate, /pendingAction\.matches\("\[data-quick-amend-pending\]"\)[\s\S]*?control\.open = true/);
+  assert.match(quickRate, /pendingAction\.matches\("\[data-quick-keep-pending\]"\) \|\| review\.storedRating === review\.pendingRating[\s\S]*?clearQuickRatePendingRating\(review\.id\)/);
+  assert.match(quickRate, /await dialog\.saveRating\(ratingButton\)/);
+  assert.match(quickRate, /pendingRatingReview && clearRow[\s\S]*?Resolve the pending selection first/);
+  assert.doesNotMatch(quickRate, /if \(!resolution\.targetEntry\)[\s\S]{0,240}clearQuickRatePendingRating/);
+  assert.match(styles, /bom-v1-quick-pending-rating[\s\S]*?data-quick-confirm-pending/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-pending-rating button \{ min-width: 0; min-height: 44px/);
+});
+
+test('cancelled authentication retains the exact pending Quick Rate context', async () => {
+  const storage = new Map();
+  const context = vm.createContext({
+    currentUser: null,
+    Date,
+    Math,
+    document: { getElementById: () => null },
+    showOnlySection() {},
+    openQuickRate() { throw new Error('must not open without a member'); },
+    window: {
+      history: { state: null },
+      sessionStorage: {
+        setItem(key, value) { storage.set(key, value); },
+        getItem(key) { return storage.get(key) || null; },
+        removeItem(key) { storage.delete(key); }
+      }
+    }
+  });
+  const pendingSource = extract('const QUICK_RATE_PENDING_RATING_KEY', 'let quickRateHistoryRestore');
+  vm.runInContext(`${pendingSource}\nthis.pendingApi={storeQuickRatePendingRating,readQuickRatePendingRating,resumePendingQuickRateRating};`, context);
+  const pending = context.pendingApi.storeQuickRatePendingRating({
+    id: 'cancelled-auth', issuedAt: Date.now(), targetInput: 'track-rating-44', rating: 7,
+    entryIdentity: 'song:44', title: 'Still here',
+    restoreState: { selectedCollection: 'bom-tracks', selectedYear: 2004, selectedFilter: 'unrated', pickerDecade: 2000, scrollTop: 160 }
+  });
+  assert.equal(await context.pendingApi.resumePendingQuickRateRating(), false);
+  const restored = context.pendingApi.readQuickRatePendingRating();
+  assert.deepEqual({
+    id: restored.id, targetInput: restored.targetInput, rating: restored.rating,
+    identity: restored.entryIdentity, year: restored.restoreState.selectedYear,
+    collection: restored.restoreState.selectedCollection, filter: restored.restoreState.selectedFilter
+  }, {
+    id: pending.id, targetInput: 'track-rating-44', rating: 7,
+    identity: 'song:44', year: 2004, collection: 'bom-tracks', filter: 'unrated'
+  });
+});
+
+test('unsuccessful authentication cannot clear or submit a pending rating', async () => {
+  let profileLoads = 0;
+  let ratingWrites = 0;
+  const context = vm.createContext({
+    currentUser: null,
+    emailInput: { value: 'member@example.com' },
+    passwordInput: { value: 'wrong' },
+    authMessage: { classList: { toggle() {} } },
+    passwordRecovery: { clear() {} },
+    authCaptcha: { async getToken() { return ''; }, reset() {} },
+    supabaseClient: { auth: { async signInWithPassword() { return { data: null, error: { code: 'invalid_credentials', message: 'Invalid login credentials' } }; } } },
+    setMessage() {},
+    async ensureUserProfile() { profileLoads += 1; },
+    updateSessionUI() {}, async loadLibrary() {}, renderLibrary() {}, renderRecommendations() {}, async renderSelectedItem() {},
+    saveTrackRating() { ratingWrites += 1; }
+  });
+  vm.runInContext(`${extract('async function logIn()', 'async function logOut()')}\nthis.logIn=logIn;`, context);
+  await context.logIn();
+  assert.equal(context.currentUser, null);
+  assert.equal(profileLoads, 0);
+  assert.equal(ratingWrites, 0);
+  assert.doesNotMatch(extract('async function logIn()', 'async function logOut()'), /clearQuickRatePendingRating/);
+});
+
+test('duplicate successful authentication events coalesce one pending-rating restoration', async () => {
+  const storage = new Map();
+  let opens = 0;
+  const context = vm.createContext({
+    currentUser: { id: 'member-1' },
+    Date,
+    Math,
+    setTimeout,
+    document: { getElementById: () => null },
+    showOnlySection() {},
+    async openQuickRate() { opens += 1; await new Promise(resolve => setTimeout(resolve, 10)); },
+    window: {
+      history: { state: null },
+      sessionStorage: {
+        setItem(key, value) { storage.set(key, value); },
+        getItem(key) { return storage.get(key) || null; },
+        removeItem(key) { storage.delete(key); }
+      }
+    }
+  });
+  const pendingSource = extract('const QUICK_RATE_PENDING_RATING_KEY', 'let quickRateHistoryRestore');
+  vm.runInContext(`${pendingSource}\nthis.pendingApi={storeQuickRatePendingRating,resumePendingQuickRateRating};`, context);
+  context.pendingApi.storeQuickRatePendingRating({
+    id: 'one-resume', issuedAt: Date.now(), targetInput: 'track-rating-45', rating: 8,
+    entryIdentity: 'song:45', title: 'Once only',
+    restoreState: { selectedCollection: 'bom-tracks', selectedYear: 2005, selectedFilter: 'all', pickerDecade: 2000, scrollTop: 0 }
+  });
+  const [first, second] = await Promise.all([
+    context.pendingApi.resumePendingQuickRateRating(),
+    context.pendingApi.resumePendingQuickRateRating()
+  ]);
+  assert.equal(first, true);
+  assert.equal(second, true);
+  assert.equal(opens, 1);
+});
+
 test('Quick Rate excludes own track ratings, deleted and duplicate tracks without mutating catalogue', () => {
   const recordingId = 'cae8bbec-c2ff-4972-9218-8f90acb07b1b';
   const songs = [
