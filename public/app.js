@@ -137,6 +137,8 @@ function loadHistoricalCoverAllowlist() {
 }
 
 let currentUser = null;
+const initialPageParams = new URLSearchParams(window.location.search);
+let authenticationRequested = initialPageParams.has("invitation") || initialPageParams.get("ui") === "legacy";
 let missingArtistArtworkRows = null;
 let missingArtistArtworkFilter = "all";
 
@@ -638,6 +640,7 @@ function normaliseHistoricalChartRatingSummary(row, chartEntryId) {
 
 async function loadHistoricalChartRatingSummaries(chartEntryIds, { force = false } = {}) {
   resetHistoricalChartRatingCacheForViewer();
+  const viewer = historicalChartRatingViewer;
   const ids = [...new Set((chartEntryIds || []).map(Number).filter(id => Number.isSafeInteger(id) && id > 0))];
   const missing = force ? ids : ids.filter(id => !historicalChartRatingSummaries.has(id));
   for (let offset = 0; offset < missing.length; offset += 250) {
@@ -646,8 +649,14 @@ async function loadHistoricalChartRatingSummaries(chartEntryIds, { force = false
       p_chart_entry_ids: batch
     });
     if (error) throw error;
+    if (getHistoricalChartRatingViewer() !== viewer) {
+      return loadHistoricalChartRatingSummaries(ids, { force });
+    }
     const byId = new Map((rows || []).map(row => [Number(row.chart_entry_id), row]));
     batch.forEach(id => historicalChartRatingSummaries.set(id, normaliseHistoricalChartRatingSummary(byId.get(id), id)));
+  }
+  if (getHistoricalChartRatingViewer() !== viewer) {
+    return loadHistoricalChartRatingSummaries(ids, { force });
   }
   return new Map(ids.map(id => [id, historicalChartRatingSummaries.get(id) || normaliseHistoricalChartRatingSummary(null, id)]));
 }
@@ -1203,6 +1212,7 @@ window.BOMPresentationBridge = Object.freeze({
     return showUserProfile();
   },
   logout: () => logOut(),
+  showAuthentication: (message) => showAuthentication(message),
   prepareAuthentication: () => authCaptcha?.initialize(),
   runSearch: (term) => {
     if (globalSearchInput) globalSearchInput.value = String(term || "");
@@ -1234,6 +1244,7 @@ window.BOMPresentationBridge = Object.freeze({
     await renderSelectedItem();
   },
   openArtist: (artistName) => window.openArtistPage(artistName),
+  rerenderDiscover: () => renderRecommendations(),
   refreshDiscover: () => refreshDiscoverUI(),
   refreshCharts: () => loadCharts(),
   refreshRatings: async () => {
@@ -1382,6 +1393,7 @@ window.BOMPresentationBridge = Object.freeze({
   },
   getState: () => ({
     authenticated: Boolean(currentUser),
+    viewerKey: getQuickRateViewerKey(),
     displayName: getUserDisplayName(),
     isAdmin: Boolean(isAdmin),
     currentSectionId,
@@ -2534,6 +2546,7 @@ function updateSessionUI() {
   if (passwordRecovery?.isActive()) return;
 
   if (currentUser) {
+    authenticationRequested = false;
     const displayName = getUserDisplayName();
 
     sessionStatus.innerHTML = `
@@ -2549,13 +2562,28 @@ function updateSessionUI() {
 
     sessionStatus.textContent = "Not logged in";
     sessionStatus.classList.remove("session-clickable");
-    authCard.classList.remove("hidden");
+    authCard.classList.toggle("hidden", !authenticationRequested);
   }
 
   updateAdminAccessUI();
   if (currentUser && isAdmin && window.BOM_DISABLE_OPTIONAL_EDGE_ADMIN_TOOLS !== true) {
     window.BOMEmailAnnouncements?.loadAdmin(supabaseClient);
   }
+}
+
+async function showAuthentication(message = "Sign in or request access to start rating music.") {
+  authenticationRequested = true;
+  authCard?.classList.remove("hidden");
+  if (message) setMessage(authMessage, message);
+  try {
+    await authCaptcha?.initialize();
+  } finally {
+    window.setTimeout(() => {
+      authCard?.scrollIntoView({ behavior: "smooth", block: "start" });
+      emailInput?.focus({ preventScroll: true });
+    }, 0);
+  }
+  return true;
 }
 
 function updateAdminAccessUI() {
@@ -3395,6 +3423,7 @@ async function refreshDiscoverUI() {
 }
 
 async function refreshSessionUI() {
+  const previousViewerKey = getQuickRateViewerKey();
   let session;
   try {
     const result = await supabaseClient.auth.getSession();
@@ -3402,6 +3431,7 @@ async function refreshSessionUI() {
     session = result.data.session;
   } catch (error) {
     currentUser = null;
+    closeQuickRateForViewerTransition(previousViewerKey);
     updateSessionUI();
     setMessage(authMessage, "Session error. Please try signing in again.");
     renderStageOneDiscoverError();
@@ -3409,11 +3439,14 @@ async function refreshSessionUI() {
   }
 
   currentUser = session ? session.user : null;
+  closeQuickRateForViewerTransition(previousViewerKey);
   if (passwordRecovery?.reconcileSession(session)) return true;
 
   await ensureUserProfile();
   updateSessionUI();
-  return refreshDiscoverUI();
+  const refreshed = await refreshDiscoverUI();
+  if (currentUser) await resumePendingQuickRateRating();
+  return refreshed;
 }
 
 
@@ -3584,6 +3617,8 @@ async function logOut() {
 
   try {
 
+    const previousViewerKey = getQuickRateViewerKey();
+
     passwordRecovery?.clear({ notify: false });
 
     const { error } = await supabaseClient.auth.signOut();
@@ -3601,6 +3636,9 @@ async function logOut() {
 
 
     currentUser = null;
+    closeQuickRateForViewerTransition(previousViewerKey);
+    authenticationRequested = false;
+    clearQuickRatePendingRating();
 
     updateSessionUI();
 
@@ -13322,6 +13360,32 @@ function getQuickRateEntryRating(entry) {
     : entry?.song ? getYourSongRating(entry.song.id) : null;
 }
 
+function getQuickRateEntryTargetInput(entry) {
+  if (entry?.canonical_song_id) return `canonical-rating-${entry.canonical_song_id}`;
+  const songId = Number(entry?.song?.id);
+  return Number.isSafeInteger(songId) && songId > 0 ? `track-rating-${songId}` : "";
+}
+
+function getQuickRatePendingRatingResolution(pendingRating, entries, selectedFilter = "all") {
+  const targetInput = String(pendingRating?.targetInput || "");
+  const entryIdentity = String(pendingRating?.entryIdentity || "");
+  const targetEntry = (entries || []).find(entry =>
+    getQuickRateEntryTargetInput(entry) === targetInput
+      && (!entryIdentity || getQuickRateEntryIdentity(entry) === entryIdentity)
+  ) || null;
+  const storedRating = targetEntry ? getQuickRateEntryRating(targetEntry) : null;
+  const hasStoredRating = storedRating !== null && Number.isFinite(Number(storedRating));
+  return {
+    targetEntry,
+    targetInput,
+    entryIdentity: targetEntry ? getQuickRateEntryIdentity(targetEntry) : entryIdentity,
+    storedRating: hasStoredRating ? Number(storedRating) : null,
+    pendingRating: Number(pendingRating?.rating),
+    selectedFilter: hasStoredRating && selectedFilter === "unrated" ? "all" : selectedFilter,
+    requiresConfirmation: hasStoredRating
+  };
+}
+
 function getQuickRateProgress(entries, userId) {
   const rateable = entries.filter(entry => entry.status === "matched" && (entry.song || entry.canonical_song_id));
   const rateableIdentities = new Set(rateable.map(getQuickRateEntryIdentity));
@@ -13650,11 +13714,129 @@ async function fetchQuickRateArtistIdentities(artistNames = []) {
   }))];
 }
 
-function enrichQuickRateArtistIdentities(dialog, userId, onReady, artistNames = []) {
+function enrichQuickRateArtistIdentities(dialog, viewerKey, onReady, artistNames = []) {
   return fetchQuickRateArtistIdentities(artistNames).then(identities => {
-    if (!dialog.open || currentUser?.id !== userId) return;
+    if (!dialog.open || getQuickRateViewerKey() !== viewerKey) return;
     onReady(identities || []);
   }).catch(() => {});
+}
+
+const QUICK_RATE_PENDING_RATING_KEY = "bom.quick-rate.pending-rating.v1";
+const QUICK_RATE_PENDING_RATING_TTL_MS = 30 * 60 * 1000;
+let quickRatePendingRatingMemory = null;
+let quickRatePendingResumeId = "";
+let quickRatePendingResumePromise = null;
+
+function getQuickRateViewerKey() {
+  return currentUser?.id ? `member:${currentUser.id}` : "guest";
+}
+
+function closeQuickRateForViewerTransition(previousViewerKey) {
+  if (!previousViewerKey || previousViewerKey === getQuickRateViewerKey()) return false;
+  const dialog = document.getElementById("bomQuickRate");
+  if (dialog?.open) dialog.close();
+  return Boolean(dialog);
+}
+
+function normaliseQuickRatePendingRating(value, now = Date.now()) {
+  const pending = value && typeof value === "object" ? value : null;
+  const targetInput = String(pending?.targetInput || "");
+  const targetIsTrack = /^track-rating-[1-9][0-9]*$/.test(targetInput);
+  const targetIsCanonical = /^canonical-rating-[0-9a-f-]{36}$/i.test(targetInput);
+  const rating = Number(pending?.rating);
+  const issuedAt = Number(pending?.issuedAt);
+  const restoreState = pending?.restoreState && typeof pending.restoreState === "object"
+    ? pending.restoreState
+    : null;
+  if (!pending?.id || (!targetIsTrack && !targetIsCanonical) || !Number.isInteger(rating) || rating < 1 || rating > 10) return null;
+  if (!Number.isFinite(issuedAt) || issuedAt > now || now - issuedAt > QUICK_RATE_PENDING_RATING_TTL_MS) return null;
+  if (!restoreState || !["bom-tracks", "uk-number-ones"].includes(restoreState.selectedCollection)) return null;
+  return {
+    id: String(pending.id),
+    issuedAt,
+    claimedUserId: String(pending.claimedUserId || ""),
+    targetInput,
+    rating,
+    entryIdentity: String(pending.entryIdentity || ""),
+    title: String(pending.title || "").slice(0, 160),
+    restoreState: {
+      selectedCollection: restoreState.selectedCollection,
+      selectedYear: Number.isInteger(Number(restoreState.selectedYear)) ? Number(restoreState.selectedYear) : null,
+      selectedFilter: restoreState.selectedFilter === "unrated" ? "unrated" : "all",
+      pickerDecade: Number.isInteger(Number(restoreState.pickerDecade)) ? Number(restoreState.pickerDecade) : null,
+      expandedIdentity: String(restoreState.expandedIdentity || ""),
+      lastNavigatedIdentity: String(restoreState.lastNavigatedIdentity || ""),
+      scrollTop: Number.isFinite(Number(restoreState.scrollTop)) ? Number(restoreState.scrollTop) : 0,
+      originIdentity: String(restoreState.originIdentity || "")
+    }
+  };
+}
+
+function storeQuickRatePendingRating(value) {
+  const pending = normaliseQuickRatePendingRating(value);
+  if (!pending) return null;
+  quickRatePendingRatingMemory = pending;
+  try { window.sessionStorage?.setItem(QUICK_RATE_PENDING_RATING_KEY, JSON.stringify(pending)); } catch { /* In-memory restoration still works. */ }
+  return pending;
+}
+
+function readQuickRatePendingRating() {
+  let stored = quickRatePendingRatingMemory;
+  try {
+    const raw = window.sessionStorage?.getItem(QUICK_RATE_PENDING_RATING_KEY);
+    if (raw) stored = JSON.parse(raw);
+  } catch { /* Fall back to the in-memory copy. */ }
+  const pending = normaliseQuickRatePendingRating(stored);
+  if (!pending && stored) clearQuickRatePendingRating();
+  return pending;
+}
+
+function clearQuickRatePendingRating(expectedId = "") {
+  const currentId = String(quickRatePendingRatingMemory?.id || "");
+  if (expectedId && currentId && currentId !== expectedId) return false;
+  quickRatePendingRatingMemory = null;
+  if (!expectedId || quickRatePendingResumeId === expectedId) {
+    quickRatePendingResumeId = "";
+    quickRatePendingResumePromise = null;
+  }
+  try { window.sessionStorage?.removeItem(QUICK_RATE_PENDING_RATING_KEY); } catch { /* Storage is optional. */ }
+  return true;
+}
+
+async function resumePendingQuickRateRating() {
+  if (!currentUser) return false;
+  let pending = readQuickRatePendingRating();
+  if (!pending) return false;
+  if (pending.claimedUserId && pending.claimedUserId !== currentUser.id) {
+    clearQuickRatePendingRating(pending.id);
+    return false;
+  }
+  if (!pending.claimedUserId) {
+    pending = storeQuickRatePendingRating({ ...pending, claimedUserId: currentUser.id });
+    if (!pending) return false;
+  }
+  if (quickRatePendingResumeId === pending.id) {
+    if (quickRatePendingResumePromise) return quickRatePendingResumePromise;
+    if (document.getElementById("bomQuickRate")) return true;
+  }
+  quickRatePendingResumeId = pending.id;
+  const resumePromise = (async () => {
+    showOnlySection("recommendationsSection");
+    await openQuickRate(
+      { ...pending.restoreState, pendingRating: pending },
+      { collectionHistoryOwned: Boolean(window.history.state?.bomQuickRateCollectionView) }
+    );
+    return true;
+  })();
+  quickRatePendingResumePromise = resumePromise;
+  try {
+    return await resumePromise;
+  } catch (error) {
+    if (quickRatePendingResumeId === pending.id) quickRatePendingResumeId = "";
+    throw error;
+  } finally {
+    if (quickRatePendingResumePromise === resumePromise) quickRatePendingResumePromise = null;
+  }
 }
 
 let quickRateHistoryRestore = null;
@@ -13747,7 +13929,7 @@ function mapQuickRateYearProjection(payload, userId) {
 
 async function loadQuickRateYearData(collection, year, userId) {
   const requestedYear = Number(year) || 0;
-  const key = `${userId}:${collection}:${requestedYear || "latest"}`;
+  const key = `${userId || "guest"}:${collection}:${requestedYear || "latest"}`;
   if (quickRateYearCache.has(key)) {
     return { ...quickRateYearCache.get(key) };
   }
@@ -13875,13 +14057,15 @@ function prepareQuickRateDialog(restoredState = null) {
 }
 
 async function openQuickRate(restoredState = null, { collectionHistoryOwned = false } = {}) {
-  if (!currentUser || !prepareQuickRateDialog(restoredState)) return;
-  const userId = currentUser.id;
+  if (!prepareQuickRateDialog(restoredState)) return;
+  const userId = currentUser?.id || null;
+  const viewerKey = getQuickRateViewerKey();
+  const pendingRating = currentUser ? normaliseQuickRatePendingRating(restoredState?.pendingRating) : null;
   const dialog = document.createElement("dialog");
   dialog.id = "bomQuickRate";
   dialog.className = "bom-v1-quick-rate bom-v1-album";
   dialog.setAttribute("aria-labelledby", "bomQuickRateTitle");
-  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK No.1s</h1><p class="bom-v1-quick-subtitle" data-quick-subtitle>Browse every UK chart-topper from 1952 to today and rate verified recordings</p></div><button type="button" data-quick-exit>Exit</button></header>
+  dialog.innerHTML = `<header><div><p class="bom-v1-quick-kicker">Quick Rate</p><h1 id="bomQuickRateTitle">UK No.1s</h1><p class="bom-v1-quick-subtitle" data-quick-subtitle>Browse every UK chart-topper from 1952 to today and rate verified recordings</p>${currentUser ? "" : '<p class="bom-v1-quick-guest-note">Browse freely. Sign in only when you choose a rating.</p>'}</div><button type="button" data-quick-exit>Exit</button></header>
     <div data-quick-collections role="group" aria-label="Choose a Quick Rate collection"><button type="button" data-quick-collection="bom-tracks" aria-pressed="false">BOM Tracks by Year</button><button type="button" data-quick-collection="uk-number-ones" aria-pressed="true">UK No.1s</button></div>
     <nav data-quick-years aria-label="Choose a UK singles year"></nav>
     <div data-quick-card></div><p data-quick-status role="status">Loading UK No.1s…</p>`;
@@ -13899,12 +14083,14 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
   let lastNavigatedIdentity = restoredState?.lastNavigatedIdentity || null;
   let restorePositionPending = Boolean(restoredState);
   let loadSequence = 0;
+  let pendingRatingAttempted = false;
+  let pendingRatingReview = null;
   bindQuickRateCloseNavigation(dialog, { collectionHistoryOwned });
   dialog.showModal();
 
   function render(focus = false) {
     if (!dialog.open) return;
-    if (currentUser?.id !== userId) { dialog.close(); return; }
+    if (getQuickRateViewerKey() !== viewerKey) { dialog.close(); return; }
     const isNumberOnes = selectedCollection === "uk-number-ones";
     const isBomTracks = selectedCollection === "bom-tracks";
     const selection = availableYears.length
@@ -13976,6 +14162,10 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
           : buildCompactTrackRatingControl(song.id, rating)
             .replaceAll('handleStarOptionClick(event, this)', 'handleQuickRateClick(event, this)');
         const identity = getQuickRateEntryIdentity(entry);
+        const targetInput = getQuickRateEntryTargetInput(entry);
+        const isPendingTarget = pendingRatingReview
+          && pendingRatingReview.targetInput === targetInput
+          && (!pendingRatingReview.entryIdentity || pendingRatingReview.entryIdentity === identity);
         const title = song ? song.title : recording?.title || entry.title;
         const artist = song ? song.artist : recording?.artist || entry.artist;
         const canonicalSpotify = recording?.preferred_spotify_track_id || "";
@@ -14014,11 +14204,16 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
             ? `<small class="bom-v1-quick-community">Community ${communityAverage.toFixed(1)} · ${communityCount} rating${communityCount === 1 ? "" : "s"}</small>`
             : `<small class="bom-v1-quick-community">No community ratings yet</small>`
           : "";
-        return `${sectionHeading}<article class="bom-v1-quick-row${expanded ? " is-expanded" : ""}" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
+        const pendingReview = isPendingTarget ? `<aside class="bom-v1-quick-pending-rating" data-quick-pending-rating role="status">
+          <div><strong>Rating ready to confirm</strong><span>Saved rating: ${pendingRatingReview.storedRating} / 10 · Pending selection: ${pendingRatingReview.pendingRating} / 10</span></div>
+          <div><button type="button" data-quick-confirm-pending="${escapeHtml(pendingRatingReview.id)}">${pendingRatingReview.storedRating === pendingRatingReview.pendingRating ? `Confirm ${pendingRatingReview.pendingRating} / 10` : `Use ${pendingRatingReview.pendingRating} / 10`}</button><button type="button" data-quick-amend-pending="${escapeHtml(pendingRatingReview.id)}">Choose another</button><button type="button" data-quick-keep-pending="${escapeHtml(pendingRatingReview.id)}">Keep ${pendingRatingReview.storedRating} / 10</button></div>
+        </aside>` : "";
+        return `${sectionHeading}<article class="bom-v1-quick-row${expanded ? " is-expanded" : ""}${isPendingTarget ? " has-pending-rating" : ""}" data-quick-entry="${entryIndex}" data-quick-identity="${escapeHtml(identity)}" tabindex="-1">
           <span class="bom-v1-quick-index">${yearEntries.indexOf(entry) + 1}</span>
           <div class="bom-v1-quick-thumb">${artwork || artistDestination?.imageUrl ? `<img src="${escapeHtml(artwork || artistDestination.imageUrl)}" alt="" loading="lazy" decoding="async" onerror="this.hidden=true">` : ""}<span aria-hidden="true">♪</span></div>
           <button type="button" class="bom-v1-quick-track" data-quick-expand aria-expanded="${expanded}" aria-label="${expanded ? "Collapse" : "Explore"} ${escapeHtml(title)} by ${escapeHtml(artist)}"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(artist)}${chartDate ? ` · ${escapeHtml(chartDate)}` : ""}</span>${album ? `<small>${escapeHtml(album.title)}</small>` : ""}${communityMeta}</button>
           <div class="bom-v1-quick-actions">${listen}<div class="bom-v1-quick-rating"><span class="bom-v1-quick-sr-only">Your rating${rating !== null ? `, ${rating} out of 10` : ""}</span>${control}</div></div>
+          ${pendingReview}
           ${discovery}
         </article>`;
       }).join("") : `<p class="bom-v1-quick-empty">${yearEntries.length ? `Everything rateable in ${selectedYear} has a rating.` : `No BOM catalogue tracks have an original release year of ${selectedYear}.`}</p>`}</div>${isNumberOnes ? '<p class="bom-v1-quick-source">Source: Wikimedia / Wikidata</p>' : ""}</section>`;
@@ -14042,11 +14237,60 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
     }
   }
 
+  function getCurrentQuickRateRestoreState(originIdentity = "") {
+    return {
+      selectedCollection,
+      selectedYear,
+      selectedFilter,
+      pickerDecade,
+      expandedIdentity,
+      lastNavigatedIdentity,
+      scrollTop: dialog.scrollTop,
+      originIdentity: originIdentity || expandedIdentity
+    };
+  }
+
+  function revealPendingQuickRateRating(review = pendingRatingReview) {
+    if (!review || !dialog.open) return;
+    window.requestAnimationFrame(() => {
+      if (!dialog.open || pendingRatingReview?.id !== review.id) return;
+      const row = [...card.querySelectorAll("[data-quick-identity]")].find(candidate =>
+        (!review.entryIdentity || candidate.dataset.quickIdentity === review.entryIdentity)
+          && candidate.querySelector(`[data-target-input="${CSS.escape(review.targetInput)}"]`)
+      );
+      if (!row) return;
+      row.scrollIntoView({ behavior: "smooth", block: "center" });
+      row.querySelector(`[data-quick-confirm-pending="${CSS.escape(review.id)}"]`)?.focus({ preventScroll: true });
+    });
+  }
+
   dialog.saveRating = async (button) => {
     const target = String(button.dataset.targetInput || "");
     const canonicalSongId = target.startsWith("canonical-rating-") ? target.replace("canonical-rating-", "") : "";
     const songId = target.startsWith("track-rating-") ? Number(target.replace("track-rating-", "")) : 0;
-    if (busy || currentUser?.id !== userId || (!songId && !canonicalSongId)) return;
+    const rating = Number(button.dataset.rating);
+    if (busy || (!songId && !canonicalSongId) || !Number.isInteger(rating) || rating < 1 || rating > 10) return false;
+    if (!currentUser) {
+      const row = button.closest("[data-quick-identity]");
+      const entryIdentity = row?.dataset.quickIdentity || "";
+      const restoreState = getCurrentQuickRateRestoreState(entryIdentity);
+      const pending = storeQuickRatePendingRating({
+        id: window.crypto?.randomUUID?.() || `quick-rate-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        issuedAt: Date.now(),
+        targetInput: target,
+        rating,
+        entryIdentity,
+        title: row?.querySelector(".bom-v1-quick-track strong")?.textContent || "this track",
+        restoreState
+      });
+      if (!pending) return false;
+      window.history.replaceState({ ...(window.history.state || {}), bomQuickRate: restoreState }, "", window.location.href);
+      if (typeof dialog.replaceQuickRateState === "function") dialog.replaceQuickRateState();
+      else dialog.close();
+      await showAuthentication(`Sign in or request access to save ${rating} / 10 for ${pending.title}. Your place is saved.`);
+      return false;
+    }
+    if (getQuickRateViewerKey() !== viewerKey || currentUser.id !== userId) return false;
     busy = true;
     const previousRating = canonicalSongId
       ? getYourCanonicalRecordingRating(canonicalSongId)
@@ -14055,25 +14299,68 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
     status.textContent = "Saving…";
     try {
       const saved = canonicalSongId
-        ? await saveCanonicalRecordingRating(canonicalSongId, Number(button.dataset.rating))
-        : await saveTrackRating(songId, Number(button.dataset.rating));
-      if (!dialog.open || currentUser?.id !== userId) return;
+        ? await saveCanonicalRecordingRating(canonicalSongId, rating)
+        : await saveTrackRating(songId, rating);
       if (!saved) throw new Error("Rating not saved");
+      const storedPendingRating = readQuickRatePendingRating();
+      if (storedPendingRating?.targetInput === target) {
+        clearQuickRatePendingRating(storedPendingRating.id);
+        if (pendingRatingReview?.id === storedPendingRating.id) pendingRatingReview = null;
+      }
+      if (!dialog.open || getQuickRateViewerKey() !== viewerKey) return true;
       if (previousRating === null && overallProgressOverride) {
         overallProgressOverride.rated = Math.min(overallProgressOverride.total, overallProgressOverride.rated + 1);
         overallProgressOverride.percentage = overallProgressOverride.total
           ? Math.round((overallProgressOverride.rated / overallProgressOverride.total) * 100)
           : 0;
       }
-      status.textContent = `Saved ${button.dataset.rating} / 10`;
+      status.textContent = `Saved ${rating} / 10`;
       render();
+      return true;
     } catch (error) {
       status.textContent = "Couldn’t save your rating. Please try again.";
+      return false;
     } finally {
       busy = false;
       card.querySelectorAll("button").forEach(item => item.disabled = false);
     }
   };
+
+  async function applyPendingQuickRateRating() {
+    if (!pendingRating || pendingRatingAttempted || !currentUser || getQuickRateViewerKey() !== viewerKey) return false;
+    if (selectedCollection !== pendingRating.restoreState.selectedCollection || Number(selectedYear) !== Number(pendingRating.restoreState.selectedYear)) return false;
+    pendingRatingAttempted = true;
+    const resolution = getQuickRatePendingRatingResolution(pendingRating, yearEntries, selectedFilter);
+    if (!resolution.targetEntry) {
+      status.textContent = "You’re signed in. Your pending rating is still saved; reload this year to try restoring it again.";
+      return false;
+    }
+    if (resolution.requiresConfirmation) {
+      selectedFilter = resolution.selectedFilter;
+      pendingRatingReview = {
+        id: pendingRating.id,
+        targetInput: resolution.targetInput,
+        entryIdentity: resolution.entryIdentity,
+        storedRating: resolution.storedRating,
+        pendingRating: resolution.pendingRating
+      };
+      render();
+      status.textContent = "Review your saved rating and pending selection before making a change.";
+      revealPendingQuickRateRating();
+      return false;
+    }
+    const button = [...card.querySelectorAll("button[data-target-input][data-rating]")].find(candidate =>
+      candidate.dataset.targetInput === resolution.targetInput
+        && Number(candidate.dataset.rating) === resolution.pendingRating
+        && (!resolution.entryIdentity || candidate.closest("[data-quick-identity]")?.dataset.quickIdentity === resolution.entryIdentity)
+    );
+    if (!button) {
+      status.textContent = "You’re signed in. Your pending rating is still saved; choose the year again to retry.";
+      return false;
+    }
+    status.textContent = `Saving your ${pendingRating.rating} / 10 rating…`;
+    return dialog.saveRating(button);
+  }
 
   dialog.querySelector("[data-quick-collections]").addEventListener("click", event => {
     const collection = event.target.closest("[data-quick-collection]")?.dataset.quickCollection;
@@ -14110,6 +14397,48 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
   });
 
   card.addEventListener("click", async event => {
+    const pendingAction = event.target.closest("[data-quick-confirm-pending], [data-quick-amend-pending], [data-quick-keep-pending]");
+    if (pendingAction) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const actionId = pendingAction.dataset.quickConfirmPending
+        || pendingAction.dataset.quickAmendPending
+        || pendingAction.dataset.quickKeepPending
+        || "";
+      const review = pendingRatingReview;
+      const storedPendingRating = readQuickRatePendingRating();
+      if (busy || !review || actionId !== review.id || storedPendingRating?.id !== review.id) return;
+      const row = pendingAction.closest("[data-quick-identity]");
+      if (!row || (review.entryIdentity && row.dataset.quickIdentity !== review.entryIdentity)) return;
+      if (pendingAction.matches("[data-quick-amend-pending]")) {
+        const control = [...row.querySelectorAll(".bom-v1-track-rating-control")].find(candidate =>
+          candidate.querySelector(`[data-target-input="${CSS.escape(review.targetInput)}"]`)
+        );
+        if (!control) return;
+        control.open = true;
+        control.querySelector(`[data-target-input="${CSS.escape(review.targetInput)}"][data-rating="${review.pendingRating}"]`)?.focus();
+        status.textContent = "Choose a rating to replace your saved score. Nothing changes until you select one.";
+        return;
+      }
+      if (pendingAction.matches("[data-quick-keep-pending]") || review.storedRating === review.pendingRating) {
+        clearQuickRatePendingRating(review.id);
+        pendingRatingReview = null;
+        render();
+        status.textContent = pendingAction.matches("[data-quick-keep-pending]")
+          ? `Kept your saved ${review.storedRating} / 10 rating.`
+          : `Confirmed your existing ${review.storedRating} / 10 rating.`;
+        return;
+      }
+      const ratingButton = [...row.querySelectorAll("button[data-target-input][data-rating]")].find(candidate =>
+        candidate.dataset.targetInput === review.targetInput && Number(candidate.dataset.rating) === review.pendingRating
+      );
+      if (!ratingButton) {
+        status.textContent = "Your pending selection is still saved. Choose another rating or try again.";
+        return;
+      }
+      await dialog.saveRating(ratingButton);
+      return;
+    }
     const historicalButton = event.target.closest("[data-quick-historical-id]");
     if (historicalButton) {
       const entry = yearEntries.find(row => String(row.id) === historicalButton.dataset.quickHistoricalId);
@@ -14207,6 +14536,12 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
     const clearButton = event.target.closest("[data-clear-track-rating]");
     const clearCanonicalButton = event.target.closest("[data-clear-canonical-rating]");
     if ((!clearButton && !clearCanonicalButton) || busy) return;
+    const clearRow = (clearButton || clearCanonicalButton).closest("[data-quick-identity]");
+    if (pendingRatingReview && clearRow
+      && (!pendingRatingReview.entryIdentity || clearRow.dataset.quickIdentity === pendingRatingReview.entryIdentity)) {
+      status.textContent = "Resolve the pending selection first: keep your saved rating or choose another score.";
+      return;
+    }
     event.preventDefault();
     event.stopImmediatePropagation();
     busy = true;
@@ -14235,7 +14570,7 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
     status.textContent = "Loading tracks…";
     try {
       const loaded = await loadQuickRateYearData(selectedCollection, requestedYear, userId);
-      if (sequence !== loadSequence || !dialog.open || currentUser?.id !== userId) return;
+      if (sequence !== loadSequence || !dialog.open || getQuickRateViewerKey() !== viewerKey) return;
       selectedYear = loaded.selectedYear;
       availableYears = loaded.years;
       songs = loaded.songs;
@@ -14256,9 +14591,11 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
         userId
       );
       render(focus);
+      await applyPendingQuickRateRating();
+      if (sequence !== loadSequence || !dialog.open || getQuickRateViewerKey() !== viewerKey) return;
       const artistLookupNames = getArtistCreditLookupNames(yearEntries.map(entry => entry.song?.artist || entry.canonicalRecording?.artist || entry.artist));
-      enrichQuickRateArtistIdentities(dialog, userId, identities => {
-        if (sequence !== loadSequence || !dialog.open || currentUser?.id !== userId) return;
+      enrichQuickRateArtistIdentities(dialog, viewerKey, identities => {
+        if (sequence !== loadSequence || !dialog.open || getQuickRateViewerKey() !== viewerKey) return;
         const scrollTop = dialog.scrollTop;
         artistIdentities = identities;
         loadedArtistIdentities = identities;
@@ -14271,7 +14608,7 @@ async function openQuickRate(restoredState = null, { collectionHistoryOwned = fa
   }
 
   void loadHistoricalCoverAllowlist().then(covers => {
-    if (!dialog.open || currentUser?.id !== userId) return;
+    if (!dialog.open || getQuickRateViewerKey() !== viewerKey) return;
     historicalCovers = covers;
     const scrollTop = dialog.scrollTop;
     render();
@@ -18381,14 +18718,17 @@ handleSpotifyAuthorizationCallback()
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
 
+  const previousViewerKey = getQuickRateViewerKey();
   currentUser = session ? session.user : null;
+  closeQuickRateForViewerTransition(previousViewerKey);
 
   if (passwordRecovery?.handleAuthEvent(event, session)) return;
 
   ensureUserProfile()
-    .then(() => {
+    .then(async () => {
       updateSessionUI();
-      return refreshDiscoverUI();
+      await refreshDiscoverUI();
+      if (currentUser) await resumePendingQuickRateRating();
     })
     .catch(handleCatalogueLoadFailure);
 

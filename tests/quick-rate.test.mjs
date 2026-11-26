@@ -9,6 +9,220 @@ const [app, styles, discover] = await Promise.all([
 ]);
 function extract(start, end) { return app.slice(app.indexOf(start), app.indexOf(end, app.indexOf(start))); }
 
+test('guests can browse Quick Rate and authentication begins only from a rating submission', () => {
+  const open = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  const beforeRatingHandler = open.slice(0, open.indexOf('dialog.saveRating = async'));
+  assert.doesNotMatch(open.slice(0, open.indexOf('const dialog = document.createElement')), /!currentUser/);
+  assert.match(open, /const userId = currentUser\?\.id \|\| null/);
+  assert.match(open, /Browse freely\. Sign in only when you choose a rating\./);
+  assert.match(open, /data-quick-collections/);
+  assert.match(open, /data-quick-picker-decade/);
+  assert.match(open, /data-quick-picker-year/);
+  assert.match(open, /data-quick-listen/);
+  assert.doesNotMatch(beforeRatingHandler, /showAuthentication\(/);
+  assert.match(open, /dialog\.saveRating = async[\s\S]*?if \(!currentUser\)[\s\S]*?storeQuickRatePendingRating\([\s\S]*?showAuthentication\(/);
+  assert.ok(open.indexOf('if (!currentUser)') < open.indexOf('saveCanonicalRecordingRating(canonicalSongId, rating)'));
+});
+
+test('guest rating context is validated, short-lived, and separated from member progress', () => {
+  const storage = new Map();
+  const context = vm.createContext({
+    currentUser: null,
+    Date,
+    Math,
+    window: {
+      sessionStorage: {
+        setItem(key, value) { storage.set(key, value); },
+        getItem(key) { return storage.get(key) || null; },
+        removeItem(key) { storage.delete(key); }
+      }
+    }
+  });
+  const pendingSource = extract('const QUICK_RATE_PENDING_RATING_KEY', 'let quickRateHistoryRestore');
+  vm.runInContext(`${pendingSource}\nthis.pendingApi={getQuickRateViewerKey,normaliseQuickRatePendingRating,storeQuickRatePendingRating,readQuickRatePendingRating,clearQuickRatePendingRating};`, context);
+  const payload = {
+    id: 'pending-1', issuedAt: Date.now(), targetInput: 'track-rating-123', rating: 8,
+    entryIdentity: 'song:123', title: 'Track',
+    restoreState: { selectedCollection: 'bom-tracks', selectedYear: 1997, selectedFilter: 'unrated', pickerDecade: 1990, expandedIdentity: 'song:123', lastNavigatedIdentity: 'song:122', scrollTop: 420, originIdentity: 'song:123' }
+  };
+  assert.equal(context.pendingApi.getQuickRateViewerKey(), 'guest');
+  assert.equal(context.pendingApi.storeQuickRatePendingRating(payload).rating, 8);
+  const restored = context.pendingApi.readQuickRatePendingRating();
+  assert.deepEqual({
+    targetInput: restored.targetInput,
+    rating: restored.rating,
+    entryIdentity: restored.entryIdentity,
+    collection: restored.restoreState.selectedCollection,
+    year: restored.restoreState.selectedYear,
+    filter: restored.restoreState.selectedFilter,
+    decade: restored.restoreState.pickerDecade,
+    scrollTop: restored.restoreState.scrollTop
+  }, { targetInput: 'track-rating-123', rating: 8, entryIdentity: 'song:123', collection: 'bom-tracks', year: 1997, filter: 'unrated', decade: 1990, scrollTop: 420 });
+  assert.equal(context.pendingApi.normaliseQuickRatePendingRating({ ...payload, rating: 11 }), null);
+  assert.equal(context.pendingApi.normaliseQuickRatePendingRating({ ...payload, issuedAt: Date.now() - 31 * 60 * 1000 }), null);
+  assert.equal(context.pendingApi.normaliseQuickRatePendingRating({ ...payload, claimedUserId: 'member-1' }).claimedUserId, 'member-1');
+  context.currentUser = { id: 'member-1' };
+  assert.equal(context.pendingApi.getQuickRateViewerKey(), 'member:member-1');
+  assert.equal(context.pendingApi.clearQuickRatePendingRating('pending-1'), true);
+  assert.equal(context.pendingApi.readQuickRatePendingRating(), null);
+});
+
+test('pending ratings preserve collection navigation and clear after a matching track saves', () => {
+  assert.match(app, /openQuickRate\([\s\S]*?pendingRating: pending[\s\S]*?collectionHistoryOwned: Boolean\(window\.history\.state\?\.bomQuickRateCollectionView\)/);
+  assert.match(app, /if \(!saved\) throw new Error\("Rating not saved"\);[\s\S]*?const storedPendingRating = readQuickRatePendingRating\(\);[\s\S]*?storedPendingRating\?\.targetInput === target[\s\S]*?clearQuickRatePendingRating\(storedPendingRating\.id\)[\s\S]*?if \(!dialog\.open/);
+  assert.match(app, /pending\.claimedUserId && pending\.claimedUserId !== currentUser\.id[\s\S]*?clearQuickRatePendingRating\(pending\.id\)/);
+  assert.match(app, /storeQuickRatePendingRating\(\{ \.\.\.pending, claimedUserId: currentUser\.id \}\)/);
+  assert.match(app, /async function logOut\([\s\S]*?clearQuickRatePendingRating\(\)/);
+  assert.match(app, /function closeQuickRateForViewerTransition[\s\S]*?dialog\?\.open[\s\S]*?dialog\.close\(\)/);
+});
+
+test('returning members review saved and pending ratings while first-time targets keep the low-friction path', () => {
+  const ratings = new Map();
+  const context = vm.createContext({
+    getSongRatingIdentity: song => `song:${song.id}`,
+    getYourSongRating: songId => ratings.has(songId) ? ratings.get(songId) : null,
+    getYourCanonicalRecordingRating: canonicalId => ratings.has(canonicalId) ? ratings.get(canonicalId) : null
+  });
+  vm.runInContext(extract('function getQuickRateEntryIdentity', 'function getQuickRateProgress'), context);
+  const ratedEntry = { status: 'matched', canonical_song_id: 'canonical-1', song: { id: 7 } };
+  const unratedEntry = { status: 'matched', canonical_song_id: 'canonical-2', song: { id: 8 } };
+  ratings.set('canonical-1', 6);
+
+  const returning = context.getQuickRatePendingRatingResolution({
+    targetInput: 'canonical-rating-canonical-1', entryIdentity: 'canonical:canonical-1', rating: 8
+  }, [ratedEntry, unratedEntry], 'unrated');
+  assert.equal(returning.targetEntry, ratedEntry);
+  assert.equal(returning.storedRating, 6);
+  assert.equal(returning.pendingRating, 8);
+  assert.equal(returning.selectedFilter, 'all');
+  assert.equal(returning.requiresConfirmation, true);
+
+  const firstRating = context.getQuickRatePendingRatingResolution({
+    targetInput: 'canonical-rating-canonical-2', entryIdentity: 'canonical:canonical-2', rating: 9
+  }, [ratedEntry, unratedEntry], 'unrated');
+  assert.equal(firstRating.targetEntry, unratedEntry);
+  assert.equal(firstRating.storedRating, null);
+  assert.equal(firstRating.selectedFilter, 'unrated');
+  assert.equal(firstRating.requiresConfirmation, false);
+
+  const identityMismatch = context.getQuickRatePendingRatingResolution({
+    targetInput: 'canonical-rating-canonical-1', entryIdentity: 'canonical:different', rating: 8
+  }, [ratedEntry], 'unrated');
+  assert.equal(identityMismatch.targetEntry, null);
+});
+
+test('restored rated targets remain pending until an explicit confirm, amendment, or keep action', () => {
+  const quickRate = extract('async function openQuickRate', 'window.handleQuickRateClick');
+  assert.match(quickRate, /getQuickRatePendingRatingResolution\(pendingRating, yearEntries, selectedFilter\)/);
+  assert.match(quickRate, /resolution\.requiresConfirmation[\s\S]*?selectedFilter = resolution\.selectedFilter[\s\S]*?pendingRatingReview = \{[\s\S]*?storedRating: resolution\.storedRating[\s\S]*?pendingRating: resolution\.pendingRating[\s\S]*?render\(\)/);
+  assert.match(quickRate, /Saved rating: \$\{pendingRatingReview\.storedRating\} \/ 10 · Pending selection: \$\{pendingRatingReview\.pendingRating\} \/ 10/);
+  assert.match(quickRate, /data-quick-confirm-pending[\s\S]*?data-quick-amend-pending[\s\S]*?data-quick-keep-pending/);
+  assert.match(quickRate, /pendingAction\.matches\("\[data-quick-amend-pending\]"\)[\s\S]*?control\.open = true/);
+  assert.match(quickRate, /pendingAction\.matches\("\[data-quick-keep-pending\]"\) \|\| review\.storedRating === review\.pendingRating[\s\S]*?clearQuickRatePendingRating\(review\.id\)/);
+  assert.match(quickRate, /await dialog\.saveRating\(ratingButton\)/);
+  assert.match(quickRate, /pendingRatingReview && clearRow[\s\S]*?Resolve the pending selection first/);
+  assert.doesNotMatch(quickRate, /if \(!resolution\.targetEntry\)[\s\S]{0,240}clearQuickRatePendingRating/);
+  assert.match(styles, /bom-v1-quick-pending-rating[\s\S]*?data-quick-confirm-pending/);
+  assert.match(styles, /@media \(max-width: 480px\)[\s\S]*?bom-v1-quick-pending-rating button \{ min-width: 0; min-height: 44px/);
+});
+
+test('cancelled authentication retains the exact pending Quick Rate context', async () => {
+  const storage = new Map();
+  const context = vm.createContext({
+    currentUser: null,
+    Date,
+    Math,
+    document: { getElementById: () => null },
+    showOnlySection() {},
+    openQuickRate() { throw new Error('must not open without a member'); },
+    window: {
+      history: { state: null },
+      sessionStorage: {
+        setItem(key, value) { storage.set(key, value); },
+        getItem(key) { return storage.get(key) || null; },
+        removeItem(key) { storage.delete(key); }
+      }
+    }
+  });
+  const pendingSource = extract('const QUICK_RATE_PENDING_RATING_KEY', 'let quickRateHistoryRestore');
+  vm.runInContext(`${pendingSource}\nthis.pendingApi={storeQuickRatePendingRating,readQuickRatePendingRating,resumePendingQuickRateRating};`, context);
+  const pending = context.pendingApi.storeQuickRatePendingRating({
+    id: 'cancelled-auth', issuedAt: Date.now(), targetInput: 'track-rating-44', rating: 7,
+    entryIdentity: 'song:44', title: 'Still here',
+    restoreState: { selectedCollection: 'bom-tracks', selectedYear: 2004, selectedFilter: 'unrated', pickerDecade: 2000, scrollTop: 160 }
+  });
+  assert.equal(await context.pendingApi.resumePendingQuickRateRating(), false);
+  const restored = context.pendingApi.readQuickRatePendingRating();
+  assert.deepEqual({
+    id: restored.id, targetInput: restored.targetInput, rating: restored.rating,
+    identity: restored.entryIdentity, year: restored.restoreState.selectedYear,
+    collection: restored.restoreState.selectedCollection, filter: restored.restoreState.selectedFilter
+  }, {
+    id: pending.id, targetInput: 'track-rating-44', rating: 7,
+    identity: 'song:44', year: 2004, collection: 'bom-tracks', filter: 'unrated'
+  });
+});
+
+test('unsuccessful authentication cannot clear or submit a pending rating', async () => {
+  let profileLoads = 0;
+  let ratingWrites = 0;
+  const context = vm.createContext({
+    currentUser: null,
+    emailInput: { value: 'member@example.com' },
+    passwordInput: { value: 'wrong' },
+    authMessage: { classList: { toggle() {} } },
+    passwordRecovery: { clear() {} },
+    authCaptcha: { async getToken() { return ''; }, reset() {} },
+    supabaseClient: { auth: { async signInWithPassword() { return { data: null, error: { code: 'invalid_credentials', message: 'Invalid login credentials' } }; } } },
+    setMessage() {},
+    async ensureUserProfile() { profileLoads += 1; },
+    updateSessionUI() {}, async loadLibrary() {}, renderLibrary() {}, renderRecommendations() {}, async renderSelectedItem() {},
+    saveTrackRating() { ratingWrites += 1; }
+  });
+  vm.runInContext(`${extract('async function logIn()', 'async function logOut()')}\nthis.logIn=logIn;`, context);
+  await context.logIn();
+  assert.equal(context.currentUser, null);
+  assert.equal(profileLoads, 0);
+  assert.equal(ratingWrites, 0);
+  assert.doesNotMatch(extract('async function logIn()', 'async function logOut()'), /clearQuickRatePendingRating/);
+});
+
+test('duplicate successful authentication events coalesce one pending-rating restoration', async () => {
+  const storage = new Map();
+  let opens = 0;
+  const context = vm.createContext({
+    currentUser: { id: 'member-1' },
+    Date,
+    Math,
+    setTimeout,
+    document: { getElementById: () => null },
+    showOnlySection() {},
+    async openQuickRate() { opens += 1; await new Promise(resolve => setTimeout(resolve, 10)); },
+    window: {
+      history: { state: null },
+      sessionStorage: {
+        setItem(key, value) { storage.set(key, value); },
+        getItem(key) { return storage.get(key) || null; },
+        removeItem(key) { storage.delete(key); }
+      }
+    }
+  });
+  const pendingSource = extract('const QUICK_RATE_PENDING_RATING_KEY', 'let quickRateHistoryRestore');
+  vm.runInContext(`${pendingSource}\nthis.pendingApi={storeQuickRatePendingRating,resumePendingQuickRateRating};`, context);
+  context.pendingApi.storeQuickRatePendingRating({
+    id: 'one-resume', issuedAt: Date.now(), targetInput: 'track-rating-45', rating: 8,
+    entryIdentity: 'song:45', title: 'Once only',
+    restoreState: { selectedCollection: 'bom-tracks', selectedYear: 2005, selectedFilter: 'all', pickerDecade: 2000, scrollTop: 0 }
+  });
+  const [first, second] = await Promise.all([
+    context.pendingApi.resumePendingQuickRateRating(),
+    context.pendingApi.resumePendingQuickRateRating()
+  ]);
+  assert.equal(first, true);
+  assert.equal(second, true);
+  assert.equal(opens, 1);
+});
+
 test('Quick Rate excludes own track ratings, deleted and duplicate tracks without mutating catalogue', () => {
   const recordingId = 'cae8bbec-c2ff-4972-9218-8f90acb07b1b';
   const songs = [
@@ -646,6 +860,7 @@ test('delayed, rejected, empty, and stale artist enrichment cannot block Quick R
   let requests = 0;
   const context = vm.createContext({
     currentUser:{id:'me'},
+    window:{sessionStorage:null},
     fetchQuickRateArtistIdentities:() => {
       requests += 1;
       return new Promise((resolve, reject) => { resolveIdentities = resolve; rejectIdentities = reject; });
@@ -655,7 +870,7 @@ test('delayed, rejected, empty, and stale artist enrichment cannot block Quick R
 
   const dialog = {open:true};
   let enriched = null;
-  const delayed = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = Array.from(rows); });
+  const delayed = context.enrichQuickRateArtistIdentities(dialog, 'member:me', rows => { enriched = Array.from(rows); });
   assert.equal(enriched, null, 'optional enrichment may remain pending after core rendering');
   assert.equal(requests, 1);
   resolveIdentities([]);
@@ -663,19 +878,19 @@ test('delayed, rejected, empty, and stale artist enrichment cannot block Quick R
   assert.deepEqual(enriched, [], 'empty enrichment is a usable fallback state');
 
   enriched = null;
-  const rejected = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = rows; });
+  const rejected = context.enrichQuickRateArtistIdentities(dialog, 'member:me', rows => { enriched = rows; });
   rejectIdentities(new Error('hero unavailable'));
   await rejected;
   assert.equal(enriched, null, 'optional failure must not enter the core load error path');
 
   enriched = null;
-  const successful = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = Array.from(rows); });
+  const successful = context.enrichQuickRateArtistIdentities(dialog, 'member:me', rows => { enriched = Array.from(rows); });
   resolveIdentities([{artist_name:'U2',musicbrainz_artist_id:'u2-id',imageUrl:'hero.jpg'}]);
   await successful;
   assert.equal(enriched[0].imageUrl, 'hero.jpg');
 
   enriched = null;
-  const stale = context.enrichQuickRateArtistIdentities(dialog, 'me', rows => { enriched = rows; });
+  const stale = context.enrichQuickRateArtistIdentities(dialog, 'member:me', rows => { enriched = rows; });
   dialog.open = false;
   resolveIdentities([{artist_name:'U2'}]);
   await stale;
@@ -696,7 +911,7 @@ test('Quick Rate discovery uses stable identity, keeps controls independent, and
   assert.match(quickRate, /selectedYear = year;\s*pickerDecade = Math\.floor\(selectedYear \/ 10\) \* 10;\s*expandedIdentity = ""/);
   assert.doesNotMatch(quickRate, /await resolveArtistIdByName/);
   assert.doesNotMatch(quickRate, /await resolveQuickRateSpotifyTrack/);
-  assert.match(quickRate, /enrichQuickRateArtistIdentities\(dialog, userId/);
+  assert.match(quickRate, /enrichQuickRateArtistIdentities\(dialog, viewerKey/);
   assert.match(extract('function enrichQuickRateArtistIdentities', 'let quickRateHistoryRestore'), /fetchQuickRateArtistIdentities\(artistNames\)/);
   assert.match(quickRate, /artwork \|\| artistDestination\?\.imageUrl/);
   assert.match(quickRate, /loading="lazy" decoding="async"/);

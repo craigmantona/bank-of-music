@@ -16,6 +16,9 @@ function createStartupContext({ session = { user: { id: "user-1" } }, authError 
   const context = vm.createContext({
     console: { error: (...args) => events.push(["console", ...args]) },
     currentUser: null,
+    getQuickRateViewerKey: () => context.currentUser?.id ? `member:${context.currentUser.id}` : "guest",
+    closeQuickRateForViewerTransition: () => false,
+    resumePendingQuickRateRating: async () => false,
     authMessage: {},
     passwordRecovery: null,
     supabaseClient: { auth: { getSession: async () => ({ data: { session }, error: authError }) } },
@@ -82,6 +85,9 @@ test("auth-state catalogue rejection is explicitly handled", async () => {
   let authHandler;
   const context = vm.createContext({
     currentUser: null,
+    getQuickRateViewerKey: () => context.currentUser?.id ? `member:${context.currentUser.id}` : "guest",
+    closeQuickRateForViewerTransition: () => false,
+    resumePendingQuickRateRating: async () => false,
     passwordRecovery: null,
     supabaseClient: { auth: { onAuthStateChange: handler => { authHandler = handler; } } },
     ensureUserProfile: async () => {},

@@ -117,7 +117,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm4.81 15.14a.65.65 0 0 1-.9.22c-2.47-1.51-5.58-1.85-9.24-1.01a.66.66 0 0 1-.29-1.28c4.01-.91 7.45-.52 10.21 1.17.31.19.41.59.22.9Zm1.29-2.86a.82.82 0 0 1-1.13.27c-2.83-1.74-7.15-2.24-10.5-1.23a.82.82 0 1 1-.48-1.57c3.83-1.16 8.59-.6 11.84 1.4.39.23.51.74.27 1.13Zm.11-2.98C14.82 8.79 9.22 8.6 5.98 9.58a.98.98 0 1 1-.57-1.88c3.72-1.13 9.91-.9 13.81 1.41a.98.98 0 0 1-1.01 1.69Z"/></svg>
           <span class="bom-v1-spotify-label"><span class="bom-v1-spotify-wide">Connect Spotify</span><span class="bom-v1-spotify-compact">Connect</span></span>
         </button>
-        <button type="button" class="bom-v1-account-button" aria-expanded="false" aria-controls="bomV1ProfileMenu" aria-label="Open account menu">···</button>
+        <button type="button" class="bom-v1-account-button is-signin" aria-label="Sign in">Sign in</button>
         <div id="bomV1ProfileMenu" class="bom-v1-menu" hidden></div>
       </div>
     </header>`;
@@ -172,7 +172,17 @@
 
   function renderProfileMenu() {
     const state = bridge()?.getState() || { authenticated: false, displayName: "Account", isAdmin: false };
-    accountButton.textContent = state.authenticated ? initials(state.displayName) : "••";
+    accountButton.textContent = state.authenticated ? initials(state.displayName) : "Sign in";
+    accountButton.classList.toggle("is-signin", !state.authenticated);
+    accountButton.setAttribute("aria-label", state.authenticated ? "Open account menu" : "Sign in");
+    if (state.authenticated) {
+      accountButton.setAttribute("aria-expanded", "false");
+      accountButton.setAttribute("aria-controls", "bomV1ProfileMenu");
+    } else {
+      accountButton.removeAttribute("aria-expanded");
+      accountButton.removeAttribute("aria-controls");
+      menu.hidden = true;
+    }
     menu.innerHTML = `
       <div class="bom-v1-menu-header"><strong>${escapeHtml(state.displayName)}</strong><small>${state.authenticated ? "Bank of Music account" : "Sign in to rate music"}</small></div>
       ${state.authenticated ? '<button type="button" data-bom-account="profile">Profile</button>' : '<button type="button" data-bom-account="signin">Sign in</button>'}
@@ -225,8 +235,12 @@
     rememberRoute("search", term);
   });
 
-  accountButton.addEventListener("click", () => {
+  accountButton.addEventListener("click", async () => {
     renderProfileMenu();
+    if (!bridge()?.getState()?.authenticated) {
+      await bridge()?.showAuthentication?.();
+      return;
+    }
     menu.hidden = !menu.hidden;
     accountButton.setAttribute("aria-expanded", String(!menu.hidden));
     if (!menu.hidden) menu.querySelector("button")?.focus();
@@ -240,8 +254,7 @@
     if (action === "spotify") await bridge().showSpotify();
     if (action === "logout") await bridge().logout();
     if (action === "signin") {
-      await bridge().prepareAuthentication?.();
-      bridge().showSection("searchSection");
+      await bridge().showAuthentication?.();
     }
     if (action === "admin") bridge().showSection("adminSection");
     if (action === "game-preview") await bridge().showGamePreview();

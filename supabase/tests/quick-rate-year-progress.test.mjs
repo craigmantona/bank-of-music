@@ -13,6 +13,14 @@ const chronologyMigration = await readFile(
   new URL("../migrations/20261123120000_fix_uk_number_ones_chronology.sql", import.meta.url),
   "utf8"
 );
+const guestAccessMigration = await readFile(
+  new URL("../migrations/20261125120000_enable_guest_quick_rate_browsing.sql", import.meta.url),
+  "utf8"
+);
+const guestAccessRollback = await readFile(
+  new URL("../operations/20261125_enable_guest_quick_rate_browsing_rollback.sql", import.meta.url),
+  "utf8"
+);
 
 const USER_ID = "11111111-1111-4111-8111-111111111111";
 const VERIFIED_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
@@ -28,6 +36,7 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
     await db.exec(`
       create role anon;
       create role authenticated;
+      create role service_role;
       create schema auth;
       create function auth.uid() returns uuid language sql stable as
         'select nullif(current_setting(''request.jwt.claim.sub'', true), '''')::uuid';
@@ -83,6 +92,29 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
         spotify_track_id text
       );
 
+      alter table public.albums enable row level security;
+      alter table public.canonical_recordings enable row level security;
+      alter table public.songs enable row level security;
+      alter table public.song_ratings enable row level security;
+      alter table public.quick_rate_collection_tracks enable row level security;
+
+      create policy "Public read albums" on public.albums for select using (true);
+      create policy "Public read canonical recordings" on public.canonical_recordings for select using (true);
+      create policy "Public read songs" on public.songs for select using (true);
+      create policy "Public read song ratings" on public.song_ratings for select using (true);
+      create policy "Public read quick rate tracks" on public.quick_rate_collection_tracks for select using (true);
+      create policy "Users insert own song ratings" on public.song_ratings
+        for insert to authenticated with check (auth.uid() = user_id);
+      create policy "Users update own song ratings" on public.song_ratings
+        for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+      create policy "Users delete own song ratings" on public.song_ratings
+        for delete to authenticated using (auth.uid() = user_id);
+
+      create unique index song_ratings_user_canonical_unique
+        on public.song_ratings(user_id, canonical_song_id) where canonical_song_id is not null;
+      create unique index song_ratings_user_song_unique
+        on public.song_ratings(user_id, song_id) where song_id is not null;
+
       insert into public.albums values
         (1, 'Verified album', 'Verified artist', '2025-01-01', '2025-01-01', null, null, false),
         (2, 'Ambiguous album', 'Ambiguous artist', '2024-01-01', '2024-01-01', null, null, false),
@@ -119,6 +151,13 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
         ('${USER_ID}', null, '${REPEAT_ID}', 8),
         ('${USER_ID}', null, '${POPULAR_ID}', 10),
         ('${USER_ID}', null, '${LOWER_ID}', 4);
+
+      grant usage on schema public, auth to anon, authenticated, service_role;
+      grant execute on function auth.uid() to anon, authenticated, service_role;
+      grant select on public.albums, public.canonical_recordings, public.songs,
+        public.song_ratings, public.quick_rate_collection_tracks to anon, authenticated;
+      grant insert, update, delete on public.song_ratings to anon, authenticated;
+      grant usage, select on sequence public.song_ratings_id_seq to anon, authenticated;
       select set_config('request.jwt.claim.sub', '${USER_ID}', false);
     `);
 
@@ -129,9 +168,45 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
 
     await db.exec(progressMigration);
     await db.exec(chronologyMigration);
+    await db.exec("grant execute on function public.get_quick_rate_year(text, integer) to service_role;");
+
+    const functionMetadataBefore = (await db.query(`select
+      p.prosecdef,
+      p.provolatile,
+      p.proconfig,
+      md5(pg_get_functiondef(p.oid)) definition_hash
+      from pg_proc p
+      where p.oid = 'public.get_quick_rate_year(text,integer)'::regprocedure`
+    )).rows[0];
+    const policiesBefore = (await db.query(`select
+      schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
+      from pg_policies
+      where tablename in ('albums', 'canonical_recordings', 'songs', 'song_ratings', 'quick_rate_collection_tracks')
+      order by tablename, policyname`
+    )).rows;
+    const rlsBefore = (await db.query(`select relname, relrowsecurity
+      from pg_class
+      where relname in ('albums', 'canonical_recordings', 'songs', 'song_ratings', 'quick_rate_collection_tracks')
+      order by relname`
+    )).rows;
+    assert.equal(functionMetadataBefore.prosecdef, false);
+    assert.equal(functionMetadataBefore.provolatile, "s");
+    assert.deepEqual(functionMetadataBefore.proconfig, ["search_path=\"\""]);
+    assert(rlsBefore.every((row) => row.relrowsecurity));
+
+    await db.exec("set role authenticated;");
+    const authenticatedBefore = (await db.query(
+      "select public.get_quick_rate_year('uk-number-ones', 2026) result"
+    )).rows[0].result;
+    await db.exec("reset role;");
+
+    await db.exec(guestAccessMigration);
+    await db.exec("set role authenticated;");
     const result = (await db.query(
       "select public.get_quick_rate_year('uk-number-ones', 2026) result"
     )).rows[0].result;
+    await db.exec("reset role;");
+    assert.deepEqual(result, authenticatedBefore);
 
     assert.equal(Number(result.overall_total), 2);
     assert.equal(Number(result.overall_rated), 2);
@@ -159,9 +234,11 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
     assert.equal(Number(result.entries.find((entry) => Number(entry.id) === 3).personal_rating), 7);
     assert.equal(Number(result.entries.find((entry) => Number(entry.id) === 4).personal_rating), 6);
 
+    await db.exec("set role authenticated;");
     const bomResult = (await db.query(
       "select public.get_quick_rate_year('bom-tracks', 2026) result"
     )).rows[0].result;
+    await db.exec("reset role;");
     assert.equal(Number(bomResult.overall_total), 6);
     assert.equal(Number(bomResult.overall_rated), 5);
     assert.deepEqual(
@@ -173,6 +250,38 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
       [1, 1, 0]
     );
 
+    await db.exec("set role authenticated;");
+    await assert.rejects(
+      db.query(`insert into public.song_ratings(user_id, canonical_song_id, rating)
+        values ('${USER_ID}', '${POPULAR_ID}', 5)`),
+      /duplicate key|unique constraint/i
+    );
+    await db.exec("reset role;");
+
+    await db.exec("select set_config('request.jwt.claim.sub', '', false); set role anon;");
+    const guestResult = (await db.query(
+      "select public.get_quick_rate_year('bom-tracks', 2026) result"
+    )).rows[0].result;
+    assert.equal(Number(guestResult.overall_rated), 0);
+    assert(guestResult.entries.every((entry) => entry.personal_rating === null));
+    const guestJson = JSON.stringify(guestResult);
+    assert(!guestJson.includes("user_id"));
+    assert(!guestJson.includes(USER_ID));
+    assert.deepEqual(
+      guestResult.entries.map((entry) => Number(entry.community_rating_count)),
+      [1, 1, 0]
+    );
+    const anonymousUpdate = await db.query("update public.song_ratings set rating = 1 returning id");
+    const anonymousDelete = await db.query("delete from public.song_ratings returning id");
+    assert.deepEqual(anonymousUpdate.rows, []);
+    assert.deepEqual(anonymousDelete.rows, []);
+    await assert.rejects(
+      db.query(`insert into public.song_ratings(user_id, song_id, rating)
+        values ('22222222-2222-4222-8222-222222222222', 12, 5)`),
+      /row-level security policy|permission denied/i
+    );
+    await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${USER_ID}', false);`);
+
     const ratingsAfter = (await db.query(`select
       id, user_id::text, song_id, canonical_song_id::text, rating::text
       from public.song_ratings order by id`
@@ -180,10 +289,55 @@ test("Quick Rate preserves catalogue ranking and orders UK No. 1s by first chart
     assert.deepEqual(ratingsAfter, ratingsBefore);
 
     const privileges = (await db.query(`select
+      has_function_privilege('public', 'public.get_quick_rate_year(text,integer)', 'execute') public_execute,
       has_function_privilege('anon', 'public.get_quick_rate_year(text,integer)', 'execute') anon_execute,
-      has_function_privilege('authenticated', 'public.get_quick_rate_year(text,integer)', 'execute') authenticated_execute`
+      has_function_privilege('authenticated', 'public.get_quick_rate_year(text,integer)', 'execute') authenticated_execute,
+      has_function_privilege('service_role', 'public.get_quick_rate_year(text,integer)', 'execute') service_execute`
     )).rows[0];
-    assert.deepEqual(privileges, { anon_execute: false, authenticated_execute: true });
+    assert.deepEqual(privileges, { public_execute: false, anon_execute: true, authenticated_execute: true, service_execute: true });
+
+    const functionMetadataAfter = (await db.query(`select
+      p.prosecdef,
+      p.provolatile,
+      p.proconfig,
+      md5(pg_get_functiondef(p.oid)) definition_hash
+      from pg_proc p
+      where p.oid = 'public.get_quick_rate_year(text,integer)'::regprocedure`
+    )).rows[0];
+    const policiesAfter = (await db.query(`select
+      schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
+      from pg_policies
+      where tablename in ('albums', 'canonical_recordings', 'songs', 'song_ratings', 'quick_rate_collection_tracks')
+      order by tablename, policyname`
+    )).rows;
+    const rlsAfter = (await db.query(`select relname, relrowsecurity
+      from pg_class
+      where relname in ('albums', 'canonical_recordings', 'songs', 'song_ratings', 'quick_rate_collection_tracks')
+      order by relname`
+    )).rows;
+    assert.deepEqual(functionMetadataAfter, functionMetadataBefore);
+    assert.deepEqual(policiesAfter, policiesBefore);
+    assert.deepEqual(rlsAfter, rlsBefore);
+
+    await db.exec(guestAccessRollback);
+    const rollbackPrivileges = (await db.query(`select
+      has_function_privilege('public', 'public.get_quick_rate_year(text,integer)', 'execute') public_execute,
+      has_function_privilege('anon', 'public.get_quick_rate_year(text,integer)', 'execute') anon_execute,
+      has_function_privilege('authenticated', 'public.get_quick_rate_year(text,integer)', 'execute') authenticated_execute,
+      has_function_privilege('service_role', 'public.get_quick_rate_year(text,integer)', 'execute') service_execute`
+    )).rows[0];
+    assert.deepEqual(rollbackPrivileges, { public_execute: false, anon_execute: false, authenticated_execute: true, service_execute: true });
+    await db.exec("select set_config('request.jwt.claim.sub', '', false); set role anon;");
+    await assert.rejects(
+      db.query("select public.get_quick_rate_year('bom-tracks', 2026) result"),
+      /permission denied/i
+    );
+    await db.exec("reset role;");
+    await db.exec(guestAccessMigration);
+    const reappliedAnonPrivilege = (await db.query(`select
+      has_function_privilege('anon', 'public.get_quick_rate_year(text,integer)', 'execute') anon_execute`
+    )).rows[0];
+    assert.deepEqual(reappliedAnonPrivilege, { anon_execute: true });
   } finally {
     await db.close();
   }

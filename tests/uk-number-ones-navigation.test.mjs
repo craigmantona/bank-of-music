@@ -33,6 +33,7 @@ function discoverHarness(source, numberOnes = []) {
   const trackCalls = [];
   const sectionCalls = [];
   let historicalSaveCalls = 0;
+  let viewerState = { authenticated: true, viewerKey: "member:listener" };
   const scroller = { style: { scrollBehavior: "smooth" }, scrollTop: 321 };
   const heading = { focus() {} };
   const root = {
@@ -49,8 +50,8 @@ function discoverHarness(source, numberOnes = []) {
     back() { historyCalls.push({ type: "back" }); }
   };
   const bridge = {
-    getState: () => ({ authenticated: true }),
-    loadHistoricalDiscovery: async () => ({ albums: [], numberOnes }),
+    getState: () => viewerState,
+    loadHistoricalDiscovery: async () => ({ albums: [], numberOnes: typeof numberOnes === "function" ? numberOnes(viewerState) : numberOnes }),
     loadHistoricalChartRatingSummaries: async () => new Map(),
     saveHistoricalChartEntryRating: async () => { historicalSaveCalls += 1; return { ok: true }; },
     showSection(sectionId) { sectionCalls.push(sectionId); },
@@ -59,7 +60,7 @@ function discoverHarness(source, numberOnes = []) {
     openTrackById(songId, trigger) { trackCalls.push({ songId, trigger }); }
   };
   const window = {
-    BOMUI: { AlbumCard: () => "", SectionState: () => "" },
+    BOMUI: { AlbumCard: () => "", SectionState: ({ title }) => `<div>${title}</div>` },
     BOMPresentationBridge: bridge,
     BOM_HIGHER_LOWER_FEATURE: { enabled: true },
     BOM_QUICKFIRE_FEATURE: { enabled: true },
@@ -92,10 +93,92 @@ function discoverHarness(source, numberOnes = []) {
   });
   return {
     window, document, root, clickHandlers, popstateHandlers, history, historyCalls, trackCalls, sectionCalls,
+    setViewer(nextState) { viewerState = nextState; },
     browseCalls: () => browseCalls,
     historicalSaveCalls: () => historicalSaveCalls
   };
 }
+
+test("historical detail history never carries one member's personal rating to another viewer", async () => {
+  const base = { id: 42, title: "Shared chart entry", artist: "Artist", chart_year: 2026, first_number_one_date: "2026-11-16", weeks_at_number_one: 1, match_status: "unresolved", song_id: null, resolvedSongId: null };
+  for (const source of [discover, publicDiscover]) {
+    const harness = discoverHarness(source, state => [{
+      ...base,
+      provisionalRatingSummary: { communityAverage: 7, communityRatingCount: 2, personalRating: state.authenticated ? 2 : null }
+    }]);
+    harness.window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+    harness.window.BOMDiscoverUI.openHistoricalDetail({ ...base, provisionalRatingSummary: { communityAverage: 7, communityRatingCount: 2, personalRating: 2 } });
+    assert.match(harness.root.innerHTML, /<strong>2 \/ 10<\/strong>/);
+    const destination = harness.history.state;
+
+    harness.setViewer({ authenticated: false, viewerKey: "guest" });
+    harness.window.BOMDiscoverUI.render({ authenticated: false, groups: [], general: [] });
+    harness.history.state = destination;
+    harness.popstateHandlers.forEach(handler => handler({ state: destination }));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.doesNotMatch(harness.root.innerHTML, /<strong>2 \/ 10<\/strong>|aria-pressed="true"[^>]*>2<\/button>/);
+    assert.match(harness.root.innerHTML, /Sign in to add your historical rating/);
+  }
+});
+
+test("a historical save completion cannot update another viewer's open detail", async () => {
+  const item = id => ({ id, title: `Entry ${id}`, artist: "Artist", chart_year: 2026, first_number_one_date: "2026-11-16", weeks_at_number_one: 1, match_status: "unresolved", song_id: null, resolvedSongId: null, provisionalRatingSummary: { communityAverage: 7, communityRatingCount: 2, personalRating: id } });
+  for (const source of [discover, publicDiscover]) {
+    const harness = discoverHarness(source);
+    let finishSave;
+    harness.window.BOMPresentationBridge.saveHistoricalChartEntryRating = () => new Promise(resolve => { finishSave = resolve; });
+    harness.window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+    harness.window.BOMDiscoverUI.openHistoricalDetail(item(2));
+    const ratingButton = { dataset: { historicalRatingValue: "5" }, hasAttribute: () => false };
+    const target = { closest(selector) { return selector === "[data-historical-rating-value],[data-historical-rating-clear]" ? ratingButton : null; } };
+    harness.clickHandlers.forEach(handler => handler({ target }));
+
+    harness.setViewer({ authenticated: true, viewerKey: "member:second" });
+    harness.window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+    harness.window.BOMDiscoverUI.openHistoricalDetail(item(9));
+    finishSave({ ok: true, summary: { communityAverage: 5, communityRatingCount: 3, personalRating: 5 }, message: "Saved 5 / 10." });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.match(harness.root.innerHTML, /Entry 9/);
+    assert.match(harness.root.innerHTML, /<strong>9 \/ 10<\/strong>/);
+    assert.doesNotMatch(harness.root.innerHTML, /Saved 5 \/ 10/);
+  }
+});
+
+test("historical list restoration reloads the active viewer before rendering", async () => {
+  const base = { id: 42, title: "Shared list entry", artist: "Artist", chart_year: 2026, first_number_one_date: "2026-11-16", weeks_at_number_one: 1, match_status: "matched", song_id: 777, resolvedSongId: 777, communityAverage: 7, communityRatingCount: 2 };
+  for (const source of [discover, publicDiscover]) {
+    const harness = discoverHarness(source, state => [{ ...base, personalRating: state.authenticated ? 2 : null }]);
+    harness.window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+    harness.window.BOMDiscoverUI.updateRowControls(harness.root);
+    await new Promise(resolve => setImmediate(resolve));
+    const listState = { bomHistoricalList: true, bomHistoricalType: "number", scrollY: 321 };
+    harness.history.state = listState;
+    harness.popstateHandlers.forEach(handler => handler({ state: listState }));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.match(harness.root.innerHTML, /Your rating · 2 \/ 10/);
+
+    harness.setViewer({ authenticated: false, viewerKey: "guest" });
+    harness.window.BOMDiscoverUI.render({ authenticated: false, groups: [], general: [] });
+    harness.root.innerHTML = "";
+    harness.history.state = listState;
+    harness.popstateHandlers.forEach(handler => handler({ state: listState }));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.doesNotMatch(harness.root.innerHTML, /Your rating · 2 \/ 10/);
+    assert.match(harness.root.innerHTML, /Not rated by you/);
+  }
+});
+
+test("failed historical detail restoration keeps the destination visible and retryable", async () => {
+  for (const source of [discover, publicDiscover]) {
+    const harness = discoverHarness(source, () => { throw new Error("temporary"); });
+    const destination = { bomHistoricalDetail: true, historicalId: 42, historicalOrigin: "feature" };
+    harness.history.state = destination;
+    harness.popstateHandlers.forEach(handler => handler({ state: destination }));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(harness.sectionCalls.at(-1), "recommendationsSection");
+    assert.match(harness.root.innerHTML, /Music history couldn’t load\./);
+  }
+});
 
 test("featured UK No. 1 keeps its detail action and adds the full historical collection", async () => {
   const chartEntry = {
@@ -251,6 +334,7 @@ test("inactive carousel slides stay out of keyboard navigation", async () => {
     const dots = Array.from({ length: 3 }, () => ({ attributes: {}, setAttribute(name, value) { this.attributes[name] = String(value); } }));
     const track = { style: { setProperty() {} } };
     const carousel = {
+      isConnected: true,
       dataset: {},
       parentElement: null,
       querySelector(selector) { return selector === ".bom-v1-discovery-track" ? track : selector === ".bom-v1-discovery-slide.is-chart" ? null : null; },

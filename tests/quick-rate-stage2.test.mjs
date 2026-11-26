@@ -4,8 +4,9 @@ import { readFile } from 'node:fs/promises';
 
 const app = await readFile(new URL('../app.js', import.meta.url), 'utf8');
 const migration = await readFile(new URL('../supabase/migrations/20261108184721_quick_rate_year_projection.sql', import.meta.url), 'utf8');
+const guestAccessMigration = await readFile(new URL('../supabase/migrations/20261125120000_enable_guest_quick_rate_browsing.sql', import.meta.url), 'utf8');
 
-test('selected UK No.1 year uses one narrow authenticated projection', () => {
+test('selected UK No.1 year uses one narrow read-only projection', () => {
   assert.match(app, /rpc\("get_quick_rate_year"/);
   assert.match(app, /p_collection_key: collection/);
   assert.match(app, /p_chart_year: requestedYear \|\| null/);
@@ -14,12 +15,15 @@ test('selected UK No.1 year uses one narrow authenticated projection', () => {
   assert.match(migration, /join selected_year y on y\.chart_year = q\.chart_year/);
 });
 
-test('projection exposes only the caller rating under invoker permissions', () => {
+test('projection exposes only the caller rating while guests can execute it read-only', () => {
   assert.match(migration, /security invoker/i);
   assert.match(migration, /r\.user_id = \(select auth\.uid\(\)\)/i);
   assert.match(migration, /revoke all on function public\.get_quick_rate_year\(text, integer\) from public, anon, authenticated/i);
   assert.match(migration, /grant execute on function public\.get_quick_rate_year\(text, integer\) to authenticated/i);
   assert.doesNotMatch(migration, /security definer/i);
+  assert.match(guestAccessMigration, /revoke all on function public\.get_quick_rate_year\(text, integer\) from public/i);
+  assert.match(guestAccessMigration, /grant execute on function public\.get_quick_rate_year\(text, integer\) to anon, authenticated/i);
+  assert.doesNotMatch(guestAccessMigration, /security definer|grant (insert|update|delete)/i);
 });
 
 test('year loads are cached, deduplicated, retryable and rating-cache safe', () => {
@@ -47,6 +51,6 @@ test('immediate shell and stale-request protection remain in place', () => {
   assert.ok(open.indexOf('dialog.showModal();') < open.indexOf('await loadSelectedQuickRateYear(selectedYear)'));
   assert.match(open, /const sequence = \+\+loadSequence/);
   assert.match(open, /sequence !== loadSequence/);
-  assert.match(open, /enrichQuickRateArtistIdentities\(dialog, userId, identities => \{\s*if \(sequence !== loadSequence \|\| !dialog\.open \|\| currentUser\?\.id !== userId\) return;/);
+  assert.match(open, /enrichQuickRateArtistIdentities\(dialog, viewerKey, identities => \{\s*if \(sequence !== loadSequence \|\| !dialog\.open \|\| getQuickRateViewerKey\(\) !== viewerKey\) return;/);
   assert.match(open, /loading="lazy" decoding="async"/);
 });

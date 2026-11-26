@@ -13,8 +13,8 @@ const [html, app, foundation, discover, styles] = await Promise.all([
 
 test("Stage 2C loads only with the opt-in Stage 1 assets", () => {
   assert.match(html, /get\("ui"\) !== "legacy"/);
-  assert.match(html, /bom-foundation\.js\?v=11/);
-  assert.match(html, /bom-discover\.js\?v=16&history=10&bond=2/);
+  assert.match(html, /bom-foundation\.js\?v=12/);
+  assert.match(html, /bom-discover\.js\?v=17&history=10&bond=2/);
   assert.match(app, /isStageOnePresentation\(\) && window\.BOMDiscoverUI/);
   assert.match(app, /window\.BOMDiscoverUI\.render\(buildStageOneDiscoverModel\(\)\)/);
 });
@@ -173,9 +173,141 @@ test("Discover renders recommendation reasons, long titles and low-data states",
   assert.match(rendered, /Not rated/);
   assert.match(rendered, /Artwork unavailable/);
   assert.match(window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] }), /Your next record is waiting/);
-  assert.match(window.BOMDiscoverUI.render({ authenticated: false, groups: [], general: [] }), /Sign in to make Discover yours/);
+  const guest = window.BOMDiscoverUI.render({ authenticated: false, groups: [], general: [] });
+  assert.match(guest, /Sign in to make Discover yours/);
+  assert.match(guest, /data-bom-discovery-carousel/);
+  assert.ok(guest.indexOf("Quick rate") < guest.indexOf("BOM GAMES · COMING SOON"));
   assert.match(window.BOMDiscoverUI.renderLoading(), /aria-busy="true"/);
   assert.match(window.BOMDiscoverUI.renderError(), /Discover couldn’t load/);
+});
+
+test("guest first paint defers historical data and viewer changes never reuse personal history", async () => {
+  let state = { authenticated: false, viewerKey: "guest" };
+  let historicalLoads = 0;
+  let rerenders = 0;
+  let releaseGuestLoad;
+  let deferGuestLoad = false;
+  const clickHandlers = [];
+  const document = {
+    hidden: false,
+    addEventListener(type, handler) { if (type === "click") clickHandlers.push(handler); },
+    querySelector() { return null; },
+    querySelectorAll() { return []; },
+    getElementById() { return null; }
+  };
+  const window = {
+    BOMUI: { AlbumCard: () => "", SectionState: () => "" },
+    BOMPresentationBridge: {
+      getState: () => state,
+      loadHistoricalDiscovery: async () => {
+        historicalLoads += 1;
+        if (deferGuestLoad) return new Promise(resolve => { releaseGuestLoad = resolve; });
+        return { albums: [], numberOnes: [] };
+      },
+      rerenderDiscover() { rerenders += 1; },
+      refreshDiscover() {}
+    },
+    addEventListener() {},
+    setTimeout: () => 0,
+    clearTimeout() {},
+    history: { state: null, replaceState() {}, pushState() {} },
+    location: { href: "http://localhost/" }
+  };
+  vm.runInNewContext(discover, { window, document, URL, Math, Promise, matchMedia: () => ({ matches: true }), clearTimeout() {}, setTimeout: () => 0 });
+  const root = { querySelector: () => null, querySelectorAll: () => [] };
+
+  window.BOMDiscoverUI.render({ authenticated: false, groups: [], general: [] });
+  window.BOMDiscoverUI.updateRowControls(root);
+  await Promise.resolve();
+  await Promise.resolve();
+  assert.equal(historicalLoads, 0, "guest Quick Rate should not download historical slides on first paint");
+
+  deferGuestLoad = true;
+  const slides = Array.from({ length: 3 }, () => ({ setAttribute() {}, toggleAttribute() {} }));
+  const dots = Array.from({ length: 3 }, () => ({ setAttribute() {} }));
+  const carousel = {
+    isConnected: true,
+    dataset: {},
+    matches: selector => selector === "[data-bom-discovery-carousel]",
+    querySelector: selector => selector === ".bom-v1-discovery-track" ? { style: { setProperty() {} } } : null,
+    querySelectorAll: selector => selector === ".bom-v1-discovery-slide" ? slides : selector === "[data-bom-carousel-go]" ? dots : [],
+    addEventListener() {},
+    contains() { return false; }
+  };
+  carousel.parentElement = { querySelector: selector => selector === "[data-bom-discovery-carousel]" ? carousel : null };
+  const go = { dataset: { bomCarouselGo: "1" } };
+  const target = { closest(selector) { if (selector === "[data-bom-discovery-carousel]") return carousel; if (selector === "[data-bom-carousel-go]") return go; return null; } };
+  clickHandlers.forEach(handler => handler({ target }));
+  assert.equal(historicalLoads, 1);
+  assert.equal(rerenders, 0);
+  deferGuestLoad = false;
+  releaseGuestLoad({ albums: [], numberOnes: [] });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(rerenders, 1, "advancing a guest carousel should rerender its newly hydrated slide");
+
+  state = { authenticated: true, viewerKey: "member:one" };
+  window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+  deferGuestLoad = true;
+  carousel.isConnected = true;
+  clickHandlers.forEach(handler => handler({ target }));
+  assert.equal(historicalLoads, 2);
+  carousel.isConnected = false;
+  deferGuestLoad = false;
+  releaseGuestLoad({ albums: [], numberOnes: [] });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(rerenders, 1, "a detached carousel must not replace a newer destination after its load resolves");
+
+  state = { authenticated: true, viewerKey: "member:two" };
+  window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+  deferGuestLoad = true;
+  carousel.isConnected = true;
+  clickHandlers.forEach(handler => handler({ target }));
+  assert.equal(historicalLoads, 3, "a different member must receive a fresh personal projection");
+  carousel.isConnected = false;
+  const liveCarousel = { ...carousel, isConnected: true, dataset: {} };
+  liveCarousel.parentElement = { querySelector: selector => selector === "[data-bom-discovery-carousel]" ? liveCarousel : null };
+  const liveTarget = { closest(selector) { if (selector === "[data-bom-discovery-carousel]") return liveCarousel; if (selector === "[data-bom-carousel-go]") return go; return null; } };
+  clickHandlers.forEach(handler => handler({ target: liveTarget }));
+  deferGuestLoad = false;
+  releaseGuestLoad({ albums: [], numberOnes: [] });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(rerenders, 2, "a live carousel joining after a detached one must still receive the hydrated render");
+
+  state = { authenticated: false, viewerKey: "guest" };
+  window.BOMDiscoverUI.render({ authenticated: false, groups: [], general: [] });
+  window.BOMDiscoverUI.updateRowControls(root);
+  await Promise.resolve();
+  await Promise.resolve();
+  assert.equal(historicalLoads, 4, "sign-out on an active history slide must reload the guest-safe projection");
+});
+
+test("a transient historical load failure remains retryable", async () => {
+  let calls = 0;
+  const document = { hidden: false, addEventListener() {}, querySelector: () => null, querySelectorAll: () => [], getElementById: () => null };
+  const window = {
+    BOMUI: { AlbumCard: () => "", SectionState: ({ title }) => `<div>${title}</div>` },
+    BOMPresentationBridge: {
+      getState: () => ({ authenticated: true, viewerKey: "member:retry" }),
+      loadHistoricalDiscovery: async () => {
+        calls += 1;
+        if (calls === 1) throw new Error("temporary");
+        return { albums: [], numberOnes: [] };
+      },
+      rerenderDiscover() {}
+    },
+    addEventListener() {}, setTimeout: () => 0, clearTimeout() {},
+    history: { state: null, replaceState() {}, pushState() {} }, location: { href: "http://localhost/" }
+  };
+  vm.runInNewContext(discover, { window, document, URL, Math, Promise, matchMedia: () => ({ matches: true }), clearTimeout() {}, setTimeout: () => 0 });
+  const root = { querySelector: () => null, querySelectorAll: () => [] };
+  window.BOMDiscoverUI.render({ authenticated: true, groups: [], general: [] });
+  window.BOMDiscoverUI.updateRowControls(root);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(calls, 1);
+  window.BOMDiscoverUI.updateRowControls(root);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(calls, 2);
+  assert.match(discover, /historyLoadError/);
 });
 
 test("Discover navigation targets approved Album and Artist routes and restores browser state", () => {
@@ -192,6 +324,8 @@ test("Discover presentation is progressive, responsive and free of legacy stylin
   assert.match(discover, /renderLoading/);
   assert.match(discover, /renderError/);
   assert.match(discover, /updateRowControls/);
+  assert.match(discover, /rerenderDiscover\?\.\(\)/);
+  assert.match(app, /rerenderDiscover: \(\) => renderRecommendations\(\)/);
   assert.doesNotMatch(discover, /supabaseClient|\.rpc\(|\bfetch\(/i);
   assert.doesNotMatch(discover, /smart-recommendation-block|poster-card|purple|gradient|emoji/i);
   assert.match(styles, /\.bom-v1-discover-row/);
